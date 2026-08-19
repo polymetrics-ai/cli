@@ -6,15 +6,15 @@
     "state": "fetched",
     "source_url": "https://sonarcloud.io/api/webservices/list",
     "requested_url": "https://sonarcloud.io/api/webservices/list",
-    "sha256": "65174f0f8f3f88a47aaaf342eb523b85c50f126827539479a6192337db25c534",
-    "bytes": 209832,
+    "sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
+    "bytes": 209845,
     "content_type": "application/json",
     "artifacts": [
       {
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "requested_url": "https://sonarcloud.io/api/webservices/list",
-        "sha256": "65174f0f8f3f88a47aaaf342eb523b85c50f126827539479a6192337db25c534",
-        "bytes": 209832,
+        "sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
+        "bytes": 209845,
         "content_type": "application/json"
       }
     ],
@@ -23,8 +23,8 @@
   },
   "normalized_inventory": {
     "path": "api_surface.json",
-    "sha256": "6d6d6625e51d0e0a60920fa1e686511a09bf5d5fa79928793997c809984c36a9",
-    "bytes": 42590,
+    "sha256": "bc3102ce85cbbe56db81216d44e7c8ad4106165d2bcf364c1d5c06acc85d21a3",
+    "bytes": 60975,
     "source_operation_count": 156,
     "old_api_surface_rows": 157,
     "regenerated_api_surface_rows": 157,
@@ -32,8 +32,8 @@
   },
   "rest": {
     "source_url": "https://sonarcloud.io/api/webservices/list",
-    "sha256": "65174f0f8f3f88a47aaaf342eb523b85c50f126827539479a6192337db25c534",
-    "bytes": 209832,
+    "sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
+    "bytes": 209845,
     "operation_counts": [
       {
         "key": "GET",
@@ -1765,8 +1765,8 @@
   },
   "graphql": {
     "source_url": "https://sonarcloud.io/api/webservices/list",
-    "sha256": "65174f0f8f3f88a47aaaf342eb523b85c50f126827539479a6192337db25c534",
-    "bytes": 209832,
+    "sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
+    "bytes": 209845,
     "operation_counts": [],
     "operations": []
   },

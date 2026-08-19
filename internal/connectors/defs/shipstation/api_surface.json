@@ -26,7 +26,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags"
+        "notes": "operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags"
       }
     },
     {
@@ -42,7 +42,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "/carriers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
-        "notes": "operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers"
+        "notes": "operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers"
       }
     },
     {
@@ -58,7 +58,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier"
+        "notes": "operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier"
       }
     },
     {
@@ -74,7 +74,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier"
+        "notes": "operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier"
       }
     },
     {
@@ -90,7 +90,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_packages; operation_id=list_packages; operation_id=list_packages"
+        "notes": "operation_id=list_packages; operation_id=list_packages; operation_id=list_packages; operation_id=list_packages; operation_id=list_packages"
       }
     },
     {
@@ -106,7 +106,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_services; operation_id=list_services; operation_id=list_services"
+        "notes": "operation_id=list_services; operation_id=list_services; operation_id=list_services; operation_id=list_services; operation_id=list_services"
       }
     },
     {
@@ -133,7 +133,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_customer; operation_id=get_customer; operation_id=get_customer"
+        "notes": "operation_id=get_customer; operation_id=get_customer; operation_id=get_customer; operation_id=get_customer; operation_id=get_customer"
       }
     },
     {
@@ -149,7 +149,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments"
+        "notes": "operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments"
       }
     },
     {
@@ -176,7 +176,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
-        "notes": "operation_id=delete_order; operation_id=delete_order; operation_id=delete_order"
+        "notes": "operation_id=delete_order; operation_id=delete_order; operation_id=delete_order; operation_id=delete_order; operation_id=delete_order"
       }
     },
     {
@@ -192,7 +192,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_order; operation_id=get_order; operation_id=get_order"
+        "notes": "operation_id=get_order; operation_id=get_order; operation_id=get_order; operation_id=get_order; operation_id=get_order"
       }
     },
     {
@@ -208,7 +208,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order"
+        "notes": "operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order"
       }
     },
     {
@@ -224,7 +224,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order"
+        "notes": "operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order"
       }
     },
     {
@@ -240,7 +240,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order"
+        "notes": "operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order"
       }
     },
     {
@@ -256,7 +256,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Legacy connector never implemented order creation",
-        "notes": "operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order"
+        "notes": "operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order"
       }
     },
     {
@@ -272,7 +272,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders"
+        "notes": "operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders"
       }
     },
     {
@@ -288,7 +288,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until"
+        "notes": "operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until"
       }
     },
     {
@@ -304,7 +304,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag"
+        "notes": "operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag"
       }
     },
     {
@@ -320,7 +320,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped"
+        "notes": "operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped"
       }
     },
     {
@@ -336,7 +336,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order"
+        "notes": "operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order"
       }
     },
     {
@@ -352,7 +352,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold"
+        "notes": "operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold"
       }
     },
     {
@@ -368,7 +368,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order"
+        "notes": "operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order"
       }
     },
     {
@@ -395,7 +395,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_product; operation_id=get_product; operation_id=get_product"
+        "notes": "operation_id=get_product; operation_id=get_product; operation_id=get_product; operation_id=get_product; operation_id=get_product"
       }
     },
     {
@@ -411,7 +411,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=update_product; operation_id=update_product; operation_id=update_product"
+        "notes": "operation_id=update_product; operation_id=update_product; operation_id=update_product; operation_id=update_product; operation_id=update_product"
       }
     },
     {
@@ -438,7 +438,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Legacy connector never implemented label purchasing",
-        "notes": "operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label"
+        "notes": "operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label"
       }
     },
     {
@@ -454,7 +454,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=get_rates; operation_id=get_rates; operation_id=get_rates"
+        "notes": "operation_id=get_rates; operation_id=get_rates; operation_id=get_rates; operation_id=get_rates; operation_id=get_rates"
       }
     },
     {
@@ -470,7 +470,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=void_label; operation_id=void_label; operation_id=void_label"
+        "notes": "operation_id=void_label; operation_id=void_label; operation_id=void_label; operation_id=void_label; operation_id=void_label"
       }
     },
     {
@@ -486,7 +486,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_stores; operation_id=list_stores; operation_id=list_stores"
+        "notes": "operation_id=list_stores; operation_id=list_stores; operation_id=list_stores; operation_id=list_stores; operation_id=list_stores"
       }
     },
     {
@@ -502,7 +502,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_store; operation_id=get_store; operation_id=get_store"
+        "notes": "operation_id=get_store; operation_id=get_store; operation_id=get_store; operation_id=get_store; operation_id=get_store"
       }
     },
     {
@@ -518,7 +518,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=update_store; operation_id=update_store; operation_id=update_store"
+        "notes": "operation_id=update_store; operation_id=update_store; operation_id=update_store; operation_id=update_store; operation_id=update_store"
       }
     },
     {
@@ -534,7 +534,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store"
+        "notes": "operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store"
       }
     },
     {
@@ -550,7 +550,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status"
+        "notes": "operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status"
       }
     },
     {
@@ -566,7 +566,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces"
+        "notes": "operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces"
       }
     },
     {
@@ -582,7 +582,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store"
+        "notes": "operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store"
       }
     },
     {
@@ -598,7 +598,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store"
+        "notes": "operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store"
       }
     },
     {
@@ -614,7 +614,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_users; operation_id=list_users; operation_id=list_users"
+        "notes": "operation_id=list_users; operation_id=list_users; operation_id=list_users; operation_id=list_users; operation_id=list_users"
       }
     },
     {
@@ -630,7 +630,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "/warehouses is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
-        "notes": "operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses"
+        "notes": "operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses"
       }
     },
     {
@@ -646,7 +646,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
-        "notes": "operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse"
+        "notes": "operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse"
       }
     },
     {
@@ -662,7 +662,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse"
+        "notes": "operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse"
       }
     },
     {
@@ -678,7 +678,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse"
+        "notes": "operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse"
       }
     },
     {
@@ -694,7 +694,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
-        "notes": "operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse"
+        "notes": "operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse"
       }
     },
     {
@@ -710,7 +710,7 @@
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Documented provider read has no matching executable stream or operation contract.",
-        "notes": "operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks"
+        "notes": "operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks"
       }
     },
     {
@@ -726,7 +726,7 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
-        "notes": "operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook"
+        "notes": "operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook"
       }
     },
     {
@@ -742,7 +742,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "/webhooks/subscribe is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
-        "notes": "operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook"
+        "notes": "operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook"
       }
     }
   ]

@@ -5,6 +5,7 @@
 - [x] Per connector source report records old `api_surface` operation count, regenerated count, and source basis (`SOURCE-INVENTORY-REPORT.md`).
 - [x] Every map has valid six-class parity classification and DELETE coverage (Batch 4 and Batch 5 check assertions).
 - [x] Every unauthored operation is `declaration-pending`, not `foundation-gap` (Batch 4 and Batch 5 check assertions); the only recorded gap is the reverse-ETL eligibility attribute `generic-typed-destination-executor`.
+- [x] Buildkite v1 sensitive-operation provenance recovery: targeted `connectorgen validate internal/connectors/defs/buildkite --json` first reported 100 missing provider citations; after rematerialization through the pinned retrieval-artifact fallback it reports zero findings, and the ledger has 100 cited operations with zero missing sensitive citations.
 - [x] `go run ./cmd/connectorgen validate` is green (552 connectors, 0 findings; final run).
 - [x] `go run ./cmd/connectorgen surface-sync --check` is green (552 connectors, 0 fields corrected; final run).
 - [x] `make connector-boundary` is green (final detached run, exit 0; log: `connector-boundary-final.log`).

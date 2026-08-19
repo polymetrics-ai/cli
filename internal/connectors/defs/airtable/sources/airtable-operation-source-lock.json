@@ -6,14 +6,14 @@
     "state": "fetched",
     "source_url": "https://airtable.com/developers/web/api/introduction",
     "requested_url": "https://airtable.com/developers/web/api/introduction",
-    "sha256": "9f6e74697ea5a8ac117b6e568647b2990315981e4e53c025a7e057d2e4163305",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
     "bytes": 623469,
     "content_type": "text/html; charset=utf-8",
     "artifacts": [
       {
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "requested_url": "https://airtable.com/developers/web/api/introduction",
-        "sha256": "9f6e74697ea5a8ac117b6e568647b2990315981e4e53c025a7e057d2e4163305",
+        "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
         "bytes": 623469,
         "content_type": "text/html; charset=utf-8"
       }
@@ -32,7 +32,7 @@
   },
   "rest": {
     "source_url": "https://airtable.com/developers/web/api/introduction",
-    "sha256": "9f6e74697ea5a8ac117b6e568647b2990315981e4e53c025a7e057d2e4163305",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
     "bytes": 623469,
     "operation_counts": [
       {
@@ -1194,7 +1194,7 @@
   },
   "graphql": {
     "source_url": "https://airtable.com/developers/web/api/introduction",
-    "sha256": "9f6e74697ea5a8ac117b6e568647b2990315981e4e53c025a7e057d2e4163305",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
     "bytes": 623469,
     "operation_counts": [],
     "operations": []

@@ -2,38 +2,55 @@
   "api": "Buildkite REST API v2 (https://api.buildkite.com/v2)",
   "docs": "https://buildkite.com/docs/apis/rest-api",
   "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 1,
   "scope": "Provider-source inventory regenerated for issue #4290 from Official Buildkite rendered REST reference table has 129 unique HTTP method/path rows. It contains 129 documented provider operations plus 3 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
     {
       "method": "DELETE",
       "path": "/v2/access-token",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "revokes the token this connector is authenticating with; irreversibly ends the connector's own session, never a data operation"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes the token this connector is authenticating with; irreversibly ends the connector's own session, never a data operation",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/access-token",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "introspects the CALLING token's own scopes/uuid, not a syncable object stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "introspects the CALLING token's own scopes/uuid, not a syncable object stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/builds",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "cross-organization all-builds list (every org the token can see); this connector is single-organization-scoped (config.organization), and the org-scoped builds stream already covers every build within it"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "cross-organization all-builds list (every org the token can see); this connector is single-organization-scoped (config.organization), and the org-scoped builds stream already covers every build within it",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/meta",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "returns the API's own published webhook-IP-allowlist metadata, not organization/pipeline data"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns the API's own published webhook-IP-allowlist metadata, not organization/pipeline data",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -46,9 +63,13 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-organization detail; identical record shape to the organizations list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-organization detail; identical record shape to the organizations list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -61,9 +82,13 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/agents/{id}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-agent detail; identical record shape to the agents list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-agent detail; identical record shape to the agents list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -90,41 +115,61 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/api-settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/api-settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/audit_events",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "organization audit-log event stream; a high-volume security/compliance event log, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization audit-log event stream; a high-volume security/compliance event log, Pass B breadth-vs-cost triage, no consuming stream this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/audit_events/{uuid}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single audit-event detail; part of the excluded audit-log surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single audit-event detail; part of the excluded audit-log surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/builds",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "organization-wide (cross-pipeline) builds list; the pipeline-scoped builds stream already covers the identical per-build record shape, and this connector has no per-pipeline fan-out config to merge results back with a pipeline_slug the org-wide endpoint's response already embeds — kept out to avoid a second stream with fully overlapping record content"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization-wide (cross-pipeline) builds list; the pipeline-scoped builds stream already covers the identical per-build record shape, and this connector has no per-pipeline fan-out config to merge results back with a pipeline_slug the org-wide endpoint's response already embeds — kept out to avoid a second stream with fully overlapping record content",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -137,353 +182,529 @@
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "creates a new cluster; low-frequency infrastructure-provisioning action, Pass B breadth-vs-cost triage, no consuming write modeled this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates a new cluster; low-frequency infrastructure-provisioning action, Pass B breadth-vs-cost triage, no consuming write modeled this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/cache_volumes",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/cache_volumes",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/network_ranges",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "cluster-scoped agent-queue list; infrastructure-configuration sub-resource, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "cluster-scoped agent-queue list; infrastructure-configuration sub-resource, Pass B breadth-vs-cost triage, no consuming stream this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "creates an agent queue; part of the excluded queues surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates an agent queue; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "deletes an agent queue; part of the excluded queues surface"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes an agent queue; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-queue detail; part of the excluded queues surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-queue detail; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "updates an agent queue; part of the excluded queues surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "updates an agent queue; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/pause_dispatch",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "pauses job dispatch on a queue; part of the excluded queues surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "pauses job dispatch on a queue; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/resume_dispatch",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "resumes job dispatch on a queue; part of the excluded queues surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "resumes job dispatch on a queue; part of the excluded queues surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "lists agent registration tokens; these are bearer credentials agents use to connect, never modeled as ordinary sync data"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists agent registration tokens; these are bearer credentials agents use to connect, never modeled as ordinary sync data",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "mints a new agent registration token; a credential-minting operation, never a data mutation"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mints a new agent registration token; a credential-minting operation, never a data mutation",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "revokes an agent registration token; credential-shaped mutation, would disconnect every agent still using it"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes an agent registration token; credential-shaped mutation, would disconnect every agent still using it",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "single agent-token detail; credential-shaped, same reasoning as the list"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single agent-token detail; credential-shaped, same reasoning as the list",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "renames/revokes-and-reissues an agent token; credential-shaped mutation"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "renames/revokes-and-reissues an agent token; credential-shaped mutation",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/clusters/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "permanently deletes a cluster and detaches every pipeline/queue/agent-token associated with it; not exposed as a write action this pass pending destructive-scope review"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "permanently deletes a cluster and detaches every pipeline/queue/agent-token associated with it; not exposed as a write action this pass pending destructive-scope review",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/clusters/{id}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-cluster detail; identical record shape to the clusters list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-cluster detail; identical record shape to the clusters list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/clusters/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "updates a cluster's name/description/default-queue; low-frequency infrastructure-config action, Pass B breadth-vs-cost triage"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "updates a cluster's name/description/default-queue; low-frequency infrastructure-config action, Pass B breadth-vs-cost triage",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/emojis",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "returns the set of emoji shortcuts usable in pipeline annotations/build messages; a UI-rendering asset list, not syncable operational data"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns the set of emoji shortcuts usable in pipeline annotations/build messages; a UI-rendering asset list, not syncable operational data",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/jobs/{job.id}/ssh-session",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/jobs/{job.id}/vnc-session",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "organization-membership list (every user with account access, independent of team); Pass B breadth-vs-cost triage, no consuming stream this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization-membership list (every user with account access, independent of team); Pass B breadth-vs-cost triage, no consuming stream this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/members/{user.uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/members/{user.uuid}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single organization-member detail; part of the excluded org-members surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single organization-member detail; part of the excluded org-members surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/members/{user.uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipeline-settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/pipeline-settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/advanced-queue-metrics",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/build-export",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/build-export",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/hosted-agents-ssh",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/hosted-agents-ssh",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/public-pipelines",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipeline-settings/public-pipelines",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipeline-templates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "pipeline-template (reusable YAML configuration) list; a configuration-management surface, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "pipeline-template (reusable YAML configuration) list; a configuration-management surface, Pass B breadth-vs-cost triage, no consuming stream this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/pipeline-templates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "creates a pipeline template; part of the excluded templates surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates a pipeline template; part of the excluded templates surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "deletes a pipeline template; part of the excluded templates surface, would also detach it from every pipeline still referencing it"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a pipeline template; part of the excluded templates surface, would also detach it from every pipeline still referencing it",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single pipeline-template detail; part of the excluded templates surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single pipeline-template detail; part of the excluded templates surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "updates a pipeline template; part of the excluded templates surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "updates a pipeline template; part of the excluded templates surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -517,41 +738,61 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-build detail; identical record shape to the builds list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-build detail; identical record shape to the builds list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/artifacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -564,81 +805,121 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}/download",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/env",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/log",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/log",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/reprioritize",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/retry",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/unblock",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -658,9 +939,13 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-pipeline detail; identical record shape to the pipelines list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-pipeline detail; identical record shape to the pipelines list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -687,161 +972,241 @@
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/pipelines/{slug}/webhook",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "regenerates the pipeline's provider (GitHub/GitLab/etc) webhook URL/secret; a one-time provisioning action, not a syncable data mutation"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "regenerates the pipeline's provider (GitHub/GitLab/etc) webhook URL/secret; a one-time provisioning action, not a syncable data mutation",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/portals",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Buildkite Portals (scoped, shareable build-trigger links) list; a niche access-delegation feature, Pass B breadth-vs-cost triage"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Buildkite Portals (scoped, shareable build-trigger links) list; a niche access-delegation feature, Pass B breadth-vs-cost triage",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/portals",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "creates a portal (a scoped external trigger credential); credential-adjacent provisioning, out of scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates a portal (a scoped external trigger credential); credential-adjacent provisioning, out of scope",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "deletes a portal; part of the excluded portals surface"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a portal; part of the excluded portals surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-portal detail; part of the excluded portals surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-portal detail; part of the excluded portals surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "updates a portal; part of the excluded portals surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "updates a portal; part of the excluded portals surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/rate_limit",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/repository_connections",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/repository_connections/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/rules",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "organization-level access-control rule list (cross-pipeline/cross-cluster permission policies); a security-policy configuration surface, Pass B breadth-vs-cost triage"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization-level access-control rule list (cross-pipeline/cross-cluster permission policies); a security-policy configuration surface, Pass B breadth-vs-cost triage",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/rules",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "creates an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates an access-control rule; a security-policy mutation, out of scope for this data-sync connector",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/rules/{uuid}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "deletes an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes an access-control rule; a security-policy mutation, out of scope for this data-sync connector",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/rules/{uuid}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "single rule detail; part of the excluded rules surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single rule detail; part of the excluded rules surface",
+        "notes": "requires_elevated_scope"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/services",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/services",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/services/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/services/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/services/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/services/{uuid}/disable",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{org.slug}/services/{uuid}/enable",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -868,9 +1233,13 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
@@ -883,137 +1252,205 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-membership list; a distinct join-resource sub-list, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "team-membership list; a distinct join-resource sub-list, Pass B breadth-vs-cost triage, no consuming stream this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "adds a user to a team; part of the team-membership surface excluded this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "adds a user to a team; part of the team-membership surface excluded this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "removes a user from a team; part of the team-membership surface excluded this pass"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes a user from a team; part of the team-membership surface excluded this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single team-membership detail; part of the team-membership surface excluded this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single team-membership detail; part of the team-membership surface excluded this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "changes a team member's role; part of the team-membership surface excluded this pass"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "changes a team member's role; part of the team-membership surface excluded this pass",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-to-pipeline access-grant list; a join-resource sub-list, Pass B breadth-vs-cost triage"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "team-to-pipeline access-grant list; a join-resource sub-list, Pass B breadth-vs-cost triage",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "grants a team access to a pipeline; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "grants a team access to a pipeline; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "revokes a team's pipeline access; part of the excluded join-resource surface"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes a team's pipeline access; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single team-pipeline access-grant detail; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single team-pipeline access-grant detail; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "changes a team's pipeline access level; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "changes a team's pipeline access level; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-to-test-suite access-grant list (Buildkite Test Engine); a join-resource sub-list, Pass B breadth-vs-cost triage"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "team-to-test-suite access-grant list (Buildkite Test Engine); a join-resource sub-list, Pass B breadth-vs-cost triage",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "grants a team access to a test suite; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "grants a team access to a test suite; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "revokes a team's test-suite access; part of the excluded join-resource surface"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes a team's test-suite access; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single team-suite access-grant detail; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single team-suite access-grant detail; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "changes a team's test-suite access level; part of the excluded join-resource surface"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "changes a team's test-suite access level; part of the excluded join-resource surface",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/{org.slug}/teams/enable",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {
       "method": "GET",
       "path": "/v2/user",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "returns the identity of the currently-authenticated user, not a syncable object stream"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns the identity of the currently-authenticated user, not a syncable object stream",
+        "source_url": "https://buildkite.com/docs/apis/rest-api"
       }
     },
     {

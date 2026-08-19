@@ -5,14 +5,14 @@
   "source_basis": {
     "source_lock": "sources/sonar-cloud-operation-source-lock.json",
     "source_url": "https://sonarcloud.io/api/webservices/list",
-    "source_sha256": "65174f0f8f3f88a47aaaf342eb523b85c50f126827539479a6192337db25c534",
-    "source_bytes": 209832,
+    "source_sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
+    "source_bytes": 209845,
     "operations_found": 156,
     "mapped_operations": 157,
     "old_api_surface_rows": 157,
     "regenerated_api_surface_rows": 157,
     "api_surface_regeneration": "provider-source-derived",
-    "normalized_inventory_sha256": "6d6d6625e51d0e0a60920fa1e686511a09bf5d5fa79928793997c809984c36a9",
+    "normalized_inventory_sha256": "bc3102ce85cbbe56db81216d44e7c8ad4106165d2bcf364c1d5c06acc85d21a3",
     "source_retrieval": "fetched",
     "coverage_confidence": {
       "level": "machine-readable-spec",
@@ -30,18 +30,14 @@
       "basis": "Official SonarCloud web-services catalog lists 156 public actions."
     },
     "enabled_operations": 34,
-    "declaration_pending_operations": 89,
-    "disabled_operations": 34,
+    "declaration_pending_operations": 95,
+    "disabled_operations": 28,
     "documented_deletes": 0,
     "enabled_deletes": 0,
     "parity_class_counts": [
       {
-        "key": "binary_read",
-        "count": 6
-      },
-      {
         "key": "direct_read",
-        "count": 53
+        "count": 59
       },
       {
         "key": "direct_write",
@@ -70,11 +66,11 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 89
+        "count": 95
       },
       {
         "key": "provider-does-not-expose",
-        "count": 34
+        "count": 28
       }
     ],
     "transport": {
@@ -100,12 +96,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/authentication/logout",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "ends the caller's own HTTP session; not a syncable record and actively counter-productive for a long-lived connector credential",
+          "notes": "operation_id=logout"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "ends the caller's own HTTP session; not a syncable record and actively counter-productive for a long-lived connector credential"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -115,19 +115,19 @@
         "operation_id": "logout",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "ends the caller's own HTTP session; not a syncable record and actively counter-productive for a long-lived connector credential",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[0]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -138,12 +138,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/authentication/validate",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "boolean credential-validity probe (true for anonymous too); not a syncable record, and covered functionally by base.check",
+          "notes": "operation_id=validate"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "boolean credential-validity probe (true for anonymous too); not a syncable record, and covered functionally by base.check"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -153,19 +157,19 @@
         "operation_id": "validate",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "boolean credential-validity probe (true for anonymous too); not a syncable record, and covered functionally by base.check",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[1]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -176,12 +180,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/ce/activity",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Compute Engine background-task activity log; a niche operational-monitoring resource, not core SonarCloud analysis data; breadth-vs-cost triage",
+          "notes": "operation_id=activity"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "Compute Engine background-task activity log; a niche operational-monitoring resource, not core SonarCloud analysis data; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -214,12 +222,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/ce/activity_status",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-scalar pending/in-progress/failing task-count snapshot, not a syncable record list",
+          "notes": "operation_id=activity_status"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "single-scalar pending/in-progress/failing task-count snapshot, not a syncable record list"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -229,19 +241,19 @@
         "operation_id": "activity_status",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "single-scalar pending/in-progress/failing task-count snapshot, not a syncable record list",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[3]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -252,12 +264,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/ce/component",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-component Compute Engine task history; a narrower view of the same task data api/ce/activity already exposes, itself out of scope",
+          "notes": "operation_id=component"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "per-component Compute Engine task history; a narrower view of the same task data api/ce/activity already exposes, itself out of scope"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -290,12 +306,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/ce/task",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-task-by-id detail; a narrower view of the same task data api/ce/activity already exposes, itself out of scope",
+          "notes": "operation_id=task"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-task-by-id detail; a narrower view of the same task data api/ce/activity already exposes, itself out of scope"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -371,12 +391,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/components/show",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-component-by-key detail; identical record shape already reachable via the components list stream's full result set",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-component-by-key detail; identical record shape already reachable via the components list stream's full result set"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -409,12 +433,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/components/tree",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "hierarchical descendant listing under a base component; a differently-shaped traversal of the same component records the components stream already returns flat",
+          "notes": "operation_id=tree"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "hierarchical descendant listing under a base component; a differently-shaped traversal of the same component records the components stream already returns flat"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -447,12 +475,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/duplications/show",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-file cross-project code-duplication block detail, keyed by a specific source file; a deep drill-down resource, not core analysis data; breadth-vs-cost triage",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-file cross-project code-duplication block detail, keyed by a specific source file; a deep drill-down resource, not core analysis data; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -485,12 +517,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/favorites/add",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record",
+          "notes": "operation_id=add"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -523,12 +559,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/favorites/remove",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record",
+          "notes": "operation_id=remove"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -561,12 +601,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/favorites/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "the authenticated user's own personal favorite-project list; a personal UI preference, not organization-scoped analysis data",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "the authenticated user's own personal favorite-project list; a personal UI preference, not organization-scoped analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -599,12 +643,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/favourites/index",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "removed since SonarQube/SonarCloud 6.3; the catalog's own description says to use api/favorites instead (itself excluded above)",
+          "notes": "operation_id=index"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "removed since SonarQube/SonarCloud 6.3; the catalog's own description says to use api/favorites instead (itself excluded above)"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -622,7 +670,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "removed since SonarQube/SonarCloud 6.3; the catalog's own description says to use api/favorites instead (itself excluded above)",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[13]"
       },
       "declaration": {
@@ -637,12 +685,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/hotspots/change_status",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Security Hotspots are deprecated and being replaced by security issues/vulnerabilities per the api/hotspots service's own catalog description (deprecatedSince 16 June 2026); the read-side api/hotspots/search is still covered for continuity, but this mutation is not implemented against a deprecated model",
+          "notes": "operation_id=change_status"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "Security Hotspots are deprecated and being replaced by security issues/vulnerabilities per the api/hotspots service's own catalog description (deprecatedSince 16 June 2026); the read-side api/hotspots/search is still covered for continuity, but this mutation is not implemented against a deprecated model"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -660,7 +712,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "Security Hotspots are deprecated and being replaced by security issues/vulnerabilities per the api/hotspots service's own catalog description (deprecatedSince 16 June 2026); the read-side api/hotspots/search is still covered for continuity, but this mutation is not implemented against a deprecated model",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[14]"
       },
       "declaration": {
@@ -718,12 +770,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/hotspots/show",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-hotspot-by-key detail; identical record shape already covered by the hotspots list stream's full result set",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-hotspot-by-key detail; identical record shape already covered by the hotspots list stream's full result set"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -838,12 +894,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/issues/authors",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "SCM-account-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population",
+          "notes": "operation_id=authors"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "SCM-account-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -876,12 +936,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/issues/bulk_change",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "multi-issue batch mutation (assign/transition/tag/comment across an issue-key list in one call); the single-issue mutations (assign_issue/set_issue_tags/do_issue_transition/add_issue_comment) already cover the same primitive operations this dialect's per-record write shape supports, applied one issue at a time",
+          "notes": "operation_id=bulk_change"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "multi-issue batch mutation (assign/transition/tag/comment across an issue-key list in one call); the single-issue mutations (assign_issue/set_issue_tags/do_issue_transition/add_issue_comment) already cover the same primitive operations this dialect's per-record write shape supports, applied one issue at a time"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -914,12 +978,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/issues/changelog",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-issue field-change audit trail; a drill-down detail view, not core issue data already covered by the issues stream",
+          "notes": "operation_id=changelog"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-issue field-change audit trail; a drill-down detail view, not core issue data already covered by the issues stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -952,12 +1020,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/issues/delete_comment",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "deletes a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from",
+          "notes": "operation_id=delete_comment"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "deletes a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1031,12 +1103,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/issues/edit_comment",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "edits a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from",
+          "notes": "operation_id=edit_comment"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "edits a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1112,12 +1188,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/issues/set_severity",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 25 Aug 2023 per the catalog; manual issue severity override has been superseded by the impacts/cleanCodeAttribute model",
+          "notes": "operation_id=set_severity"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 25 Aug 2023 per the catalog; manual issue severity override has been superseded by the impacts/cleanCodeAttribute model"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1135,7 +1215,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 25 Aug 2023 per the catalog; manual issue severity override has been superseded by the impacts/cleanCodeAttribute model",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[26]"
       },
       "declaration": {
@@ -1191,12 +1271,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/issues/set_type",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 25 Aug 2023 per the catalog; manual issue type override has been superseded by the impacts/cleanCodeAttribute model",
+          "notes": "operation_id=set_type"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 25 Aug 2023 per the catalog; manual issue type override has been superseded by the impacts/cleanCodeAttribute model"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1214,7 +1298,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 25 Aug 2023 per the catalog; manual issue type override has been superseded by the impacts/cleanCodeAttribute model",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[28]"
       },
       "declaration": {
@@ -1229,12 +1313,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/issues/tags",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "tag-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population",
+          "notes": "operation_id=tags"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "tag-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1310,12 +1398,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/measures/component",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-component current-measures snapshot; the measures stream's api/measures/search already returns the same metric values across components",
+          "notes": "operation_id=component"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-component current-measures snapshot; the measures stream's api/measures/search already returns the same metric values across components"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1348,12 +1440,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/measures/component_tree",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "hierarchical descendant measures listing; a differently-shaped traversal of the same measure data the measures stream already returns flat",
+          "notes": "operation_id=component_tree"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "hierarchical descendant measures listing; a differently-shaped traversal of the same measure data the measures stream already returns flat"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1386,12 +1482,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/measures/search_history",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-component measure time series (one metric's value over successive analyses); a drill-down history view requiring a specific component+metric pairing, not a flat syncable list; breadth-vs-cost triage",
+          "notes": "operation_id=search_history"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-component measure time series (one metric's value over successive analyses); a drill-down history view requiring a specific component+metric pairing, not a flat syncable list; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1424,12 +1524,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/metrics/domains",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated since 7.7 per the catalog",
+          "notes": "operation_id=domains"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated since 7.7 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1447,7 +1551,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated since 7.7 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[34]"
       },
       "declaration": {
@@ -1505,12 +1609,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/metrics/types",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "static enum of possible metric value types (INT, PERCENT, ...), not a syncable object list",
+          "notes": "operation_id=types"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "static enum of possible metric value types (INT, PERCENT, ...), not a syncable object list"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1520,19 +1628,19 @@
         "operation_id": "types",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "static enum of possible metric value types (INT, PERCENT, ...), not a syncable object list",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[36]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -1543,12 +1651,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/notifications/add",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-user personal email-notification subscription preference, not organizational analysis data",
+          "notes": "operation_id=add"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-user personal email-notification subscription preference, not organizational analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1581,12 +1693,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/notifications/list",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "the authenticated user's own personal notification-subscription list, not organization-scoped analysis data",
+          "notes": "operation_id=list"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "the authenticated user's own personal notification-subscription list, not organization-scoped analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1619,12 +1735,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/notifications/remove",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-user personal email-notification subscription preference, not organizational analysis data",
+          "notes": "operation_id=remove"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-user personal email-notification subscription preference, not organizational analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1657,12 +1777,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/add_group",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "grants a permission to a group at global or project scope; account/access-control administration, out of remit for a data-sync connector",
+          "notes": "operation_id=add_group"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "grants a permission to a group at global or project scope; account/access-control administration, out of remit for a data-sync connector"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1695,12 +1819,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/add_group_to_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=add_group_to_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1733,12 +1861,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/add_project_creator_to_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=add_project_creator_to_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1771,12 +1903,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/add_user",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "grants a permission to a user at global or project scope; account/access-control administration, out of remit",
+          "notes": "operation_id=add_user"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "grants a permission to a user at global or project scope; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1809,12 +1945,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/add_user_to_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=add_user_to_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1847,12 +1987,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/apply_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "applies a permission template to a project, overwriting its existing access grants; account/access-control administration, out of remit",
+          "notes": "operation_id=apply_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "applies a permission template to a project, overwriting its existing access grants; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1885,12 +2029,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/bulk_apply_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "bulk permission-template application across many projects at once; account/access-control administration, out of remit",
+          "notes": "operation_id=bulk_apply_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "bulk permission-template application across many projects at once; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1923,12 +2071,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/create_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=create_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1961,12 +2113,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/delete_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a permission template; account/access-control administration, out of remit",
+          "notes": "operation_id=delete_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a permission template; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -1999,12 +2155,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/remove_group",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "revokes a permission from a group; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_group"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "revokes a permission from a group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2037,12 +2197,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/remove_group_from_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_group_from_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2075,12 +2239,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/remove_project_creator_from_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_project_creator_from_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2113,12 +2281,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/remove_user",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "revokes a permission from a user; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_user"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "revokes a permission from a user; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2151,12 +2323,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/remove_user_from_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_user_from_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2189,12 +2365,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/permissions/search_templates",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lists permission templates; requires global administrator rights and only serves the excluded permission-administration write actions above",
+          "notes": "requires_elevated_scope; operation_id=search_templates"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "lists permission templates; requires global administrator rights and only serves the excluded permission-administration write actions above"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2225,12 +2405,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/set_default_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "changes which permission template new projects get by default; account/access-control administration, out of remit",
+          "notes": "operation_id=set_default_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "changes which permission template new projects get by default; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2263,12 +2447,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/permissions/update_template",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permission-template administration; account/access-control administration, out of remit",
+          "notes": "operation_id=update_template"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permission-template administration; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2301,12 +2489,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/create_event",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "annotates a specific analysis with a custom marker event; a niche write with no corresponding common sync use case, and its target analysis key is only obtainable via the already-covered project_analyses read stream, adding a fan-out dependency not worth the complexity for this action alone",
+          "notes": "operation_id=create_event"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "annotates a specific analysis with a custom marker event; a niche write with no corresponding common sync use case, and its target analysis key is only obtainable via the already-covered project_analyses read stream, adding a fan-out dependency not worth the complexity for this action alone"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2339,12 +2531,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a historical analysis snapshot and all its associated measures/issues-at-that-point-in-time; destructive project-data administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a historical analysis snapshot and all its associated measures/issues-at-that-point-in-time; destructive project-data administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2377,12 +2573,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/delete_event",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes an analysis marker event; destructive project-data administration",
+          "notes": "operation_id=delete_event"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes an analysis marker event; destructive project-data administration"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2458,12 +2658,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/set_baseline",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "changes which historical analysis the New Code Definition is measured against; project-administrator-scoped configuration, not a data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=set_baseline"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "changes which historical analysis the New Code Definition is measured against; project-administrator-scoped configuration, not a data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2494,12 +2698,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/unset_baseline",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "reverts the New Code Definition baseline; project-administrator-scoped configuration, not a data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=unset_baseline"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "reverts the New Code Definition baseline; project-administrator-scoped configuration, not a data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2530,12 +2738,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_analyses/update_event",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "renames a specific analysis marker event; a niche write with no corresponding common sync use case, and its target event key is only obtainable via the already-covered project_analyses read stream's nested events[], adding a fan-out dependency not worth the complexity for this action alone",
+          "notes": "operation_id=update_event"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "renames a specific analysis marker event; a niche write with no corresponding common sync use case, and its target event key is only obtainable via the already-covered project_analyses read stream's nested events[], adding a fan-out dependency not worth the complexity for this action alone"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2564,16 +2776,20 @@
     {
       "method": "GET",
       "path": "/api/project_badges/ai_code_assurance",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/project_badges/ai_code_assurance",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns an SVG image badge, not JSON record data",
+          "notes": "operation_id=ai_code_assurance"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns an SVG image badge, not JSON record data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2595,23 +2811,27 @@
         "evidence": "api_surface.json:endpoints[64]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "GET",
       "path": "/api/project_badges/measure",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/project_badges/measure",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns an SVG image badge, not JSON record data",
+          "notes": "operation_id=measure"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns an SVG image badge, not JSON record data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2633,23 +2853,27 @@
         "evidence": "api_surface.json:endpoints[65]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "GET",
       "path": "/api/project_badges/quality_gate",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/project_badges/quality_gate",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns an SVG image badge, not JSON record data",
+          "notes": "operation_id=quality_gate"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns an SVG image badge, not JSON record data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2671,7 +2895,7 @@
         "evidence": "api_surface.json:endpoints[66]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -2682,12 +2906,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_branches/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a project branch and its analysis history; destructive project-data administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a project branch and its analysis history; destructive project-data administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2720,12 +2948,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/project_branches/list",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-project branch inventory (name/status/analysis-date); a scoping/navigation resource rather than core analysis data, and this bundle has no per-project fan-out mechanism configured to enumerate every project's branches without adding one; breadth-vs-cost triage",
+          "notes": "operation_id=list"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-project branch inventory (name/status/analysis-date); a scoping/navigation resource rather than core analysis data, and this bundle has no per-project fan-out mechanism configured to enumerate every project's branches without adding one; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2758,12 +2990,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_branches/rename",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "renames a project's main branch; project-administrator-scoped configuration, not a data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=rename"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "renames a project's main branch; project-administrator-scoped configuration, not a data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2794,12 +3030,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_links/create",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "manages a project's auxiliary reference links (homepage/CI/issue-tracker URLs); a project-metadata convenience field, not core analysis data",
+          "notes": "operation_id=create"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "manages a project's auxiliary reference links (homepage/CI/issue-tracker URLs); a project-metadata convenience field, not core analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2832,12 +3072,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_links/delete",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "manages a project's auxiliary reference links; a project-metadata convenience field, not core analysis data",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "manages a project's auxiliary reference links; a project-metadata convenience field, not core analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2870,12 +3114,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/project_links/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lists a project's auxiliary reference links; a project-metadata convenience field, not core analysis data; breadth-vs-cost triage",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "lists a project's auxiliary reference links; a project-metadata convenience field, not core analysis data; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2908,12 +3156,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/project_pull_requests/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a project pull-request analysis and its history; destructive project-data administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a project pull-request analysis and its history; destructive project-data administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2946,12 +3198,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/project_pull_requests/list",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-project open-pull-request analysis inventory; a scoping/navigation resource rather than core analysis data, and this bundle has no per-project fan-out mechanism configured to enumerate every project's pull requests without adding one; breadth-vs-cost triage",
+          "notes": "operation_id=list"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-project open-pull-request analysis inventory; a scoping/navigation resource rather than core analysis data, and this bundle has no per-project fan-out mechanism configured to enumerate every project's pull requests without adding one; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -2984,12 +3240,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/project_tags/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns a bare JSON array of tag-name strings (not objects); connsdk.RecordsAt only explodes array elements that decode as a JSON object, so a scalar-string array yields zero records under this dialect -- there is no declarative way to wrap each string into a syncable record without a computed_fields/schema mechanism this dialect does not have for bare-array responses",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "returns a bare JSON array of tag-name strings (not objects); connsdk.RecordsAt only explodes array elements that decode as a JSON object, so a scalar-string array yields zero records under this dialect -- there is no declarative way to wrap each string into a syncable record without a computed_fields/schema mechanism this dialect does not have for bare-array responses"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3063,12 +3323,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/bulk_delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes multiple projects and all their analysis history in one call; destructive project-data administration, out of remit",
+          "notes": "operation_id=bulk_delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes multiple projects and all their analysis history in one call; destructive project-data administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3101,12 +3365,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/bulk_update_key",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated since 7.6 per the catalog",
+          "notes": "operation_id=bulk_update_key"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated since 7.6 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3124,7 +3392,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated since 7.6 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[78]"
       },
       "declaration": {
@@ -3139,12 +3407,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/create",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires the 'Create Projects' organization permission per the action's own description; project provisioning is an organization-administration action, not a typical data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=create"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires the 'Create Projects' organization permission per the action's own description; project provisioning is an organization-administration action, not a typical data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3175,12 +3447,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a project and all its analysis history; destructive project-data administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a project and all its analysis history; destructive project-data administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3256,12 +3532,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/update_key",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "renames a project's unique key, which is also its primary-key identifier for every other stream in this bundle; requires project-administrator rights and changing it would break cross-stream record correlation",
+          "notes": "requires_elevated_scope; operation_id=update_key"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "renames a project's unique key, which is also its primary-key identifier for every other stream in this bundle; requires project-administrator rights and changing it would break cross-stream record correlation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3292,12 +3572,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/projects/update_visibility",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "changes a project's public/private visibility; requires project-administrator rights, an access-control change rather than a data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=update_visibility"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "changes a project's public/private visibility; requires project-administrator rights, an access-control change rather than a data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3328,12 +3612,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/properties/index",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated since 6.3 per the catalog; use api/settings instead",
+          "notes": "operation_id=index"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated since 6.3 per the catalog; use api/settings instead"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3351,7 +3639,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated since 6.3 per the catalog; use api/settings instead",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[84]"
       },
       "declaration": {
@@ -3366,12 +3654,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/copy",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=copy"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3389,7 +3681,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[85]"
       },
       "declaration": {
@@ -3404,12 +3696,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/create",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=create"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3427,7 +3723,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[86]"
       },
       "declaration": {
@@ -3442,12 +3738,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/create_condition",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=create_condition"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3465,7 +3765,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[87]"
       },
       "declaration": {
@@ -3480,12 +3780,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/delete_condition",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=delete_condition"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3503,7 +3807,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[88]"
       },
       "declaration": {
@@ -3518,12 +3822,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/deselect",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=deselect"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3541,7 +3849,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[89]"
       },
       "declaration": {
@@ -3556,12 +3864,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/destroy",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=destroy"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3579,7 +3891,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[90]"
       },
       "declaration": {
@@ -3594,12 +3906,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualitygates/get_by_project",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=get_by_project"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3617,7 +3933,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[91]"
       },
       "declaration": {
@@ -3675,12 +3991,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualitygates/project_status",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=project_status"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3698,7 +4018,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[93]"
       },
       "declaration": {
@@ -3713,12 +4033,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/rename",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=rename"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3736,7 +4060,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[94]"
       },
       "declaration": {
@@ -3751,12 +4075,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualitygates/search",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3774,7 +4102,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[95]"
       },
       "declaration": {
@@ -3789,12 +4117,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/select",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=select"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3812,7 +4144,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[96]"
       },
       "declaration": {
@@ -3827,12 +4159,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/set_as_default",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=set_as_default"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3850,7 +4186,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[97]"
       },
       "declaration": {
@@ -3865,12 +4201,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualitygates/show",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3888,7 +4228,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[98]"
       },
       "declaration": {
@@ -3903,12 +4243,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/unset_default",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated since 7.0 per the catalog",
+          "notes": "operation_id=unset_default"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated since 7.0 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3926,7 +4270,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated since 7.0 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[99]"
       },
       "declaration": {
@@ -3941,12 +4285,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualitygates/update_condition",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 16 September 2025 per the catalog",
+          "notes": "operation_id=update_condition"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 16 September 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -3964,7 +4312,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 16 September 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[100]"
       },
       "declaration": {
@@ -3979,12 +4327,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/activate_rule",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission per the underlying action; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=activate_rule"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission per the underlying action; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4015,12 +4367,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/activate_rules",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=activate_rules"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4051,12 +4407,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/add_project",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires project-administrator rights; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=add_project"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires project-administrator rights; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4087,12 +4447,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/backup",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns an XML quality-profile export document, not a JSON record list; a configuration-export tool, not sync data",
+          "notes": "operation_id=backup"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "returns an XML quality-profile export document, not a JSON record list; a configuration-export tool, not sync data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4125,12 +4489,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/change_parent",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=change_parent"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4161,12 +4529,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/changelog",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-profile rule-activation change history; a drill-down audit view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage",
+          "notes": "operation_id=changelog"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-profile rule-activation change history; a drill-down audit view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4199,12 +4571,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/copy",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=copy"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4235,12 +4611,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/create",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=create"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4271,12 +4651,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/deactivate_rule",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=deactivate_rule"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4307,12 +4691,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/deactivate_rules",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=deactivate_rules"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4343,12 +4731,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a quality profile; destructive quality-profile administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a quality profile; destructive quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4381,12 +4773,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/export",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 18 March 2025 per the catalog",
+          "notes": "operation_id=export"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 18 March 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4404,7 +4800,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 18 March 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[112]"
       },
       "declaration": {
@@ -4419,12 +4815,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/exporters",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 18 March 2025 per the catalog",
+          "notes": "operation_id=exporters"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 18 March 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4442,7 +4842,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 18 March 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[113]"
       },
       "declaration": {
@@ -4457,12 +4857,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/importers",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated 18 March 2025 per the catalog",
+          "notes": "operation_id=importers"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated 18 March 2025 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4480,7 +4884,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated 18 March 2025 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[114]"
       },
       "declaration": {
@@ -4495,12 +4899,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/inheritance",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-profile parent/child inheritance chain detail; a drill-down configuration view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage",
+          "notes": "operation_id=inheritance"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-profile parent/child inheritance chain detail; a drill-down configuration view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4533,12 +4941,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/projects",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lists projects using a specific quality profile; a drill-down association view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage",
+          "notes": "operation_id=projects"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "lists projects using a specific quality profile; a drill-down association view requiring a specific profile key sourced from an admin-scoped listing not otherwise covered; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4571,12 +4983,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/remove_project",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires project-administrator rights; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=remove_project"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires project-administrator rights; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4607,12 +5023,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/rename",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=rename"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4643,12 +5063,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/restore",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=restore"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4679,12 +5103,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/restore_built_in",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "deprecated since 6.4 per the catalog",
+          "notes": "operation_id=restore_built_in"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "deprecated since 6.4 per the catalog"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4702,7 +5130,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "deprecated since 6.4 per the catalog",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[120]"
       },
       "declaration": {
@@ -4717,12 +5145,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/qualityprofiles/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "organization-wide quality-profile inventory (name/language/active-rule-count); a secondary configuration resource, not core analysis data; breadth-vs-cost triage -- most of the same rule-set information is already reachable via the rules stream",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "organization-wide quality-profile inventory (name/language/active-rule-count); a secondary configuration resource, not core analysis data; breadth-vs-cost triage -- most of the same rule-set information is already reachable via the rules stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4755,12 +5187,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/qualityprofiles/set_default",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=set_default"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4791,12 +5227,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/rules/repositories",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "list of rule-engine plugin names/languages; a static reference/metadata list serving the rules stream, not additional syncable data of its own",
+          "notes": "operation_id=repositories"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "list of rule-engine plugin names/languages; a static reference/metadata list serving the rules stream, not additional syncable data of its own"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4872,12 +5312,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/rules/show",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-rule-by-key detail; identical record shape already covered by the rules list stream's full result set",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-rule-by-key detail; identical record shape already covered by the rules list stream's full result set"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4910,12 +5354,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/rules/tags",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "tag-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population",
+          "notes": "operation_id=tags"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "tag-name autocomplete/typeahead search, not a syncable object list; scoped for UI search-box population"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4948,12 +5396,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/rules/update",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires 'Administer Quality Profiles' organization permission per the action's own description; custom-rule authoring/rule-metadata administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=update"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires 'Administer Quality Profiles' organization permission per the action's own description; custom-rule authoring/rule-metadata administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -4984,12 +5436,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/settings/list_definitions",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "instance/project configuration-setting definitions; requires administrator rights on most instances, configuration metadata rather than analysis data",
+          "notes": "requires_elevated_scope; operation_id=list_definitions"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "instance/project configuration-setting definitions; requires administrator rights on most instances, configuration metadata rather than analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5020,12 +5476,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/settings/reset",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "resets an instance/project setting to its default value; configuration administration, out of remit",
+          "notes": "operation_id=reset"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "resets an instance/project setting to its default value; configuration administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5058,12 +5518,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/settings/set",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "changes an instance/project configuration setting; requires administrator rights, configuration administration rather than a data-sync mutation",
+          "notes": "requires_elevated_scope; operation_id=set"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "changes an instance/project configuration setting; requires administrator rights, configuration administration rather than a data-sync mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5094,12 +5558,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/settings/values",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "reads instance/project configuration-setting values; requires administrator rights on most settings, configuration data rather than analysis data",
+          "notes": "requires_elevated_scope; operation_id=values"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "reads instance/project configuration-setting values; requires administrator rights on most settings, configuration data rather than analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5126,16 +5594,20 @@
     {
       "method": "GET",
       "path": "/api/sources/raw",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/sources/raw",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns the raw source-file text content, not structured JSON record data",
+          "notes": "operation_id=raw"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns the raw source-file text content, not structured JSON record data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5157,23 +5629,27 @@
         "evidence": "api_surface.json:endpoints[132]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "GET",
       "path": "/api/sources/scm",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/sources/scm",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns per-line SCM blame text keyed by line number, a source-file-shaped payload rather than a syncable object list",
+          "notes": "operation_id=scm"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns per-line SCM blame text keyed by line number, a source-file-shaped payload rather than a syncable object list"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5195,23 +5671,27 @@
         "evidence": "api_surface.json:endpoints[133]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "GET",
       "path": "/api/sources/show",
-      "parity_class": "binary_read",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
         "path": "/api/sources/show",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns raw source-file line content, not structured JSON record data",
+          "notes": "operation_id=show"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "returns raw source-file line content, not structured JSON record data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5233,7 +5713,7 @@
         "evidence": "api_surface.json:endpoints[134]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -5244,12 +5724,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/timemachine/index",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "removed since 6.3 per the catalog's own description; use api/measures/search_history instead (itself out of scope, see above)",
+          "notes": "operation_id=index"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "removed since 6.3 per the catalog's own description; use api/measures/search_history instead (itself out of scope, see above)"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5267,7 +5751,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "removed since 6.3 per the catalog's own description; use api/measures/search_history instead (itself out of scope, see above)",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[135]"
       },
       "declaration": {
@@ -5282,12 +5766,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_groups/add_user",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "adds a user to a group; account/access-control administration, out of remit",
+          "notes": "operation_id=add_user"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "adds a user to a group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5320,12 +5808,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_groups/create",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "creates a user group; account/access-control administration, out of remit",
+          "notes": "operation_id=create"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "creates a user group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5358,12 +5850,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_groups/delete",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly deletes a user group; account/access-control administration, out of remit",
+          "notes": "operation_id=delete"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly deletes a user group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5396,12 +5892,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_groups/remove_user",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "removes a user from a group; account/access-control administration, out of remit",
+          "notes": "operation_id=remove_user"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "removes a user from a group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5434,12 +5934,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/user_groups/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires organization-administrator rights to list groups; account/access-control administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires organization-administrator rights to list groups; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5470,12 +5974,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_groups/update",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "renames/redescribes a user group; account/access-control administration, out of remit",
+          "notes": "operation_id=update"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "renames/redescribes a user group; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5508,12 +6016,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/user_groups/users",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires organization-administrator rights to list a group's members; account/access-control administration, out of remit",
+          "notes": "requires_elevated_scope; operation_id=users"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "requires organization-administrator rights to list a group's members; account/access-control administration, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5544,12 +6056,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/user_properties/index",
-        "operation": null,
+        "operation": {
+          "model": "deprecated",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "removed since 6.3 per the catalog's own description; use api/favorites and api/notifications instead (both themselves out of scope, see above)",
+          "notes": "operation_id=index"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "deprecated",
-          "reason": "removed since 6.3 per the catalog's own description; use api/favorites and api/notifications instead (both themselves out of scope, see above)"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5567,7 +6083,7 @@
       "rejection": {
         "reason": "provider-does-not-expose",
         "recoverable": false,
-        "detail": "removed since 6.3 per the catalog's own description; use api/favorites and api/notifications instead (both themselves out of scope, see above)",
+        "detail": "The provider marks the endpoint deprecated or non-data.",
         "evidence": "api_surface.json:endpoints[143]"
       },
       "declaration": {
@@ -5582,12 +6098,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_tokens/generate",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "mints a new personal access token for a user; a credential-issuance action with security implications well outside a data-sync connector's remit",
+          "notes": "operation_id=generate"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "mints a new personal access token for a user; a credential-issuance action with security implications well outside a data-sync connector's remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5620,12 +6140,16 @@
       "api_surface": {
         "method": "POST",
         "path": "/api/user_tokens/revoke",
-        "operation": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversibly revokes a personal access token; a credential-lifecycle action with security implications, out of remit",
+          "notes": "operation_id=revoke"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "irreversibly revokes a personal access token; a credential-lifecycle action with security implications, out of remit"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5658,12 +6182,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/user_tokens/search",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lists the authenticated user's own token metadata (name/creation date, never the token value itself); a personal account-management view, not organization-scoped analysis data",
+          "notes": "operation_id=search"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "lists the authenticated user's own token metadata (name/creation date, never the token value itself); a personal account-management view, not organization-scoped analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5696,12 +6224,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/users/groups",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lists a specific user's group memberships; requires administrator rights on most instances, account/access-control data rather than analysis data",
+          "notes": "requires_elevated_scope; operation_id=groups"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "requires_elevated_scope",
-          "reason": "lists a specific user's group memberships; requires administrator rights on most instances, account/access-control data rather than analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5814,12 +6346,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/webhooks/deliveries",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "per-webhook delivery-attempt history (payload/response/latency per call); an operational-monitoring drill-down, not core analysis data; breadth-vs-cost triage",
+          "notes": "operation_id=deliveries"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "per-webhook delivery-attempt history (payload/response/latency per call); an operational-monitoring drill-down, not core analysis data; breadth-vs-cost triage"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5852,12 +6388,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/webhooks/delivery",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-delivery-by-id detail; a narrower view of the same delivery data api/webhooks/deliveries already exposes, itself out of scope",
+          "notes": "operation_id=delivery"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-delivery-by-id detail; a narrower view of the same delivery data api/webhooks/deliveries already exposes, itself out of scope"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5974,12 +6514,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/webservices/list",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "this API's own machine-readable self-description of every controller/action it exposes -- metadata about the API surface, not application/analysis data",
+          "notes": "operation_id=list"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "this API's own machine-readable self-description of every controller/action it exposes -- metadata about the API surface, not application/analysis data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -5989,19 +6533,19 @@
         "operation_id": "list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "this API's own machine-readable self-description of every controller/action it exposes -- metadata about the API surface, not application/analysis data",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[154]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
@@ -6012,12 +6556,16 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/webservices/response_example",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "a single hard-coded documentation example payload per action, not real application data",
+          "notes": "operation_id=response_example"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "a single hard-coded documentation example payload per action, not real application data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/sonar-cloud-operation-source-lock.json",
@@ -6027,19 +6575,19 @@
         "operation_id": "response_example",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "a single hard-coded documentation example payload per action, not real application data",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[155]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },

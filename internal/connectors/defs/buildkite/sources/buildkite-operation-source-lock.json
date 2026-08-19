@@ -6,14 +6,14 @@
     "state": "fetched",
     "source_url": "https://buildkite.com/docs/apis/rest-api",
     "requested_url": "https://buildkite.com/docs/apis/rest-api",
-    "sha256": "f7aeb511a475b473ea0475156da667efaec3c1af69e069085d80c0e6a49c166d",
+    "sha256": "350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd",
     "bytes": 440978,
     "content_type": "text/html; charset=utf-8",
     "artifacts": [
       {
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "requested_url": "https://buildkite.com/docs/apis/rest-api",
-        "sha256": "f7aeb511a475b473ea0475156da667efaec3c1af69e069085d80c0e6a49c166d",
+        "sha256": "350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd",
         "bytes": 440978,
         "content_type": "text/html; charset=utf-8"
       }
@@ -23,8 +23,8 @@
   },
   "normalized_inventory": {
     "path": "api_surface.json",
-    "sha256": "a6b9fd4f61fec052382d55cc15b3eaa76ccf1a2ebaf419245231197fae347f77",
-    "bytes": 40261,
+    "sha256": "cdf2eccc5fbd9fadd5e9a6e934f239b6da627727e1f08bc2135e265d7fb75c49",
+    "bytes": 56769,
     "source_operation_count": 129,
     "old_api_surface_rows": 99,
     "regenerated_api_surface_rows": 132,
@@ -32,7 +32,7 @@
   },
   "rest": {
     "source_url": "https://buildkite.com/docs/apis/rest-api",
-    "sha256": "f7aeb511a475b473ea0475156da667efaec3c1af69e069085d80c0e6a49c166d",
+    "sha256": "350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd",
     "bytes": 440978,
     "operation_counts": [
       {
@@ -1480,7 +1480,7 @@
   },
   "graphql": {
     "source_url": "https://buildkite.com/docs/apis/rest-api",
-    "sha256": "f7aeb511a475b473ea0475156da667efaec3c1af69e069085d80c0e6a49c166d",
+    "sha256": "350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd",
     "bytes": 440978,
     "operation_counts": [],
     "operations": []

@@ -954,12 +954,27 @@ function materializeAPISurface(connector, existing, sourceOperations, retrieval)
     // explicitly local rows; the provider inventory is nevertheless rebuilt
     // in full, and its rows do not borrow that compatibility coverage.
     const sourceEndpoints = sourceOperations.map((source) => {
+      // Normalized source rows intentionally retain only endpoint identity;
+      // providerSourceRecord later enriches the lock with its artifact URL.
+      // A v1 ledger needs that same already-pinned artifact URL on each
+      // sensitive operation, so recover it from the indexed retrieval rather
+      // than writing an empty citation or inventing an endpoint URL.
+      const sourceURL = source.source_url || retrieval.artifacts?.[source.artifact_index || 0]?.source_url || retrieval.source_url;
+      assert(typeof sourceURL === 'string' && sourceURL.startsWith('https://'), `${connector}: source operation ${source.method} ${source.path} has no HTTPS provider citation`);
       const original = existingByKey.get(`${source.method}\u0000${source.path}`);
-      if (original && !original.excluded) return clone(original);
+      if (original && !original.excluded) {
+        const endpoint = clone(original);
+        if (endpoint.operation && !endpoint.operation.source_url && !endpoint.operation.notes) endpoint.operation.source_url = sourceURL;
+        return endpoint;
+      }
+      const operation = materializedOperation(source.method, original, source);
+      // v1 operation ledgers carry provenance on the operation itself.  This
+      // is copied from the exact provider-source operation, never inferred.
+      operation.source_url = sourceURL;
       return {
         method: source.method,
         path: source.path,
-        operation: materializedOperation(source.method, original, source),
+        operation,
       };
     });
     return {
@@ -1095,8 +1110,26 @@ async function materialize(connector) {
   const cli = await readJSON(join(dir, 'cli_surface.json'));
   const profile = sourceProfiles[connector];
   const sourceURL = profile.urls[0] || sourceOverrides[connector] || oldAPISurface.docs.split('; ')[0];
-  const retrieval = await fetchPublicSource(connector, sourceURL);
-  const sourceOperations = sourceInventory(connector, retrieval);
+  let retrieval;
+  let sourceOperations;
+  try {
+    retrieval = await fetchPublicSource(connector, sourceURL);
+    sourceOperations = sourceInventory(connector, retrieval);
+  } catch (error) {
+    // A completed lock is an immutable record of bytes already retrieved from
+    // the public description.  Retain it when a later rematerialization meets
+    // transient documentation CDN protection instead of downgrading a settled
+    // inventory to partial or fabricating a new pin.
+    const priorLock = await readJSON(join(sources, `${connector}-operation-source-lock.json`));
+    const priorOperations = priorLock && [
+      ...(priorLock.rest?.operations || []),
+      ...(priorLock.graphql?.operations || []),
+    ];
+    if (!priorLock || priorLock.counts?.total === null || !Array.isArray(priorOperations) || priorOperations.length !== priorLock.counts.total || !priorLock.source_retrieval?.sha256) throw error;
+    retrieval = priorLock.source_retrieval;
+    sourceOperations = uniqueSourceOperations(connector, priorOperations);
+    assert(sourceOperations.length === priorLock.counts.total, `${connector}: prior source lock does not contain a complete provider inventory`);
+  }
   const apiSurface = materializeAPISurface(connector, oldAPISurface, sourceOperations, retrieval);
   const apiSurfaceBytes = Buffer.from(json(apiSurface));
   const operationsFound = sourceOperations ? sourceOperations.length : retrieval.state === 'partial' ? null : profile.total;

@@ -6,15 +6,15 @@
     "state": "fetched",
     "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
     "requested_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
-    "sha256": "71aebea9183d980a806f7de98517524eee0df771138747b7f6bb72742c86b874",
-    "bytes": 651707,
+    "sha256": "2fd707bc8df87440903b46711e836370da639f485078a600019760f3e29a6d63",
+    "bytes": 651974,
     "content_type": "text/html; charset=utf-8",
     "artifacts": [
       {
         "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
         "requested_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
-        "sha256": "71aebea9183d980a806f7de98517524eee0df771138747b7f6bb72742c86b874",
-        "bytes": 651707,
+        "sha256": "2fd707bc8df87440903b46711e836370da639f485078a600019760f3e29a6d63",
+        "bytes": 651974,
         "content_type": "text/html; charset=utf-8"
       }
     ],
@@ -23,8 +23,8 @@
   },
   "normalized_inventory": {
     "path": "api_surface.json",
-    "sha256": "59c5319b48488cfcbc2aafa62200ec12d4759f0cc4420d406091276313abe550",
-    "bytes": 99617,
+    "sha256": "f99e8e6251f37481eb030c8cb2a88ee0f7199630f7f5b877efd12f60c9ea772c",
+    "bytes": 140055,
     "source_operation_count": 279,
     "old_api_surface_rows": 12,
     "regenerated_api_surface_rows": 284,
@@ -32,8 +32,8 @@
   },
   "rest": {
     "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
-    "sha256": "71aebea9183d980a806f7de98517524eee0df771138747b7f6bb72742c86b874",
-    "bytes": 651707,
+    "sha256": "2fd707bc8df87440903b46711e836370da639f485078a600019760f3e29a6d63",
+    "bytes": 651974,
     "operation_counts": [
       {
         "key": "DELETE",
@@ -3130,8 +3130,8 @@
   },
   "graphql": {
     "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
-    "sha256": "71aebea9183d980a806f7de98517524eee0df771138747b7f6bb72742c86b874",
-    "bytes": 651707,
+    "sha256": "2fd707bc8df87440903b46711e836370da639f485078a600019760f3e29a6d63",
+    "bytes": 651974,
     "operation_counts": [],
     "operations": []
   },

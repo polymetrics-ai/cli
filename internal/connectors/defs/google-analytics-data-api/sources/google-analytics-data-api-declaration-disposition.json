@@ -5,7 +5,7 @@
   "source_basis": {
     "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
     "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-    "source_sha256": "4e8d4622cc0fa220b6647e687ad47c0a2799676003de9a440ddc95e31de5b82a",
+    "source_sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
     "source_bytes": 306884,
     "operations_found": 23,
     "mapped_operations": 28,
@@ -139,10 +139,10 @@
       },
       "source": {
         "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
-        "source_id": "google-analytics-data-api.provider.analyticsdata-operations-get-2",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-operations-list-2",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-        "source_location": "methods.get",
-        "operation_id": "analyticsdata.operations.get",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.operations.list",
         "deprecated": false
       },
       "state": "declaration-pending",

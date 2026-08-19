@@ -5,7 +5,7 @@
   "source_basis": {
     "source_lock": "sources/airtable-operation-source-lock.json",
     "source_url": "https://airtable.com/developers/web/api/introduction",
-    "source_sha256": "9f6e74697ea5a8ac117b6e568647b2990315981e4e53c025a7e057d2e4163305",
+    "source_sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
     "source_bytes": 623469,
     "operations_found": 103,
     "mapped_operations": 105,

@@ -6,28 +6,28 @@
     "state": "fetched",
     "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
     "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-    "sha256": "4e8d4622cc0fa220b6647e687ad47c0a2799676003de9a440ddc95e31de5b82a",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
     "bytes": 306884,
     "content_type": "multiple-public-artifacts",
     "artifacts": [
       {
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-        "sha256": "11d0ca27114df317b2b578066d9f380d14cb12f03f37f7c6080b9e87936f2370",
+        "sha256": "92487efec56020b9ef2f9644b55a352f9ae9ca34eba41612f90a82d54266b499",
         "bytes": 14971,
         "content_type": "application/json; charset=UTF-8"
       },
       {
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha",
         "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha",
-        "sha256": "8cef127114051dbdd0cd077d431dca4d43d9fcb3d5a353d3687dee816ee3b5b6",
+        "sha256": "3cf80498a331d3fea9e896e6e07157af5c443d68588ba3e91f55b96c5b8d9359",
         "bytes": 174016,
         "content_type": "application/json; charset=UTF-8"
       },
       {
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
         "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
-        "sha256": "5a158e1b62cf5d5522d77f616911ac2e1ca63120c2e7cf03f2b2e48415031cf9",
+        "sha256": "28bb49de277c9d0339ff4f584f46f477aea91c2b906353ecc859f1828dddf843",
         "bytes": 117897,
         "content_type": "application/json; charset=UTF-8"
       }
@@ -46,7 +46,7 @@
   },
   "rest": {
     "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-    "sha256": "4e8d4622cc0fa220b6647e687ad47c0a2799676003de9a440ddc95e31de5b82a",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
     "bytes": 306884,
     "operation_counts": [
       {
@@ -75,14 +75,14 @@
         "artifact_index": 0
       },
       {
-        "id": "google-analytics-data-api.provider.analyticsdata-operations-get-2",
+        "id": "google-analytics-data-api.provider.analyticsdata-operations-list-2",
         "protocol": "rest",
         "method": "GET",
         "path": "/v1/{+name}",
-        "operation_id": "analyticsdata.operations.get",
+        "operation_id": "analyticsdata.operations.list",
         "deprecated": false,
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-        "source_location": "methods.get",
+        "source_location": "methods.list",
         "artifact_index": 0
       },
       {
@@ -320,7 +320,7 @@
   },
   "graphql": {
     "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
-    "sha256": "4e8d4622cc0fa220b6647e687ad47c0a2799676003de9a440ddc95e31de5b82a",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
     "bytes": 306884,
     "operation_counts": [],
     "operations": []

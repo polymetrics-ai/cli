@@ -23,8 +23,8 @@
   },
   "normalized_inventory": {
     "path": "api_surface.json",
-    "sha256": "9868d788baa288ceb1da6f43c0266729ec626d1632c1a1c7bb8439f1e5820893",
-    "bytes": 37249,
+    "sha256": "635dc046a7a3411a1f01ba850e9fa66e793f2b06808c760d03546e78fdf7fedd",
+    "bytes": 40115,
     "source_operation_count": 53,
     "old_api_surface_rows": 47,
     "regenerated_api_surface_rows": 53,
