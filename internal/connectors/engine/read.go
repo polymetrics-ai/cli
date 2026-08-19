@@ -759,20 +759,34 @@ func incrementalRequestParamShouldApply(stream StreamSpec, req connectors.ReadRe
 	return connsdk.Cursor(req.State) != ""
 }
 
-// resolveQueryParams resolves every entry of params against vars, applying
-// the SAME per-entry dialect stream.Query has always used (bundle.go's
-// QueryParam doc comment): a plain-string-sourced entry (OmitWhenAbsent
-// false, Default "") hard-errors on any unresolved config/secrets/
-// incremental key; an object-form entry tolerates an unresolved key via
-// OmitWhenAbsent (param dropped, no error) or Default (literal value sent
-// instead of erroring). Shared by buildInitialQuery (stream.Query) and
-// buildCheckQuery (RequestSpec.Query, checkquery-ledger.md) so both surfaces
-// resolve query templates identically by construction, not by convention.
+// resolveQueryParams resolves stream/check query entries with their original
+// per-entry dialect (bundle.go's QueryParam doc comment). It deliberately does
+// not tolerate a missing record value: direct reads have no record input, and
+// broadening this shared path would silently relax those established surfaces.
+// Write actions that opt into the one additional record-only rule use
+// resolveWriteQueryParams below.
 func resolveQueryParams(params map[string]QueryParam, vars Vars) (url.Values, error) {
+	return resolveQueryParamsWithRecordOmission(params, vars, false)
+}
+
+// resolveWriteQueryParams extends the established query dialect only for a
+// declared write action. An object-form query entry may omit an unresolved
+// record.* value when, and only when, that exact entry sets omit_when_absent.
+// It is not a caller-provided query channel: config, secret, incremental,
+// wrong-source, malformed, and required-record behavior remains governed by
+// the existing resolver rules.
+func resolveWriteQueryParams(params map[string]QueryParam, vars Vars) (url.Values, error) {
+	return resolveQueryParamsWithRecordOmission(params, vars, true)
+}
+
+func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Vars, allowOmitRecord bool) (url.Values, error) {
 	q := url.Values{}
 	for k, param := range params {
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
+			if allowOmitRecord && param.OmitWhenAbsent && isUnresolvedRecordPath(err) {
+				continue
+			}
 			if isUnresolvedConfigSecretOrIncremental(err) {
 				switch {
 				case param.OmitWhenAbsent:

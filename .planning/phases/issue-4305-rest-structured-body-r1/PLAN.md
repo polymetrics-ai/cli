@@ -7,7 +7,7 @@
 - Merges into: main
 - Delivery: Committed task branch with all local gates green; Firstmate owns the later no-mistakes, push, and one PR stage.
 - Working branch: fm/cli-rest-structured-body-r1
-- Task: Add a closed source-declaration-owned structured JSON request-body path shared by generated REST CLI commands and typed reverse-ETL actions. It must support declared nested object and array fields, preserve path/query/header separation and approval gates, fail closed before I/O, preserve existing body strategies, and document mechanical downstream composition without editing production connector definitions.
+- Task: Add a closed source-declaration-owned structured JSON request-body path shared by generated REST CLI commands and typed reverse-ETL actions. It must support declared nested object and array fields, preserve path/query/header separation and approval gates, fail closed before I/O, preserve existing body strategies, and document mechanical downstream composition without editing production connector definitions. Add the approved shared write-query slice: a missing `record.*` query value may be omitted only when that exact source-locked `QueryParam` declares `omit_when_absent`; required, undeclared, wrong-source, malformed, and explicit invalid values remain pre-I/O failures.
 - Verification: Red/green engine, commandrunner, and installed-CLI tests; go vet; pm binary build; generator validation and surface sync; generated help/manual checks; completion-tracked connector boundary; make verify; and configured code review.
 
 ## Evidence Table
@@ -40,14 +40,15 @@
 3. Red: add typed-action approval mutation and action-isolation tests. Green: share the canonical materializer and payload identity across CLI and typed-action paths.
 4. Red: add generated help/schema and downstream-contract expectations. Green: synchronize generators/docs while keeping opaque raw-body inputs absent.
 5. Refactor: preserve scalar/form/SCIM/binary/GitHub behavior with their existing focused regression suites; remove duplication only after all tests pass.
+6. Red: a synthetic `WriteAction.Query` with `{{ record.optional }}` and `omit_when_absent:true` still rejects its missing record value. Green: add a write-only resolver boundary that omits that exact absence while retaining config, secret, incremental, required-record, wrong-source, malformed, and explicit-value behavior.
 
 ## CLI help/manual/website parity
 
-- [ ] Existing connector-command help resolves and documents declared structured fields.
-- [ ] Bare connector namespace behavior remains unchanged; no namespace command is introduced.
-- [ ] Generated manual/schema artifacts are synchronized.
-- [ ] Documentation records JSON/approval/confirmation safety and no raw-body escape hatch.
-- [ ] Website changes are not applicable unless an existing connector surface documentation generator requires them; this must be checked explicitly before completion.
+- [x] Existing connector-command help resolves and documents declared structured fields.
+- [x] Bare connector namespace behavior remains unchanged; no namespace command is introduced.
+- [x] Generated manual/schema artifacts are synchronized.
+- [x] Documentation records JSON/approval/confirmation safety and no raw-body escape hatch.
+- [x] Website documentation records the same declaration-bound write boundary.
 
 ## Lifecycle and skills
 

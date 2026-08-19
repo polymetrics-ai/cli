@@ -659,6 +659,97 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration(t *testing.T) {
+	newBundle := func(bodySchema, mapsTo string) fstest.MapFS {
+		fsys := directWriteCLISurfaceBundleFS()
+		fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+			"tagline": "Work with CLI Surface from the command line.",
+			"usage": "pm cli-surface <command> [flags]",
+			"commands": [{
+				"path": "widget configure",
+				"summary": "Configure a widget",
+				"intent": "direct_write",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.configure",
+				"source_cli_path": "clis widget configure",
+				"api_surface": [{"method": "POST", "path": "/widgets/{id}/configure"}],
+				"output_policy": "json",
+				"flags": [
+					{"name": "id", "type": "string", "maps_to": "path.id", "required": true},
+					{"name": "settings", "type": "json", "maps_to": "` + mapsTo + `", "required": true}
+				],
+				"risk": "updates a widget",
+				"approval": "plan-preview-confirm-execute"
+			}]
+		}`)}
+		fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+			"api": "test API v1",
+			"operation_ledger_version": 1,
+			"endpoints": [
+				{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+				{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+				{
+				"method": "POST",
+				"path": "/widgets/{id}/configure",
+				"operation": {
+					"model": "destructive_action",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "Typed rest_write operation",
+					"notes": "Declared only through the direct-write executor."
+				}
+			}]
+		}`)}
+		fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(`{
+			"operations": [{
+				"id": "cli-surface.widgets.configure",
+				"kind": "rest_write",
+				"summary": "Configure a widget",
+				"risk": "high",
+				"approval": "plan-preview-confirm-execute",
+				"output_policy": "json",
+				"mutation_class": "update",
+				"confirmation": {"kind": "destructive"},
+				"batchable": false,
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}/configure",
+					"content_type": "application/json",
+					"max_bytes": 1024,
+					"body_schema": ` + bodySchema + `
+				}
+			}]
+		}`)}
+		return fsys
+	}
+
+	closedBounded := `{"type":"object","additionalProperties":false,"required":["settings"],"properties":{"settings":{"type":"object","additionalProperties":false,"required":["owner","targets"],"properties":{"owner":{"type":"string"},"targets":{"type":"array","maxItems":2,"items":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string"}}}}}}}}`
+	for _, tc := range []struct {
+		name, schema, mapsTo string
+		wantFinding          bool
+	}{
+		{name: "closed bounded object is accepted", schema: closedBounded, mapsTo: "body.settings"},
+		{name: "nested flag traversal is rejected", schema: closedBounded, mapsTo: "body.settings.owner", wantFinding: true},
+		{name: "open nested object is rejected", schema: strings.Replace(closedBounded, `"additionalProperties":false,"required":["owner","targets"]`, `"required":["owner","targets"]`, 1), mapsTo: "body.settings", wantFinding: true},
+		{name: "unbounded nested array is rejected", schema: strings.Replace(closedBounded, `"maxItems":2,`, "", 1), mapsTo: "body.settings", wantFinding: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(newBundle(tc.schema, tc.mapsTo))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantFinding {
+				assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+				return
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("valid structured REST body declaration has findings: %+v", report.Findings)
+			}
+		})
+	}
+}
+
 func TestValidate_CLISurfaceImplementedMultipartDirectWritePasses(t *testing.T) {
 	fsys := directWriteCLISurfaceBundleFS()
 	cli := string(fsys["cli-surface/cli_surface.json"].Data)

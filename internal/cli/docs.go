@@ -514,6 +514,18 @@ REVERSE ETL WRITE ACTIONS
   writable connectors; the rest are read-only because their APIs expose no
   supported mutations.
 
+DECLARATION-BOUND STRUCTURED WRITE INPUTS
+  Some provider-sourced direct-write commands expose a declared object or array
+  as a typed json flag, for example --settings or --targets. The generated
+  command help and connector manual name the accepted fields and their
+  maps_to=body.<field> binding. The operation declaration—not the caller—owns
+  the method, route, content type, headers, and nested schema. There is no raw
+  --body flag and no method, path, content-type, action, or connector override.
+  A malformed, unknown, missing, oversized, or schema-incompatible structured
+  value is rejected before any provider request. Direct writes still use plan,
+  preview, approval, confirmation where declared, and execute; approval binds
+  the exact canonical structured payload.
+
   Run pm connectors inspect <name> to see a connector's write=true/false
   capability, ETL streams, reverse ETL write actions, required fields, and risk
   notes.

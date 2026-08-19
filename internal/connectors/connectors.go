@@ -670,6 +670,15 @@ type OperationDirectWritePreflighter interface {
 	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
 }
 
+// OperationStructuredJSONBodyPreflighter proves that one named top-level
+// operation body field is a closed, bounded object or array in the operation
+// declaration. It deliberately accepts neither a raw body nor a dotted path:
+// command runners use it before parsing a json flag so source declarations,
+// not callers, own the resulting request structure.
+type OperationStructuredJSONBodyPreflighter interface {
+	PreflightOperationStructuredJSONBodyField(operation, field string) error
+}
+
 // OperationDirectWriteMetadataProvider exposes the plan-safe metadata for a
 // declared REST or fixed-document GraphQL mutation without preparing
 // credentials or making a network request.

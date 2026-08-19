@@ -370,6 +370,33 @@ not a full override by default.
   so preflight fails closed if a shipped bundle has no matching projection entry. The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **Structured REST JSON direct writes are a closed operation adoption**: this foundation does not
+  make an endpoint executable by itself. A connector lane may bind a provider-sourced
+  `kind:"rest_write"` operation only when its `rest` declaration fixes the method,
+  connector-relative path, JSON (or SCIM JSON) content type, positive `max_bytes`, and a
+  `body_schema`. The root and every nested object must declare
+  `"additionalProperties": false`; every array must declare `maxItems` and an item schema. The
+  engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
+  more than 1024 allowed collection items. A command may use `type:"json"` only for one declared,
+  top-level `maps_to:"body.<field>"` object or array. Keep scalar fields as their normal typed
+  flags; dotted JSON traversals and raw `body`, method, path, content-type, action, connector, or
+  header inputs are not legal command targets. Mark a structured field required when it supplies a
+  required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
+  materializer verify the same declaration before I/O, and preview/approval binds the resulting
+  canonical payload. This is also the canonical materializer used by typed-action/reverse-ETL
+  execution; do not add a second request builder. Each adoption must still run `surface-sync`, add
+  provider-source evidence, update its generated help/manual/website surfaces, and prove its own
+  exact request and rejected-input cases.
+- **Write-query optionality is source-locked too**: a legacy `writes.json` action may use the
+  existing object-form `query` entry with `"template":"{{ record.field }}"` and
+  `"omit_when_absent": true` to omit that one parameter when the record does not contain the
+  field. This is the only write-side record-absence exception. A plain-string entry, a missing
+  required record field, an undeclared query key, a wrong source (for example `query.*` in place of
+  `record.*`), malformed interpolation, and an explicit invalid value still fail before I/O.
+  Config, secret, and incremental references retain their established object-form omission/default
+  behavior; they do not satisfy a missing `record.*` reference. The caller cannot provide free-form
+  query values: an explicit record value is sent only through its exact declared query entry. Do not
+  use this rule for operation direct writes or as a generic query escape hatch.
 - **`api_surface` operation rows are reconciled, never hand-edited**: use
   `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
   result for direct-read operation rows. The tool loads the disk bundle and
