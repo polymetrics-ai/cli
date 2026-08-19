@@ -445,3 +445,18 @@ write-action-set SHA-256 selector and an explicit disposition for every typed
 action. The remaining exact foundation gap is
 `action-scoped-source-binding`; persisted App/CLI destination dispatch remains
 the pending upstream #4304 dependency, not a completed deployment claim.
+
+### Per-action eligibility clarification — 2026-08-20
+
+**Red:** a connector-level action-set selector can prove which set was audited,
+but it does not itself make the eligibility of each typed action inspectable.
+
+**Green:** the seven-surface ledger now contains one named entry for every
+action emitted by each connector's `writes.json`: 491 entries in total, with
+four `eligible_bound_fixture_mapping` entries and 487 eligible pending entries.
+The mechanical cross-check compares the sorted `writes.json` names against the
+ledger names for all ten connectors and reports zero missing or extra actions.
+Each pending entry is bound to its connector's precise source-identity,
+nested-object, or `action-scoped-source-binding` foundation record; no entry
+uses risk, privilege, deletion, cost, or missing live credentials as an
+ineligibility reason.

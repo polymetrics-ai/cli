@@ -22,13 +22,35 @@
       "documented_operations": 54,
       "api_surface_endpoints": 54,
       "surfaces": {
-        "binary_read": {"documented": 1, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 22, "cli_implemented": 19},
-        "direct_write": {"documented": 27, "cli_implemented": 2},
-        "etl": {"documented": 4, "cli_implemented": 4},
-        "reverse_etl": {"typed_actions": 20, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 45, "implemented": 45}
+        "binary_read": {
+          "documented": 1,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 22,
+          "cli_implemented": 19
+        },
+        "direct_write": {
+          "documented": 27,
+          "cli_implemented": 2
+        },
+        "etl": {
+          "documented": 4,
+          "cli_implemented": 4
+        },
+        "reverse_etl": {
+          "typed_actions": 20,
+          "destination_actions": 0,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 45,
+          "implemented": 45
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/dockerhub/writes.json",
@@ -37,7 +59,129 @@
         "selector": "Every typed action in this pinned action set has a CLI command but no source stream fixture proves a target-object mapping that preserves the required organization/repository/member identity.",
         "state": "schema-incompatible",
         "evidence": "internal/connectors/defs/dockerhub/fixtures/streams/repositories/page_1.json; internal/connectors/defs/dockerhub/writes.json",
-        "recoverability": "Add a source stream whose schema and fixture prove each target action's required identity and request fields."
+        "recoverability": "Add a source stream whose schema and fixture prove each target action's required identity and request fields.",
+        "action_dispositions": [
+          {
+            "action": "update_organization_settings",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "update_repository_immutable_tags",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "verify_repository_immutable_tags",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "create_repository_group",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "create_repository",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "update_organization_member",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_organization_member",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "create_organization_group",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "replace_organization_group",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "update_organization_group",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_organization_group",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "add_organization_group_member",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_organization_group_member",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_organization_invite",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "resend_organization_invite",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "create_organization_invites",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "update_personal_access_token",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_personal_access_token",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "update_organization_access_token",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_organization_access_token",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          }
+        ]
       }
     },
     {
@@ -45,22 +189,200 @@
       "documented_operations": 49,
       "api_surface_endpoints": 55,
       "surfaces": {
-        "binary_read": {"documented": 0, "cli_implemented": 0},
-        "binary_write": {"documented": 1, "cli_implemented": 0},
-        "direct_read": {"documented": 18, "cli_implemented": 18},
-        "direct_write": {"documented": 25, "cli_implemented": 0},
-        "etl": {"documented": 5, "cli_implemented": 6},
-        "reverse_etl": {"typed_actions": 24, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 49, "implemented": 45}
+        "binary_read": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 1,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 18,
+          "cli_implemented": 18
+        },
+        "direct_write": {
+          "documented": 25,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 5,
+          "cli_implemented": 6
+        },
+        "reverse_etl": {
+          "typed_actions": 24,
+          "destination_actions": 1,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 49,
+          "implemented": 45
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/notion/writes.json",
         "action_set_sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606",
         "action_count": 24,
-        "bound_actions": [{"action": "update_view", "stream": "views", "fixture": "fixtures/streams/views/page_1.json", "inputs": {"view_id": "id", "name": "name"}}],
+        "bound_actions": [
+          {
+            "action": "update_view",
+            "stream": "views",
+            "fixture": "fixtures/streams/views/page_1.json",
+            "inputs": {
+              "view_id": "id",
+              "name": "name"
+            }
+          }
+        ],
         "remaining_action_selector": "Every other typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
-        "foundation_gap_id": "action-scoped-source-binding"
+        "foundation_gap_id": "action-scoped-source-binding",
+        "action_dispositions": [
+          {
+            "action": "create_meeting_note",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_block",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_block",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "append_block_children",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_comment",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_comment",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_comment_markdown",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_comment",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_data_source",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_data_source",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_database",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_database",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_page",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_page",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_page_markdown",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "move_page",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "move_page_to_data_source",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_view",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_view",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_bound_fixture_mapping"
+          },
+          {
+            "action": "delete_view",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_view_query",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_view_query",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_file_upload",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "complete_file_upload",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          }
+        ]
       }
     },
     {
@@ -68,22 +390,77 @@
       "documented_operations": 589,
       "api_surface_endpoints": 589,
       "surfaces": {
-        "binary_read": {"documented": 4, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 254, "cli_implemented": 0},
-        "direct_write": {"documented": 326, "cli_implemented": 0},
-        "etl": {"documented": 5, "cli_implemented": 5},
-        "reverse_etl": {"typed_actions": 3, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 8, "implemented": 8}
+        "binary_read": {
+          "documented": 4,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 254,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 326,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 5,
+          "cli_implemented": 5
+        },
+        "reverse_etl": {
+          "typed_actions": 3,
+          "destination_actions": 1,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 8,
+          "implemented": 8
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/stripe/writes.json",
         "action_set_sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f",
         "action_count": 3,
-        "bound_actions": [{"action": "update_customer", "stream": "customers", "fixture": "fixtures/streams/customers/page_1.json", "inputs": {"id": "id", "email": "email", "name": "name", "description": "description", "phone": "phone"}}],
+        "bound_actions": [
+          {
+            "action": "update_customer",
+            "stream": "customers",
+            "fixture": "fixtures/streams/customers/page_1.json",
+            "inputs": {
+              "id": "id",
+              "email": "email",
+              "name": "name",
+              "description": "description",
+              "phone": "phone"
+            }
+          }
+        ],
         "remaining_action_selector": "Every other typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
-        "foundation_gap_id": "action-scoped-source-binding"
+        "foundation_gap_id": "action-scoped-source-binding",
+        "action_dispositions": [
+          {
+            "action": "create_customer",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_customer",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_bound_fixture_mapping"
+          },
+          {
+            "action": "delete_customer",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          }
+        ]
       }
     },
     {
@@ -91,13 +468,35 @@
       "documented_operations": 331,
       "api_surface_endpoints": 331,
       "surfaces": {
-        "binary_read": {"documented": 15, "cli_implemented": 0},
-        "binary_write": {"documented": 4, "cli_implemented": 0},
-        "direct_read": {"documented": 21, "cli_implemented": 0},
-        "direct_write": {"documented": 148, "cli_implemented": 0},
-        "etl": {"documented": 143, "cli_implemented": 1},
-        "reverse_etl": {"typed_actions": 54, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 5, "implemented": 3}
+        "binary_read": {
+          "documented": 15,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 4,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 21,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 148,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 143,
+          "cli_implemented": 1
+        },
+        "reverse_etl": {
+          "typed_actions": 54,
+          "destination_actions": 0,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 5,
+          "implemented": 3
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/bitbucket/writes.json",
@@ -106,7 +505,333 @@
         "selector": "Every typed action in this pinned action set.",
         "state": "schema-incompatible",
         "evidence": "The repositories fixture supplies slug but not the required target workspace identity for the declared repository actions; no current stream fixture proves the path/body identity for a typed write.",
-        "recoverability": "Declare a source stream and fixture with the required target workspace/path fields, then bind the record fields exactly."
+        "recoverability": "Declare a source stream and fixture with the required target workspace/path fields, then bind the record fields exactly.",
+        "action_dispositions": [
+          {
+            "action": "delete_repositories_workspace_repo_slug",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "create_repositories_workspace_repo_slug",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_commit_commit_approve",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_downloads_filename",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_hooks_uid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_issues_issue_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_issues_issue_id_vote",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_issues_issue_id_watch",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_refs_branches_name",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_repositories_workspace_repo_slug_refs_tags_name",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_snippets_workspace_encoded_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_snippets_workspace_encoded_id_comments_comment_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_snippets_workspace_encoded_id_watch",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_snippets_workspace_encoded_id_node_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_teams_username_pipelines_config_variables_variable_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_users_selected_user_gpg_keys_fingerprint",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_users_selected_user_pipelines_config_variables_variable_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_users_selected_user_properties_app_key_property_name",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_users_selected_user_ssh_keys_key_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_hooks_uid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_projects_project_key",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          },
+          {
+            "action": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_source_identity_fixture"
+          }
+        ]
       }
     },
     {
@@ -114,37 +839,144 @@
       "documented_operations": 1755,
       "api_surface_endpoints": 1755,
       "surfaces": {
-        "binary_read": {"documented": 46, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 699, "cli_implemented": 0},
-        "direct_write": {"documented": 1006, "cli_implemented": 0},
-        "etl": {"documented": 4, "cli_implemented": 4},
-        "reverse_etl": {"typed_actions": 0, "destination_actions": 0, "state": "not-applicable"},
-        "cli": {"declared": 4, "implemented": 4}
+        "binary_read": {
+          "documented": 46,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 699,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 1006,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 4,
+          "cli_implemented": 4
+        },
+        "reverse_etl": {
+          "typed_actions": 0,
+          "destination_actions": 0,
+          "state": "not-applicable"
+        },
+        "cli": {
+          "declared": 4,
+          "implemented": 4
+        }
       },
-      "typed_action_disposition": {"source": "internal/connectors/defs/gitlab/writes.json", "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a", "action_count": 0, "state": "not-applicable"}
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/gitlab/writes.json",
+        "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a",
+        "action_count": 0,
+        "state": "not-applicable",
+        "action_dispositions": []
+      }
     },
     {
       "connector": "circleci",
       "documented_operations": 111,
       "api_surface_endpoints": 111,
       "surfaces": {
-        "binary_read": {"documented": 0, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 52, "cli_implemented": 0},
-        "direct_write": {"documented": 50, "cli_implemented": 0},
-        "etl": {"documented": 9, "cli_implemented": 1},
-        "reverse_etl": {"typed_actions": 7, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 2, "implemented": 2}
+        "binary_read": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 52,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 50,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 9,
+          "cli_implemented": 1
+        },
+        "reverse_etl": {
+          "typed_actions": 7,
+          "destination_actions": 1,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 2,
+          "implemented": 2
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/circleci/writes.json",
         "action_set_sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d",
         "action_count": 7,
-        "bound_actions": [{"action": "update_schedule", "stream": "schedules", "fixture": "fixtures/streams/schedules/page_1.json", "inputs": {"id": "id", "name": "name", "description": "description", "timetable": "timetable", "parameters": "parameters"}}],
+        "bound_actions": [
+          {
+            "action": "update_schedule",
+            "stream": "schedules",
+            "fixture": "fixtures/streams/schedules/page_1.json",
+            "inputs": {
+              "id": "id",
+              "name": "name",
+              "description": "description",
+              "timetable": "timetable",
+              "parameters": "parameters"
+            }
+          }
+        ],
         "remaining_action_selector": "Every other typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
-        "foundation_gap_id": "action-scoped-source-binding"
+        "foundation_gap_id": "action-scoped-source-binding",
+        "action_dispositions": [
+          {
+            "action": "create_schedule",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_schedule",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_bound_fixture_mapping"
+          },
+          {
+            "action": "delete_schedule",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_environment_variable",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_environment_variable",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_checkout_key",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_checkout_key",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          }
+        ]
       }
     },
     {
@@ -152,37 +984,207 @@
       "documented_operations": 223,
       "api_surface_endpoints": 223,
       "surfaces": {
-        "binary_read": {"documented": 0, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 117, "cli_implemented": 0},
-        "direct_write": {"documented": 103, "cli_implemented": 0},
-        "etl": {"documented": 3, "cli_implemented": 0},
-        "reverse_etl": {"typed_actions": 0, "destination_actions": 0, "state": "not-applicable"},
-        "cli": {"declared": 0, "implemented": 0}
+        "binary_read": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 117,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 103,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 3,
+          "cli_implemented": 0
+        },
+        "reverse_etl": {
+          "typed_actions": 0,
+          "destination_actions": 0,
+          "state": "not-applicable"
+        },
+        "cli": {
+          "declared": 0,
+          "implemented": 0
+        }
       },
-      "typed_action_disposition": {"source": "internal/connectors/defs/sentry/writes.json", "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a", "action_count": 0, "state": "not-applicable"}
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/sentry/writes.json",
+        "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a",
+        "action_count": 0,
+        "state": "not-applicable",
+        "action_dispositions": []
+      }
     },
     {
       "connector": "vercel",
       "documented_operations": 400,
       "api_surface_endpoints": 400,
       "surfaces": {
-        "binary_read": {"documented": 0, "cli_implemented": 0},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 156, "cli_implemented": 0},
-        "direct_write": {"documented": 237, "cli_implemented": 0},
-        "etl": {"documented": 7, "cli_implemented": 1},
-        "reverse_etl": {"typed_actions": 18, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 2, "implemented": 2}
+        "binary_read": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 156,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 237,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 7,
+          "cli_implemented": 1
+        },
+        "reverse_etl": {
+          "typed_actions": 18,
+          "destination_actions": 1,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 2,
+          "implemented": 2
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/vercel/writes.json",
         "action_set_sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e",
         "action_count": 18,
-        "bound_actions": [{"action": "update_project", "stream": "projects", "fixture": "fixtures/streams/projects/page_1.json", "inputs": {"id": "id", "name": "name"}}],
+        "bound_actions": [
+          {
+            "action": "update_project",
+            "stream": "projects",
+            "fixture": "fixtures/streams/projects/page_1.json",
+            "inputs": {
+              "id": "id",
+              "name": "name"
+            }
+          }
+        ],
         "remaining_action_selector": "Every other typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
-        "foundation_gap_id": "action-scoped-source-binding"
+        "foundation_gap_id": "action-scoped-source-binding",
+        "action_dispositions": [
+          {
+            "action": "create_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_bound_fixture_mapping"
+          },
+          {
+            "action": "delete_project",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_deployment",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "cancel_deployment",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_deployment",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "add_project_domain",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "remove_project_domain",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_project_env_var",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_project_env_var",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_webhook",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_webhook",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_log_drain",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_log_drain",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "create_edge_config",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "update_edge_config",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_edge_config",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "delete_alias",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          }
+        ]
       }
     },
     {
@@ -190,13 +1192,35 @@
       "documented_operations": 249,
       "api_surface_endpoints": 249,
       "surfaces": {
-        "binary_read": {"documented": 0, "cli_implemented": 0},
-        "binary_write": {"documented": 1, "cli_implemented": 0},
-        "direct_read": {"documented": 10, "cli_implemented": 0},
-        "direct_write": {"documented": 129, "cli_implemented": 0},
-        "etl": {"documented": 109, "cli_implemented": 9},
-        "reverse_etl": {"typed_actions": 73, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 249, "implemented": 82}
+        "binary_read": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "binary_write": {
+          "documented": 1,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 10,
+          "cli_implemented": 0
+        },
+        "direct_write": {
+          "documented": 129,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 109,
+          "cli_implemented": 9
+        },
+        "reverse_etl": {
+          "typed_actions": 73,
+          "destination_actions": 0,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 249,
+          "implemented": 82
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/asana/writes.json",
@@ -205,7 +1229,447 @@
         "selector": "Every typed action in this pinned action set.",
         "state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
-        "additional_evidence": "The current generic input_fields mapping copies only one flat source field per input; Asana update actions commonly require a nested data object, which it cannot construct. See internal/connectors/sync_transport.go:175-199,351-365."
+        "additional_evidence": "The current generic input_fields mapping copies only one flat source field per input; Asana update actions commonly require a nested data object, which it cannot construct. See internal/connectors/sync_transport.go:175-199,351-365.",
+        "action_dispositions": [
+          {
+            "action": "create_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_task",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "delete_task",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "delete_project",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_section",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_section",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "delete_section",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_tag",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_tag",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "delete_tag",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_comment",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_custom_field",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_enum_option_for_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "insert_enum_option_for_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_enum_option",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_graph_export",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_resource_export",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_goal_relationship",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_supporting_relationship",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_goal",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_goal",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_goal_metric",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_goal_metric",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_followers",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_custom_field_setting_for_goal",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_ooo_entry",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_ooo_entry",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_portfolio",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_portfolio",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_item_for_portfolio",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_custom_field_setting_for_portfolio",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_members_for_portfolio",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "duplicate_portfolio",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_project_brief",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_project_brief",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_project_portfolio_setting",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_project_status_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "instantiate_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "duplicate_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_project_for_team",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_project_for_workspace",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_custom_field_setting_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_members_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_followers_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "project_save_as_template",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "trigger_rule",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_task_for_section",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "insert_section_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_status_for_object",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_story",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_story_for_goal",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_tag_for_workspace",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "instantiate_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "duplicate_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_subtask_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "set_parent_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_dependencies_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_dependents_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_project_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_tag_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_followers_for_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_team",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_team",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_user_for_team",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "create_time_tracking_entry",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_time_tracking_entry",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_user",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_user_for_workspace",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "update_workspace",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          },
+          {
+            "action": "add_user_for_workspace",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_closed_nested_object_mapping"
+          }
+        ]
       }
     },
     {
@@ -213,13 +1677,35 @@
       "documented_operations": 617,
       "api_surface_endpoints": 617,
       "surfaces": {
-        "binary_read": {"documented": 3, "cli_implemented": 3},
-        "binary_write": {"documented": 0, "cli_implemented": 0},
-        "direct_read": {"documented": 292, "cli_implemented": 292},
-        "direct_write": {"documented": 319, "cli_implemented": 0},
-        "etl": {"documented": 3, "cli_implemented": 3},
-        "reverse_etl": {"typed_actions": 292, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
-        "cli": {"declared": 590, "implemented": 584}
+        "binary_read": {
+          "documented": 3,
+          "cli_implemented": 3
+        },
+        "binary_write": {
+          "documented": 0,
+          "cli_implemented": 0
+        },
+        "direct_read": {
+          "documented": 292,
+          "cli_implemented": 292
+        },
+        "direct_write": {
+          "documented": 319,
+          "cli_implemented": 0
+        },
+        "etl": {
+          "documented": 3,
+          "cli_implemented": 3
+        },
+        "reverse_etl": {
+          "typed_actions": 292,
+          "destination_actions": 0,
+          "app_cli_dispatch": "pending-upstream-4304"
+        },
+        "cli": {
+          "declared": 590,
+          "implemented": 584
+        }
       },
       "typed_action_disposition": {
         "source": "internal/connectors/defs/jira/writes.json",
@@ -228,7 +1714,1761 @@
         "selector": "Every typed action in this pinned action set.",
         "state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
-        "additional_evidence": "Representative project_update_project requires input projectIdOrKey, but destination input identifiers reject upper-case characters: internal/connectors/sync_transport.go:673-690."
+        "additional_evidence": "Representative project_update_project requires input projectIdOrKey, but destination input identifiers reject upper-case characters: internal/connectors/sync_transport.go:673-690.",
+        "action_dispositions": [
+          {
+            "action": "announcement_banner_set_banner",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "app_update_multiple_custom_field_values",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "app_update_custom_field_configuration",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "app_update_custom_field_value",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "application_properties_set_application_property",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "attachment_remove_attachment",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_delete",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_edit",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_move",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_transition",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_unwatch",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "bulk_submit_bulk_watch",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "comment_delete_comment_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "component_create_component",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "component_delete_component",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "component_update_component",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "config_create_field_association_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "config_delete_field_association_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "config_update_field_association_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "config_clone_field_association_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "configuration_select_time_tracking_implementation",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "configuration_set_shared_time_tracking_configuration",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_create_dashboard",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_bulk_edit_dashboards",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_add_gadget",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_remove_gadget",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_update_gadget",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_delete_dashboard_item_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_delete_dashboard",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_update_dashboard",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "dashboard_copy_dashboard",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_create_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_remove_associations",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_create_associations",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_update_custom_field",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_create_custom_field_context",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_set_default_values",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_get_custom_field_contexts_for_projects_and_issue_types",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_delete_custom_field_context",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_update_custom_field_context",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_add_issue_types_to_context",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_remove_issue_types_from_context",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_create_custom_field_option",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_update_custom_field_option",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_reorder_custom_field_options",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_delete_custom_field_option",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_replace_custom_field_option",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_assign_projects_to_custom_field_context",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_remove_custom_field_context_from_projects",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_create_issue_field_option",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_delete_issue_field_option",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_update_issue_field_option",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_replace_issue_field_option",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_delete_custom_field",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_restore_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "field_trash_custom_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfiguration_create_field_configuration",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfiguration_delete_field_configuration",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfiguration_update_field_configuration",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfiguration_update_field_configuration_items",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_create_field_configuration_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_assign_field_configuration_scheme_to_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_delete_field_configuration_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_update_field_configuration_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_set_field_configuration_scheme_mapping",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "fieldconfigurationscheme_remove_issue_types_from_global_field_configuration_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_create_filter",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_set_default_share_scope",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_delete_filter",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_update_filter",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_reset_columns",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_set_columns",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_delete_favourite_for_filter",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_set_favourite_for_filter",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_change_filter_owner",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_add_share_permission",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "filter_delete_share_permission",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "forge_bulk_pin_unpin_projects_async",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "group_create_group",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "group_remove_user_from_group",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "group_add_user_to_group",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_create_issue",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_archive_issues_async",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_archive_issues",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_create_issues",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_set_issues_properties_list",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_set_issue_properties_by_issue",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_delete_issue_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_set_issue_property",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_unarchive_issues",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_get_is_watching_issue_bulk",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_issue",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_edit_issue",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_assign_issue",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_add_attachment",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_add_comment",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_comment",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_update_comment",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_notify",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_issue_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_remote_issue_link_by_global_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_create_or_update_remote_issue_link",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_remote_issue_link_by_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_update_remote_issue_link",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_do_transition",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_remove_vote",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_add_vote",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_remove_watcher",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_delete_worklogs",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_add_worklog",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_bulk_move_worklogs",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_worklog",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_update_worklog",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_delete_worklog_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_link_link_issues",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_link_delete_issue_link",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_link_type_create_issue_link_type",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_link_type_delete_issue_link_type",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issue_link_type_update_issue_link_type",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issues_export_archived_issues",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_create_issue_security_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_set_default_levels",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_associate_schemes_to_projects",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_update_issue_security_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_delete_security_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_add_security_level",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_remove_level",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_update_security_level",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_add_security_level_members",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuesecurityschemes_remove_member_from_security_level",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetype_create_issue_type",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetype_delete_issue_type",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetype_update_issue_type",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetype_delete_issue_type_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_create_issue_type_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_assign_issue_type_scheme_to_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_delete_issue_type_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_update_issue_type_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_add_issue_types_to_issue_type_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_reorder_issue_types_in_issue_type_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescheme_remove_issue_type_from_issue_type_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_create_issue_type_screen_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_assign_issue_type_screen_scheme_to_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_delete_issue_type_screen_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_update_issue_type_screen_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_append_mappings_for_issue_type_screen_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_update_default_screen_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "issuetypescreenscheme_remove_mappings_from_issue_type_screen_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "jql_update_precomputations",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "mypreferences_remove_preference",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "mypreferences_set_locale",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "notificationscheme_create_notification_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "notificationscheme_update_notification_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "notificationscheme_add_notifications",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "notificationscheme_delete_notification_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "notificationscheme_remove_notification_from_notification_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissions_get_bulk_permissions",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissions_get_permitted_projects",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissionscheme_create_permission_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissionscheme_delete_permission_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissionscheme_update_permission_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissionscheme_create_permission_grant",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "permissionscheme_delete_permission_scheme_entity",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_create_plan",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_archive_plan",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_duplicate_plan",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_add_atlassian_team",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_remove_atlassian_team",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_create_plan_only_team",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_delete_plan_only_team",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "plans_trash_plan",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priority_create_priority",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priority_set_default_priority",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priority_move_priorities",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priority_delete_priority",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priority_update_priority",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priorityscheme_create_priority_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priorityscheme_delete_priority_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "priorityscheme_update_priority_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_create_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_template_create_project_with_custom_template",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_template_edit_template",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_template_remove_template",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_template_save_template",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_delete_project",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_update_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_archive_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_update_project_avatar",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_delete_project_avatar",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_remove_default_project_classification",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_update_default_project_classification",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_delete_project_asynchronously",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_toggle_feature_for_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_delete_project_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_restore",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_delete_actor",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_add_actor_users",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_set_actors",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_update_project_email",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_assign_permission_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_category_create_project_category",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_category_remove_project_category",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "project_category_update_project_category",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "redact_redact",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "resolution_create_resolution",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "resolution_set_default_resolution",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "resolution_move_resolutions",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "resolution_delete_resolution",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "resolution_update_resolution",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_create_project_role",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_delete_project_role",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_partial_update_project_role",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_fully_update_project_role",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_delete_project_role_actors_from_role",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "role_add_project_role_actors_to_role",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_create_screen",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_add_field_to_default_screen",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_delete_screen",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_update_screen",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_add_screen_tab",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_delete_screen_tab",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_rename_screen_tab",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_add_screen_tab_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_remove_screen_tab_field",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_move_screen_tab_field",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screens_move_screen_tab",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screenscheme_create_screen_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screenscheme_delete_screen_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "screenscheme_update_screen_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "settings_set_issue_navigator_default_columns",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "statuses_delete_statuses_by_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "statuses_create_statuses",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "statuses_update_statuses",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "task_cancel_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "ui_modifications_create_ui_modification",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "ui_modifications_delete_ui_modification",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "ui_modifications_update_ui_modification",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "universal_avatar_delete_avatar",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "user_remove_user",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "user_create_user",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "user_set_user_columns",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "user_delete_user_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_create_version",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_delete_version",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_update_version",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_merge_versions",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_move_version",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_create_related_work",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_update_related_work",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_delete_and_replace_version",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "version_delete_related_work",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "webhook_delete_webhook_by_id",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "webhook_register_dynamic_webhooks",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "webhook_refresh_webhooks",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflow_read_workflow_from_history",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflow_update_workflow_transition_rule_configurations",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflow_delete_workflow_transition_rule_configurations",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflow_delete_inactive_workflow",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflows_read_workflows",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflows_create_workflows",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflows_update_workflows",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_create_workflow_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_assign_scheme_to_project",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_switch_workflow_scheme_for_project",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_read_workflow_schemes",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_schemes",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_get_required_workflow_scheme_mappings",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_workflow_scheme",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_workflow_scheme",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_create_workflow_scheme_draft_from_parent",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_default_workflow",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_default_workflow",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_workflow_scheme_draft",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_workflow_scheme_draft",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_draft_default_workflow",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_draft_default_workflow",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_workflow_scheme_draft_issue_type",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_set_workflow_scheme_draft_issue_type",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_publish_draft_workflow_scheme",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_draft_workflow_mapping",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_draft_workflow_mapping",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_workflow_scheme_issue_type",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_set_workflow_scheme_issue_type",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_delete_workflow_mapping",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "workflowscheme_update_workflow_mapping",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "connect_delete_addon_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "connect_register_modules",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "connect_update_issue_fields",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "connect_update_entity_properties_value",
+            "kind": "update",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "connect_submit_task",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "forge_delete_forge_app_property",
+            "kind": "delete",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          },
+          {
+            "action": "internal_get_worklogs_by_issue_id_and_worklog_id",
+            "kind": "create",
+            "reverse_etl_eligibility": "eligible",
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
+          }
+        ]
       }
     }
   ],

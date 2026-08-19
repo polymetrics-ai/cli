@@ -188,6 +188,11 @@
   for every typed action, including a stable action-set SHA-256 selector,
   source mapping, acknowledgement/delivery facts, and a semantic exclusion or
   exact foundation dependency where the current closed contract cannot bind it.
+- [x] A mechanical per-connector comparison of `writes.json` action names to
+  the ledger's named eligibility rows reports 491 / 491 action names, with
+  zero missing or extra. Four are fixture-bound; the remaining 487 remain
+  eligible and carry a specific mapping/foundation dependency rather than a
+  safety, privilege, deletion, price, or credential exclusion.
 - [x] Definition-owned static destination mappings validate for Notion
   `views -> update_view`, Stripe `customers -> update_customer`, CircleCI
   `schedules -> update_schedule`, and Vercel `projects -> update_project`.

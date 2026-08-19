@@ -17,10 +17,12 @@ exact source mappings are in `SEVEN-SURFACE-RECONCILIATION.json`.
 | Asana | 249 | 82 | 73 | None: closed mapper cannot construct nested action data |
 | Jira | 617 | 584 | 292 | None: representative typed input violates mapper identifier grammar |
 
-All remaining typed actions are explicitly covered by the pinned action-set
-selectors in the JSON ledger. They remain CLI-reachable where a command is
-already declared. They are not excluded for risk, privilege, destructiveness or
-the lack of live credentials.
+The JSON ledger now contains one named eligibility disposition for every one
+of the 491 typed actions: four are `eligible_bound_fixture_mapping` and 487
+are eligible but pending the exact source-identity, nested-object, or
+action-scoped mapping dependency named alongside that action. The action-set
+hash remains an anti-drift selector for each connector. These actions are not
+excluded for risk, privilege, destructiveness, or the lack of live credentials.
 
 The current generic destination can model one action mapping per destination
 declaration. It resolves that mapping from source executor and stream, not the

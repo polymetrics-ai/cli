@@ -72,8 +72,9 @@ destination mappings—Notion views, Stripe customers, CircleCI schedules, and
 Vercel projects—and supplies the missing CircleCI/Vercel ETL and reverse-ETL
 commands. The installed binary reaches credential preflight for those four
 commands without a provider request. The new seven-surface ledger gives all
-491 typed actions an explicit destination eligibility disposition and retains
-the source action-set hashes.
+491 typed actions a named destination eligibility disposition (four static
+fixture mappings and 487 exact pending dependencies), while retaining the
+source action-set hashes for anti-drift verification.
 
 This is deliberately not connector completion: source-operation command
 coverage remains well below the requested full-reachability bar for several
