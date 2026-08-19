@@ -60,6 +60,11 @@ func TestAllProviderOperationsHaveExecutableCommands(t *testing.T) {
 			t.Errorf("%s commands = %d, want %d", intent, got, want)
 		}
 	}
+	for _, topic := range surface.HelpTopics {
+		if topic.Name == "direct-read" && strings.Contains(strings.ToLower(topic.Summary), "planned") {
+			t.Fatalf("direct-read help topic = %q, want current executable-contract wording", topic.Summary)
+		}
+	}
 }
 
 func TestOperationReadAndStructuredWriteSafetyContracts(t *testing.T) {

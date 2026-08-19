@@ -1,8 +1,8 @@
 {
   "api": "Twenty CRM REST API (https://api.twenty.com/rest)",
   "docs": "https://docs.twenty.com/developers/extend/api",
-  "reviewed_at": "2026-07-10",
-  "scope": "Complete connector-local ledger for the Twenty standard-object REST CRUD surface derived from the official API overview (https://docs.twenty.com/developers/extend/api) and open-source standard-object metadata. Twenty documents schema-per-tenant REST /rest and GraphQL /graphql APIs rather than one static workspace reference; this bundle covers the standard-object REST operations exactly once: 56 GET rows, 84 create/update/batch reverse-ETL rows, and 28 typed-confirmation DELETE rows. GraphQL is recorded as source context and not duplicated as raw executable operations. S3 #280 uses same-stream coverage for get-by-id rows until generic direct-read execution exists. S4 #281 adds non-destructive reverse-ETL create/update/batch rows. S5 #282 covers destructive DELETE /rest/<object>/{id} rows with confirm=destructive.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Complete connector-local ledger for the Twenty standard-object REST CRUD surface derived from the official API overview (https://docs.twenty.com/developers/extend/api) and open-source standard-object metadata. Twenty documents schema-per-tenant REST /rest and GraphQL /graphql APIs rather than one static workspace reference; this bundle covers the standard-object REST operations exactly once: 28 ETL list reads, 28 bounded operation-backed get-by-ID reads, 84 create/update/batch reverse-ETL rows, and 28 typed-confirmation DELETE rows. GraphQL is recorded as source context and not duplicated as a raw executable operation surface.",
   "endpoints": [
     {
       "method": "GET",

@@ -5948,7 +5948,7 @@
     },
     {
       "name": "direct-read",
-      "summary": "Get-by-id commands are planned until generic JSON direct_read output policies are approved."
+      "summary": "Get-by-id commands are bounded, operation-backed direct reads with redacted JSON output."
     }
   ]
 }

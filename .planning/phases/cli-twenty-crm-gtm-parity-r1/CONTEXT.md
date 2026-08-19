@@ -71,7 +71,12 @@ historical file is imported.
 ## Scope and foundation boundary
 
 Only `internal/connectors/defs/twenty/**` plus this issue's planning evidence may
-change. A required shared-engine, generator, allowlist, schema, or website change
-is a foundation decision, not a connector workaround. The required GSD prompts
-were resolved with `scripts/gsd prompt`; this execution uses the documented
-inline/manual fallback because compatible isolated Pi workers are unavailable.
+change. The single curated `internal/connectors/icon_data.json` fallback row for
+Twenty is explicitly authorized: it is authored provenance (`source` and
+`review_status` are `polymetrics`) and uses the documented sample fallback rather
+than mislabelling another provider's asset. The other 556 curated rows remain
+byte-identical; no upstream registry regeneration is authorized. A required
+shared-engine, generator, allowlist, schema, or website change is a foundation
+decision, not a connector workaround. The required GSD prompts were resolved
+with `scripts/gsd prompt`; this execution uses the documented inline/manual
+fallback because compatible isolated Pi workers are unavailable.
