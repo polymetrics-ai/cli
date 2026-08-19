@@ -218,14 +218,8 @@
         "artifact": "gorgias-openapi-3.1.0-2026-08-19",
         "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       },
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding.",
-        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
-        "notes": "named_dependency=connector-local bounded binary or direct-read contract and generated CLI binding; source=gorgias-openapi-3.1.0-2026-08-19"
+      "covered_by": {
+        "direct_read": "files download"
       }
     },
     {
@@ -620,14 +614,8 @@
         "artifact": "gorgias-openapi-3.1.0-2026-08-19",
         "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       },
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding.",
-        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
-        "notes": "named_dependency=connector-local bounded direct-read contract and generated CLI binding; source=gorgias-openapi-3.1.0-2026-08-19"
+      "covered_by": {
+        "direct_read": "tickets messages list"
       }
     },
     {

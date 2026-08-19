@@ -11,41 +11,586 @@
     "connectors": 20,
     "documented_operations": 3932,
     "direct_read_documented": 1465,
-    "direct_read_exact_command_bindings": 122,
-    "direct_read_missing_exact_command_bindings": 1343,
+    "direct_read_exact_command_bindings": 123,
+    "direct_read_missing_exact_command_bindings": 1342,
     "direct_write_documented": 2189,
     "direct_write_exact_typed_action_bindings": 444,
     "direct_write_missing_exact_typed_action_bindings": 1745,
     "direct_write_cli_commands": 0,
     "etl_streams": 287,
-    "source_transports": 0,
-    "reverse_etl_destination_action_bindings": 0,
-    "binary_ledger_rows": 0,
+    "source_transports": 1,
+    "reverse_etl_destination_action_bindings": 1,
+    "binary_ledger_rows": 1,
     "binary_cli_commands": 2,
     "documented_deletes": 424,
     "connectors_with_unproven_source_inventory": 3,
-    "provider_live_certified": 0
+    "provider_live_certified": 0,
+    "reverse_etl_destination_declarations_pending_app_dispatch": 1,
+    "reverse_etl_cli_commands": 61
   },
   "connectors": [
-    {"connector":"close-com","source_inventory":"complete","documented":300,"direct_read":{"documented":123,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":163,"typed_action_bindings":12,"cli_commands":0},"etl":{"streams":14,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":52,"cli_commands":0},
-    {"connector":"outreach","source_inventory":"complete","documented":259,"direct_read":{"documented":0,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":163,"typed_action_bindings":163,"cli_commands":0},"etl":{"streams":96,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":36,"cli_commands":0},
-    {"connector":"salesloft","source_inventory":"complete","documented":211,"direct_read":{"documented":115,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":91,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":5,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":18,"cli_commands":0},
-    {"connector":"copper","source_inventory":"complete","documented":89,"direct_read":{"documented":32,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":52,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":5,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":11,"cli_commands":0},
-    {"connector":"zoho-bigin","source_inventory":"complete","documented":75,"direct_read":{"documented":26,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":43,"typed_action_bindings":6,"cli_commands":0},"etl":{"streams":13,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":11,"cli_commands":0},
-    {"connector":"klaviyo","source_inventory":"complete","documented":345,"direct_read":{"documented":198,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":141,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":6,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":30,"cli_commands":0},
-    {"connector":"braze","source_inventory":"unproven","documented":95,"direct_read":{"documented":21,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":53,"typed_action_bindings":29,"cli_commands":0},"etl":{"streams":21,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":4,"cli_commands":0},
-    {"connector":"customer-io","source_inventory":"complete","documented":166,"direct_read":{"documented":82,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":68,"typed_action_bindings":10,"cli_commands":0},"etl":{"streams":16,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":14,"cli_commands":0},
-    {"connector":"intercom","source_inventory":"complete","documented":231,"direct_read":{"documented":103,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":123,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":5,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":31,"cli_commands":0},
-    {"connector":"freshdesk","source_inventory":"complete","documented":170,"direct_read":{"documented":73,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":92,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":5,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":22,"cli_commands":0},
-    {"connector":"segment","source_inventory":"complete","documented":201,"direct_read":{"documented":97,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":101,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":3,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":28,"cli_commands":0},
-    {"connector":"activecampaign","source_inventory":"complete","documented":296,"direct_read":{"documented":128,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":157,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":11,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":50,"cli_commands":0},
-    {"connector":"iterable","source_inventory":"complete","documented":148,"direct_read":{"documented":49,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":96,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":3,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":12,"cli_commands":0},
-    {"connector":"help-scout","source_inventory":"unproven","documented":144,"direct_read":{"documented":55,"command_bindings":50,"cli_commands":49},"direct_write":{"documented":65,"typed_action_bindings":65,"cli_commands":0},"etl":{"streams":24,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":1},"deletes":18,"cli_commands":139},
-    {"connector":"gorgias","source_inventory":"complete","documented":114,"direct_read":{"documented":42,"command_bindings":40,"cli_commands":42},"direct_write":{"documented":68,"typed_action_bindings":61,"cli_commands":0},"etl":{"streams":4,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":1},"deletes":18,"cli_commands":93},
-    {"connector":"service-now","source_inventory":"complete_dynamic_templates","documented":6,"direct_read":{"documented":1,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":4,"typed_action_bindings":2,"cli_commands":0},"etl":{"streams":3,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":1,"cli_commands":0},
-    {"connector":"chatwoot","source_inventory":"complete","documented":148,"direct_read":{"documented":57,"command_bindings":32,"cli_commands":34},"direct_write":{"documented":84,"typed_action_bindings":60,"cli_commands":0},"etl":{"streams":7,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":18,"cli_commands":100},
-    {"connector":"chargebee","source_inventory":"complete","documented":527,"direct_read":{"documented":128,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":367,"typed_action_bindings":36,"cli_commands":0},"etl":{"streams":32,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":0,"cli_commands":0},
-    {"connector":"square","source_inventory":"complete","documented":334,"direct_read":{"documented":117,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":213,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":4,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":27,"cli_commands":0},
-    {"connector":"braintree","source_inventory":"unproven","documented":73,"direct_read":{"documented":18,"command_bindings":0,"cli_commands":0},"direct_write":{"documented":45,"typed_action_bindings":0,"cli_commands":0},"etl":{"streams":10,"source_transport":false},"reverse_etl":{"destination_action_bindings":0},"binary":{"ledger_rows":0,"cli_commands":0},"deletes":6,"cli_commands":0}
+    {
+      "connector": "close-com",
+      "source_inventory": "complete",
+      "documented": 300,
+      "direct_read": {
+        "documented": 123,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 163,
+        "typed_action_bindings": 12,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 14,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 52,
+      "cli_commands": 0
+    },
+    {
+      "connector": "outreach",
+      "source_inventory": "complete",
+      "documented": 259,
+      "direct_read": {
+        "documented": 0,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 163,
+        "typed_action_bindings": 163,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 96,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 36,
+      "cli_commands": 0
+    },
+    {
+      "connector": "salesloft",
+      "source_inventory": "complete",
+      "documented": 211,
+      "direct_read": {
+        "documented": 115,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 91,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 5,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 18,
+      "cli_commands": 0
+    },
+    {
+      "connector": "copper",
+      "source_inventory": "complete",
+      "documented": 89,
+      "direct_read": {
+        "documented": 32,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 52,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 5,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 11,
+      "cli_commands": 0
+    },
+    {
+      "connector": "zoho-bigin",
+      "source_inventory": "complete",
+      "documented": 75,
+      "direct_read": {
+        "documented": 26,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 43,
+        "typed_action_bindings": 6,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 13,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 11,
+      "cli_commands": 0
+    },
+    {
+      "connector": "klaviyo",
+      "source_inventory": "complete",
+      "documented": 345,
+      "direct_read": {
+        "documented": 198,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 141,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 6,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 30,
+      "cli_commands": 0
+    },
+    {
+      "connector": "braze",
+      "source_inventory": "unproven",
+      "documented": 95,
+      "direct_read": {
+        "documented": 21,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 53,
+        "typed_action_bindings": 29,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 21,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 4,
+      "cli_commands": 0
+    },
+    {
+      "connector": "customer-io",
+      "source_inventory": "complete",
+      "documented": 166,
+      "direct_read": {
+        "documented": 82,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 68,
+        "typed_action_bindings": 10,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 16,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 14,
+      "cli_commands": 0
+    },
+    {
+      "connector": "intercom",
+      "source_inventory": "complete",
+      "documented": 231,
+      "direct_read": {
+        "documented": 103,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 123,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 5,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 31,
+      "cli_commands": 0
+    },
+    {
+      "connector": "freshdesk",
+      "source_inventory": "complete",
+      "documented": 170,
+      "direct_read": {
+        "documented": 73,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 92,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 5,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 22,
+      "cli_commands": 0
+    },
+    {
+      "connector": "segment",
+      "source_inventory": "complete",
+      "documented": 201,
+      "direct_read": {
+        "documented": 97,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 101,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 3,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 28,
+      "cli_commands": 0
+    },
+    {
+      "connector": "activecampaign",
+      "source_inventory": "complete",
+      "documented": 296,
+      "direct_read": {
+        "documented": 128,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 157,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 11,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 50,
+      "cli_commands": 0
+    },
+    {
+      "connector": "iterable",
+      "source_inventory": "complete",
+      "documented": 148,
+      "direct_read": {
+        "documented": 49,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 96,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 3,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 12,
+      "cli_commands": 0
+    },
+    {
+      "connector": "help-scout",
+      "source_inventory": "unproven",
+      "documented": 144,
+      "direct_read": {
+        "documented": 55,
+        "command_bindings": 50,
+        "cli_commands": 49
+      },
+      "direct_write": {
+        "documented": 65,
+        "typed_action_bindings": 65,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 24,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 1
+      },
+      "deletes": 18,
+      "cli_commands": 139
+    },
+    {
+      "connector": "gorgias",
+      "source_inventory": "complete",
+      "documented": 114,
+      "direct_read": {
+        "documented": 42,
+        "command_bindings": 41,
+        "cli_commands": 43
+      },
+      "direct_write": {
+        "documented": 68,
+        "typed_action_bindings": 61,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 4,
+        "source_transport": true
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 1,
+        "cli_commands": 61,
+        "deployable_application_dispatch": false,
+        "pending_foundation": "#4304 persisted App/CLI generic destination dispatch"
+      },
+      "binary": {
+        "ledger_rows": 1,
+        "cli_commands": 1
+      },
+      "deletes": 18,
+      "cli_commands": 94
+    },
+    {
+      "connector": "service-now",
+      "source_inventory": "complete_dynamic_templates",
+      "documented": 6,
+      "direct_read": {
+        "documented": 1,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 4,
+        "typed_action_bindings": 2,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 3,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 1,
+      "cli_commands": 0
+    },
+    {
+      "connector": "chatwoot",
+      "source_inventory": "complete",
+      "documented": 148,
+      "direct_read": {
+        "documented": 57,
+        "command_bindings": 32,
+        "cli_commands": 34
+      },
+      "direct_write": {
+        "documented": 84,
+        "typed_action_bindings": 60,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 7,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 18,
+      "cli_commands": 100
+    },
+    {
+      "connector": "chargebee",
+      "source_inventory": "complete",
+      "documented": 527,
+      "direct_read": {
+        "documented": 128,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 367,
+        "typed_action_bindings": 36,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 32,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 0,
+      "cli_commands": 0
+    },
+    {
+      "connector": "square",
+      "source_inventory": "complete",
+      "documented": 334,
+      "direct_read": {
+        "documented": 117,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 213,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 4,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 27,
+      "cli_commands": 0
+    },
+    {
+      "connector": "braintree",
+      "source_inventory": "unproven",
+      "documented": 73,
+      "direct_read": {
+        "documented": 18,
+        "command_bindings": 0,
+        "cli_commands": 0
+      },
+      "direct_write": {
+        "documented": 45,
+        "typed_action_bindings": 0,
+        "cli_commands": 0
+      },
+      "etl": {
+        "streams": 10,
+        "source_transport": false
+      },
+      "reverse_etl": {
+        "destination_action_bindings": 0
+      },
+      "binary": {
+        "ledger_rows": 0,
+        "cli_commands": 0
+      },
+      "deletes": 6,
+      "cli_commands": 0
+    }
   ]
 }

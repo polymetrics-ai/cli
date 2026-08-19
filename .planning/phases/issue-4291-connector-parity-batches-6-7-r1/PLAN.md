@@ -67,3 +67,14 @@ available foundation. `READINESS-BASELINE.{json,md}` is the before-state for thi
 The canonical contract forbids role spawning. The GSD lifecycle therefore runs inline with this
 issue-local phase evidence; generated prompts were refreshed on 2026-08-20 after `scripts/gsd
 doctor` and all five command sources passed `agentcontractgen check`.
+
+## Gorgias increment — 2026-08-20
+
+The first connector-owned reconciliation slice is Gorgias. It promotes the pinned deprecated
+ticket-message GET and existing bounded file download into correct user-reachable classes, then
+declares every ETL stream and a single closed `tickets(id,status) → update_ticket` destination proof.
+All remaining typed actions must receive an explicit eligibility state; the current closed
+per-mode action selector makes 59 eligible actions pending a #4304 foundation extension rather than
+silently selecting one. `upload_file` is the lone semantic multipart/binary exception and remains
+CLI-reachable. The slice cannot claim application-level reverse-ETL deployment until the captain's
+pending persisted App/CLI dispatch update is merged and exercised.

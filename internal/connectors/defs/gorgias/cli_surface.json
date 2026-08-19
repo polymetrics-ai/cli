@@ -1126,6 +1126,34 @@
       ]
     },
     {
+      "path": "tickets messages list",
+      "summary": "List messages of a ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_ticket_messages",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "integer",
+          "summary": "The documented Gorgias ticket ID.",
+          "maps_to": "path.ticket_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets/{ticket_id}/messages"
+        }
+      ],
+      "notes": "Bounded direct read for a deprecated-but-documented provider operation; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tickets messages list --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
       "path": "tickets tags list",
       "summary": "List ticket tags",
       "intent": "direct_read",
@@ -3045,7 +3073,7 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter `id`.",
           "maps_to": "record.id",
           "required": true

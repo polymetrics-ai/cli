@@ -481,6 +481,21 @@
       }
     },
     {
+      "id": "gorgias.list_ticket_messages",
+      "kind": "rest_read",
+      "summary": "List ticket messages",
+      "description": "Bounded Gorgias read for the provider's deprecated-but-documented GET /api/tickets/{ticket_id}/messages operation. The installed CLI remains available while the provider marks the route deprecated.",
+      "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "max_bytes": 1048576
+      }
+    },
+    {
       "id": "gorgias.list_ticket_tags",
       "kind": "rest_read",
       "summary": "List ticket tags",

@@ -3188,6 +3188,12 @@
     },
     {
       "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/api/tickets/{ticket_id}/messages/{id}",
       "kind": "rest_read",
       "max_bytes": 1048576

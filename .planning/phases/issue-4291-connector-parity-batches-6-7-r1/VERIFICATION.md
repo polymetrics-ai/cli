@@ -71,3 +71,31 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   and `go run ./cmd/connectorgen surface-sync --check` passed (`552 connector(s) scanned, 0
   field(s) filled and 0 field(s) corrected across 0 connector(s)`). `jq empty` passed for the
   readiness baseline and Gorgias API surface.
+
+## Gorgias connector-owned destination increment — 2026-08-20
+
+- **RED:** Gorgias had two documented-but-disabled source rows despite existing command/operation
+  support (`files download`) or a faithfully modelable deprecated provider route (`GET
+  /api/tickets/{ticket_id}/messages`). It had no source or destination transport declaration, and
+  every typed action still named the retired generic-destination gap. `connectorgen params-import`
+  was also unable to import the otherwise hash-matching public OpenAPI because its `/api/jobs`
+  parameter schema uses a valid union type that the importer cannot decode.
+- **GREEN:** The legacy message route is an implemented bounded `rest_read` command with its exact
+  required integer `ticket_id`; the binary route is explicitly a `binary_read` source row; and
+  `sync_transport.json` declares all four streams plus the exact `tickets(id,status) → update_ticket`
+  typed-destination proof. The endpoint ledger and website projections were regenerated. All 61
+  typed actions have an explicit eligibility decision: one bound proof, 59 pending closed
+  definition-owned action selection, and one multipart/binary semantic exclusion that remains
+  CLI-reachable. Provider-live certification is still pending.
+- **GREEN:** `go test -timeout 20m ./cmd/connectorgen -run TestGorgiasAPISurfaceOperationLedger -count=1`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed. A fresh installed binary in an initialized isolated project reached both
+  `pm gorgias tickets messages list --ticket-id 1 --json` and `pm gorgias tickets update --id 1
+  --status open --json`; each stopped at expected `error: missing --credential`, never an unknown
+  command. No credential or provider request was used.
+- **PENDING FOUNDATION:** This is declaration/fixture proof only. Per the captain update, #4304
+  still needs persisted App/CLI generic-destination dispatch. Do not mark application-level
+  reverse-ETL deployable until the final foundation merge is an ancestor and the real App/CLI path
+  exercises the declared destination.
