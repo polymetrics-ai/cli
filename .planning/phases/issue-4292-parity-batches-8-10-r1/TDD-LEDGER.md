@@ -153,6 +153,17 @@
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
 
+### Typed-write CLI proof — second increment
+
+- **Red:** the second five bundles still carried 24 absent typed-action CLI
+  bindings (dbt Cloud and Dremio); the zero-action Metabase, Looker, and Mode
+  rows must not grow invented commands.
+- **Green:** materialized only dbt Cloud and Dremio actions in their existing
+  connector-owned surfaces. The exact route join and partial reasons are the
+  same closed rule as the first increment; the three source-only bundles gain
+  no action command. The focused trace, `connectorgen validate`,
+  `surface-sync --check`, and runtime-preflight sweep pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

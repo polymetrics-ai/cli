@@ -13841,8 +13841,14 @@
             {
               "action": "create_job",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create job apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -13875,8 +13881,14 @@
             {
               "action": "update_job",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update job apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -13894,8 +13906,14 @@
             {
               "action": "delete_job",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete job apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -13913,8 +13931,14 @@
             {
               "action": "trigger_job_run",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "trigger job run apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: job_id, cause"
@@ -13923,8 +13947,14 @@
             {
               "action": "retry_failed_job",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "retry failed job apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: job_id"
@@ -13933,8 +13963,14 @@
             {
               "action": "cancel_run",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "cancel run apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: run_id"
@@ -13943,8 +13979,14 @@
             {
               "action": "retry_run",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "retry run apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: run_id"
@@ -13953,8 +13995,14 @@
             {
               "action": "create_notification",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create notification apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "notifications",
@@ -13997,8 +14045,14 @@
             {
               "action": "update_notification",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update notification apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -14016,8 +14070,14 @@
             {
               "action": "delete_notification",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete notification apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -14035,8 +14095,14 @@
             {
               "action": "create_ssh_tunnel",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create ssh tunnel apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "ssh_tunnels",
@@ -14074,8 +14140,14 @@
             {
               "action": "update_ssh_tunnel",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update ssh tunnel apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -14093,8 +14165,14 @@
             {
               "action": "delete_ssh_tunnel",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete ssh tunnel apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "projects",
@@ -14112,9 +14190,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
+          "declared_commands": 13,
           "implemented_commands": 0,
-          "partial_commands": 0
+          "partial_commands": 13
         }
       }
     },
@@ -14231,8 +14309,13 @@
             {
               "action": "create_user",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create user apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "reflections",
@@ -14250,8 +14333,13 @@
             {
               "action": "update_user",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update user apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14269,8 +14357,13 @@
             {
               "action": "delete_user",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete user apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14288,8 +14381,13 @@
             {
               "action": "create_role",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create role apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "reflections",
@@ -14307,8 +14405,13 @@
             {
               "action": "update_role",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update role apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14326,8 +14429,13 @@
             {
               "action": "delete_role",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete role apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14345,8 +14453,13 @@
             {
               "action": "update_reflection",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update reflection apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14364,8 +14477,13 @@
             {
               "action": "refresh_reflection",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "refresh reflection apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14383,8 +14501,13 @@
             {
               "action": "delete_reflection",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete reflection apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "catalog",
@@ -14402,8 +14525,14 @@
             {
               "action": "create_personal_access_token",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create personal access token apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /user/{user_id}/token disagrees with covered api_surface path /user/{user-id}/token."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: user_id, label"
@@ -14412,8 +14541,14 @@
             {
               "action": "delete_personal_access_token",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete personal access token apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /user/{user_id}/token/{token_id} disagrees with covered api_surface path /user/{userName}/token/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: user_id, token_id"
@@ -14422,9 +14557,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
-          "implemented_commands": 0,
-          "partial_commands": 0
+          "declared_commands": 11,
+          "implemented_commands": 9,
+          "partial_commands": 2
         }
       }
     },

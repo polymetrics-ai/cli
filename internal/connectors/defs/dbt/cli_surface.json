@@ -1,0 +1,404 @@
+{
+  "tagline": "Run dbt Cloud's declared typed write actions.",
+  "usage": "pm dbt <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "cancel run apply",
+        "create job apply",
+        "create notification apply",
+        "create ssh tunnel apply",
+        "delete job apply",
+        "delete notification apply",
+        "delete ssh tunnel apply",
+        "retry failed job apply",
+        "retry run apply",
+        "trigger job run apply",
+        "update job apply",
+        "update notification apply",
+        "update ssh tunnel apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "cancel run apply",
+      "summary": "Typed action cancel_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "cancel_run",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Required run_id record field.",
+          "maps_to": "record.run_id",
+          "required": true
+        }
+      ],
+      "risk": "cancels an in-progress dbt Cloud run; stops warehouse queries mid-execution, external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt cancel run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create job apply",
+      "summary": "Typed action create_job",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_job",
+      "flags": [
+        {
+          "name": "environment-id",
+          "type": "integer",
+          "summary": "Required environment_id record field.",
+          "maps_to": "record.environment_id",
+          "required": true
+        },
+        {
+          "name": "execute-steps",
+          "type": "json",
+          "summary": "Required execute_steps record field.",
+          "maps_to": "record.execute_steps",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "integer",
+          "summary": "Required project_id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "creates a new scheduled/triggerable dbt Cloud job definition; low-risk until triggered, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt create job apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create notification apply",
+      "summary": "Typed action create_notification",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_notification",
+      "flags": [
+        {
+          "name": "on-cancel",
+          "type": "json",
+          "summary": "Required on_cancel record field.",
+          "maps_to": "record.on_cancel",
+          "required": true
+        },
+        {
+          "name": "on-failure",
+          "type": "json",
+          "summary": "Required on_failure record field.",
+          "maps_to": "record.on_failure",
+          "required": true
+        },
+        {
+          "name": "on-success",
+          "type": "json",
+          "summary": "Required on_success record field.",
+          "maps_to": "record.on_success",
+          "required": true
+        },
+        {
+          "name": "on-warning",
+          "type": "json",
+          "summary": "Required on_warning record field.",
+          "maps_to": "record.on_warning",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "integer",
+          "summary": "Required state record field.",
+          "maps_to": "record.state",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "integer",
+          "summary": "Required user_id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "registers an outbound job-status notification (email or Slack channel of the caller's choosing); low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt create notification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create ssh tunnel apply",
+      "summary": "Typed action create_ssh_tunnel",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_ssh_tunnel",
+      "flags": [
+        {
+          "name": "connection-id",
+          "type": "integer",
+          "summary": "Required connection_id record field.",
+          "maps_to": "record.connection_id",
+          "required": true
+        },
+        {
+          "name": "hostname",
+          "type": "string",
+          "summary": "Required hostname record field.",
+          "maps_to": "record.hostname",
+          "required": true
+        },
+        {
+          "name": "port",
+          "type": "integer",
+          "summary": "Required port record field.",
+          "maps_to": "record.port",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "integer",
+          "summary": "Required state record field.",
+          "maps_to": "record.state",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Required username record field.",
+          "maps_to": "record.username",
+          "required": true
+        }
+      ],
+      "risk": "creates an SSH tunnel encrypting traffic for a warehouse connection; may carry a private key in the request body, external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt create ssh tunnel apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete job apply",
+      "summary": "Typed action delete_job",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_job",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversible removal of a job definition (its schedule/trigger and run history reference); approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt delete job apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete notification apply",
+      "summary": "Typed action delete_notification",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_notification",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "removes an existing job-status notification configuration; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt delete notification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete ssh tunnel apply",
+      "summary": "Typed action delete_ssh_tunnel",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_ssh_tunnel",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "removes an SSH tunnel; the associated warehouse connection falls back to unencrypted/direct connectivity, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt delete ssh tunnel apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "retry failed job apply",
+      "summary": "Typed action retry_failed_job",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "retry_failed_job",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "integer",
+          "summary": "Required job_id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        }
+      ],
+      "risk": "retries a job's most recent failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt retry failed job apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "retry run apply",
+      "summary": "Typed action retry_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "retry_run",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Required run_id record field.",
+          "maps_to": "record.run_id",
+          "required": true
+        }
+      ],
+      "risk": "retries a specific failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt retry run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "trigger job run apply",
+      "summary": "Typed action trigger_job_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "trigger_job_run",
+      "flags": [
+        {
+          "name": "cause",
+          "type": "string",
+          "summary": "Required cause record field.",
+          "maps_to": "record.cause",
+          "required": true
+        },
+        {
+          "name": "job-id",
+          "type": "integer",
+          "summary": "Required job_id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        }
+      ],
+      "risk": "kicks off a real dbt Cloud job run against the configured warehouse connection (builds/materializes models, can run arbitrary project SQL); external mutation with warehouse side effects, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt trigger job run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update job apply",
+      "summary": "Typed action update_job",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_job",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing dbt Cloud job's definition (steps, schedule, environment); a changed schema/target affects the next triggered run, external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt update job apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update notification apply",
+      "summary": "Typed action update_notification",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_notification",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "repoints or reconfigures an existing job-status notification's destination (email/Slack channel); external mutation, approval required for a changed destination",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt update notification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update ssh tunnel apply",
+      "summary": "Typed action update_ssh_tunnel",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_ssh_tunnel",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing SSH tunnel's connection details; may carry a private key in the request body, external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.account_id }}.",
+      "examples": [
+        "pm dbt update ssh tunnel apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

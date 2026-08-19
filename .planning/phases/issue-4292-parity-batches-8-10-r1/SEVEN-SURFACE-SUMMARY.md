@@ -10,10 +10,10 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 8 | amplitude | 187 | 78 | 99 | 0/0 | 10 | update_annotation | 7 | 8/4/12 |
 | 8 | posthog | 1943 | 807 | 1134 | 0/0 | 2 | — | 0 | 0/0/0 |
 | 8 | metabase | 634 | 305 | 329 | 0/0 | 5 | — | 0 | 0/0/0 |
-| 8 | dbt | 52 | 16 | 26 | 0/0 | 10 | create_job | 9 | 0/0/0 |
+| 8 | dbt | 52 | 16 | 26 | 0/0 | 10 | create_job | 9 | 0/13/13 |
 | 8 | looker | 433 | 206 | 222 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 8 | mode | 94 | 49 | 45 | 0/0 | 5 | — | 0 | 0/0/0 |
-| 8 | dremio | 49 | 17 | 31 | 0/0 | 5 | create_user | 9 | 0/0/0 |
+| 8 | dremio | 49 | 17 | 31 | 0/0 | 5 | create_user | 9 | 9/2/11 |
 | 9 | coda | 124 | 59 | 58 | 0/0 | 7 | — | 0 | 0/0/0 |
 | 9 | clickup-api | 173 | 58 | 107 | 0/0 | 8 | create_task | 16 | 0/0/0 |
 | 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | create_share | 1 | 0/0/0 |

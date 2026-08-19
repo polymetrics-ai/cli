@@ -66,6 +66,22 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Second five-connector typed-write CLI increment
+
+- [x] Red: dbt Cloud and Dremio had 24 missing typed-write CLI bindings;
+  Metabase, Looker, and Mode expose no existing typed actions and therefore
+  cannot receive an invented command.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli metabase dbt looker mode dremio`
+  regenerated their connector-owned surfaces under the same exact-binding
+  rule; zero-action bundles remain command-free.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check metabase dbt looker mode dremio`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ### Third five-connector declaration increment
 
 - [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check coda clickup-api calendly greenhouse lever-hiring` failed before declarations with `coda: source transport declaration missing`.
