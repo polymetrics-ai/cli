@@ -1,0 +1,24 @@
+{
+  "phase": "issue-4299-defs-embed-slim-r1",
+  "issue": 4299,
+  "branch": "fm/cli-defs-embed-slim-r1",
+  "base": "origin/main",
+  "status": "planned",
+  "gsd": {
+    "doctor": "passed",
+    "mode": "manual_inline_fallback",
+    "commands": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "decisions": {
+    "sourceLocks": "github source lock explicit exception only",
+    "checkoutRoot": "deferred",
+    "compression": "deferred",
+    "lazyLoading": "deferred"
+  }
+}
