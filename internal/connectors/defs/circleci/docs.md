@@ -125,6 +125,6 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 
 - Batch defaults: read_page_size=100.
 - API coverage includes 9 stream-backed endpoint group(s), 7 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=5, duplicate_of=22, non_data_endpoint=1, out_of_scope=39,
-  requires_elevated_scope=28.
+- The current public OpenAPI document is pinned in `sources/circleci-operation-source-lock.json`
+  (111 documented operations, retrieved 2026-08-19). Operations not represented by the nine streams
+  or seven typed write actions remain explicitly disabled with source evidence.

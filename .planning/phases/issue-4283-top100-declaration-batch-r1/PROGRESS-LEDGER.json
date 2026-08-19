@@ -1,0 +1,660 @@
+{
+  "schema_version": 1,
+  "issue": 4283,
+  "cohort": "top100-daily-use-increment-001",
+  "scope": "public-source declarations plus non-live certification only",
+  "generated_at": "2026-08-19T11:37:51Z",
+  "connectors": [
+    {
+      "connector": "asana",
+      "daily_use_rank": 18,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+        "source_url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+        "bytes": 3066750,
+        "per_kind_counts": {
+          "GET": 119,
+          "POST": 81,
+          "PUT": 26,
+          "DELETE": 23
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 249,
+        "declared": 249,
+        "surface_unblocked": 85,
+        "disabled": 164,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 189
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/asana/certification-sweep.json",
+        "declared_rows": 251,
+        "cli_commands": 249,
+        "statuses": {
+          "fixture_required": 84,
+          "not_applicable": 11,
+          "product_defect": 156
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 73,
+        "kinds": {
+          "create": 51,
+          "delete": 4,
+          "update": 18
+        }
+      }
+    },
+    {
+      "connector": "bitbucket",
+      "daily_use_rank": 11,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "cc6411982ef4dad138bbdfc16d4ccf1bb87054e0df5aaf9f79a40b446df58e9e",
+        "bytes": 1485729,
+        "per_kind_counts": {
+          "DELETE": 54,
+          "PUT": 48,
+          "GET": 179,
+          "POST": 50
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 331,
+        "declared": 331,
+        "surface_unblocked": 197,
+        "disabled": 134,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 134
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/bitbucket/certification-sweep.json",
+        "declared_rows": 7,
+        "cli_commands": 5,
+        "statuses": {
+          "fixture_required": 5,
+          "not_applicable": 1,
+          "product_defect": 1
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 54,
+        "kinds": {
+          "create": 1,
+          "delete": 53
+        }
+      }
+    },
+    {
+      "connector": "circleci",
+      "daily_use_rank": 12,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+        "source_url": "https://circleci.com/api/v2/openapi.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "5daeb722f744a9f4a577b45a7b6b71e19543854534d6091f5874a8c476fdc699",
+        "bytes": 621321,
+        "per_kind_counts": {
+          "GET": 61,
+          "POST": 25,
+          "DELETE": 16,
+          "PATCH": 7,
+          "PUT": 2
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 111,
+        "declared": 111,
+        "surface_unblocked": 16,
+        "disabled": 95,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/circleci/certification-sweep.json",
+        "declared_rows": 2,
+        "cli_commands": 0,
+        "statuses": {
+          "fixture_required": 2
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 7,
+        "kinds": {
+          "create": 3,
+          "delete": 3,
+          "update": 1
+        }
+      }
+    },
+    {
+      "connector": "dockerhub",
+      "daily_use_rank": 3,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+        "bytes": 148322,
+        "per_kind_counts": {
+          "POST": 12,
+          "GET": 24,
+          "PATCH": 5,
+          "DELETE": 6,
+          "PUT": 4,
+          "HEAD": 3
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 54,
+        "declared": 54,
+        "surface_unblocked": 4,
+        "disabled": 50,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/dockerhub/certification-sweep.json",
+        "declared_rows": 5,
+        "cli_commands": 4,
+        "statuses": {
+          "fixture_required": 5
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 0,
+        "kinds": {}
+      }
+    },
+    {
+      "connector": "gitlab",
+      "daily_use_rank": 5,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "3aa3881b736a2f23a1f89ac89b9b730df841151b21e5f46df8d7996bed818871",
+        "bytes": 3500933,
+        "per_kind_counts": {
+          "POST": 438,
+          "PUT": 329,
+          "GET": 746,
+          "PATCH": 27,
+          "DELETE": 212,
+          "HEAD": 3
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 1755,
+        "declared": 1755,
+        "surface_unblocked": 4,
+        "disabled": 1751,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/gitlab/certification-sweep.json",
+        "declared_rows": 5,
+        "cli_commands": 4,
+        "statuses": {
+          "fixture_required": 5
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 0,
+        "kinds": {}
+      }
+    },
+    {
+      "connector": "jira",
+      "daily_use_rank": 7,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+        "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+        "bytes": 2455064,
+        "per_kind_counts": {
+          "GET": 276,
+          "PUT": 118,
+          "POST": 134,
+          "DELETE": 89
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 617,
+        "declared": 617,
+        "surface_unblocked": 590,
+        "disabled": 27,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 25
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/jira/certification-sweep.json",
+        "declared_rows": 592,
+        "cli_commands": 590,
+        "statuses": {
+          "fixture_required": 586,
+          "not_applicable": 6
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 292,
+        "kinds": {
+          "create": 106,
+          "delete": 84,
+          "update": 102
+        }
+      }
+    },
+    {
+      "connector": "notion",
+      "daily_use_rank": 9,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "c90a4587bc951a7357419af4126c5ce6924a600255ef2b460dc6834938ea36dc",
+        "bytes": 884260,
+        "per_kind_counts": {
+          "GET": 20,
+          "POST": 17,
+          "PATCH": 8,
+          "DELETE": 4
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 49,
+        "declared": 49,
+        "surface_unblocked": 44,
+        "disabled": 5,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 19
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/notion/certification-sweep.json",
+        "declared_rows": 51,
+        "cli_commands": 49,
+        "statuses": {
+          "fixture_required": 47,
+          "not_applicable": 3,
+          "product_defect": 1
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 24,
+        "kinds": {
+          "create": 8,
+          "delete": 4,
+          "update": 12
+        }
+      }
+    },
+    {
+      "connector": "sentry",
+      "daily_use_rank": 13,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+        "bytes": 3868570,
+        "per_kind_counts": {
+          "GET": 120,
+          "PUT": 32,
+          "POST": 34,
+          "DELETE": 35,
+          "PATCH": 2
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 223,
+        "declared": 223,
+        "surface_unblocked": 3,
+        "disabled": 220,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/sentry/certification-sweep.json",
+        "declared_rows": 1,
+        "cli_commands": 0,
+        "statuses": {
+          "fixture_required": 1
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 0,
+        "kinds": {}
+      }
+    },
+    {
+      "connector": "stripe",
+      "daily_use_rank": 10,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+        "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5",
+        "bytes": 7967776,
+        "per_kind_counts": {
+          "GET": 263,
+          "POST": 294,
+          "DELETE": 32
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 589,
+        "declared": 589,
+        "surface_unblocked": 8,
+        "disabled": 581,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/stripe/certification-sweep.json",
+        "declared_rows": 10,
+        "cli_commands": 8,
+        "statuses": {
+          "fixture_required": 10
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 3,
+        "kinds": {
+          "create": 1,
+          "delete": 1,
+          "update": 1
+        }
+      }
+    },
+    {
+      "connector": "vercel",
+      "daily_use_rank": 8,
+      "selection": "Ranked daily-use connector with a credential-free retrievable public OpenAPI description and an existing declarative api_surface inventory.",
+      "source_lock": {
+        "pinned": true,
+        "path": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+        "source_url": "https://openapi.vercel.sh/",
+        "retrieved_at": "2026-08-19T11:28:09Z",
+        "sha256": "6b6e0450635c01d335e52d19a7f2cbd60e737dd946e53fda30d87384ca9e4226",
+        "bytes": 10420235,
+        "per_kind_counts": {
+          "GET": 159,
+          "POST": 120,
+          "DELETE": 56,
+          "PATCH": 43,
+          "PUT": 18,
+          "HEAD": 4
+        }
+      },
+      "files_produced": [
+        "api_surface.json (source cross-check)",
+        "operations.json",
+        "writes.json",
+        "certification-sweep.json"
+      ],
+      "operations": {
+        "documented": 400,
+        "declared": 400,
+        "surface_unblocked": 22,
+        "disabled": 378,
+        "coverage_percent": 100,
+        "operation_ledger_entries": 0
+      },
+      "sync_transport": {
+        "state": "disabled",
+        "reason": "foundation-gap",
+        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+      },
+      "non_live_certification": {
+        "sweep_artifact": "internal/connectors/defs/vercel/certification-sweep.json",
+        "declared_rows": 2,
+        "cli_commands": 0,
+        "statuses": {
+          "fixture_required": 2
+        },
+        "live_certification": "pending"
+      },
+      "parity_classes": [
+        "source-lock",
+        "api-surface",
+        "operations",
+        "writes",
+        "non-live-certification-sweep"
+      ],
+      "state": "declarations_complete_non_live_certification_pending",
+      "timestamp": "2026-08-19T11:37:51Z",
+      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "writes": {
+        "actions": 18,
+        "kinds": {
+          "create": 7,
+          "delete": 8,
+          "update": 3
+        }
+      }
+    }
+  ]
+}

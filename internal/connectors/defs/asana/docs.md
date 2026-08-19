@@ -8,6 +8,7 @@ Official source inventory:
 - Pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml
 - OpenAPI: `3.0.0` / info version `1.0`
 - Operation count: `249` (`GET=119`, `POST=81`, `PUT=26`, `DELETE=23`)
+- Retrieval provenance, SHA-256, byte count, and operation inventory: `sources/asana-operation-source-lock.json` (retrieved 2026-08-19)
 - Parent #380 lane counts: `etl_read=111`, `reverse_etl_write=125`, `direct_read_query_search=3`, `file_upload=1`, `cdc_changefeed=8`, `excluded_not_applicable=1`
 
 Readable streams currently executable by the declarative engine: `custom_fields`, `project_statuses`, `projects`, `sections`, `stories`, `tags`, `tasks`, `team_memberships`, `teams`, `users`, `workspace_memberships`, `workspaces`.

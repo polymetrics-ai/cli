@@ -56,5 +56,7 @@ release data.
 
 - Batch defaults: read_page_size=100.
 - API coverage includes 4 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=24, out_of_scope=180, requires_elevated_scope=13.
+- The current public OpenAPI document is pinned in `sources/sentry-operation-source-lock.json`
+  (223 documented operations, retrieved 2026-08-19). The 220 unpromoted operations are explicitly
+  disabled in `api_surface.json`; the batch rejection ledger records each exact reason and recovery
+  condition.

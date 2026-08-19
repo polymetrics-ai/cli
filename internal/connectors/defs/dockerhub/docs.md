@@ -60,6 +60,7 @@ tag data.
 ## Known limits
 
 - Batch defaults: read_page_size=100.
+- Public API provenance is pinned in `sources/dockerhub-operation-source-lock.json` (54 documented operations, retrieved 2026-08-19); endpoints outside the four stream-backed reads are explicitly disabled in `api_surface.json`.
 - API coverage includes 4 stream-backed endpoint group(s).
 - Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented
   legacy endpoint is exposed by this bundle.

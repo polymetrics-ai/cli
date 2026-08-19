@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "check": "pinned public source raw-byte and SHA-256 verification",
+  "entries": [
+    {
+      "connector": "asana",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/asana.source",
+      "source_url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+      "expected_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "actual_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "expected_bytes": 3066750,
+      "actual_bytes": 3066750,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "bitbucket",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/bitbucket.source",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "expected_sha256": "cc6411982ef4dad138bbdfc16d4ccf1bb87054e0df5aaf9f79a40b446df58e9e",
+      "actual_sha256": "cc6411982ef4dad138bbdfc16d4ccf1bb87054e0df5aaf9f79a40b446df58e9e",
+      "expected_bytes": 1485729,
+      "actual_bytes": 1485729,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "circleci",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/circleci.source",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "expected_sha256": "5daeb722f744a9f4a577b45a7b6b71e19543854534d6091f5874a8c476fdc699",
+      "actual_sha256": "5daeb722f744a9f4a577b45a7b6b71e19543854534d6091f5874a8c476fdc699",
+      "expected_bytes": 621321,
+      "actual_bytes": 621321,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "dockerhub",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/dockerhub.source",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "expected_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "actual_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "expected_bytes": 148322,
+      "actual_bytes": 148322,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "gitlab",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/gitlab.source",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+      "expected_sha256": "3aa3881b736a2f23a1f89ac89b9b730df841151b21e5f46df8d7996bed818871",
+      "actual_sha256": "3aa3881b736a2f23a1f89ac89b9b730df841151b21e5f46df8d7996bed818871",
+      "expected_bytes": 3500933,
+      "actual_bytes": 3500933,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "jira",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/jira.source",
+      "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "expected_sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+      "actual_sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+      "expected_bytes": 2455064,
+      "actual_bytes": 2455064,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "notion",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/notion.source",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "expected_sha256": "c90a4587bc951a7357419af4126c5ce6924a600255ef2b460dc6834938ea36dc",
+      "actual_sha256": "c90a4587bc951a7357419af4126c5ce6924a600255ef2b460dc6834938ea36dc",
+      "expected_bytes": 884260,
+      "actual_bytes": 884260,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "sentry",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/sentry.source",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "expected_sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+      "actual_sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+      "expected_bytes": 3868570,
+      "actual_bytes": 3868570,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "stripe",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/stripe.source",
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "expected_sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5",
+      "actual_sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5",
+      "expected_bytes": 7967776,
+      "actual_bytes": 7967776,
+      "sha256_matches": true,
+      "bytes_match": true
+    },
+    {
+      "connector": "vercel",
+      "retrieved_artifact": ".tmp/top100-increment-001-sources.ohFlrz/vercel.source",
+      "source_url": "https://openapi.vercel.sh/",
+      "expected_sha256": "6b6e0450635c01d335e52d19a7f2cbd60e737dd946e53fda30d87384ca9e4226",
+      "actual_sha256": "6b6e0450635c01d335e52d19a7f2cbd60e737dd946e53fda30d87384ca9e4226",
+      "expected_bytes": 10420235,
+      "actual_bytes": 10420235,
+      "sha256_matches": true,
+      "bytes_match": true
+    }
+  ]
+}

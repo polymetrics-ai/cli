@@ -1378,7 +1378,7 @@
       "path": "/v1/registrar/domains/availability",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1386,7 +1386,7 @@
       "path": "/v1/registrar/domains/buy",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1394,7 +1394,7 @@
       "path": "/v1/registrar/domains/{domain}/auth-code",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1402,7 +1402,7 @@
       "path": "/v1/registrar/domains/{domain}/auto-renew",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1410,7 +1410,7 @@
       "path": "/v1/registrar/domains/{domain}/availability",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1418,7 +1418,7 @@
       "path": "/v1/registrar/domains/{domain}/buy",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1426,7 +1426,7 @@
       "path": "/v1/registrar/domains/{domain}/contact-info/schema",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1434,7 +1434,7 @@
       "path": "/v1/registrar/domains/{domain}/contact-verification",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1442,7 +1442,7 @@
       "path": "/v1/registrar/domains/{domain}/nameservers",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1450,7 +1450,7 @@
       "path": "/v1/registrar/domains/{domain}/price",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1458,7 +1458,7 @@
       "path": "/v1/registrar/domains/{domain}/renew",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1466,7 +1466,7 @@
       "path": "/v1/registrar/domains/{domain}/transfer",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1474,7 +1474,7 @@
       "path": "/v1/registrar/domains/{domain}/transfer",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1482,7 +1482,7 @@
       "path": "/v1/registrar/orders/{orderId}",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1490,7 +1490,7 @@
       "path": "/v1/registrar/tlds/supported",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1498,7 +1498,7 @@
       "path": "/v1/registrar/tlds/{tld}",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -1506,7 +1506,7 @@
       "path": "/v1/registrar/tlds/{tld}/price",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow — a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
@@ -2355,7 +2355,7 @@
       "path": "/v5/domains/{domain}/records",
       "excluded": {
         "category": "requires_elevated_scope",
-        "reason": "lists DNS records for one specific domain; same per-domain fan_out scope limitation as the DNS record write endpoints above \u2014 the domains stream itself is covered, but its per-domain records sub-collection is not"
+        "reason": "lists DNS records for one specific domain; same per-domain fan_out scope limitation as the DNS record write endpoints above — the domains stream itself is covered, but its per-domain records sub-collection is not"
       }
     },
     {
@@ -2631,6 +2631,1086 @@
       "excluded": {
         "category": "duplicate_of",
         "reason": "single-environment-variable update by a v9-prefixed legacy path; the v10 create_project_env_var/delete_project_env_var write actions this bundle already covers target the current, documented /v10/projects/{id}/env resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ai-gateway/virtual-model-configs",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ai-gateway/virtual-model-configs",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ai-gateway/virtual-model-configs",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ai-gateway/virtual-model-configs",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ai-gateway/virtual-model-configs/list",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ai-gateway/rules",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ai-gateway/rules",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ai-gateway/rules",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ai-gateway/rules",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v8/artifacts/{hash}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v8/artifacts",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/connect/install/{connector}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domain}/records",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/records/{recordId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/global-config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/global-config/{edgeConfigId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/global-config/{edgeConfigId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/items",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/global-config/{edgeConfigId}/items",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/schema",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/global-config/{edgeConfigId}/schema",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/global-config/{edgeConfigId}/schema",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/item/{edgeConfigItemKey}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/tokens",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/global-config/{edgeConfigId}/tokens",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/token/{token}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/global-config/{edgeConfigId}/token",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/backups/{edgeConfigBackupVersionId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/global-config/{edgeConfigId}/backups/{edgeConfigBackupVersionId}/restore",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-config/{edgeConfigId}/backups",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/installations/{integrationConfigurationId}/credentials/rotate",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api-keys",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/kms/issuers",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/sign/message",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/sign/token",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/keys",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/keys/{keyId}/activate",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/keys/{keyId}/revoke",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/kms/issuers/{issuerId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/kms/issuers/{issuerId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/kms/issuers/{issuerId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/kms/issuers/{issuerId}/policies",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/kms/issuers/{issuerId}/policies/{kind}/{policyKey}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/kms/issuers/{issuerId}/policies/{kind}/{policyKey}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/installations/{integrationConfigurationId}/resources/{resourceId}/experimentation/global-config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/installations/{integrationConfigurationId}/resources/{resourceId}/experimentation/global-config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/installations/{integrationConfigurationId}/resources/{resourceId}/experimentation/global-config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/observability/query",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/observability/schema",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/observability/schema/{metricId}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/projects/traces",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/projects/{idOrName}/token",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/projects/traces/session",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sandboxes/{name}/fork",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sandboxes",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sandboxes/sessions/{sessionId}/snapshot",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sandboxes/{name}/fork",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v4/sandboxes",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/security/firewall/config",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/security/firewall/config/{configVersion}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/security/firewall/config/{configVersion}/activate",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/security/firewall/config/generate-rule",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/speed-insights/toggle",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storage/stores/{id}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storage/stores/blob",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/storage/stores/blob/{id}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/vcr/repository/{idOrName}/permissions",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/vcr/repository/{idOrName}/permissions",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/vcr/repository/{idOrName}/permissions",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/vcr/repository/{idOrName}/permissions/all",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/vcr/repository/{idOrName}/images/{imageIdOrDigest}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/{digest}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/{digest}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/{digest}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/uploads/{uuid}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/uploads/{uuid}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/uploads/{uuid}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/uploads/{uuid}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/uploads/",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/manifests/{reference}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/manifests/{reference}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/manifests/{reference}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/manifests/{reference}",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{teamSlug}/{projectSlug}/{repositoryName}/tags/list",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/web/insights/toggle",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v8/certs",
+      "provenance": {
+        "artifact": "vercel-operation-source-lock-2026-08-19",
+        "source_url": "https://openapi.vercel.sh/"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
       }
     }
   ]

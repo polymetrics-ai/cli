@@ -1,0 +1,1026 @@
+{
+  "schema_version": 2,
+  "connector": "circleci",
+  "captured_at": "2026-08-19T11:28:09Z",
+  "rest": {
+    "source_url": "https://circleci.com/api/v2/openapi.json",
+    "sha256": "5daeb722f744a9f4a577b45a7b6b71e19543854534d6091f5874a8c476fdc699",
+    "bytes": 621321,
+    "openapi": "3.0.3",
+    "info_version": "v2",
+    "operation_counts": {
+      "GET": 61,
+      "POST": 25,
+      "DELETE": 16,
+      "PATCH": 7,
+      "PUT": 2
+    },
+    "operations": [
+      {
+        "id": "circleci.rest.getProjectWorkflowsPageData",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/pages/{project-slug}/summary",
+        "operation_id": "getProjectWorkflowsPageData",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/pages/{project-slug}/summary\"].get"
+      },
+      {
+        "id": "circleci.rest.getJobTimeseries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/time-series/{project-slug}/workflows/{workflow-name}/jobs",
+        "operation_id": "getJobTimeseries",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/time-series/{project-slug}/workflows/{workflow-name}/jobs\"].get"
+      },
+      {
+        "id": "circleci.rest.getOrgSummaryData",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{org-slug}/summary",
+        "operation_id": "getOrgSummaryData",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{org-slug}/summary\"].get"
+      },
+      {
+        "id": "circleci.rest.getAllInsightsBranches",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/branches",
+        "operation_id": "getAllInsightsBranches",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/branches\"].get"
+      },
+      {
+        "id": "circleci.rest.getFlakyTests",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/flaky-tests",
+        "operation_id": "getFlakyTests",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/flaky-tests\"].get"
+      },
+      {
+        "id": "circleci.rest.getProjectWorkflowMetrics",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows",
+        "operation_id": "getProjectWorkflowMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/workflows\"].get"
+      },
+      {
+        "id": "circleci.rest.getProjectWorkflowRuns",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}",
+        "operation_id": "getProjectWorkflowRuns",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}\"].get"
+      },
+      {
+        "id": "circleci.rest.getProjectWorkflowJobMetrics",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/jobs",
+        "operation_id": "getProjectWorkflowJobMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}/jobs\"].get"
+      },
+      {
+        "id": "circleci.rest.getWorkflowSummary",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/summary",
+        "operation_id": "getWorkflowSummary",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}/summary\"].get"
+      },
+      {
+        "id": "circleci.rest.getProjectWorkflowTestMetrics",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/test-metrics",
+        "operation_id": "getProjectWorkflowTestMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}/test-metrics\"].get"
+      },
+      {
+        "id": "circleci.rest.cancelJobByJobID",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobs/{job-id}/cancel",
+        "operation_id": "cancelJobByJobID",
+        "deprecated": false,
+        "source_location": "paths[\"/jobs/{job-id}/cancel\"].post"
+      },
+      {
+        "id": "circleci.rest.getCurrentUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/me",
+        "operation_id": "getCurrentUser",
+        "deprecated": false,
+        "source_location": "paths[\"/me\"].get"
+      },
+      {
+        "id": "circleci.rest.getCollaborations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/me/collaborations",
+        "operation_id": "getCollaborations",
+        "deprecated": false,
+        "source_location": "paths[\"/me/collaborations\"].get"
+      },
+      {
+        "id": "circleci.rest.createOrganization",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organization",
+        "operation_id": "createOrganization",
+        "deprecated": false,
+        "source_location": "paths[\"/organization\"].post"
+      },
+      {
+        "id": "circleci.rest.deleteOrganization",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organization/{org-slug-or-id}",
+        "operation_id": "deleteOrganization",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getOrganization",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization/{org-slug-or-id}",
+        "operation_id": "getOrganization",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}\"].get"
+      },
+      {
+        "id": "circleci.rest.createProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organization/{org-slug-or-id}/project",
+        "operation_id": "createProject",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}/project\"].post"
+      },
+      {
+        "id": "circleci.rest.listURLOrbAllowListEntries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list",
+        "operation_id": "listURLOrbAllowListEntries",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}/url-orb-allow-list\"].get"
+      },
+      {
+        "id": "circleci.rest.createURLOrbAllowListEntry",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list",
+        "operation_id": "createURLOrbAllowListEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}/url-orb-allow-list\"].post"
+      },
+      {
+        "id": "circleci.rest.removeURLOrbAllowListEntry",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}",
+        "operation_id": "removeURLOrbAllowListEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.listPipelines",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline",
+        "operation_id": "listPipelines",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline\"].get"
+      },
+      {
+        "id": "circleci.rest.continuePipeline",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/pipeline/continue",
+        "operation_id": "continuePipeline",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline/continue\"].post"
+      },
+      {
+        "id": "circleci.rest.getPipelineById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/{pipeline-id}",
+        "operation_id": "getPipelineById",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline/{pipeline-id}\"].get"
+      },
+      {
+        "id": "circleci.rest.getPipelineConfigById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/{pipeline-id}/config",
+        "operation_id": "getPipelineConfigById",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline/{pipeline-id}/config\"].get"
+      },
+      {
+        "id": "circleci.rest.listWorkflowsByPipelineId",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/{pipeline-id}/workflow",
+        "operation_id": "listWorkflowsByPipelineId",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline/{pipeline-id}/workflow\"].get"
+      },
+      {
+        "id": "circleci.rest.getProjectBySlug",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}",
+        "operation_id": "getProjectBySlug",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}\"].get"
+      },
+      {
+        "id": "circleci.rest.deleteProjectBySlug",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project/{project-slug}",
+        "operation_id": "deleteProjectBySlug",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}\"].delete"
+      },
+      {
+        "id": "circleci.rest.listCheckoutKeys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/checkout-key",
+        "operation_id": "listCheckoutKeys",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/checkout-key\"].get"
+      },
+      {
+        "id": "circleci.rest.createCheckoutKey",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{project-slug}/checkout-key",
+        "operation_id": "createCheckoutKey",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/checkout-key\"].post"
+      },
+      {
+        "id": "circleci.rest.deleteCheckoutKey",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project/{project-slug}/checkout-key/{fingerprint}",
+        "operation_id": "deleteCheckoutKey",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/checkout-key/{fingerprint}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getCheckoutKey",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/checkout-key/{fingerprint}",
+        "operation_id": "getCheckoutKey",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/checkout-key/{fingerprint}\"].get"
+      },
+      {
+        "id": "circleci.rest.listEnvVars",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/envvar",
+        "operation_id": "listEnvVars",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/envvar\"].get"
+      },
+      {
+        "id": "circleci.rest.createEnvVar",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{project-slug}/envvar",
+        "operation_id": "createEnvVar",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/envvar\"].post"
+      },
+      {
+        "id": "circleci.rest.deleteEnvVar",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project/{project-slug}/envvar/{name}",
+        "operation_id": "deleteEnvVar",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/envvar/{name}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getEnvVar",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/envvar/{name}",
+        "operation_id": "getEnvVar",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/envvar/{name}\"].get"
+      },
+      {
+        "id": "circleci.rest.cancelJobByJobNumber",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{project-slug}/job/{job-number}/cancel",
+        "operation_id": "cancelJobByJobNumber",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/job/{job-number}/cancel\"].post"
+      },
+      {
+        "id": "circleci.rest.triggerPipeline",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{project-slug}/pipeline",
+        "operation_id": "triggerPipeline",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/pipeline\"].post"
+      },
+      {
+        "id": "circleci.rest.listPipelinesForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/pipeline",
+        "operation_id": "listPipelinesForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/pipeline\"].get"
+      },
+      {
+        "id": "circleci.rest.listMyPipelines",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/pipeline/mine",
+        "operation_id": "listMyPipelines",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/pipeline/mine\"].get"
+      },
+      {
+        "id": "circleci.rest.getPipelineByNumber",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/pipeline/{pipeline-number}",
+        "operation_id": "getPipelineByNumber",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/pipeline/{pipeline-number}\"].get"
+      },
+      {
+        "id": "circleci.rest.createSchedule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{project-slug}/schedule",
+        "operation_id": "createSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/schedule\"].post"
+      },
+      {
+        "id": "circleci.rest.listSchedulesForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{project-slug}/schedule",
+        "operation_id": "listSchedulesForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{project-slug}/schedule\"].get"
+      },
+      {
+        "id": "circleci.rest.deleteScheduleById",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/schedule/{schedule-id}",
+        "operation_id": "deleteScheduleById",
+        "deprecated": false,
+        "source_location": "paths[\"/schedule/{schedule-id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.updateSchedule",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/schedule/{schedule-id}",
+        "operation_id": "updateSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/schedule/{schedule-id}\"].patch"
+      },
+      {
+        "id": "circleci.rest.getScheduleById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/schedule/{schedule-id}",
+        "operation_id": "getScheduleById",
+        "deprecated": false,
+        "source_location": "paths[\"/schedule/{schedule-id}\"].get"
+      },
+      {
+        "id": "circleci.rest.getUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/{id}",
+        "operation_id": "getUser",
+        "deprecated": false,
+        "source_location": "paths[\"/user/{id}\"].get"
+      },
+      {
+        "id": "circleci.rest.approvePendingApprovalJobById",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workflow/{id}/approve/{approval_request_id}",
+        "operation_id": "approvePendingApprovalJobById",
+        "deprecated": false,
+        "source_location": "paths[\"/workflow/{id}/approve/{approval_request_id}\"].post"
+      },
+      {
+        "id": "circleci.rest.cancelWorkflow",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workflow/{id}/cancel",
+        "operation_id": "cancelWorkflow",
+        "deprecated": false,
+        "source_location": "paths[\"/workflow/{id}/cancel\"].post"
+      },
+      {
+        "id": "circleci.rest.listWorkflowJobs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workflow/{id}/job",
+        "operation_id": "listWorkflowJobs",
+        "deprecated": false,
+        "source_location": "paths[\"/workflow/{id}/job\"].get"
+      },
+      {
+        "id": "circleci.rest.rerunWorkflow",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workflow/{id}/rerun",
+        "operation_id": "rerunWorkflow",
+        "deprecated": false,
+        "source_location": "paths[\"/workflow/{id}/rerun\"].post"
+      },
+      {
+        "id": "circleci.rest.GetOrgClaims",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "operation_id": "GetOrgClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/oidc-custom-claims\"].get"
+      },
+      {
+        "id": "circleci.rest.DeleteOrgClaims",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "operation_id": "DeleteOrgClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/oidc-custom-claims\"].delete"
+      },
+      {
+        "id": "circleci.rest.PatchOrgClaims",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "operation_id": "PatchOrgClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/oidc-custom-claims\"].patch"
+      },
+      {
+        "id": "circleci.rest.GetProjectClaims",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "operation_id": "GetProjectClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/project/{projectID}/oidc-custom-claims\"].get"
+      },
+      {
+        "id": "circleci.rest.DeleteProjectClaims",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "operation_id": "DeleteProjectClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/project/{projectID}/oidc-custom-claims\"].delete"
+      },
+      {
+        "id": "circleci.rest.PatchProjectClaims",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "operation_id": "PatchProjectClaims",
+        "deprecated": false,
+        "source_location": "paths[\"/org/{orgID}/project/{projectID}/oidc-custom-claims\"].patch"
+      },
+      {
+        "id": "circleci.rest.GetDecisionLogs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision",
+        "operation_id": "GetDecisionLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision\"].get"
+      },
+      {
+        "id": "circleci.rest.MakeDecision",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/owner/{ownerID}/context/{context}/decision",
+        "operation_id": "MakeDecision",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision\"].post"
+      },
+      {
+        "id": "circleci.rest.GetDecisionSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/settings",
+        "operation_id": "GetDecisionSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision/settings\"].get"
+      },
+      {
+        "id": "circleci.rest.SetDecisionSettings",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/owner/{ownerID}/context/{context}/decision/settings",
+        "operation_id": "SetDecisionSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision/settings\"].patch"
+      },
+      {
+        "id": "circleci.rest.GetDecisionLog",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}",
+        "operation_id": "GetDecisionLog",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision/{decisionID}\"].get"
+      },
+      {
+        "id": "circleci.rest.GetDecisionLogPolicyBundle",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle",
+        "operation_id": "GetDecisionLogPolicyBundle",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle\"].get"
+      },
+      {
+        "id": "circleci.rest.GetPolicyBundle",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle",
+        "operation_id": "GetPolicyBundle",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/policy-bundle\"].get"
+      },
+      {
+        "id": "circleci.rest.CreatePolicyBundle",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle",
+        "operation_id": "CreatePolicyBundle",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/policy-bundle\"].post"
+      },
+      {
+        "id": "circleci.rest.GetPolicyDocument",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle/{policyName}",
+        "operation_id": "GetPolicyDocument",
+        "deprecated": false,
+        "source_location": "paths[\"/owner/{ownerID}/context/{context}/policy-bundle/{policyName}\"].get"
+      },
+      {
+        "id": "circleci.rest.createContext",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/context",
+        "operation_id": "createContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context\"].post"
+      },
+      {
+        "id": "circleci.rest.listContexts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/context",
+        "operation_id": "listContexts",
+        "deprecated": false,
+        "source_location": "paths[\"/context\"].get"
+      },
+      {
+        "id": "circleci.rest.getContext",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/context/{context_id}",
+        "operation_id": "getContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.deleteContext",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/context/{context_id}",
+        "operation_id": "deleteContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.listEnvironmentVariablesFromContext",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/context/{context_id}/environment-variable",
+        "operation_id": "listEnvironmentVariablesFromContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/environment-variable\"].get"
+      },
+      {
+        "id": "circleci.rest.addEnvironmentVariableToContext",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/context/{context_id}/environment-variable/{env_var_name}",
+        "operation_id": "addEnvironmentVariableToContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/environment-variable/{env_var_name}\"].put"
+      },
+      {
+        "id": "circleci.rest.deleteEnvironmentVariableFromContext",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/context/{context_id}/environment-variable/{env_var_name}",
+        "operation_id": "deleteEnvironmentVariableFromContext",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/environment-variable/{env_var_name}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getContextRestrictions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/context/{context_id}/restrictions",
+        "operation_id": "getContextRestrictions",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/restrictions\"].get"
+      },
+      {
+        "id": "circleci.rest.createContextRestriction",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/context/{context_id}/restrictions",
+        "operation_id": "createContextRestriction",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/restrictions\"].post"
+      },
+      {
+        "id": "circleci.rest.deleteContextRestriction",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/context/{context_id}/restrictions/{restriction_id}",
+        "operation_id": "deleteContextRestriction",
+        "deprecated": false,
+        "source_location": "paths[\"/context/{context_id}/restrictions/{restriction_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getProjectSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project/{provider}/{organization}/{project}/settings",
+        "operation_id": "getProjectSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{provider}/{organization}/{project}/settings\"].get"
+      },
+      {
+        "id": "circleci.rest.patchProjectSettings",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/project/{provider}/{organization}/{project}/settings",
+        "operation_id": "patchProjectSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{provider}/{organization}/{project}/settings\"].patch"
+      },
+      {
+        "id": "circleci.rest.getOrganizationGroups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org_id}/groups",
+        "operation_id": "getOrganizationGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/groups\"].get"
+      },
+      {
+        "id": "circleci.rest.createOrganizationGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organizations/{org_id}/groups",
+        "operation_id": "createOrganizationGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/groups\"].post"
+      },
+      {
+        "id": "circleci.rest.getGroup",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org_id}/groups/{group_id}",
+        "operation_id": "getGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/groups/{group_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.deleteGroup",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organizations/{org_id}/groups/{group_id}",
+        "operation_id": "deleteGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/groups/{group_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.createUsageExport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organizations/{org_id}/usage_export_job",
+        "operation_id": "createUsageExport",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/usage_export_job\"].post"
+      },
+      {
+        "id": "circleci.rest.getUsageExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org_id}/usage_export_job/{usage_export_job_id}",
+        "operation_id": "getUsageExport",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_id}/usage_export_job/{usage_export_job_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.triggerPipelineRun",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project/{provider}/{organization}/{project}/pipeline/run",
+        "operation_id": "triggerPipelineRun",
+        "deprecated": false,
+        "source_location": "paths[\"/project/{provider}/{organization}/{project}/pipeline/run\"].post"
+      },
+      {
+        "id": "circleci.rest.listPipelineDefinitions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions",
+        "operation_id": "listPipelineDefinitions",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions\"].get"
+      },
+      {
+        "id": "circleci.rest.createPipelineDefinition",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_id}/pipeline-definitions",
+        "operation_id": "createPipelineDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions\"].post"
+      },
+      {
+        "id": "circleci.rest.getPipelineDefinition",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "operation_id": "getPipelineDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.updatePipelineDefinition",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "operation_id": "updatePipelineDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}\"].patch"
+      },
+      {
+        "id": "circleci.rest.deletePipelineDefinition",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "operation_id": "deletePipelineDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.listPipelineDefinitionTriggers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+        "operation_id": "listPipelineDefinitionTriggers",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers\"].get"
+      },
+      {
+        "id": "circleci.rest.createTrigger",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+        "operation_id": "createTrigger",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers\"].post"
+      },
+      {
+        "id": "circleci.rest.getTrigger",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "operation_id": "getTrigger",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/triggers/{trigger_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.updateTrigger",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "operation_id": "updateTrigger",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/triggers/{trigger_id}\"].patch"
+      },
+      {
+        "id": "circleci.rest.deleteTrigger",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "operation_id": "deleteTrigger",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/triggers/{trigger_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.rollbackProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_id}/rollback",
+        "operation_id": "rollbackProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_id}/rollback\"].post"
+      },
+      {
+        "id": "circleci.rest.listEnvironments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/deploy/environments",
+        "operation_id": "listEnvironments",
+        "deprecated": false,
+        "source_location": "paths[\"/deploy/environments\"].get"
+      },
+      {
+        "id": "circleci.rest.getEnvironment",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/deploy/environments/{environment_id}",
+        "operation_id": "getEnvironment",
+        "deprecated": false,
+        "source_location": "paths[\"/deploy/environments/{environment_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.listComponents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/deploy/components",
+        "operation_id": "listComponents",
+        "deprecated": false,
+        "source_location": "paths[\"/deploy/components\"].get"
+      },
+      {
+        "id": "circleci.rest.getComponent",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/deploy/components/{component_id}",
+        "operation_id": "getComponent",
+        "deprecated": false,
+        "source_location": "paths[\"/deploy/components/{component_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.listComponentVersions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/deploy/components/{component_id}/versions",
+        "operation_id": "listComponentVersions",
+        "deprecated": false,
+        "source_location": "paths[\"/deploy/components/{component_id}/versions\"].get"
+      },
+      {
+        "id": "circleci.rest.getWebhooks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook",
+        "operation_id": "getWebhooks",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook\"].get"
+      },
+      {
+        "id": "circleci.rest.createWebhook",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook",
+        "operation_id": "createWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook\"].post"
+      },
+      {
+        "id": "circleci.rest.getWebhookById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook/{webhook_id}",
+        "operation_id": "getWebhookById",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook/{webhook_id}\"].get"
+      },
+      {
+        "id": "circleci.rest.updateWebhook",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/webhook/{webhook_id}",
+        "operation_id": "updateWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook/{webhook_id}\"].put"
+      },
+      {
+        "id": "circleci.rest.deleteWebhook",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhook/{webhook_id}",
+        "operation_id": "deleteWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook/{webhook_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.listOtelExporters",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/otel/exporters",
+        "operation_id": "listOtelExporters",
+        "deprecated": false,
+        "source_location": "paths[\"/otel/exporters\"].get"
+      },
+      {
+        "id": "circleci.rest.createOtelExporter",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/otel/exporters",
+        "operation_id": "createOtelExporter",
+        "deprecated": false,
+        "source_location": "paths[\"/otel/exporters\"].post"
+      },
+      {
+        "id": "circleci.rest.deleteOtelExporter",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/otel/exporters/{otel_exporter_id}",
+        "operation_id": "deleteOtelExporter",
+        "deprecated": false,
+        "source_location": "paths[\"/otel/exporters/{otel_exporter_id}\"].delete"
+      },
+      {
+        "id": "circleci.rest.getPipelineValuesById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/{pipeline_id}/values",
+        "operation_id": "getPipelineValuesById",
+        "deprecated": false,
+        "source_location": "paths[\"/pipeline/{pipeline_id}/values\"].get"
+      },
+      {
+        "id": "circleci.rest.getWorkflowById",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workflow/{id}",
+        "operation_id": "getWorkflowById",
+        "deprecated": false,
+        "source_location": "paths[\"/workflow/{id}\"].get"
+      },
+      {
+        "id": "circleci.rest.getJob",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "operation_id": "getJob",
+        "deprecated": false,
+        "source_location": "paths[\"/jobs/{job_id}\"].get"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 111,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 111
+  }
+}

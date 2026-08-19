@@ -1,0 +1,1554 @@
+{
+  "schema_version": 1,
+  "connector": "notion",
+  "source": "connector declarations",
+  "declared_commands": 49,
+  "declared_rows": 51,
+  "status_total": 51,
+  "commands": [
+    {
+      "summary": "Retrieve an async task",
+      "path": "async-task get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.task_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/async_tasks/{task_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --task-id",
+      "required_flags": [
+        "--task-id"
+      ]
+    },
+    {
+      "summary": "Append block children",
+      "path": "block children append",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.block_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}/children"
+        }
+      ],
+      "status": "not_applicable",
+      "reason": "declared availability is \"partial\", not implemented",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Retrieve block children",
+      "path": "block children list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.block_id"
+        },
+        {
+          "name": "page-size",
+          "type": "number",
+          "required": false,
+          "maps_to": "query.page_size"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}/children"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --block-id",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Delete a block",
+      "path": "block delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.block_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --block-id",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a block",
+      "path": "block get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.block_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --block-id",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Update a block",
+      "path": "block update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.block_id"
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.in_trash"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --block-id",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Create a comment",
+      "path": "comment create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/comments"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a comment",
+      "path": "comment delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a comment",
+      "path": "comment get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "List comments",
+      "path": "comment list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "query.block_id"
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.page_size"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/comments"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --block-id",
+      "required_flags": [
+        "--block-id"
+      ]
+    },
+    {
+      "summary": "Update a comment",
+      "path": "comment update",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "status": "not_applicable",
+      "reason": "declared availability is \"partial\", not implemented",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "Update a comment",
+      "path": "comment update-markdown",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.comment_id"
+        },
+        {
+          "name": "markdown",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.markdown"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/comments/{comment_id} (body=markdown)"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id, --markdown",
+      "required_flags": [
+        "--comment-id",
+        "--markdown"
+      ]
+    },
+    {
+      "summary": "List Notion custom emojis as ETL records.",
+      "path": "custom-emojis list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "custom_emojis",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_emojis"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Create a data source",
+      "path": "data-source create",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "parent-database-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.parent.database_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_sources"
+        }
+      ],
+      "status": "not_applicable",
+      "reason": "declared availability is \"partial\", not implemented",
+      "required_flags": [
+        "--parent-database-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a data source",
+      "path": "data-source get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.data_source_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --data-source-id",
+      "required_flags": [
+        "--data-source-id"
+      ]
+    },
+    {
+      "summary": "Query a data source",
+      "path": "data-source query",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.data_source_id"
+        },
+        {
+          "name": "filter-properties",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.filter_properties"
+        },
+        {
+          "name": "is-archived",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.is_archived"
+        },
+        {
+          "name": "page-size",
+          "type": "number",
+          "required": false,
+          "maps_to": "body.page_size"
+        },
+        {
+          "name": "result-type",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.result_type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_sources/{data_source_id}/query"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --data-source-id",
+      "required_flags": [
+        "--data-source-id"
+      ]
+    },
+    {
+      "summary": "List templates in a data source",
+      "path": "data-source templates list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.data_source_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.name"
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.page_size"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}/templates"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --data-source-id",
+      "required_flags": [
+        "--data-source-id"
+      ]
+    },
+    {
+      "summary": "Update a data source",
+      "path": "data-source update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.data_source_id"
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.in_trash"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/data_sources/{data_source_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-source-id",
+      "required_flags": [
+        "--data-source-id"
+      ]
+    },
+    {
+      "summary": "Create a database",
+      "path": "database create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "is-inline",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_inline"
+        },
+        {
+          "name": "parent",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.parent"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/databases"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --parent",
+      "required_flags": [
+        "--parent"
+      ]
+    },
+    {
+      "summary": "Retrieve a database",
+      "path": "database get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "database-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.database_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/databases/{database_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --database-id",
+      "required_flags": [
+        "--database-id"
+      ]
+    },
+    {
+      "summary": "Update a database",
+      "path": "database update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "database-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.database_id"
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.in_trash"
+        },
+        {
+          "name": "is-inline",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_inline"
+        },
+        {
+          "name": "is-locked",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_locked"
+        },
+        {
+          "name": "parent",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.parent"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/databases/{database_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --database-id",
+      "required_flags": [
+        "--database-id"
+      ]
+    },
+    {
+      "summary": "List Notion databases as ETL records.",
+      "path": "databases list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "databases",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/search (object=database)"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Complete a multi-part file upload",
+      "path": "file-upload complete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "file-upload-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.file_upload_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/complete"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --file-upload-id",
+      "required_flags": [
+        "--file-upload-id"
+      ]
+    },
+    {
+      "summary": "Create a file upload",
+      "path": "file-upload create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "content-type",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.content_type"
+        },
+        {
+          "name": "external-url",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.external_url"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.filename"
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.mode"
+        },
+        {
+          "name": "number-of-parts",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.number_of_parts"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Retrieve a file upload",
+      "path": "file-upload get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "file-upload-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.file_upload_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/file_uploads/{file_upload_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --file-upload-id",
+      "required_flags": [
+        "--file-upload-id"
+      ]
+    },
+    {
+      "summary": "Upload a file",
+      "path": "file-upload send",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation_kind": null,
+      "op_class": null,
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/send"
+        }
+      ],
+      "status": "product_defect",
+      "reason": "parity projection: reverse_etl command \"file-upload send\" requires declared write action \"\""
+    },
+    {
+      "summary": "List Notion file uploads as ETL records.",
+      "path": "file-uploads list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "file_uploads",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/file_uploads"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Create a meeting note",
+      "path": "meeting-note create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "language",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.language"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Query meeting notes",
+      "path": "meeting-note query",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes/query"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Create a page",
+      "path": "page create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "allow-async",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.allow_async"
+        },
+        {
+          "name": "markdown",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.markdown"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Retrieve a page",
+      "path": "page get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "filter-properties",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.filter_properties"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.page_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --page-id",
+      "required_flags": [
+        "--page-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a page as markdown",
+      "path": "page markdown get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "include-transcript",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "query.include_transcript"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.page_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/markdown"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --page-id",
+      "required_flags": [
+        "--page-id"
+      ]
+    },
+    {
+      "summary": "Update a page's content as markdown",
+      "path": "page markdown update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "allow-async",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.allow_async"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.page_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}/markdown"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --page-id",
+      "required_flags": [
+        "--page-id"
+      ]
+    },
+    {
+      "summary": "Move a page",
+      "path": "page move",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.page_id"
+        },
+        {
+          "name": "parent-page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.parent.page_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages/{page_id}/move"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --page-id, --parent-page-id",
+      "required_flags": [
+        "--page-id",
+        "--parent-page-id"
+      ]
+    },
+    {
+      "summary": "Move a page",
+      "path": "page move-to-data-source",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.page_id"
+        },
+        {
+          "name": "parent-data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.parent.data_source_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages/{page_id}/move (parent=data_source_id)"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --page-id, --parent-data-source-id",
+      "required_flags": [
+        "--page-id",
+        "--parent-data-source-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a page property item",
+      "path": "page property get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.page_id"
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.page_size"
+        },
+        {
+          "name": "property-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.property_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/properties/{property_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --page-id, --property-id",
+      "required_flags": [
+        "--page-id",
+        "--property-id"
+      ]
+    },
+    {
+      "summary": "Update page",
+      "path": "page update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "erase-content",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.erase_content"
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.in_trash"
+        },
+        {
+          "name": "is-archived",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_archived"
+        },
+        {
+          "name": "is-locked",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_locked"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.page_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --page-id",
+      "required_flags": [
+        "--page-id"
+      ]
+    },
+    {
+      "summary": "List Notion pages as ETL records.",
+      "path": "pages list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "pages",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/search (object=page)"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Retrieve a user",
+      "path": "user get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --user-id",
+      "required_flags": [
+        "--user-id"
+      ]
+    },
+    {
+      "summary": "Retrieve your token's bot user",
+      "path": "user me get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/me"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Notion users as ETL records.",
+      "path": "users list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "users",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Create a view",
+      "path": "view create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.data_source_id"
+        },
+        {
+          "name": "database-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.database_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.type"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/views"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-source-id, --name, --type",
+      "required_flags": [
+        "--data-source-id",
+        "--name",
+        "--type"
+      ]
+    },
+    {
+      "summary": "Delete a view",
+      "path": "view delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --view-id",
+      "required_flags": [
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "Retrieve a view",
+      "path": "view get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --view-id",
+      "required_flags": [
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "Create a view query",
+      "path": "view query create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "page-size",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.page_size"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/views/{view_id}/queries"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --view-id",
+      "required_flags": [
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "Delete a view query",
+      "path": "view query delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "query-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.query_id"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}/queries/{query_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --query-id, --view-id",
+      "required_flags": [
+        "--query-id",
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "Get view query results",
+      "path": "view query results get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "page-size",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.page_size"
+        },
+        {
+          "name": "query-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.query_id"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views/{view_id}/queries/{query_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --query-id, --view-id",
+      "required_flags": [
+        "--query-id",
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "Update a view",
+      "path": "view update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --view-id",
+      "required_flags": [
+        "--view-id"
+      ]
+    },
+    {
+      "summary": "List Notion views as ETL records.",
+      "path": "views list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "views",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [
+    {
+      "command": "file-upload send",
+      "flag": "\u003cparity-projection\u003e",
+      "path_parameter": "\u003cparity-projection\u003e",
+      "reason": "parity projection: reverse_etl command \"file-upload send\" requires declared write action \"\""
+    }
+  ],
+  "provider_refusals": []
+}
