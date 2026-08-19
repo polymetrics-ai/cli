@@ -127,6 +127,32 @@
 - The focused checker, real `connectorgen validate`, and `surface-sync --check`
   pass.
 
+### Typed-write CLI proof — first increment
+
+- **Red:** the all-30 ledger exposed 1,425 typed actions with
+  `declaration-pending-cli-binding`; a destination declaration is not an
+  executable CLI surface. The first Zoho attempt also showed that its legacy
+  `covered_by.writes` array cannot be treated as an exact operation binding.
+- **Green:** `reconcile-seven-surfaces.mjs --write-cli brex zoho-books
+  testrail amplitude posthog` materializes connector-owned command surfaces
+  from existing typed actions only. Its route join accepts exactly one
+  `api_surface.covered_by.write` equal to the action name, requires method and
+  canonical path equality, promotes only declared `{{ record.<field> }}` path
+  placeholders, and treats URL query templates as typed query/config flags.
+  Zero/multiple matches, method/path disagreement, and unsupported placeholder
+  syntax remain partial with a precise declared reason; no fuzzy match or
+  array-order selection occurs. Query config inputs are preserved as typed
+  flags and are partial only for the concrete
+  `internal/connectors/commandrunner/runner.go:1565` closed-record override
+  limitation.
+- `go run traces/audit-promotable-writes.go` calls the real
+  `engine.ValidatePromotableRecordSchema` gate for all 1,591 actions: 1,591
+  promotable, 0 foundation gaps. The first five action surfaces then pass
+  `node traces/reconcile-seven-surfaces.mjs --check brex zoho-books testrail
+  amplitude posthog`, `connectorgen validate`, `surface-sync --check`, and
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

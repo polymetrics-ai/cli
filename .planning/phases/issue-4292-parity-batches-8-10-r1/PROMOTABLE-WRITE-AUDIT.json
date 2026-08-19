@@ -1,0 +1,6509 @@
+{
+  "schema_version": 1,
+  "gate": "engine.ValidatePromotableRecordSchema",
+  "rows": [
+    {
+      "connector": "brex",
+      "actions": [
+        {
+          "action": "create_department",
+          "state": "promotable"
+        },
+        {
+          "action": "create_location",
+          "state": "promotable"
+        },
+        {
+          "action": "create_title",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "lock_card",
+          "state": "promotable"
+        },
+        {
+          "action": "terminate_card",
+          "state": "promotable"
+        },
+        {
+          "action": "unlock_card",
+          "state": "promotable"
+        },
+        {
+          "action": "update_card",
+          "state": "promotable"
+        },
+        {
+          "action": "update_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vendor",
+          "state": "promotable"
+        },
+        {
+          "action": "update_webhook",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "zoho-books",
+      "actions": [
+        {
+          "action": "active_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "active_tag_option",
+          "state": "promotable"
+        },
+        {
+          "action": "add_bank_reconciliation_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_bill_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_bill_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_address",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_card",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_contact_tax_info",
+          "state": "promotable"
+        },
+        {
+          "action": "add_credit_note_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_credit_note_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_credit_note_digital_signature",
+          "state": "promotable"
+        },
+        {
+          "action": "add_invoice_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_invoice_digital_signature",
+          "state": "promotable"
+        },
+        {
+          "action": "add_invoice_document",
+          "state": "promotable"
+        },
+        {
+          "action": "add_invoice_online_payment_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "add_item_to_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "add_items_to_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "add_journal_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_journal_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_project_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_project_task",
+          "state": "promotable"
+        },
+        {
+          "action": "add_project_user",
+          "state": "promotable"
+        },
+        {
+          "action": "add_purchase_order_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_purchase_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_retainer_invoice_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_retainer_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_sales_order_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_sales_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_task",
+          "state": "promotable"
+        },
+        {
+          "action": "add_task_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_task_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_vendor_credit_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_credit_note_substatus",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_credit_note_to_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_credits_to_a_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_credits_to_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_credits_to_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_invoice_substatus",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_journal_credits_to_bills",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_journal_credits_to_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_pricebook_to_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "apply_retainer_payments_to_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_credit_notes",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "assign_contact_owner",
+          "state": "promotable"
+        },
+        {
+          "action": "assign_owner_to_contacts",
+          "state": "promotable"
+        },
+        {
+          "action": "associate_recurring_invoice_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "associate_recurring_invoice_card",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_approve_journals",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_bank_account_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_base_currency_adjustments",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_chart_of_accounts",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_customer_payments",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_journals",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_register_transactions",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_delete_vendor_payments",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_invoice_reminder",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_mark_chart_of_accounts_active",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_mark_chart_of_accounts_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_publish_journals",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_submit_journals",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_update_bank_account_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_update_custom_module_records",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_update_register_transactions",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_credit_note_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_credit_notes_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_einvoice_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_einvoice_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_invoice_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_invoices_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_scheduled_invoice_email",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_write_off_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_writeoff_opening_balance",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_as_credit_note_refunds",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_as_vendor_credit_refunds",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_as_vendor_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_bank_transaction_as_customer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_bank_transaction_as_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_bank_transaction_as_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "categorize_bank_transaction_as_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "clone_project",
+          "state": "promotable"
+        },
+        {
+          "action": "copy_organization_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bank_account_match_filter",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bank_account_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bank_reconciliation",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "create_base_currency_adjustment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "create_chart_of_account",
+          "state": "promotable"
+        },
+        {
+          "action": "create_contact",
+          "state": "promotable"
+        },
+        {
+          "action": "create_contact_person",
+          "state": "promotable"
+        },
+        {
+          "action": "create_contact_person_2",
+          "state": "promotable"
+        },
+        {
+          "action": "create_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "create_credit_note_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "create_currency",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_module",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_module_record",
+          "state": "promotable"
+        },
+        {
+          "action": "create_customer_debit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "create_customer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_customer_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "create_delivery_challan",
+          "state": "promotable"
+        },
+        {
+          "action": "create_employee",
+          "state": "promotable"
+        },
+        {
+          "action": "create_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_estimate_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_exchange_rate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "create_expense_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "create_fixed_asset",
+          "state": "promotable"
+        },
+        {
+          "action": "create_fixed_asset_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_fixed_asset_type",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoice_asynchronous_online_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoice_from_salesorder",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoice_synchronous_online_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoices_from_estimates",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invoices_from_projects",
+          "state": "promotable"
+        },
+        {
+          "action": "create_item",
+          "state": "promotable"
+        },
+        {
+          "action": "create_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "create_location",
+          "state": "promotable"
+        },
+        {
+          "action": "create_opening_balance",
+          "state": "promotable"
+        },
+        {
+          "action": "create_organization",
+          "state": "promotable"
+        },
+        {
+          "action": "create_organization_address",
+          "state": "promotable"
+        },
+        {
+          "action": "create_pricebook",
+          "state": "promotable"
+        },
+        {
+          "action": "create_project",
+          "state": "promotable"
+        },
+        {
+          "action": "create_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "create_recurring_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "create_recurring_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "create_recurring_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "create_recurring_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "create_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "create_retainer_invoice_async_online_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "create_sales_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "create_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "create_tax",
+          "state": "promotable"
+        },
+        {
+          "action": "create_tax_authority",
+          "state": "promotable"
+        },
+        {
+          "action": "create_tax_exemption",
+          "state": "promotable"
+        },
+        {
+          "action": "create_tax_group",
+          "state": "promotable"
+        },
+        {
+          "action": "create_time_entries",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user",
+          "state": "promotable"
+        },
+        {
+          "action": "create_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "create_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "decline_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_applied_retainer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_account_match_filter",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_account_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_reconciliation",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_reconciliation_document",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_base_currency_adjustment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bill_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bill_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_bill_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_chart_of_account",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_chart_of_account_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_address",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_card",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_document",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_person",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_person_2",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contact_tax_info",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_contacts",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note_document",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note_einvoice_status",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_credit_note_substatus",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_currency",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_custom_module",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_custom_module_record",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_custom_module_records",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_customer_debit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_customer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_customer_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_delivery_challan",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_delivery_challan_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_employee",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_estimate_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_exchange_rate",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_expense_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_fixed_asset",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_fixed_asset_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_fixed_asset_type",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_applied_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_document",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_einvoice_status",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_expense_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_line_item",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_of_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoice_substatus",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_item",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_journal_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_journal_credits_payables",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_journal_credits_receivables",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_last_imported_bank_statement",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_location",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_opening_balance",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_organization_address",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_pricebook",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_project",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_project_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_project_task",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_project_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_purchase_order_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_purchase_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_invoice_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_invoice_card",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_recurring_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_retainer_invoice_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_retainer_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_sales_order_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_sales_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_sales_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_task",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_task_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_task_document",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tasks",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tax",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tax_authority",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tax_exemption",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_tax_group",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_time_entries",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_time_entry",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_transaction_lock",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_credit_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_credit_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_credit_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_vendor_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_contact_payment_reminder",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_contact_person_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_contact_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_invoice_payment_reminder",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_recurring_invoice_autobill",
+          "state": "promotable"
+        },
+        {
+          "action": "downgrade_organization_to_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "email_contact",
+          "state": "promotable"
+        },
+        {
+          "action": "email_contact_statement",
+          "state": "promotable"
+        },
+        {
+          "action": "email_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "email_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "email_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "email_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "email_multiple_estimates",
+          "state": "promotable"
+        },
+        {
+          "action": "email_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "email_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "email_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "email_sales_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "email_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_contact_payment_reminder",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_contact_person_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_contact_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_invoice_payment_reminder",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_locations",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_recurring_invoice_autobill",
+          "state": "promotable"
+        },
+        {
+          "action": "exclude_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "fetch_credit_note_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "fetch_invoice_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "finalize_credit_note_approval",
+          "state": "promotable"
+        },
+        {
+          "action": "finalize_invoice_approval",
+          "state": "promotable"
+        },
+        {
+          "action": "force_pay_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "import_bank_statements",
+          "state": "promotable"
+        },
+        {
+          "action": "import_customer_using_crm_account_id",
+          "state": "promotable"
+        },
+        {
+          "action": "import_customer_using_crm_contact_id",
+          "state": "promotable"
+        },
+        {
+          "action": "import_item_using_crm_product_id",
+          "state": "promotable"
+        },
+        {
+          "action": "import_vendor_using_crm_vendor_id",
+          "state": "promotable"
+        },
+        {
+          "action": "inactive_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "inactive_tag_option",
+          "state": "promotable"
+        },
+        {
+          "action": "invite_contact_person_to_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "invite_project_user",
+          "state": "promotable"
+        },
+        {
+          "action": "invite_user",
+          "state": "promotable"
+        },
+        {
+          "action": "mail_invoice_pdf",
+          "state": "promotable"
+        },
+        {
+          "action": "map_invoice_with_salesorder",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_bank_account_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_bank_account_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_bill_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_bill_void",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_chart_of_account_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_chart_of_account_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_address_as_billing",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_address_as_shipping",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_person_primary",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contact_person_primary_2",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_contacts_for_1099_tracking",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_draft",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_einvoice_cancelled",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_einvoice_pushed",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_ready_to_push",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_credit_note_void",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_default_option",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_delivery_challan_as_delivered",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_delivery_challan_as_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_delivery_challan_as_returned",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_delivery_challan_as_undelivered",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_estimate_accepted",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_estimate_declined",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_estimate_sent",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_fixed_asset_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_fixed_asset_cancel",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_fixed_asset_draft",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_draft",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_einvoice_cancelled",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_einvoice_pushed",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_ready_to_push",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_sent",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoice_void",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoices_sent",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_invoices_shipped",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_item_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_item_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_journal_published",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_location_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_location_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_location_primary",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_organization_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_pricebook_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_pricebook_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_project_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_project_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_purchase_order_billed",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_purchase_order_cancelled",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_purchase_order_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_retainer_invoice_draft",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_retainer_invoice_sent",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_retainer_invoice_void",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_sales_order_as_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_sales_order_as_void",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_task_as_completed",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_task_as_ongoing",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_task_as_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_user_active",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_user_inactive",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_vendor_credit_open",
+          "state": "promotable"
+        },
+        {
+          "action": "mark_vendor_credit_void",
+          "state": "promotable"
+        },
+        {
+          "action": "match_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "merge_contact",
+          "state": "promotable"
+        },
+        {
+          "action": "preview_invoice_coupons",
+          "state": "promotable"
+        },
+        {
+          "action": "push_credit_note_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "push_credit_note_refund_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "push_credit_notes_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "push_invoice_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "push_invoices_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "recall_credit_note_einvoice_status",
+          "state": "promotable"
+        },
+        {
+          "action": "recall_invoice_einvoice_status",
+          "state": "promotable"
+        },
+        {
+          "action": "reevaluate_base_currency_adjustment",
+          "state": "promotable"
+        },
+        {
+          "action": "refund_excess_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "refund_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_purchase_orders",
+          "state": "promotable"
+        },
+        {
+          "action": "remind_customer_for_invoice_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_item_from_portal",
+          "state": "promotable"
+        },
+        {
+          "action": "reorder_bank_account_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "reorder_tags",
+          "state": "promotable"
+        },
+        {
+          "action": "resend_contact_person_portal_invite",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_contact_documents",
+          "state": "promotable"
+        },
+        {
+          "action": "resume_recurring_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "resume_recurring_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "resume_recurring_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "resume_recurring_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "resume_recurring_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "return_delivery_challans",
+          "state": "promotable"
+        },
+        {
+          "action": "reverse_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "save_bank_reconciliation_draft",
+          "state": "promotable"
+        },
+        {
+          "action": "schedule_invoice_email",
+          "state": "promotable"
+        },
+        {
+          "action": "sell_fixed_asset",
+          "state": "promotable"
+        },
+        {
+          "action": "send_contact_client_review_email",
+          "state": "promotable"
+        },
+        {
+          "action": "send_contact_payment_method_email",
+          "state": "promotable"
+        },
+        {
+          "action": "send_contact_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "send_contact_vendor_statement_email",
+          "state": "promotable"
+        },
+        {
+          "action": "send_contacts_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "send_invoice_dunning_notifications",
+          "state": "promotable"
+        },
+        {
+          "action": "send_invoice_retry_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "send_invoice_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "send_invoice_via_snail_mail",
+          "state": "promotable"
+        },
+        {
+          "action": "skip_suggested_bank_account_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "start_entry_timer",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_entry_timer",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_recurring_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_recurring_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_recurring_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_recurring_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "stop_recurring_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_credit_notes",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_journal_for_approval",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "track_contact_1099",
+          "state": "promotable"
+        },
+        {
+          "action": "uncategorize_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "undo_return_delivery_challans",
+          "state": "promotable"
+        },
+        {
+          "action": "unmap_invoices_from_salesorders",
+          "state": "promotable"
+        },
+        {
+          "action": "unmatch_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "unship_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "untrack_contact_1099",
+          "state": "promotable"
+        },
+        {
+          "action": "update_a_task",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_account_match_filter",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_account_preferences",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_account_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_reconciliation",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bank_transaction",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "update_bill_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_chart_of_account",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_card",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_document",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_person",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_person_2",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_tags",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_tax_info",
+          "state": "promotable"
+        },
+        {
+          "action": "update_contact_trn_status",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_cfdi_status",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_custom_fields",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_document",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_shipping_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_credit_note_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_currency",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_customer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_item",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_fields_in_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_module",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_module_record",
+          "state": "promotable"
+        },
+        {
+          "action": "update_customer_debit_note",
+          "state": "promotable"
+        },
+        {
+          "action": "update_customer_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_customer_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "update_delivery_challan",
+          "state": "promotable"
+        },
+        {
+          "action": "update_delivery_challan_shipping_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_delivery_challan_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_estimate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_estimate_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_estimate_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_estimate_shipping_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_estimate_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_exchange_rate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "update_fixed_asset",
+          "state": "promotable"
+        },
+        {
+          "action": "update_fixed_asset_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_advanced_tracking_details",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_attachment_preference",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_cfdi_status",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_einvoice_payment_status",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_metadata",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_shipping_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_invoice_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_item",
+          "state": "promotable"
+        },
+        {
+          "action": "update_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "update_location",
+          "state": "promotable"
+        },
+        {
+          "action": "update_opening_balance",
+          "state": "promotable"
+        },
+        {
+          "action": "update_organization",
+          "state": "promotable"
+        },
+        {
+          "action": "update_organization_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_partial_unlock",
+          "state": "promotable"
+        },
+        {
+          "action": "update_percentage_task",
+          "state": "promotable"
+        },
+        {
+          "action": "update_pricebook",
+          "state": "promotable"
+        },
+        {
+          "action": "update_project",
+          "state": "promotable"
+        },
+        {
+          "action": "update_project_task",
+          "state": "promotable"
+        },
+        {
+          "action": "update_project_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_purchase_order",
+          "state": "promotable"
+        },
+        {
+          "action": "update_purchase_order_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_purchase_order_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_purchase_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_purchase_order_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_recurring_bill",
+          "state": "promotable"
+        },
+        {
+          "action": "update_recurring_expense",
+          "state": "promotable"
+        },
+        {
+          "action": "update_recurring_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "update_recurring_invoice_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_recurring_journal",
+          "state": "promotable"
+        },
+        {
+          "action": "update_retainer_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "update_retainer_invoice_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_retainer_invoice_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_retainer_invoice_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_attachment_preference",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_billing_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_shipping_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_sub_status",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_order_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sales_receipt",
+          "state": "promotable"
+        },
+        {
+          "action": "update_salesorder_customfields",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tag_criteria",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tag_options",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tasks",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tax",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tax_authority",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tax_exemption",
+          "state": "promotable"
+        },
+        {
+          "action": "update_tax_group",
+          "state": "promotable"
+        },
+        {
+          "action": "update_time_entry",
+          "state": "promotable"
+        },
+        {
+          "action": "update_transaction_lock",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vendor_credit",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vendor_credit_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vendor_payment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vendor_payment_refund",
+          "state": "promotable"
+        },
+        {
+          "action": "upgrade_organization_to_books",
+          "state": "promotable"
+        },
+        {
+          "action": "upload_credit_note_digital_signature",
+          "state": "promotable"
+        },
+        {
+          "action": "upload_invoice_digital_signature",
+          "state": "promotable"
+        },
+        {
+          "action": "upload_invoice_document",
+          "state": "promotable"
+        },
+        {
+          "action": "verify_contact_address_by_id",
+          "state": "promotable"
+        },
+        {
+          "action": "verify_contact_bank_account",
+          "state": "promotable"
+        },
+        {
+          "action": "verify_contact_einvoice",
+          "state": "promotable"
+        },
+        {
+          "action": "void_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "write_off_fixed_asset",
+          "state": "promotable"
+        },
+        {
+          "action": "write_off_invoice",
+          "state": "promotable"
+        },
+        {
+          "action": "write_off_invoices",
+          "state": "promotable"
+        },
+        {
+          "action": "writeoff_opening_balance",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "testrail",
+      "actions": [
+        {
+          "action": "add_case",
+          "state": "promotable"
+        },
+        {
+          "action": "add_milestone",
+          "state": "promotable"
+        },
+        {
+          "action": "add_plan",
+          "state": "promotable"
+        },
+        {
+          "action": "add_project",
+          "state": "promotable"
+        },
+        {
+          "action": "add_result_for_case",
+          "state": "promotable"
+        },
+        {
+          "action": "add_run",
+          "state": "promotable"
+        },
+        {
+          "action": "add_suite",
+          "state": "promotable"
+        },
+        {
+          "action": "close_run",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_run",
+          "state": "promotable"
+        },
+        {
+          "action": "update_case",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "amplitude",
+      "actions": [
+        {
+          "action": "create_annotation",
+          "state": "promotable"
+        },
+        {
+          "action": "create_annotation_category",
+          "state": "promotable"
+        },
+        {
+          "action": "create_taxonomy_category",
+          "state": "promotable"
+        },
+        {
+          "action": "create_taxonomy_event",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_annotation",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_annotation_category",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_taxonomy_category",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_taxonomy_event",
+          "state": "promotable"
+        },
+        {
+          "action": "update_annotation",
+          "state": "promotable"
+        },
+        {
+          "action": "update_annotation_category",
+          "state": "promotable"
+        },
+        {
+          "action": "update_taxonomy_category",
+          "state": "promotable"
+        },
+        {
+          "action": "update_taxonomy_event",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "posthog",
+      "actions": []
+    },
+    {
+      "connector": "metabase",
+      "actions": []
+    },
+    {
+      "connector": "dbt",
+      "actions": [
+        {
+          "action": "cancel_run",
+          "state": "promotable"
+        },
+        {
+          "action": "create_job",
+          "state": "promotable"
+        },
+        {
+          "action": "create_notification",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ssh_tunnel",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_job",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_notification",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ssh_tunnel",
+          "state": "promotable"
+        },
+        {
+          "action": "retry_failed_job",
+          "state": "promotable"
+        },
+        {
+          "action": "retry_run",
+          "state": "promotable"
+        },
+        {
+          "action": "trigger_job_run",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job",
+          "state": "promotable"
+        },
+        {
+          "action": "update_notification",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ssh_tunnel",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "looker",
+      "actions": []
+    },
+    {
+      "connector": "mode",
+      "actions": []
+    },
+    {
+      "connector": "dremio",
+      "actions": [
+        {
+          "action": "create_personal_access_token",
+          "state": "promotable"
+        },
+        {
+          "action": "create_role",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_personal_access_token",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_reflection",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_role",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_user",
+          "state": "promotable"
+        },
+        {
+          "action": "refresh_reflection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_reflection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_role",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "coda",
+      "actions": [
+        {
+          "action": "create_page",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_page",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_row",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_rows",
+          "state": "promotable"
+        },
+        {
+          "action": "push_button",
+          "state": "promotable"
+        },
+        {
+          "action": "update_page",
+          "state": "promotable"
+        },
+        {
+          "action": "update_row",
+          "state": "promotable"
+        },
+        {
+          "action": "upsert_rows",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "clickup-api",
+      "actions": [
+        {
+          "action": "add_tag_to_task",
+          "state": "promotable"
+        },
+        {
+          "action": "create_folder",
+          "state": "promotable"
+        },
+        {
+          "action": "create_goal",
+          "state": "promotable"
+        },
+        {
+          "action": "create_list",
+          "state": "promotable"
+        },
+        {
+          "action": "create_space",
+          "state": "promotable"
+        },
+        {
+          "action": "create_task",
+          "state": "promotable"
+        },
+        {
+          "action": "create_task_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_folder",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_list",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_space",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_task",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_tag_from_task",
+          "state": "promotable"
+        },
+        {
+          "action": "set_custom_field_value",
+          "state": "promotable"
+        },
+        {
+          "action": "update_folder",
+          "state": "promotable"
+        },
+        {
+          "action": "update_list",
+          "state": "promotable"
+        },
+        {
+          "action": "update_space",
+          "state": "promotable"
+        },
+        {
+          "action": "update_task",
+          "state": "promotable"
+        },
+        {
+          "action": "update_webhook",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "calendly",
+      "actions": [
+        {
+          "action": "cancel_scheduled_event",
+          "state": "promotable"
+        },
+        {
+          "action": "create_invitee",
+          "state": "promotable"
+        },
+        {
+          "action": "create_one_off_event_type",
+          "state": "promotable"
+        },
+        {
+          "action": "create_share",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webhook_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webhook_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "invite_user_to_organization",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_organization_membership",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "greenhouse",
+      "actions": [
+        {
+          "action": "add_a_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "add_a_future_job_permission",
+          "state": "promotable"
+        },
+        {
+          "action": "add_a_job_permission",
+          "state": "promotable"
+        },
+        {
+          "action": "add_application_to_candidate_prospect",
+          "state": "promotable"
+        },
+        {
+          "action": "add_attachment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_attachment_to_application",
+          "state": "promotable"
+        },
+        {
+          "action": "add_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "add_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "add_department",
+          "state": "promotable"
+        },
+        {
+          "action": "add_e_mail_address_to_user",
+          "state": "promotable"
+        },
+        {
+          "action": "add_e_mail_note",
+          "state": "promotable"
+        },
+        {
+          "action": "add_education",
+          "state": "promotable"
+        },
+        {
+          "action": "add_employment",
+          "state": "promotable"
+        },
+        {
+          "action": "add_hiring_team_members",
+          "state": "promotable"
+        },
+        {
+          "action": "add_note",
+          "state": "promotable"
+        },
+        {
+          "action": "add_office",
+          "state": "promotable"
+        },
+        {
+          "action": "add_prospect",
+          "state": "promotable"
+        },
+        {
+          "action": "add_user",
+          "state": "promotable"
+        },
+        {
+          "action": "advance_application",
+          "state": "promotable"
+        },
+        {
+          "action": "anonymize_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "change_user_permission_level",
+          "state": "promotable"
+        },
+        {
+          "action": "convert_prospect_to_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_field",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_field_options",
+          "state": "promotable"
+        },
+        {
+          "action": "create_job",
+          "state": "promotable"
+        },
+        {
+          "action": "create_new_openings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_or_replace_an_approval_flow",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_application",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_custom_field",
+          "state": "promotable"
+        },
+        {
+          "action": "destroy_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "edit_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "edit_department",
+          "state": "promotable"
+        },
+        {
+          "action": "edit_office",
+          "state": "promotable"
+        },
+        {
+          "action": "edit_openings",
+          "state": "promotable"
+        },
+        {
+          "action": "hire_application",
+          "state": "promotable"
+        },
+        {
+          "action": "merge_candidates",
+          "state": "promotable"
+        },
+        {
+          "action": "move_application_different_job",
+          "state": "promotable"
+        },
+        {
+          "action": "move_application_same_job",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_application",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_a_future_job_permission",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_a_job_permission",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_custom_field_options",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_education_from_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_employment_from_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_hiring_team_member",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_scheduled_interview",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_tag_from_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "replace_an_approver_in_an_approver_group",
+          "state": "promotable"
+        },
+        {
+          "action": "replace_hiring_team",
+          "state": "promotable"
+        },
+        {
+          "action": "request_approvals",
+          "state": "promotable"
+        },
+        {
+          "action": "unreject_application",
+          "state": "promotable"
+        },
+        {
+          "action": "update_application",
+          "state": "promotable"
+        },
+        {
+          "action": "update_current_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_field",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_field_options",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job",
+          "state": "promotable"
+        },
+        {
+          "action": "update_rejection_reason",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "lever-hiring",
+      "actions": [
+        {
+          "action": "create_feedback_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_form_template",
+          "state": "promotable"
+        },
+        {
+          "action": "deactivate_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_feedback",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_feedback_template",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_form_template",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_note",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_requisition",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_requisition_field",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_requisition_field_options",
+          "state": "promotable"
+        },
+        {
+          "action": "reactivate_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_feedback",
+          "state": "promotable"
+        },
+        {
+          "action": "update_feedback_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_form_template",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "ashby",
+      "actions": [
+        {
+          "action": "add_application_hiring_team_member",
+          "state": "promotable"
+        },
+        {
+          "action": "add_assessment_completed_to_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "add_candidate_email_message",
+          "state": "promotable"
+        },
+        {
+          "action": "add_candidate_project",
+          "state": "promotable"
+        },
+        {
+          "action": "add_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "add_hiring_team_member",
+          "state": "promotable"
+        },
+        {
+          "action": "add_interviewer_pool_user",
+          "state": "promotable"
+        },
+        {
+          "action": "add_opening_job",
+          "state": "promotable"
+        },
+        {
+          "action": "add_opening_location",
+          "state": "promotable"
+        },
+        {
+          "action": "add_sequence",
+          "state": "promotable"
+        },
+        {
+          "action": "anonymize_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_department",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_interviewer_pool",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_location",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_interview_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "cancel_sequence",
+          "state": "promotable"
+        },
+        {
+          "action": "change_application_source",
+          "state": "promotable"
+        },
+        {
+          "action": "change_application_source_2",
+          "state": "promotable"
+        },
+        {
+          "action": "change_application_stage",
+          "state": "promotable"
+        },
+        {
+          "action": "change_application_stage_2",
+          "state": "promotable"
+        },
+        {
+          "action": "create_application",
+          "state": "promotable"
+        },
+        {
+          "action": "create_application_feedback_request",
+          "state": "promotable"
+        },
+        {
+          "action": "create_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_candidate_note",
+          "state": "promotable"
+        },
+        {
+          "action": "create_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_field",
+          "state": "promotable"
+        },
+        {
+          "action": "create_department",
+          "state": "promotable"
+        },
+        {
+          "action": "create_interview_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "create_interviewer_pool",
+          "state": "promotable"
+        },
+        {
+          "action": "create_job",
+          "state": "promotable"
+        },
+        {
+          "action": "create_location",
+          "state": "promotable"
+        },
+        {
+          "action": "create_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "create_opening",
+          "state": "promotable"
+        },
+        {
+          "action": "create_referral",
+          "state": "promotable"
+        },
+        {
+          "action": "create_survey_request",
+          "state": "promotable"
+        },
+        {
+          "action": "create_survey_submission",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user_interviewer_pause",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_application",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_user_interviewer_pause",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "discard_sequence",
+          "state": "promotable"
+        },
+        {
+          "action": "move_department",
+          "state": "promotable"
+        },
+        {
+          "action": "move_location",
+          "state": "promotable"
+        },
+        {
+          "action": "push_candidate_to_hris",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_application_hiring_team_member",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_candidate_project",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_candidate_tag",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_hiring_team_member",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_interviewer_pool_user",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_opening_job",
+          "state": "promotable"
+        },
+        {
+          "action": "remove_opening_location",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_department",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_interviewer_pool",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_location",
+          "state": "promotable"
+        },
+        {
+          "action": "set_candidate_fraud_status",
+          "state": "promotable"
+        },
+        {
+          "action": "set_custom_field_value",
+          "state": "promotable"
+        },
+        {
+          "action": "set_custom_field_values",
+          "state": "promotable"
+        },
+        {
+          "action": "set_job_posting_status",
+          "state": "promotable"
+        },
+        {
+          "action": "set_job_status",
+          "state": "promotable"
+        },
+        {
+          "action": "set_offer_decided_at",
+          "state": "promotable"
+        },
+        {
+          "action": "set_offer_status",
+          "state": "promotable"
+        },
+        {
+          "action": "set_opening_archived",
+          "state": "promotable"
+        },
+        {
+          "action": "set_opening_opening_state",
+          "state": "promotable"
+        },
+        {
+          "action": "set_user_custom_field_value",
+          "state": "promotable"
+        },
+        {
+          "action": "set_user_custom_field_values",
+          "state": "promotable"
+        },
+        {
+          "action": "start_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "start_offer_approval_process",
+          "state": "promotable"
+        },
+        {
+          "action": "start_offer_process",
+          "state": "promotable"
+        },
+        {
+          "action": "start_sequence",
+          "state": "promotable"
+        },
+        {
+          "action": "submit_application_feedback",
+          "state": "promotable"
+        },
+        {
+          "action": "transfer_application",
+          "state": "promotable"
+        },
+        {
+          "action": "update_application",
+          "state": "promotable"
+        },
+        {
+          "action": "update_application_history",
+          "state": "promotable"
+        },
+        {
+          "action": "update_approval_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_assessment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_field_selectable_values",
+          "state": "promotable"
+        },
+        {
+          "action": "update_department",
+          "state": "promotable"
+        },
+        {
+          "action": "update_interview_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "update_interviewer_pool",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job_compensation",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job_posting",
+          "state": "promotable"
+        },
+        {
+          "action": "update_job_posting_compensation",
+          "state": "promotable"
+        },
+        {
+          "action": "update_location_address",
+          "state": "promotable"
+        },
+        {
+          "action": "update_location_external_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_location_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_location_workplace_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "update_opening",
+          "state": "promotable"
+        },
+        {
+          "action": "update_sequence_stage",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user_interviewer_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "update_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "upload_candidate_file",
+          "state": "promotable"
+        },
+        {
+          "action": "upload_candidate_resume",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "workable",
+      "actions": [
+        {
+          "action": "approve_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "approve_requisition",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_time_entry",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_create_time_entries",
+          "state": "promotable"
+        },
+        {
+          "action": "comment_on_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "copy_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_department",
+          "state": "promotable"
+        },
+        {
+          "action": "create_employee",
+          "state": "promotable"
+        },
+        {
+          "action": "create_job_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_requisition",
+          "state": "promotable"
+        },
+        {
+          "action": "create_review_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "create_talent_pool_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "create_time_entry",
+          "state": "promotable"
+        },
+        {
+          "action": "create_timeoff_request",
+          "state": "promotable"
+        },
+        {
+          "action": "deactivate_member",
+          "state": "promotable"
+        },
+        {
+          "action": "decide_timeoff_approval",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_department",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "disqualify_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "enable_member",
+          "state": "promotable"
+        },
+        {
+          "action": "invite_member",
+          "state": "promotable"
+        },
+        {
+          "action": "merge_department",
+          "state": "promotable"
+        },
+        {
+          "action": "move_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "rate_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_offer",
+          "state": "promotable"
+        },
+        {
+          "action": "reject_requisition",
+          "state": "promotable"
+        },
+        {
+          "action": "relocate_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "revert_candidate_disqualification",
+          "state": "promotable"
+        },
+        {
+          "action": "update_candidate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_candidate_custom_attribute",
+          "state": "promotable"
+        },
+        {
+          "action": "update_candidate_rating",
+          "state": "promotable"
+        },
+        {
+          "action": "update_candidate_tags",
+          "state": "promotable"
+        },
+        {
+          "action": "update_department",
+          "state": "promotable"
+        },
+        {
+          "action": "update_employee",
+          "state": "promotable"
+        },
+        {
+          "action": "update_member",
+          "state": "promotable"
+        },
+        {
+          "action": "update_requisition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_time_entry",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "recruitee",
+      "actions": []
+    },
+    {
+      "connector": "hibob",
+      "actions": []
+    },
+    {
+      "connector": "factorial",
+      "actions": []
+    },
+    {
+      "connector": "datadog",
+      "actions": [
+        {
+          "action": "cancel_downtime",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_key",
+          "state": "promotable"
+        },
+        {
+          "action": "create_dashboard",
+          "state": "promotable"
+        },
+        {
+          "action": "create_dashboard_list",
+          "state": "promotable"
+        },
+        {
+          "action": "create_downtime",
+          "state": "promotable"
+        },
+        {
+          "action": "create_event",
+          "state": "promotable"
+        },
+        {
+          "action": "create_monitor",
+          "state": "promotable"
+        },
+        {
+          "action": "create_notebook",
+          "state": "promotable"
+        },
+        {
+          "action": "create_slo",
+          "state": "promotable"
+        },
+        {
+          "action": "create_synthetics_api_test",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_key",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_dashboard",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_dashboard_list",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_monitor",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_notebook",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_slo",
+          "state": "promotable"
+        },
+        {
+          "action": "disable_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_key",
+          "state": "promotable"
+        },
+        {
+          "action": "update_dashboard",
+          "state": "promotable"
+        },
+        {
+          "action": "update_dashboard_list",
+          "state": "promotable"
+        },
+        {
+          "action": "update_downtime",
+          "state": "promotable"
+        },
+        {
+          "action": "update_monitor",
+          "state": "promotable"
+        },
+        {
+          "action": "update_notebook",
+          "state": "promotable"
+        },
+        {
+          "action": "update_slo",
+          "state": "promotable"
+        },
+        {
+          "action": "update_synthetics_api_test",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "pagerduty",
+      "actions": []
+    },
+    {
+      "connector": "auth0",
+      "actions": [
+        {
+          "action": "create_client",
+          "state": "promotable"
+        },
+        {
+          "action": "create_organization",
+          "state": "promotable"
+        },
+        {
+          "action": "create_role",
+          "state": "promotable"
+        },
+        {
+          "action": "create_user",
+          "state": "promotable"
+        },
+        {
+          "action": "update_client",
+          "state": "promotable"
+        },
+        {
+          "action": "update_organization",
+          "state": "promotable"
+        },
+        {
+          "action": "update_role",
+          "state": "promotable"
+        },
+        {
+          "action": "update_user",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "okta",
+      "actions": [
+        {
+          "action": "create_api_v1_agent_pools_pool_id_updates",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_agent_pools_pool_id_updates_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_agent_pools_pool_id_updates_update_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_connections_default",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_credentials_csrs",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_credentials_jwks",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_credentials_secrets",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_cwo_connections",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_federated_claims",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_grants",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_group_push_mappings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_interclient_allowed_apps",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_users",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_apps_app_name_app_id_oauth2_callback",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authenticators",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authenticators_authenticator_id_aaguids",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authenticators_authenticator_id_methods_web_authn_method_type_verify_rp_id_domain",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_associated_servers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_claims",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_policies",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_authorization_servers_auth_server_id_scopes",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_behaviors",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_bot_protection_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_brands",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_brands_brand_id_templates_email_template_name_customizations",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_brands_brand_id_templates_email_template_name_test",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_captchas",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_captchas_captcha_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_device_assurances",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_device_posture_checks",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_directories_app_instance_id_groups_group_id_query",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_directories_app_instance_id_groups_modify",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_domains",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_domains_domain_id_verify",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_dr_failback",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_dr_failover",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_email_domains",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_email_domains_email_domain_id_verify",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_email_servers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_email_servers_email_server_id_test",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_event_hooks",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_features_feature_id_lifecycle",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_groups",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_groups_group_id_owners",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_groups_group_id_roles",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_groups_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_hook_keys",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_governance_bundles",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_governance_opt_in",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_governance_opt_out",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_resource_sets",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_resource_sets_resource_set_id_or_label_bindings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_resource_sets_resource_set_id_or_label_resources",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_roles",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_iam_roles_role_id_or_label_permissions_permission_type",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_groups",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_groups_group_or_external_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_delete",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_group_memberships_delete",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_group_memberships_upsert",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_groups_delete",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_groups_upsert",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_upsert",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_start_import",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_identity_sources_identity_source_id_users",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_idps",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_idps_credentials_keys",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_idps_idp_id_credentials_csrs",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_idps_idp_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_inline_hooks",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_inline_hooks_inline_hook_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_inline_hooks_inline_hook_id_execute",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_log_streams",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_mappings_mapping_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_schemas_apps_app_id_default",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_schemas_group_default",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_schemas_user_linked_objects",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_schemas_user_schema_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_types_user",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_types_user_type_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_meta_uischemas",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_email_bounces_remove_list",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_factors_yubikey_token_tokens",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_org_settings_third_party_admin_setting",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_preferences_hide_end_user_footer",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_preferences_show_end_user_footer",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_privacy_aerial_grant",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_privacy_okta_communication_opt_in",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_privacy_okta_communication_opt_out",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_privacy_okta_support_extend",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_privacy_okta_support_grant",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_org_settings_auto_assign_admin_app_setting",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_orgs",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_policies",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_policies_policy_id_clone",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_policies_policy_id_mappings",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_policies_policy_id_rules",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_principal_rate_limits",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_push_providers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_realm_assignments",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_realm_assignments_operations",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_realms",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_roles_role_ref_subscriptions_notification_type_subscribe",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_roles_role_ref_subscriptions_notification_type_unsubscribe",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_security_events_providers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_ssf_stream",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_ssf_stream_verification",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_telephony_providers",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_telephony_providers_custom_telephony_provider_id_set_as_primary",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_telephony_providers_custom_telephony_provider_id_test",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_templates_sms",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_templates_sms_template_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_threats_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_trusted_origins",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_id",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_authenticator_enrollments_phone",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_authenticator_enrollments_tac",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_credentials_change_password",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_credentials_change_recovery_question",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_credentials_forgot_password",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_credentials_forgot_password_recovery_question",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_factors",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_factors_factor_id_resend",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_factors_factor_id_verify",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_roles",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_subscriptions_notification_type_subscribe",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_users_user_id_subscriptions_notification_type_unsubscribe",
+          "state": "promotable"
+        },
+        {
+          "action": "create_api_v1_zones",
+          "state": "promotable"
+        },
+        {
+          "action": "create_integrations_api_v1_api_services",
+          "state": "promotable"
+        },
+        {
+          "action": "create_integrations_api_v1_api_services_api_service_id_credentials_secrets",
+          "state": "promotable"
+        },
+        {
+          "action": "create_oauth2_v1_clients_client_id_roles",
+          "state": "promotable"
+        },
+        {
+          "action": "create_privileged_access_api_v1_okta_service_accounts",
+          "state": "promotable"
+        },
+        {
+          "action": "create_privileged_access_api_v1_service_accounts",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webauthn_registration_api_v1_enroll",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webauthn_registration_api_v1_initiate_fulfillment_request",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webauthn_registration_api_v1_send_pin",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webauthn_registration_api_v1_users_user_id_enrollments_authenticator_enrollment_id_mark_error",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_agent_pools_pool_id_updates_update_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_api_tokens_api_token_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_api_tokens_current",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_credentials_csrs_csr_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_credentials_jwks_key_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_credentials_secrets_secret_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_cwo_connections_connection_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_federated_claims_claim_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_grants_grant_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_interclient_allowed_apps_allowed_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_tokens",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_tokens_token_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_apps_app_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authenticators_authenticator_id_aaguids_aaguid",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_associated_servers_associated_server_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_claims_claim_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_clients_client_id_tokens",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_policies_policy_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_authorization_servers_auth_server_id_scopes_scope_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_behaviors_behavior_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_pages_error_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_pages_error_preview",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_pages_sign_in_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_pages_sign_in_preview",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_templates_email_template_name_customizations",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_themes_theme_id_background_image",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_themes_theme_id_favicon",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_brands_brand_id_themes_theme_id_logo",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_captchas_captcha_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_device_assurances_device_assurance_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_device_posture_checks_posture_check_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_devices_device_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_domains_domain_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_email_domains_email_domain_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_email_servers_email_server_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_event_hooks_event_hook_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_owners_owner_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_roles_role_assignment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_groups_target_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_group_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_groups_rules_group_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_hook_keys_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_governance_bundles_bundle_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_resource_sets_resource_set_id_or_label",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_roles_role_id_or_label",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_iam_roles_role_id_or_label_permissions_permission_type",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_identity_sources_identity_source_id_groups_group_or_external_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership_member_external_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_identity_sources_identity_source_id_sessions_session_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_identity_sources_identity_source_id_users_external_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_idps_credentials_keys_kid",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_idps_idp_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_idps_idp_id_credentials_csrs_idp_csr_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_idps_idp_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_inline_hooks_inline_hook_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_log_streams_log_stream_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_meta_schemas_user_linked_objects_linked_object_name",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_meta_types_user_type_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_meta_uischemas_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_org_captcha",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_policies_policy_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_policies_policy_id_mappings_mapping_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_policies_policy_id_rules_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_push_providers_push_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_realm_assignments_assignment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_realms_realm_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_security_events_providers_security_event_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_sessions_session_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_ssf_stream",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_telephony_providers_custom_telephony_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_templates_sms_template_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_trusted_origins_trusted_origin_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_authenticator_enrollments_enrollment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_clients_client_id_grants",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_clients_client_id_tokens",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_clients_client_id_tokens_token_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_factors_factor_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_grants",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_grants_grant_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_or_login_linked_objects_relationship_name",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_roles_role_assignment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_users_user_id_sessions",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_api_v1_zones_zone_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_integrations_api_v1_api_services_api_service_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_privileged_access_api_v1_okta_service_accounts_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_privileged_access_api_v1_service_accounts_id",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webauthn_registration_api_v1_users_user_id_enrollments_authenticator_enrollment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_pause",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_resume",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_retry",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_agent_pools_pool_id_updates_update_id_stop",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_connections_default_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_connections_default_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_credentials_jwks_key_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_credentials_jwks_key_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_credentials_secrets_secret_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_credentials_secrets_secret_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_apps_app_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authenticators_authenticator_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authenticators_authenticator_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authenticators_authenticator_id_methods_method_type_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authenticators_authenticator_id_methods_method_type_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_credentials_lifecycle_key_rotate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_behaviors_behavior_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_behaviors_behavior_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_device_integrations_device_integration_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_device_integrations_device_integration_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_devices_device_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_devices_device_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_devices_device_id_lifecycle_suspend",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_devices_device_id_lifecycle_unsuspend",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_event_hooks_event_hook_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_event_hooks_event_hook_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_event_hooks_event_hook_id_lifecycle_verify",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_groups_rules_group_rule_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_groups_rules_group_rule_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_idps_idp_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_idps_idp_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_inline_hooks_inline_hook_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_inline_hooks_inline_hook_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_log_streams_log_stream_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_log_streams_log_stream_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_org_privacy_aerial_revoke",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_org_privacy_okta_support_revoke",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_policies_policy_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_policies_policy_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_policies_policy_id_rules_rule_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_policies_policy_id_rules_rule_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_realm_assignments_assignment_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_realm_assignments_assignment_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_security_events_providers_security_event_provider_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_security_events_providers_security_event_provider_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_sessions_session_id_lifecycle_refresh",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_telephony_providers_custom_telephony_provider_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_telephony_providers_custom_telephony_provider_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_trusted_origins_trusted_origin_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_trusted_origins_trusted_origin_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_expire_password",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_expire_password_with_temp_password",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_reactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_reset_factors",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_suspend",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_unlock",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_id_lifecycle_unsuspend",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_users_user_id_factors_factor_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_zones_zone_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_api_v1_zones_zone_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id_lifecycle_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id_lifecycle_deactivate",
+          "state": "promotable"
+        },
+        {
+          "action": "execute_webauthn_registration_api_v1_activate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_api_tokens_api_token_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_cwo_connections_connection_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_features_feature_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_federated_claims_claim_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_group_push_mappings_mapping_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_apps_app_id_policies_policy_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authenticators_authenticator_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authenticators_authenticator_id_aaguids_aaguid",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authenticators_authenticator_id_aaguids_aaguid_2",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authenticators_authenticator_id_methods_method_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authorization_servers_auth_server_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authorization_servers_auth_server_id_claims_claim_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authorization_servers_auth_server_id_policies_policy_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_authorization_servers_auth_server_id_scopes_scope_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_behaviors_behavior_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_pages_error_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_pages_error_preview",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_pages_sign_in_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_pages_sign_in_preview",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_pages_sign_out_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_templates_email_template_name_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_themes_theme_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_brands_brand_id_well_known_uris_path_customized",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_captchas_captcha_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_device_assurances_device_assurance_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_device_posture_checks_posture_check_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_domains_domain_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_domains_domain_id_certificate",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_email_domains_email_domain_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_email_servers_email_server_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_event_hooks_event_hook_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_first_party_app_settings_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_groups_target_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_group_id_users_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_groups_rules_group_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_hook_keys_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_governance_bundles_bundle_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_resource_sets_resource_set_id_or_label",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_resource_sets_resource_set_id_or_label_resources",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_roles_role_id_or_label",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_iam_roles_role_id_or_label_permissions_permission_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_identity_sources_identity_source_id_users_external_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_identity_sources_identity_source_id_users_external_id_2",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_idps_credentials_keys_kid",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_idps_idp_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_inline_hooks_inline_hook_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_log_streams_log_stream_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_meta_types_user_type_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_meta_uischemas_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_org",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_org_captcha",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_org_contacts_contact_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_org_privacy_okta_support_cases_case_number",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_org_settings_client_privileges_setting",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_policies_policy_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_policies_policy_id_rules_rule_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_principal_rate_limits_principal_rate_limit_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_push_providers_push_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_rate_limit_settings_admin_notifications",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_rate_limit_settings_per_client",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_rate_limit_settings_warning_threshold",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_realm_assignments_assignment_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_realms_realm_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_security_events_providers_security_event_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_ssf_stream",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_ssf_stream_2",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_telephony_providers_custom_telephony_provider_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_templates_sms_template_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_trusted_origins_trusted_origin_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_classification",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_or_login_linked_objects_primary_relationship_name_primary_user_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_risk",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_users_user_id_roles_role_assignment_id_targets_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_api_v1_zones_zone_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_attack_protection_api_v1_authenticator_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "update_attack_protection_api_v1_user_lockout_settings",
+          "state": "promotable"
+        },
+        {
+          "action": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name",
+          "state": "promotable"
+        },
+        {
+          "action": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups_group_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_okta_personal_settings_api_v1_edit_feature",
+          "state": "promotable"
+        },
+        {
+          "action": "update_okta_personal_settings_api_v1_export_blocklists",
+          "state": "promotable"
+        },
+        {
+          "action": "update_privileged_access_api_v1_okta_service_accounts_id",
+          "state": "promotable"
+        },
+        {
+          "action": "update_privileged_access_api_v1_service_accounts_id",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "firehydrant",
+      "actions": [
+        {
+          "action": "archive_audience",
+          "state": "promotable"
+        },
+        {
+          "action": "bulk_update_incident_milestones",
+          "state": "promotable"
+        },
+        {
+          "action": "close_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "convert_incident_task",
+          "state": "promotable"
+        },
+        {
+          "action": "copy_on_call_schedule_rotation",
+          "state": "promotable"
+        },
+        {
+          "action": "create_audience",
+          "state": "promotable"
+        },
+        {
+          "action": "create_change",
+          "state": "promotable"
+        },
+        {
+          "action": "create_change_event",
+          "state": "promotable"
+        },
+        {
+          "action": "create_change_identity",
+          "state": "promotable"
+        },
+        {
+          "action": "create_checklist_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_comment_reaction",
+          "state": "promotable"
+        },
+        {
+          "action": "create_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "create_custom_field_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "create_email_subscriber",
+          "state": "promotable"
+        },
+        {
+          "action": "create_environment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_functionality",
+          "state": "promotable"
+        },
+        {
+          "action": "create_inbound_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_alert",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_change_event",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_chat_message",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_impact",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_link",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_note",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_retrospective",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_retrospective_dynamic_input",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_retrospective_field",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_role",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_role_assignment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_status_page",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_task",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_task_list",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_team_assignment",
+          "state": "promotable"
+        },
+        {
+          "action": "create_incident_type",
+          "state": "promotable"
+        },
+        {
+          "action": "create_lifecycle_measurement_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "create_lifecycle_milestone",
+          "state": "promotable"
+        },
+        {
+          "action": "create_notification_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "create_nunc_component_group",
+          "state": "promotable"
+        },
+        {
+          "action": "create_nunc_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "create_nunc_link",
+          "state": "promotable"
+        },
+        {
+          "action": "create_nunc_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "create_on_call_schedule_rotation",
+          "state": "promotable"
+        },
+        {
+          "action": "create_on_call_shift",
+          "state": "promotable"
+        },
+        {
+          "action": "create_post_mortem_reason",
+          "state": "promotable"
+        },
+        {
+          "action": "create_post_mortem_report",
+          "state": "promotable"
+        },
+        {
+          "action": "create_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "create_retrospective_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_role",
+          "state": "promotable"
+        },
+        {
+          "action": "create_runbook",
+          "state": "promotable"
+        },
+        {
+          "action": "create_runbook_execution",
+          "state": "promotable"
+        },
+        {
+          "action": "create_saved_search",
+          "state": "promotable"
+        },
+        {
+          "action": "create_scheduled_maintenance",
+          "state": "promotable"
+        },
+        {
+          "action": "create_service",
+          "state": "promotable"
+        },
+        {
+          "action": "create_service_checklist_response",
+          "state": "promotable"
+        },
+        {
+          "action": "create_service_dependency",
+          "state": "promotable"
+        },
+        {
+          "action": "create_service_links",
+          "state": "promotable"
+        },
+        {
+          "action": "create_severity",
+          "state": "promotable"
+        },
+        {
+          "action": "create_severity_matrix_condition",
+          "state": "promotable"
+        },
+        {
+          "action": "create_severity_matrix_impact",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_alert_grouping_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_email_target",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_event_source",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_heartbeat_endpoint_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_page",
+          "state": "promotable"
+        },
+        {
+          "action": "create_signals_webhook_target",
+          "state": "promotable"
+        },
+        {
+          "action": "create_slack_emoji_action",
+          "state": "promotable"
+        },
+        {
+          "action": "create_status_update_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_task_list",
+          "state": "promotable"
+        },
+        {
+          "action": "create_team",
+          "state": "promotable"
+        },
+        {
+          "action": "create_team_call_route",
+          "state": "promotable"
+        },
+        {
+          "action": "create_team_escalation_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "create_team_on_call_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "create_team_signal_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ticket",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ticketing_custom_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ticketing_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ticketing_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "create_ticketing_project_config",
+          "state": "promotable"
+        },
+        {
+          "action": "create_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "debug_signals_expression",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_call_route",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_change",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_change_event",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_change_identity",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_checklist_template",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_comment_reaction",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_custom_field_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_environment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_functionality",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_inbound_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_alert",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_chat_message",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_event",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_impact",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_link",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_role",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_role_assignment",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_status_page",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_task",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_incident_type",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_lifecycle_measurement_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_lifecycle_milestone",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_notification_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_nunc_component_group",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_nunc_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_nunc_image",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_nunc_link",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_nunc_subscription",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_on_call_schedule_rotation",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_on_call_shift",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_post_mortem_reason",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_retrospective_template",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_role",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_runbook",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_saved_search",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_scheduled_maintenance",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_service",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_service_dependency",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_service_link",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_severity",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_severity_matrix_condition",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_severity_matrix_impact",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_signals_alert_grouping_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_signals_email_target",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_signals_event_source",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_signals_heartbeat_endpoint_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_signals_webhook_target",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_slack_emoji_action",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_status_update_template",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_statuspage_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_support_hours_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_task_list",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_team",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_team_escalation_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_team_on_call_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_team_signal_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ticket",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ticketing_custom_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ticketing_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ticketing_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_ticketing_project_config",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_transcript_entry",
+          "state": "promotable"
+        },
+        {
+          "action": "delete_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "generate_audience_summary",
+          "state": "promotable"
+        },
+        {
+          "action": "ingest_catalog_data",
+          "state": "promotable"
+        },
+        {
+          "action": "override_on_call_schedule_rotation_shifts",
+          "state": "promotable"
+        },
+        {
+          "action": "preview_on_call_schedule_rotation",
+          "state": "promotable"
+        },
+        {
+          "action": "preview_team_on_call_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "publish_nunc_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "publish_post_mortem_report",
+          "state": "promotable"
+        },
+        {
+          "action": "refresh_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "reorder_post_mortem_reasons",
+          "state": "promotable"
+        },
+        {
+          "action": "resolve_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "restore_audience",
+          "state": "promotable"
+        },
+        {
+          "action": "set_member_default_audience",
+          "state": "promotable"
+        },
+        {
+          "action": "share_incident_retrospectives",
+          "state": "promotable"
+        },
+        {
+          "action": "test_slack_channel",
+          "state": "promotable"
+        },
+        {
+          "action": "unarchive_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "unpublish_nunc_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ai_preferences",
+          "state": "promotable"
+        },
+        {
+          "action": "update_audience",
+          "state": "promotable"
+        },
+        {
+          "action": "update_authed_provider",
+          "state": "promotable"
+        },
+        {
+          "action": "update_aws_cloudtrail_batch",
+          "state": "promotable"
+        },
+        {
+          "action": "update_aws_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_call_route",
+          "state": "promotable"
+        },
+        {
+          "action": "update_change",
+          "state": "promotable"
+        },
+        {
+          "action": "update_change_event",
+          "state": "promotable"
+        },
+        {
+          "action": "update_change_identity",
+          "state": "promotable"
+        },
+        {
+          "action": "update_checklist_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_comment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_custom_field_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_environment",
+          "state": "promotable"
+        },
+        {
+          "action": "update_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "update_functionality",
+          "state": "promotable"
+        },
+        {
+          "action": "update_inbound_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_alert_primary",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_change_event",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_chat_message",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_event",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_impact_patch",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_impact_put",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_link",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_note",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_retrospective",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_retrospective_field",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_role",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_task",
+          "state": "promotable"
+        },
+        {
+          "action": "update_incident_type",
+          "state": "promotable"
+        },
+        {
+          "action": "update_lifecycle_measurement_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_lifecycle_milestone",
+          "state": "promotable"
+        },
+        {
+          "action": "update_notification_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "update_nunc_component_group",
+          "state": "promotable"
+        },
+        {
+          "action": "update_nunc_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_nunc_link",
+          "state": "promotable"
+        },
+        {
+          "action": "update_on_call_schedule_rotation",
+          "state": "promotable"
+        },
+        {
+          "action": "update_on_call_shift",
+          "state": "promotable"
+        },
+        {
+          "action": "update_post_mortem_field",
+          "state": "promotable"
+        },
+        {
+          "action": "update_post_mortem_questions",
+          "state": "promotable"
+        },
+        {
+          "action": "update_post_mortem_reason",
+          "state": "promotable"
+        },
+        {
+          "action": "update_post_mortem_report",
+          "state": "promotable"
+        },
+        {
+          "action": "update_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "update_retrospective_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_role",
+          "state": "promotable"
+        },
+        {
+          "action": "update_runbook",
+          "state": "promotable"
+        },
+        {
+          "action": "update_runbook_execution_step",
+          "state": "promotable"
+        },
+        {
+          "action": "update_runbook_execution_step_script",
+          "state": "promotable"
+        },
+        {
+          "action": "update_saved_search",
+          "state": "promotable"
+        },
+        {
+          "action": "update_scheduled_maintenance",
+          "state": "promotable"
+        },
+        {
+          "action": "update_service",
+          "state": "promotable"
+        },
+        {
+          "action": "update_service_dependency",
+          "state": "promotable"
+        },
+        {
+          "action": "update_severity",
+          "state": "promotable"
+        },
+        {
+          "action": "update_severity_matrix",
+          "state": "promotable"
+        },
+        {
+          "action": "update_severity_matrix_condition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_severity_matrix_impact",
+          "state": "promotable"
+        },
+        {
+          "action": "update_signals_alert",
+          "state": "promotable"
+        },
+        {
+          "action": "update_signals_alert_grouping_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "update_signals_email_target",
+          "state": "promotable"
+        },
+        {
+          "action": "update_signals_heartbeat_endpoint_configuration",
+          "state": "promotable"
+        },
+        {
+          "action": "update_signals_webhook_target",
+          "state": "promotable"
+        },
+        {
+          "action": "update_slack_emoji_action",
+          "state": "promotable"
+        },
+        {
+          "action": "update_status_update_template",
+          "state": "promotable"
+        },
+        {
+          "action": "update_statuspage_connection",
+          "state": "promotable"
+        },
+        {
+          "action": "update_support_hours_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "update_task_list",
+          "state": "promotable"
+        },
+        {
+          "action": "update_team",
+          "state": "promotable"
+        },
+        {
+          "action": "update_team_escalation_policy",
+          "state": "promotable"
+        },
+        {
+          "action": "update_team_on_call_schedule",
+          "state": "promotable"
+        },
+        {
+          "action": "update_team_signal_rule",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ticket",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ticketing_custom_definition",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ticketing_field_map",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ticketing_priority",
+          "state": "promotable"
+        },
+        {
+          "action": "update_ticketing_project_config",
+          "state": "promotable"
+        },
+        {
+          "action": "update_transcript_attribution",
+          "state": "promotable"
+        },
+        {
+          "action": "update_vote",
+          "state": "promotable"
+        },
+        {
+          "action": "update_webhook",
+          "state": "promotable"
+        },
+        {
+          "action": "validate_incident_tags",
+          "state": "promotable"
+        },
+        {
+          "action": "vote_ai_incident_summary",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "adobe-commerce-magento",
+      "actions": [
+        {
+          "action": "cancel_order",
+          "state": "promotable"
+        },
+        {
+          "action": "create_category",
+          "state": "promotable"
+        },
+        {
+          "action": "update_category",
+          "state": "promotable"
+        },
+        {
+          "action": "update_product",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "commercetools",
+      "actions": []
+    },
+    {
+      "connector": "recharge",
+      "actions": []
+    },
+    {
+      "connector": "docuseal",
+      "actions": [
+        {
+          "action": "archive_submission",
+          "state": "promotable"
+        },
+        {
+          "action": "archive_template",
+          "state": "promotable"
+        },
+        {
+          "action": "clone_template",
+          "state": "promotable"
+        },
+        {
+          "action": "create_submission",
+          "state": "promotable"
+        },
+        {
+          "action": "update_submitter",
+          "state": "promotable"
+        },
+        {
+          "action": "update_template",
+          "state": "promotable"
+        }
+      ]
+    },
+    {
+      "connector": "eventbrite",
+      "actions": []
+    }
+  ]
+}

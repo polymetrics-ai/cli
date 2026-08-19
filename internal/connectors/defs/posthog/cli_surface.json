@@ -1,0 +1,12 @@
+{
+  "tagline": "Run PostHog's declared typed write actions.",
+  "usage": "pm posthog <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": []
+    }
+  ],
+  "commands": []
+}

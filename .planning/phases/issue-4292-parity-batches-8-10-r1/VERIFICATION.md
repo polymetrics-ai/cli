@@ -11,10 +11,12 @@
 - [x] Lever focused repair: `go test -timeout 20m ./cmd/connectorgen -run
   '^TestLeverHiringAPISurfaceOperationLedger$'` and Batch 9 source integrity
   check pass.
-- [ ] Generate and validate the 30-row seven-surface ledger and human summary.
-- [ ] Add only faithful connector-local source/destination declarations and
-  per-increment static evidence; do not claim generic App/CLI dispatch before
-  the foundation integration is merged.
+- [x] Generated and validated the 30-row seven-surface ledger and human
+  summary; every one of 1,591 typed actions has a reverse-ETL eligibility and
+  a direct-write CLI disposition.
+- [x] Added only faithful connector-local source/destination declarations and
+  per-increment static evidence; generic App/CLI dispatch remains explicitly
+  pending the foundation integration.
 - [ ] Before final push: fetch and merge the latest foundation branch, prove
   its exact SHA is an ancestor, and exercise the installed App/CLI dispatch
   route without credentials.
@@ -31,6 +33,26 @@
   connector(s) checked, 0 findings.
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
+
+### First five-connector typed-write CLI increment
+
+- [x] Red: the prior generated ledger contained 1,425
+  `declaration-pending-cli-binding` typed actions; a static destination proof
+  does not make an action CLI-reachable.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli brex zoho-books testrail amplitude posthog`
+  generated only existing-action command contracts. Binding is fail-closed on
+  the exact singular `covered_by.write` action, equal method, canonical path,
+  declared record placeholders, and declared query/config inputs.
+- [x] `go run .planning/phases/issue-4292-parity-batches-8-10-r1/traces/audit-promotable-writes.go`
+  — real engine schema gate: 1,591 actions, 1,591 promotable, 0 foundation
+  gaps.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check brex zoho-books testrail amplitude posthog`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
 
 ### Second five-connector declaration increment
 
@@ -141,4 +163,7 @@
   reran all three declaration integrity checks, connector validation,
   `surface-sync --check`, targeted Go tests, `go build`, lint, and the agent
   contract check. No map retains the superseded HEAD/pagination engine-gap IDs.
-- [ ] Review, commit, push, and open the direct PR.
+- [ ] Materialize and verify the remaining 25 connector groups' typed-write
+  CLI surfaces, preserving every exact route-binding failure as partial rather
+  than guessing a route.
+- [ ] Review, commit, push, and update existing PR #4301.

@@ -70,7 +70,16 @@ reconciliation directive and is the current execution contract.
    from the reachability count. Generate declarations only from existing typed
    bundle contracts and connector schemas; pass static bundle/transport loading
    and focused no-I/O transport preflight checks per five-connector increment.
-4. **Foundation handoff:** fetch and merge the latest #4304 head before final
+4. **Red/green — typed-write CLI reachability:** every existing typed write
+   action receives a connector-owned direct CLI command or an explicit partial
+   block reason. The generator may bind an action only to the unique
+   `api_surface.covered_by.write` equal to its exact action name, with equal
+   method and canonical path after converting only declared record path
+   placeholders. URL query templates become declared typed flags, never route
+   text. Zero/multiple matches, method/path disagreement, unknown placeholders,
+   and config overrides the closed record assembler cannot yet carry fail
+   closed with precise evidence; no fuzzy or array-order match is permitted.
+5. **Foundation handoff:** fetch and merge the latest #4304 head before final
    verification. Prove that SHA is an ancestor and run the installed App/CLI
    path. Until that passes, record application deployment as pending rather
    than adding a local fallback.
@@ -244,5 +253,8 @@ their generated source maps are not eligible for a PR until replaced.
 - Skills loaded: `golang-how-to`, `golang-design-patterns`,
   `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
   `golang-safety`, and `golang-testing`.
-- CLI help/manual/website parity: not applicable; this plan forbids CLI,
-  API-surface, command, generated-help, and website changes.
+- CLI help/manual/website parity: connector commands are generated from each
+  connector's `cli_surface.json`; no hand-authored docs page is appropriate.
+  Final verification exercises `pm <connector>`, generated command help, and
+  no-credential preflight for implemented/partial command paths, with docs and
+  website checks recorded as no static connector-page drift.
