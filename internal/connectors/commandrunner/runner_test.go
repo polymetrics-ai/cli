@@ -2503,7 +2503,7 @@ func TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets(t *testing.T) {
 		t.Fatal("cli surface schema has no output_policy enum")
 	}
 
-	want := make(map[string]struct{}, len(supportedDirectReadOutputPolicies)+len(supportedDirectWriteOutputPolicies)+1)
+	want := make(map[string]struct{}, len(supportedDirectReadOutputPolicies)+len(supportedDirectWriteOutputPolicies)+2)
 	for policy := range supportedDirectReadOutputPolicies {
 		want[policy] = struct{}{}
 	}
@@ -2513,6 +2513,7 @@ func TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets(t *testing.T) {
 	// This legacy compatibility value belongs to binary_download metadata, not
 	// either JSON direct-read/write executor, and existing bundles still use it.
 	want["binary_file_bounded"] = struct{}{}
+	want["status"] = struct{}{}
 
 	got := make(map[string]struct{}, len(outputPolicy.Enum))
 	for _, policy := range outputPolicy.Enum {

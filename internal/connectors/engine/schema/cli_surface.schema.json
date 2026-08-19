@@ -81,6 +81,8 @@
               "direct_read",
               "direct_write",
               "binary_download",
+              "text_export",
+              "status_check",
               "local_workflow",
               "auth",
               "config",
@@ -182,7 +184,7 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "text", "binary_file_bounded", "none", "json", "write_result_redacted", "gong_bounded_input_redacted"]
+            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "text", "binary_file_bounded", "none", "json", "write_result_redacted", "gong_bounded_input_redacted", "secret_stored", "status"]
           },
           "redact_fields": {
             "type": "array",

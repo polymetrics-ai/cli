@@ -120,6 +120,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		maxBytes:        maxBytes,
 		page:            req.Page,
 		pageCursor:      req.PageCursor,
+		pagination:      op.REST.Pagination,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -216,6 +217,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 			return OperationSpec{}, err
 		}
 		return op, nil
+	}
+	if err := validateRESTOperationPagination(op); err != nil {
+		return OperationSpec{}, fmt.Errorf("operation %q pagination: %w", op.ID, err)
 	}
 	// provider_search shares this executor deliberately: its response bounding,
 	// clamping, redaction and output-policy handling are the same as any other

@@ -60,6 +60,10 @@ type directReadWalk struct {
 	maxBytes        int
 	page            int
 	pageCursor      string
+	// pagination is present only for an operation-backed read. It wins over
+	// the connector-level stream pagination because it is declared for this
+	// exact provider endpoint.
+	pagination *PaginationSpec
 }
 
 // directReadPageMode is what the bundle's declared pagination can actually do
@@ -125,7 +129,9 @@ func resolveDirectReadPageMode(spec PaginationSpec, method string, paginatorErr 
 // where that page sits in the collection.
 func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk) (any, connectors.DirectReadPage, *connsdk.Response, error) {
 	var spec PaginationSpec
-	if b.HTTP.Pagination != nil {
+	if w.pagination != nil {
+		spec = *w.pagination
+	} else if b.HTTP.Pagination != nil {
 		spec = *b.HTTP.Pagination
 	}
 	pageSize := spec.PageSize

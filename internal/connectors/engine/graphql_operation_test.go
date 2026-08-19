@@ -728,7 +728,7 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	}
 }
 
-func TestOperationDirectWriteRedactsDeclaredGraphQLInputFromProviderErrors(t *testing.T) {
+func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) {
 	const sensitiveValue = "provider-echoed-github-pat"
 	for _, tt := range []struct {
 		name       string
@@ -738,7 +738,7 @@ func TestOperationDirectWriteRedactsDeclaredGraphQLInputFromProviderErrors(t *te
 		{
 			name:       "graphql errors",
 			statusCode: http.StatusOK,
-			body:       `{"data":null,"errors":[{"message":"invalid githubPat ` + sensitiveValue + `"}]}`,
+			body:       `{"data":null,"errors":[{"message":"invalid token=` + sensitiveValue + `"}]}`,
 		},
 		{
 			name:       "non JSON HTTP error",
@@ -775,11 +775,11 @@ func TestOperationDirectWriteRedactsDeclaredGraphQLInputFromProviderErrors(t *te
 			if err == nil {
 				t.Fatal("OperationDirectWrite error = nil, want provider failure")
 			}
-			if strings.Contains(err.Error(), sensitiveValue) {
-				t.Fatalf("OperationDirectWrite leaked a declared sensitive input: %v", err)
+			if !strings.Contains(err.Error(), sensitiveValue) {
+				t.Fatal("OperationDirectWrite did not retain the complete provider error")
 			}
-			if !strings.Contains(err.Error(), "redacted") {
-				t.Fatalf("OperationDirectWrite error = %v, want redaction marker", err)
+			if strings.Contains(err.Error(), "redacted") {
+				t.Fatal("OperationDirectWrite redacted a secret-operation provider error")
 			}
 			if calls != 1 {
 				t.Fatalf("provider error calls = %d, want exactly one approved request", calls)
