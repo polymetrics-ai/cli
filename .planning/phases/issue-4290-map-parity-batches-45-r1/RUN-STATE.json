@@ -1,0 +1,15 @@
+{
+  "issue": 4290,
+  "phase": "issue-4290-map-parity-batches-45-r1",
+  "state": "planned",
+  "delivery": "direct-pr",
+  "base_branch": "main",
+  "working_branch": "fm/cli-map-batch45-r1",
+  "batches": {
+    "4": "pending",
+    "5": "pending"
+  },
+  "credentials_used": false,
+  "live_provider_calls": false,
+  "gsd_execution": "inline-manual-fallback"
+}
