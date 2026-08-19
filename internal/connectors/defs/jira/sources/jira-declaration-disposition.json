@@ -131,7 +131,17 @@
       "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
       "operations_found": 617
     },
-    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 617,
+      "provider_operations_found": 617,
+      "new_api_surface_count": 617,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 0,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json; counts.total=617, per-method total=617, operation inventory=617"
+    }
   },
   "ledger_dispositions": [
     {

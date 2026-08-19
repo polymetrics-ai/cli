@@ -45,3 +45,12 @@ the former reverse-ETL primary-class count is zero. Reverse ETL is an
 eligibility attribute on those direct writes and stays zero-eligible until a
 connector-neutral typed destination factory supplies the required transport
 binding, apply strategies, and acknowledgement contract.
+
+## Provider surface reconciliation
+
+The full-provider-source audit found no Batch-1 understatements. The old/new
+`api_surface.json` counts are unchanged (Docker Hub 54, Notion 55, Stripe 589,
+Bitbucket 331, GitLab 1,755, CircleCI 111, Sentry 224, Vercel 422, Asana 249,
+Jira 617), while their settled provider OpenAPI counts are 54, 49, 589, 331,
+1,755, 111, 223, 400, 249 and 617. The 6/1/22 positive deltas are documented
+bounded variants or legacy entries, not a source-completeness substitute.

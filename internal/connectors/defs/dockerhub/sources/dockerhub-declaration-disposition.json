@@ -156,7 +156,17 @@
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "operations_found": 54
     },
-    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 54,
+      "provider_operations_found": 54,
+      "new_api_surface_count": 54,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 0,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://docs.docker.com/reference/api/hub/latest.yaml; counts.total=54, per-method total=54, operation inventory=54"
+    }
   },
   "notes": [
     "Source-input completeness: 54 operations found in the complete provider-published OpenAPI document; confidence=high because counts.total, per-method counts, and operation inventory agree.",

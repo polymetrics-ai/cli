@@ -20,6 +20,26 @@ certification is pending for all ten and was not attempted.
 | Asana | 18 | 249 / 249 | high — OpenAPI | 167 | 82 | 73 (4) | declared | foundation-gap |
 | **Total** | — | **4,378 / 4,378** | **high — 10 OpenAPI** | **3,902** | **476** | **491 (163)** | **10 / 10** | **0 eligible / 10 gap** |
 
+## Provider surface reconciliation
+
+The authoritative boundary is the complete pinned provider OpenAPI, not the
+pre-existing `api_surface.json`. All ten provider method/path sets are already
+contained, so no Batch-1 surface required regeneration. The machine-readable
+audit is `API-SURFACE-REALITY-AUDIT.json`.
+
+| Connector | Old api_surface | Provider operations | New api_surface | Basis |
+| --- | ---: | ---: | ---: | --- |
+| Docker Hub | 54 | 54 | 54 | complete provider OpenAPI |
+| Notion | 55 | 49 | 55 | complete OpenAPI; 6 bounded connector variants retained |
+| Stripe | 589 | 589 | 589 | complete provider OpenAPI |
+| Bitbucket | 331 | 331 | 331 | complete provider OpenAPI |
+| GitLab | 1,755 | 1,755 | 1,755 | complete provider OpenAPI |
+| CircleCI | 111 | 111 | 111 | complete provider OpenAPI |
+| Sentry | 224 | 223 | 224 | complete OpenAPI; 1 legacy route retained |
+| Vercel | 422 | 400 | 422 | complete OpenAPI; 22 legacy edge-config routes retained |
+| Asana | 249 | 249 | 249 | complete provider OpenAPI |
+| Jira | 617 | 617 | 617 | complete provider OpenAPI |
+
 All ETL source descriptors use the definition-owned
 `declarative_stream_source` contract from PR #4286, each with its actual
 stream allowlist and connector-owned evidence reference. A provider mutation is

@@ -127,3 +127,13 @@ a complete provider-published OpenAPI document. The concrete source totals are
 now state `operations_found` plus a high-confidence machine-readable-spec
 basis, instead of `declared_percent`. PR #4294 remains held pending the
 fleet-wide correction; no new PR activity is authorized by this review.
+
+## Provider-surface reconciliation review
+
+Review compared each full provider OpenAPI method/path set directly against
+the existing connector `api_surface.json`, not against the declaration map.
+No Batch-1 source operation is missing: the old/new counts remain 54/54,
+55/55, 589/589, 331/331, 1,755/1,755, 111/111, 224/224, 422/422, 249/249 and
+617/617, respectively. `API-SURFACE-REALITY-AUDIT.json` records the settled
+provider counts and explains the 6/1/22 retained non-source entries. No
+understated surface or fabricated dynamic basis remains.

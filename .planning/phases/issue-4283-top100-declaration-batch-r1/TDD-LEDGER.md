@@ -259,6 +259,28 @@ Before a future connector is mapped, reject a lock without `counts.total` or
 per-kind counts, and re-pin any implausibly small complete-surface count rather
 than treating map parity as source completeness.
 
+## Provider-surface reconciliation correction
+
+### Red
+
+Using an existing `api_surface.json` as the map boundary could preserve a
+legacy undercount even after a correct source lock is available.
+
+### Green
+
+Each Batch-1 provider OpenAPI method/path set was compared directly with its
+`api_surface.json`. All 4,378 provider operations are present; no surface is
+understated and no regeneration is needed. The durable
+`API-SURFACE-REALITY-AUDIT.json` records old count, provider count, unchanged
+new count and basis per connector. Notion, Sentry and Vercel retain only their
+explicitly described extra bounded/legacy entries.
+
+### Refactor
+
+For every later connector, calculate the provider operation set first and
+generate/extend `api_surface.json` from that set. An old API surface is never
+evidence of the provider’s complete documented surface.
+
 ## Classification correction — direct write is not reverse ETL
 
 ### Red

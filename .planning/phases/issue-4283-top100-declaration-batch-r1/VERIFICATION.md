@@ -140,3 +140,15 @@
   `website/lib/connectors.catalog.data.generated.json`, and
   `website/lib/connectors.catalog.generated.ts`.
 - [x] The generator was run a second time with no further generated-file drift.
+
+## Provider surface reconciliation
+
+- [x] Compared each Batch-1 `api_surface.json` method/path set to the complete
+  pinned provider OpenAPI method/path set, rather than treating the old surface
+  as the completeness boundary.
+- [x] `API-SURFACE-REALITY-AUDIT.json` records the old count, provider count,
+  new count and basis for every connector: 4,378 provider operations found;
+  zero missing from `api_surface.json`; zero surfaces regenerated.
+- [x] Notion (6), Sentry (1), and Vercel (22) retain explicitly described
+  connector-specific or legacy entries beyond their current OpenAPI count; none
+  masks a missing provider operation. No source is instance-dependent.

@@ -137,7 +137,18 @@
       "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
       "operations_found": 400
     },
-    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 422,
+      "provider_operations_found": 400,
+      "new_api_surface_count": 422,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 22,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://openapi.vercel.sh/; counts.total=400, per-method total=400, operation inventory=400",
+      "retained_non_source_entry_basis": "twenty-two legacy edge-config routes remain in addition to the current provider OpenAPI surface"
+    }
   },
   "ledger_dispositions": [
     {

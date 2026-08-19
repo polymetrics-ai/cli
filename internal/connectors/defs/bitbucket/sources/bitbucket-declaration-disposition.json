@@ -276,7 +276,17 @@
       "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
       "operations_found": 331
     },
-    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 331,
+      "provider_operations_found": 331,
+      "new_api_surface_count": 331,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 0,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json; counts.total=331, per-method total=331, operation inventory=331"
+    }
   },
   "ledger_dispositions": [
     {

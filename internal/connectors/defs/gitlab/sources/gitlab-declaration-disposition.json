@@ -132,7 +132,17 @@
       "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
       "operations_found": 1755
     },
-    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 1755,
+      "provider_operations_found": 1755,
+      "new_api_surface_count": 1755,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 0,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml; counts.total=1755, per-method total=1755, operation inventory=1755"
+    }
   },
   "ledger_dispositions": [
     {

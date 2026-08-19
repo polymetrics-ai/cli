@@ -159,6 +159,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 249,
+        "provider_operations_found": 249,
+        "new_api_surface_count": 249,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml; counts.total=249, per-method total=249, operation inventory=249"
       }
     },
     {
@@ -315,6 +326,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 331,
+        "provider_operations_found": 331,
+        "new_api_surface_count": 331,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json; counts.total=331, per-method total=331, operation inventory=331"
       }
     },
     {
@@ -470,6 +492,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 111,
+        "provider_operations_found": 111,
+        "new_api_surface_count": 111,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://circleci.com/api/v2/openapi.json; counts.total=111, per-method total=111, operation inventory=111"
       }
     },
     {
@@ -646,6 +679,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 54,
+        "provider_operations_found": 54,
+        "new_api_surface_count": 54,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://docs.docker.com/reference/api/hub/latest.yaml; counts.total=54, per-method total=54, operation inventory=54"
       }
     },
     {
@@ -798,6 +842,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 1755,
+        "provider_operations_found": 1755,
+        "new_api_surface_count": 1755,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml; counts.total=1755, per-method total=1755, operation inventory=1755"
       }
     },
     {
@@ -953,6 +1008,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 617,
+        "provider_operations_found": 617,
+        "new_api_surface_count": 617,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json; counts.total=617, per-method total=617, operation inventory=617"
       }
     },
     {
@@ -1110,6 +1176,18 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 55,
+        "provider_operations_found": 49,
+        "new_api_surface_count": 55,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 6,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://developers.notion.com/openapi.json; counts.total=49, per-method total=49, operation inventory=49",
+        "retained_non_source_entry_basis": "six connector-specific variants split a single provider operation into distinct bounded command contracts"
       }
     },
     {
@@ -1261,6 +1339,18 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 224,
+        "provider_operations_found": 223,
+        "new_api_surface_count": 224,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 1,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json; counts.total=223, per-method total=223, operation inventory=223",
+        "retained_non_source_entry_basis": "one legacy /api/0/projects/ connector route remains in addition to the current provider OpenAPI surface"
       }
     },
     {
@@ -1414,6 +1504,17 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 589,
+        "provider_operations_found": 589,
+        "new_api_surface_count": 589,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 0,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; counts.total=589, per-method total=589, operation inventory=589"
       }
     },
     {
@@ -1570,6 +1671,18 @@
           "eligible_operations": 0,
           "recoverable": true
         }
+      },
+      "api_surface_reality_audit": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/API-SURFACE-REALITY-AUDIT.json",
+        "old_api_surface_count": 422,
+        "provider_operations_found": 400,
+        "new_api_surface_count": 422,
+        "provider_operations_missing_from_api_surface": 0,
+        "retained_non_source_entries": 22,
+        "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+        "coverage_confidence": "high",
+        "basis": "complete provider-published OpenAPI pinned at https://openapi.vercel.sh/; counts.total=400, per-method total=400, operation inventory=400",
+        "retained_non_source_entry_basis": "twenty-two legacy edge-config routes remain in addition to the current provider OpenAPI surface"
       }
     }
   ]
