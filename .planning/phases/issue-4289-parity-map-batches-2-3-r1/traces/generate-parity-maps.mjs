@@ -513,10 +513,61 @@ function declarationPending(connector, source, endpoint, classification) {
 
 function genericDestinationGap() {
   return {
-    id: "generic-typed-destination-executor",
-    evidence: "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-    minimal_change: "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+    id: "generic-typed-destination-app-dispatch",
+    evidence: "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+    minimal_change: "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
   };
+}
+
+function destinationActionMultiplicityGap() {
+  return {
+    id: "declarative-typed-destination-action-multiplicity",
+    evidence: "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+    minimal_change: "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+  };
+}
+
+function actionNames(endpoint) {
+  const covered = endpoint?.covered_by || {};
+  return [covered.write, ...(Array.isArray(covered.writes) ? covered.writes : [])].filter(Boolean);
+}
+
+async function typedWriteActionDispositions(connector, rows) {
+  let writes;
+  try {
+    writes = JSON.parse(await readFile(definitionPath(connector, "writes.json"), "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+  const mapped = new Map();
+  for (const row of rows) {
+    for (const action of actionNames(row.api_surface)) {
+      const sourceIDs = mapped.get(action) || [];
+      sourceIDs.push(row.source.source_id);
+      mapped.set(action, sourceIDs);
+    }
+  }
+  const multiplicity = destinationActionMultiplicityGap();
+  return writes.actions.map((action) => {
+    const sourceIDs = mapped.get(action.name) || [];
+    return {
+      action: action.name,
+      semantic_eligibility: "eligible",
+      closed_destination_contract: "representable",
+      source_row_binding: sourceIDs.length > 0
+        ? { state: "source-bound", source_ids: sourceIDs }
+        : {
+            state: "declaration-pending",
+            detail: "The existing typed action is individually representable, but the pinned source inventory has no exact source-row binding for its base-relative or unmatched action path.",
+            minimal_change: "Pin the provider operation that exactly backs this existing action, then add its source-row and installed direct-command declarations; do not infer a request contract."
+          },
+      destination_binding: {
+        state: "foundation-gap",
+        foundation_gap: multiplicity
+      }
+    };
+  });
 }
 
 function ledgerRow(connector, source, endpoint, lockName) {
@@ -719,12 +770,13 @@ function mapSurface(connector, surface, lock) {
   return { surface: { ...surface, operation_ledger_version: 1, endpoints }, rows };
 }
 
-function summary(connector, lock, rows) {
+async function summary(connector, lock, rows) {
   const counts = ["direct_read", "direct_write", "etl", "reverse_etl", "binary_read", "binary_write"].map((key) => ({ key, count: rows.filter((row) => row.parity_class === key).length }));
   const enabledRows = rows.filter((row) => row.state === "enabled");
   const deletes = rows.filter((row) => row.method === "DELETE");
   const enabledDeletes = deletes.filter((row) => row.state === "enabled");
   const reverseETL = rows.filter((row) => row.declaration.reverse_etl_eligibility);
+  const actionDispositions = await typedWriteActionDispositions(connector, rows);
   const declarationPendingRows = rows.filter((row) => row.state === "disabled");
   const declarationPendingByID = [...declarationPendingRows.reduce((counts, row) => {
     const id = row.foundation.declaration_pending?.id;
@@ -746,13 +798,18 @@ function summary(connector, lock, rows) {
     writes_actions: rows.filter((row) => row.api_surface.covered_by?.write || row.api_surface.covered_by?.writes?.length).length,
     terminal_commands: enabledRows.length,
     live_certification: "pending",
-    gap_ids: ["generic-typed-destination-executor"],
-    foundation_gaps: [{ id: "generic-typed-destination-executor", count: reverseETL.length, scope: "destination_transport" }],
+    gap_ids: ["generic-typed-destination-app-dispatch", "declarative-typed-destination-action-multiplicity"],
+    foundation_gaps: [
+      { id: "generic-typed-destination-app-dispatch", count: reverseETL.length, scope: "destination_transport" },
+      { id: "declarative-typed-destination-action-multiplicity", count: actionDispositions.length, scope: "destination_action_selection" }
+    ],
     rejected_by_reason: [{ key: "declaration-pending", count: declarationPendingRows.length }],
     reverse_etl_eligibility: {
       state: "foundation-gap",
       typed_direct_write_operations: reverseETL.length,
-      foundation_gap: genericDestinationGap()
+      typed_write_actions: actionDispositions.length,
+      foundation_gap: genericDestinationGap(),
+      action_dispositions: actionDispositions
     },
     transport: transportSummary(connector),
     declaration_pending_ids: declarationPendingByID.map((entry) => entry.id),
@@ -785,7 +842,7 @@ async function main() {
       operations_found: mapped.rows.length,
       coverage_confidence: lock.rest.coverage_confidence
       },
-      summary: summary(connector, lock, mapped.rows),
+      summary: await summary(connector, lock, mapped.rows),
       ledger_dispositions: mapped.rows
     };
     await mkdir(path.dirname(sourceFile(connector, lockName)), { recursive: true });

@@ -6,7 +6,7 @@ Two committed map slices now cover all nineteen requested connector bundles. Sou
 
 The held-PR repair replaced the incomplete two-route PayPal Transaction Search pin with all thirteen official PayPal REST OpenAPI documents, yielding 115 exact PayPal operations. It also restores the Batch-2-shaped root count object for every batch-3 source lock and makes that root denominator a verifier requirement.
 
-The classification correction is deliberate: typed write actions are enabled `direct_write`; `reverse_etl` is represented only as nested eligibility metadata and is foundation-blocked by `generic-typed-destination-executor` at `internal/app/issue_label_warehouse_transport.go:85-95`. ETL is a real endpoint class but remains connector-local `declaration-pending` until a source `sync_transport.json` meets the PR #4286 contract. No destination binding/action was invented.
+The classification correction is deliberate: typed write actions are enabled `direct_write`; `reverse_etl` is represented only as nested and action-level eligibility metadata. All 621 existing schema-backed write actions are semantically eligible and individually representable by the closed generic destination. Reverse-ETL is still foundation-pending because persisted App/CLI dispatch does not select that already-composed destination (`internal/app/transport_dispatch.go:53-67`) and one descriptor can select only one named action per sync mode (`internal/connectors/sync_transport.go:388-415`). ETL remains a real endpoint class but is connector-local `declaration-pending` until a source `sync_transport.json` meets the PR #4286 contract. No destination binding, selector, or action was invented.
 
 Commits:
 

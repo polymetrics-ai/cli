@@ -57,13 +57,19 @@
     "terminal_commands": 28,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "generic-typed-destination-app-dispatch",
+      "declarative-typed-destination-action-multiplicity"
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
+        "id": "generic-typed-destination-app-dispatch",
         "count": 7,
         "scope": "destination_transport"
+      },
+      {
+        "id": "declarative-typed-destination-action-multiplicity",
+        "count": 7,
+        "scope": "destination_action_selection"
       }
     ],
     "rejected_by_reason": [
@@ -75,11 +81,147 @@
     "reverse_etl_eligibility": {
       "state": "foundation-gap",
       "typed_direct_write_operations": 7,
+      "typed_write_actions": 7,
       "foundation_gap": {
-        "id": "generic-typed-destination-executor",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-      }
+        "id": "generic-typed-destination-app-dispatch",
+        "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+        "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+      },
+      "action_dispositions": [
+        {
+          "action": "move_manager_link_customer_manager_links",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_customermanagerlinks_movemanagerlink.145"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "remove_data_links",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_datalinks_remove.119"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "update_data_links",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_datalinks_update.120"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "remove_product_link_invitations",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_productlinkinvitations_remove.52"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "update_product_link_invitations",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_productlinkinvitations_update.50"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "remove_product_links",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_productlinks_remove.111"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        },
+        {
+          "action": "start_identity_verification_customers",
+          "semantic_eligibility": "eligible",
+          "closed_destination_contract": "representable",
+          "source_row_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-ads.rest.post.v22_customers_customerid_startidentityverification.3"
+            ]
+          },
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          }
+        }
+      ]
     },
     "transport": {
       "contract": "docs/sync-transport-definition.md (PR #4286)",
@@ -94,9 +236,9 @@
       "destination_transport": {
         "state": "gap",
         "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          "id": "generic-typed-destination-app-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+          "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
         }
       }
     },
@@ -243,11 +385,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -2315,11 +2457,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -2404,11 +2546,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -5116,11 +5258,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -5487,11 +5629,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -5529,11 +5671,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }
@@ -6699,11 +6841,11 @@
         },
         "reverse_etl_eligibility": {
           "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
           }
         }
       }

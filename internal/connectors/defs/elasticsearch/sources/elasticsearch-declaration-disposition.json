@@ -57,13 +57,19 @@
     "terminal_commands": 0,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "generic-typed-destination-app-dispatch",
+      "declarative-typed-destination-action-multiplicity"
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
+        "id": "generic-typed-destination-app-dispatch",
         "count": 0,
         "scope": "destination_transport"
+      },
+      {
+        "id": "declarative-typed-destination-action-multiplicity",
+        "count": 0,
+        "scope": "destination_action_selection"
       }
     ],
     "rejected_by_reason": [
@@ -75,11 +81,13 @@
     "reverse_etl_eligibility": {
       "state": "foundation-gap",
       "typed_direct_write_operations": 0,
+      "typed_write_actions": 0,
       "foundation_gap": {
-        "id": "generic-typed-destination-executor",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-      }
+        "id": "generic-typed-destination-app-dispatch",
+        "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+        "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+      },
+      "action_dispositions": []
     },
     "transport": {
       "contract": "docs/sync-transport-definition.md (PR #4286)",
@@ -94,9 +102,9 @@
       "destination_transport": {
         "state": "gap",
         "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          "id": "generic-typed-destination-app-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+          "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
         }
       }
     },

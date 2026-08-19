@@ -13,7 +13,7 @@ For each selected bundle, a source lock pins a credential-free public provider d
 - every source operation has exactly one method/path API-surface binding;
 - parity-class totals equal the pinned source denominator;
 - every source lock has `counts.total`, per-kind/method counts, and non-self-referential `operations_found` with a coverage-confidence basis; a partial inventory is visible as a hold, not reported as 100% declared;
-- `foundation-gap` records include a concrete engine file/line and minimal change; enabled typed `direct_write` rows carry reverse-ETL eligibility metadata using the actual `generic-typed-destination-executor` refusal at `internal/app/issue_label_warehouse_transport.go:85-95` rather than the retired estate-wide source gap;
+- `foundation-gap` records include a concrete engine file/line and minimal change; enabled typed `direct_write` rows carry reverse-ETL eligibility metadata using the actual persisted App/CLI dispatch refusal at `internal/app/transport_dispatch.go:53-67`, while the action ledger separately records the one-action-per-mode selection limit at `internal/connectors/sync_transport.go:388-415`;
 - unauthored connector work is `declaration-pending`, and elevated scopes do not disable rows.
 
 `connectorgen validate` and `surface-sync --check` remain the production structural green gates. No behavior changes are made, so no Go unit-test red phase is appropriate; the map-integrity assertion is the testable artifact behavior added by this issue.
@@ -39,3 +39,13 @@ Keep the generated ledgers connector-local and use the exact corrected batch-1 s
 **Refactor:** retain the immutable source locks and existing disposition rows as inputs; normalize action and transport metadata mechanically through connector-local generation. Keep REST direct-write, binary transfer, and reverse-ETL destination contracts distinct. Unsupported remains a precise engine incapability with source and refusal evidence, never a proxy for missing authoring.
 
 **Foundation hold:** the initial #4304 commit composes generic typed destinations but does not yet select them in the App/CLI persisted-dispatch path. Declarations can be structurally green, but an installed App/CLI reverse-ETL run is red until the updated foundation branch is merged and that path is exercised. No connector-local substitute is permitted.
+
+## Typed Write Eligibility — Red / Green
+
+**Red:** a source-row-only eligibility assertion leaves five existing typed actions without an exact action disposition because their legacy paths are base-relative or their published source inventory has no exact row. It also makes a one-action destination look like a connector-complete reverse-ETL declaration.
+
+**Green:** `verify-parity-maps.mjs` requires every `writes.json` action to have exactly one action-level eligibility disposition. The 621 target actions are semantically eligible and individually representable by `declarative_api/declarative_typed_destination`; none is excluded for safety, privilege, or destructive behavior. The disposition records whether it has an exact source-row binding and names `declarative-typed-destination-action-multiplicity` when the current one-action-per-mode descriptor cannot select all eligible actions. This is a foundation hold, never a connector-local selector or a completion claim.
+
+## REST Body Input — Red
+
+Provider-backed nested REST bodies cannot be faithfully exposed from the current operation CLI surface: `commandrunner` accepts structured JSON only for fixed GraphQL operations and refuses an exact direct-write `body` mapping. The plan records the bounded declaration-owned REST-body foundation request under `[key=rest-structured-body-cli]`; no raw-body or unvalidated connector workaround is allowed.
