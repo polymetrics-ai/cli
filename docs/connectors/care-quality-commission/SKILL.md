@@ -11,9 +11,11 @@ Reads Care Quality Commission (CQC) registered locations, providers, and inspect
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,23 +30,23 @@ Reads Care Quality Commission (CQC) registered locations, providers, and inspect
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - locations:
   - primary key: locationId
-  - fields: locationId(), locationName(), postalCode()
+  - fields: locationId(string), locationName(string), postalCode(string)
 - providers:
   - primary key: providerId
-  - fields: providerId(), providerName()
+  - fields: providerId(string), providerName(string)
 - inspection_areas:
   - primary key: inspectionAreaId
-  - fields: endDate(), inspectionAreaId(), inspectionAreaName(), inspectionAreaType(), inspectionCategories(), orgInspectionAreaRetirementDate(), status(), supersededBy()
+  - fields: endDate(string), inspectionAreaId(string), inspectionAreaName(string), inspectionAreaType(string), inspectionCategories(array), orgInspectionAreaRetirementDate(string), status(string), supersededBy(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

@@ -1,14 +1,14 @@
 {
   "name": "gorgias",
   "display_name": "Gorgias",
-  "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).",
+  "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API; executes bounded direct reads and a file download across the account, custom fields, events, integrations, jobs, macros, metric cards, phone, rules, search, statistics, tags, teams, users, views, and widgets surface; models Gorgias mutations and a multipart file upload as typed reverse-ETL actions.",
   "integration_type": "api",
   "docs_url": "https://developers.gorgias.com/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Gorgias API read of helpdesk tickets, customers, messages, and satisfaction surveys"
+    "read": "external Gorgias API read of helpdesk tickets, customers, messages, satisfaction surveys, and bounded direct reads across account, custom field, event, integration, job, macro, metric card, phone, rule, search, statistics, tag, team, user, view, and widget resources; a bounded file download follows the provider's cross-host storage redirect without forwarding the connector credential",
+    "write": "typed Gorgias reverse ETL mutations for tickets, customers, users, teams, tags, views, macros, rules, widgets, integrations, jobs, account settings, custom fields, satisfaction surveys, and a multipart file upload",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive actions require --confirm destructive"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "issue": 3792,
+  "phase": "operation-direct-read-reconciliation-r1",
+  "mode": "manual-gsd-tdd",
+  "status": "verified",
+  "next": "commit verified foundation; firstmate owns no-mistakes and PR lifecycle"
+}

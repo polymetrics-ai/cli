@@ -13,9 +13,17 @@ DESCRIPTION
   Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-reddit
+  asset: icons/simple-icons/reddit.svg
+  title: Reddit
+  simple_icon_slug: reddit
+  simple_icon_hex: FF4500
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Reddit
+  match: exact-name-or-slug
+  matched_by: reddit
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,18 +34,18 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  subreddit
-  access_token (secret)
+  subreddit (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   posts:
     primary key: id
     cursor: created_utc
-    fields: author(), created_utc(), id(), name(), permalink(), subreddit(), title()
+    fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
   comments:
     primary key: id
     cursor: created_utc
-    fields: author(), body(), created_utc(), id(), name(), permalink(), subreddit()
+    fields: author(string), body(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

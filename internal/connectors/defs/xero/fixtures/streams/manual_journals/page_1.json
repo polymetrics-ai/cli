@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ManualJournals"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "ManualJournals": [
+        {
+          "Narration": "narration_fixture",
+          "JournalLines": [
+            "journal_line_fixture"
+          ],
+          "Date": "2026-01-01T00:00:00Z",
+          "LineAmountTypes": "STANDARD",
+          "Status": "ACTIVE",
+          "Url": "url_fixture",
+          "ShowOnCashBasisReports": false,
+          "HasAttachments": false,
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "ManualJournalID": "manual_journal_id_fixture_1",
+          "StatusAttributeString": "ACTIVE",
+          "Warnings": [
+            "warning_fixture"
+          ],
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ],
+          "Attachments": [
+            "attachment_fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

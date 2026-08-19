@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.
 
 ICON
+  id: postmark
   asset: icons/postmark.svg
   source: official
   review_status: official_verified
@@ -34,49 +35,49 @@ CONFIGURATION
   mode
   template_id_or_alias
   webhook_id
-  X-Postmark-Server-Token (secret)
+  X-Postmark-Server-Token (secret) (required)
 
 ETL STREAMS
   outbound_messages:
     primary key: id
     cursor: received_at
-    fields: from(), id(), received_at(), status(), subject(), to()
+    fields: from(string), id(string), received_at(string), status(string), subject(string), to(array)
   inbound_messages:
     primary key: id
-    fields: from(), id(), status(), subject(), to()
+    fields: from(string), id(string), status(string), subject(string), to(string)
   current_server:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   bulk_email_status:
     primary key: Id
-    fields: Id()
+    fields: Id(string)
   delivery_stats:
   bounces:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   bounce:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   bounce_dump:
   templates:
     primary key: TemplateId
-    fields: TemplateId()
+    fields: TemplateId(string)
   template:
     primary key: TemplateId
-    fields: TemplateId()
+    fields: TemplateId(string)
   message_streams:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   message_stream:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   outbound_message_details:
     primary key: MessageID
-    fields: MessageID()
+    fields: MessageID(string)
   outbound_message_dump:
   inbound_message_details:
     primary key: MessageID
-    fields: MessageID()
+    fields: MessageID(string)
   outbound_message_opens:
   outbound_message_opens_by_message:
   outbound_message_clicks:
@@ -95,13 +96,13 @@ ETL STREAMS
   stats_outbound_click_location:
   inbound_rule_triggers:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   webhooks:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   webhook:
     primary key: ID
-    fields: ID()
+    fields: ID(string)
   suppressions:
 
 SYNC MODES
@@ -110,12 +111,15 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_email:
     endpoint: POST /email
+    required fields: From, To, Subject
     risk: sends a live Postmark email; approval required
   send_bulk_email:
     endpoint: POST /email/bulk
+    required fields: From, Subject, Messages
     risk: submits a live Postmark bulk email request; approval required
   send_email_with_template:
     endpoint: POST /email/withTemplate
+    required fields: From, To
     risk: sends a live Postmark template email; approval required
   edit_current_server:
     endpoint: PUT /server
@@ -126,6 +130,7 @@ REVERSE ETL ACTIONS
     risk: reactivates a bounced email address in Postmark; approval required
   create_template:
     endpoint: POST /templates
+    required fields: Name
     risk: creates a Postmark template; approval required
   edit_template:
     endpoint: PUT /templates/{{ record.template_id_or_alias }}
@@ -140,6 +145,7 @@ REVERSE ETL ACTIONS
     risk: validates Postmark template content; no persistent mutation expected but still invokes the external API
   create_message_stream:
     endpoint: POST /message-streams
+    required fields: ID, Name, MessageStreamType
     risk: creates a Postmark message stream; approval required
   edit_message_stream:
     endpoint: PATCH /message-streams/{{ record.message_stream_id }}
@@ -163,6 +169,7 @@ REVERSE ETL ACTIONS
     risk: retries processing for one inbound Postmark message; approval required
   create_inbound_rule_trigger:
     endpoint: POST /triggers/inboundrules
+    required fields: Rule
     risk: creates an inbound rule trigger; approval required
   delete_inbound_rule_trigger:
     endpoint: DELETE /triggers/inboundrules/{{ record.trigger_id }}
@@ -170,6 +177,7 @@ REVERSE ETL ACTIONS
     risk: deletes an inbound rule trigger; destructive external mutation
   create_webhook:
     endpoint: POST /webhooks
+    required fields: Url
     risk: creates a Postmark webhook endpoint; approval required
   edit_webhook:
     endpoint: PUT /webhooks/{{ record.webhook_id }}
@@ -181,11 +189,11 @@ REVERSE ETL ACTIONS
     risk: deletes a Postmark webhook endpoint; destructive external mutation
   create_suppression:
     endpoint: POST /message-streams/{{ record.message_stream_id }}/suppressions
-    required fields: message_stream_id
+    required fields: message_stream_id, Suppressions
     risk: adds one or more suppressions to a Postmark message stream; approval required
   delete_suppression:
     endpoint: POST /message-streams/{{ record.message_stream_id }}/suppressions/delete
-    required fields: message_stream_id
+    required fields: message_stream_id, Suppressions
     risk: removes one or more suppressions from a Postmark message stream; approval required
 
 SECURITY

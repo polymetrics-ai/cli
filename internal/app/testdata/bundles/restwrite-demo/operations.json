@@ -1,0 +1,53 @@
+{
+  "operations": [
+    {
+      "id": "restwrite-demo.vote",
+      "kind": "rest_write",
+      "summary": "Cast one fixture vote.",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "confirmation": { "kind": "destructive" },
+      "batchable": false,
+      "rest": {
+        "method": "POST",
+        "path": "/api/vote",
+        "content_type": "application/x-www-form-urlencoded",
+        "max_bytes": 1024,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "dir"],
+          "properties": {
+            "id": { "type": "string" },
+            "dir": { "type": "integer" }
+          }
+        }
+      }
+    },
+    {
+      "id": "restwrite-demo.widget-update",
+      "kind": "rest_write",
+      "summary": "Update one fixture widget.",
+      "risk": "medium",
+      "approval": "plan-preview-approve-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/widgets/{id}",
+        "content_type": "application/json",
+        "max_bytes": 1024,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" }
+          }
+        }
+      }
+    }
+  ]
+}

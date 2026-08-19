@@ -2,12 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Google Ads Connection Specification",
   "type": "object",
-  "required": ["access_token", "developer_token"],
+  "required": [
+    "access_token",
+    "developer_token"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Google OAuth 2.0 access token with Google Ads read scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
+      "description": "Google OAuth 2.0 access token with Google Ads API scopes. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
     },
     "developer_token": {
       "type": "string",
@@ -21,12 +24,12 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://googleads.googleapis.com/v24",
-      "description": "Google Ads REST API base URL override for tests or proxies."
+      "default": "https://googleads.googleapis.com",
+      "description": "Google Ads REST API root URL override for tests or proxies; declarative paths include /v22."
     },
     "customer_id": {
       "type": "string",
-      "description": "Google Ads customer id to query GAQL search resources (campaigns, ad_groups) against. Required for those streams only; accessible_customers is account-scoped and does not reference it."
+      "description": "Google Ads customer id without dashes. Required for customer-scoped streams, direct reads, and reverse/write actions."
     },
     "page_size": {
       "type": "integer",

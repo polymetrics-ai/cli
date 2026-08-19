@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/department.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "department_info_id_fixture_27",
+        "name": "Department Info Name Fixture 27",
+        "externalName": "Department Info Externalname Fixture 27",
+        "isArchived": true,
+        "parentId": "department_info_parentid_fixture_27",
+        "createdAt": "2026-01-27T07:00:00Z",
+        "updatedAt": "2026-02-27T03:00:00Z",
+        "extraData": {
+          "id": "department_info_extradata_fixture_27"
+        }
+      }
+    }
+  },
+  "read_query": {
+    "departmentId": "departmentid_fixture"
+  }
+}

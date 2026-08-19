@@ -20,7 +20,7 @@
 // Component split (mirrors postgres's connector.go/connection.go/reader.go/
 // cataloger.go; no cdc.go — TallyPrime's Gateway Server is polled per Read
 // with no subscription/webhook mechanism, so there is no CDC path to stub,
-// unlike postgres's documented pglogrepl stub):
+// unlike postgres's retained fail-closed logical-replication foundation):
 //   - connector.go (this file) — entry/wiring, Metadata, Write stub.
 //   - connection.go — gateway_url/company config resolution, the envelope
 //     HTTP POST helper (JSON and XML wire encodings), Check.

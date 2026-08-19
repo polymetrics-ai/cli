@@ -84,6 +84,20 @@ describe('connector data route', () => {
     });
   });
 
+  it('returns operation-backed CLI surface metadata for docs rendering', async () => {
+    const { response, json } = await connectorData('zendesk-support');
+
+    expect(response.status).toBe(200);
+    expect(json.cliSurface).toMatchObject({
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'operations get_sources_by_target',
+          operation: 'zendesk-support.get_sources_by_target',
+        }),
+      ]),
+    });
+  });
+
   it('returns a 404 JSON payload for unknown connectors', async () => {
     const { response, json } = await connectorData('missing-connector');
 

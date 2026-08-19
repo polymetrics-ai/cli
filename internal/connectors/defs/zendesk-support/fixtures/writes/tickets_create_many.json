@@ -1,0 +1,32 @@
+{
+  "record": {
+    "tickets": [
+      {
+        "due_at": "fixture-due-at",
+        "additional_collaborators": [
+          {
+            "email": "fixture@example.com",
+            "name": "fixture-name"
+          }
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/tickets/create_many",
+    "body": {
+      "tickets": [
+        {
+          "due_at": "fixture-due-at",
+          "additional_collaborators": [
+            {
+              "email": "fixture@example.com",
+              "name": "fixture-name"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "connector": "github",
+  "stage_names": [
+    "generated_direct_read_copilot_spaces_get_for_user",
+    "generated_direct_read_copilot_spaces_get_resource_for_user",
+    "generated_direct_read_copilot_spaces_list_collaborators_for_user",
+    "generated_direct_read_copilot_spaces_list_resources_for_user"
+  ]
+}

@@ -47,8 +47,6 @@ For a future tag such as `v0.2.0`, the GitHub release is expected to contain:
   - `pm_0.2.0_darwin_arm64.tar.gz`
   - `pm_0.2.0_linux_amd64.tar.gz`
   - `pm_0.2.0_linux_arm64.tar.gz`
-  - `pm_0.2.0_windows_amd64.zip`
-  - `pm_0.2.0_windows_arm64.zip`
 - native standalone Linux packages:
   - `pm_0.2.0_linux_amd64.deb`
   - `pm_0.2.0_linux_arm64.deb`
@@ -136,7 +134,8 @@ Their package metadata uses:
 - upgrade/uninstall behavior: package managers replace the same `pm` package name on upgrade and remove `/usr/bin/pm` plus package-owned doc files on uninstall; there are no maintainer scripts or background services
 
 Release CI exports `SOURCE_DATE_EPOCH` from the checked-out release commit so
-repeated GoReleaser/nFPM builds of the same commit produce stable package bytes.
+repeated archive and nFPM assembly of the same commit produce stable package
+bytes.
 
 These packages are not signed APT or RPM repositories. A signed package
 repository would require repository metadata such as APT `InRelease` or RPM

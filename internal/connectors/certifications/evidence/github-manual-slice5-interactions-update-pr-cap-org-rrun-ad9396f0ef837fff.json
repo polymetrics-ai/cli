@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:interactions_update_pull_request_creation_cap_for_org",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:35:52Z",
+  "run_id": "github-manual-slice5-interactions-update-pr-cap-org-rrun-ad9396f0ef837fff",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "8bc1432d9221ddae637ba96846d94f36ee7f28c6f8a069e22d170ceaea886a7b",
+    "pm_command_fingerprint": "{{pmcertfp:v1:ee956546915b0d994a8adf17143f4215de34e7daa675a68b50958fe709d903d8}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:128751441278bbe44377cf629fc71b6c53d57201ef46d46bdd794d87544f4f73}}"],
+    "http_exchanges": [
+      {
+        "operation": "command_run",
+        "request": {"method": "PATCH", "target": "{{pmcertfp:v1:4d0b134835eaa9fbb58ac925e81aee9a56316832d38ef2b48d0187f493f69383}}", "query": [], "headers": [{"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:8ec146d9cc11004cf5e0addc1613dbfe5593c9301165eadfebedda8f0eba089f}}", "max_open_pull_requests": "{{pmcertfp:v1:a617038e56054ef5101810a65fb3458e1c5c81f8ccc600c117a479d3dca8e763}}"}, "original_bytes": 43, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:8ec146d9cc11004cf5e0addc1613dbfe5593c9301165eadfebedda8f0eba089f}}", "max_open_pull_requests": "{{pmcertfp:v1:a617038e56054ef5101810a65fb3458e1c5c81f8ccc600c117a479d3dca8e763}}"}, "original_bytes": 43, "truncated": false}}
+      },
+      {
+        "operation": "state_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:4d0b134835eaa9fbb58ac925e81aee9a56316832d38ef2b48d0187f493f69383}}", "query": [], "headers": [{"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:8ec146d9cc11004cf5e0addc1613dbfe5593c9301165eadfebedda8f0eba089f}}", "max_open_pull_requests": "{{pmcertfp:v1:a617038e56054ef5101810a65fb3458e1c5c81f8ccc600c117a479d3dca8e763}}"}, "original_bytes": 43, "truncated": false}}
+      },
+      {
+        "operation": "terminal_disposal",
+        "request": {"method": "PATCH", "target": "{{pmcertfp:v1:4d0b134835eaa9fbb58ac925e81aee9a56316832d38ef2b48d0187f493f69383}}", "query": [], "headers": [{"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:bed8976cb6acd192cf3aebaeef19438fc39058950a995b4525226c0952c25091}}", "max_open_pull_requests": "{{pmcertfp:v1:839b7b8d6cba280dd9f74193bc32dbd3e1763cf3c223c6c8ad7a1290bc1fdb06}}"}, "original_bytes": 44, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:bed8976cb6acd192cf3aebaeef19438fc39058950a995b4525226c0952c25091}}", "max_open_pull_requests": "{{pmcertfp:v1:839b7b8d6cba280dd9f74193bc32dbd3e1763cf3c223c6c8ad7a1290bc1fdb06}}"}, "original_bytes": 44, "truncated": false}}
+      },
+      {
+        "operation": "terminal_disposal_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:4d0b134835eaa9fbb58ac925e81aee9a56316832d38ef2b48d0187f493f69383}}", "query": [], "headers": [{"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"enabled": "{{pmcertfp:v1:bed8976cb6acd192cf3aebaeef19438fc39058950a995b4525226c0952c25091}}", "max_open_pull_requests": "{{pmcertfp:v1:839b7b8d6cba280dd9f74193bc32dbd3e1763cf3c223c6c8ad7a1290bc1fdb06}}"}, "original_bytes": 44, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

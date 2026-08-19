@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventory REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-zoho-inventory
+  asset: icons/simple-icons/zoho-inventory.svg
+  title: Zoho
+  simple_icon_slug: zoho
+  simple_icon_hex: E42527
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Zoho
+  match: curated-alias
+  matched_by: zoho
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,21 +38,21 @@ CONFIGURATION
   mode
   organization_id
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: id
     cursor: updated_at
-    fields: company_name(), contact_id(), contact_name(), contact_type(), created_time(), currency_code(), email(), id(), last_modified_time(), outstanding_receivable_amount(), phone(), status(), updated_at()
+    fields: company_name(string), contact_id(string), contact_name(string), contact_type(string), created_time(string), currency_code(string), email(string), id(string), last_modified_time(string), outstanding_receivable_amount(number), phone(string), status(string), updated_at(string)
   items:
     primary key: id
     cursor: updated_at
-    fields: created_time(), description(), id(), item_id(), item_name(), last_modified_time(), name(), rate(), sku(), status(), unit(), updated_at()
+    fields: created_time(string), description(string), id(string), item_id(string), item_name(string), last_modified_time(string), name(string), rate(number), sku(string), status(string), unit(string), updated_at(string)
   salesorders:
     primary key: id
     cursor: updated_at
-    fields: balance(), created_time(), currency_code(), customer_id(), customer_name(), date(), id(), last_modified_time(), salesorder_id(), salesorder_number(), shipment_date(), status(), total(), updated_at()
+    fields: balance(number), created_time(string), currency_code(string), customer_id(string), customer_name(string), date(string), id(string), last_modified_time(string), salesorder_id(string), salesorder_number(string), shipment_date(string), status(string), total(number), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

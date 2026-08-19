@@ -1,0 +1,9 @@
+{
+  "issue": 3859,
+  "phase": "issue-3859-native-apply-strategies-r1",
+  "status": "verified-local",
+  "delivery_mode": "direct-pr",
+  "gsd_execution": "inline-manual-fallback",
+  "base": "integration/4015-mvp-flat-r1",
+  "branch": "fm/cli-3859-native-apply-strategies-r1"
+}

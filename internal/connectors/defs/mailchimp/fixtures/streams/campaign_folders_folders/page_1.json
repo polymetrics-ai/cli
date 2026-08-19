@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaign-folders",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "folders": [
+        {
+          "id": "fixture_id",
+          "name": "fixture_name",
+          "count": 1,
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Finage US market data: most active stocks, top gainers and losers, sector performance, delisted companies, and per-symbol market news via the Finage REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,36 +32,36 @@ CONFIGURATION
   calendar_to
   mode
   symbols
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   most_active_us_stocks:
     primary key: symbol
-    fields: change(), change_percentage(), company_name(), price(), symbol()
+    fields: change(number), change_percentage(string), company_name(string), price(string), symbol(string)
   most_gainers:
     primary key: symbol
-    fields: change(), change_percentage(), company_name(), price(), symbol()
+    fields: change(number), change_percentage(string), company_name(string), price(string), symbol(string)
   most_losers:
     primary key: symbol
-    fields: change(), change_percentage(), company_name(), price(), symbol()
+    fields: change(number), change_percentage(string), company_name(string), price(string), symbol(string)
   sector_performance:
     primary key: sector
-    fields: change_percentage(), sector()
+    fields: change_percentage(string), sector(string)
   delisted_companies:
     primary key: symbol
-    fields: company_name(), delisted_date(), exchange(), ipo_date(), symbol()
+    fields: company_name(string), delisted_date(string), exchange(string), ipo_date(string), symbol(string)
   market_news:
     primary key: url
-    fields: date(), description(), source(), symbol(), title(), url()
+    fields: date(string), description(string), source(string), symbol(string), title(string), url(string)
   earnings_calendar:
     primary key: symbol, date
-    fields: date(), eps(), estimated_eps(), estimated_revenue(), revenue(), symbol(), time()
+    fields: date(string), eps(number), estimated_eps(number), estimated_revenue(number), revenue(number), symbol(string), time(string)
   ipo_calendar:
     primary key: symbol, date
-    fields: company(), date(), exchange(), market_cap(), price_range(), shares(), status(), symbol()
+    fields: company(string), date(string), exchange(string), market_cap(number), price_range(string), shares(integer), status(string), symbol(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Finage API read of market data

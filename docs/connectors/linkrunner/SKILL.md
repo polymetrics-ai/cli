@@ -11,9 +11,11 @@ Reads Linkrunner mobile attribution campaigns and attributed users from the Link
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -36,18 +38,18 @@ Reads Linkrunner mobile attribution campaigns and attributed users from the Link
 - page_size
 - start_timestamp
 - timezone
-- linkrunner-key (secret)
+- linkrunner-key (secret) (required)
 
 ## ETL Streams
 
 - campaigns:
   - primary key: display_id
   - cursor: update_at
-  - fields: active(), attributed_users(), created_at(), default_link(), display_id(), domain(), google(), link(), meta(), meta_campaign_id(), name(), shareable_link(), update_at(), website()
+  - fields: active(boolean), attributed_users(number), created_at(string), default_link(boolean), display_id(string), domain(string), google(boolean), link(string), meta(boolean), meta_campaign_id(string), name(string), shareable_link(string), update_at(string), website(string)
 - attributed_users:
   - primary key: campaign_display_id, attributed_at
   - cursor: attributed_at
-  - fields: ad_set_id(), attributed_at(), campaign_display_id(), campaign_name(), installed_at(), link(), store_click_at(), user_data()
+  - fields: ad_set_id(string), attributed_at(string), campaign_display_id(string), campaign_name(string), installed_at(string), link(string), store_click_at(string), user_data(object)
 
 ## Sync Modes
 

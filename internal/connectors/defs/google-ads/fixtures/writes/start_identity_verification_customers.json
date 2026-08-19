@@ -1,0 +1,16 @@
+{
+  "record": {
+    "verificationProgram": "UNSPECIFIED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value:startIdentityVerification",
+    "body": {
+      "verificationProgram": "UNSPECIFIED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

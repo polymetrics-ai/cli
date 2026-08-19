@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-wheniwork
+  asset: icons/simple-icons/wheniwork.svg
+  title: When I Work
+  simple_icon_slug: wheniwork
+  simple_icon_hex: 51A33D
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=When%20I%20Work
+  match: exact-name-or-slug
+  matched_by: when-i-work
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -27,55 +35,55 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  email (secret)
-  password (secret)
+  email (secret) (required)
+  password (secret) (required)
 
 ETL STREAMS
   users:
     primary key: id
-    fields: email(), first_name(), id(), last_name()
+    fields: email(string), first_name(string), id(integer), last_name(string)
   locations:
     primary key: id
-    fields: address(), id(), name()
+    fields: address(string), id(integer), name(string)
   positions:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
   shifts:
     primary key: id
-    fields: end_time(), id(), start_time(), user_id()
+    fields: end_time(string), id(integer), start_time(string), user_id(integer)
   sites:
     primary key: id
-    fields: address(), id(), is_deleted(), location_id(), name()
+    fields: address(string), id(integer), is_deleted(boolean), location_id(integer), name(string)
   blocks:
     primary key: id
-    fields: end_time(), id(), location_id(), position_id(), start_time()
+    fields: end_time(string), id(integer), location_id(integer), position_id(integer), start_time(string)
   annotations:
     primary key: id
-    fields: end_date(), id(), message(), start_date(), title()
+    fields: end_date(string), id(integer), message(string), start_date(string), title(string)
   availabilityevents:
     primary key: id
-    fields: end_time(), id(), start_time(), type(), user_id()
+    fields: end_time(string), id(integer), start_time(string), type(integer), user_id(integer)
   requesttypes:
     primary key: id
-    fields: built_in(), enabled(), id(), is_deleted(), name()
+    fields: built_in(boolean), enabled(boolean), id(integer), is_deleted(boolean), name(string)
   times:
     primary key: id
-    fields: end_time(), id(), is_approved(), shift_id(), start_time(), user_id()
+    fields: end_time(string), id(integer), is_approved(boolean), shift_id(integer), start_time(string), user_id(integer)
   timezones:
     primary key: timezone_id
-    fields: offset(), olson_id(), timezone_id(), timezone_name()
+    fields: offset(number), olson_id(string), timezone_id(integer), timezone_name(string)
   payrolls:
     primary key: id
-    fields: end_date(), id(), is_closed(), is_finalized(), start_date()
+    fields: end_date(string), id(integer), is_closed(boolean), is_finalized(boolean), start_date(string)
   openshiftapprovalrequests:
     primary key: id
-    fields: created_at(), id(), shift_id(), status()
+    fields: created_at(string), id(integer), shift_id(integer), status(integer)
   swaps:
     primary key: id
-    fields: id(), shift_id(), status(), type(), user_id()
+    fields: id(integer), shift_id(integer), status(integer), type(integer), user_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_user:
@@ -91,6 +99,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a workforce-scheduling user account; approval required
   create_location:
     endpoint: POST /2/locations
+    required fields: name
     risk: external mutation; approval required
   update_location:
     endpoint: PUT /2/locations/{{ record.id }}
@@ -102,6 +111,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a schedule location; approval required
   create_position:
     endpoint: POST /2/positions
+    required fields: name
     risk: external mutation; approval required
   update_position:
     endpoint: PUT /2/positions/{{ record.id }}
@@ -113,6 +123,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a position; approval required
   create_site:
     endpoint: POST /2/sites
+    required fields: location_id, name
     risk: external mutation; approval required
   update_site:
     endpoint: PUT /2/sites/{{ record.id }}
@@ -124,6 +135,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a site; approval required
   create_block:
     endpoint: POST /2/blocks
+    required fields: start_time, end_time, location_id
     risk: external mutation; approval required
   update_block:
     endpoint: PUT /2/blocks/{{ record.id }}
@@ -135,6 +147,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a shift template; approval required
   create_annotation:
     endpoint: POST /2/annotations
+    required fields: start_date, end_date, title
     risk: external mutation; approval required
   update_annotation:
     endpoint: PUT /2/annotations/{{ record.id }}
@@ -146,6 +159,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a schedule annotation; approval required
   create_availability_event:
     endpoint: POST /2/availabilityevents
+    required fields: start_time, type
     risk: external mutation; writes a user's availability/unavailability preference; approval required
   update_availability_event:
     endpoint: PUT /2/availabilityevents/{{ record.id }}
@@ -157,6 +171,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a user availability event; approval required
   create_time:
     endpoint: POST /2/times
+    required fields: user_id, start_time, end_time
     risk: external mutation; creates a worked-time entry feeding payroll; approval required
   update_time:
     endpoint: PUT /2/times/{{ record.id }}
@@ -168,6 +183,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a worked-time entry feeding payroll; approval required
   create_shift:
     endpoint: POST /2/shifts
+    required fields: start_time, end_time, location_id
     risk: external mutation; creates a scheduled shift; approval required
   delete_shift:
     endpoint: DELETE /2/shifts/{{ record.id }}

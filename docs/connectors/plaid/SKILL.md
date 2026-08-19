@@ -11,6 +11,7 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 
 ## Icon
 
+- id: plaid
 - asset: icons/plaid.svg
 - source: official
 - review_status: official_verified
@@ -32,21 +33,21 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 - max_pages
 - mode
 - page_size
-- client_id (secret)
-- secret (secret)
+- client_id (secret) (required)
+- secret (secret) (required)
 
 ## ETL Streams
 
 - institutions:
   - primary key: institution_id
-  - fields: country_codes(), institution_id(), name()
+  - fields: country_codes(string), institution_id(string), name(string)
 - categories:
   - primary key: category_id
-  - fields: category_id(), group(), hierarchy()
+  - fields: category_id(string), group(string), hierarchy(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

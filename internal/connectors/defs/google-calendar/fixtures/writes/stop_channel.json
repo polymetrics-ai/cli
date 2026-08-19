@@ -1,0 +1,4 @@
+{
+  "record": {"id": "channel_fixture_1", "resourceId": "resource_fixture_1"},
+  "expect": {"method": "POST", "path": "/channels/stop", "body": {"id": "channel_fixture_1", "resourceId": "resource_fixture_1"}}
+}

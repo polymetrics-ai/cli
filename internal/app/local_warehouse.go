@@ -3,7 +3,9 @@ package app
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,42 +16,85 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/warehouse"
 )
 
 type etlExecutionResult struct {
-	RecordsRead        int
-	RecordsTransformed int
-	RecordsLoaded      int
-	RecordsFailed      int
-	BatchCount         int
-	Checkpoint         map[string]string
+	RecordsRead               int
+	RecordsTransformed        int
+	RecordsLoaded             int
+	RecordsFailed             int
+	BatchCount                int
+	Checkpoint                map[string]string
+	TransportPhaseMeasurement *TransportPhaseMeasurement
+	PendingStreamState        *pendingStreamState
+}
+
+func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *TransportPhaseMeasurement {
+	if measurement == nil {
+		return nil
+	}
+	clone := *measurement
+	return &clone
+}
+
+type pendingStreamState struct {
+	Key   string
+	State StreamState
 }
 
 type localRawRecord struct {
-	RawID        string            `json:"_polymetrics_raw_id"`
-	RunID        string            `json:"_polymetrics_run_id"`
-	SyncID       string            `json:"_polymetrics_sync_id"`
-	GenerationID int64             `json:"_polymetrics_generation_id"`
-	ExtractedAt  string            `json:"_polymetrics_extracted_at"`
-	LoadedAt     string            `json:"_polymetrics_loaded_at"`
-	Cursor       string            `json:"_polymetrics_cursor,omitempty"`
-	PrimaryKey   string            `json:"_polymetrics_primary_key,omitempty"`
-	Deleted      bool              `json:"_polymetrics_deleted"`
-	Record       connectors.Record `json:"record"`
+	RawID        string               `json:"_polymetrics_raw_id"`
+	RunID        string               `json:"_polymetrics_run_id"`
+	SyncID       string               `json:"_polymetrics_sync_id"`
+	GenerationID int64                `json:"_polymetrics_generation_id"`
+	ExtractedAt  string               `json:"_polymetrics_extracted_at"`
+	LoadedAt     string               `json:"_polymetrics_loaded_at"`
+	Cursor       string               `json:"_polymetrics_cursor,omitempty"`
+	CursorState  *localRawCursorState `json:"_polymetrics_cursor_state,omitempty"`
+	PrimaryKey   string               `json:"_polymetrics_primary_key,omitempty"`
+	Deleted      bool                 `json:"_polymetrics_deleted"`
+	Record       connectors.Record    `json:"record"`
 }
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
-	}
+type localRawCursorState struct {
+	Token []byte `json:"token"`
+}
+
+// syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
+// sync primitive; production defaults to durability.SyncDirectory.
+var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
+
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
+	if prior.Checkpoint != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
 	}
+	cursorTracker, err := newStreamCursorTracker(prior, source, sourceRuntime, stream.CursorField, mode.Source)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
 
 	dir := localWarehouseDir(destRuntime)
+	if err := warehouse.CheckLegacyLayout(dir); err != nil {
+		return etlExecutionResult{}, err
+	}
+	// pm does not write into a warehouse it will not read. Without this, a sync
+	// into a pre-Parquet warehouse reported records loaded and exit status 0
+	// while every read of that warehouse was refused — an operator told at once
+	// that the sync worked and that the table cannot be read.
+	if err := warehouse.CheckLegacyTableFormat(dir); err != nil {
+		return etlExecutionResult{}, err
+	}
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
@@ -57,12 +102,38 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if table == "" {
 		table = streamName
 	}
-	finalPath := localWarehouseTablePath(dir, table)
-	tmpFinalPath := finalPath + "." + runID + ".tmp"
-	rawPath := localRawPath(dir, conn.Name, streamName, table)
+	location, err := a.warehouseLocation(dir, conn)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		return etlExecutionResult{}, err
+	}
+	finalPath, err := location.TablePath(table)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	rawPath, err := location.WALPath(streamName)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	if mode.IsDeduped() && !mode.IsOverwrite() && cursorTracker.sourceOrdered != nil {
+		if err := validateSourceOrderedLocalRawRecords(ctx, rawPath); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
+	// Directory nesting already makes a shared table path unrepresentable.
+	// Re-deriving ownership from the table path is the independent check that
+	// fails loudly if a future change ever reintroduces a shared path.
+	if err := location.AssertOwnedTable(finalPath, table); err != nil {
+		return etlExecutionResult{}, err
+	}
 	tmpRawPath := rawPath + "." + runID + ".tmp"
 	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
-		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
+		return etlExecutionResult{}, fmt.Errorf("create warehouse wal directory: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(finalPath), 0o700); err != nil {
+		return etlExecutionResult{}, fmt.Errorf("create warehouse tables directory: %w", err)
 	}
 
 	rawTarget := rawPath
@@ -77,41 +148,19 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 	rawEncoder := json.NewEncoder(rawFile)
 
-	var finalFile *os.File
-	var finalEncoder *json.Encoder
-	if !mode.IsDeduped() {
-		finalTarget := finalPath
-		finalFlags := os.O_CREATE | os.O_WRONLY | os.O_APPEND
-		if mode.IsOverwrite() {
-			finalTarget = tmpFinalPath
-			finalFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
-		}
-		finalFile, err = os.OpenFile(finalTarget, finalFlags, 0o600)
-		if err != nil {
-			_ = rawFile.Close()
-			return etlExecutionResult{}, fmt.Errorf("open final table: %w", err)
-		}
-		finalEncoder = json.NewEncoder(finalFile)
-	}
-
 	success := false
 	defer func() {
 		_ = rawFile.Close()
-		if finalFile != nil {
-			_ = finalFile.Close()
-		}
 		if !success && mode.IsOverwrite() {
 			_ = os.Remove(tmpRawPath)
-			_ = os.Remove(tmpFinalPath)
 		}
 	}()
 
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
-	recordBatch := make([]connectors.Record, 0, batchSize)
 	rawBatch := make([]localRawRecord, 0, batchSize)
-	nextCursor := prior.Cursor
 	rawSeq := 0
+	observedAt := time.Time{}
 
 	flush := func() error {
 		if len(rawBatch) == 0 {
@@ -125,45 +174,24 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 				return fmt.Errorf("write raw record: %w", err)
 			}
 		}
-		if finalEncoder != nil {
-			for _, record := range recordBatch {
-				if err := ctx.Err(); err != nil {
-					return err
-				}
-				if err := finalEncoder.Encode(record); err != nil {
-					return fmt.Errorf("write final record: %w", err)
-				}
-			}
-		}
 		result.BatchCount++
 		rawBatch = rawBatch[:0]
-		recordBatch = recordBatch[:0]
 		return nil
 	}
 
-	readConfig := sourceRuntime
-	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if prior.Cursor != "" {
-		readConfig.Config["since"] = prior.Cursor
-	}
-	err = source.Read(ctx, connectors.ReadRequest{
-		Stream: streamName,
-		Config: readConfig,
-		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
-	}, func(record connectors.Record) error {
+	err = source.Read(ctx, cursorTracker.readRequest(streamName, sourceRuntime, prior, generationID, mode.Source), func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
+		cursorState := connectors.OpaqueCursorState{}
 		if stream.CursorField != "" {
+			var include bool
 			var err error
-			cursor, err = recordCursor(record, stream.CursorField)
+			cursor, cursorState, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && prior.Cursor != "" && compareCursor(cursor, prior.Cursor) < 0 {
+			if !include {
 				return nil
-			}
-			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
-				nextCursor = cursor
 			}
 		}
 		deleted := isDeletedRecord(record)
@@ -171,7 +199,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		enriched["_polymetrics_run_id"] = runID
 		enriched["_polymetrics_synced_at"] = now
 		enriched["_polymetrics_deleted"] = deleted
-		if cursor != "" {
+		if stream.CursorField != "" {
 			enriched["_polymetrics_cursor"] = cursor
 		}
 
@@ -192,13 +220,14 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			ExtractedAt:  time.Now().UTC().Format(time.RFC3339Nano),
 			LoadedAt:     now,
 			Cursor:       cursor,
+			CursorState:  localRawCursorStateFor(cursorState),
 			PrimaryKey:   pk,
 			Deleted:      deleted,
 			Record:       enriched,
 		}
 		rawBatch = append(rawBatch, raw)
-		recordBatch = append(recordBatch, enriched)
 		result.RecordsTransformed++
+		observedAt = time.Now().UTC()
 		result.RecordsLoaded++
 		if len(rawBatch) >= batchSize {
 			return flush()
@@ -211,54 +240,96 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err := flush(); err != nil {
 		return result, err
 	}
+	if err := rawFile.Sync(); err != nil {
+		return result, fmt.Errorf("sync raw table: %w", err)
+	}
 	if err := rawFile.Close(); err != nil {
 		return result, fmt.Errorf("close raw table: %w", err)
 	}
-	if finalFile != nil {
-		if err := finalFile.Close(); err != nil {
-			return result, fmt.Errorf("close final table: %w", err)
-		}
-	}
 
-	if mode.IsDeduped() {
-		readRawPath := rawPath
-		if mode.IsOverwrite() {
-			readRawPath = tmpRawPath
-		}
-		finalCount, err := materializeDedupedFinal(ctx, readRawPath, tmpFinalPath)
-		if err != nil {
-			return result, err
-		}
-		result.RecordsLoaded = finalCount
-	}
-
+	// The write-ahead log is durable and complete, so it becomes the log of
+	// record before the table is derived from it. If materialization then
+	// fails, the next run rebuilds the table from this same log; no record is
+	// lost by the table being stale.
 	if mode.IsOverwrite() {
 		if err := os.Rename(tmpRawPath, rawPath); err != nil {
 			return result, fmt.Errorf("replace raw table: %w", err)
 		}
 	}
-	if mode.IsOverwrite() || mode.IsDeduped() {
-		if err := os.Rename(tmpFinalPath, finalPath); err != nil {
-			return result, fmt.Errorf("replace final table: %w", err)
-		}
+
+	// Every mode now materializes the table wholesale from the write-ahead
+	// log. Deduped modes already did. Append modes used to stream into the
+	// table O_APPEND, which Parquet cannot support: a Parquet file cannot be
+	// appended to once closed. Rebuilding from the log is what makes the table
+	// format a derived detail rather than a constraint on the write pattern.
+	finalCount, err := materializeFinalTable(ctx, rawPath, finalPath, mode.IsDeduped(), cursorTracker.sourceOrdered)
+	if err != nil {
+		return result, err
+	}
+	if mode.IsDeduped() {
+		// A deduped table's row count is the folded count, not the number of
+		// records this run read. An append table's stays per-run, because the
+		// table it rebuilds spans every run.
+		result.RecordsLoaded = finalCount
 	}
 
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Cursor:              nextCursor,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       result.RecordsLoaded,
-		UpdatedAt:           time.Now().UTC(),
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(finalPath)); err != nil {
+		return result, err
 	}
-	a.state.StreamStates[stateKey] = updated
-	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(rawPath)); err != nil {
+		return result, err
+	}
+
+	if observedAt.IsZero() {
+		observedAt = time.Now().UTC()
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destination.Name(), time.Now().UTC())
+	if err != nil {
+		return result, err
+	}
+	nextCursor, nextCursorObserved := cursorTracker.checkpoint()
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	if err != nil {
+		return result, err
+	}
+	reportedCursor, reportedCursorObserved := cursorTracker.reportedCursor()
+	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, reportedCursor, reportedCursorObserved)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	success = true
 	return result, nil
 }
 
-func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
+func syncLocalWarehouseDirectory(dir string) error {
+	if err := syncLocalWarehouseDirectoryCommit(dir); err != nil {
+		return fmt.Errorf("sync warehouse directory: %w", err)
+	}
+	return nil
+}
+
+// syncLocalWarehouseDirectoryChain synchronizes dir and every ancestor through
+// the filesystem root. This establishes a known durable parent boundary after
+// MkdirAll without inferring which components were new, and it must complete
+// before a downstream checkpoint is acknowledged.
+func syncLocalWarehouseDirectoryChain(dir string) error {
+	path, err := filepath.Abs(dir)
+	if err != nil {
+		return fmt.Errorf("resolve warehouse directory: %w", err)
+	}
+	for {
+		if err := syncLocalWarehouseDirectory(path); err != nil {
+			return err
+		}
+		parent := filepath.Dir(path)
+		if parent == path {
+			return nil
+		}
+		path = parent
+	}
+}
+
+func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState, cursor string, cursorObserved bool) map[string]string {
+	// This map is a backward-compatible run report, not resumable sync state.
+	// StreamState.Checkpoint is the sole durable resume record.
 	checkpoint := map[string]string{
 		"records_read":        strconv.Itoa(result.RecordsRead),
 		"records_transformed": strconv.Itoa(result.RecordsTransformed),
@@ -269,69 +340,293 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 		"state_key":           stateKey,
 		"generation_id":       strconv.FormatInt(state.GenerationID, 10),
 	}
-	if state.Cursor != "" {
-		checkpoint["cursor"] = state.Cursor
+	if cursorObserved {
+		checkpoint["cursor"] = cursor
 	}
 	return checkpoint
 }
 
-func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (int, error) {
-	best, err := readBestLocalRawRecords(ctx, rawPath)
+// materializeFinalTable rebuilds a table wholesale from its write-ahead log and
+// swaps it into place as one Parquet file.
+//
+// A deduped table folds the log by primary key, drops deletions, and emits in
+// key order. An append table replays the log in the order it was written, which
+// is the order the streaming append path produced — including across earlier
+// runs, because the log accumulates the same way the table used to.
+func materializeFinalTable(ctx context.Context, rawPath, finalPath string, deduped bool, sourceOrdered connectors.SourceOrderedCursorReader) (int, error) {
+	writer, err := warehouse.NewTableWriter(finalPath)
 	if err != nil {
 		return 0, err
 	}
-	keys := make([]string, 0, len(best))
-	for key, raw := range best {
-		if raw.Deleted {
-			continue
+	committed := false
+	defer func() {
+		if !committed {
+			writer.Abort()
 		}
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-	file, err := os.OpenFile(finalPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
-	if err != nil {
-		return 0, fmt.Errorf("open deduped final table: %w", err)
-	}
-	defer file.Close()
-	encoder := json.NewEncoder(file)
-	count := 0
-	for _, key := range keys {
-		if err := ctx.Err(); err != nil {
-			return count, err
+	}()
+
+	if deduped {
+		best, err := readBestLocalRawRecords(ctx, rawPath, sourceOrdered)
+		if err != nil {
+			return 0, err
 		}
-		if err := encoder.Encode(best[key].Record); err != nil {
-			return count, fmt.Errorf("write deduped final record: %w", err)
+		keys := make([]string, 0, len(best))
+		for key, raw := range best {
+			if raw.Deleted {
+				continue
+			}
+			keys = append(keys, key)
 		}
-		count++
+		sort.Strings(keys)
+		for _, key := range keys {
+			if err := ctx.Err(); err != nil {
+				return 0, err
+			}
+			if err := writer.Write(best[key].Record); err != nil {
+				return 0, err
+			}
+		}
+	} else if err := forEachLocalRawRecord(ctx, rawPath, func(raw localRawRecord) error {
+		return writer.Write(raw.Record)
+	}); err != nil {
+		return 0, err
 	}
+
+	count := writer.Rows()
+	if err := writer.Commit(ctx); err != nil {
+		return 0, err
+	}
+	committed = true
 	return count, nil
 }
 
-func rawRecordNewer(candidate, current localRawRecord) bool {
-	if cmp := compareCursor(candidate.Cursor, current.Cursor); cmp != 0 {
-		return cmp > 0
+// materializeHistoryFinalTable rebuilds a local SCD2 projection from the WAL.
+// A source version is keyed by its primary key, cursor, delete marker, and
+// canonical record bytes, so replaying the same provider version never creates
+// a second interval. Distinct versions are ordered by the source cursor and a
+// stable source-version identity; WAL sequence is deliberately not the tie
+// breaker because retry timing must not change the history table.
+func materializeHistoryFinalTable(ctx context.Context, rawPath, finalPath string) (int, error) {
+	writer, err := warehouse.NewTableWriter(finalPath)
+	if err != nil {
+		return 0, err
 	}
-	if cmp := compareCursor(candidate.ExtractedAt, current.ExtractedAt); cmp != 0 {
-		return cmp > 0
+	committed := false
+	defer func() {
+		if !committed {
+			writer.Abort()
+		}
+	}()
+
+	versions, err := readLocalHistoryVersions(ctx, rawPath)
+	if err != nil {
+		return 0, err
 	}
-	return candidate.RawID > current.RawID
+	keys := make([]string, 0, len(versions))
+	for key := range versions {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		series := versions[key]
+		for index, version := range series {
+			if err := ctx.Err(); err != nil {
+				return 0, err
+			}
+			if version.record.Deleted {
+				continue
+			}
+			row := cloneRecord(version.record.Record)
+			row["_valid_from"] = version.record.Cursor
+			if index+1 < len(series) {
+				row["_valid_to"] = series[index+1].record.Cursor
+			} else {
+				row["_valid_to"] = nil
+			}
+			row["_is_current"] = index+1 == len(series)
+			row["_polymetrics_source_version"] = version.identity
+			if err := writer.Write(row); err != nil {
+				return 0, err
+			}
+		}
+	}
+	count := writer.Rows()
+	if err := writer.Commit(ctx); err != nil {
+		return 0, err
+	}
+	committed = true
+	return count, nil
 }
 
-func readBestLocalRawRecords(ctx context.Context, path string) (map[string]localRawRecord, error) {
+type localHistoryVersion struct {
+	record   localRawRecord
+	identity string
+}
+
+func readLocalHistoryVersions(ctx context.Context, path string) (map[string][]localHistoryVersion, error) {
+	byKey := make(map[string][]localHistoryVersion)
+	seen := make(map[string]struct{})
+	err := forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		if record.PrimaryKey == "" {
+			return fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
+		}
+		if record.Cursor == "" {
+			return fmt.Errorf("raw record %s is missing source cursor metadata", record.RawID)
+		}
+		identity, err := localHistoryVersionIdentity(record)
+		if err != nil {
+			return err
+		}
+		seenKey := record.PrimaryKey + "\x00" + identity
+		if _, duplicate := seen[seenKey]; duplicate {
+			return nil
+		}
+		seen[seenKey] = struct{}{}
+		byKey[record.PrimaryKey] = append(byKey[record.PrimaryKey], localHistoryVersion{record: record, identity: identity})
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	for key := range byKey {
+		sort.Slice(byKey[key], func(i, j int) bool {
+			left, right := byKey[key][i], byKey[key][j]
+			if cmp := compareCursor(left.record.Cursor, right.record.Cursor); cmp != 0 {
+				return cmp < 0
+			}
+			return left.identity < right.identity
+		})
+	}
+	return byKey, nil
+}
+
+func localHistoryVersionIdentity(record localRawRecord) (string, error) {
+	payload, err := json.Marshal(struct {
+		PrimaryKey string            `json:"primary_key"`
+		Cursor     string            `json:"cursor"`
+		Deleted    bool              `json:"deleted"`
+		Record     connectors.Record `json:"record"`
+	}{
+		PrimaryKey: record.PrimaryKey,
+		Cursor:     record.Cursor,
+		Deleted:    record.Deleted,
+		Record:     record.Record,
+	})
+	if err != nil {
+		return "", fmt.Errorf("marshal local warehouse source version: %w", err)
+	}
+	digest := sha256.Sum256(payload)
+	return fmt.Sprintf("sha256:%x", digest[:]), nil
+}
+
+func localRawCursorStateFor(state connectors.OpaqueCursorState) *localRawCursorState {
+	if !state.Present {
+		return nil
+	}
+	return &localRawCursorState{Token: append([]byte(nil), state.Token...)}
+}
+
+func (r localRawRecord) opaqueCursorState() (connectors.OpaqueCursorState, error) {
+	if r.CursorState == nil {
+		return connectors.OpaqueCursorState{}, fmt.Errorf("raw record %s is missing source cursor state", r.RawID)
+	}
+	return connectors.OpaqueCursorState{Token: append([]byte(nil), r.CursorState.Token...), Present: true}, nil
+}
+
+func rawRecordNewer(candidate, current localRawRecord, candidateSequence, currentSequence uint64, sourceOrdered connectors.SourceOrderedCursorReader) (bool, error) {
+	if sourceOrdered != nil {
+		candidateState, err := candidate.opaqueCursorState()
+		if err != nil {
+			return false, err
+		}
+		currentState, err := current.opaqueCursorState()
+		if err != nil {
+			return false, err
+		}
+		cmp, err := sourceOrdered.CompareCursorStates(candidateState, currentState)
+		if err == nil && cmp != 0 {
+			return cmp > 0, nil
+		}
+		if err != nil && !errors.Is(err, connectors.ErrOpaqueCursorOrderUnavailable) {
+			return false, err
+		}
+		return candidateSequence > currentSequence, nil
+	}
+	if cmp := compareCursor(candidate.Cursor, current.Cursor); cmp != 0 {
+		return cmp > 0, nil
+	}
+	if cmp := compareCursor(candidate.ExtractedAt, current.ExtractedAt); cmp != 0 {
+		return cmp > 0, nil
+	}
+	return candidate.RawID > current.RawID, nil
+}
+
+type indexedLocalRawRecord struct {
+	record   localRawRecord
+	sequence uint64
+}
+
+func readBestLocalRawRecords(ctx context.Context, path string, sourceOrdered connectors.SourceOrderedCursorReader) (map[string]localRawRecord, error) {
+	best := map[string]indexedLocalRawRecord{}
+	var sequence uint64
+	err := forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		sequence++
+		if record.PrimaryKey == "" {
+			return fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
+		}
+		current, ok := best[record.PrimaryKey]
+		if !ok {
+			if sourceOrdered != nil {
+				if _, err := record.opaqueCursorState(); err != nil {
+					return err
+				}
+			}
+			best[record.PrimaryKey] = indexedLocalRawRecord{record: record, sequence: sequence}
+			return nil
+		}
+		newer, err := rawRecordNewer(record, current.record, sequence, current.sequence, sourceOrdered)
+		if err != nil {
+			return err
+		}
+		if newer {
+			best[record.PrimaryKey] = indexedLocalRawRecord{record: record, sequence: sequence}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	resolved := make(map[string]localRawRecord, len(best))
+	for key, record := range best {
+		resolved[key] = record.record
+	}
+	return resolved, nil
+}
+
+func validateSourceOrderedLocalRawRecords(ctx context.Context, path string) error {
+	return forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		_, err := record.opaqueCursorState()
+		return err
+	})
+}
+
+// forEachLocalRawRecord streams a write-ahead log in the order it was written.
+// A log that does not exist yet is an empty log, not an error: a connection can
+// be materialized before its first record ever arrives.
+func forEachLocalRawRecord(ctx context.Context, path string, visit func(localRawRecord) error) error {
 	file, err := os.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return map[string]localRawRecord{}, nil
+			return nil
 		}
-		return nil, fmt.Errorf("open raw table: %w", err)
+		return fmt.Errorf("open raw table: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	reader := bufio.NewScanner(file)
 	reader.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
-	best := map[string]localRawRecord{}
 	for reader.Scan() {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return err
 		}
 		line := strings.TrimSpace(reader.Text())
 		if line == "" {
@@ -339,20 +634,16 @@ func readBestLocalRawRecords(ctx context.Context, path string) (map[string]local
 		}
 		var record localRawRecord
 		if err := json.Unmarshal([]byte(line), &record); err != nil {
-			return nil, fmt.Errorf("decode raw record: %w", err)
+			return fmt.Errorf("decode raw record: %w", err)
 		}
-		if record.PrimaryKey == "" {
-			return nil, fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
-		}
-		current, ok := best[record.PrimaryKey]
-		if !ok || rawRecordNewer(record, current) {
-			best[record.PrimaryKey] = record
+		if err := visit(record); err != nil {
+			return err
 		}
 	}
 	if err := reader.Err(); err != nil && err != io.EOF {
-		return nil, fmt.Errorf("scan raw records: %w", err)
+		return fmt.Errorf("scan raw records: %w", err)
 	}
-	return best, nil
+	return nil
 }
 
 func isDeletedRecord(record connectors.Record) bool {
@@ -384,32 +675,9 @@ func localWarehouseDir(cfg connectors.RuntimeConfig) string {
 	return filepath.Join(cfg.ProjectDir, "warehouse")
 }
 
-func localWarehouseTablePath(dir, table string) string {
-	return filepath.Join(dir, localSafeName(table)+".jsonl")
-}
-
-func localRawPath(dir, connection, stream, table string) string {
-	name := localSafeName(connection + "__" + stream + "__" + table)
-	return filepath.Join(dir, "_pm_raw", name+".jsonl")
-}
-
-func localSafeName(name string) string {
-	name = strings.TrimSpace(strings.ToLower(name))
-	var b strings.Builder
-	for _, r := range name {
-		switch {
-		case r >= 'a' && r <= 'z':
-			b.WriteRune(r)
-		case r >= '0' && r <= '9':
-			b.WriteRune(r)
-		case r == '_' || r == '-':
-			b.WriteRune(r)
-		case r == '.' || r == '/' || r == ' ' || r == ':':
-			b.WriteRune('_')
-		}
-	}
-	if b.Len() == 0 {
-		return "records"
-	}
-	return b.String()
+// warehouseLocation resolves the directory conn owns inside a warehouse root.
+// The connection's opaque ID is the path component, never its display name,
+// and never anything derived from a credential.
+func (a *App) warehouseLocation(dir string, conn Connection) (warehouse.Location, error) {
+	return warehouse.LocationFor(dir, a.state.WorkspaceID, conn.Source.Connector, conn.ID, conn.Name)
 }

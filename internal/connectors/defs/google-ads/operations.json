@@ -1,0 +1,1061 @@
+{
+  "operations": [
+    {
+      "id": "google_ads.audience.insights.list.insights.eligible.dates",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method audienceInsights.listInsightsEligibleDates with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#audienceInsights.listInsightsEligibleDates",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/audienceInsights:listInsightsEligibleDates",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "insightsApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.asset.generations.generate.images",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.assetGenerations.generateImages with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateImages",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGenerations:generateImages",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "finalUrlGeneration": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "assetFieldTypes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "HEADLINE",
+                  "DESCRIPTION",
+                  "MANDATORY_AD_TEXT",
+                  "MARKETING_IMAGE",
+                  "MEDIA_BUNDLE",
+                  "YOUTUBE_VIDEO",
+                  "BOOK_ON_GOOGLE",
+                  "LEAD_FORM",
+                  "PROMOTION",
+                  "CALLOUT",
+                  "STRUCTURED_SNIPPET",
+                  "SITELINK",
+                  "MOBILE_APP",
+                  "HOTEL_CALLOUT",
+                  "CALL",
+                  "PRICE",
+                  "LONG_HEADLINE",
+                  "BUSINESS_NAME",
+                  "SQUARE_MARKETING_IMAGE",
+                  "PORTRAIT_MARKETING_IMAGE",
+                  "LOGO",
+                  "LANDSCAPE_LOGO",
+                  "VIDEO",
+                  "CALL_TO_ACTION_SELECTION",
+                  "AD_IMAGE",
+                  "BUSINESS_LOGO",
+                  "HOTEL_PROPERTY",
+                  "DEMAND_GEN_CAROUSEL_CARD",
+                  "BUSINESS_MESSAGE",
+                  "TALL_PORTRAIT_MARKETING_IMAGE",
+                  "RELATED_YOUTUBE_VIDEOS",
+                  "LANDING_PAGE_PREVIEW"
+                ]
+              }
+            },
+            "advertisingChannelType": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ]
+            },
+            "productRecontextGeneration": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "freeformGeneration": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.asset.generations.generate.text",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.assetGenerations.generateText with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateText",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGenerations:generateText",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "existingGenerationContext": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "advertisingChannelType": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ]
+            },
+            "finalUrl": {
+              "type": "string"
+            },
+            "freeformPrompt": {
+              "type": "string"
+            },
+            "assetFieldTypes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "HEADLINE",
+                  "DESCRIPTION",
+                  "MANDATORY_AD_TEXT",
+                  "MARKETING_IMAGE",
+                  "MEDIA_BUNDLE",
+                  "YOUTUBE_VIDEO",
+                  "BOOK_ON_GOOGLE",
+                  "LEAD_FORM",
+                  "PROMOTION",
+                  "CALLOUT",
+                  "STRUCTURED_SNIPPET",
+                  "SITELINK",
+                  "MOBILE_APP",
+                  "HOTEL_CALLOUT",
+                  "CALL",
+                  "PRICE",
+                  "LONG_HEADLINE",
+                  "BUSINESS_NAME",
+                  "SQUARE_MARKETING_IMAGE",
+                  "PORTRAIT_MARKETING_IMAGE",
+                  "LOGO",
+                  "LANDSCAPE_LOGO",
+                  "VIDEO",
+                  "CALL_TO_ACTION_SELECTION",
+                  "AD_IMAGE",
+                  "BUSINESS_LOGO",
+                  "HOTEL_PROPERTY",
+                  "DEMAND_GEN_CAROUSEL_CARD",
+                  "BUSINESS_MESSAGE",
+                  "TALL_PORTRAIT_MARKETING_IMAGE",
+                  "RELATED_YOUTUBE_VIDEOS",
+                  "LANDING_PAGE_PREVIEW"
+                ]
+              }
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "assetFieldTypes"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.generate.ad.group.themes",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.generateAdGroupThemes with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAdGroupThemes",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAdGroupThemes",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "adGroups": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "adGroups",
+            "keywords"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.generate.keyword.historical.metrics",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.generateKeywordHistoricalMetrics with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordHistoricalMetrics",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "historicalMetricsOptions": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "language": {
+              "type": "string"
+            },
+            "aggregateMetrics": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "keywordPlanNetwork": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "GOOGLE_SEARCH",
+                "GOOGLE_SEARCH_AND_PARTNERS"
+              ]
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "includeAdultKeywords": {
+              "type": "boolean"
+            },
+            "geoTargetConstants": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.generate.keyword.ideas",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.generateKeywordIdeas with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordIdeas",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordIdeas",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pageToken": {
+              "type": "string"
+            },
+            "keywordAnnotation": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "KEYWORD_CONCEPT"
+                ]
+              }
+            },
+            "language": {
+              "type": "string"
+            },
+            "keywordAndUrlSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "urlSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "geoTargetConstants": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "aggregateMetrics": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "pageSize": {
+              "type": "integer"
+            },
+            "keywordSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "siteSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "historicalMetricsOptions": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "includeAdultKeywords": {
+              "type": "boolean"
+            },
+            "keywordPlanNetwork": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "GOOGLE_SEARCH",
+                "GOOGLE_SEARCH_AND_PARTNERS"
+              ]
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.generate.suggested.targeting.insights",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.generateSuggestedTargetingInsights with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateSuggestedTargetingInsights",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateSuggestedTargetingInsights",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "insightsApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "customerInsightsGroup": {
+              "type": "string"
+            },
+            "audienceDefinition": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "audienceDescription": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.get.identity.verification",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.getIdentityVerification with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.getIdentityVerification",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/getIdentityVerification",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google_ads.customers.invoices.list",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.invoices.list with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.invoices.list",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/invoices",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google_ads.customers.payments.accounts.list",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.paymentsAccounts.list with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.paymentsAccounts.list",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/paymentsAccounts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google_ads.customers.recommendations.generate",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.recommendations.generate with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendations.generate",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:generate",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "conversionTrackingStatus": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "NOT_CONVERSION_TRACKED",
+                "CONVERSION_TRACKING_MANAGED_BY_SELF",
+                "CONVERSION_TRACKING_MANAGED_BY_THIS_MANAGER",
+                "CONVERSION_TRACKING_MANAGED_BY_ANOTHER_MANAGER"
+              ]
+            },
+            "positiveLocationsIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "seedInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "budgetInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "biddingInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "countryCodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "negativeLocationsIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "targetPartnerSearchNetwork": {
+              "type": "boolean"
+            },
+            "campaignSitelinkCount": {
+              "type": "integer"
+            },
+            "adGroupInfo": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "assetGroupInfo": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "languageCodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "targetContentNetwork": {
+              "type": "boolean"
+            },
+            "campaignImageAssetCount": {
+              "type": "integer"
+            },
+            "merchantCenterAccountId": {
+              "type": "string"
+            },
+            "recommendationTypes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "CAMPAIGN_BUDGET",
+                  "KEYWORD",
+                  "TEXT_AD",
+                  "TARGET_CPA_OPT_IN",
+                  "MAXIMIZE_CONVERSIONS_OPT_IN",
+                  "ENHANCED_CPC_OPT_IN",
+                  "SEARCH_PARTNERS_OPT_IN",
+                  "MAXIMIZE_CLICKS_OPT_IN",
+                  "OPTIMIZE_AD_ROTATION",
+                  "KEYWORD_MATCH_TYPE",
+                  "MOVE_UNUSED_BUDGET",
+                  "FORECASTING_CAMPAIGN_BUDGET",
+                  "TARGET_ROAS_OPT_IN",
+                  "RESPONSIVE_SEARCH_AD",
+                  "MARGINAL_ROI_CAMPAIGN_BUDGET",
+                  "USE_BROAD_MATCH_KEYWORD",
+                  "RESPONSIVE_SEARCH_AD_ASSET",
+                  "UPGRADE_SMART_SHOPPING_CAMPAIGN_TO_PERFORMANCE_MAX",
+                  "RESPONSIVE_SEARCH_AD_IMPROVE_AD_STRENGTH",
+                  "DISPLAY_EXPANSION_OPT_IN",
+                  "UPGRADE_LOCAL_CAMPAIGN_TO_PERFORMANCE_MAX",
+                  "RAISE_TARGET_CPA_BID_TOO_LOW",
+                  "FORECASTING_SET_TARGET_ROAS",
+                  "CALLOUT_ASSET",
+                  "SITELINK_ASSET",
+                  "CALL_ASSET",
+                  "SHOPPING_ADD_AGE_GROUP",
+                  "SHOPPING_ADD_COLOR",
+                  "SHOPPING_ADD_GENDER",
+                  "SHOPPING_ADD_GTIN",
+                  "SHOPPING_ADD_MORE_IDENTIFIERS",
+                  "SHOPPING_ADD_SIZE",
+                  "SHOPPING_ADD_PRODUCTS_TO_CAMPAIGN",
+                  "SHOPPING_FIX_DISAPPROVED_PRODUCTS",
+                  "SHOPPING_TARGET_ALL_OFFERS",
+                  "SHOPPING_FIX_SUSPENDED_MERCHANT_CENTER_ACCOUNT",
+                  "SHOPPING_FIX_MERCHANT_CENTER_ACCOUNT_SUSPENSION_WARNING",
+                  "SHOPPING_MIGRATE_REGULAR_SHOPPING_CAMPAIGN_OFFERS_TO_PERFORMANCE_MAX",
+                  "DYNAMIC_IMAGE_EXTENSION_OPT_IN",
+                  "RAISE_TARGET_CPA",
+                  "LOWER_TARGET_ROAS",
+                  "PERFORMANCE_MAX_OPT_IN",
+                  "IMPROVE_PERFORMANCE_MAX_AD_STRENGTH",
+                  "MIGRATE_DYNAMIC_SEARCH_ADS_CAMPAIGN_TO_PERFORMANCE_MAX",
+                  "FORECASTING_SET_TARGET_CPA",
+                  "SET_TARGET_CPA",
+                  "SET_TARGET_ROAS",
+                  "MAXIMIZE_CONVERSION_VALUE_OPT_IN",
+                  "IMPROVE_GOOGLE_TAG_COVERAGE",
+                  "PERFORMANCE_MAX_FINAL_URL_OPT_IN",
+                  "REFRESH_CUSTOMER_MATCH_LIST",
+                  "CUSTOM_AUDIENCE_OPT_IN",
+                  "LEAD_FORM_ASSET",
+                  "IMPROVE_DEMAND_GEN_AD_STRENGTH"
+                ]
+              }
+            },
+            "advertisingChannelType": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ]
+            },
+            "campaignCallAssetCount": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "recommendationTypes",
+            "advertisingChannelType"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.search.audience.insights.attributes",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.searchAudienceInsightsAttributes with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.searchAudienceInsightsAttributes",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:searchAudienceInsightsAttributes",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "insightsApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "youtubeReachLocation": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "customerInsightsGroup": {
+              "type": "string"
+            },
+            "locationCountryFilters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "CATEGORY",
+                  "KNOWLEDGE_GRAPH",
+                  "GEO_TARGET_COUNTRY",
+                  "SUB_COUNTRY_LOCATION",
+                  "YOUTUBE_CHANNEL",
+                  "AFFINITY_USER_INTEREST",
+                  "IN_MARKET_USER_INTEREST",
+                  "PARENTAL_STATUS",
+                  "INCOME_RANGE",
+                  "AGE_RANGE",
+                  "GENDER",
+                  "YOUTUBE_VIDEO",
+                  "DEVICE",
+                  "YOUTUBE_LINEUP",
+                  "USER_LIST"
+                ]
+              }
+            },
+            "queryText": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "dimensions",
+            "queryText"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.suggest.brands",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.suggestBrands with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestBrands",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestBrands",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "selectedBrands": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "brandPrefix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "brandPrefix"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.customers.suggest.travel.assets",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method customers.suggestTravelAssets with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestTravelAssets",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestTravelAssets",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "languageOption": {
+              "type": "string"
+            },
+            "placeIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "languageOption"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.geo.target.constants.suggest",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method geoTargetConstants.suggest with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#geoTargetConstants.suggest",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/geoTargetConstants:suggest",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "countryCode": {
+              "type": "string"
+            },
+            "locationNames": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "geoTargets": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "locale": {
+              "type": "string"
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.keyword.theme.constants.suggest",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method keywordThemeConstants.suggest with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#keywordThemeConstants.suggest",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/keywordThemeConstants:suggest",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "countryCode": {
+              "type": "string"
+            },
+            "queryText": {
+              "type": "string"
+            },
+            "languageCode": {
+              "type": "string"
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.v22.generate.conversion.rates",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method v22.generateConversionRates with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.generateConversionRates",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22:generateConversionRates",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "customerReachGroup": {
+              "type": "string"
+            },
+            "customerId": {
+              "type": "string"
+            },
+            "reachApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "customerId"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.v22.list.plannable.locations",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method v22.listPlannableLocations with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableLocations",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22:listPlannableLocations",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "reachApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.v22.list.plannable.products",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method v22.listPlannableProducts with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableProducts",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22:listPlannableProducts",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "plannableLocationId": {
+              "type": "string"
+            },
+            "reachApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "plannableLocationId"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.v22.list.plannable.user.interests",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method v22.listPlannableUserInterests with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserInterests",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22:listPlannableUserInterests",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "customerId": {
+              "type": "string"
+            },
+            "reachApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "pathQuery": {
+              "type": "string"
+            },
+            "userInterestTaxonomyTypes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "UNSPECIFIED",
+                  "UNKNOWN",
+                  "AFFINITY",
+                  "IN_MARKET",
+                  "MOBILE_APP_INSTALL_USER",
+                  "VERTICAL_GEO",
+                  "NEW_SMART_PHONE_USER"
+                ]
+              }
+            },
+            "nameQuery": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "customerId"
+          ]
+        },
+        "body": {}
+      }
+    },
+    {
+      "id": "google_ads.v22.list.plannable.user.lists",
+      "kind": "rest_read",
+      "summary": "Read Google Ads API v22 method v22.listPlannableUserLists with a fixed connector-owned operation definition.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserLists",
+      "risk": "medium",
+      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v22:listPlannableUserLists",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "customerId": {
+              "type": "string"
+            },
+            "reachApplicationInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "customerReachGroup": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "customerId"
+          ]
+        },
+        "body": {}
+      }
+    }
+  ]
+}

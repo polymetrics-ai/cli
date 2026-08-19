@@ -17,8 +17,10 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
+          "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
-          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart"] },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload"] },
+          "body_required": { "type": "boolean" },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "body_field": { "type": "string" },
           "body_schema": { "type": "object" },
@@ -52,6 +54,11 @@
                     "type": { "type": "string", "enum": ["field", "file"] },
                     "field": { "type": "string" },
                     "content_type": { "type": "string" },
+                    "allowed_media_types": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string" }
+                    },
                     "required": { "type": "boolean" },
                     "max_bytes": { "type": "integer" }
                   }
@@ -59,7 +66,36 @@
               }
             }
           },
+          "base64_upload": {
+            "type": "object",
+            "required": ["source_field", "content_field", "max_decoded_bytes"],
+            "additionalProperties": false,
+            "properties": {
+              "source": { "type": "string", "enum": ["path", "base64"] },
+              "source_field": { "type": "string" },
+              "content_field": { "type": "string" },
+              "max_decoded_bytes": { "type": "integer" },
+              "max_encoded_bytes": { "type": "integer" }
+            }
+          },
           "record_schema": { "type": "object" },
+          "idempotency_key_header": { "type": "string", "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$" },
+          "dynamic_fields": {
+            "type": "object",
+            "required": ["field", "key_pattern"],
+            "additionalProperties": false,
+            "properties": {
+              "field": { "type": "string" },
+              "key_pattern": { "type": "string" },
+              "max_keys": { "type": "integer" },
+              "value_types": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["string", "number", "boolean", "null"] }
+              },
+              "max_value_bytes": { "type": "integer" },
+              "target": { "type": "string", "enum": ["inline", "nested"] }
+            }
+          },
           "delete": {
             "type": "object",
             "additionalProperties": false,
@@ -69,7 +105,45 @@
             }
           },
           "risk": { "type": "string" },
+          "batchable": { "type": "boolean", "default": true },
           "confirm": { "type": "string", "enum": ["", "destructive"] },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
+          "transport_binding": {
+            "type": "object",
+            "required": ["capability", "role", "modes", "inputs"],
+            "additionalProperties": false,
+            "properties": {
+              "capability": { "type": "string", "enum": ["issue_label"] },
+              "role": { "type": "string", "enum": ["apply", "replace", "cleanup"] },
+              "modes": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "enum": ["full_append", "full_overwrite", "incremental_upsert"] }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["input", "field", "shape"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "input": { "type": "string", "enum": ["target_issue", "label"] },
+                    "field": { "type": "string", "pattern": ".+" },
+                    "shape": { "type": "string", "enum": ["scalar", "singleton_array"] }
+                  }
+                }
+              }
+            }
+          },
           "hook": { "type": "string" }
         }
       }

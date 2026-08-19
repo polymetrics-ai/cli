@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints.
 
 ICON
+  id: primetric
   asset: icons/primetric.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,25 +29,25 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   token_url
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   employees:
     primary key: id
-    fields: created_at(), email(), first_name(), id(), last_name(), name(), updated_at()
+    fields: created_at(string), email(string), first_name(string), id(integer), last_name(string), name(string), updated_at(string)
   projects:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   clients:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   roles:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Primetric API read of employee, project, client, and role data

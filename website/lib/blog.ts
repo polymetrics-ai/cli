@@ -62,6 +62,79 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'the-review-agent-was-right',
+    title: 'The Review Agent Was Right',
+    description:
+      'A review agent stopped a claim I had approved earlier that day. We kept the check. We narrowed the claim. The missing evidence went back to the foundation that owns it.',
+    publishedAt: '2026-08-06',
+    updatedAt: '2026-08-06',
+    readingTime: '6 min read',
+    category: 'Build in public',
+    tags: ['AI agents', 'code review', 'connector architecture', 'provenance'],
+    summary:
+      'A review agent caught the same error we were fixing in the product. We had made a claim the evidence could not support.',
+    leadImage: {
+      src: '/blog/the-review-agent-was-right/01-review-agent-was-right.webp',
+      alt: 'A paper-diorama assembly line where one small worker figure raises a hand to stop a hollow sheet before the supervisor can stamp it approved.',
+      caption: 'The check that mattered was the one aimed back at the approval.',
+      width: 1672,
+      height: 941,
+      placement: 'full',
+    },
+    sections: [
+      {
+        heading: 'The small shortcut',
+        body: [
+          'It was a normal working day. Several agents were changing different parts of one codebase. They had separate branches and clear scopes. The work was moving.',
+          'One lane needed a preflight check for the endpoints behind dynamic connector commands. I had a small choice. We could put a second copy of every provider API surface in the binary, or use operation declarations that already ship. I chose the files that already ship.',
+          'The shortcut was reasonable. It kept the binary smaller. It avoided another inventory to keep in sync. It could check that a command matched the operation we had declared for it.',
+        ],
+      },
+      {
+        heading: 'The review sent it back',
+        body: [
+          'Then the lane wrote that the result was provider-surface-backed provenance. A review agent stopped it. The check had read our own operation declarations. It had not read the provider documentation.',
+          'It could show that a command agreed with our declaration. It could not show that the declaration agreed with a provider. That was useful, but narrower than the words in the draft. Our own declarations cannot be independent evidence for themselves.',
+          'I had approved the shortcut and the wording earlier that day. The reviewer was right. We kept the check and changed the claim to command-to-declaration agreement. The separate foundation that owns provider citations and inventories still owns the missing proof.',
+          'Nothing dramatic happened. The binary stayed small. The check stayed useful. We stopped asking it to prove more than it could.',
+        ],
+      },
+      {
+        heading: 'The other stops',
+        body: [
+          'Once I saw that, the rest of the day looked different. Workers had been stopping all along. Each one had found a shared gap and refused to hide it behind a local patch.',
+          'One connector lane reached a generated file. Hand-editing it would have been quick. The worker stopped because a generator defect blocked every new connector. We fixed the generator, not the next connector patch.',
+          'That same lane needed to declare complete output. It would not call the output redacted. The runtime could return the full response, but the schema had no permitted value to ask for it. We added the missing policy.',
+          'Another lane wrote a stricter preflight rule. Its focused tests passed. The real sweep found it would reject 178 existing commands. Those were 178 of 1,239 commands marked implemented.',
+          'The lane stopped. It did not weaken the rule. The shared read contract became its own foundation task.',
+          'One more rule passed every test. Its fixtures supplied data that production deliberately omits. In the shipped binary, every affected command would have failed before dispatch. Review caught it before a user did.',
+          'Review also found a fifth layer of output stripping. Documentation was about to promise complete content while preview and error paths still replaced values. The guarantee stayed out of the docs. We gave the engine gap its own foundation task with preservation tests.',
+        ],
+      },
+      {
+        heading: 'Counting what was there',
+        body: [
+          'The inventory work had the same shape. We rebuilt three connector inventories from provider documentation. One local record said 7 operations. The provider inventory had 1,913.',
+          'Another record said 11 operations. The provider inventory had 1,745. A third had no record. Its provider inventory had 234 operations.',
+          'Those counts did not make hundreds of commands appear. Many rows were blocked, restricted, or deliberately excluded.',
+          'They told us what exists. They told us what the product can execute. They showed what still needs foundation work or a connector-specific implementation.',
+          'The public site had the same problem. It advertised far more operations as generally available than the CLI could actually run. A planned operation is useful information. It is not generally available behavior.',
+        ],
+      },
+      {
+        heading: 'At the end of the day',
+        body: [
+          'There was one more correction. I had treated rate limiting and an authentication-failure cascade as one abstraction. Research showed one builder and two scopes.',
+          'Provider rate policy is not always per token. An authentication-failure cascade can be. We kept the shared builder. We separated its scopes.',
+          'The smaller model was convenient. It was not safe.',
+          'By the end of the day, some branches had stopped. A candidate had been reverted. Documentation got narrower. Shared gaps had names and owners.',
+          'The review agent did not make the codebase correct. It saw a claim with nothing behind it and returned the work. That was the same fault we had spent the day removing from the product: behavior advertised but not implemented. This time it was in my own approval.',
+          'I do not need an agent to agree with an earlier approval. I need it to stop when the evidence ends.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'human-harnesses',
     title: 'Humans Need Harnesses Too',
     description:
@@ -344,7 +417,7 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
         code: `pm reverse plan candidates_to_github --source-table candidates --destination github:github-local --action create_issue --map title:title
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json`,
+pm reverse run <plan-id> --approval-token-stdin --json`,
       },
       {
         heading: 'The repository became a harness',
@@ -596,7 +669,7 @@ pm reverse plan sync --source-table stale_issues --destination github:write --js
         ],
         code: `pm reverse plan sync --source-table candidates --destination github:write --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <token> --json`,
+pm reverse run <plan-id> --approval-token-stdin --json`,
       },
       {
         heading: 'A better default for automation',
@@ -653,6 +726,16 @@ pm reverse run <plan-id> --approve <token> --json`,
     ],
   },
 ];
+
+export function sortBlogPostsByPublishedAt(posts: readonly BlogPost[]): BlogPost[] {
+  return [...posts].sort((a, b) => {
+    if (a.publishedAt !== b.publishedAt) {
+      return a.publishedAt > b.publishedAt ? -1 : 1;
+    }
+    if (a.slug === b.slug) return 0;
+    return a.slug < b.slug ? -1 : 1;
+  });
+}
 
 export function getBlogPost(slug: string): BlogPost | undefined {
   return BLOG_POSTS.find((post) => post.slug === slug);

@@ -1,0 +1,73 @@
+name: Website Data
+
+# The website's generated data is derived from the connector bundles, so the
+# drift check has to run on bundle changes too — not just website changes.
+# It lives in its own workflow rather than in `website.yml` because the
+# generators import only `node:` builtins: this job needs Node and nothing
+# else, so widening its trigger to every connector PR costs seconds, while
+# widening `website.yml` would drag pnpm install, Playwright, and a Next build
+# onto all 550 connectors.
+on:
+  pull_request:
+    paths:
+      - "website/**"
+      - "internal/connectors/defs/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
+      - ".github/workflows/website-data.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "website/**"
+      - "internal/connectors/defs/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
+      - ".github/workflows/website-data.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  generated-data:
+    name: Website generated data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure git defaults
+        run: git config --global init.defaultBranch main
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Named to match the gate referenced in
+      # .agents/connector-migration/validation-gates.md. `npm run` is used
+      # instead of `pnpm run` so no dependency install is needed: package.json
+      # stays the single owner of the generator list, and pnpm would verify
+      # node_modules before running the script.
+      - name: Verify generated website data
+        working-directory: website
+        run: npm run gen:website-data
+
+      # Repo-wide rather than a hand-listed file set: an enumerated list goes
+      # stale silently the moment a generator gains an output, which is how
+      # content/docs/github-cli-surface.mdx and data/connectors.generated.json
+      # both ended up unchecked.
+      - name: Check generated files
+        run: |
+          changed="$(git status --porcelain)"
+          if [ -n "$changed" ]; then
+            printf 'generated website data is stale; run `cd website && pnpm run gen:website-data` and commit the result\n'
+            printf '%s\n' "$changed"
+            git diff
+            exit 1
+          fi

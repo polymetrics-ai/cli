@@ -1,0 +1,24 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "order_id": "fixture_order_id",
+    "id": "fixture_id",
+    "customer": {},
+    "campaign_id": "fixture_campaign_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ecommerce/stores/fixture_store_id/orders/fixture_order_id",
+    "body": {
+      "id": "fixture_id",
+      "customer": {},
+      "campaign_id": "fixture_campaign_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_put_ecommerce_stores_orders"
+    }
+  }
+}

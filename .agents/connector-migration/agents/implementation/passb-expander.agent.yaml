@@ -11,7 +11,7 @@ metadata:
   - api-surface
   - implementation
 role: implementation
-objective: Expand exactly one connector definition bundle to cover practical documented API reads and writes.
+objective: Expand exactly one target connector definition bundle to cover practical documented API reads and writes without absorbing shared foundation work.
 skills:
   required_groups:
   - api_architecture
@@ -46,6 +46,7 @@ outputs:
   - expanded internal/connectors/defs/<connector>/api_surface.json
   - new streams, writes, schemas, fixtures, and docs for implemented capabilities
   - typed blocker notes when the engine cannot honestly model an endpoint
+  - target connector scope, ownership guard evidence, changed-path compliance, and foundation issue/PR path when shared work is needed
 permissions:
   allowed_paths:
   - internal/connectors/defs/<connector>/**
@@ -79,11 +80,14 @@ workflow:
 - run_connector_validation
 guardrails:
   input:
-  - exactly one connector must be assigned
+  - exactly one target connector must be assigned
+  - shared runtime/tooling, schema, generated-index, or unrelated connector needs must be split into a separate foundation issue/PR before connector implementation proceeds
   blocking_human_gates:
   - new dependencies
   - new hook packages
   - shared generated files
+  - generic shared runtime/tooling in connector PRs
+  - unrelated connector changes
   - auth scope changes
   - secrets
   - destructive external actions

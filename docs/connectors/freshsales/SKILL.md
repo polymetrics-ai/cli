@@ -11,6 +11,7 @@ Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads thr
 
 ## Icon
 
+- id: freshsales
 - asset: icons/freshsales.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,30 +28,30 @@ Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads thr
 
 ## Configuration
 
-- domain_name
+- domain_name (required)
 - max_pages
 - mode
 - view_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: city(), country(), created_at(), display_name(), email(), first_name(), id(), job_title(), last_name(), mobile_number(), owner_id(), updated_at(), work_number()
+  - fields: city(string), country(string), created_at(string), display_name(string), email(string), first_name(string), id(integer), job_title(string), last_name(string), mobile_number(string), owner_id(integer), updated_at(string), work_number(string)
 - sales_accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: annual_revenue(), city(), country(), created_at(), id(), industry_type_id(), name(), number_of_employees(), owner_id(), phone(), updated_at(), website()
+  - fields: annual_revenue(number), city(string), country(string), created_at(string), id(integer), industry_type_id(integer), name(string), number_of_employees(integer), owner_id(integer), phone(string), updated_at(string), website(string)
 - deals:
   - primary key: id
   - cursor: updated_at
-  - fields: amount(), created_at(), currency_id(), deal_pipeline_id(), deal_stage_id(), expected_close(), id(), name(), owner_id(), probability(), sales_account_id(), updated_at()
+  - fields: amount(number), created_at(string), currency_id(integer), deal_pipeline_id(integer), deal_stage_id(integer), expected_close(string), id(integer), name(string), owner_id(integer), probability(integer), sales_account_id(integer), updated_at(string)
 - leads:
   - primary key: id
   - cursor: updated_at
-  - fields: city(), company_name(), country(), created_at(), display_name(), email(), first_name(), id(), job_title(), last_name(), lead_stage_id(), owner_id(), updated_at()
+  - fields: city(string), company_name(string), country(string), created_at(string), display_name(string), email(string), first_name(string), id(integer), job_title(string), last_name(string), lead_stage_id(integer), owner_id(integer), updated_at(string)
 
 ## Sync Modes
 

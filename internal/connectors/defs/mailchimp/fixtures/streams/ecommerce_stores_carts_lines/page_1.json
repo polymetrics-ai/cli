@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores/synthetic-conformance-value/carts/synthetic-conformance-value/lines",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "lines": [
+        {
+          "id": "fixture_id",
+          "store_id": "fixture_store_id",
+          "cart_id": "fixture_cart_id",
+          "product_id": "fixture_product_id",
+          "product_title": "fixture_product_title",
+          "product_variant_id": "fixture_product_variant_id",
+          "product_variant_title": "fixture_product_variant_title",
+          "quantity": 1
+        }
+      ]
+    }
+  }
+}

@@ -11,6 +11,7 @@ Reads articles and news sources from the News API (newsapi.org): the everything 
 
 ## Icon
 
+- id: newsapi
 - asset: icons/newsapi.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -39,21 +40,21 @@ Reads articles and news sources from the News API (newsapi.org): the everything 
 - sort_by
 - sources
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - everything:
   - primary key: url
   - cursor: published_at
-  - fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+  - fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
 - top_headlines:
   - primary key: url
   - cursor: published_at
-  - fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+  - fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
 - sources:
   - primary key: id
-  - fields: category(), country(), description(), id(), language(), name(), url()
+  - fields: category(string), country(string), description(string), id(string), language(string), name(string), url(string)
 
 ## Sync Modes
 

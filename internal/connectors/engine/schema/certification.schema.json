@@ -15,6 +15,10 @@
           "type": "object",
           "additionalProperties": true
         },
+        "required_credential_config": {
+          "type": "object",
+          "additionalProperties": true
+        },
         "live_unavailable": {
           "type": "array",
           "items": {
@@ -41,6 +45,8 @@
         "properties": {
           "stage_name": { "type": "string" },
           "command": { "type": "string" },
+          "cohort": { "type": "string" },
+          "generated": { "type": "boolean" },
           "args": {
             "type": "array",
             "items": {
@@ -55,6 +61,177 @@
                 "connector": { "type": "boolean" },
                 "source_credential": { "type": "boolean" }
               }
+            }
+          },
+          "output_assertions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["json_pointer"],
+              "additionalProperties": false,
+              "properties": {
+                "json_pointer": { "type": "string" },
+                "equals": {},
+                "value_type": {
+                  "type": "string",
+                  "enum": ["object", "array", "object_or_array", "string", "number", "boolean", "null"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "direct_read_generation": {
+      "type": "object",
+      "required": ["cohorts"],
+      "additionalProperties": false,
+      "properties": {
+        "required_flag_defaults": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "cohorts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "command_count", "commands"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string"},
+              "command_count": {"type": "integer"},
+              "commands": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "mutation_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["command", "command_tokens", "intent", "cohort", "credential_flag", "declaration", "address", "input_slots", "required_flags", "classification"],
+        "additionalProperties": false,
+        "properties": {
+          "command": { "type": "string" },
+          "command_tokens": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "intent": { "type": "string", "enum": ["direct_write", "reverse_etl"] },
+          "cohort": { "type": "string" },
+          "credential_flag": { "type": "string", "enum": ["--credential"] },
+          "json_mode": { "type": "boolean" },
+          "declaration": {
+            "type": "object",
+            "required": ["kind", "id", "executor"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["operation", "write_action"] },
+              "id": { "type": "string" },
+              "executor": { "type": "string", "enum": ["direct_write", "reverse_plan"] }
+            }
+          },
+          "address": {
+            "type": "object",
+            "required": ["source", "method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "source": { "type": "string", "enum": ["cli_surface", "operation", "write_action"] },
+              "transport": { "type": "string", "enum": ["rest", "graphql"] },
+              "method": { "type": "string" },
+              "path": { "type": "string" }
+            }
+          },
+          "fixture": {
+            "type": "object",
+            "required": ["strategy", "evidence"],
+            "additionalProperties": false,
+            "properties": {
+              "strategy": { "type": "string", "enum": ["derived_collection_cycle", "named_exception"] },
+              "collection": { "type": "string" },
+              "collection_depth": { "type": "integer" },
+              "provisioner_commands": { "type": "array", "items": { "type": "string" } },
+              "exception_code": { "type": "string", "enum": ["graphql_transport_not_collection", "missing_api_surface", "collection_without_creator"] },
+              "evidence": { "type": "string" }
+            }
+          },
+          "input_slots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path", "type", "required"],
+              "additionalProperties": false,
+              "properties": {
+                "path": { "type": "string" },
+                "type": { "type": "string" },
+                "required": { "type": "boolean" },
+                "values": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "required_flags": { "type": "array", "items": { "type": "string" } },
+          "classification": {
+            "type": "object",
+            "required": ["code", "family", "evidence"],
+            "additionalProperties": false,
+            "properties": {
+              "code": { "type": "string", "enum": ["contained", "real_money", "real_people", "public_visibility", "third_party_scope", "unassessed"] },
+              "family": { "type": "string" },
+              "evidence": { "type": "string" }
+            }
+          },
+          "generated": { "type": "boolean" },
+          "override_reason": { "type": "string" }
+        }
+      }
+    },
+    "mutation_generation": {
+      "type": "object",
+      "required": ["cohort", "unassessed", "families"],
+      "additionalProperties": false,
+      "properties": {
+        "cohort": {
+          "type": "object",
+          "required": ["name", "command_count", "intents"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "command_count": { "type": "integer" },
+            "intents": { "type": "array", "minItems": 1, "items": { "type": "string", "enum": ["direct_write", "reverse_etl"] } }
+          }
+        },
+        "unassessed": {
+          "type": "object",
+          "required": ["code", "evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "code": { "type": "string", "enum": ["unassessed"] },
+            "evidence": { "type": "string" }
+          }
+        },
+        "families": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "classification"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "classification": {
+                "type": "object",
+                "required": ["code", "evidence"],
+                "additionalProperties": false,
+                "properties": {
+                  "code": { "type": "string", "enum": ["contained", "real_money", "real_people", "public_visibility", "third_party_scope", "unassessed"] },
+                  "evidence": { "type": "string" }
+                }
+              },
+              "commands": { "type": "array", "items": { "type": "string" } },
+              "operations": { "type": "array", "items": { "type": "string" } },
+              "writes": { "type": "array", "items": { "type": "string" } },
+              "intents": { "type": "array", "items": { "type": "string", "enum": ["direct_write", "reverse_etl"] } },
+              "exclude_commands": { "type": "array", "items": { "type": "string" } },
+              "exclude_operations": { "type": "array", "items": { "type": "string" } },
+              "exclude_writes": { "type": "array", "items": { "type": "string" } }
             }
           }
         }
@@ -88,6 +265,104 @@
         }
       }
     },
+    "graphql": {
+      "type": "object",
+      "required": ["source_lock", "command_prefix", "schema_conformant_reason", "fixture_required_reason", "live_candidates"],
+      "additionalProperties": false,
+      "properties": {
+        "source_lock": { "type": "string" },
+        "command_prefix": { "type": "string" },
+        "schema_conformant_reason": { "type": "string" },
+        "fixture_required_reason": { "type": "string" },
+        "live_candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["stage_name", "command", "args", "output_assertions"],
+            "additionalProperties": false,
+            "properties": {
+              "stage_name": { "type": "string" },
+              "command": { "type": "string" },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "literal": { "type": "string" },
+                    "config_key": { "type": "string" },
+                    "default": { "type": "string" },
+                    "omit_when_empty": { "type": "boolean" },
+                    "when_config_key": { "type": "string" },
+                    "connector": { "type": "boolean" },
+                    "source_credential": { "type": "boolean" }
+                  }
+                }
+              },
+              "output_assertions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["json_pointer"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "json_pointer": { "type": "string" },
+                    "equals": {},
+                    "value_type": {
+                      "type": "string",
+                      "enum": ["object", "array", "object_or_array", "string", "number", "boolean", "null"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidence_import": {
+      "type": "object",
+      "required": ["provider"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "database": {
+          "type": "object",
+          "required": ["protocol", "operation_prefix", "change_capture_statement"],
+          "additionalProperties": false,
+          "properties": {
+            "protocol": { "type": "string" },
+            "operation_prefix": { "type": "string" },
+            "change_capture_statement": { "type": "string" }
+          }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["scope"],
+            "additionalProperties": false,
+            "properties": {
+              "scope": { "type": "string", "enum": ["capability", "workflow", "sync_mode", "flow"] },
+              "function_kind": { "type": "string" },
+              "workflow_kind": { "type": "string" },
+              "sync_mode": { "type": "string" },
+              "primitive": { "type": "string" },
+              "source": { "type": "string" },
+              "destination": { "type": "string" },
+              "flow_kind": { "type": "string" },
+              "stage_sets": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["direct_read_candidates", "binary_candidates", "graphql_live_candidates"] }
+              },
+              "stages": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
     "write_pairings": {
       "type": "array",
       "items": {
@@ -106,6 +381,75 @@
             "additionalProperties": true
           }
         }
+      }
+    },
+    "write_inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["classification", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "classification": { "type": "string" },
+              "reason": { "type": "string" },
+              "actions": { "type": "array", "items": { "type": "string" } },
+              "paths": { "type": "array", "items": { "type": "string" } },
+              "path_prefixes": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "write_wave": {
+      "type": "object",
+      "required": ["fixture", "actions", "action_bindings", "scenarios", "tag_prefix", "tag_subject_prefix"],
+      "additionalProperties": false,
+      "properties": {
+        "fixture": {
+          "type": "object",
+          "required": ["config", "description"],
+          "additionalProperties": false,
+          "properties": {
+            "config": { "type": "object", "additionalProperties": true },
+            "description": { "type": "string" }
+          }
+        },
+        "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "action_bindings": { "type": "object", "minProperties": 1, "additionalProperties": true },
+        "scenarios": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "ledger_name", "tag_name", "actions"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "ledger_name": { "type": "string" },
+              "tag_name": { "type": "string" },
+              "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            }
+          }
+        },
+        "blocked_actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "actions", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "tag_prefix": { "type": "string" },
+        "tag_subject_prefix": { "type": "string" }
       }
     }
   }

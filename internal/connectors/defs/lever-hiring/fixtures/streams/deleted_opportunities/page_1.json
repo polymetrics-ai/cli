@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/opportunities/deleted",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "deleted_opportunities_fixture_1",
+          "text": "Fixture deleted opportunities",
+          "name": "Fixture deleted opportunities",
+          "createdAt": 1767225601000,
+          "updatedAt": 1767225602000
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

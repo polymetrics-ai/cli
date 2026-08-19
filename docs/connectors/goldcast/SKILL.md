@@ -11,6 +11,7 @@ Reads Goldcast organizations, events, agenda items, discussion groups, and track
 
 ## Icon
 
+- id: goldcast
 - asset: icons/goldcast.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,29 +29,29 @@ Reads Goldcast organizations, events, agenda items, discussion groups, and track
 ## Configuration
 
 - base_url
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 
 - organizations:
   - primary key: id
-  - fields: created_at(), domain(), id(), name(), slug()
+  - fields: created_at(string), domain(string), id(string), name(string), slug(string)
 - events:
   - primary key: id
-  - fields: created_at(), end_time(), id(), organization(), start_time(), status(), timezone(), title()
+  - fields: created_at(string), end_time(string), id(string), organization(string), start_time(string), status(string), timezone(string), title(string)
 - agenda_items:
   - primary key: id
-  - fields: description(), end_time(), event(), id(), start_time(), title()
+  - fields: description(string), end_time(string), event(string), id(string), start_time(string), title(string)
 - discussion_groups:
   - primary key: id
-  - fields: capacity(), created_at(), event(), id(), name()
+  - fields: capacity(integer), created_at(string), event(string), id(string), name(string)
 - tracks:
   - primary key: id
-  - fields: color(), event(), id(), name()
+  - fields: color(string), event(string), id(string), name(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

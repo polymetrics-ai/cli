@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "cost_category_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/costCategories/cost_category_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "cost_category_fixture_1"
+    }
+  }
+}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads OneSignal account-level applications through the OneSignal REST API. Device/notification/outcome streams remain quarantined (ENGINE_GAP: no per-stream auth override).
 
 ICON
+  id: onesignal
   asset: icons/onesignal.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,15 +29,15 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  user_auth_key (secret)
+  user_auth_key (secret) (required)
 
 ETL STREAMS
   apps:
     primary key: id
-    fields: created_at(), id(), messageable_players(), name(), organization_id(), players(), updated_at()
+    fields: created_at(string), id(string), messageable_players(integer), name(string), organization_id(string), players(integer), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external OneSignal API read of account-level application metadata

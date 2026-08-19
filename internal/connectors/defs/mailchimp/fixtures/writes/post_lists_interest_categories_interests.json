@@ -1,0 +1,22 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "interest_category_id": "fixture_interest_category_id",
+    "name": "fixture_name",
+    "display_order": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/interest-categories/fixture_interest_category_id/interests",
+    "body": {
+      "name": "fixture_name",
+      "display_order": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_interest_categories_interests"
+    }
+  }
+}

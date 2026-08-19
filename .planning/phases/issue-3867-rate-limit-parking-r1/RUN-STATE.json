@@ -1,0 +1,8 @@
+{
+  "issue": 3867,
+  "state": "verified_and_reviewed",
+  "base": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-3867-rate-parking-r1",
+  "manual_gsd_fallback": "Issue is not a numbered roadmap phase and the canonical single-worker contract disallows role spawning; generated prompts execute inline with durable TDD, verification, and review evidence.",
+  "next": "rebase to integration base, push, open PR, and read back the GitHub API base"
+}

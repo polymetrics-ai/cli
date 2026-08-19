@@ -11,9 +11,11 @@ Reads Smartwaiver waivers, checkins, templates, published keys, user info, and a
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -30,37 +32,38 @@ Reads Smartwaiver waivers, checkins, templates, published keys, user info, and a
 - end_date
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - waivers:
   - primary key: waiverId
-  - fields: createdOn(), email(), expirationDate(), expired(), firstName(), lastName(), templateId(), title(), verified(), waiverId()
+  - fields: createdOn(string), email(string), expirationDate(string), expired(boolean), firstName(string), lastName(string), templateId(string), title(string), verified(boolean), waiverId(string)
 - checkins:
   - primary key: checkinId
-  - fields: checkinId(), date(), dateSigned(), firstName(), lastName(), templateId(), waiverId()
+  - fields: checkinId(string), date(string), dateSigned(string), firstName(string), lastName(string), templateId(string), waiverId(string)
 - templates:
   - primary key: templateId
-  - fields: kioskUrl(), publishedOn(), publishedVersion(), templateId(), title(), webUrl()
+  - fields: kioskUrl(string), publishedOn(string), publishedVersion(integer), templateId(string), title(string), webUrl(string)
 - published_keys:
   - primary key: key
-  - fields: createdAt(), key(), label()
+  - fields: createdAt(string), key(string), label(string)
 - user_info:
   - primary key: username
-  - fields: email(), ipAddress(), signupDate(), username()
+  - fields: email(string), ipAddress(string), signupDate(string), username(string)
 - settings:
   - primary key: type
-  - fields: settings(), type()
+  - fields: settings(object), type(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - set_webhook_config:
   - endpoint: PUT /v4/webhooks/configure
+  - required fields: endpoint
   - risk: changes where the account's near-real-time waiver-signed webhook notifications are delivered; approval required
 - resend_webhook:
   - endpoint: PUT /v4/webhooks/resend/{{ record.waiver_id }}
@@ -68,6 +71,7 @@ Reads Smartwaiver waivers, checkins, templates, published keys, user info, and a
   - risk: re-triggers the new-waiver webhook delivery for a specific waiver (testing aid, heavily rate limited by Smartwaiver at 2/minute); approval required
 - send_sms:
   - endpoint: POST /v4/sms
+  - required fields: templateId, number
   - risk: sends an outbound SMS with a waiver-signing link to a real phone number (rate limited daily by Smartwaiver for anti-spam); approval required
 - prefill_template:
   - endpoint: POST /v4/templates/{{ record.template_id }}/prefill

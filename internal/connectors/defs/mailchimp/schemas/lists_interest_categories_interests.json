@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_interest_categories_interests",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "category_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscriber_count": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "display_order": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "interest_category_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

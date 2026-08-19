@@ -11,9 +11,11 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,40 +29,41 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 ## Configuration
 
 - base_url
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 
 - devices:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - variables:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - dashboards:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - events:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - device_groups:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - device_types:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - variable_values:
   - primary key: variable_id, timestamp
-  - fields: context(), timestamp(), value(), variable_id()
+  - fields: context(object), timestamp(integer), value(number), variable_id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_device:
   - endpoint: POST api/v2.0/devices/
+  - required fields: label
   - risk: creates a new Ubidots device; low-risk external mutation, no approval required
 - update_device:
   - endpoint: PATCH api/v2.0/devices/{{ record.id }}/
@@ -72,6 +75,7 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
   - risk: permanently deletes a device and all of its variables/values; destructive and irreversible; approval required
 - create_variable:
   - endpoint: POST api/v2.0/variables/
+  - required fields: label, device
   - risk: creates a new variable under an existing device; low-risk external mutation, no approval required
 - update_variable:
   - endpoint: PATCH api/v2.0/variables/{{ record.id }}/
@@ -83,8 +87,8 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
   - risk: permanently deletes a variable and all of its stored values; destructive and irreversible; approval required
 - create_variable_value:
   - endpoint: POST api/v1.6/variables/{{ record.variable_id }}/values/
-  - required fields: variable_id
-  - optional fields: value, timestamp, context
+  - required fields: variable_id, value
+  - optional fields: timestamp, context
   - risk: injects a new data point (dot) into an existing variable; low-risk external mutation, no approval required
 
 ## Security

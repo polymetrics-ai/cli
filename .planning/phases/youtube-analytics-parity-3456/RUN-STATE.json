@@ -1,0 +1,84 @@
+{
+  "phase": "youtube-analytics-parity-3456",
+  "branch": "fm/cli-youtube-analytics-parity-wave03-r1",
+  "status": "verified_pending_commit",
+  "gsd": {
+    "adapter_doctor": "passed",
+    "adapter_list": "passed",
+    "programming_loop_prompt": "unavailable: scripts/gsd unknown command programming-loop",
+    "fallback": "manual-gsd"
+  },
+  "issue_range": [
+    3456,
+    3457,
+    3458,
+    3459,
+    3460,
+    3461,
+    3462,
+    3463
+  ],
+  "official_inventory": {
+    "operations_total": 16,
+    "youtube_analytics_v2": 8,
+    "youtube_reporting_v1": 8,
+    "pre_edit_local_rows": 7,
+    "pre_edit_missing": 10,
+    "pre_edit_extra": 1,
+    "post_edit_local_rows": 16,
+    "post_edit_missing": 0,
+    "post_edit_extra": 0,
+    "post_edit_covered": 14,
+    "post_edit_blocked_operations": 2
+  },
+  "implementation": {
+    "production_edits_started": true,
+    "streams": [
+      "jobs",
+      "job",
+      "report_types",
+      "reports",
+      "report",
+      "groups",
+      "group_items"
+    ],
+    "writes": [
+      "create_job",
+      "delete_job",
+      "create_group",
+      "update_group",
+      "delete_group",
+      "create_group_item",
+      "delete_group_item"
+    ],
+    "blocked_operations": [
+      "youtubeAnalytics.reports.query",
+      "youtubereporting.media.download"
+    ]
+  },
+  "github": {
+    "issue_addendum_appended": [
+      3456,
+      3457,
+      3458,
+      3459,
+      3460,
+      3461,
+      3462,
+      3463
+    ]
+  },
+  "verification": {
+    "connectorgen_validate_root": "passed",
+    "connectorgen_validate_single_connector_path": "attempted; shared tool treats path as defs root and fails on fixtures/schemas child dirs",
+    "youtube_conformance": "passed",
+    "cli_connector_dynamic_golden": "passed",
+    "go_build_pm": "passed",
+    "connector_boundary": "passed",
+    "make_verify": "passed",
+    "git_diff_check": "passed",
+    "required_gates_complete": true,
+    "commit_created": true,
+    "pushed": false
+  }
+}

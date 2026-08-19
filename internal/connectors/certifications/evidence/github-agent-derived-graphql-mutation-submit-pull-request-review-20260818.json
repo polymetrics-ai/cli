@@ -1,0 +1,193 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_submit_pull_request_review",
+  "provider": "github",
+  "executed_at": "2026-08-18T06:24:30.88538Z",
+  "run_id": "rrun_8fd441f4d3dba41d",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:efbe8c3e605b59d025dc2cfa52cb35af95c96cfae38d57069a613dd3c946c572}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_submit_pull_request_review",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:9118622518c610cc6a696388db5db474006b499d8b24dbb17d277d3544787208}}",
+              "query": "{{pmcertfp:v1:3d80d9eb962437b12fda63eaa32b924a03912a4f0fcfcb5239d0d315d858bb1e}}",
+              "variables": {
+                "input": {
+                  "pullRequestId": "{{pmcertfp:v1:a5789112d4c4da52d4bc02996262c487c2f8f25a484c1c20670f03a48dbbc904}}",
+                  "pullRequestReviewId": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}",
+                  "event": "{{pmcertfp:v1:27530e03a03c8d06ec37995a2925b7fa67470bc0c0b1a59148e0b87497b85c1e}}",
+                  "body": "{{pmcertfp:v1:5dccc9f95b3ada7cb0b65e02cc1431368f7b07455696745726eb90756cab26a9}}"
+                }
+              }
+            },
+            "original_bytes": 382,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "submitPullRequestReview": {
+                "__typename": "{{pmcertfp:v1:364ca57f96b8048bd648e59bc8a4833ad3df49cb5824d7c9b88c051396c81c10}}"
+              }
+            },
+            "original_bytes": 75,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_commented_exact_body_wrong_pending_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:f58f38e460f4aa0e68295e1f8a404644e434dae92a6a32350df56bed6677cdf6}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}"
+              }
+            },
+            "original_bytes": 151,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}",
+                  "state": "{{pmcertfp:v1:aa9829c95c554332fbf9803bebe4c1d9ab0be507830304188d865afbb3668d3c}}",
+                  "body": "{{pmcertfp:v1:5dccc9f95b3ada7cb0b65e02cc1431368f7b07455696745726eb90756cab26a9}}",
+                  "pullRequest": {
+                    "id": "{{pmcertfp:v1:a5789112d4c4da52d4bc02996262c487c2f8f25a484c1c20670f03a48dbbc904}}",
+                    "state": "{{pmcertfp:v1:a87e08e7b07fedee424da4e92b0f21c4c143942b57fb428a4811b288ccf9afd4}}"
+                  }
+                }
+              }
+            },
+            "original_bytes": 173,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_close_pr_and_delete_branch",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:9e3446f3dfc70473558c1a231cb79753a656f5eadc81084c8e296fc9615ba46d}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {},
+            "original_bytes": 2,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "branch_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "review_and_pr": {
+                "data": {
+                  "node": {
+                    "id": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}",
+                    "state": "{{pmcertfp:v1:aa9829c95c554332fbf9803bebe4c1d9ab0be507830304188d865afbb3668d3c}}",
+                    "body": "{{pmcertfp:v1:5dccc9f95b3ada7cb0b65e02cc1431368f7b07455696745726eb90756cab26a9}}",
+                    "pullRequest": {
+                      "id": "{{pmcertfp:v1:a5789112d4c4da52d4bc02996262c487c2f8f25a484c1c20670f03a48dbbc904}}",
+                      "state": "{{pmcertfp:v1:a87e08e7b07fedee424da4e92b0f21c4c143942b57fb428a4811b288ccf9afd4}}"
+                    }
+                  }
+                }
+              },
+              "terminal_disposal": "{{pmcertfp:v1:cf41bc6b2a631ca137aad54cf4edee8c926de63fe23e208530e18afcf5177373}}"
+            },
+            "original_bytes": 252,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_contained_closed_and_branch_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:f58f38e460f4aa0e68295e1f8a404644e434dae92a6a32350df56bed6677cdf6}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}"
+              }
+            },
+            "original_bytes": 151,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "branch_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "review_and_pr": {
+                "data": {
+                  "node": {
+                    "id": "{{pmcertfp:v1:d1d74fb10836ed880e26a5d113a05c0e7b07f418e1b12c614bcbd46fbaf79a3c}}",
+                    "state": "{{pmcertfp:v1:aa9829c95c554332fbf9803bebe4c1d9ab0be507830304188d865afbb3668d3c}}",
+                    "body": "{{pmcertfp:v1:5dccc9f95b3ada7cb0b65e02cc1431368f7b07455696745726eb90756cab26a9}}",
+                    "pullRequest": {
+                      "id": "{{pmcertfp:v1:a5789112d4c4da52d4bc02996262c487c2f8f25a484c1c20670f03a48dbbc904}}",
+                      "state": "{{pmcertfp:v1:a87e08e7b07fedee424da4e92b0f21c4c143942b57fb428a4811b288ccf9afd4}}"
+                    }
+                  }
+                }
+              },
+              "terminal_disposal": "{{pmcertfp:v1:cf41bc6b2a631ca137aad54cf4edee8c926de63fe23e208530e18afcf5177373}}"
+            },
+            "original_bytes": 252,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

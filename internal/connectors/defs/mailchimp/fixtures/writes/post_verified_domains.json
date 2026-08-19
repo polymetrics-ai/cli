@@ -1,0 +1,18 @@
+{
+  "record": {
+    "verification_email": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/verified-domains",
+    "body": {
+      "verification_email": "fixture@example.invalid"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_verified_domains"
+    }
+  }
+}

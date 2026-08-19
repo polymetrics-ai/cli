@@ -1,0 +1,316 @@
+{
+  "parent_issue": {
+    "number": 3579,
+    "url": "https://github.com/polymetrics-ai/cli/issues/3579",
+    "title": "Connector path ownership guardrail remediation",
+    "state": "open"
+  },
+  "parent_branch": "fix/3579-connector-path-ownership-guardrails",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/3580",
+    "base": "main",
+    "head": "fix/3579-connector-path-ownership-guardrails",
+    "draft": true,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 3581,
+      "status": "blocked",
+      "dependencies": [
+        "#3595"
+      ],
+      "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests; integration blocked until #3595 canonical icon-registry foundation lands",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 3595,
+      "status": "sub_pr_open",
+      "dependencies": [],
+      "write_scope": "shared icon-registry foundation: internal/connectors/icon_data.json, internal/connectors/icons.go, cmd/iconregistrygen/**, website scripts, canonical docs icon assets, focused tests/docs",
+      "decision": "spawned"
+    },
+    {
+      "number": 3582,
+      "status": "planned",
+      "dependencies": [
+        "#3581"
+      ],
+      "write_scope": ".github/workflows/**; Makefile/hooks/docs",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 3583,
+      "status": "provisionally_integrated",
+      "dependencies": [],
+      "write_scope": ".agents/**; .pi/**; .github templates; no-mistakes guidance",
+      "decision": "spawned"
+    },
+    {
+      "number": 3584,
+      "status": "sub_pr_open",
+      "dependencies": [],
+      "write_scope": "HubSpot/Bitbucket ledger; internal/cli/**; internal/app/**; internal/connectors/manifest.go; bundleregistry tests",
+      "decision": "spawned"
+    },
+    {
+      "number": 3585,
+      "status": "sub_pr_open",
+      "dependencies": [
+        "#3581 partial for cmd/connectorgen edits"
+      ],
+      "write_scope": "Stripe/Freshchat/Google Ads shared engine/runner/connectorgen ledger/tests",
+      "decision": "spawned"
+    },
+    {
+      "number": 3586,
+      "status": "sub_pr_open",
+      "dependencies": [],
+      "write_scope": "generated/manual/docs/website unrelated connector remediation; guard fixtures",
+      "decision": "spawned"
+    },
+    {
+      "number": 3587,
+      "status": "planned",
+      "dependencies": [
+        "#3581",
+        "#3582",
+        "#3584",
+        "#3585",
+        "#3586"
+      ],
+      "write_scope": "historical audit ledger and end-to-end enforcement proof",
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-08-02T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        3579
+      ],
+      "reason": "created parent issue, parent branch, and seed planning artifacts before sub-issue workers; sub-issues not yet created, so no worker-ready issue exists"
+    },
+    {
+      "timestamp": "2026-08-02T06:05:39Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        3579,
+        3581,
+        3582,
+        3583,
+        3584,
+        3585,
+        3586,
+        3587
+      ],
+      "reason": "recovered from transient failure; reconciled parent issue/PR and created/linked full sub-issue roster before worker spawn"
+    },
+    {
+      "timestamp": "2026-08-02T11:20:57Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        3583
+      ],
+      "reason": "captain-authorized parent-orchestrator integration of green stacked sub-PR #3588 into parent branch; provisional parent PR fallback review remains pending before parent PR readiness"
+    },
+    {
+      "timestamp": "2026-08-02T13:58:26Z",
+      "decision": "spawned",
+      "issue_numbers": [
+        3595
+      ],
+      "reason": "captain-approved icon-registry-single-source-bare-identifiers foundation must land before PR #3590 R5/R6 reconciliation and #3582 unblocking"
+    }
+  ],
+  "subissues": [
+    {
+      "number": 3581,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3581",
+      "branch": "fix/3581-target-scope-core-validator",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3590",
+      "worker": "pm-gsd-worker",
+      "status": "blocked",
+      "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests",
+      "worker_directory": "pending",
+      "verification": "blocked on #3595 canonical icon-registry foundation; existing prior-config no-mistakes run 01KZ14EMZW4HR7X343SXS62X3Q remains parked and must not be used for integration; fresh 5.6 SOL validation required after reconciliation",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "blocked",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "R5 superseded by #3595 canonical icon-registry foundation; R6 waits for foundation; no response sent to PR #3590 R5/R6 gate",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/issues/3595"
+      }
+    },
+    {
+      "number": 3595,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3595",
+      "branch": "fix/3595-icon-registry-single-source",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3596",
+      "worker": "pm-gsd-worker",
+      "status": "sub_pr_open",
+      "write_scope": "shared icon-registry foundation: canonical bare icon registry, docs/connectors/icons canonical assets, website generated copies, Go/runtime/website/ownership consumers, tests/docs",
+      "worker_directory": "/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3595-icon-registry",
+      "verification": "planning scaffold pushed at b814e85a6; implementation and 5.6 SOL no-mistakes validation pending",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "b814e85a6",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending implementation",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 3582,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3582",
+      "branch": "fix/3582-connector-ownership-ci-gate",
+      "pr_url": "pending",
+      "worker": "pm-gsd-worker",
+      "status": "planned",
+      "write_scope": ".github/workflows/**; Makefile/hooks/docs",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 3583,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3583",
+      "branch": "fix/3583-pm-no-mistakes-connector-lane",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3588",
+      "worker": "pm-gsd-worker",
+      "status": "provisionally_integrated",
+      "write_scope": ".agents/**; .pi/**; .github templates; no-mistakes guidance",
+      "worker_directory": "/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3583-pm",
+      "verification": "no-mistakes run 01KZ0SEAKBB9TG7N3SMG97XKJS passed at sub-PR head 0c321595d7ae4852550a5012a895c3e11f7e8298; GitHub required/current checks green per captain authority; squash-merged into parent as 86b91fc40f46b8653538531fc40c183913676f05",
+      "automated_review": {
+        "primary_route": "human",
+        "status": "pending",
+        "head_sha": "0c321595d7ae4852550a5012a895c3e11f7e8298",
+        "reviewed_range": "9dde38b36a52d7b67c51645770f3722dd8abf733..86b91fc40f46b8653538531fc40c183913676f05",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "human",
+        "disposition_summary": "Captain-authorized provisional integration after no-mistakes review/test/document/lint/push/pr/ci passed; parent PR #3580 remains draft and final review/human gate pending.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/3588"
+      }
+    },
+    {
+      "number": 3584,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3584",
+      "branch": "fix/3584-hubspot-bitbucket-forward-remediation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3591",
+      "worker": "pm-gsd-worker",
+      "status": "sub_pr_open",
+      "write_scope": "HubSpot/Bitbucket ledger; internal/cli/**; internal/app/**; internal/connectors/manifest.go; bundleregistry tests",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 3585,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3585",
+      "branch": "fix/3585-shared-engine-runner-remediation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3593",
+      "worker": "pm-gsd-worker",
+      "status": "sub_pr_open",
+      "write_scope": "Stripe/Freshchat/Google Ads shared engine/runner/connectorgen ledger/tests",
+      "worker_directory": "pending",
+      "verification": "worker PR #3593 open; local gates recorded in PR body; integration pending parent-orchestrator merge arbitration",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 3586,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3586",
+      "branch": "fix/3586-generated-unrelated-connector-remediation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3589",
+      "worker": "pm-gsd-worker",
+      "status": "sub_pr_open",
+      "write_scope": "generated/manual/docs/website unrelated connector remediation; guard fixtures",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 3587,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3587",
+      "branch": "fix/3587-first-eight-audit-ledger-proof",
+      "pr_url": "pending",
+      "worker": "pm-gsd-worker",
+      "status": "planned",
+      "write_scope": "historical audit ledger and end-to-end enforcement proof",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "secret handling changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "generic raw write tooling",
+    "reverse ETL execution outside plan-preview-approval-execute",
+    "branch protection/ruleset permission denial"
+  ],
+  "updated_at": "2026-08-02T13:58:26Z"
+}

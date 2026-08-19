@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadata, exclusion lists, servers, and feedback options; exposes safe segment, guide, and feedback mutations.
 
 ICON
+  id: pendo
   asset: icons/pendo.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -48,99 +49,99 @@ CONFIGURATION
   tracktype_id
   visitor_history_starttime
   visitor_id
-  integration_key (secret)
+  integration_key (secret) (required)
 
 ETL STREAMS
   visitors:
     primary key: id
     cursor: lastVisit
-    fields: accountId(), email(), id(), lastVisit()
+    fields: accountId(string), email(string), id(string), lastVisit(string)
   accounts:
     primary key: id
     cursor: lastVisit
-    fields: id(), lastVisit(), name()
+    fields: id(string), lastVisit(string), name(string)
   pages:
     primary key: id
     cursor: lastUpdated
-    fields: id(), lastUpdated(), name()
+    fields: id(string), lastUpdated(string), name(string)
   features:
     primary key: id
     cursor: lastUpdated
-    fields: id(), lastUpdated(), name()
+    fields: id(string), lastUpdated(string), name(string)
   page_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   pages_by_ids:
     primary key: id
-    fields: id()
+    fields: id(string)
   feature_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   features_by_ids:
     primary key: id
-    fields: id()
+    fields: id(string)
   tracktypes:
     primary key: id
-    fields: id()
+    fields: id(string)
   tracktype_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   visitor_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   visitor_history:
     primary key: ts, type
-    fields: ts(), type()
+    fields: ts(string), type(string)
   account_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   bulkdelete_requests:
     primary key: id
-    fields: id()
+    fields: id(string)
   bulkdelete_request:
     primary key: id
-    fields: id()
+    fields: id(string)
   segments:
     primary key: id
-    fields: id()
+    fields: id(string)
   segment_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   segment_status:
     primary key: requestId
-    fields: requestId()
+    fields: requestId(string)
   reports:
     primary key: id
-    fields: id()
+    fields: id(string)
   report_results_json:
   guides:
     primary key: id
-    fields: id()
+    fields: id(string)
   guide_by_id:
     primary key: id
-    fields: id()
+    fields: id(string)
   guide_history:
     primary key: id
-    fields: id()
+    fields: id(string)
   guide_order:
   metadata_schema:
   metadata_dependencies:
   metadata_field_dependencies:
   blacklist:
     primary key: id
-    fields: id()
+    fields: id(string)
   blacklist_by_type:
     primary key: id
-    fields: id()
+    fields: id(string)
   servers:
     primary key: id
-    fields: id()
+    fields: id(string)
   server_by_name:
     primary key: id
-    fields: id()
+    fields: id(string)
   servers_by_flag:
     primary key: id
-    fields: id()
+    fields: id(string)
   feedback_options:
 
 SYNC MODES
@@ -153,10 +154,11 @@ REVERSE ETL ACTIONS
     risk: starts an asynchronous Pendo segment visitor export job; approval required
   create_segment:
     endpoint: POST /segment/upload
+    required fields: name, visitors
     risk: creates a shared Pendo segment from visitor ids; approval required
   update_segment:
     endpoint: PUT /segment/{{ record.segmentId }}
-    required fields: segmentId
+    required fields: segmentId, name, visitors
     risk: replaces the visitor membership for a Pendo segment; approval required
   delete_segment:
     endpoint: DELETE /segment/{{ record.segmentId }}
@@ -172,7 +174,7 @@ REVERSE ETL ACTIONS
     risk: removes a visitor from a Pendo segment; destructive membership mutation
   patch_segment_visitors:
     endpoint: PATCH /segment/{{ record.segmentId }}/visitor
-    required fields: segmentId
+    required fields: segmentId, patch
     risk: adds/removes a small batch of visitors for a Pendo segment; approval required
   reset_guide_for_visitor:
     endpoint: POST /guide/{{ record.guideId }}/visitor/{{ record.visitorId }}/reset
@@ -191,14 +193,15 @@ REVERSE ETL ACTIONS
     risk: resets all staged guides in the subscription; approval required
   change_guide_segment:
     endpoint: PUT /guide/{{ record.guideId }}/segment
-    required fields: guideId
+    required fields: guideId, segmentId
     risk: changes the segment assigned to a Pendo guide; approval required
   change_guide_state:
     endpoint: PUT /guide/{{ record.guideId }}/state
-    required fields: guideId
+    required fields: guideId, state
     risk: changes a Pendo guide state such as public, staged, disabled, or draft; approval required
   create_feedback:
     endpoint: POST /feedback
+    required fields: accountId, visitorId, title
     risk: creates a Pendo Listen feedback item; approval required
   update_feedback:
     endpoint: PATCH /feedback/{{ record.id }}
@@ -206,7 +209,7 @@ REVERSE ETL ACTIONS
     risk: updates a Pendo Listen feedback item; approval required
   delete_feedback:
     endpoint: DELETE /feedback
-    optional fields: ids
+    required fields: ids
     risk: deletes Pendo Listen feedback items by id; destructive external mutation
 
 SECURITY

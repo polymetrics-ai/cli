@@ -11,6 +11,7 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
 
 ## Icon
 
+- id: customer-io
 - asset: icons/customer-io.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,70 +28,70 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - page_size
-- app_api_key (secret)
+- app_api_key (secret) (required)
 
 ## ETL Streams
 
 - campaigns:
   - primary key: id
   - cursor: updated
-  - fields: active(), created(), id(), name(), state(), type(), updated()
+  - fields: active(boolean), created(integer), id(integer), name(string), state(string), type(string), updated(integer)
 - newsletters:
   - primary key: id
   - cursor: updated
-  - fields: created(), id(), name(), subject(), type(), updated()
+  - fields: created(integer), id(integer), name(string), subject(string), type(string), updated(integer)
 - segments:
   - primary key: id
   - cursor: updated
-  - fields: description(), id(), name(), state(), type(), updated()
+  - fields: description(string), id(integer), name(string), state(string), type(string), updated(integer)
 - broadcasts:
   - primary key: id
   - cursor: updated
-  - fields: active(), created(), id(), name(), state(), type(), updated()
+  - fields: active(boolean), created(integer), id(integer), name(string), state(string), type(string), updated(integer)
 - activities:
   - primary key: id
   - cursor: timestamp
-  - fields: customer_id(), customer_identifiers(), data(), delivery_id(), delivery_type(), id(), timestamp(), type()
+  - fields: customer_id(string), customer_identifiers(object), data(object), delivery_id(string), delivery_type(string), id(string), timestamp(integer), type(string)
 - messages:
   - primary key: id
-  - fields: action_id(), broadcast_id(), campaign_id(), content_id(), created(), customer_id(), failure_message(), id(), newsletter_id(), recipient(), subject(), type()
+  - fields: action_id(integer), broadcast_id(integer), campaign_id(integer), content_id(integer), created(integer), customer_id(string), failure_message(string), id(string), newsletter_id(integer), recipient(string), subject(string), type(string)
 - exports:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), downloads(), failed(), id(), status(), total(), type(), updated_at(), user_email(), user_id()
+  - fields: created_at(integer), description(string), downloads(integer), failed(boolean), id(integer), status(string), total(integer), type(string), updated_at(integer), user_email(string), user_id(integer)
 - transactional:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), hide_message_body(), id(), link_tracking(), name(), open_tracking(), queue_drafts(), send_to_unsubscribed(), updated_at()
+  - fields: created_at(integer), description(string), hide_message_body(boolean), id(integer), link_tracking(boolean), name(string), open_tracking(boolean), queue_drafts(boolean), send_to_unsubscribed(boolean), updated_at(integer)
 - object_types:
   - primary key: id
-  - fields: enabled(), icon(), id(), name(), singular_name(), singular_slug(), slug()
+  - fields: enabled(boolean), icon(string), id(string), name(string), singular_name(string), singular_slug(string), slug(string)
 - reporting_webhooks:
   - primary key: id
-  - fields: disabled(), endpoint(), events(), full_resolution(), id(), name(), with_content()
+  - fields: disabled(boolean), endpoint(string), events(array), full_resolution(boolean), id(integer), name(string), with_content(boolean)
 - sender_identities:
   - primary key: id
-  - fields: address(), auto_generated(), deduplicate_id(), email(), id(), name(), template_type()
+  - fields: address(string), auto_generated(boolean), deduplicate_id(string), email(string), id(integer), name(string), template_type(string)
 - snippets:
   - primary key: name
   - cursor: updated_at
-  - fields: name(), updated_at(), value()
+  - fields: name(string), updated_at(integer), value(string)
 - subscription_channels:
   - primary key: id
-  - fields: description(), id(), name(), subscribed_by_default(), type()
+  - fields: description(string), id(integer), name(string), subscribed_by_default(boolean), type(string)
 - subscription_topics:
   - primary key: id
-  - fields: description(), id(), identifier(), name(), subscribed_by_default()
+  - fields: description(string), id(integer), identifier(string), name(string), subscribed_by_default(boolean)
 - workspaces:
   - primary key: id
-  - fields: billable_messages_sent(), id(), messages_sent(), name(), object_types(), objects(), people()
+  - fields: billable_messages_sent(integer), id(integer), messages_sent(integer), name(string), object_types(integer), objects(integer), people(integer)
 - collections:
   - primary key: id
   - cursor: updated_at
-  - fields: bytes(), created_at(), id(), name(), rows(), updated_at()
+  - fields: bytes(integer), created_at(integer), id(integer), name(string), rows(integer), updated_at(integer)
 
 ## Sync Modes
 
@@ -100,9 +101,11 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
 
 - create_snippet:
   - endpoint: POST /snippets
+  - required fields: name, value
   - risk: external mutation; creates a reusable content snippet referenced by live messages/newsletters
 - update_snippet:
   - endpoint: PUT /snippets
+  - required fields: name, value
   - risk: external mutation; overwrites the content of a live snippet, changing every message/newsletter that references it
 - delete_snippet:
   - endpoint: DELETE /snippets/{{ record.name }}
@@ -110,10 +113,11 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
   - risk: external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required
 - create_reporting_webhook:
   - endpoint: POST /reporting_webhooks
+  - required fields: name, endpoint, events
   - risk: external mutation; registers a new reporting webhook that will deliver live workspace event data to the given endpoint URL
 - update_reporting_webhook:
   - endpoint: PUT /reporting_webhooks/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, endpoint, events
   - risk: external mutation; changes a live reporting webhook's target endpoint/event selection or enables/disables delivery
 - delete_reporting_webhook:
   - endpoint: DELETE /reporting_webhooks/{{ record.id }}
@@ -121,6 +125,7 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
   - risk: external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required
 - create_manual_segment:
   - endpoint: POST /segments
+  - required fields: segment
   - risk: external mutation; creates a new manual segment in the live workspace
 - delete_manual_segment:
   - endpoint: DELETE /segments/{{ record.id }}
@@ -128,6 +133,7 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
   - risk: external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required
 - send_email:
   - endpoint: POST /send/email
+  - required fields: to
   - risk: sends a live transactional email to the given recipient on the workspace's behalf; irreversible once delivered
 - trigger_broadcast:
   - endpoint: POST /campaigns/{{ record.broadcast_id }}/triggers

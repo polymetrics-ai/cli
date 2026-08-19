@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -31,6 +33,20 @@ func TestInit_RegistersHooks(t *testing.T) {
 	}
 }
 
+func TestBundleUsesDeclarativeBearerAuth(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "google-search-console")
+	if err != nil {
+		t.Fatalf("load bundle: %v", err)
+	}
+	if len(bundle.HTTP.Auth) != 1 {
+		t.Fatalf("auth specs = %d, want 1", len(bundle.HTTP.Auth))
+	}
+	auth := bundle.HTTP.Auth[0]
+	if auth.Mode != "bearer" || auth.Token != "{{ secrets.access_token }}" || auth.Hook != "" {
+		t.Fatalf("auth spec = %+v, want declarative access-token bearer auth", auth)
+	}
+}
+
 // --- ReadStream dispatch ---
 
 func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
@@ -46,9 +62,33 @@ func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 	}
 }
 
+func TestAnalyticsDimensionsPreserveDateCursor(t *testing.T) {
+	cases := []struct {
+		stream string
+		want   string
+	}{
+		{"search_analytics_by_date", "date"},
+		{"search_analytics_by_country", "date,country"},
+		{"search_analytics_by_device", "date,device"},
+		{"search_analytics_by_page", "date,page"},
+		{"search_analytics_by_query", "date,query"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.stream, func(t *testing.T) {
+			got, ok := analyticsDimensions[tc.stream]
+			if !ok {
+				t.Fatalf("analyticsDimensions[%q] is missing", tc.stream)
+			}
+			if joined := strings.Join(got, ","); joined != tc.want {
+				t.Fatalf("analyticsDimensions[%q] = %q, want %q", tc.stream, joined, tc.want)
+			}
+		})
+	}
+}
+
 func TestReadStream_SitemapsUsesSingleSiteFallbackAndStringifiesCounts(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		const wantPath = "/sites/https:%2F%2Fexample.com%2F/sitemaps"
+		const wantPath = "/webmasters/v3/sites/https:%2F%2Fexample.com%2F/sitemaps"
 		if r.URL.EscapedPath() != wantPath {
 			t.Errorf("path = %q, want %q", r.URL.EscapedPath(), wantPath)
 			http.NotFound(w, r)
@@ -97,7 +137,7 @@ func TestReadStream_SitemapsUsesSingleSiteFallbackAndStringifiesCounts(t *testin
 // TestReadStream_PaginatesAndAuthenticates is the red-first test: it asserts
 // the search-analytics stream pages through two responses via startRow
 // offset carried inside the POST body, and that rows are flattened into
-// records keyed by the requested dimension. Auth is applied by rt.Requester
+// records keyed by the requested dimensions. Auth is applied by rt.Requester
 // (built by the engine, exercised here directly), not by the hook itself.
 func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 	var sawAuth string
@@ -105,7 +145,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 	var sawStartRows []float64
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sawAuth = r.Header.Get("Authorization")
-		const wantPath = "/sites/https:%2F%2Fexample.com%2F/searchAnalytics/query"
+		const wantPath = "/webmasters/v3/sites/https:%2F%2Fexample.com%2F/searchAnalytics/query"
 		if r.URL.EscapedPath() != wantPath {
 			t.Errorf("path = %q, want %q", r.URL.EscapedPath(), wantPath)
 			http.NotFound(w, r)
@@ -132,12 +172,12 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		switch body.StartRow {
 		case 0:
 			_, _ = w.Write([]byte(`{"rows":[
-				{"keys":["2026-06-01"],"clicks":10,"impressions":100,"ctr":0.1,"position":3.2},
-				{"keys":["2026-06-02"],"clicks":5,"impressions":50,"ctr":0.1,"position":4.5}
+				{"keys":["2026-06-01","USA"],"clicks":10,"impressions":100,"ctr":0.1,"position":3.2},
+				{"keys":["2026-06-02","GBR"],"clicks":5,"impressions":50,"ctr":0.1,"position":4.5}
 			]}`))
 		case 2:
 			_, _ = w.Write([]byte(`{"rows":[
-				{"keys":["2026-06-03"],"clicks":1,"impressions":20,"ctr":0.05,"position":7.0}
+				{"keys":["2026-06-03","IND"],"clicks":1,"impressions":20,"ctr":0.05,"position":7.0}
 			]}`))
 		default:
 			t.Errorf("unexpected startRow=%v", body.StartRow)
@@ -148,7 +188,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 
 	rt := &engine.Runtime{Requester: &connsdk.Requester{BaseURL: srv.URL, Auth: connsdk.Bearer("ya29.test_token")}}
 	req := connectors.ReadRequest{
-		Stream: "search_analytics_by_date",
+		Stream: "search_analytics_by_country",
 		Config: connectors.RuntimeConfig{
 			Config: map[string]string{
 				"site_urls":  "https://example.com/",
@@ -161,7 +201,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 
 	h := &Hooks{}
 	var got []connectors.Record
-	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_date"}, req, rt, func(rec connectors.Record) error {
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_country"}, req, rt, func(rec connectors.Record) error {
 		got = append(got, rec)
 		return nil
 	})
@@ -169,13 +209,13 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		t.Fatalf("ReadStream: %v", err)
 	}
 	if !handled {
-		t.Fatal("handled = false, want true for search_analytics_by_date")
+		t.Fatal("handled = false, want true for search_analytics_by_country")
 	}
 	if sawAuth != "Bearer ya29.test_token" {
 		t.Fatalf("Authorization = %q, want Bearer ya29.test_token", sawAuth)
 	}
-	if len(sawDimensions) != 1 || sawDimensions[0] != "date" {
-		t.Fatalf("dimensions = %v, want [date]", sawDimensions)
+	if len(sawDimensions) != 2 || sawDimensions[0] != "date" || sawDimensions[1] != "country" {
+		t.Fatalf("dimensions = %v, want [date country]", sawDimensions)
 	}
 	if len(sawStartRows) != 2 || sawStartRows[0] != 0 || sawStartRows[1] != 2 {
 		t.Fatalf("startRows = %v, want [0 2]", sawStartRows)
@@ -184,8 +224,8 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		t.Fatalf("records = %d, want 3 (2 pages)", len(got))
 	}
 	for _, rec := range got {
-		if rec["date"] == nil || rec["clicks"] == nil {
-			t.Fatalf("record missing date/clicks: %+v", rec)
+		if rec["date"] == nil || rec["country"] == nil || rec["clicks"] == nil {
+			t.Fatalf("record missing date/country/clicks: %+v", rec)
 		}
 		if rec["site_url"] != "https://example.com/" {
 			t.Fatalf("record site_url = %v, want https://example.com/", rec["site_url"])
@@ -222,6 +262,41 @@ func TestReadStream_MultipleSitesFanOut(t *testing.T) {
 	}
 	if len(sawPaths) != 2 {
 		t.Fatalf("requests = %d, want 2 (one per site)", len(sawPaths))
+	}
+	for _, path := range sawPaths {
+		if !strings.HasPrefix(path, "/webmasters/v3/sites/") {
+			t.Fatalf("path = %q, want Search Console API prefix", path)
+		}
+	}
+}
+
+func TestWriteCommandsCarryActionRedactions(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "google-search-console")
+	if err != nil {
+		t.Fatalf("load bundle: %v", err)
+	}
+
+	actionRedactions := make(map[string][]string, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actionRedactions[action.Name] = action.RedactFields
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Write == "" {
+			continue
+		}
+		want, ok := actionRedactions[command.Write]
+		if !ok {
+			t.Fatalf("command %q references unknown write action %q", command.Path, command.Write)
+		}
+		for _, field := range want {
+			found := false
+			for _, got := range command.RedactFields {
+				found = found || got == field
+			}
+			if !found {
+				t.Fatalf("command %q redact_fields = %v, want action field %q", command.Path, command.RedactFields, field)
+			}
+		}
 	}
 }
 

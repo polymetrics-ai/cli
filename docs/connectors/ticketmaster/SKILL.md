@@ -11,6 +11,7 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 
 ## Icon
 
+- id: ticketmaster
 - asset: icons/ticketmaster.svg
 - source: official
 - review_status: official_verified
@@ -31,26 +32,26 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 - country_code
 - keyword
 - locale
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - events:
   - primary key: id
-  - fields: id(), locale(), name(), type(), url()
+  - fields: id(string), locale(string), name(string), type(string), url(string)
 - venues:
   - primary key: id
-  - fields: city(), country(), id(), name(), url()
+  - fields: city(object), country(object), id(string), name(string), url(string)
 - attractions:
   - primary key: id
-  - fields: id(), locale(), name(), type(), url()
+  - fields: id(string), locale(string), name(string), type(string), url(string)
 - classifications:
   - primary key: id
-  - fields: genre(), id(), name(), segment(), subGenre()
+  - fields: genre(object), id(string), name(string), segment(object), subGenre(object)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

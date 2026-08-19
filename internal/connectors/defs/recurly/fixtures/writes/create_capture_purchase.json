@@ -1,0 +1,15 @@
+{
+  "record": {
+    "transaction_id": "fixture_transaction_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchases/fixture_transaction_id/capture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object"
+    }
+  }
+}

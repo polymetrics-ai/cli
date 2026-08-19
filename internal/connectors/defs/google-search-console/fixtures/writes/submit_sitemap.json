@@ -5,6 +5,6 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/sites/https://fixture.example.com//sitemaps/https://fixture.example.com/sitemap.xml"
+    "path": "/webmasters/v3/sites/https://fixture.example.com//sitemaps/https://fixture.example.com/sitemap.xml"
   }
 }

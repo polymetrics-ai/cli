@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_code_security_get_configurations_for_enterprise",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:52:55.132Z",
+  "run_id": "github-slice2-agent_derived_code_security_get_configurations_for_enterprise",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:dd992ee13a884dc8d941918821fcf54b542ee9ba81b6c3840cfe109149eb0c2e}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:cdcbfb35c055e83a079c968c8b5a2239af989ab918c9e811ababe73bb68b8d3f}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_code_security_get_configurations_for_enterprise",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:3f14aa91fe2695af27e65401900d6ab1842d24983f87a6a5deac118b036013e1}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "advanced_security": "{{pmcertfp:v1:79e392f519842cabddc1f9b15a2ef4acb8d850f5f54aa1c4c0b9ca04a37a77bd}}",
+                "code_scanning_default_setup": "{{pmcertfp:v1:79e392f519842cabddc1f9b15a2ef4acb8d850f5f54aa1c4c0b9ca04a37a77bd}}",
+                "code_scanning_default_setup_options": null,
+                "code_scanning_delegated_alert_dismissal": "{{pmcertfp:v1:0f6809c25ece860b58db121368a4d6982d4ae2f50c10f2721780803a73c33ba7}}",
+                "created_at": "{{pmcertfp:v1:cccda6d2925d054c324520fae8413498a8cc52da9020faab8854b90a739f3eb9}}",
+                "dependabot_alerts": "{{pmcertfp:v1:79e392f519842cabddc1f9b15a2ef4acb8d850f5f54aa1c4c0b9ca04a37a77bd}}",
+                "dependabot_delegated_alert_dismissal": null,
+                "dependabot_security_updates": "{{pmcertfp:v1:0f6809c25ece860b58db121368a4d6982d4ae2f50c10f2721780803a73c33ba7}}",
+                "dependency_graph": "{{pmcertfp:v1:79e392f519842cabddc1f9b15a2ef4acb8d850f5f54aa1c4c0b9ca04a37a77bd}}",
+                "dependency_graph_autosubmit_action": "{{pmcertfp:v1:0f6809c25ece860b58db121368a4d6982d4ae2f50c10f2721780803a73c33ba7}}",
+                "dependency_graph_autosubmit_action_options": {
+                  "labeled_runners": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+                },
+                "description": "{{pmcertfp:v1:84bca9889c85e84ffd8e92062077ce051d18a451eab2de3abba81a05d765b05f}}",
+                "enforcement": "{{pmcertfp:v1:e9726fb264563b1bef63b0c5f6ab7192f4c740f5df47b691cd8f7831d67d7b31}}",
+                "html_url": "{{pmcertfp:v1:6a5898261ff43157f9c93cf5a82684c27f99dd799ee54f8631325b95e14f54b7}}",
+                "id": "{{pmcertfp:v1:e05b88a7873aaff7b651ab0a3643ab121232d21b59564c99edeb77a1b5e44108}}",
+                "name": "{{pmcertfp:v1:9e467d482f09f5170aa80c48dc11ebd4896507fef1e6c9825467ce079e51f522}}",
+                "private_vulnerability_reporting": "{{pmcertfp:v1:79e392f519842cabddc1f9b15a2ef4acb8d850f5f54aa1c4c0b9ca04a37a77bd}}",
+                "secret_scanning_delegated_alert_dismissal_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_delegated_bypass_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_extended_metadata_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_generic_secrets_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_non_provider_patterns_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_push_protection_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "secret_scanning_validity_checks_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "target_type": "{{pmcertfp:v1:fb8279c231316d63359866064eb3729bdd690a62c72989bf2f01e7d544bada35}}",
+                "updated_at": "{{pmcertfp:v1:c7db43f2f8c2ec462529a93dd80e2c93eea6c66517baf84c24f0c488ef6321a3}}",
+                "url": "{{pmcertfp:v1:73f48817c87bcfa1b6113fff868125004daf25461a57e40f025efae53834ba7f}}"
+              }
+            ],
+            "original_bytes": 1308,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

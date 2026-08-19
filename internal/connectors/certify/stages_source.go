@@ -14,6 +14,11 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -115,6 +120,7 @@ type streamSpec struct {
 type runContext struct {
 	ctx                   context.Context
 	harness               *Harness
+	ephemeralCredentials  *app.CertificationEphemeralSession
 	opts                  Options
 	sabotage              *sabotage
 	stdoutLeakSabotage    *stdoutLeakSabotage
@@ -134,10 +140,25 @@ type runContext struct {
 	// write_plan_preview recorded a skip (Options.Write is false).
 	write *writeContext
 
+	// transportPairProbe exercises one declared source/destination pair through
+	// App's production definition-composition root. The seam exists only so an
+	// inverse test can remove every factory and prove certification then fails
+	// on the real registration error.
+	transportPairProbe func(context.Context, string) (certificationTransportPairProof, error)
+
+	// graphQLInventory is a test seam for the definition-owned GraphQL schema
+	// compiler. Production uses graphQLCertificationInventoryFor directly.
+	graphQLInventory func(string) (graphQLCertificationInventory, error)
+
 	// currentStage names the stage function presently executing, so run()
 	// can tag each captured CLI invocation with its owning stage without
 	// threading a stage name through every one of the ~20 call sites.
 	currentStage string
+
+	// rateLimitEvents captures the bounded requester admission trail for this
+	// ephemeral certification project. recordStage keeps its stage label in
+	// sync with the CLI work that caused each event.
+	rateLimitEvents *rateLimitEventCollector
 
 	// capturedOutputs accumulates every CLI invocation's raw stdout/stderr
 	// across the whole run, for finalizeSecretRedaction's full-output scan.
@@ -161,7 +182,16 @@ type runContext struct {
 // rc.run instead of rc.harness.Run directly so finalizeSecretRedaction can
 // see everything a real secret leak could hide in.
 func (rc *runContext) run(args ...string) CLIResult {
-	res := rc.harness.Run(args...)
+	return rc.captureRun(rc.harness.Run(args...))
+}
+
+// runWithStdin uses the real CLI's standard-input channel without adding the
+// data to the argv captured in certification reports.
+func (rc *runContext) runWithStdin(stdin string, args ...string) CLIResult {
+	return rc.captureRun(rc.harness.RunWithStdin(stdin, args...))
+}
+
+func (rc *runContext) captureRun(res CLIResult) CLIResult {
 	stdout := res.Stdout
 	if rc.stdoutLeakSabotage != nil && rc.stdoutLeakSabotage.stage == rc.currentStage {
 		stdout += "\n[sabotage-planted-secret]: " + rc.stdoutLeakSabotage.secret
@@ -185,12 +215,32 @@ type stageFunc func(rc *runContext, rep *Report) error
 // a fresh os.MkdirTemp root, mirroring the Makefile "smoke" target's
 // --root/--json flag pattern (Makefile:41). See stages_source.go doc comment
 // for stage-list scope.
-func (r *Runner) Run(ctx context.Context) (Report, error) {
+func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if r.opts.Connector == "" {
 		return Report{}, fmt.Errorf("certify: Options.Connector is required")
 	}
+	if r.opts.WriteOnly && !r.opts.Write {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly requires Options.Write")
+	}
+	if r.opts.WriteOnly && r.opts.RequireFullParity {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly cannot claim full parity")
+	}
+	if r.opts.WriteOnly && !certificationHasWriteWave(r.opts.Connector) {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly requires a connector-declared bounded repository write wave")
+	}
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
+	}
+	r.observedHTTP = nil
+	if r.opts.ObserveHTTP {
+		observer, removeObserver, observeErr := installCertificationHTTPObserver(defaultObservedBodyBytes)
+		if observeErr != nil {
+			return Report{}, fmt.Errorf("certify: install external HTTP observer: %w", observeErr)
+		}
+		defer func() {
+			r.observedHTTP = observer.Exchanges()
+			removeObserver()
+		}()
 	}
 
 	root, err := os.MkdirTemp("", "pm-certify-"+r.opts.Connector+"-")
@@ -201,33 +251,88 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	if !r.opts.KeepWork {
 		defer func() { _ = os.RemoveAll(root) }()
 	}
+	rateLimitEvents := &rateLimitEventCollector{}
+	removeRateLimitEvents := engine.ConfigureRateLimitEventSink(filepath.Join(root, ".polymetrics"), rateLimitEvents)
+	defer removeRateLimitEvents()
+	removeAdmissionTimeout := engine.ConfigureRateLimitAdmissionTimeout(filepath.Join(root, ".polymetrics"), certificationRateLimitAdmissionTimeout(r.opts))
+	defer removeAdmissionTimeout()
+	defer func() { rep.RateLimitEvents = rateLimitEvents.snapshot() }()
 
 	secretValues := make([]string, 0, len(r.opts.SecretEnv))
-	for _, envName := range r.opts.SecretEnv {
+	secretFields := make(map[string]string, len(r.opts.SecretEnv))
+	for field, envName := range r.opts.SecretEnv {
 		if v := os.Getenv(envName); v != "" {
 			secretValues = append(secretValues, v)
+			secretFields[field] = v
 		}
 	}
+	if r.opts.RuntimeObservation != nil {
+		if err := r.opts.RuntimeObservation(RuntimeObservationInput{
+			Workdir:      root,
+			SecretValues: append([]string(nil), secretValues...),
+		}); err != nil {
+			return Report{}, fmt.Errorf("certify: capture external runtime observation: %w", err)
+		}
+	}
+	ephemeralCredentials, err := app.BeginCertificationEphemeralCredentials(root,
+		app.EphemeralCredential{
+			Name:      sourceCredentialName,
+			Connector: r.opts.Connector,
+			Config:    effectiveCredentialConfig(r.opts.Connector, r.opts.Config),
+			Secrets:   secretFields,
+		},
+		app.EphemeralCredential{
+			Name:      warehouseCredentialName,
+			Connector: "warehouse",
+			Config:    map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")},
+		},
+	)
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: begin ephemeral credentials: %w", err)
+	}
+	defer ephemeralCredentials.Close()
 
 	rc := &runContext{
 		ctx:                   ctx,
 		harness:               NewHarness(root, WithSecrets(secretValues...)),
+		ephemeralCredentials:  ephemeralCredentials,
 		opts:                  r.opts,
 		sabotage:              r.sabotage,
 		stdoutLeakSabotage:    r.stdoutLeakSabotage,
 		cleanupVerifySabotage: r.cleanupVerifySabotage,
 		root:                  root,
+		rateLimitEvents:       rateLimitEvents,
 	}
 
-	rep := Report{
+	rep = Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
+		SchemaVersion: CurrentSchemaVersion,
 		Connector:     r.opts.Connector,
 		Mode:          "live",
 		StartedAt:     time.Now().UTC(),
 		Passed:        true,
 	}
 	rep.Capabilities.SyncModes = map[string]SyncModeResult{}
+	if r.opts.DirectReadOnly {
+		directReadStages := []stageFunc{
+			stagePreflight,
+			stageCredentialsAdd,
+			stageCredentialsTest,
+			stageGraphQLSchemaConformance,
+			stageDirectReadSweep,
+		}
+		for _, stage := range directReadStages {
+			if err := stage(rc, &rep); err != nil {
+				rep.CompletedAt = time.Now().UTC()
+				return rep, err
+			}
+		}
+		finalizeJSONContract(&rep)
+		finalizeSecretRedaction(rc, &rep, secretValues)
+		rep.CompletedAt = time.Now().UTC()
+		rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
+		return rep, nil
+	}
 
 	setupStages := []stageFunc{
 		stagePreflight,
@@ -248,6 +353,8 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 	tailStages := []stageFunc{
 		stageSurfaceInventory,
+		stageDeclaredTransportPair,
+		stageGraphQLSchemaConformance,
 		stageDirectReadSweep,
 		stageBinaryDownloadSweep,
 		stageWritePlanPreview,
@@ -256,11 +363,25 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageWriteCleanup,
 		stageCleanupVerify,
 		stageApprovalIdempotency,
+		stageRepositoryWriteWave,
 	}
-	if !r.opts.Full {
+	if r.opts.WriteOnly {
+		// A bounded wave still uses the production credentials and write
+		// machinery, but intentionally avoids unrelated source/schedule stages
+		// so a rate-limit restart can finish one self-cleaning resource family.
+		setupStages = []stageFunc{stagePreflight, stageCredentialsAdd, stageCredentialsTest}
+		readStages = nil
+		tailStages = []stageFunc{stageRepositoryWriteWave}
+	}
+	if !r.opts.Full && !r.opts.WriteOnly {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
 	}
-	tailStages = append(tailStages, stageWriteSweepAllPairings)
+	if !r.opts.WriteOnly {
+		tailStages = append(tailStages, stageWriteSweepAllPairings)
+	}
+	if r.opts.RequireFullParity {
+		tailStages = append(tailStages, stageFullParityClaim)
+	}
 
 	for _, stage := range setupStages {
 		if err := stage(rc, &rep); err != nil {
@@ -290,6 +411,12 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 
 	finalizeJSONContract(&rep)
 	finalizeSecretRedaction(rc, &rep, secretValues)
+	if hasIncompleteWriteAction(rep.Capabilities.WriteActions) {
+		// A baseline certification can pass its applicable source checks while
+		// write coverage is incomplete. Do not render that as a generic live
+		// certification result.
+		rep.Mode = "partial_live"
+	}
 	rep.CompletedAt = time.Now().UTC()
 	// A secret_redaction failure is a security-relevant fact operators must
 	// not be able to miss by only checking per-stage Passed flags (M2,
@@ -297,8 +424,19 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	// stronger guarantee than it is" — the converse also holds: a "fail"
 	// must actually fail the report, since the certification-design's own
 	// enablement gate (cmd/certstatus) keys off Report.Passed).
-	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
+	// A known blocked write is a non-coverage outcome even when a dedicated
+	// recovery stage has cleaned its tagged resource. Do not let a successful
+	// cleanup-only run flatten it into Passed=true; that would recreate the F4
+	// false-coverage claim at the report root.
+	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail" && !hasBlockingWriteAction(rep.Capabilities.WriteActions)
 	return rep, nil
+}
+
+func certificationRateLimitAdmissionTimeout(opts Options) time.Duration {
+	if opts.RateLimitAdmissionTimeout > 0 {
+		return opts.RateLimitAdmissionTimeout
+	}
+	return defaultCertificationRateLimitAdmissionTimeout
 }
 
 // recordStage runs body, timing it, and appends a StageResult to rep.Stages.
@@ -311,13 +449,22 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 func recordStage(rc *runContext, rep *Report, name string, tier int, run func() (bool, CLIStageInfo, string)) StageResult {
 	prevStage := rc.currentStage
 	rc.currentStage = name
-	defer func() { rc.currentStage = prevStage }()
+	if rc.rateLimitEvents != nil {
+		rc.rateLimitEvents.setStage(name)
+	}
+	defer func() {
+		rc.currentStage = prevStage
+		if rc.rateLimitEvents != nil {
+			rc.rateLimitEvents.setStage(prevStage)
+		}
+	}()
 
 	start := time.Now()
 	passed, cli, errMsg := run()
 	stage := StageResult{
 		Name:       name,
 		Tier:       tier,
+		Status:     stageStatus(passed, errMsg),
 		Passed:     passed,
 		DurationMS: time.Since(start).Milliseconds(),
 		Error:      errMsg,
@@ -325,6 +472,22 @@ func recordStage(rc *runContext, rep *Report, name string, tier int, run func() 
 	}
 	rep.Stages = append(rep.Stages, stage)
 	return stage
+}
+
+func stageStatus(passed bool, errMsg string) string {
+	if passed {
+		return "pass"
+	}
+	if strings.HasPrefix(errMsg, "skipped:") {
+		return "skipped"
+	}
+	if strings.HasPrefix(errMsg, "unexecutable:") {
+		return "unexecutable"
+	}
+	if strings.HasPrefix(errMsg, "not_live:") {
+		return "not_live"
+	}
+	return "fail"
 }
 
 // expectKind returns the expected envelope kind for name, substituting the
@@ -341,7 +504,57 @@ func (rc *runContext) expectKind(stageName, kind string) string {
 func assertKind(rc *runContext, stageName string, res CLIResult, wantKind string, wantExit int) (bool, string) {
 	kind := rc.expectKind(stageName, wantKind)
 	if err := rc.harness.MustKind(res, kind, wantExit); err != nil {
-		return false, err.Error()
+		return false, stageErrorWithSafeCLIEnvelope(err.Error(), res, rc.harness.secrets)
+	}
+	return true, ""
+}
+
+// safeCLIErrorEnvelopeDiagnostic retains the structured reason from a CLI
+// error envelope only after replacing every prepared credential form with the
+// external-proof fingerprint marker. The result may be stored in a stage
+// error, unlike raw stdout/stderr which remain in-memory redaction inputs.
+func safeCLIErrorEnvelopeDiagnostic(res CLIResult, secrets []string) (string, error) {
+	errEnvelope, ok := res.Envelope["error"].(map[string]any)
+	if !ok {
+		return "", nil
+	}
+	message, _ := errEnvelope["message"].(string)
+	if strings.TrimSpace(message) == "" {
+		return "", nil
+	}
+	category, _ := errEnvelope["category"].(string)
+	code, _ := errEnvelope["code"].(string)
+	return RedactExternalProofDiagnostic(
+		fmt.Sprintf("cli_error category=%q code=%q message=%s", category, code, message),
+		secrets,
+	)
+}
+
+func stageErrorWithSafeCLIEnvelope(errMsg string, res CLIResult, secrets []string) string {
+	diagnostic, err := safeCLIErrorEnvelopeDiagnostic(res, secrets)
+	if err != nil {
+		return errMsg + "; cli error diagnostic unavailable after credential redaction"
+	}
+	if diagnostic == "" {
+		return errMsg
+	}
+	return errMsg + "; " + diagnostic
+}
+
+// assertTypedPreIORefusal verifies the serialized CLI shape of a typed
+// sync-mode admission refusal. The application tests retain the concrete Go
+// error and no-source-read assertion; certification observes the CLI result.
+func assertTypedPreIORefusal(rc *runContext, stageName string, res CLIResult) (bool, string) {
+	if passed, errMsg := assertKind(rc, stageName, res, "Error", 1); !passed {
+		return false, errMsg
+	}
+	errEnvelope, ok := res.Envelope["error"].(map[string]any)
+	if !ok {
+		return false, "typed sync-mode refusal did not include an error envelope"
+	}
+	message, _ := errEnvelope["message"].(string)
+	if !strings.Contains(message, "is not executable") {
+		return false, fmt.Sprintf("want typed sync-mode refusal, got error message %q", message)
 	}
 	return true, ""
 }
@@ -457,37 +670,6 @@ func queryRowCount(rc *runContext, table string) (int, error) {
 	return int(count), nil
 }
 
-// assertNoDuplicatePKs runs `pm query run --table <table> --json` and fails
-// if any "id" value (the certify-fixed primary key field, see
-// createCaptureConnection's --primary-key id) repeats across rows.
-func assertNoDuplicatePKs(rc *runContext, table string) error {
-	res := rc.run("query", "run", "--table", table, "--json")
-	if res.ExitCode != 0 || res.Kind != "QueryResult" {
-		return fmt.Errorf("query --table %s: exit=%d kind=%q", table, res.ExitCode, res.Kind)
-	}
-	rows, _ := res.Envelope["rows"].([]any)
-	seen := map[string]bool{}
-	pk := rc.primaryKey()
-	for _, row := range rows {
-		m, ok := row.(map[string]any)
-		if !ok {
-			continue
-		}
-		id, _ := m[pk].(string)
-		if id == "" && pk != "id" {
-			id, _ = m["id"].(string)
-		}
-		if id == "" {
-			continue
-		}
-		if seen[id] {
-			return fmt.Errorf("duplicate primary key %q found in table %s (dedup failed)", id, table)
-		}
-		seen[id] = true
-	}
-	return nil
-}
-
 func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error {
 	for _, spec := range rc.fullSweepStreamSpecs() {
 		rc.currentStream = spec.Name
@@ -516,6 +698,9 @@ func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error
 }
 
 func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
+	if spec, ok := rc.dynamicPollingCertificationStreamSpec(); ok {
+		return []streamSpec{spec}
+	}
 	if len(rc.catalogStreamSpecs) > 0 {
 		out := make([]streamSpec, 0, len(rc.catalogStreamSpecs))
 		for _, spec := range rc.catalogStreamSpecs {
@@ -529,6 +714,29 @@ func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
 		}
 	}
 	return []streamSpec{(streamSpec{Name: rc.streamName()}).withDefaults()}
+}
+
+// dynamicPollingCertificationStreamSpec selects a caller-named relation only
+// when its own bundle declares a native-database polling transport. A catalog
+// cannot truthfully invent a universal watermark, so an explicit cursor is
+// required. This is selection glue for an already declared pair, not a
+// generic database execution policy.
+func (rc *runContext) dynamicPollingCertificationStreamSpec() (streamSpec, bool) {
+	if strings.TrimSpace(rc.opts.Stream) == "" || strings.TrimSpace(rc.opts.Config["cursor_field"]) == "" {
+		return streamSpec{}, false
+	}
+	bundle, err := engine.Load(defs.FS, rc.opts.Connector)
+	if err != nil || bundle.PollingWatermark == nil || bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil ||
+		bundle.SyncTransport.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		bundle.SyncTransport.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase {
+		return streamSpec{}, false
+	}
+	for _, spec := range rc.catalogStreamSpecs {
+		if spec.Name == rc.opts.Stream && spec.PrimaryKey != "" {
+			return streamSpec{Name: spec.Name, PrimaryKey: spec.PrimaryKey, CursorField: rc.opts.Config["cursor_field"]}, true
+		}
+	}
+	return streamSpec{}, false
 }
 
 func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
@@ -629,30 +837,23 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 
 func stageCredentialsAdd(rc *runContext, rep *Report) error {
 	recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		args := []string{"credentials", "add", sourceCredentialName, "--connector", rc.opts.Connector, "--json"}
-		for field, envName := range rc.opts.SecretEnv {
-			args = append(args, "--from-env", field+"="+envName)
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
 		}
-		config := effectiveCredentialConfig(rc.opts.Connector, rc.opts.Config)
-		keys := make([]string, 0, len(config))
-		for k := range config {
-			keys = append(keys, k)
+		if !rc.ephemeralCredentials.HasCredential(sourceCredentialName) {
+			return false, CLIStageInfo{}, "source credential was not retained in the ephemeral session"
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			args = append(args, "--config", k+"="+config[k])
-		}
-		res := rc.run(args...)
-		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		return true, ephemeralCredentialStageInfo(sourceCredentialName), ""
 	})
 
 	recordStage(rc, rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		warehouseDir := filepath.Join(rc.root, ".polymetrics", "warehouse")
-		res := rc.run("credentials", "add", warehouseCredentialName, "--connector", "warehouse",
-			"--config", "path="+warehouseDir, "--json")
-		passed, errMsg := assertKind(rc, "warehouse_credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
+		}
+		if !rc.ephemeralCredentials.HasCredential(warehouseCredentialName) {
+			return false, CLIStageInfo{}, "warehouse credential was not retained in the ephemeral session"
+		}
+		return true, ephemeralCredentialStageInfo(warehouseCredentialName), ""
 	})
 	return nil
 }
@@ -713,6 +914,14 @@ func stageCatalog(rc *runContext, rep *Report) error {
 		rep.Capabilities.Catalog.Streams = count
 		if count < 1 {
 			return false, cliInfoFrom(res), "catalog: expected at least one stream"
+		}
+		if spec, ok := rc.dynamicPollingCertificationStreamSpec(); ok {
+			// PostgreSQL's dynamic catalog exposes primary keys but does not
+			// invent a cursor_fields list. The native polling executor validates
+			// the caller-selected watermark against the live relation before it
+			// reads, so accepting this stream is not an inferred cursor claim.
+			rc.catalogStreamSpecs = []streamSpec{spec}
+			return true, cliInfoFrom(res), ""
 		}
 		if !catalogHasPKAndCursor(streams, stream) {
 			return false, cliInfoFrom(res), fmt.Sprintf("catalog: stream %q missing primary_key/cursor_fields", stream)
@@ -890,19 +1099,35 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	if rc.captureFileRegistered {
 		return true, ""
 	}
-	res := rc.run("credentials", "add", rc.fileCredentialName(), "--connector", "file",
-		"--config", "path="+rc.capturePath, "--json")
-	if passed, errMsg := assertKind(rc, "capture_credentials_add", res, "Credential", 0); !passed {
+	if rc.ephemeralCredentials == nil {
+		return false, "certification ephemeral credentials are unavailable"
+	}
+	if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+		Name:      rc.fileCredentialName(),
+		Connector: "file",
+		Config:    map[string]string{"path": rc.capturePath},
+	}); err != nil {
+		return false, fmt.Sprintf("register capture credential: %v", err)
+	}
+	if !rc.ephemeralCredentials.HasCredential(rc.fileCredentialName()) {
 		recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-			return false, cliInfoFrom(res), errMsg
+			return false, CLIStageInfo{}, "capture credential was not retained in the ephemeral session"
 		})
-		return false, errMsg
+		return false, "capture credential was not retained in the ephemeral session"
 	}
 	recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-		return true, cliInfoFrom(res), ""
+		return true, ephemeralCredentialStageInfo(rc.fileCredentialName()), ""
 	})
 	rc.captureFileRegistered = true
 	return true, ""
+}
+
+func ephemeralCredentialStageInfo(name string) CLIStageInfo {
+	return CLIStageInfo{
+		ArgvRedacted: "pm certification ephemeral-credential " + name,
+		ExitCode:     0,
+		Kind:         "Credential",
+	}
 }
 
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {
@@ -981,7 +1206,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	return nil
 }
 
-// --- stage 7: etl_full_refresh_overwrite_deduped (CAPTURE) ---
+// --- stage 7: etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) ---
 
 func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	if rc.primaryKey() == "" {
@@ -1014,13 +1239,10 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 
 	recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
-		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite_deduped", res, "ETLRun", 0); !passed {
+		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_full_refresh_overwrite_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		if err := assertNoDuplicatePKs(rc, table); err != nil {
-			return false, cliInfoFrom(res), fmt.Sprintf("etl_full_refresh_overwrite_deduped: %v", err)
-		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "capture"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "pre_io_refusal", Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
@@ -1029,6 +1251,11 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 // --- stage 8: etl_incremental_append (LIVE) + stage 9: resume (LIVE run 2) ---
 
 func stageIncrementalAppend(rc *runContext, rep *Report) error {
+	if _, dynamicPolling := rc.dynamicPollingCertificationStreamSpec(); dynamicPolling {
+		skipStage(rc, rep, "incremental_connection_create", "skipped: incremental watermark is exercised through the declared managed transport pair")
+		skipStage(rc, rep, "etl_incremental_append", "skipped: incremental watermark is exercised through the declared managed transport pair")
+		return nil
+	}
 	if rc.cursorField() == "" {
 		skipStage(rc, rep, "incremental_connection_create", "skipped: stream has no cursor field")
 		skipStage(rc, rep, "etl_incremental_append", "skipped: stream has no cursor field")
@@ -1141,7 +1368,7 @@ func compareCursorStrings(a, b string) int {
 	}
 }
 
-// --- stage 10: etl_incremental_append_deduped (CAPTURE) ---
+// --- stage 10: etl_incremental_append_deduped (typed pre-I/O refusal) ---
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	if rc.primaryKey() == "" {
@@ -1172,13 +1399,10 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 
 	recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
-		if passed, errMsg := assertKind(rc, "etl_incremental_append_deduped", res, "ETLRun", 0); !passed {
+		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_incremental_append_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		if err := assertNoDuplicatePKs(rc, table); err != nil {
-			return false, cliInfoFrom(res), fmt.Sprintf("etl_incremental_append_deduped: %v", err)
-		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "capture"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
@@ -1187,6 +1411,10 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 // --- stage 11: query_contract ---
 
 func stageQueryContract(rc *runContext, rep *Report) error {
+	if rc.capturePath == "" {
+		skipStage(rc, rep, "query_contract", "skipped: no live capture (etl_full_refresh_append was unavailable)")
+		return nil
+	}
 	table := "cert_live_" + rc.streamName()
 	recordStage(rc, rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--limit", "1", "--json")
@@ -1293,23 +1521,77 @@ func finalizeSecretRedaction(rc *runContext, rep *Report, secretValues []string)
 
 func allStagesPassed(stages []StageResult) bool {
 	for _, s := range stages {
-		if s.Name == "fixture_conformance" {
-			// A documented skip never fails the overall report.
+		if s.Passed {
 			continue
 		}
-		if !s.Passed && strings.HasPrefix(s.Error, "skipped: ") {
-			// A documented skip (e.g. Options.Write disabled, or no
-			// available write pairing) never fails the overall report,
-			// exactly like fixture_conformance above (design §A "no
-			// credential -> uncertified, never failed" applies analogously
-			// to an unavailable safe write path).
+		if s.Status == "skipped" {
+			// An explicit benign environmental/safety skip (e.g. write testing
+			// disabled or an unavailable safe write pairing) is not a failed
+			// execution. An unexecutable declared capability deliberately uses
+			// Status=unexecutable and therefore falls through to failure.
 			continue
 		}
-		if !s.Passed {
-			return false
-		}
+		return false
 	}
 	return true
+}
+
+func hasIncompleteWriteAction(actions map[string]WriteActionResult) bool {
+	for _, action := range actions {
+		if action.Result != "pass" {
+			return true
+		}
+	}
+	return false
+}
+
+func hasBlockingWriteAction(actions map[string]WriteActionResult) bool {
+	for _, action := range actions {
+		switch action.Result {
+		case "blocked", "fail", "leaked_resource", "recovered_unverified":
+			return true
+		}
+	}
+	return false
+}
+
+// fullParityStage is emitted only for an explicit --full-parity request. Its
+// success is the single report-local fact an external proof may use for the
+// full-parity claim; callers must not infer that fact merely from command-line
+// spelling or a successful subset of stages.
+const fullParityStage = "full_parity"
+
+func stageFullParityClaim(rc *runContext, rep *Report) error {
+	if !rc.opts.Full || !rc.opts.Write {
+		recordStage(rc, rep, fullParityStage, 2, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, "full parity requires full read and write execution"
+		})
+		return nil
+	}
+
+	notLive := make([]string, 0)
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result != "pass" {
+			notLive = append(notLive, action)
+		}
+	}
+	sort.Strings(notLive)
+	recordStage(rc, rep, fullParityStage, 2, func() (bool, CLIStageInfo, string) {
+		if len(notLive) == 0 {
+			return true, CLIStageInfo{}, ""
+		}
+		return false, CLIStageInfo{}, fmt.Sprintf("full parity unavailable: %d declared write action(s) are not provider-verified; first=%s", len(notLive), notLive[0])
+	})
+	return nil
+}
+
+func (rep Report) FullParityVerified() bool {
+	for _, stage := range rep.Stages {
+		if stage.Name == fullParityStage {
+			return stage.Passed
+		}
+	}
+	return false
 }
 
 func secretValuesFromEnv(secretEnv map[string]string) []string {

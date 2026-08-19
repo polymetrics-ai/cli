@@ -1,0 +1,4 @@
+{
+  "record": {"summary": "Fixture Calendar", "description": "Fixture description", "timeZone": "UTC"},
+  "expect": {"method": "POST", "path": "/calendars", "body": {"summary": "Fixture Calendar", "description": "Fixture description", "timeZone": "UTC"}}
+}

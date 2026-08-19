@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "website/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   push:
@@ -11,6 +13,8 @@ on:
       - main
     paths:
       - "website/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   workflow_dispatch:
@@ -32,7 +36,7 @@ jobs:
         working-directory: website
     services:
       postgres:
-        image: postgres:17-alpine
+        image: postgres:17-alpine@sha256:742f40ea20b9ff2ff31db5458d127452988a2164df9e17441e191f3b72252193 # 17-alpine
         env:
           POSTGRES_DB: website
           POSTGRES_USER: website
@@ -53,16 +57,16 @@ jobs:
         run: git config --global init.defaultBranch main
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
@@ -71,18 +75,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=silent
 
+      # Also checked by .github/workflows/website-data.yml, which carries the
+      # wider connector-bundle trigger. Kept here too because `image` and
+      # `deploy` chain off this job, so dropping it would let stale generated
+      # data deploy. The check is repo-wide rather than a hand-listed file set:
+      # an enumerated list goes stale the moment a generator gains an output,
+      # which is how content/docs/github-cli-surface.mdx and
+      # data/connectors.generated.json both ended up unchecked.
       - name: Verify generated website data
         run: |
           pnpm run gen:website-data
-          changed="$(git status --short -- \
-            lib/connectors.catalog.data.generated.json \
-            lib/connectors.catalog.generated.ts \
-            lib/connectors.generated.ts \
-            lib/connectors.enrichment.generated.ts \
-            lib/docs.generated.ts \
-            public/connectors/icons)"
+          changed="$(git status --porcelain)"
           if [ -n "$changed" ]; then
+            printf 'generated website data is stale; run `cd website && pnpm run gen:website-data` and commit the result\n'
             printf '%s\n' "$changed"
+            git diff
             exit 1
           fi
 
@@ -94,6 +101,9 @@ jobs:
 
       - name: Unit tests
         run: pnpm run test:unit
+
+      - name: Script tests
+        run: pnpm run test:scripts
 
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
@@ -119,7 +129,7 @@ jobs:
         run: git config --global init.defaultBranch main
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set image tags
         id: image
@@ -187,7 +197,7 @@ jobs:
         run: git config --global init.defaultBranch main
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Deploy website to origin Quadlet
         env:

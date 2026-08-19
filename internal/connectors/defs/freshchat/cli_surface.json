@@ -1,0 +1,1337 @@
+{
+  "tagline": "Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.",
+  "usage": "pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]",
+  "source_cli": {
+    "name": "Freshchat API",
+    "docs": "https://developers.freshchat.com/api/",
+    "reference": "Freshchat API docs ETag W/\"26e4fd8b1fe01578eae1dbaff6b69224\"",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "account",
+      "title": "Freshchat account read commands",
+      "commands": [
+        "account"
+      ]
+    },
+    {
+      "id": "agents",
+      "title": "Freshchat agent read/write/admin commands",
+      "commands": [
+        "agents"
+      ]
+    },
+    {
+      "id": "users",
+      "title": "Freshchat user read/write commands",
+      "commands": [
+        "users"
+      ]
+    },
+    {
+      "id": "conversations",
+      "title": "Freshchat conversation read/write commands",
+      "commands": [
+        "conversations"
+      ]
+    },
+    {
+      "id": "groups",
+      "title": "Freshchat group read commands",
+      "commands": [
+        "groups"
+      ]
+    },
+    {
+      "id": "channels",
+      "title": "Freshchat channel read commands",
+      "commands": [
+        "channels"
+      ]
+    },
+    {
+      "id": "roles",
+      "title": "Freshchat role read commands",
+      "commands": [
+        "roles"
+      ]
+    },
+    {
+      "id": "outbound",
+      "title": "Freshchat outbound read/write commands",
+      "commands": [
+        "outbound"
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Freshchat report read/write commands",
+      "commands": [
+        "reports"
+      ]
+    },
+    {
+      "id": "metrics",
+      "title": "Freshchat metrics read commands",
+      "commands": [
+        "metrics"
+      ]
+    },
+    {
+      "id": "business-hours",
+      "title": "Freshchat business-hours read commands",
+      "commands": [
+        "business-hours"
+      ]
+    },
+    {
+      "id": "csat",
+      "title": "Freshchat CSAT write commands",
+      "commands": [
+        "csat"
+      ]
+    },
+    {
+      "id": "direct",
+      "title": "Planned bounded provider-search commands",
+      "commands": [
+        "direct"
+      ]
+    },
+    {
+      "id": "binary",
+      "title": "Planned binary/multipart commands",
+      "commands": [
+        "binary"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential profile name; never pass secret values as flags.",
+      "maps_to": "config.credential",
+      "allow_empty": false
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Render machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream-backed commands."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write without making a network mutation."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive/admin reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "account configuration",
+      "summary": "Read Freshchat account configuration.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_configuration",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/configuration"
+        }
+      ],
+      "examples": [
+        "pm freshchat account configuration --credential freshchat-prod --json"
+      ]
+    },
+    {
+      "path": "agents list",
+      "summary": "List Freshchat agents with optional documented filters.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents"
+        }
+      ],
+      "flags": [
+        {
+          "name": "is-deactivated",
+          "type": "enum",
+          "summary": "Filter by deactivation state.",
+          "maps_to": "config.agents_is_deactivated",
+          "values": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "groups",
+          "type": "string",
+          "summary": "Filter by group id.",
+          "maps_to": "config.agents_groups",
+          "allow_empty": false
+        },
+        {
+          "name": "availability-status",
+          "type": "enum",
+          "summary": "Filter by availability status.",
+          "maps_to": "config.agents_availability_status",
+          "values": [
+            "AVAILABLE",
+            "UNAVAILABLE"
+          ]
+        },
+        {
+          "name": "sort-order",
+          "type": "enum",
+          "summary": "Freshchat sort order.",
+          "maps_to": "config.agents_sort_order",
+          "values": [
+            "asc",
+            "desc"
+          ]
+        },
+        {
+          "name": "sort-by",
+          "type": "string",
+          "summary": "Freshchat sort field.",
+          "maps_to": "config.agents_sort_by",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm freshchat agents list --availability-status AVAILABLE --json"
+      ]
+    },
+    {
+      "path": "agents view",
+      "summary": "Read one Freshchat agent by configured agent id.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agent_details",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/{agent_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "agent-id",
+          "type": "string",
+          "summary": "Freshchat agent id.",
+          "maps_to": "config.agent_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "agents statuses",
+      "summary": "List Freshchat agent statuses.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agent_statuses",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/status"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List Freshchat users with documented search filters.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "flags": [
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "Filter by first_name.",
+          "maps_to": "config.users_first_name",
+          "allow_empty": false
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "Filter by last_name.",
+          "maps_to": "config.users_last_name",
+          "allow_empty": false
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Filter by email.",
+          "maps_to": "config.users_email",
+          "allow_empty": false
+        },
+        {
+          "name": "reference-id",
+          "type": "string",
+          "summary": "Filter by reference_id.",
+          "maps_to": "config.users_reference_id",
+          "allow_empty": false
+        },
+        {
+          "name": "phone-no",
+          "type": "string",
+          "summary": "Filter by phone_no.",
+          "maps_to": "config.users_phone_no",
+          "allow_empty": false
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "summary": "Filter by created_time lower bound.",
+          "maps_to": "config.users_created_from",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "summary": "Filter by created_time upper bound.",
+          "maps_to": "config.users_created_to",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "updated-from",
+          "type": "string",
+          "summary": "Filter by updated_time lower bound.",
+          "maps_to": "config.users_updated_from",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "updated-to",
+          "type": "string",
+          "summary": "Filter by updated_time upper bound.",
+          "maps_to": "config.users_updated_to",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Freshchat requires at least one user search filter for successful live /users responses; connector config and command metadata expose the documented filter set without a raw query escape hatch.",
+      "examples": [
+        "pm freshchat users list --email fixture@example.com --json"
+      ]
+    },
+    {
+      "path": "users view",
+      "summary": "Read one Freshchat user by configured user id.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_details",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Freshchat user id.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "users conversations",
+      "summary": "List conversations for a Freshchat user.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_conversations",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}/conversations"
+        }
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Freshchat user id.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations view",
+      "summary": "Read one Freshchat conversation.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversation_detail",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Freshchat conversation id.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations messages",
+      "summary": "List messages in a Freshchat conversation.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversation_messages",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/{conversation_id}/messages"
+        }
+      ],
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Freshchat conversation id.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "from-time",
+          "type": "string",
+          "summary": "Return messages created after or at this UTC timestamp.",
+          "maps_to": "config.conversation_messages_from_time",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations fields",
+      "summary": "List Freshchat conversation property fields.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversation_fields",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/fields"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "List Freshchat groups.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sort-order",
+          "type": "enum",
+          "summary": "Freshchat sort order.",
+          "maps_to": "config.groups_sort_order",
+          "values": [
+            "asc",
+            "desc"
+          ]
+        },
+        {
+          "name": "sort-by",
+          "type": "string",
+          "summary": "Freshchat sort field.",
+          "maps_to": "config.groups_sort_by",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "channels list",
+      "summary": "List Freshchat channels/topics.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "channels",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/channels"
+        }
+      ],
+      "flags": [
+        {
+          "name": "locale",
+          "type": "string",
+          "summary": "Locale filter in ISO-639 format.",
+          "maps_to": "config.channels_locale",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "List Freshchat roles.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles"
+        }
+      ]
+    },
+    {
+      "path": "outbound messages list",
+      "summary": "List Freshchat outbound messages.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_messages",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound-messages"
+        }
+      ],
+      "flags": [
+        {
+          "name": "request-id",
+          "type": "string",
+          "summary": "Optional outbound request id filter.",
+          "maps_to": "config.outbound_request_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "reports status",
+      "summary": "Read Freshchat raw report status.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_status",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/raw/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "report-id",
+          "type": "string",
+          "summary": "Freshchat raw report id.",
+          "maps_to": "config.report_id",
+          "allow_empty": false
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Optional report status filter.",
+          "maps_to": "config.report_status",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "metrics historical",
+      "summary": "Read Freshchat historical metrics.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "historical_metrics",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/historical"
+        }
+      ],
+      "flags": [
+        {
+          "name": "metric",
+          "type": "string",
+          "summary": "Metric name.",
+          "maps_to": "config.metrics_metric",
+          "allow_empty": false
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Historical metrics start timestamp.",
+          "maps_to": "config.metrics_start",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Historical metrics end timestamp.",
+          "maps_to": "config.metrics_end",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "group-by",
+          "type": "string",
+          "summary": "Optional group_by value.",
+          "maps_to": "config.metrics_group_by",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-by",
+          "type": "string",
+          "summary": "Optional filter_by value.",
+          "maps_to": "config.metrics_filter_by",
+          "allow_empty": false
+        },
+        {
+          "name": "aggregator",
+          "type": "string",
+          "summary": "Optional aggregator value.",
+          "maps_to": "config.metrics_aggregator",
+          "allow_empty": false
+        },
+        {
+          "name": "interval",
+          "type": "string",
+          "summary": "Optional interval value.",
+          "maps_to": "config.metrics_interval",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm freshchat metrics historical --metric conversation_metrics --start 2026-01-01T00:00:00Z --end 2026-01-02T00:00:00Z --json"
+      ]
+    },
+    {
+      "path": "metrics instant",
+      "summary": "Read Freshchat instant metrics.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instant_metrics",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/instant"
+        }
+      ],
+      "flags": [
+        {
+          "name": "metric",
+          "type": "string",
+          "summary": "Metric name.",
+          "maps_to": "config.metrics_metric",
+          "allow_empty": false
+        },
+        {
+          "name": "group-by",
+          "type": "string",
+          "summary": "Optional group_by value.",
+          "maps_to": "config.metrics_group_by",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-by",
+          "type": "string",
+          "summary": "Optional filter_by value.",
+          "maps_to": "config.metrics_filter_by",
+          "allow_empty": false
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Optional summary value.",
+          "maps_to": "config.metrics_summary",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "business-hours status",
+      "summary": "Check whether a Freshchat group is within business hours.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "business_hours_status",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business-hours/within-bh"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Freshchat business-hours group id.",
+          "maps_to": "config.business_hours_group_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "users create",
+      "summary": "Plan creation of a Freshchat user/contact.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "risk": "Creates a Freshchat user/contact visible to agents.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "User email.",
+          "maps_to": "record.email",
+          "allow_empty": false
+        },
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "User first name.",
+          "maps_to": "record.first_name",
+          "allow_empty": false
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "User last name.",
+          "maps_to": "record.last_name",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "User phone.",
+          "maps_to": "record.phone",
+          "allow_empty": false
+        },
+        {
+          "name": "reference-id",
+          "type": "string",
+          "summary": "External reference id.",
+          "maps_to": "record.reference_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm freshchat users create --email fixture@example.com --preview --json"
+      ]
+    },
+    {
+      "path": "users update",
+      "summary": "Plan update of a Freshchat user/contact.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "risk": "Updates an existing Freshchat user/contact.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Freshchat user id.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "User email.",
+          "maps_to": "record.email",
+          "allow_empty": false
+        },
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "User first name.",
+          "maps_to": "record.first_name",
+          "allow_empty": false
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "User last name.",
+          "maps_to": "record.last_name",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "User phone.",
+          "maps_to": "record.phone",
+          "allow_empty": false
+        },
+        {
+          "name": "reference-id",
+          "type": "string",
+          "summary": "External reference id.",
+          "maps_to": "record.reference_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "users delete",
+      "summary": "Plan deletion of a Freshchat user/contact.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "risk": "Deletes a Freshchat user/contact.",
+      "approval": "Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Freshchat user id to delete.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "path": "conversations create",
+      "summary": "Plan creation of a Freshchat conversation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations"
+        }
+      ],
+      "risk": "Creates a Freshchat conversation.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Freshchat user id.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        },
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Freshchat channel id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations update",
+      "summary": "Plan update of a Freshchat conversation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "Updates status, routing, priority, or properties on a Freshchat conversation.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Freshchat conversation id.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Conversation status.",
+          "maps_to": "record.status",
+          "allow_empty": false
+        },
+        {
+          "name": "assigned-agent-id",
+          "type": "string",
+          "summary": "Assigned Freshchat agent id.",
+          "maps_to": "record.assigned_agent_id",
+          "allow_empty": false
+        },
+        {
+          "name": "assigned-group-id",
+          "type": "string",
+          "summary": "Assigned Freshchat group id.",
+          "maps_to": "record.assigned_group_id",
+          "allow_empty": false
+        },
+        {
+          "name": "priority",
+          "type": "string",
+          "summary": "Conversation priority.",
+          "maps_to": "record.priority",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations message send",
+      "summary": "Plan sending a message into a Freshchat conversation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_conversation_message",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/messages"
+        }
+      ],
+      "risk": "Sends a visible message into an existing Freshchat conversation.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Freshchat conversation id.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "actor-type",
+          "type": "string",
+          "summary": "Freshchat actor type.",
+          "maps_to": "record.actor_type",
+          "allow_empty": false
+        },
+        {
+          "name": "actor-id",
+          "type": "string",
+          "summary": "Freshchat actor id.",
+          "maps_to": "record.actor_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "agents create",
+      "summary": "Plan creation of a Freshchat admin/agent account.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_agent",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/agents"
+        }
+      ],
+      "risk": "Creates a Freshchat admin/agent account.",
+      "approval": "Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Agent email.",
+          "maps_to": "record.email",
+          "allow_empty": false
+        },
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "Agent first name.",
+          "maps_to": "record.first_name",
+          "allow_empty": false
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "Agent last name.",
+          "maps_to": "record.last_name",
+          "allow_empty": false
+        },
+        {
+          "name": "role-id",
+          "type": "string",
+          "summary": "Freshchat role id.",
+          "maps_to": "record.role_id",
+          "allow_empty": false
+        },
+        {
+          "name": "groups",
+          "type": "string_array",
+          "summary": "Freshchat group ids.",
+          "maps_to": "record.groups"
+        }
+      ],
+      "redact_fields": [
+        "email"
+      ]
+    },
+    {
+      "path": "agents update",
+      "summary": "Plan update of a Freshchat admin/agent account.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_agent",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/agents/{agent_id}"
+        }
+      ],
+      "risk": "Updates a Freshchat admin/agent account.",
+      "approval": "Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "agent-id",
+          "type": "string",
+          "summary": "Freshchat agent id.",
+          "maps_to": "record.agent_id",
+          "allow_empty": false
+        },
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "Agent first name.",
+          "maps_to": "record.first_name",
+          "allow_empty": false
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "Agent last name.",
+          "maps_to": "record.last_name",
+          "allow_empty": false
+        },
+        {
+          "name": "role-id",
+          "type": "string",
+          "summary": "Freshchat role id.",
+          "maps_to": "record.role_id",
+          "allow_empty": false
+        },
+        {
+          "name": "groups",
+          "type": "string_array",
+          "summary": "Freshchat group ids.",
+          "maps_to": "record.groups"
+        },
+        {
+          "name": "is-deactivated",
+          "type": "boolean",
+          "summary": "Agent deactivation state.",
+          "maps_to": "record.is_deactivated"
+        }
+      ],
+      "redact_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "path": "agents status update",
+      "summary": "Plan update of a Freshchat agent availability status.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_agent_status",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/agents/{agent_id}"
+        }
+      ],
+      "risk": "Updates a Freshchat agent availability status.",
+      "approval": "Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "agent-id",
+          "type": "string",
+          "summary": "Freshchat agent id.",
+          "maps_to": "record.agent_id",
+          "allow_empty": false
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Freshchat availability status.",
+          "maps_to": "record.status",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "path": "agents delete",
+      "summary": "Plan deletion of a Freshchat admin/agent account.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_agent",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/agents/{agent_id}"
+        }
+      ],
+      "risk": "Deletes a Freshchat admin/agent account.",
+      "approval": "Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "agent-id",
+          "type": "string",
+          "summary": "Freshchat agent id to delete.",
+          "maps_to": "record.agent_id",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "path": "outbound whatsapp send",
+      "summary": "Plan sending an outbound WhatsApp message through Freshchat.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_outbound_whatsapp_message",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound-messages/whatsapp"
+        }
+      ],
+      "risk": "Sends an outbound WhatsApp message through Freshchat.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "provider",
+          "type": "string",
+          "summary": "Outbound provider value.",
+          "maps_to": "record.provider",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "reports extract",
+      "summary": "Plan generation of a Freshchat raw report extract.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "extract_report",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/raw"
+        }
+      ],
+      "risk": "Requests generation of a Freshchat raw report extract.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Report start timestamp.",
+          "maps_to": "record.start",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Report end timestamp.",
+          "maps_to": "record.end",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Report event.",
+          "maps_to": "record.event",
+          "allow_empty": false
+        },
+        {
+          "name": "format",
+          "type": "enum",
+          "summary": "Report output format.",
+          "maps_to": "record.format",
+          "values": [
+            "csv",
+            "json"
+          ]
+        }
+      ],
+      "examples": [
+        "pm freshchat reports extract --start 2024-01-01T00:00:00Z --end 2024-01-02T00:00:00Z --event Conversation-Resolved --format csv --preview --json"
+      ]
+    },
+    {
+      "path": "csat create",
+      "summary": "Plan creation of a Freshchat CSAT rating.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_csat_rating",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/csat/{conversation_id}"
+        }
+      ],
+      "risk": "Creates a CSAT rating for a Freshchat conversation.",
+      "approval": "Reverse ETL writes require plan -> preview -> explicit approval -> execute.",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Freshchat conversation id.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "rating",
+          "type": "integer",
+          "summary": "CSAT rating.",
+          "maps_to": "record.rating"
+        },
+        {
+          "name": "comment",
+          "type": "string",
+          "summary": "Optional CSAT comment.",
+          "maps_to": "record.comment",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "direct users fetch",
+      "summary": "Planned bounded subset fetch for up to 100 Freshchat user ids.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.freshchat.com/api/#list_subset_users",
+      "risk": "medium",
+      "approval": "none until #2985 provides executable provider_search/provider_query safety; no live call is available today.",
+      "notes": "Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.",
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string_array",
+          "summary": "Freshchat user ids; provider maximum 100 ids.",
+          "maps_to": "body.ids"
+        }
+      ]
+    },
+    {
+      "path": "binary files upload",
+      "summary": "Planned Freshchat file upload.",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_url": "https://developers.freshchat.com/api/#upload_a_file",
+      "risk": "high",
+      "approval": "blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.",
+      "notes": "Blocked binary/file operation. Official API accepts one multipart file with a documented 25 MB cap; this connector currently accepts no filesystem path or binary payload.",
+      "flags": [
+        {
+          "name": "file",
+          "type": "string",
+          "summary": "Future local file path; currently not executable.",
+          "maps_to": "body.file",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "binary images upload",
+      "summary": "Planned Freshchat image upload.",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_url": "https://developers.freshchat.com/api/#upload_an_image",
+      "risk": "high",
+      "approval": "blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.",
+      "notes": "Blocked binary/file operation. Official API accepts multipart image input; this connector currently accepts no filesystem path or binary payload.",
+      "flags": [
+        {
+          "name": "image",
+          "type": "string",
+          "summary": "Future local image path; currently not executable.",
+          "maps_to": "body.image",
+          "allow_empty": false
+        }
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "destructive-confirmation",
+      "summary": "Freshchat DELETE and admin/agent-management operations require typed destructive confirmation plus reverse ETL plan -> preview -> approval -> execute."
+    },
+    {
+      "name": "provider-search",
+      "summary": "Freshchat POST /users/fetch remains planned/blocked on #2985 and is not exposed as a raw query/body command."
+    },
+    {
+      "name": "binary-uploads",
+      "summary": "Freshchat file/image uploads remain planned/blocked until a typed binary/multipart safety contract exists."
+    }
+  ]
+}

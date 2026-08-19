@@ -1,0 +1,10 @@
+{
+  "record": {
+    "opportunity": "opportunity_fixture_1",
+    "noteId": "noteId_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/opportunities/opportunity_fixture_1/notes/noteId_fixture_1"
+  }
+}

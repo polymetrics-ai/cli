@@ -1,36 +1,52 @@
 {
-  "api": "Google Calendar legacy connector hook surface",
-  "docs": "https://developers.google.com/calendar/api/v3/reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Tier-2 quarantine migration for the legacy google-calendar connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-calendar, which delegates to internal/connectors/google-calendar until the human-gated wave 6 cutover.",
+  "api": "Google Calendar API v3",
+  "docs": "https://developers.google.com/workspace/calendar/api/v3/reference",
+  "reviewed_at": "2026-08-05",
+  "operation_ledger_version": 1,
+  "scope": "All 38 operations in the official Google Discovery document (revision 20260731): https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
   "endpoints": [
-    {
-      "method": "HOOK",
-      "path": "internal/connectors/google-calendar calendar_list read path",
-      "covered_by": {
-        "stream": "calendar_list"
-      }
-    },
-    {
-      "method": "HOOK",
-      "path": "internal/connectors/google-calendar events read path",
-      "covered_by": {
-        "stream": "events"
-      }
-    },
-    {
-      "method": "HOOK",
-      "path": "internal/connectors/google-calendar settings read path",
-      "covered_by": {
-        "stream": "settings"
-      }
-    },
-    {
-      "method": "HOOK",
-      "path": "internal/connectors/google-calendar acl read path",
-      "covered_by": {
-        "stream": "acl"
-      }
-    }
+    {"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}", "covered_by": {"write": "delete_acl_rule"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}", "covered_by": {"stream": "acl_rule"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/acl", "covered_by": {"write": "insert_acl_rule"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/acl", "covered_by": {"stream": "acl"}},
+    {"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}", "covered_by": {"write": "patch_acl_rule"}},
+    {"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}", "covered_by": {"write": "update_acl_rule"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/acl/watch", "covered_by": {"write": "watch_acl"}},
+
+    {"method": "DELETE", "path": "/calendar/v3/users/me/calendarList/{calendarId}", "covered_by": {"write": "delete_calendar_list_entry"}},
+    {"method": "GET", "path": "/calendar/v3/users/me/calendarList/{calendarId}", "covered_by": {"stream": "calendar_list_entry"}},
+    {"method": "POST", "path": "/calendar/v3/users/me/calendarList", "covered_by": {"write": "insert_calendar_list_entry"}},
+    {"method": "GET", "path": "/calendar/v3/users/me/calendarList", "covered_by": {"stream": "calendar_list"}},
+    {"method": "PATCH", "path": "/calendar/v3/users/me/calendarList/{calendarId}", "covered_by": {"write": "patch_calendar_list_entry"}},
+    {"method": "PUT", "path": "/calendar/v3/users/me/calendarList/{calendarId}", "covered_by": {"write": "update_calendar_list_entry"}},
+    {"method": "POST", "path": "/calendar/v3/users/me/calendarList/watch", "covered_by": {"write": "watch_calendar_list"}},
+
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/clear", "covered_by": {"write": "clear_calendar"}},
+    {"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}", "covered_by": {"write": "delete_calendar"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}", "covered_by": {"stream": "calendar"}},
+    {"method": "POST", "path": "/calendar/v3/calendars", "covered_by": {"write": "insert_calendar"}},
+    {"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}", "covered_by": {"write": "patch_calendar"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/transferOwnership", "covered_by": {"write": "transfer_calendar_ownership"}},
+    {"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}", "covered_by": {"write": "update_calendar"}},
+
+    {"method": "POST", "path": "/calendar/v3/channels/stop", "covered_by": {"write": "stop_channel"}},
+    {"method": "GET", "path": "/calendar/v3/colors", "covered_by": {"stream": "colors"}},
+
+    {"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}", "covered_by": {"write": "delete_event"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}", "covered_by": {"stream": "event"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/import", "covered_by": {"write": "import_event"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events", "covered_by": {"write": "insert_event"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances", "covered_by": {"stream": "event_instances"}},
+    {"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events", "covered_by": {"stream": "events"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move", "covered_by": {"write": "move_event"}},
+    {"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}", "covered_by": {"write": "patch_event"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd", "covered_by": {"write": "quick_add_event"}},
+    {"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}", "covered_by": {"write": "update_event"}},
+    {"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/watch", "covered_by": {"write": "watch_events"}},
+    {"method": "POST", "path": "/calendar/v3/freeBusy", "covered_by": {"direct_read": "freebusy query"}},
+
+    {"method": "GET", "path": "/calendar/v3/users/me/settings/{setting}", "covered_by": {"stream": "setting"}},
+    {"method": "GET", "path": "/calendar/v3/users/me/settings", "covered_by": {"stream": "settings"}},
+    {"method": "POST", "path": "/calendar/v3/users/me/settings/watch", "covered_by": {"write": "watch_settings"}}
   ]
 }

@@ -11,6 +11,7 @@ Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, an
 
 ## Icon
 
+- id: bingads
 - asset: icons/bingads.svg
 - source: upstream_registry
 - review_status: upstream_seeded

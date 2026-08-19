@@ -11,6 +11,7 @@ Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic
 
 ## Icon
 
+- id: avni
 - asset: icons/avni.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,39 +31,39 @@ Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic
 - mode
 - page_size
 - start_date
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - subjects:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - encounters:
   - primary key: id
   - cursor: updated_at
-  - fields: encounter_type(), id(), subject_id(), updated_at()
+  - fields: encounter_type(string), id(string), subject_id(string), updated_at(string)
 - program_enrolments:
   - primary key: id
   - cursor: updated_at
-  - fields: enrolment_date_time(), exit_date_time(), id(), program(), subject_id(), updated_at()
+  - fields: enrolment_date_time(string), exit_date_time(string), id(string), program(string), subject_id(string), updated_at(string)
 - program_encounters:
   - primary key: id
   - cursor: updated_at
-  - fields: encounter_date_time(), encounter_type(), enrolment_id(), id(), program(), subject_id(), updated_at()
+  - fields: encounter_date_time(string), encounter_type(string), enrolment_id(string), id(string), program(string), subject_id(string), updated_at(string)
 - group_subjects:
   - primary key: id
   - cursor: updated_at
-  - fields: group_subject_id(), id(), member_subject_id(), membership_end_date(), membership_start_date(), updated_at()
+  - fields: group_subject_id(string), id(string), member_subject_id(string), membership_end_date(string), membership_start_date(string), updated_at(string)
 - locations:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), level(), parent_id(), title(), type(), updated_at()
+  - fields: id(string), level(number), parent_id(string), title(string), type(string), updated_at(string)
 - approval_statuses:
   - primary key: entity_id, entity_type
   - cursor: status_date_time
-  - fields: approval_status(), approval_status_comment(), entity_id(), entity_type(), entity_type_id(), status_date_time()
+  - fields: approval_status(string), approval_status_comment(string), entity_id(string), entity_type(string), entity_type_id(string), status_date_time(string)
 
 ## Sync Modes
 

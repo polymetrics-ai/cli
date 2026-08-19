@@ -11,6 +11,7 @@ Reads monday.com boards, items, users, teams, and tags through the monday.com Gr
 
 ## Icon
 
+- id: monday
 - asset: icons/monday.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -39,20 +40,20 @@ Reads monday.com boards, items, users, teams, and tags through the monday.com Gr
 - boards:
   - primary key: id
   - cursor: updated_at
-  - fields: board_kind(), description(), id(), name(), state(), type(), updated_at(), workspace_id()
+  - fields: board_kind(string), description(string), id(string), name(string), state(string), type(string), updated_at(string), workspace_id(string)
 - items:
   - primary key: id
   - cursor: updated_at
-  - fields: board_id(), board_name(), created_at(), group_id(), group_title(), id(), name(), state(), updated_at()
+  - fields: board_id(string), board_name(string), created_at(string), group_id(string), group_title(string), id(string), name(string), state(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: created_at(), email(), enabled(), id(), is_admin(), is_guest(), is_pending(), name()
+  - fields: created_at(string), email(string), enabled(boolean), id(string), is_admin(boolean), is_guest(boolean), is_pending(boolean), name(string)
 - teams:
   - primary key: id
-  - fields: id(), name(), picture_url()
+  - fields: id(string), name(string), picture_url(string)
 - tags:
   - primary key: id
-  - fields: color(), id(), name()
+  - fields: color(string), id(string), name(string)
 
 ## Sync Modes
 

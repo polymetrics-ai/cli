@@ -11,6 +11,7 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 
 ## Icon
 
+- id: tyntec
 - asset: icons/tyntec.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,24 +29,24 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - messages:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), from(), id(), status(), to()
+  - fields: created_at(string), from(string), id(string), status(string), to(string)
 - templates:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - sender_ids:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - delivery_reports:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), from(), id(), status(), to()
+  - fields: created_at(string), from(string), id(string), status(string), to(string)
 
 ## Sync Modes
 
@@ -55,6 +56,7 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 
 - send_message:
   - endpoint: POST sms/v1/messages
+  - required fields: to, from, text
   - risk: sends a billable SMS message to the recipient phone number and may notify an external user
 
 ## Security

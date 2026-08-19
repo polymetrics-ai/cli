@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "changefeed.json",
+  "type": "object",
+  "required": ["status", "mechanism", "source"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["implemented", "planned", "unsupported", "unknown"]
+    },
+    "mechanism": {
+      "type": "string",
+      "enum": ["logical_replication", "binlog_replication", "incremental_cursor", "webhook", "event_stream", "polling_watermark"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["artifact_url", "artifact_version", "retrieved_at"],
+      "additionalProperties": false,
+      "properties": {
+        "artifact_url": { "type": "string", "format": "uri" },
+        "artifact_version": { "type": "string" },
+        "retrieved_at": { "type": "string", "format": "date" }
+      }
+    },
+    "reason": { "type": "string" },
+    "executor": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string" },
+        "id": { "type": "string" }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "required": ["kind", "keys", "commit_after", "on_invalid"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string" },
+        "keys": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "commit_after": { "type": "string" },
+        "on_invalid": { "type": "string" }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "required": ["ordering", "duplicates", "deletes", "dedupe_key"],
+      "additionalProperties": false,
+      "properties": {
+        "ordering": { "type": "string" },
+        "duplicates": { "type": "string" },
+        "deletes": { "type": "string" },
+        "dedupe_key": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "streams": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "polling_watermark": {
+      "type": "object",
+      "required": ["watermark", "tie_breaker", "boundary", "safety_lag_seconds", "page_size", "max_pages", "request_budget"],
+      "additionalProperties": false,
+      "properties": {
+        "watermark": {
+          "type": "object",
+          "required": ["kind", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["timestamp", "monotonic_sequence", "opaque_cursor"] },
+            "path": { "type": "string" }
+          }
+        },
+        "tie_breaker": {
+          "type": "object",
+          "required": ["path"],
+          "additionalProperties": false,
+          "properties": { "path": { "type": "string" } }
+        },
+        "boundary": { "type": "string", "enum": ["inclusive"] },
+        "safety_lag_seconds": { "type": "integer" },
+        "page_size": { "type": "integer" },
+        "max_pages": { "type": "integer" },
+        "request_budget": { "type": "integer" },
+        "soft_delete": {
+          "type": "object",
+          "required": ["path"],
+          "additionalProperties": false,
+          "properties": { "path": { "type": "string" } }
+        },
+        "deletion_endpoint": {
+          "type": "object",
+          "required": ["path", "records_path"],
+          "additionalProperties": false,
+          "properties": {
+            "path": { "type": "string" },
+            "records_path": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

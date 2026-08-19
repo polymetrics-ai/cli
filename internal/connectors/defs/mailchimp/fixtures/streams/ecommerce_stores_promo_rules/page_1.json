@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores/synthetic-conformance-value/promo-rules",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "promo_rules": [
+        {
+          "id": "fixture_id",
+          "store_id": "fixture_store_id",
+          "title": "fixture_title",
+          "description": "fixture_description",
+          "starts_at": "fixture_starts_at",
+          "ends_at": "fixture_ends_at",
+          "amount": 1,
+          "type": "fixture_type"
+        }
+      ]
+    }
+  }
+}

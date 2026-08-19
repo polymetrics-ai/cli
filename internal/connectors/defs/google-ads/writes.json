@@ -1,0 +1,180 @@
+{
+  "actions": [
+    {
+      "name": "move_manager_link_customer_manager_links",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/customerManagerLinks:moveManagerLink",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "newManager": {
+            "type": "string"
+          },
+          "validateOnly": {
+            "type": "boolean"
+          },
+          "previousCustomerManagerLink": {
+            "type": "string"
+          }
+        },
+        "minProperties": 1
+      },
+      "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.moveManagerLink against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_data_links",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/dataLinks:remove",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resourceName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resourceName"
+        ]
+      },
+      "risk": "Executes Google Ads API v22 method customers.dataLinks.remove against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_data_links",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/dataLinks:update",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dataLinkStatus": {
+            "type": "string",
+            "enum": [
+              "UNSPECIFIED",
+              "UNKNOWN",
+              "REQUESTED",
+              "PENDING_APPROVAL",
+              "ENABLED",
+              "DISABLED",
+              "REVOKED",
+              "REJECTED"
+            ]
+          },
+          "resourceName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resourceName"
+        ]
+      },
+      "risk": "Executes Google Ads API v22 method customers.dataLinks.update against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_product_link_invitations",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:remove",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resourceName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resourceName"
+        ]
+      },
+      "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.remove against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_product_link_invitations",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:update",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productLinkInvitationStatus": {
+            "type": "string",
+            "enum": [
+              "UNSPECIFIED",
+              "UNKNOWN",
+              "ACCEPTED",
+              "REQUESTED",
+              "PENDING_APPROVAL",
+              "REVOKED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          },
+          "resourceName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resourceName"
+        ]
+      },
+      "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.update against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_product_links",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}/productLinks:remove",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resourceName": {
+            "type": "string"
+          },
+          "validateOnly": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "resourceName"
+        ]
+      },
+      "risk": "Executes Google Ads API v22 method customers.productLinks.remove against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "start_identity_verification_customers",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v22/customers/{{ config.customer_id }}:startIdentityVerification",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "verificationProgram": {
+            "type": "string",
+            "enum": [
+              "UNSPECIFIED",
+              "UNKNOWN",
+              "ADVERTISER_IDENTITY_VERIFICATION"
+            ]
+          }
+        },
+        "minProperties": 1
+      },
+      "risk": "Executes Google Ads API v22 method customers.startIdentityVerification against the configured customer. Review provider-side effects before approval.",
+      "confirm": "destructive"
+    }
+  ]
+}

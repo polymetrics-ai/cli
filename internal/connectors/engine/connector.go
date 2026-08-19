@@ -3,44 +3,40 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"net/http"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/synccontract"
 )
 
-// syncMode name constants mirror internal/app/sync_modes.go's MustSyncModeNames
-// verbatim (design §B.6). engine cannot import internal/app (app already
-// depends on connectors, and PLAN.md forbids editing internal/app/** for this
-// task); these are the same five strings, kept in lockstep by
-// TestDerivedSyncModesTruthTable against the design doc's truth table rather
-// than by a shared import.
-const (
-	syncModeFullRefreshAppend           = "full_refresh_append"
-	syncModeFullRefreshOverwrite        = "full_refresh_overwrite"
-	syncModeFullRefreshOverwriteDeduped = "full_refresh_overwrite_deduped"
-	syncModeIncrementalAppend           = "incremental_append"
-	syncModeIncrementalAppendDeduped    = "incremental_append_deduped"
-)
-
-// DerivedSyncModes returns the sync modes a stream supports, derived from its
-// bundle-declared shape rather than authored anywhere (design §B.6): the two
-// full_refresh modes are always available; the *_deduped variants require
-// x-primary-key; the incremental_* modes require an incremental block.
+// DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
-	modes := []string{syncModeFullRefreshAppend, syncModeFullRefreshOverwrite}
+	cursorField := effectiveCursorField(s, sch)
+	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
+		HasCursor:              cursorField != "",
+		HasIncrementalExecutor: hasIncrementalExecutor(s, cursorField),
+	})
+}
 
-	hasPrimaryKey := sch != nil && len(sch.PrimaryKey) > 0
-	hasIncremental := s.Incremental != nil
+func effectiveCursorField(s StreamSpec, sch *StreamSchema) string {
+	if sch != nil && sch.CursorField != "" {
+		return sch.CursorField
+	}
+	if s.Incremental != nil {
+		return s.Incremental.CursorField
+	}
+	return ""
+}
 
-	if hasPrimaryKey {
-		modes = append(modes, syncModeFullRefreshOverwriteDeduped)
+func hasIncrementalExecutor(s StreamSpec, cursorField string) bool {
+	if s.Incremental == nil || cursorField == "" {
+		return false
 	}
-	if hasIncremental {
-		modes = append(modes, syncModeIncrementalAppend)
-	}
-	if hasPrimaryKey && hasIncremental {
-		modes = append(modes, syncModeIncrementalAppendDeduped)
-	}
-	return modes
+	return s.Incremental.CursorField == "" || s.Incremental.CursorField == cursorField
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -86,8 +82,86 @@ func (c *Connector) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(c.bundle)
 }
 
+// RateLimitCoordination returns the safe declaration-level provenance used by
+// connector inspection. It intentionally does not attempt a coordinator
+// connection or expose any protected scope identity.
+func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
+	if c == nil || c.bundle.RateLimits == nil || c.bundle.RateLimits.State != connsdk.RateLimitStateDeclared || len(c.bundle.RateLimits.Policies) == 0 {
+		return connectors.RateLimitCoordination{}
+	}
+	hasProcessLocal := false
+	hasRequireShared := false
+	hasCertificationOnlyRequireShared := false
+	for _, policy := range c.bundle.RateLimits.Policies {
+		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+			if rateLimitPolicyIsCertificationOnly(policy) {
+				hasCertificationOnlyRequireShared = true
+				continue
+			}
+			hasRequireShared = true
+		} else {
+			hasProcessLocal = true
+		}
+	}
+	if hasRequireShared && hasProcessLocal {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationMixed,
+			Message: "Rate-limit coordination is policy-scoped: process-local policies protect this pm process only and are not shared across processes; require_shared policies refuse before sending when the optional coordinator is unavailable.",
+		}
+	}
+	if hasRequireShared {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationRequireShared,
+			Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
+		}
+	}
+	message := "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes."
+	if hasCertificationOnlyRequireShared {
+		message += " Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable."
+	}
+	return connectors.RateLimitCoordination{
+		Mode:    connectors.RateLimitCoordinationProcessLocal,
+		Message: message,
+	}
+}
+
+// rateLimitPolicyIsCertificationOnly reports whether a policy's declared
+// coordination requirement applies only to the certification runner. Connector
+// inspection has no selected credential tier, so it reports ordinary traffic's
+// process-local boundary separately while its message discloses this overlay.
+func rateLimitPolicyIsCertificationOnly(policy connsdk.RateLimitPolicy) bool {
+	if len(policy.Selector.Tiers) == 0 {
+		return false
+	}
+	for _, tier := range policy.Selector.Tiers {
+		if tier != "certification" {
+			return false
+		}
+	}
+	return true
+}
+
+// HasConfigurationConstraints reports whether this bundle declares
+// configuration-time constraints. It is intentionally separate from the
+// connector's optional interface presence so callers can distinguish a
+// constraint-free bundle from one whose constraints can be evaluated.
+func (c *Connector) HasConfigurationConstraints() bool {
+	return c.bundle.Spec != nil && c.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// this bundle's declared configuration constraints.
+func (c *Connector) ValidateConfiguration(config map[string]string) error {
+	if c.bundle.Spec == nil {
+		return nil
+	}
+	return c.bundle.Spec.ValidateConfiguration(config)
+}
+
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
-	return Check(ctx, c.bundle, cfg, c.hooks)
+	return executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Check(admitted, c.bundle, cfg, c.hooks))
+	})
 }
 
 // Catalog derives connectors.Catalog from the bundle's streams and compiled
@@ -105,21 +179,164 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	return Read(ctx, c.bundle, req, c.hooks, emit)
+	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Read(admitted, c.bundle, req, c.hooks, emit))
+	})
+}
+
+// RateLimitParkingScope reproduces the declaration-selected policy group for
+// the failed stream. It accepts only connsdk's typed terminal 429 evidence;
+// generic HTTP or string-shaped errors cannot create durable parking state.
+func (c *Connector) RateLimitParkingScope(ctx context.Context, cfg connectors.RuntimeConfig, stream string, runErr error) (connectors.RateLimitScopeKey, error) {
+	var rateErr *connsdk.RateLimitError
+	if !errors.As(runErr, &rateErr) || rateErr == nil || !rateErr.HasReset || rateErr.ResetAt.IsZero() {
+		return "", errors.New("rate-limit parking scope requires typed reset evidence")
+	}
+	spec, err := findStream(c.bundle, stream)
+	if err != nil {
+		return "", err
+	}
+	method := spec.Method
+	if method == "" {
+		method = "GET"
+	}
+	resolver := newRateLimitResolverWithContext(ctx, c.bundle, cfg)
+	if resolver == nil {
+		return "", errors.New("rate-limit parking scope has no declared policy")
+	}
+	matched, _, err := resolver.resolvePolicies(ctx, method, spec.Path, resolver.policies)
+	if err != nil {
+		return "", err
+	}
+	if len(matched) == 0 || matched[0].parkingScope == "" {
+		return "", errors.New("rate-limit parking scope has no matching declared policy")
+	}
+	return matched[0].parkingScope, nil
 }
 
 func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
-	return DirectRead(ctx, c.bundle, req, c.hooks)
+	var result connectors.DirectReadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = DirectRead(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
-	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
+	var result connectors.DirectReadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationDirectRead(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+// PreflightOperationDirectRead proves a command's declared binding can reach
+// this connector's bounded direct-read executor without resolving credentials
+// or making a network request.
+func (c *Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// OperationStatusCheck delegates one closed, response-less HEAD operation to
+// the engine. It remains distinct from direct reads so a status declaration
+// cannot gain JSON response behavior through the connector adapter.
+func (c *Connector) OperationStatusCheck(ctx context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
+	var result connectors.OperationStatusCheckResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationStatusCheck(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+// PreflightOperationStatusCheck proves a status_check command's fixed HEAD
+// binding without resolving credentials or sending a request.
+func (c *Connector) PreflightOperationStatusCheck(operation, method, path, outputPolicy string) error {
+	return PreflightOperationStatusCheck(c.bundle, operation, method, path, outputPolicy)
+}
+
+// PreflightOperationStructuredJSONVariable lets commandrunner admit a JSON
+// flag only after the fixed GraphQL operation's own closed variables schema
+// has accepted that exact top-level variable. It resolves no credential and
+// makes no request.
+func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
+	op, err := findOperation(c.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
+}
+
+// PreflightOperationDirectWrite proves a command's declared binding can reach
+// this connector's typed write executor without resolving credentials or
+// making a network request.
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+}
+
+func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	var result connectors.WritePreview
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = PreviewOperationDirectWrite(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+func (c *Connector) OperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
+	var result connectors.OperationDirectWriteResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationDirectWrite(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.OperationDirectWriteMetadata, error) {
+	return OperationDirectWriteMetadata(c.bundle, operation)
+}
+
+// OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
+// delegating to the package-level executor. The engine-local request type stays
+// the executor's own contract; this adapter is the seam that lets a CLI command
+// reach it without the connectors package depending on engine internals.
+func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	var result BinaryDownloadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationBinaryDownload(admitted, c.bundle, BinaryDownloadRequest{
+			Operation: req.Operation, Config: req.Config, PathParams: req.PathParams, Query: req.Query,
+			MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
+		}, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	if err != nil {
+		return connectors.OperationBinaryDownloadResult{}, err
+	}
+	return connectors.OperationBinaryDownloadResult{
+		Connector: result.Connector,
+		Operation: result.Operation,
+		Record:    result.Record,
+	}, nil
 }
 
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	return InitialState(ctx, c.bundle, stream, cfg)
+	var result map[string]string
+	err := executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = InitialState(admitted, c.bundle, stream, cfg)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 // Write executes req against the bundle's writes.json actions. A bundle with
@@ -132,7 +349,56 @@ func (c *Connector) Write(ctx context.Context, req connectors.WriteRequest, reco
 	if len(c.bundle.Writes) == 0 {
 		return connectors.WriteResult{RecordsFailed: len(records)}, connectors.ErrUnsupportedOperation
 	}
-	return Write(ctx, c.bundle, req, records, c.hooks)
+	var result connectors.WriteResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = Write(admitted, c.bundle, req, records, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+// AuthenticationFailureVerified classifies only errors matched by this
+// connector's declared error map. A generic 401 without a matching declaration
+// is deliberately insufficient.
+func (c *Connector) AuthenticationFailureVerified(err error) bool {
+	if connectors.IsVerifiedAuthenticationFailure(err) {
+		return true
+	}
+	var engineErr *Error
+	return errors.As(err, &engineErr) && (engineErr.Class == "auth_failed" || declaredAuthenticationRuleMatches(c.bundle.HTTP.ErrorMap, engineErr.Err))
+}
+
+func executeWithAuthCohort(ctx context.Context, cfg connectors.RuntimeConfig, operation func(context.Context) error) error {
+	if cfg.AuthenticationAdmission == nil {
+		return operation(ctx)
+	}
+	return cfg.AuthenticationAdmission.Execute(ctx, operation)
+}
+
+func markDeclaredAuthenticationFailure(rules []ErrorRule, err error) error {
+	if err == nil {
+		return nil
+	}
+	var engineErr *Error
+	if errors.As(err, &engineErr) && (engineErr.Class == "auth_failed" || declaredAuthenticationRuleMatches(rules, engineErr.Err)) {
+		return connectors.MarkVerifiedAuthenticationFailure(err)
+	}
+	return err
+}
+
+func declaredAuthenticationRuleMatches(rules []ErrorRule, err error) bool {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return false
+	}
+	for _, rule := range rules {
+		if rule.Status != httpErr.Status || (rule.MatchBody != "" && !strings.Contains(httpErr.Body, rule.MatchBody)) {
+			continue
+		}
+		return rule.Status == http.StatusUnauthorized || rule.Class == "auth_failed"
+	}
+	return false
 }
 
 // ValidateWrite satisfies connectors.WriteValidator.
@@ -141,6 +407,30 @@ func (c *Connector) ValidateWrite(ctx context.Context, req connectors.WriteReque
 		return connectors.ErrUnsupportedOperation
 	}
 	return ValidateWrite(ctx, c.bundle, req, records)
+}
+
+// PreflightWriteAction exposes the declarative write promotion guard to the
+// command runner. Keeping the inspection beside the raw bundle schema makes
+// promotion enforcement part of the declarative runtime rather than a copied
+// static-validator rule.
+func (c *Connector) PreflightWriteAction(name string) error {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return err
+	}
+	return ValidatePromotableRecordSchema(action.RecordSchema)
+}
+
+// PreflightStructuredJSONRecordField makes the concrete write schema the
+// authority for a commandrunner `json` flag. It intentionally accepts a field
+// name rather than a raw body or arbitrary path, so the runner cannot grow a
+// generic JSON request escape hatch around the declarative write contract.
+func (c *Connector) PreflightStructuredJSONRecordField(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateStructuredJSONRecordField(action.RecordSchema, field)
 }
 
 // DryRunWrite satisfies connectors.DryRunWriter.
@@ -152,11 +442,11 @@ func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest
 }
 
 // Base is embedded by Tier-3 native connectors (design §B.7 Tier 3, e.g.
-// native/postgres) to serve identity/metadata/definition from their bundle
-// without duplicating the synthesis logic Connector already has. Tier-3
-// connectors are NOT declaratively read/written by the engine — they
-// implement Check/Catalog/Read/Write themselves and embed Base purely for
-// Name/Metadata/Definition.
+// native/postgres) to serve identity/metadata/definition and operation
+// direct-read preflight from their bundle without duplicating the synthesis
+// logic Connector already has. Tier-3 connectors are NOT declaratively
+// read/written by the engine — they implement Check/Catalog/Read/Write
+// themselves.
 type Base struct {
 	bundle Bundle
 }
@@ -172,12 +462,57 @@ func (b Base) Metadata() connectors.Metadata {
 	return synthesizeMetadata(b.bundle)
 }
 
+// BundleManifest gives a Tier-3 native the bundle's configuration, risk, and
+// static-stream projection when that native elects to expose a Manifest.
+// This stays explicitly named so adding a helper to Base cannot silently
+// change every existing Tier-3 connector's public manifest projection.
+func (b Base) BundleManifest() connectors.Manifest {
+	return synthesizeManifest(b.bundle)
+}
+
 func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
 }
 
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
+}
+
+// PreflightOperationDirectRead validates a native connector's declared
+// operation direct-read binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// PreflightOperationDirectWrite validates a native connector's declared
+// operation direct-write binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+}
+
+// OperationDirectReadMaxBytes returns the bounded response limit for a
+// declared operation direct read.
+func (b Base) OperationDirectReadMaxBytes(operation string, requested int) (int, error) {
+	op, err := operationDirectReadSpec(b.bundle, operation)
+	if err != nil {
+		return 0, err
+	}
+	return clampOperationDirectReadMaxBytes(requested, op.REST.MaxBytes), nil
+}
+
+// HasConfigurationConstraints exposes bundle-declared configuration
+// constraints to Tier-3 native connectors that embed Base.
+func (b Base) HasConfigurationConstraints() bool {
+	return b.bundle.Spec != nil && b.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// the embedded bundle's declared configuration constraints.
+func (b Base) ValidateConfiguration(config map[string]string) error {
+	if b.bundle.Spec == nil {
+		return nil
+	}
+	return b.bundle.Spec.ValidateConfiguration(config)
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,
@@ -215,12 +550,16 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 		for _, key := range b.Spec.SecretKeys() {
 			secretSet[key] = true
 		}
+		requiredSet := map[string]bool{}
+		for _, key := range b.Spec.RequiredKeys() {
+			requiredSet[key] = true
+		}
 		for _, property := range b.Spec.Properties() {
 			if secretSet[property] {
-				secretFields = append(secretFields, connectors.SecretField{Name: property})
+				secretFields = append(secretFields, connectors.SecretField{Name: property, Required: requiredSet[property]})
 				continue
 			}
-			configFields = append(configFields, connectors.ConfigField{Name: property})
+			configFields = append(configFields, connectors.ConfigField{Name: property, Required: requiredSet[property]})
 		}
 	}
 
@@ -233,20 +572,22 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			}
 		}
 	}
-	// Preserve the canonical mode ordering (matches
-	// internal/app/sync_modes.go.MustSyncModeNames) rather than
-	// first-seen-per-stream order.
+	// Preserve the shared public mode ordering rather than first-seen-per-stream
+	// order.
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionSpec{
 			Name:           a.Name,
 			RequiredFields: writeActionRequiredFields(a),
 			OptionalFields: writeActionOptionalFields(a),
 			Method:         a.Method,
 			Path:           a.Path,
+			RedactFields:   append([]string(nil), a.RedactFields...),
 			Risk:           a.Risk,
-			Confirm:        a.Confirm,
+			Batchable:      cloneBoolPtr(a.Batchable),
+			Confirm:        confirm,
 		})
 	}
 
@@ -319,34 +660,53 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		}
 		if sch != nil {
 			summary.PrimaryKey = sch.PrimaryKey
-			summary.CursorField = sch.CursorField
 		}
+		summary.CursorField = effectiveCursorField(s, sch)
 		streamSummaries = append(streamSummaries, summary)
 	}
 
 	writeActions := make([]connectors.WriteActionInfo, 0, len(b.Writes))
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionInfo{
-			Name:    a.Name,
-			Kind:    a.Kind,
-			Method:  a.Method,
-			Path:    a.Path,
-			Risk:    a.Risk,
-			Confirm: a.Confirm,
+			Name:             a.Name,
+			Kind:             a.Kind,
+			Method:           a.Method,
+			Path:             a.Path,
+			Risk:             a.Risk,
+			Batchable:        cloneBoolPtr(a.Batchable),
+			Confirm:          confirm,
+			TransportBinding: a.TransportBinding.Clone(),
 		})
 	}
 
+	var changefeed *connectors.ChangefeedDescriptor
+	if b.Changefeed != nil {
+		changefeed = b.Changefeed.Clone()
+	}
+	var pollingWatermark *connectors.PollingWatermarkDescriptor
+	if b.PollingWatermark != nil {
+		pollingWatermark = b.PollingWatermark.Clone()
+	}
+	var syncTransport *connectors.SyncTransportDescriptor
+	if b.SyncTransport != nil {
+		syncTransport = b.SyncTransport.Clone()
+	}
+
 	return connectors.Definition{
-		Name:            b.Metadata.Name,
-		DisplayName:     b.Metadata.DisplayName,
-		Description:     b.Metadata.Description,
-		IntegrationType: b.Metadata.IntegrationType,
-		DocsURL:         b.Metadata.DocsURL,
-		ReleaseStage:    b.Metadata.ReleaseStage,
-		Capabilities:    synthesizeMetadata(b).Capabilities,
-		Spec:            specJSON(b),
-		Streams:         streamSummaries,
-		WriteActions:    writeActions,
+		Name:             b.Metadata.Name,
+		DisplayName:      b.Metadata.DisplayName,
+		Description:      b.Metadata.Description,
+		IntegrationType:  b.Metadata.IntegrationType,
+		DocsURL:          b.Metadata.DocsURL,
+		ReleaseStage:     b.Metadata.ReleaseStage,
+		Capabilities:     synthesizeMetadata(b).Capabilities,
+		Changefeed:       changefeed,
+		PollingWatermark: pollingWatermark,
+		SyncTransport:    syncTransport,
+		Spec:             specJSON(b),
+		Streams:          streamSummaries,
+		WriteActions:     writeActions,
 		Risk: connectors.RiskSpec{
 			Read:     b.Metadata.Risk.Read,
 			Write:    b.Metadata.Risk.Write,
@@ -412,6 +772,13 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Notes:         cmd.Notes,
 		})
 	}
+	if commandSurfaceHasWriteIntent(out.Commands) {
+		for _, flag := range connectors.ReverseETLApprovalFlags() {
+			if !commandSurfaceHasGlobalFlag(out.GlobalFlags, flag.Name) {
+				out.GlobalFlags = append(out.GlobalFlags, flag)
+			}
+		}
+	}
 	for _, topic := range surface.HelpTopics {
 		out.HelpTopics = append(out.HelpTopics, connectors.CommandSurfaceHelpTopic{
 			Name:    topic.Name,
@@ -419,6 +786,24 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {
+	for _, cmd := range commands {
+		if cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" {
+			return true
+		}
+	}
+	return false
+}
+
+func commandSurfaceHasGlobalFlag(flags []connectors.CommandSurfaceFlag, name string) bool {
+	for _, flag := range flags {
+		if flag.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.CommandSurfaceEndpointRef {
@@ -438,6 +823,11 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MapsTo:     flag.MapsTo,
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
+		Minimum:    cloneFloat64Ptr(flag.Minimum),
+		Required:   flag.Required,
+		EnvOnly:    flag.EnvOnly,
+		MaxItems:   flag.MaxItems,
+		MinItems:   flag.MinItems,
 	}
 }
 
@@ -459,6 +849,14 @@ func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.Command
 }
 
 func cloneBoolPtr(value *bool) *bool {
+	if value == nil {
+		return nil
+	}
+	out := *value
+	return &out
+}
+
+func cloneFloat64Ptr(value *float64) *float64 {
 	if value == nil {
 		return nil
 	}
@@ -503,20 +901,33 @@ func specJSON(b Bundle) []byte {
 	return raw
 }
 
-// legacyStreamOf builds the legacy connectors.Stream shape for one
-// StreamSpec, reusing its compiled schema for PrimaryKey/CursorFields. Field
-// types are not derivable from the compiled schema (Schema only exposes
-// property names, not per-property JSON types), so Fields carries names only
-// (Type left as the zero value) — no wave0 consumer inspects Field.Type.
+// legacyStreamOf builds the shared connectors.Stream shape for one StreamSpec.
+// Bundle loading retains the original schema specifically so static catalogs
+// use the same projection as provider-discovered schemas.
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
+	cursorField := effectiveCursorField(s, sch)
 	if sch == nil {
+		if cursorField != "" {
+			stream.CursorFields = []string{cursorField}
+		}
 		return stream
 	}
+	if len(sch.Raw) > 0 {
+		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
+		if err == nil {
+			if cursorField != "" {
+				projected.CursorFields = []string{cursorField}
+			}
+			return projected
+		}
+	}
+	// Hand-assembled test bundles predating raw-schema retention still need a
+	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
-	if sch.CursorField != "" {
-		stream.CursorFields = []string{sch.CursorField}
+	if cursorField != "" {
+		stream.CursorFields = []string{cursorField}
 	}
 	for _, name := range sch.Properties() {
 		stream.Fields = append(stream.Fields, connectors.Field{Name: name})
@@ -524,14 +935,7 @@ func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	return stream
 }
 
-// canonicalModeOrder is internal/app/sync_modes.go's MustSyncModeNames order.
-var canonicalModeOrder = []string{
-	syncModeFullRefreshAppend,
-	syncModeFullRefreshOverwrite,
-	syncModeFullRefreshOverwriteDeduped,
-	syncModeIncrementalAppend,
-	syncModeIncrementalAppendDeduped,
-}
+var canonicalModeOrder = synccontract.PublicModeNames()
 
 // orderCanonicalModes returns the subset of canonicalModeOrder present in
 // modes, in canonical order.

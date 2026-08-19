@@ -1,0 +1,13 @@
+{
+  "name": "humanproxy-demo",
+  "display_name": "Human Proxy Demo",
+  "description": "Engine test fixture exercising batchable and non-batchable write actions. Not a real connector.",
+  "integration_type": "api",
+  "release_stage": "alpha",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
+  "risk": {
+    "read": "reads fixture widgets",
+    "write": "posts fixture votes and profile updates",
+    "approval": "reverse ETL writes require plan, preview, approval, execute"
+  }
+}

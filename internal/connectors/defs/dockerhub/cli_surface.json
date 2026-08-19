@@ -1,0 +1,86 @@
+{
+  "tagline": "Run Docker Hub's declared streams and reverse-ETL actions.",
+  "usage": "pm dockerhub \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "repositories list",
+        "repository detail list",
+        "tag detail list",
+        "tags list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "repositories list",
+      "summary": "Run the repositories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "repositories",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "examples": [
+        "pm dockerhub repositories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories"
+        }
+      ]
+    },
+    {
+      "path": "repository detail list",
+      "summary": "Run the repository detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "repository_detail",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "examples": [
+        "pm dockerhub repository detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+        }
+      ]
+    },
+    {
+      "path": "tag detail list",
+      "summary": "Run the tag detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag_detail",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "examples": [
+        "pm dockerhub tag detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "examples": [
+        "pm dockerhub tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+        }
+      ]
+    }
+  ]
+}

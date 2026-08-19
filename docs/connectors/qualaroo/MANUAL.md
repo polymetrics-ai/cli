@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Qualaroo nudges and reporting response records through the Qualaroo API. Read-only.
 
 ICON
+  id: qualaroo
   asset: icons/qualaroo.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,22 +29,22 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   survey_id
-  api_key (secret)
+  api_key (secret) (required)
   api_secret (secret)
 
 ETL STREAMS
   nudges:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), name(), status(), updated_at()
+    fields: created_at(string), id(string), name(string), status(string), updated_at(string)
   responses:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), nudge_id(), updated_at()
+    fields: created_at(string), email(string), id(string), nudge_id(string), updated_at(string)
   survey_responses:
     primary key: id
     cursor: time
-    fields: answered_questions(), id(), identity(), ip_address(), page(), properties(), referrer(), time(), token(), user_agent()
+    fields: answered_questions(object), id(string), identity(string), ip_address(string), page(string), properties(object), referrer(string), time(string), token(string), user_agent(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

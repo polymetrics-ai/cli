@@ -1,0 +1,22 @@
+{
+  "record": {
+    "external_product_id": "fixture_external_product_id",
+    "reference_code": "fixture_reference_code"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/external_products/fixture_external_product_id/external_product_references",
+    "body": {
+      "reference_code": "fixture_reference_code"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

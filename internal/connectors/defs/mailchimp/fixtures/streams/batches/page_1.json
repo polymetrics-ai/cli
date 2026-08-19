@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/batches",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "batches": [
+        {
+          "id": "fixture_id",
+          "status": "fixture_status",
+          "total_operations": 1,
+          "finished_operations": 1,
+          "errored_operations": 1,
+          "submitted_at": "fixture_submitted_at",
+          "completed_at": "fixture_completed_at",
+          "response_body_url": "https://example.invalid/mailchimp-fixture"
+        }
+      ]
+    }
+  }
+}

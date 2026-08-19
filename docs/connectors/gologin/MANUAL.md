@@ -13,9 +13,11 @@ DESCRIPTION
   Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,23 +29,23 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   profiles:
     primary key: id
     cursor: updatedAt
-    fields: browserType(), createdAt(), folderName(), id(), name(), notes(), os(), role(), updatedAt()
+    fields: browserType(string), createdAt(string), folderName(string), id(string), name(string), notes(string), os(string), role(string), updatedAt(string)
   folders:
     primary key: id
-    fields: id(), name(), profilesCount()
+    fields: id(string), name(string), profilesCount(integer)
   user:
     primary key: _id
     cursor: createdAt
-    fields: _id(), createdAt(), email(), firstName(), lastName(), plan(), profilesCount()
+    fields: _id(string), createdAt(string), email(string), firstName(string), lastName(string), plan(string), profilesCount(integer)
   tags:
     primary key: _id
-    fields: _id(), color(), field(), title()
+    fields: _id(string), color(string), field(string), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

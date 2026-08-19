@@ -15,8 +15,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Final target branch:
 - Milestones:
 - Project:
-- Orchestrator:
-- Orchestration workflow: `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+- Canonical worker: `pm-delivery-worker` or `pm-connector-worker`
+- Parent ownership contract: `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 - Automated review routing: `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 
 ## Sub-issues
@@ -25,14 +25,18 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 | --- | --- | --- | --- | --- | --- |
 | #N | <milestone> | `<type>/<issue>-<slug>` | `<parent-branch>` | <one-slice outcome> | Backlog |
 
-## Orchestration state
+## Parent job state
 
-| Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
+| Issue | Active owner | Branch | PR | Latest SHA | Verification | Automated review coverage | Canonical state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
+| #N | `<canonical worker>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | `<state_machine step ID>` | None |
 
 ## Branch and PR policy
 
+- Connector implementation sub-issues must declare exactly one target connector, ownership guard
+  evidence, changed-path compliance requirements, and any foundation issue/PR path before the
+  canonical worker starts the wave.
+- Shared runtime/tooling, schema, generated-index, or unrelated connector work discovered by a connector lane is split to a separate foundation issue/PR before the connector implementation proceeds.
 - Parent branch starts from `main`.
 - Parent PR targets `main` and is created as soon as the parent branch exists.
 - Parent PR stays draft and may use `Refs #<parent-issue>` until all required sub-issues are
@@ -45,23 +49,18 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - If the parent branch has no useful diff yet, create a deliberate parent seed commit so GitHub has
   a parent PR thread, checks surface, and review target.
 
-## Automated sub-PR merge policy
+## Child integration evidence
 
-Agents may merge a sub-PR into the parent branch without human approval only when all of these are
-true:
+Do not copy a gate list into the issue. The authoritative integration criteria are
+`tracker.integrate_when` in `.agents/agentic-delivery/canonical/delivery-contract.json`; PR-shape
+and review-routing mechanics live in
+`.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`. Record evidence against
+every current criterion in the parent job state before advancing `integrate_sub_pr`.
 
-- the sub-PR is scoped to exactly one sub-issue
-- branch name and PR title checks pass
-- PR body references the sub-issue and parent issue
-- targeted tests and issue verification pass
-- automated review loop is complete and comments are resolved
-- automated review coverage exists through the sub-PR, through a parent PR fallback review that
-  covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
-  because Claude is blocked
-- no human gate is triggered
-- no requested-changes review is open
-- the parent branch is current enough that the sub-PR diff is reviewable
-- the parent issue orchestrator records the merge decision
+For a connector implementation child, also record the exact target connector, ownership guard,
+changed-path compliance, and separate foundation issue/PR for any shared runtime/tooling or
+unrelated connector work. Naming or linking a foundation issue does not authorize those paths in
+the connector PR.
 
 ## Human gates
 

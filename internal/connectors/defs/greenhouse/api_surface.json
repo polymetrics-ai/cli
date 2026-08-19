@@ -1,8 +1,9 @@
 {
   "api": "Greenhouse Harvest API (https://harvest.greenhouse.io/v1)",
   "docs": "https://developers.greenhouse.io/harvest.html",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion generated from 129 distinct Harvest v1 method/path entries in the official Greenhouse documentation. GET endpoints are streams; non-deprecated JSON-compatible mutations are write actions; deprecated/deactivated v1 mutations are explicitly excluded.",
+  "reviewed_at": "2026-08-07",
+  "operation_ledger_version": 1,
+  "scope": "138 documented Greenhouse Harvest operations, re-derived 2026-08-07 from developers.greenhouse.io/harvest.html (HTTP 200, 1,636,662 bytes). Greenhouse publishes no OpenAPI/Swagger for Harvest, so each operation is taken from the canonical '<h3>HTTP Request</h3><p><code>METHOD https://harvest.greenhouse.io/vN/path</code></p>' declaration that follows every endpoint section - 138 declarations, zero duplicates, reconciling exactly with the provider-artifact ledger. Method split GET 69 / POST 28 / PUT 8 / PATCH 19 / DELETE 14. Every row carries exactly one disposition: covered_by, or a blocked operation naming what it waits on. Harvest v1 paths are base-relative; the eight Harvest v2 operations are recorded at their documented host-root path (/v2/...) because they lie outside this bundle's single /v1 base. Webhook events are excluded by the counting policy and Greenhouse documents them on a separate page (developers.greenhouse.io/webhooks.html); Harvest exposes no webhook management endpoints, so this surface carries zero webhook rows of either kind.",
   "endpoints": [
     {
       "method": "GET",
@@ -497,9 +498,14 @@
     {
       "method": "DELETE",
       "path": "/jobs/{job_id}/openings",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Greenhouse marks this Harvest v1 mutation (DELETE: Destroy Openings) DEPRECATED in its own reference - the declaration is wrapped in <strong>DEPRECATED</strong><del>...</del> markup - and directs callers to DELETE /v2/jobs/{job_id}/openings. Deprecated operations still count toward the documented surface, so this is dispositioned rather than dropped, but it is not implemented: shipping a mutation the provider has retired would be a liability, and its replacement is itself out of base.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#delete-destroy-openings",
+        "notes": "Named dependency: DELETE /v2/jobs/{job_id}/openings, which is blocked on the same per-operation base URL override every Harvest v2 row waits on. When that lands, implement the v2 replacement; this v1 row stays deprecated."
       }
     },
     {
@@ -736,17 +742,27 @@
     {
       "method": "POST",
       "path": "/scheduled_interviews",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Greenhouse marks this Harvest v1 mutation (POST: Create Scheduled Interview) DEPRECATED in its own reference - the declaration is wrapped in <strong>DEPRECATED</strong><del>...</del> markup - and directs callers to POST /v2/scheduled_interviews. Deprecated operations still count toward the documented surface, so this is dispositioned rather than dropped, but it is not implemented: shipping a mutation the provider has retired would be a liability, and its replacement is itself out of base.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#post-create-scheduled-interview",
+        "notes": "Named dependency: POST /v2/scheduled_interviews, which is blocked on the same per-operation base URL override every Harvest v2 row waits on. When that lands, implement the v2 replacement; this v1 row stays deprecated."
       }
     },
     {
       "method": "PATCH",
       "path": "/scheduled_interviews/{scheduled_interview_id}",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Greenhouse marks this Harvest v1 mutation (PATCH: Update Scheduled Interview) DEPRECATED in its own reference - the declaration is wrapped in <strong>DEPRECATED</strong><del>...</del> markup - and directs callers to PATCH /v2/scheduled_interviews/{scheduled_interview_id}. Deprecated operations still count toward the documented surface, so this is dispositioned rather than dropped, but it is not implemented: shipping a mutation the provider has retired would be a liability, and its replacement is itself out of base.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-scheduled-interview",
+        "notes": "Named dependency: PATCH /v2/scheduled_interviews/{scheduled_interview_id}, which is blocked on the same per-operation base URL override every Harvest v2 row waits on. When that lands, implement the v2 replacement; this v1 row stays deprecated."
       }
     },
     {
@@ -908,6 +924,117 @@
       "path": "/user_roles",
       "covered_by": {
         "stream": "user_roles"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/candidate/{tag_id}",
+      "covered_by": {
+        "write": "destroy_candidate_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/jobs/{job_id}/openings",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#delete-destroy-openings",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/job_posts/{job_post_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-job-post",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/job_posts/{job_post_id}/status",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-job-post-status",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/scheduled_interviews/{scheduled_interview_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-scheduled-interview",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/users/",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-user",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/users/disable",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-disable-user",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/users/enable",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#patch-enable-user",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/scheduled_interviews",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Harvest v2 operation. This bundle binds exactly one HTTPBase, https://harvest.greenhouse.io/v1 (spec.json base_url), and every stream and write path is resolved relative to it, so a /v2 path cannot be addressed: a base-relative form builds .../v1/v2/..., and an absolute form is rejected because engine.deriveOperationDirectReadEndpointLedger only emits a runtime endpoint-ledger entry when operation.rest.path equals an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developers.greenhouse.io/harvest.html#post-create-scheduled-interview",
+        "notes": "Named dependency: per-operation base URL override in internal/connectors/engine, so a single bundle can address more than one API version prefix without restructuring every existing stream and write path in lockstep. Recorded at its documented host-root path (/v2/...) so it cannot collide with a base-relative v1 row."
       }
     }
   ]

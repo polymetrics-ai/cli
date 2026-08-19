@@ -90,7 +90,7 @@ function connectorRecord(c: ConnectorMeta): SearchRecord {
         c.cliSurface.usage,
         c.cliSurface.groups.map((group) => `${group.title} ${group.commands.join(' ')}`).join(' '),
         c.cliSurface.commands
-          .map((command) => `${command.path} ${command.summary} ${command.intent} ${command.availability} ${command.stream} ${command.write}`)
+          .map((command) => `${command.path} ${command.summary} ${command.intent} ${command.availability} ${command.stream} ${command.write} ${command.operation ?? ''}`)
           .join(' '),
       ].join(' ')
     : '';

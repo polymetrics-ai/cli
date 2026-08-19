@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "project_custom_field_templates",
+  "type": "object",
+  "x-primary-key": [
+    "_id"
+  ],
+  "required": [
+    "_id"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "filterGrid": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instructions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defaultValue": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defaultRadioId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "placeholderText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "choices": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "canResourceEdit": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allowMultipleValues": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "characterLimit": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "maxValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "minValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "stepValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "weekStartOn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isRequired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isChoicesSortedAlphabetically": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "createdDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

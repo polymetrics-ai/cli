@@ -11,6 +11,7 @@ Reads Productive projects, people, companies, and tasks through the Productive J
 
 ## Icon
 
+- id: productive
 - asset: icons/productive.svg
 - source: official
 - review_status: official_verified
@@ -28,27 +29,27 @@ Reads Productive projects, people, companies, and tasks through the Productive J
 ## Configuration
 
 - base_url
-- organization_id
-- api_key (secret)
+- organization_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - people:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 
 ## Sync Modes
 

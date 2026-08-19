@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_usage record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "merchant_tag": {
+      "type": "string",
+      "description": "Custom field for recording the id in your own system associated with the usage, so you can provide auditable usage displays to your customers using a GET on this endpoint."
+    },
+    "amount": {
+      "type": "number",
+      "format": "float",
+      "description": "The amount of usage. Can be positive, negative, or 0. If the Decimal Quantity feature is enabled, this value will be rounded to nine decimal places.  Otherwise, all digits after the decimal will be stripped. If the usage-based add-on is billed with a percentage, your usage should be a monetary amount formatted in cents (e.g., $5.00 is \"500\")."
+    },
+    "usage_type": {
+      "type": "string",
+      "enum": [
+        "price",
+        "percentage"
+      ],
+      "title": "Usage Type",
+      "description": "Type of usage, returns usage type if `add_on_type` is `usage`."
+    },
+    "tier_type": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "tiered",
+        "stairstep",
+        "volume"
+      ],
+      "default": "flat",
+      "title": "Tier type",
+      "description": "The pricing model for the add-on.  For more information,\n[click here](https://docs.recurly.com/docs/billing-models#section-quantity-based). See our\n[Guide](https://recurly.com/developers/guides/item-addon-guide.html) for an overview of how\nto configure quantity-based pricing models.\n"
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ending_quantity": {
+            "type": "integer",
+            "title": "Ending quantity",
+            "description": "Ending quantity for the tier.  This represents a unit amount for unit-priced add ons. Must be left empty if it is the final tier."
+          },
+          "unit_amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Unit amount",
+            "description": "Allows up to 2 decimal places. Optionally, override the tiers' default unit amount. If add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided."
+          },
+          "unit_amount_decimal": {
+            "type": "string",
+            "title": "Unit amount decimal",
+            "description": "Allows up to 9 decimal places.  Optionally, override tiers' default unit amount.\nIf `unit_amount_decimal` is provided, `unit_amount` cannot be provided.\nIf add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided.\n"
+          },
+          "usage_percentage": {
+            "type": "string",
+            "title": "Usage Percentage",
+            "description": "(deprecated) -- Use the percentage_tiers object instead."
+          }
+        },
+        "additionalProperties": false
+      },
+      "title": "Tiers",
+      "description": "The tiers and prices of the subscription based on the usage_timestamp. If tier_type = flat, tiers = []"
+    },
+    "percentage_tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ending_amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Ending amount",
+            "description": "Ending amount for the tier. Allows up to 2 decimal places. Must be left empty if it is the final tier."
+          },
+          "usage_percentage": {
+            "type": "string",
+            "title": "Usage Percentage",
+            "description": "The percentage taken of the monetary amount of usage tracked.\nThis can be up to 4 decimal places represented as a string.\n"
+          }
+        },
+        "additionalProperties": false
+      },
+      "title": "Percentage Tiers",
+      "description": "The percentage tiers of the subscription based on the usage_timestamp. If tier_type = flat, percentage_tiers = []. This feature is currently in development and requires approval and enablement, please contact support."
+    },
+    "measured_unit_id": {
+      "type": "string",
+      "description": "The ID of the measured unit associated with the add-on the usage record is for."
+    },
+    "recording_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the usage was recorded in your system."
+    },
+    "usage_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the usage actually happened. This will define the line item dates this usage is billed under and is important for revenue recognition."
+    },
+    "usage_percentage": {
+      "type": "number",
+      "format": "float",
+      "title": "Usage Percentage",
+      "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places. A value between 0.0 and 100.0."
+    },
+    "unit_amount": {
+      "type": "number",
+      "format": "float",
+      "title": "Unit price"
+    },
+    "unit_amount_decimal": {
+      "type": "string",
+      "title": "Unit Amount Decimal",
+      "description": "Unit price that can optionally support a sub-cent value."
+    },
+    "billed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the usage record was billed on an invoice."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the usage record was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the usage record was billed on an invoice."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

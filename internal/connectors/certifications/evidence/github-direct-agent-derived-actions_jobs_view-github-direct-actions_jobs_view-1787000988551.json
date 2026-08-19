@@ -1,0 +1,100 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:actions_jobs_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:09:48.551Z",
+  "run_id": "github-direct-actions_jobs_view-1787000988551",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:5138794bb5c9ed61cc3243bbe596e4faeb04f2c2e648f6e18a93b3c6866445db}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:actions_jobs_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:6449c58279c344e86f4818db43f6b2880a99986ca94a32e71253b573d06154a6}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "check_run_url": "{{pmcertfp:v1:57ccea6aafea4d5ef86ec9f590a968dec2ddad2b1dc69736999fe3a09373aca6}}",
+              "completed_at": "{{pmcertfp:v1:6f70029cb467561ea595a011ccd11a76b0aa1105f2ea82e1699730843a10fab4}}",
+              "conclusion": "{{pmcertfp:v1:3f3370561e0bcb3a50996f338608babe582a98731fc51dff932e0499e6cbe894}}",
+              "created_at": "{{pmcertfp:v1:d7a2df83868304f39b838961f2c74859bef9505ef48d7ab1cdaf6a465f26a6f4}}",
+              "head_branch": "{{pmcertfp:v1:8024855201449a5d733d4821565cc4f07dd134ab7ebc6972a8e0a5a25bfe2999}}",
+              "head_sha": "{{pmcertfp:v1:1faccfd6df5d1d5bd35e87677aa5da84c928447db069add9d32118b09a2a828a}}",
+              "html_url": "{{pmcertfp:v1:bf25aa94129a2539980d8de62ffeda44b255e86f9eb160916cb212df94a54237}}",
+              "id": "{{pmcertfp:v1:23f4d46468418152d8cc94a30f076116083e0a7eabf5ec8678dac086f26968b2}}",
+              "labels": [
+                "{{pmcertfp:v1:d3bf094c4d4d3a2653ecb17eff0d31946da4358c70120f49773b4e86a42cec09}}"
+              ],
+              "name": "{{pmcertfp:v1:0d4a5a3a20fae8c02c9b0a8c7ee3c7b7e77cabd2564582e4fc4e16732241f0bd}}",
+              "node_id": "{{pmcertfp:v1:c636dd540e339405f6cc0c8a79848411d0c06402280ddf5008cbe15260ef29aa}}",
+              "run_attempt": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+              "run_id": "{{pmcertfp:v1:d52e30c0b81456b68093ad1f945b93d31ba0dd5fdecca120c7625c063fea19ab}}",
+              "run_url": "{{pmcertfp:v1:8ab4d6f3b697b16077bda955bf780beaaf2f2a025ee346fc8d6abea3e535fed2}}",
+              "runner_group_id": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "runner_group_name": "{{pmcertfp:v1:5c726e5485ca4ddd2a1a977839c41efbaf3971522698b70bcee8ac15224ab3f5}}",
+              "runner_id": "{{pmcertfp:v1:423c93ec06fe7c6bf8c7d11e3818e982288ee2a8e623bbd7c1dfce40aeaacd05}}",
+              "runner_name": "{{pmcertfp:v1:2979b57024687e905375d28a7a57afff10b426869bffcf31a3f95e46b7a2b797}}",
+              "started_at": "{{pmcertfp:v1:f3ac4b91f1854082f3567c039222ebceed027b4f121cdc2dcbeb214fd2e727f9}}",
+              "status": "{{pmcertfp:v1:381edde4cfc7e423b54976185bb6017455044d3cc1bac11d99368ecbe4ae0a41}}",
+              "steps": [
+                {
+                  "completed_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "conclusion": "{{pmcertfp:v1:3f3370561e0bcb3a50996f338608babe582a98731fc51dff932e0499e6cbe894}}",
+                  "name": "{{pmcertfp:v1:49ad2ed16817eb2f0fe55e0739e9e0cfdc2cca5cbc94fe19922e2136862d88dc}}",
+                  "number": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                  "started_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "status": "{{pmcertfp:v1:381edde4cfc7e423b54976185bb6017455044d3cc1bac11d99368ecbe4ae0a41}}"
+                },
+                {
+                  "completed_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "conclusion": "{{pmcertfp:v1:3f3370561e0bcb3a50996f338608babe582a98731fc51dff932e0499e6cbe894}}",
+                  "name": "{{pmcertfp:v1:d311fafa74673a4f509791b26b6f4e74f3631fa4f70d26c9b9c8ba46a3f353d2}}",
+                  "number": "{{pmcertfp:v1:e4035211b6690c9836dcb5668cd768dcb9aa1077fd042798b007dea834a62789}}",
+                  "started_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "status": "{{pmcertfp:v1:381edde4cfc7e423b54976185bb6017455044d3cc1bac11d99368ecbe4ae0a41}}"
+                },
+                {
+                  "completed_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "conclusion": "{{pmcertfp:v1:3f3370561e0bcb3a50996f338608babe582a98731fc51dff932e0499e6cbe894}}",
+                  "name": "{{pmcertfp:v1:eb8542afc22fdaaf4ecabf73813ef9274c1b1c862e8d9aada37fb76a35b195f7}}",
+                  "number": "{{pmcertfp:v1:857c63a556b38b92608672df03bddd5ab6c39f241dc1dbdbd80a2a00c6ecd602}}",
+                  "started_at": "{{pmcertfp:v1:150eb27d7287783bc4325f87e23ac9ecb553b37061846462336c90c712e08056}}",
+                  "status": "{{pmcertfp:v1:381edde4cfc7e423b54976185bb6017455044d3cc1bac11d99368ecbe4ae0a41}}"
+                }
+              ],
+              "url": "{{pmcertfp:v1:b4ad1ca5e2b0793f3e5521279a6e56ef6d965429942e9754d3f6bd4fda72226f}}",
+              "workflow_name": "{{pmcertfp:v1:f601ebfbf39c60dc4a92ff56953014440bdb63b50d97d8de34d7ee5ea1ac0280}}"
+            },
+            "original_bytes": 1458,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

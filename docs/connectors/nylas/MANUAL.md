@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Nylas calendars, contacts, messages, and events for a connected grant through the Nylas v3 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -31,23 +33,23 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   calendars:
     primary key: id
-    fields: description(), grant_id(), hex_color(), id(), is_primary(), name(), object(), read_only(), timezone()
+    fields: description(string), grant_id(string), hex_color(string), id(string), is_primary(boolean), name(string), object(string), read_only(boolean), timezone(string)
   contacts:
     primary key: id
-    fields: company_name(), emails(), given_name(), grant_id(), id(), job_title(), object(), phone_numbers(), source(), surname()
+    fields: company_name(string), emails(array), given_name(string), grant_id(string), id(string), job_title(string), object(string), phone_numbers(array), source(string), surname(string)
   messages:
     primary key: id
     cursor: date
-    fields: date(), folders(), from(), grant_id(), id(), object(), snippet(), starred(), subject(), thread_id(), to(), unread()
+    fields: date(integer), folders(array), from(array), grant_id(string), id(string), object(string), snippet(string), starred(boolean), subject(string), thread_id(string), to(array), unread(boolean)
   events:
     primary key: id
     cursor: updated_at
-    fields: busy(), calendar_id(), description(), grant_id(), id(), location(), object(), read_only(), status(), title(), updated_at(), when()
+    fields: busy(boolean), calendar_id(string), description(string), grant_id(string), id(string), location(string), object(string), read_only(boolean), status(string), title(string), updated_at(integer), when(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

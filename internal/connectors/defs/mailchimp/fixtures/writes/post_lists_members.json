@@ -1,0 +1,23 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "email_address": "fixture@example.invalid",
+    "email_type": "fixture@example.invalid",
+    "status": "fixture_status"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/members",
+    "body": {
+      "email_address": "fixture@example.invalid",
+      "email_type": "fixture@example.invalid",
+      "status": "fixture_status"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_members"
+    }
+  }
+}

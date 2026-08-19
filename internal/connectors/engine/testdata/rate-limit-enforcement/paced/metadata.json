@@ -1,0 +1,8 @@
+{
+  "name": "paced",
+  "display_name": "Paced test connector",
+  "description": "Test-only declared rate-limit bundle.",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {"check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false}
+}

@@ -46,13 +46,6 @@
       "schema": "schemas/clock.json"
     },
     {
-      "name": "country_info",
-      "path": "/country_info",
-      "query": { "limit": "{{ config.limit }}" },
-      "records": { "path": "." },
-      "schema": "schemas/country_info.json"
-    },
-    {
       "name": "account_activities",
       "path": "/accounts/activities",
       "query": {

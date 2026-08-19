@@ -1,0 +1,22 @@
+{
+  "record": {
+    "Quotes": [
+      "quote_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Quotes",
+    "body": {
+      "Quotes": [
+        "quote_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

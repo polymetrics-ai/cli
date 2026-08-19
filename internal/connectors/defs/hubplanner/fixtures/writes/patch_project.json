@@ -1,0 +1,22 @@
+{
+  "record": {
+    "_id": "project_fixture_1",
+    "name": "Updated Project",
+    "status": "STATUS_ACTIVE"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/project",
+    "body": {
+      "_id": "project_fixture_1",
+      "name": "Updated Project",
+      "status": "STATUS_ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "project_fixture_1"
+    }
+  }
+}

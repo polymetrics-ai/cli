@@ -11,9 +11,11 @@ Reads Sigma workbooks, datasets, teams, and members through the Sigma REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -35,19 +37,19 @@ Reads Sigma workbooks, datasets, teams, and members through the Sigma REST API.
 - workbooks:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 - datasets:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 - teams:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 - members:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 
 ## Sync Modes
 

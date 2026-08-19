@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/calendars/synthetic-conformance-value/events/synthetic-conformance-value/instances",
+    "query": {
+      "maxResults": "250"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#events",
+      "items": [
+        {
+          "kind": "calendar#event",
+          "etag": "etag-event",
+          "id": "instance-1",
+          "status": "confirmed",
+          "htmlLink": "https://calendar.google.com/fixture",
+          "created": "2020-01-01T00:00:00Z",
+          "updated": "2020-01-03T00:00:00Z",
+          "summary": "Fixture Event",
+          "description": "Fixture event only",
+          "start": {
+            "dateTime": "2020-01-04T10:00:00Z",
+            "timeZone": "UTC"
+          },
+          "end": {
+            "dateTime": "2020-01-04T11:00:00Z",
+            "timeZone": "UTC"
+          },
+          "creator": {
+            "email": "fixture@example.test"
+          },
+          "organizer": {
+            "email": "fixture@example.test"
+          },
+          "eventType": "default",
+          "recurringEventId": "synthetic-conformance-value"
+        }
+      ]
+    }
+  }
+}

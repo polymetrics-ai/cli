@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_price_segment record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "id": {
+      "type": "string",
+      "description": "The price segment ID, e.g. `e28zov4fw0v2`."
+    },
+    "code": {
+      "type": "string",
+      "description": "The price segment code, e.g. `my-price-segment`.",
+      "pattern": "^[a-z0-9_+-]+$"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

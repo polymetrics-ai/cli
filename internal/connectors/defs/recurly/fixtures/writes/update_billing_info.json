@@ -1,0 +1,22 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "first_name": "fixture_first_name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/accounts/fixture_account_id/billing_info",
+    "body": {
+      "first_name": "fixture_first_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

@@ -11,9 +11,11 @@ Reads Poplar campaigns and orders through read-only REST list endpoints.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,17 +29,17 @@ Reads Poplar campaigns and orders through read-only REST list endpoints.
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 - orders:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 
 ## Sync Modes
 

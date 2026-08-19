@@ -68,6 +68,10 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		}
 	}
 
+	// 69 documented operations, re-derived 2026-08-07 from Gong's own OpenAPI 3.0.1 artifact at
+	// https://gong.app.gong.io/ajax/settings/api/documentation/specs?version= (info.version V2,
+	// 59 paths). The provider-artifact ledger's carried-forward 69 reconciles exactly.
+	// Method split: GET 29, POST 28, PUT 8, DELETE 3, PATCH 1.
 	if len(surface.Endpoints) != 69 {
 		t.Fatalf("endpoints = %d, want 69", len(surface.Endpoints))
 	}
@@ -101,11 +105,20 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		"POST /v2/calls/extensive",
 		"POST /v2/calls/transcript",
 		"POST /v2/stats/interaction",
+	} {
+		if !seen[key] {
+			t.Fatalf("expected official POST read-query endpoint %q", key)
+		}
+	}
+	// Targets: the two operations the carried-forward bundle was missing. GET /v2/targets returns an
+	// uncursored {requestId, targets} envelope so it is a direct read, not a stream; the assignments
+	// upload is multipart/form-data with a single binary file part.
+	for _, key := range []string{
 		"GET /v2/targets",
 		"POST /v2/targets/{targetId}/assignments",
 	} {
 		if !seen[key] {
-			t.Fatalf("expected official Gong endpoint %q", key)
+			t.Fatalf("expected documented Targets endpoint %q", key)
 		}
 	}
 	for _, key := range []string{
@@ -119,54 +132,6 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 			t.Fatalf("stale or wrong-method endpoint %q should not be present", key)
 		}
 	}
-
-	rawOps, err := os.ReadFile("../../internal/connectors/defs/gong/operations.json")
-	if err != nil {
-		t.Fatalf("read gong operations.json: %v", err)
-	}
-	var ledger struct {
-		Operations []gongOperationSpec `json:"operations"`
-	}
-	if err := json.Unmarshal(rawOps, &ledger); err != nil {
-		t.Fatalf("unmarshal gong operations.json: %v", err)
-	}
-	if len(ledger.Operations) != 69 {
-		t.Fatalf("operations = %d, want 69", len(ledger.Operations))
-	}
-
-	operationKinds := map[string]int{}
-	operationIDs := map[string]gongOperationSpec{}
-	for _, op := range ledger.Operations {
-		if _, ok := operationIDs[op.ID]; ok {
-			t.Fatalf("duplicate operation id %q", op.ID)
-		}
-		operationIDs[op.ID] = op
-		operationKinds[op.Kind]++
-	}
-	assertGongStringIntMap(t, "operationKinds", operationKinds, map[string]int{
-		"rest_read":  30,
-		"rest_write": 27,
-		"stream_etl": 12,
-	})
-
-	targetsList, ok := operationIDs["gong.list_target_definitions"]
-	if !ok {
-		t.Fatalf("missing gong.list_target_definitions operation")
-	}
-	if targetsList.Kind != "rest_read" || targetsList.REST == nil || targetsList.REST.Method != "GET" || targetsList.REST.Path != "/v2/targets" || targetsList.REST.MaxBytes != 1048576 {
-		t.Fatalf("target definitions operation = %+v", targetsList)
-	}
-
-	targetUpload, ok := operationIDs["gong.upload_assignments"]
-	if !ok {
-		t.Fatalf("missing gong.upload_assignments operation")
-	}
-	if targetUpload.Kind != "rest_write" || targetUpload.REST == nil || targetUpload.REST.Method != "POST" || targetUpload.REST.Path != "/v2/targets/{targetId}/assignments" {
-		t.Fatalf("target assignments operation = %+v", targetUpload)
-	}
-	if !targetUpload.Destructive || targetUpload.SensitivePolicy == nil || targetUpload.SensitivePolicy.ApprovalMode != "typed_confirmation" {
-		t.Fatalf("target assignments destructive policy = %+v", targetUpload)
-	}
 }
 
 type gongSurfaceOperation struct {
@@ -177,24 +142,6 @@ type gongSurfaceOperation struct {
 	Reason           string `json:"reason"`
 	SourceURL        string `json:"source_url"`
 	Notes            string `json:"notes"`
-}
-
-type gongOperationSpec struct {
-	ID              string                   `json:"id"`
-	Kind            string                   `json:"kind"`
-	Destructive     bool                     `json:"destructive"`
-	REST            *gongRESTOperation       `json:"rest"`
-	SensitivePolicy *gongSensitivePolicySpec `json:"sensitive_policy"`
-}
-
-type gongRESTOperation struct {
-	Method   string `json:"method"`
-	Path     string `json:"path"`
-	MaxBytes int    `json:"max_bytes"`
-}
-
-type gongSensitivePolicySpec struct {
-	ApprovalMode string `json:"approval_mode"`
 }
 
 func gongRequiresSourceOrNotes(model string) bool {

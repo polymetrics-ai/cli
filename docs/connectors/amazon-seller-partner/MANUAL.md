@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
 
 ICON
+  id: amazonsellerpartner
   asset: icons/amazonsellerpartner.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -71,7 +72,7 @@ CONFIGURATION
   query_id
   query_type
   rate_id
-  replication_start_date
+  replication_start_date (required)
   report_id
   report_schedule_id
   report_types
@@ -95,438 +96,438 @@ CONFIGURATION
   transaction_id
   transfer_schedule_id
   vehicle_type
-  lwa_app_id (secret)
-  lwa_client_secret (secret)
-  refresh_token (secret)
+  lwa_app_id (secret) (required)
+  lwa_client_secret (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   orders:
     primary key: AmazonOrderId
     cursor: LastUpdateDate
-    fields: AmazonOrderId(), FulfillmentChannel(), IsBusinessOrder(), IsPrime(), LastUpdateDate(), MarketplaceId(), NumberOfItemsShipped(), NumberOfItemsUnshipped(), OrderStatus(), OrderTotal(), OrderType(), PurchaseDate(), SalesChannel(), SellerOrderId()
+    fields: AmazonOrderId(string), FulfillmentChannel(string), IsBusinessOrder(boolean), IsPrime(boolean), LastUpdateDate(string), MarketplaceId(string), NumberOfItemsShipped(integer), NumberOfItemsUnshipped(integer), OrderStatus(string), OrderTotal(object), OrderType(string), PurchaseDate(string), SalesChannel(string), SellerOrderId(string)
   inventory_summaries:
     primary key: sellerSku
     cursor: lastUpdatedTime
-    fields: asin(), condition(), fnSku(), inventoryDetails(), lastUpdatedTime(), productName(), sellerSku(), totalQuantity()
+    fields: asin(string), condition(string), fnSku(string), inventoryDetails(object), lastUpdatedTime(string), productName(string), sellerSku(string), totalQuantity(integer)
   financial_event_groups:
     primary key: FinancialEventGroupId
     cursor: FinancialEventGroupEnd
-    fields: AccountTail(), BeginningBalance(), ConvertedTotal(), FinancialEventGroupEnd(), FinancialEventGroupId(), FinancialEventGroupStart(), FundTransferDate(), FundTransferStatus(), OriginalTotal(), ProcessingStatus(), TraceId()
+    fields: AccountTail(string), BeginningBalance(object), ConvertedTotal(object), FinancialEventGroupEnd(string), FinancialEventGroupId(string), FinancialEventGroupStart(string), FundTransferDate(string), FundTransferStatus(string), OriginalTotal(object), ProcessingStatus(string), TraceId(string)
   list_content_document_asin_relations:
     primary key: asin
-    fields: asin(), badgeSet(), contentReferenceKeySet(), content_reference_key(), imageUrl(), parent(), title()
+    fields: asin(string), badgeSet(array), contentReferenceKeySet(array), content_reference_key(string), imageUrl(string), parent(string), title(string)
   search_content_documents:
     primary key: contentReferenceKey
-    fields: contentMetadata(), contentReferenceKey()
+    fields: contentMetadata(object), contentReferenceKey(string)
   search_content_publish_records:
     primary key: contentReferenceKey
-    fields: asin(), contentReferenceKey(), contentSubType(), contentType(), locale(), marketplaceId()
+    fields: asin(string), contentReferenceKey(string), contentSubType(string), contentType(string), locale(string), marketplaceId(string)
   get_inbound:
     primary key: orderId
-    fields: createdAt(), destinationDetails(), externalReferenceId(), orderId(), orderStatus(), order_id(), originAddress(), packagesToInbound(), preferences(), updatedAt()
+    fields: createdAt(string), destinationDetails(object), externalReferenceId(string), orderId(string), orderStatus(string), order_id(string), originAddress(object), packagesToInbound(array), preferences(object), updatedAt(string)
   get_label_page_types:
     primary key: shipment_id
-    fields: shipment_id()
+    fields: shipment_id(string)
   get_inbound_shipment:
     primary key: orderId
-    fields: carrierCode(), createdAt(), destinationAddress(), destinationRegion(), externalReferenceId(), orderId(), originAddress(), receivedQuantity(), shipBy(), shipmentContainerQuantities(), shipmentId(), shipmentSkuQuantities(), shipmentStatus(), shipment_id(), trackingId(), updatedAt(), warehouseReferenceId()
+    fields: carrierCode(object), createdAt(string), destinationAddress(object), destinationRegion(string), externalReferenceId(string), orderId(string), originAddress(object), receivedQuantity(array), shipBy(string), shipmentContainerQuantities(array), shipmentId(string), shipmentSkuQuantities(array), shipmentStatus(string), shipment_id(string), trackingId(string), updatedAt(string), warehouseReferenceId(string)
   list_inbound_shipments:
     primary key: orderId
-    fields: createdAt(), externalReferenceId(), orderId(), shipmentId(), shipmentStatus(), updatedAt()
+    fields: createdAt(string), externalReferenceId(string), orderId(string), shipmentId(string), shipmentStatus(string), updatedAt(string)
   list_inventory:
     primary key: sku
-    fields: expirationDetails(), inventoryDetails(), sku(), totalInboundQuantity(), totalOnhandQuantity()
+    fields: expirationDetails(array), inventoryDetails(object), sku(string), totalInboundQuantity(integer), totalOnhandQuantity(integer)
   get_outbound:
     primary key: orderId
-    fields: confirmedOn(), createdAt(), eligiblePackagesToOutbound(), eligibleProductsToOutbound(), executionErrors(), orderId(), orderPreferences(), orderStatus(), order_id(), outboundShipments(), packagesToOutbound(), productsToOutbound(), shippedOutboundPackages(), shippedOutboundProducts(), updatedAt()
+    fields: confirmedOn(string), createdAt(string), eligiblePackagesToOutbound(array), eligibleProductsToOutbound(array), executionErrors(array), orderId(string), orderPreferences(array), orderStatus(string), order_id(string), outboundShipments(array), packagesToOutbound(array), productsToOutbound(array), shippedOutboundPackages(array), shippedOutboundProducts(array), updatedAt(string)
   list_outbounds:
     primary key: orderId
-    fields: confirmedOn(), createdAt(), eligiblePackagesToOutbound(), eligibleProductsToOutbound(), executionErrors(), orderId(), orderPreferences(), orderStatus(), outboundShipments(), packagesToOutbound(), productsToOutbound(), shippedOutboundPackages(), shippedOutboundProducts(), updatedAt()
+    fields: confirmedOn(string), createdAt(string), eligiblePackagesToOutbound(array), eligibleProductsToOutbound(array), executionErrors(array), orderId(string), orderPreferences(array), orderStatus(string), outboundShipments(array), packagesToOutbound(array), productsToOutbound(array), shippedOutboundPackages(array), shippedOutboundProducts(array), updatedAt(string)
   get_replenishment_order:
     primary key: orderId
-    fields: confirmedOn(), createdAt(), distributionIneligibleReasons(), eligibleProducts(), orderId(), order_id(), outboundShipments(), products(), shippedProducts(), status(), updatedAt()
+    fields: confirmedOn(string), createdAt(string), distributionIneligibleReasons(array), eligibleProducts(array), orderId(string), order_id(string), outboundShipments(array), products(array), shippedProducts(array), status(string), updatedAt(string)
   list_replenishment_orders:
     primary key: orderId
-    fields: confirmedOn(), createdAt(), distributionIneligibleReasons(), eligibleProducts(), orderId(), outboundShipments(), products(), shippedProducts(), status(), updatedAt()
+    fields: confirmedOn(string), createdAt(string), distributionIneligibleReasons(array), eligibleProducts(array), orderId(string), outboundShipments(array), products(array), shippedProducts(array), status(string), updatedAt(string)
   get_catalog_item:
     primary key: asin
-    fields: asin(), attributes(), identifiers(), images(), productTypes(), salesRanks(), summaries(), variations(), vendorDetails()
+    fields: asin(string), attributes(object), identifiers(array), images(array), productTypes(array), salesRanks(array), summaries(array), variations(array), vendorDetails(array)
   search_catalog_items:
     primary key: asin
-    fields: asin(), attributes(), identifiers(), images(), productTypes(), salesRanks(), summaries(), variations(), vendorDetails()
+    fields: asin(string), attributes(object), identifiers(array), images(array), productTypes(array), salesRanks(array), summaries(array), variations(array), vendorDetails(array)
   get_catalog_item_catalog_2022_04_01_items_asin:
     primary key: asin
-    fields: asin(), attributes(), classifications(), dimensions(), identifiers(), images(), productTypes(), relationships(), salesRanks(), summaries(), vendorDetails()
+    fields: asin(string), attributes(object), classifications(array), dimensions(array), identifiers(array), images(array), productTypes(array), relationships(array), salesRanks(array), summaries(array), vendorDetails(array)
   search_catalog_items_catalog_2022_04_01_items:
     primary key: asin
-    fields: asin(), attributes(), classifications(), dimensions(), identifiers(), images(), productTypes(), relationships(), salesRanks(), summaries(), vendorDetails()
+    fields: asin(string), attributes(object), classifications(array), dimensions(array), identifiers(array), images(array), productTypes(array), relationships(array), salesRanks(array), summaries(array), vendorDetails(array)
   get_vehicles:
-    fields: bodyStyle(), driveType(), energy(), engineOutput(), identifiers(), lastProcessedDate(), make(), manufacturingStartDate(), manufacturingStopDate(), model(), status(), variantName()
+    fields: bodyStyle(string), driveType(string), energy(string), engineOutput(array), identifiers(array), lastProcessedDate(string), make(string), manufacturingStartDate(object), manufacturingStopDate(object), model(string), status(string), variantName(string)
   list_catalog_categories:
     primary key: ProductCategoryId
-    fields: ProductCategoryId(), ProductCategoryName(), parent()
+    fields: ProductCategoryId(string), ProductCategoryName(string), parent(object)
   get_browse_node_return_topics:
     primary key: browse_node_id
-    fields: browseNodeMetrics(), browse_node_id(), topic()
+    fields: browseNodeMetrics(object), browse_node_id(string), topic(string)
   get_browse_node_return_trends:
     primary key: browse_node_id
-    fields: browse_node_id(), topic(), trendMetrics()
+    fields: browse_node_id(string), topic(string), trendMetrics(array)
   get_browse_node_review_topics:
     primary key: browse_node_id
-    fields: browseNodeMetrics(), browse_node_id(), reviewSnippets(), subtopics(), topic()
+    fields: browseNodeMetrics(object), browse_node_id(string), reviewSnippets(array), subtopics(array), topic(string)
   get_browse_node_review_trends:
     primary key: browse_node_id
-    fields: browse_node_id(), topic(), trendMetrics()
+    fields: browse_node_id(string), topic(string), trendMetrics(array)
   get_item_browse_node:
     primary key: asin
-    fields: asin(), browseNodeId(), displayName()
+    fields: asin(string), browseNodeId(string), displayName(string)
   get_item_review_topics:
     primary key: asin
-    fields: asin(), asinMetrics(), browseNodeMetrics(), childAsinMetrics(), parentAsinMetrics(), reviewSnippets(), subtopics(), topic()
+    fields: asin(string), asinMetrics(object), browseNodeMetrics(object), childAsinMetrics(object), parentAsinMetrics(object), reviewSnippets(array), subtopics(array), topic(string)
   get_item_review_trends:
     primary key: asin
-    fields: asin(), topic(), trendMetrics()
+    fields: asin(string), topic(string), trendMetrics(array)
   get_query:
     primary key: queryId
-    fields: createdTime(), dataDocumentId(), errorDocumentId(), pagination(), processingEndTime(), processingStartTime(), processingStatus(), query(), queryId(), query_id()
+    fields: createdTime(string), dataDocumentId(string), errorDocumentId(string), pagination(object), processingEndTime(string), processingStartTime(string), processingStatus(string), query(string), queryId(string), query_id(string)
   get_queries:
     primary key: queryId
-    fields: createdTime(), dataDocumentId(), errorDocumentId(), pagination(), processingEndTime(), processingStartTime(), processingStatus(), query(), queryId()
+    fields: createdTime(string), dataDocumentId(string), errorDocumentId(string), pagination(object), processingEndTime(string), processingStartTime(string), processingStatus(string), query(string), queryId(string)
   get_definitions_product_type:
     primary key: product_type
-    fields: displayName(), locale(), marketplaceIds(), metaSchema(), productType(), productTypeVersion(), product_type(), propertyGroups(), requirements(), requirementsEnforced(), schema()
+    fields: displayName(string), locale(string), marketplaceIds(array), metaSchema(object), productType(string), productTypeVersion(object), product_type(string), propertyGroups(object), requirements(string), requirementsEnforced(string), schema(object)
   search_definitions_product_types:
-    fields: displayName(), marketplaceIds(), name()
+    fields: displayName(string), marketplaceIds(array), name(string)
   get_scheduled_package:
     primary key: orderItemId
-    fields: orderItemId(), orderItemSerialNumbers()
+    fields: orderItemId(string), orderItemSerialNumbers(array)
   get_return:
     primary key: id
-    fields: creationDateTime(), fulfillmentLocationId(), id(), lastUpdatedDateTime(), marketplaceChannelDetails(), merchantSku(), numberOfUnits(), otpDetails(), packageDeliveryMode(), replanningDetails(), returnLocationId(), returnMetadata(), returnShippingInfo(), returnSubType(), returnType(), return_id(), status()
+    fields: creationDateTime(string), fulfillmentLocationId(string), id(string), lastUpdatedDateTime(string), marketplaceChannelDetails(object), merchantSku(string), numberOfUnits(integer), otpDetails(object), packageDeliveryMode(string), replanningDetails(object), returnLocationId(string), returnMetadata(object), returnShippingInfo(object), returnSubType(string), returnType(string), return_id(string), status(string)
   list_returns:
     primary key: id
-    fields: creationDateTime(), fulfillmentLocationId(), id(), lastUpdatedDateTime(), marketplaceChannelDetails(), merchantSku(), numberOfUnits(), otpDetails(), packageDeliveryMode(), replanningDetails(), returnLocationId(), returnMetadata(), returnShippingInfo(), returnSubType(), returnType(), status()
+    fields: creationDateTime(string), fulfillmentLocationId(string), id(string), lastUpdatedDateTime(string), marketplaceChannelDetails(object), merchantSku(string), numberOfUnits(integer), otpDetails(object), packageDeliveryMode(string), replanningDetails(object), returnLocationId(string), returnMetadata(object), returnShippingInfo(object), returnSubType(string), returnType(string), status(string)
   retrieve_invoice:
     primary key: shipment_id
-    fields: content(), format(), shipment_id()
+    fields: content(string), format(string), shipment_id(string)
   retrieve_shipping_options:
     primary key: shipment_id
-    fields: carrierName(), handoverLocation(), pickupWindow(), shipBy(), shipment_id(), shippingOptionId(), timeSlot()
+    fields: carrierName(string), handoverLocation(object), pickupWindow(object), shipBy(string), shipment_id(string), shippingOptionId(string), timeSlot(object)
   get_shipment:
     primary key: id
-    fields: charges(), creationDateTime(), earliestPackDateTime(), id(), invoiceInfo(), lastUpdatedDateTime(), lineItems(), locationId(), marketplaceAttributes(), packages(), partyInfoList(), reason(), shipmentInfo(), shipmentRequirements(), shipment_id(), shippingInfo(), status(), subStatus()
+    fields: charges(array), creationDateTime(string), earliestPackDateTime(string), id(string), invoiceInfo(object), lastUpdatedDateTime(string), lineItems(array), locationId(string), marketplaceAttributes(object), packages(array), partyInfoList(array), reason(string), shipmentInfo(object), shipmentRequirements(object), shipment_id(string), shippingInfo(object), status(string), subStatus(string)
   get_shipments:
     primary key: id
-    fields: charges(), creationDateTime(), earliestPackDateTime(), id(), invoiceInfo(), lastUpdatedDateTime(), lineItems(), locationId(), marketplaceAttributes(), packages(), partyInfoList(), reason(), shipmentInfo(), shipmentRequirements(), shippingInfo(), status(), subStatus()
+    fields: charges(array), creationDateTime(string), earliestPackDateTime(string), id(string), invoiceInfo(object), lastUpdatedDateTime(string), lineItems(array), locationId(string), marketplaceAttributes(object), packages(array), partyInfoList(array), reason(string), shipmentInfo(object), shipmentRequirements(object), shippingInfo(object), status(string), subStatus(string)
   get_prep_instructions:
     primary key: ASIN
-    fields: ASIN(), AmazonPrepFeesDetailsList(), BarcodeInstruction(), PrepGuidance(), PrepInstructionList(), SellerSKU()
+    fields: ASIN(string), AmazonPrepFeesDetailsList(array), BarcodeInstruction(string), PrepGuidance(string), PrepInstructionList(array), SellerSKU(string)
   get_shipment_items:
     primary key: SellerSKU
-    fields: FulfillmentNetworkSKU(), PrepDetailsList(), QuantityInCase(), QuantityReceived(), QuantityShipped(), ReleaseDate(), SellerSKU(), ShipmentId()
+    fields: FulfillmentNetworkSKU(string), PrepDetailsList(array), QuantityInCase(integer), QuantityReceived(integer), QuantityShipped(integer), ReleaseDate(string), SellerSKU(string), ShipmentId(string)
   get_shipment_items_by_shipment_id:
     primary key: shipment_id
-    fields: FulfillmentNetworkSKU(), PrepDetailsList(), QuantityInCase(), QuantityReceived(), QuantityShipped(), ReleaseDate(), SellerSKU(), ShipmentId(), shipment_id()
+    fields: FulfillmentNetworkSKU(string), PrepDetailsList(array), QuantityInCase(integer), QuantityReceived(integer), QuantityShipped(integer), ReleaseDate(string), SellerSKU(string), ShipmentId(string), shipment_id(string)
   get_shipments_fba_inbound_v0_shipments:
     primary key: ShipmentId
-    fields: AreCasesRequired(), BoxContentsSource(), ConfirmedNeedByDate(), DestinationFulfillmentCenterId(), EstimatedBoxContentsFee(), LabelPrepType(), ShipFromAddress(), ShipmentId(), ShipmentName(), ShipmentStatus()
+    fields: AreCasesRequired(boolean), BoxContentsSource(string), ConfirmedNeedByDate(string), DestinationFulfillmentCenterId(string), EstimatedBoxContentsFee(object), LabelPrepType(string), ShipFromAddress(object), ShipmentId(string), ShipmentName(string), ShipmentStatus(string)
   get_item_eligibility_preview:
   get_feature_sku:
     primary key: asin
-    fields: asin(), featureName(), feature_name(), fnSku(), ineligibleReasons(), isEligible(), marketplaceId(), sellerSku(), seller_sku(), skuCount()
+    fields: asin(string), featureName(string), feature_name(string), fnSku(string), ineligibleReasons(array), isEligible(boolean), marketplaceId(string), sellerSku(string), seller_sku(string), skuCount(number)
   get_feature_inventory:
     primary key: feature_name
-    fields: featureName(), featureSkus(), feature_name(), marketplaceId(), nextToken()
+    fields: featureName(string), featureSkus(array), feature_name(string), marketplaceId(string), nextToken(string)
   get_features:
-    fields: featureDescription(), featureName(), sellerEligible()
+    fields: featureDescription(string), featureName(string), sellerEligible(boolean)
   get_fulfillment_order:
     primary key: seller_fulfillment_order_id
-    fields: fulfillmentOrder(), fulfillmentOrderItems(), fulfillmentShipments(), paymentInformation(), returnAuthorizations(), returnItems(), seller_fulfillment_order_id()
+    fields: fulfillmentOrder(object), fulfillmentOrderItems(array), fulfillmentShipments(array), paymentInformation(array), returnAuthorizations(array), returnItems(array), seller_fulfillment_order_id(string)
   list_all_fulfillment_orders:
     primary key: sellerFulfillmentOrderId
-    fields: codSettings(), deliveryWindow(), destinationAddress(), displayableOrderComment(), displayableOrderDate(), displayableOrderId(), featureConstraints(), fulfillmentAction(), fulfillmentOrderStatus(), fulfillmentPolicy(), marketplaceId(), notificationEmails(), receivedDate(), sellerFulfillmentOrderId(), shippingSpeedCategory(), statusUpdatedDate()
+    fields: codSettings(object), deliveryWindow(object), destinationAddress(object), displayableOrderComment(string), displayableOrderDate(string), displayableOrderId(string), featureConstraints(array), fulfillmentAction(string), fulfillmentOrderStatus(string), fulfillmentPolicy(string), marketplaceId(string), notificationEmails(array), receivedDate(string), sellerFulfillmentOrderId(string), shippingSpeedCategory(string), statusUpdatedDate(string)
   list_return_reason_codes:
-    fields: description(), returnReasonCode(), translatedDescription()
+    fields: description(string), returnReasonCode(string), translatedDescription(string)
   get_package_tracking_details:
-    fields: eventAddress(), eventCode(), eventDate(), eventDescription()
+    fields: eventAddress(object), eventCode(string), eventDate(string), eventDescription(string)
   get_shipment_details:
     primary key: AmazonOrderId
-    fields: AmazonOrderId(), AmazonShipmentId(), BuyerCounty(), BuyerName(), BuyerTaxInfo(), MarketplaceId(), MarketplaceTaxInfo(), PaymentMethodDetails(), Payments(), PurchaseDate(), SellerDisplayName(), SellerId(), ShipmentItems(), ShippingAddress(), WarehouseId(), shipment_id()
+    fields: AmazonOrderId(string), AmazonShipmentId(string), BuyerCounty(string), BuyerName(string), BuyerTaxInfo(object), MarketplaceId(string), MarketplaceTaxInfo(object), PaymentMethodDetails(array), Payments(array), PurchaseDate(string), SellerDisplayName(string), SellerId(string), ShipmentItems(array), ShippingAddress(object), WarehouseId(string), shipment_id(string)
   get_feed:
     primary key: feedId
-    fields: createdTime(), feedId(), feedType(), feed_id(), marketplaceIds(), processingEndTime(), processingStartTime(), processingStatus(), resultFeedDocumentId()
+    fields: createdTime(string), feedId(string), feedType(string), feed_id(string), marketplaceIds(array), processingEndTime(string), processingStartTime(string), processingStatus(string), resultFeedDocumentId(string)
   get_feeds:
     primary key: feedId
-    fields: createdTime(), feedId(), feedType(), marketplaceIds(), processingEndTime(), processingStartTime(), processingStatus(), resultFeedDocumentId()
+    fields: createdTime(string), feedId(string), feedType(string), marketplaceIds(array), processingEndTime(string), processingStartTime(string), processingStatus(string), resultFeedDocumentId(string)
   list_transactions:
     primary key: transactionId
-    fields: breakdowns(), contexts(), description(), items(), marketplaceDetails(), postedDate(), relatedIdentifiers(), sellingPartnerMetadata(), totalAmount(), transactionId(), transactionStatus(), transactionType()
+    fields: breakdowns(array), contexts(array), description(string), items(array), marketplaceDetails(object), postedDate(string), relatedIdentifiers(array), sellingPartnerMetadata(object), totalAmount(object), transactionId(string), transactionStatus(string), transactionType(string)
   get_payment_methods:
     primary key: paymentMethodId
-    fields: accountHolderName(), assignmentType(), countryCode(), expiryDate(), paymentMethodId(), paymentMethodType(), tail()
+    fields: accountHolderName(string), assignmentType(string), countryCode(string), expiryDate(object), paymentMethodId(string), paymentMethodType(string), tail(string)
   list_account_balances:
     primary key: accountId
-    fields: accountId(), account_id(), balanceAmount(), balanceCurrency(), balanceType(), lastUpdateDate()
+    fields: accountId(string), account_id(string), balanceAmount(number), balanceCurrency(string), balanceType(string), lastUpdateDate(string)
   get_account:
     primary key: accountId
-    fields: accountCountryCode(), accountCurrency(), accountHolderName(), accountId(), account_id(), bankAccountHolderStatus(), bankAccountNumberFormat(), bankAccountNumberTail(), bankAccountOwnershipType(), bankName(), bankNumberFormat(), routingNumber()
+    fields: accountCountryCode(string), accountCurrency(string), accountHolderName(string), accountId(string), account_id(string), bankAccountHolderStatus(string), bankAccountNumberFormat(string), bankAccountNumberTail(string), bankAccountOwnershipType(string), bankName(string), bankNumberFormat(string), routingNumber(string)
   list_accounts:
     primary key: accountId
-    fields: accountCountryCode(), accountCurrency(), accountHolderName(), accountId(), bankAccountHolderStatus(), bankAccountNumberFormat(), bankAccountNumberTail(), bankAccountOwnershipType(), bankName(), bankNumberFormat(), routingNumber()
+    fields: accountCountryCode(string), accountCurrency(string), accountHolderName(string), accountId(string), bankAccountHolderStatus(string), bankAccountNumberFormat(string), bankAccountNumberTail(string), bankAccountOwnershipType(string), bankName(string), bankNumberFormat(string), routingNumber(string)
   get_transaction:
     primary key: transaction_id
-    fields: transaction_id()
+    fields: transaction_id(string)
   list_account_transactions:
     primary key: transactionId
-    fields: accountId(), expectedCompletionDate(), lastUpdateDate(), requesterName(), transactionActualCompletionDate(), transactionDescription(), transactionDestinationAccount(), transactionFailureReason(), transactionFinalAmount(), transactionId(), transactionRequestAmount(), transactionRequestDate(), transactionRequesterSource(), transactionSourceAccount(), transactionStatus(), transactionType(), transferRateDetails()
+    fields: accountId(string), expectedCompletionDate(string), lastUpdateDate(string), requesterName(string), transactionActualCompletionDate(string), transactionDescription(string), transactionDestinationAccount(object), transactionFailureReason(string), transactionFinalAmount(object), transactionId(string), transactionRequestAmount(object), transactionRequestDate(string), transactionRequesterSource(string), transactionSourceAccount(object), transactionStatus(string), transactionType(string), transferRateDetails(object)
   get_transfer_preview:
     primary key: feeId
-    fields: feeAmount(), feeId(), feeRateValue(), feeType()
+    fields: feeAmount(object), feeId(string), feeRateValue(string), feeType(string)
   get_transfer_schedule:
     primary key: transferScheduleId
-    fields: paymentPreference(), transactionDestinationAccount(), transactionSourceAccount(), transactionType(), transferScheduleFailures(), transferScheduleId(), transferScheduleInformation(), transferScheduleStatus(), transfer_schedule_id()
+    fields: paymentPreference(object), transactionDestinationAccount(object), transactionSourceAccount(object), transactionType(string), transferScheduleFailures(array), transferScheduleId(string), transferScheduleInformation(object), transferScheduleStatus(string), transfer_schedule_id(string)
   list_transfer_schedules:
     primary key: transferScheduleId
-    fields: paymentPreference(), transactionDestinationAccount(), transactionSourceAccount(), transactionType(), transferScheduleFailures(), transferScheduleId(), transferScheduleInformation(), transferScheduleStatus()
+    fields: paymentPreference(object), transactionDestinationAccount(object), transactionSourceAccount(object), transactionType(string), transferScheduleFailures(array), transferScheduleId(string), transferScheduleInformation(object), transferScheduleStatus(string)
   list_financial_events_by_group_id:
     primary key: AmazonOrderId
-    fields: AmazonOrderId(), DirectPaymentList(), MarketplaceName(), OrderChargeAdjustmentList(), OrderChargeList(), OrderFeeAdjustmentList(), OrderFeeList(), PostedDate(), SellerOrderId(), ShipmentFeeAdjustmentList(), ShipmentFeeList(), ShipmentItemAdjustmentList(), ShipmentItemList(), StoreName(), event_group_id()
+    fields: AmazonOrderId(string), DirectPaymentList(array), MarketplaceName(string), OrderChargeAdjustmentList(array), OrderChargeList(array), OrderFeeAdjustmentList(array), OrderFeeList(array), PostedDate(string), SellerOrderId(string), ShipmentFeeAdjustmentList(array), ShipmentFeeList(array), ShipmentItemAdjustmentList(array), ShipmentItemList(array), StoreName(string), event_group_id(string)
   list_financial_events:
     primary key: AmazonOrderId
-    fields: AmazonOrderId(), DirectPaymentList(), MarketplaceName(), OrderChargeAdjustmentList(), OrderChargeList(), OrderFeeAdjustmentList(), OrderFeeList(), PostedDate(), SellerOrderId(), ShipmentFeeAdjustmentList(), ShipmentFeeList(), ShipmentItemAdjustmentList(), ShipmentItemList(), StoreName()
+    fields: AmazonOrderId(string), DirectPaymentList(array), MarketplaceName(string), OrderChargeAdjustmentList(array), OrderChargeList(array), OrderFeeAdjustmentList(array), OrderFeeList(array), PostedDate(string), SellerOrderId(string), ShipmentFeeAdjustmentList(array), ShipmentFeeList(array), ShipmentItemAdjustmentList(array), ShipmentItemList(array), StoreName(string)
   list_financial_events_by_order_id:
     primary key: order_id
-    fields: AmazonOrderId(), DirectPaymentList(), MarketplaceName(), OrderChargeAdjustmentList(), OrderChargeList(), OrderFeeAdjustmentList(), OrderFeeList(), PostedDate(), SellerOrderId(), ShipmentFeeAdjustmentList(), ShipmentFeeList(), ShipmentItemAdjustmentList(), ShipmentItemList(), StoreName(), order_id()
+    fields: AmazonOrderId(string), DirectPaymentList(array), MarketplaceName(string), OrderChargeAdjustmentList(array), OrderChargeList(array), OrderFeeAdjustmentList(array), OrderFeeList(array), PostedDate(string), SellerOrderId(string), ShipmentFeeAdjustmentList(array), ShipmentFeeList(array), ShipmentItemAdjustmentList(array), ShipmentItemList(array), StoreName(string), order_id(string)
   list_inbound_plan_boxes:
     primary key: packageId
-    fields: boxId(), contentInformationSource(), destinationRegion(), dimensions(), externalContainerIdentifier(), externalContainerIdentifierType(), inbound_plan_id(), items(), packageId(), quantity(), templateName(), weight()
+    fields: boxId(string), contentInformationSource(string), destinationRegion(object), dimensions(object), externalContainerIdentifier(string), externalContainerIdentifierType(string), inbound_plan_id(string), items(array), packageId(string), quantity(integer), templateName(string), weight(object)
   list_inbound_plan_items:
     primary key: asin
-    fields: asin(), expiration(), fnsku(), inbound_plan_id(), labelOwner(), manufacturingLotCode(), msku(), prepInstructions(), quantity()
+    fields: asin(string), expiration(string), fnsku(string), inbound_plan_id(string), labelOwner(string), manufacturingLotCode(string), msku(string), prepInstructions(array), quantity(integer)
   list_packing_group_boxes:
     primary key: packageId
-    fields: boxId(), contentInformationSource(), destinationRegion(), dimensions(), externalContainerIdentifier(), externalContainerIdentifierType(), inbound_plan_id(), items(), packageId(), packing_group_id(), quantity(), templateName(), weight()
+    fields: boxId(string), contentInformationSource(string), destinationRegion(object), dimensions(object), externalContainerIdentifier(string), externalContainerIdentifierType(string), inbound_plan_id(string), items(array), packageId(string), packing_group_id(string), quantity(integer), templateName(string), weight(object)
   list_packing_group_items:
     primary key: asin
-    fields: asin(), expiration(), fnsku(), inbound_plan_id(), labelOwner(), manufacturingLotCode(), msku(), packing_group_id(), prepInstructions(), quantity()
+    fields: asin(string), expiration(string), fnsku(string), inbound_plan_id(string), labelOwner(string), manufacturingLotCode(string), msku(string), packing_group_id(string), prepInstructions(array), quantity(integer)
   list_packing_options:
     primary key: inbound_plan_id
-    fields: discounts(), expiration(), fees(), inbound_plan_id(), packingGroups(), packingOptionId(), status(), supportedConfigurations(), supportedShippingConfigurations()
+    fields: discounts(array), expiration(string), fees(array), inbound_plan_id(string), packingGroups(array), packingOptionId(string), status(string), supportedConfigurations(array), supportedShippingConfigurations(array)
   list_inbound_plan_pallets:
     primary key: packageId
-    fields: dimensions(), inbound_plan_id(), packageId(), quantity(), stackability(), weight()
+    fields: dimensions(object), inbound_plan_id(string), packageId(string), quantity(integer), stackability(string), weight(object)
   list_placement_options:
     primary key: inbound_plan_id
-    fields: discounts(), expiration(), fees(), inbound_plan_id(), placementOptionId(), shipmentIds(), status()
+    fields: discounts(array), expiration(string), fees(array), inbound_plan_id(string), placementOptionId(string), shipmentIds(array), status(string)
   list_shipment_boxes:
     primary key: shipment_id
-    fields: boxId(), contentInformationSource(), destinationRegion(), dimensions(), externalContainerIdentifier(), externalContainerIdentifierType(), inbound_plan_id(), items(), packageId(), quantity(), shipment_id(), templateName(), weight()
+    fields: boxId(string), contentInformationSource(string), destinationRegion(object), dimensions(object), externalContainerIdentifier(string), externalContainerIdentifierType(string), inbound_plan_id(string), items(array), packageId(string), quantity(integer), shipment_id(string), templateName(string), weight(object)
   get_shipment_content_update_preview:
     primary key: shipment_id
-    fields: contentUpdatePreviewId(), content_update_preview_id(), expiration(), inbound_plan_id(), requestedUpdates(), shipment_id(), transportationOption()
+    fields: contentUpdatePreviewId(string), content_update_preview_id(string), expiration(string), inbound_plan_id(string), requestedUpdates(object), shipment_id(string), transportationOption(object)
   list_shipment_content_update_previews:
     primary key: shipment_id
-    fields: contentUpdatePreviewId(), expiration(), inbound_plan_id(), requestedUpdates(), shipment_id(), transportationOption()
+    fields: contentUpdatePreviewId(string), expiration(string), inbound_plan_id(string), requestedUpdates(object), shipment_id(string), transportationOption(object)
   list_delivery_window_options:
     primary key: shipment_id
-    fields: availabilityType(), deliveryWindowOptionId(), endDate(), inbound_plan_id(), shipment_id(), startDate(), validUntil()
+    fields: availabilityType(string), deliveryWindowOptionId(string), endDate(string), inbound_plan_id(string), shipment_id(string), startDate(string), validUntil(string)
   list_shipment_items:
     primary key: shipment_id
-    fields: asin(), expiration(), fnsku(), inbound_plan_id(), labelOwner(), manufacturingLotCode(), msku(), prepInstructions(), quantity(), shipment_id()
+    fields: asin(string), expiration(string), fnsku(string), inbound_plan_id(string), labelOwner(string), manufacturingLotCode(string), msku(string), prepInstructions(array), quantity(integer), shipment_id(string)
   list_shipment_pallets:
     primary key: shipment_id
-    fields: dimensions(), inbound_plan_id(), packageId(), quantity(), shipment_id(), stackability(), weight()
+    fields: dimensions(object), inbound_plan_id(string), packageId(string), quantity(integer), shipment_id(string), stackability(string), weight(object)
   get_self_ship_appointment_slots:
     primary key: shipment_id
-    fields: inbound_plan_id(), shipment_id(), slotId(), slotTime()
+    fields: inbound_plan_id(string), shipment_id(string), slotId(string), slotTime(object)
   get_shipment_inbound_fba_2024_03_20_inbound_plans_inbound_plan_id_shipments_shipment_id:
     primary key: shipmentId
-    fields: amazonReferenceId(), contactInformation(), dates(), destination(), freightInformation(), inbound_plan_id(), name(), placementOptionId(), selectedDeliveryWindow(), selectedTransportationOptionId(), selfShipAppointmentDetails(), shipmentConfirmationId(), shipmentId(), shipment_id(), source(), status(), trackingDetails()
+    fields: amazonReferenceId(string), contactInformation(object), dates(object), destination(object), freightInformation(object), inbound_plan_id(string), name(string), placementOptionId(string), selectedDeliveryWindow(object), selectedTransportationOptionId(string), selfShipAppointmentDetails(array), shipmentConfirmationId(string), shipmentId(string), shipment_id(string), source(object), status(string), trackingDetails(object)
   list_transportation_options:
     primary key: shipmentId
-    fields: carrier(), carrierAppointment(), inbound_plan_id(), preconditions(), quote(), shipmentId(), shippingMode(), shippingSolution(), transportationOptionId()
+    fields: carrier(object), carrierAppointment(object), inbound_plan_id(string), preconditions(array), quote(object), shipmentId(string), shippingMode(string), shippingSolution(string), transportationOptionId(string)
   get_inbound_plan:
     primary key: inboundPlanId
-    fields: createdAt(), inboundPlanId(), inbound_plan_id(), lastUpdatedAt(), marketplaceIds(), name(), packingOptions(), placementOptions(), shipments(), sourceAddress(), status()
+    fields: createdAt(string), inboundPlanId(string), inbound_plan_id(string), lastUpdatedAt(string), marketplaceIds(array), name(string), packingOptions(array), placementOptions(array), shipments(array), sourceAddress(object), status(string)
   list_inbound_plans:
     primary key: inboundPlanId
-    fields: createdAt(), inboundPlanId(), lastUpdatedAt(), marketplaceIds(), name(), sourceAddress(), status()
+    fields: createdAt(string), inboundPlanId(string), lastUpdatedAt(string), marketplaceIds(array), name(string), sourceAddress(object), status(string)
   list_item_compliance_details:
     primary key: asin
-    fields: asin(), fnsku(), msku(), taxDetails()
+    fields: asin(string), fnsku(string), msku(string), taxDetails(object)
   list_prep_details:
-    fields: allOwnersConstraint(), labelOwnerConstraint(), msku(), prepCategory(), prepOwnerConstraint(), prepTypes()
+    fields: allOwnersConstraint(string), labelOwnerConstraint(string), msku(string), prepCategory(string), prepOwnerConstraint(string), prepTypes(array)
   get_listings_item:
     primary key: sku
-    fields: attributes(), fulfillmentAvailability(), issues(), offers(), procurement(), productTypes(), relationships(), seller_id(), sku(), summaries()
+    fields: attributes(object), fulfillmentAvailability(array), issues(array), offers(array), procurement(array), productTypes(array), relationships(array), seller_id(string), sku(string), summaries(array)
   search_listings_items:
     primary key: sku
-    fields: attributes(), fulfillmentAvailability(), issues(), offers(), procurement(), productTypes(), relationships(), seller_id(), sku(), summaries()
+    fields: attributes(object), fulfillmentAvailability(array), issues(array), offers(array), procurement(array), productTypes(array), relationships(array), seller_id(string), sku(string), summaries(array)
   get_listings_restrictions:
     primary key: marketplaceId
-    fields: conditionType(), marketplaceId(), reasons()
+    fields: conditionType(string), marketplaceId(string), reasons(array)
   get_messaging_actions_for_order:
     primary key: order_id
-    fields: _embedded(), _links(), errors(), order_id()
+    fields: _embedded(object), _links(object), errors(array), order_id(string)
   get_shipment_mfn_v0_shipments_shipment_id:
     primary key: AmazonOrderId
-    fields: AmazonOrderId(), CreatedDate(), Insurance(), ItemList(), Label(), LastUpdatedDate(), PackageDimensions(), SellerOrderId(), ShipFromAddress(), ShipToAddress(), ShipmentId(), ShippingService(), Status(), TrackingId(), Weight(), shipment_id()
+    fields: AmazonOrderId(string), CreatedDate(string), Insurance(object), ItemList(array), Label(object), LastUpdatedDate(string), PackageDimensions(object), SellerOrderId(string), ShipFromAddress(object), ShipToAddress(object), ShipmentId(string), ShippingService(object), Status(string), TrackingId(string), Weight(object), shipment_id(string)
   get_destination:
     primary key: destinationId
-    fields: destinationId(), destination_id(), name(), resource()
+    fields: destinationId(string), destination_id(string), name(string), resource(object)
   get_destinations:
     primary key: destinationId
-    fields: destinationId(), name(), resource()
+    fields: destinationId(string), name(string), resource(object)
   get_subscription_by_id:
     primary key: destinationId
-    fields: destinationId(), notification_type(), payloadVersion(), processingDirective(), subscriptionId(), subscription_id()
+    fields: destinationId(string), notification_type(string), payloadVersion(string), processingDirective(object), subscriptionId(string), subscription_id(string)
   get_subscription:
     primary key: destinationId
-    fields: destinationId(), notification_type(), payloadVersion(), processingDirective(), subscriptionId()
+    fields: destinationId(string), notification_type(string), payloadVersion(string), processingDirective(object), subscriptionId(string)
   get_order:
     primary key: orderId
-    fields: associatedOrders(), buyer(), createdTime(), fulfillment(), fulfillmentOrders(), lastUpdatedTime(), orderAliases(), orderId(), orderItems(), order_id(), packages(), payment(), proceeds(), programs(), recipient(), salesChannel(), tax()
+    fields: associatedOrders(array), buyer(object), createdTime(string), fulfillment(object), fulfillmentOrders(array), lastUpdatedTime(string), orderAliases(array), orderId(string), orderItems(array), order_id(string), packages(array), payment(object), proceeds(object), programs(array), recipient(object), salesChannel(object), tax(object)
   search_orders:
     primary key: orderId
-    fields: associatedOrders(), buyer(), createdTime(), fulfillment(), fulfillmentOrders(), lastUpdatedTime(), orderAliases(), orderId(), orderItems(), packages(), payment(), proceeds(), programs(), recipient(), salesChannel(), tax()
+    fields: associatedOrders(array), buyer(object), createdTime(string), fulfillment(object), fulfillmentOrders(array), lastUpdatedTime(string), orderAliases(array), orderId(string), orderItems(array), packages(array), payment(object), proceeds(object), programs(array), recipient(object), salesChannel(object), tax(object)
   get_order_items:
     primary key: order_id
-    fields: ASIN(), AmazonPrograms(), AssociatedItems(), BuyerInfo(), BuyerRequestedCancel(), CODFee(), CODFeeDiscount(), ConditionId(), ConditionNote(), ConditionSubtypeId(), DeemedResellerCategory(), IossNumber(), IsGift(), IsTransparency(), ItemPrice(), ItemTax(), Measurement(), OrderItemId(), PointsGranted(), PriceDesignation(), ProductInfo(), PromotionDiscount(), PromotionDiscountTax(), PromotionIds(), QuantityOrdered(), QuantityShipped(), ScheduledDeliveryEndDate(), ScheduledDeliveryStartDate(), SellerSKU(), SerialNumberRequired(), SerialNumbers(), ShippingConstraints(), ShippingDiscount(), ShippingDiscountTax(), ShippingPrice(), ShippingTax(), StoreChainStoreId(), SubstitutionPreferences(), TaxCollection(), Title(), order_id()
+    fields: ASIN(string), AmazonPrograms(object), AssociatedItems(array), BuyerInfo(object), BuyerRequestedCancel(object), CODFee(object), CODFeeDiscount(object), ConditionId(string), ConditionNote(string), ConditionSubtypeId(string), DeemedResellerCategory(string), IossNumber(string), IsGift(string), IsTransparency(boolean), ItemPrice(object), ItemTax(object), Measurement(object), OrderItemId(string), PointsGranted(object), PriceDesignation(string), ProductInfo(object), PromotionDiscount(object), PromotionDiscountTax(object), PromotionIds(array), QuantityOrdered(integer), QuantityShipped(integer), ScheduledDeliveryEndDate(string), ScheduledDeliveryStartDate(string), SellerSKU(string), SerialNumberRequired(boolean), SerialNumbers(array), ShippingConstraints(object), ShippingDiscount(object), ShippingDiscountTax(object), ShippingPrice(object), ShippingTax(object), StoreChainStoreId(string), SubstitutionPreferences(object), TaxCollection(object), Title(string), order_id(string)
   get_order_orders_v0_orders_order_id:
     primary key: order_id
-    fields: AmazonOrderId(), AutomatedShippingSettings(), BuyerInfo(), BuyerInvoicePreference(), BuyerTaxInformation(), CbaDisplayableShippingLabel(), DefaultShipFromLocationAddress(), EarliestDeliveryDate(), EarliestShipDate(), EasyShipShipmentStatus(), ElectronicInvoiceStatus(), FulfillmentChannel(), FulfillmentInstruction(), HasRegulatedItems(), IsAccessPointOrder(), IsBusinessOrder(), IsEstimatedShipDateSet(), IsGlobalExpressEnabled(), IsIBA(), IsISPU(), IsPremiumOrder(), IsPrime(), IsReplacementOrder(), IsSoldByAB(), LastUpdateDate(), LatestDeliveryDate(), LatestShipDate(), MarketplaceId(), MarketplaceTaxInfo(), NumberOfItemsShipped(), NumberOfItemsUnshipped(), OrderChannel(), OrderStatus(), OrderTotal(), OrderType(), PaymentExecutionDetail(), PaymentMethod(), PaymentMethodDetails(), PromiseResponseDueDate(), PurchaseDate(), ReplacedOrderId(), SalesChannel(), SellerDisplayName(), SellerOrderId(), ShipServiceLevel(), ShipmentServiceLevelCategory(), ShippingAddress(), order_id()
+    fields: AmazonOrderId(string), AutomatedShippingSettings(object), BuyerInfo(object), BuyerInvoicePreference(string), BuyerTaxInformation(object), CbaDisplayableShippingLabel(string), DefaultShipFromLocationAddress(object), EarliestDeliveryDate(string), EarliestShipDate(string), EasyShipShipmentStatus(string), ElectronicInvoiceStatus(string), FulfillmentChannel(string), FulfillmentInstruction(object), HasRegulatedItems(boolean), IsAccessPointOrder(boolean), IsBusinessOrder(boolean), IsEstimatedShipDateSet(boolean), IsGlobalExpressEnabled(boolean), IsIBA(boolean), IsISPU(boolean), IsPremiumOrder(boolean), IsPrime(boolean), IsReplacementOrder(boolean), IsSoldByAB(boolean), LastUpdateDate(string), LatestDeliveryDate(string), LatestShipDate(string), MarketplaceId(string), MarketplaceTaxInfo(object), NumberOfItemsShipped(integer), NumberOfItemsUnshipped(integer), OrderChannel(string), OrderStatus(string), OrderTotal(object), OrderType(string), PaymentExecutionDetail(array), PaymentMethod(string), PaymentMethodDetails(array), PromiseResponseDueDate(string), PurchaseDate(string), ReplacedOrderId(string), SalesChannel(string), SellerDisplayName(string), SellerOrderId(string), ShipServiceLevel(string), ShipmentServiceLevelCategory(string), ShippingAddress(object), order_id(string)
   get_competitive_pricing:
     primary key: ASIN
-    fields: ASIN(), Product(), SellerSKU(), status()
+    fields: ASIN(string), Product(object), SellerSKU(string), status(string)
   get_item_offers:
     primary key: asin
-    fields: ConditionNotes(), IsBuyBoxWinner(), IsFeaturedMerchant(), IsFulfilledByAmazon(), ListingPrice(), MyOffer(), Points(), PrimeInformation(), SellerFeedbackRating(), SellerId(), Shipping(), ShippingTime(), ShipsFrom(), SubCondition(), asin(), offerType(), quantityDiscountPrices()
+    fields: ConditionNotes(string), IsBuyBoxWinner(boolean), IsFeaturedMerchant(boolean), IsFulfilledByAmazon(boolean), ListingPrice(object), MyOffer(boolean), Points(object), PrimeInformation(object), SellerFeedbackRating(object), SellerId(string), Shipping(object), ShippingTime(object), ShipsFrom(object), SubCondition(string), asin(string), offerType(string), quantityDiscountPrices(array)
   get_listing_offers:
     primary key: seller_sku
-    fields: ConditionNotes(), IsBuyBoxWinner(), IsFeaturedMerchant(), IsFulfilledByAmazon(), ListingPrice(), MyOffer(), Points(), PrimeInformation(), SellerFeedbackRating(), SellerId(), Shipping(), ShippingTime(), ShipsFrom(), SubCondition(), offerType(), quantityDiscountPrices(), seller_sku()
+    fields: ConditionNotes(string), IsBuyBoxWinner(boolean), IsFeaturedMerchant(boolean), IsFulfilledByAmazon(boolean), ListingPrice(object), MyOffer(boolean), Points(object), PrimeInformation(object), SellerFeedbackRating(object), SellerId(string), Shipping(object), ShippingTime(object), ShipsFrom(object), SubCondition(string), offerType(string), quantityDiscountPrices(array), seller_sku(string)
   get_pricing:
     primary key: ASIN
-    fields: ASIN(), Product(), SellerSKU(), status()
+    fields: ASIN(string), Product(object), SellerSKU(string), status(string)
   get_report:
     primary key: reportId
-    fields: createdTime(), dataEndTime(), dataStartTime(), marketplaceIds(), processingEndTime(), processingStartTime(), processingStatus(), reportDocumentId(), reportId(), reportScheduleId(), reportType(), report_id()
+    fields: createdTime(string), dataEndTime(string), dataStartTime(string), marketplaceIds(array), processingEndTime(string), processingStartTime(string), processingStatus(string), reportDocumentId(string), reportId(string), reportScheduleId(string), reportType(string), report_id(string)
   get_reports:
     primary key: reportId
-    fields: createdTime(), dataEndTime(), dataStartTime(), marketplaceIds(), processingEndTime(), processingStartTime(), processingStatus(), reportDocumentId(), reportId(), reportScheduleId(), reportType()
+    fields: createdTime(string), dataEndTime(string), dataStartTime(string), marketplaceIds(array), processingEndTime(string), processingStartTime(string), processingStatus(string), reportDocumentId(string), reportId(string), reportScheduleId(string), reportType(string)
   get_report_schedule:
     primary key: report_schedule_id
-    fields: marketplaceIds(), nextReportCreationTime(), period(), reportOptions(), reportScheduleId(), reportType(), report_schedule_id()
+    fields: marketplaceIds(array), nextReportCreationTime(string), period(string), reportOptions(object), reportScheduleId(string), reportType(string), report_schedule_id(string)
   get_report_schedules:
     primary key: reportScheduleId
-    fields: marketplaceIds(), nextReportCreationTime(), period(), reportOptions(), reportScheduleId(), reportType()
+    fields: marketplaceIds(array), nextReportCreationTime(string), period(string), reportOptions(object), reportScheduleId(string), reportType(string)
   get_order_metrics:
-    fields: averageUnitPrice(), interval(), orderCount(), orderItemCount(), totalSales(), unitCount()
+    fields: averageUnitPrice(object), interval(string), orderCount(integer), orderItemCount(integer), totalSales(object), unitCount(integer)
   get_account_sellers_v1_account:
-    fields: marketplace(), participation(), storeName()
+    fields: marketplace(object), participation(object), storeName(string)
   get_marketplace_participations:
-    fields: marketplace(), participation(), storeName()
+    fields: marketplace(object), participation(object), storeName(string)
   get_appointment_slots:
-    fields: capacity(), endTime(), startTime()
+    fields: capacity(integer), endTime(string), startTime(string)
   get_appointmment_slots_by_job_id:
     primary key: service_job_id
-    fields: capacity(), endTime(), service_job_id(), startTime()
+    fields: capacity(integer), endTime(string), service_job_id(string), startTime(string)
   get_service_job_by_service_job_id:
     primary key: serviceJobId
-    fields: appointments(), associatedItems(), buyer(), createTime(), marketplaceId(), payments(), preferredAppointmentTimes(), productOrderIds(), scopeOfWork(), seller(), serviceJobId(), serviceJobProvider(), serviceJobStatus(), serviceLocation(), serviceOrderId(), service_job_id(), storeId(), trackingIds()
+    fields: appointments(array), associatedItems(array), buyer(object), createTime(string), marketplaceId(string), payments(array), preferredAppointmentTimes(array), productOrderIds(array), scopeOfWork(object), seller(object), serviceJobId(string), serviceJobProvider(object), serviceJobStatus(string), serviceLocation(object), serviceOrderId(string), service_job_id(string), storeId(string), trackingIds(array)
   get_service_jobs:
     primary key: serviceJobId
-    fields: appointments(), associatedItems(), buyer(), createTime(), marketplaceId(), payments(), preferredAppointmentTimes(), productOrderIds(), scopeOfWork(), seller(), serviceJobId(), serviceJobProvider(), serviceJobStatus(), serviceLocation(), serviceOrderId(), storeId(), trackingIds()
+    fields: appointments(array), associatedItems(array), buyer(object), createTime(string), marketplaceId(string), payments(array), preferredAppointmentTimes(array), productOrderIds(array), scopeOfWork(object), seller(object), serviceJobId(string), serviceJobProvider(object), serviceJobStatus(string), serviceLocation(object), serviceOrderId(string), storeId(string), trackingIds(array)
   get_account_shipping_v1_account:
     primary key: accountId
-    fields: accountId()
+    fields: accountId(string)
   get_shipment_shipping_v1_shipments_shipment_id:
     primary key: shipmentId
-    fields: acceptedRate(), clientReferenceId(), containers(), shipFrom(), shipTo(), shipmentId(), shipment_id(), shipper()
+    fields: acceptedRate(object), clientReferenceId(string), containers(array), shipFrom(object), shipTo(object), shipmentId(string), shipment_id(string), shipper(object)
   get_tracking_information:
     primary key: trackingId
-    fields: eventHistory(), promisedDeliveryDate(), summary(), trackingId(), tracking_id()
+    fields: eventHistory(array), promisedDeliveryDate(string), summary(object), trackingId(string), tracking_id(string)
   get_access_points:
-    fields: accessPointsMap()
+    fields: accessPointsMap(object)
   get_carrier_account_form_inputs:
     primary key: carrierId
-    fields: carrierId(), linkableAccountTypes()
+    fields: carrierId(string), linkableAccountTypes(array)
   get_collection_form:
     primary key: collection_form_id
-    fields: base64EncodedContent(), collection_form_id(), documentFormat()
+    fields: base64EncodedContent(string), collection_form_id(string), documentFormat(string)
   get_shipment_documents:
     primary key: shipment_id
-    fields: contents(), format(), shipment_id(), type()
+    fields: contents(string), format(string), shipment_id(string), type(string)
   get_additional_inputs:
   get_tracking:
   get_solicitation_actions_for_order:
     primary key: order_id
-    fields: _embedded(), _links(), errors(), order_id()
+    fields: _embedded(object), _links(object), errors(array), order_id(string)
   get_supply_source:
     primary key: supplySourceId
-    fields: address(), alias(), capabilities(), configuration(), createdAt(), status(), supplySourceCode(), supplySourceId(), supply_source_id(), updatedAt()
+    fields: address(object), alias(string), capabilities(object), configuration(object), createdAt(string), status(string), supplySourceCode(string), supplySourceId(string), supply_source_id(string), updatedAt(string)
   get_supply_sources:
     primary key: supplySourceId
-    fields: address(), alias(), supplySourceCode(), supplySourceId()
+    fields: address(object), alias(string), supplySourceCode(string), supplySourceId(string)
   get_invoices_export:
     primary key: exportId
-    fields: errorMessage(), exportId(), export_id(), generateExportFinishedAt(), generateExportStartedAt(), invoicesDocumentIds(), status()
+    fields: errorMessage(string), exportId(string), export_id(string), generateExportFinishedAt(string), generateExportStartedAt(string), invoicesDocumentIds(array), status(string)
   get_invoices_exports:
     primary key: exportId
-    fields: errorMessage(), exportId(), generateExportFinishedAt(), generateExportStartedAt(), invoicesDocumentIds(), status()
+    fields: errorMessage(string), exportId(string), generateExportFinishedAt(string), generateExportStartedAt(string), invoicesDocumentIds(array), status(string)
   get_invoice:
     primary key: id
-    fields: date(), errorCode(), externalInvoiceId(), govResponse(), id(), invoiceType(), invoice_id(), series(), status(), transactionIds(), transactionType()
+    fields: date(string), errorCode(string), externalInvoiceId(string), govResponse(string), id(string), invoiceType(string), invoice_id(string), series(string), status(string), transactionIds(array), transactionType(string)
   get_invoices:
     primary key: id
-    fields: date(), errorCode(), externalInvoiceId(), govResponse(), id(), invoiceType(), series(), status(), transactionIds(), transactionType()
+    fields: date(string), errorCode(string), externalInvoiceId(string), govResponse(string), id(string), invoiceType(string), series(string), status(string), transactionIds(array), transactionType(string)
   get_order_vendor_direct_fulfillment_orders_2021_12_28_purchase_orders_purchase_order_numbe:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber(), purchase_order_number()
+    fields: orderDetails(object), purchaseOrderNumber(string), purchase_order_number(string)
   get_orders:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber()
+    fields: orderDetails(object), purchaseOrderNumber(string)
   get_order_vendor_direct_fulfillment_orders_v1_purchase_orders_purchase_order_number:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber(), purchase_order_number()
+    fields: orderDetails(object), purchaseOrderNumber(string), purchase_order_number(string)
   get_orders_vendor_direct_fulfillment_orders_v1_purchase_orders:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber()
+    fields: orderDetails(object), purchaseOrderNumber(string)
   get_order_scenarios:
     primary key: transactionId
-    fields: status(), testCaseData(), transactionId(), transaction_id()
+    fields: status(string), testCaseData(object), transactionId(string), transaction_id(string)
   get_customer_invoice:
     primary key: purchaseOrderNumber
-    fields: content(), purchaseOrderNumber(), purchase_order_number()
+    fields: content(string), purchaseOrderNumber(string), purchase_order_number(string)
   get_customer_invoices:
     primary key: purchaseOrderNumber
-    fields: content(), purchaseOrderNumber()
+    fields: content(string), purchaseOrderNumber(string)
   get_customer_invoice_vendor_direct_fulfillment_shipping_v1_customer_invoices_purchase_order_number:
     primary key: purchaseOrderNumber
-    fields: content(), purchaseOrderNumber(), purchase_order_number()
+    fields: content(string), purchaseOrderNumber(string), purchase_order_number(string)
   get_customer_invoices_vendor_direct_fulfillment_shipping_v1_customer_invoices:
     primary key: purchaseOrderNumber
-    fields: content(), purchaseOrderNumber()
+    fields: content(string), purchaseOrderNumber(string)
   get_transaction_status:
     primary key: transactionId
-    fields: errors(), status(), transactionId(), transaction_id()
+    fields: errors(object), status(string), transactionId(string), transaction_id(string)
   get_transaction_status_vendor_direct_fulfillment_transactions_v1_transactions_transaction_id:
     primary key: transaction_id
-    fields: transactionStatus(), transaction_id()
+    fields: transactionStatus(object), transaction_id(string)
   get_purchase_order:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber(), purchaseOrderState(), purchase_order_number()
+    fields: orderDetails(object), purchaseOrderNumber(string), purchaseOrderState(string), purchase_order_number(string)
   get_purchase_orders:
     primary key: purchaseOrderNumber
-    fields: orderDetails(), purchaseOrderNumber(), purchaseOrderState()
+    fields: orderDetails(object), purchaseOrderNumber(string), purchaseOrderState(string)
   get_purchase_orders_status:
     primary key: purchaseOrderNumber
-    fields: itemStatus(), lastUpdatedDate(), purchaseOrderDate(), purchaseOrderNumber(), purchaseOrderStatus(), sellingParty(), shipToParty()
+    fields: itemStatus(array), lastUpdatedDate(string), purchaseOrderDate(string), purchaseOrderNumber(string), purchaseOrderStatus(string), sellingParty(object), shipToParty(object)
   get_shipment_details_vendor_shipping_v1_shipments:
     primary key: buyerReferenceNumber
-    fields: buyerReferenceNumber(), collectFreightPickupDetails(), containers(), currentShipmentStatus(), currentshipmentStatusDate(), importDetails(), packageLabelCreateDate(), purchaseOrders(), sellingParty(), shipFromParty(), shipToParty(), shipmentConfirmDate(), shipmentCreateDate(), shipmentFreightTerm(), shipmentMeasurements(), shipmentStatusDetails(), transactionDate(), transactionType(), transportationDetails(), vendorShipmentIdentifier()
+    fields: buyerReferenceNumber(string), collectFreightPickupDetails(object), containers(array), currentShipmentStatus(string), currentshipmentStatusDate(string), importDetails(object), packageLabelCreateDate(string), purchaseOrders(array), sellingParty(object), shipFromParty(object), shipToParty(object), shipmentConfirmDate(string), shipmentCreateDate(string), shipmentFreightTerm(string), shipmentMeasurements(object), shipmentStatusDetails(array), transactionDate(string), transactionType(string), transportationDetails(object), vendorShipmentIdentifier(string)
   get_transaction_vendor_transactions_v1_transactions_transaction_id:
     primary key: transaction_id
-    fields: transactionStatus(), transaction_id()
+    fields: transactionStatus(object), transaction_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads articles and news sources from the News API (newsapi.org): the everything search, top headlines, and the sources directory.
 
 ICON
+  id: newsapi
   asset: icons/newsapi.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -38,20 +39,20 @@ CONFIGURATION
   sort_by
   sources
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   everything:
     primary key: url
     cursor: published_at
-    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+    fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
   top_headlines:
     primary key: url
     cursor: published_at
-    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+    fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
   sources:
     primary key: id
-    fields: category(), country(), description(), id(), language(), name(), url()
+    fields: category(string), country(string), description(string), id(string), language(string), name(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

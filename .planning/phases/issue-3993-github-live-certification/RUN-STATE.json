@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "issue": 3993,
+  "connector": "github",
+  "state": "fresh_current_sha_lineage_planning",
+  "gsd": {
+    "requested": [
+      "scripts/gsd prompt discuss-phase 3993 --auto",
+      "scripts/gsd prompt plan-phase 3993 --tdd --skip-research",
+      "scripts/gsd prompt execute-phase 3993 --interactive",
+      "scripts/gsd prompt verify-work 3993 --auto",
+      "scripts/gsd prompt code-review 3993 --depth=standard"
+    ],
+    "execution": "inline_manual",
+    "fallback_reason": "issue number 3993 is not a roadmap phase and dispatch forbids role spawning",
+    "verify_work": "completed inline on 2026-08-11; UAT.md distinguishes the verified harness slice from the still-uncertified provider outcome",
+    "code_review": "completed inline at standard depth on 2026-08-11; REVIEW.md records the complete 1/#4020 -> 2/#4022 -> 3/#4027 -> 4/#4039 -> 5/#4050 correction history and explicit #3990/#3994/#3992 dependencies",
+    "shepherd_compatibility": "manual compatibility evidence only; no automatic #3995/Shepherd approval is asserted"
+  },
+  "boundary": {
+    "allowed_owner": "Polymetrics-Cert",
+    "protected_owner": "polymetrics-ai"
+  },
+  "outbound_dependency": [3994, 3992],
+  "completed": {
+    "boundary_parameterization": true,
+    "barrier_release": true,
+    "terminal_process_bound": true,
+    "per_write_readback_required": true,
+    "manifest_and_bootstrap_self_checks": true,
+    "local_pm_build": true,
+    "app_installation_authentication": true,
+    "credentialed_whole_surface_measurement": true,
+    "sanitized_evidence_and_residue_cleanup": true,
+    "inbound_github_parquet_duckdb_round_trip": true
+  },
+  "final_gate_corrections": {
+    "used": 5,
+    "limit": 5,
+    "issue": 4050,
+    "status": "complete_after_green",
+    "sequence": "1/#4020 -> 2/#4022 -> 3/#4027 -> 4/#4039 -> 5/#4050",
+    "history": [
+      { "round": 1, "issue": 4020 },
+      { "round": 2, "issue": 4022 },
+      { "round": 3, "issue": 4027 },
+      { "round": 4, "issue": 4039 },
+      { "round": 5, "issue": 4050 }
+    ],
+    "last": "historical rate-proof retirement and bootstrap artifact guarding passed the focused 50-test GREEN suite"
+  },
+  "fresh_current_sha_lineage": {
+    "used": 1,
+    "limit": 5,
+    "status": "plan_01_complete_needs_decision_no_approved_app_credential_or_boundary",
+    "started_at": "2026-08-11",
+    "owner_issue": 3993,
+    "pr": 4061,
+    "branch": "test/3993-github-live-roundtrip-nm5",
+    "base": "feat/3988-github-certification",
+    "scope": "current-SHA built-binary one-process GitHub closure; no historical external-process measurement is promoted",
+    "dependencies": [4059, 4060, 3994, 3992],
+    "red_green": {
+      "red": "Red: 2026-08-11 focused Node provenance regression exited 1 because execution_model was unsupported rather than validated; config-redaction case passed; no credential, provider, or child process invoked",
+      "green": "Green: 2026-08-11 focused Node provenance/redaction suite passed 2/2 and full proof-sweep suite passed 15/15; external model is fail-closed before credential/provider dispatch"
+    },
+    "current_sha_assessment": {
+      "local_head": "aeaec4dd18a44db573f69ece9e71b1f80ccd5ea6",
+      "binary_sha256": "c7f9f9c7d070d8c0f6ead322735c5146c33d47fce92a42dc083c8ab6ef554fd4",
+      "execution_model": "built_pm_in_process",
+      "provider_contact": false,
+      "provider_mutation": false,
+      "credential": {
+        "required_type": "github_app_installation",
+        "availability": "absent",
+        "scope": "unverified",
+        "fingerprint": "not_available"
+      },
+      "boundary": "not_available",
+      "result": "needs-decision",
+      "dependencies": {
+        "warehouse_to_github_flow": [3994, 4059],
+        "real_schedule_firing": [3992],
+        "parent_update_pending": [4060]
+      }
+    }
+  },
+  "current_classifier": {
+    "surface_commands": 1521,
+    "attemptable": 182,
+    "blocked": 1339,
+    "direct_read": { "attemptable": 169, "blocked": 470 },
+    "movement_from_historical_terminal": { "attemptable": -483, "blocked": 483 }
+  },
+  "historical_terminal_measurement": {
+    "surface_commands": 1521,
+    "proven": 0,
+    "failed": 665,
+    "untestable": 856,
+    "failure_cause": "all reads exceeded the 45000 ms terminal bound",
+    "rate_before": { "rest_core_remaining": 15000, "graphql_remaining": 5000 },
+    "rate_after": { "rest_core_remaining": 14997, "graphql_remaining": 5000 }
+  },
+  "remaining_before_certification": [
+    "admit the barrier-released provider workload without serializing it or presenting local process saturation as rate policy",
+    "supply cleanup-safe fixtures and independent read-backs for currently blocked writes",
+    "#3994 approved action execution for the warehouse-to-GitHub leg",
+    "#3992 real schedule firing for the warehouse-to-GitHub leg"
+  ]
+}

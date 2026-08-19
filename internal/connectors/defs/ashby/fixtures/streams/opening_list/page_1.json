@@ -1,0 +1,64 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/opening.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "opening_list_id_fixture_37",
+          "openedAt": "2026-02-09T13:00:00Z",
+          "closedAt": "2026-01-09T07:00:00Z",
+          "isArchived": true,
+          "closeReasonId": "opening_list_closereasonid_fixture_37",
+          "archivedAt": "2026-01-09T07:00:00Z",
+          "openingState": "Draft",
+          "latestVersion": {
+            "id": "opening_list_id_fixture_37",
+            "identifier": "opening_list_identifier_fixture_37",
+            "description": "Description fixture 37",
+            "authorId": "opening_list_authorid_fixture_37",
+            "createdAt": "2026-01-09T07:00:00Z",
+            "targetHireDate": "2026-01-09T07:00:00Z",
+            "targetStartDate": "2026-01-09T07:00:00Z",
+            "isBackfill": true,
+            "employmentType": "FullTime",
+            "teamId": "opening_list_teamid_fixture_37",
+            "jobIds": [
+              "opening_list_jobid_fixture_37"
+            ],
+            "locationIds": [
+              "opening_list_locationid_fixture_37"
+            ],
+            "hiringTeam": [
+              {
+                "userId": "opening_list_userid_fixture_37",
+                "firstName": "Opening List Firstname Fixture 37",
+                "lastName": "Opening List Lastname Fixture 37",
+                "email": "opening_list.email.37@example.invalid",
+                "role": "opening_list_role_fixture_37"
+              }
+            ],
+            "customFields": [
+              {
+                "id": "opening_list_id_fixture_37",
+                "isPrivate": true,
+                "title": "Title fixture 37",
+                "valueLabel": "opening_list_valuelabel_fixture_37",
+                "value": {
+                  "value": 37.0,
+                  "currencyCode": "opening_list_currencycode_fixture_37"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

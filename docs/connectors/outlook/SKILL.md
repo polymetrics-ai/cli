@@ -11,9 +11,11 @@ Reads Outlook messages, mail folders, and calendar events through Microsoft Grap
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -33,23 +35,23 @@ Reads Outlook messages, mail folders, and calendar events through Microsoft Grap
 - scope
 - tenant_id
 - token_url
-- client_id (secret)
-- client_secret (secret)
-- refresh_token (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
+- refresh_token (secret) (required)
 
 ## ETL Streams
 
 - messages:
   - primary key: id
   - cursor: received_date_time
-  - fields: id(), last_modified_date_time(), received_date_time(), subject(), web_link()
+  - fields: id(string), last_modified_date_time(string), received_date_time(string), subject(string), web_link(string)
 - mail_folders:
   - primary key: id
-  - fields: display_name(), id(), total_item_count(), unread_item_count()
+  - fields: display_name(string), id(string), total_item_count(integer), unread_item_count(integer)
 - events:
   - primary key: id
   - cursor: last_modified_date_time
-  - fields: created_date_time(), id(), last_modified_date_time(), subject(), web_link()
+  - fields: created_date_time(string), id(string), last_modified_date_time(string), subject(string), web_link(string)
 
 ## Sync Modes
 

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/unassigned-work",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "unassigned_work_fixture_1",
+        "value": "Fixture unassigned work"
+      }
+    ]
+  }
+}

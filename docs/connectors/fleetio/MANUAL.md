@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, and service entries through the Fleetio REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,30 +29,30 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   page_size
-  account_token (secret)
-  api_key (secret)
+  account_token (secret) (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   vehicles:
     primary key: id
     cursor: updated_at
-    fields: archived_at(), created_at(), current_meter_value(), id(), license_plate(), make(), model(), name(), updated_at(), vehicle_status_name(), vehicle_type_name(), vin(), year()
+    fields: archived_at(string), created_at(string), current_meter_value(string), id(integer), license_plate(string), make(string), model(string), name(string), updated_at(string), vehicle_status_name(string), vehicle_type_name(string), vin(string), year(integer)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: archived_at(), created_at(), email(), employee(), first_name(), group_name(), id(), last_name(), name(), technician(), updated_at()
+    fields: archived_at(string), created_at(string), email(string), employee(boolean), first_name(string), group_name(string), id(integer), last_name(string), name(string), technician(boolean), updated_at(string)
   fuel_entries:
     primary key: id
     cursor: updated_at
-    fields: cost(), created_at(), date(), id(), is_sample(), meter_value(), total_amount(), updated_at(), us_gallons(), vehicle_id(), vehicle_name()
+    fields: cost(string), created_at(string), date(string), id(integer), is_sample(boolean), meter_value(string), total_amount(string), updated_at(string), us_gallons(string), vehicle_id(integer), vehicle_name(string)
   issues:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), due_date(), id(), number(), resolved_at(), state(), summary(), updated_at(), vehicle_id(), vehicle_name()
+    fields: created_at(string), description(string), due_date(string), id(integer), number(integer), resolved_at(string), state(string), summary(string), updated_at(string), vehicle_id(integer), vehicle_name(string)
   service_entries:
     primary key: id
     cursor: updated_at
-    fields: completed_at(), created_at(), id(), is_sample(), labor_subtotal(), meter_value(), parts_subtotal(), started_at(), total_amount(), updated_at(), vehicle_id(), vehicle_name()
+    fields: completed_at(string), created_at(string), id(integer), is_sample(boolean), labor_subtotal(string), meter_value(string), parts_subtotal(string), started_at(string), total_amount(string), updated_at(string), vehicle_id(integer), vehicle_name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

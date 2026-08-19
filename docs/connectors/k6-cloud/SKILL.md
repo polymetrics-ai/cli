@@ -11,6 +11,7 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 
 ## Icon
 
+- id: k6cloud
 - asset: icons/k6cloud.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,23 +31,23 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 - base_url
 - mode
 - page_size
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - organizations:
   - primary key: id
-  - fields: billing_address(), billing_country(), billing_email(), created(), description(), id(), is_default(), is_saml_org(), name(), owner_id(), updated(), vat_number()
+  - fields: billing_address(string), billing_country(string), billing_email(string), created(string), description(string), id(integer), is_default(boolean), is_saml_org(boolean), name(string), owner_id(integer), updated(string), vat_number(string)
 - k6_tests:
   - primary key: id
-  - fields: created(), id(), last_test_run_id(), name(), project_id(), script(), test_run_ids(), updated(), user_id()
+  - fields: created(string), id(integer), last_test_run_id(string), name(string), project_id(integer), script(string), test_run_ids(array), updated(string), user_id(integer)
 - projects:
   - primary key: id
-  - fields: created(), description(), id(), is_default(), name(), organization_id(), updated()
+  - fields: created(string), description(string), id(integer), is_default(boolean), name(string), organization_id(integer), updated(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

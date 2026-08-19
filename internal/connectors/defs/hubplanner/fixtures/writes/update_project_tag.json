@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "project_tag_fixture_1",
+    "value": "Updated Project Tag"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/project-tag/project_tag_fixture_1",
+    "body": {
+      "value": "Updated Project Tag"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "project_tag_fixture_1"
+    }
+  }
+}

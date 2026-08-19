@@ -1,0 +1,1885 @@
+{
+  "operations": [
+    {
+      "id": "preview_invoice",
+      "kind": "rest_read",
+      "summary": "Preview new invoice for pending line items",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
+      "rest": {
+        "method": "POST",
+        "path": "/accounts/{account_id}/invoices/preview",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "business_entity_code": {
+              "type": "string",
+              "description": "The `business_entity_code` is the value that represents a specific business entity for an end customer which will be assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used."
+            },
+            "business_entity_id": {
+              "type": "string",
+              "description": "The `business_entity_id` is the value that represents a specific business entity for an end customer which will be assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used."
+            },
+            "charge_customer_notes": {
+              "type": "string",
+              "description": "This will default to the Customer Notes text specified on the Invoice Settings for charge invoices. Specify custom notes to add or override Customer Notes on charge invoices."
+            },
+            "collection_method": {
+              "type": "string",
+              "enum": [
+                "automatic",
+                "manual"
+              ],
+              "description": "An automatic invoice means a corresponding transaction is run using the account's billing information at the same time the invoice is created. Manual invoices are created without a corresponding transaction. The merchant must enter a manual payment transaction or have the customer pay the invoice with an automatic method, like credit card, PayPal, Amazon, or ACH bank payment."
+            },
+            "credit_application_policy": {
+              "type": "object",
+              "properties": {
+                "allowed_origins": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "line_item_refund",
+                      "open_amount_refund",
+                      "immediate_change",
+                      "termination",
+                      "credit",
+                      "write_off",
+                      "refund",
+                      "external_refund",
+                      "carryforward_credit",
+                      "usage_correction",
+                      "prepayment",
+                      "gift_card",
+                      "carryforward_gift_credit"
+                    ],
+                    "description": "The origin type of a credit invoice that can be allowed in a credit application policy"
+                  },
+                  "description": "Optional array of credit invoice origin types to allow when mode is `all`. If not specified when mode is `all`, credits from all origins are applied. Only valid when mode is `all`."
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "none"
+                  ],
+                  "description": "Determines which credit invoices are applied to invoices: - `all`: All available credit invoices are applied (default) - `none`: No credit invoices are applied automatically"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "mode"
+              ],
+              "description": "Controls whether credit invoices are automatically applied to new invoices. The `mode` field determines the application behavior. When mode is `all`, the optional `allowed_origins` array can restrict which credit invoice origins are applied."
+            },
+            "credit_customer_notes": {
+              "type": "string",
+              "description": "This will default to the Customer Notes text specified on the Invoice Settings for credit invoices. Specify customer notes to add or override Customer Notes on credit invoices."
+            },
+            "currency": {
+              "type": "string",
+              "description": "3-letter ISO 4217 currency code."
+            },
+            "net_terms": {
+              "type": "integer",
+              "description": "Integer paired with `Net Terms Type` and representing the number of days past the current date (for `net` Net Terms Type) or days after the last day of the current month (for `eom` Net Terms Type) that the invoice will become past due. For `manual` collection method, an additional 24 hours is added to ensure the customer has the entire last day to make payment before becoming past due. For example: If an invoice is due `net 0`, it is due 'On Receipt' and will become past due 24 hours after it's "
+            },
+            "net_terms_type": {
+              "type": "string",
+              "enum": [
+                "net",
+                "eom"
+              ],
+              "description": "Optionally supplied string that may be either `net` or `eom` (end-of-month). When `net`, an invoice becomes past due the specified number of `Net Terms` days from the current date. When `eom` an invoice becomes past due the specified number of `Net Terms` days from the last day of the current month."
+            },
+            "po_number": {
+              "type": "string",
+              "description": "For manual invoicing, this identifies the PO number associated with the subscription."
+            },
+            "terms_and_conditions": {
+              "type": "string",
+              "description": "This will default to the Terms and Conditions text specified on the Invoice Settings page in your Recurly admin. Specify custom notes to add or override Terms and Conditions."
+            },
+            "transaction_descriptor_suffix": {
+              "type": "string",
+              "description": "Optionally overrides the suffix component of the composed transaction descriptor. If omitted, the suffix is derived from the subscription's plan name or the invoice description, with a Trial prefix on Visa trial conversions. Subject to gateway availability and payment method support."
+            },
+            "vat_reverse_charge_notes": {
+              "type": "string",
+              "description": "VAT Reverse Charge Notes only appear if you have EU VAT enabled or are using your own Avalara AvaTax account and the customer is in the EU, has a VAT number, and is in a different country than your own. This will default to the VAT Reverse Charge Notes text specified on the Tax Settings page in your Recurly admin, unless custom notes were created with the original subscription."
+            },
+            "vertex_transaction_type": {
+              "type": "string",
+              "enum": [
+                "sale",
+                "rental",
+                "lease"
+              ],
+              "description": "Used by Vertex for tax calculations. Possible values are sale, rental, lease."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "currency"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_invoice_pdf",
+      "kind": "binary_download",
+      "summary": "Fetch an invoice as a PDF",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
+      "binary": {
+        "method": "GET",
+        "path": "/invoices/{invoice_id}.pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "get_preview_renewal",
+      "kind": "rest_read",
+      "summary": "Fetch a preview of a subscription's renewal invoice(s)",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/preview_renewal",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "preview_subscription_change",
+      "kind": "rest_read",
+      "summary": "Preview a new subscription change",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/change/preview",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "add_ons": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "add_on_source": {
+                    "type": "string",
+                    "enum": [
+                      "plan_add_on",
+                      "item"
+                    ],
+                    "description": "Used to determine where the associated add-on data is pulled from. If this value is set to `plan_add_on` or left blank, then add-on data will be pulled from the plan's add-ons. If the associated `plan` has `allow_any_item_on_subscriptions` set to `true` and this field is set to `item`, then the associated add-on data will be pulled from the site's item catalog."
+                  },
+                  "code": {
+                    "type": "string",
+                    "description": "If a code is provided without an id, the subscription add-on attributes will be set to the current value for those attributes on the plan add-on unless provided in the request. If `add_on_source` is set to `plan_add_on` or left blank, then plan's add-on `code` should be used. If `add_on_source` is set to `item`, then the `code` from the associated item should be used."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "When an id is provided, the existing subscription add-on attributes will persist unless overridden in the request."
+                  },
+                  "percentage_tiers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "ending_amount": {
+                          "type": "number",
+                          "description": "Ending amount for the tier. Allows up to 2 decimal places. Must be left empty if it is the final tier."
+                        },
+                        "usage_percentage": {
+                          "type": "string",
+                          "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places represented as a string."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "description": "If percentage tiers are provided in the request, all existing percentage tiers on the Subscription Add-on will be removed and replaced by the percentage tiers in the request. Use only if add_on.tier_type is tiered or volume and add_on.usage_type is percentage. There must be one tier without an `ending_amount` value which represents the final tier. This feature is currently in development and requires approval and enablement, please contact support."
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantity"
+                  },
+                  "revenue_schedule_type": {
+                    "type": "string",
+                    "enum": [
+                      "at_range_end",
+                      "at_range_start",
+                      "evenly",
+                      "never"
+                    ],
+                    "description": "Revenue schedule type"
+                  },
+                  "tiers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "ending_quantity": {
+                          "type": "integer",
+                          "description": "Ending quantity for the tier. This represents a unit amount for unit-priced add ons. Must be left empty if it is the final tier."
+                        },
+                        "unit_amount": {
+                          "type": "number",
+                          "description": "Allows up to 2 decimal places. Optionally, override the tiers' default unit amount. If add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided."
+                        },
+                        "unit_amount_decimal": {
+                          "type": "string",
+                          "description": "Allows up to 9 decimal places. Optionally, override tiers' default unit amount. If `unit_amount_decimal` is provided, `unit_amount` cannot be provided. If add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided."
+                        },
+                        "usage_percentage": {
+                          "type": "string",
+                          "description": "(deprecated) -- Use the percentage_tiers object instead."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "description": "If the plan add-on's `tier_type` is `flat`, then `tiers` must be absent. The `tiers` object must include one to many tiers with `ending_quantity` and `unit_amount`. There must be one tier without an `ending_quantity` value which represents the final tier."
+                  },
+                  "unit_amount": {
+                    "type": "number",
+                    "description": "Allows up to 2 decimal places. Optionally, override the add-on's default unit amount. If the plan add-on's `tier_type` is `tiered`, `volume`, or `stairstep`, then `unit_amount` cannot be provided."
+                  },
+                  "unit_amount_decimal": {
+                    "type": "string",
+                    "description": "Allows up to 9 decimal places. Optionally, override the add-on's default unit amount. If the plan add-on's `tier_type` is `tiered`, `volume`, or `stairstep`, then `unit_amount_decimal` cannot be provided. If `unit_amount_decimal` is provided, `unit_amount` cannot be provided."
+                  },
+                  "usage_percentage": {
+                    "type": "number",
+                    "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places. A value between 0.0 and 100.0. Required if add_on_type is usage and usage_type is percentage."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "If you provide a value for this field it will replace any existing add-ons. So, when adding or modifying an add-on, you need to include the existing subscription add-ons. Unchanged add-ons can be included just using the subscription add-on''s ID: `{\"id\": \"abc123\"}`. If this value is omitted your existing add-ons will be unaffected. To remove all existing add-ons, this value should be an empty array.' If a subscription add-on's `code` is supplied without the `id`, `{\"code\": \"def456\"}`, the subscr"
+            },
+            "billing_info": {
+              "type": "object",
+              "properties": {
+                "three_d_secure_action_result_token_id": {
+                  "type": "string",
+                  "description": "A token generated by Recurly.js after completing a 3-D Secure device fingerprinting or authentication challenge."
+                }
+              },
+              "additionalProperties": false,
+              "description": "Accept nested attributes for three_d_secure_action_result_token_id"
+            },
+            "business_entity_code": {
+              "type": "string",
+              "description": "The `business_entity_code` is the value that represents a specific business entity for an end customer. When `business_entity_code` is used to assign a business entity to the subscription, all future billing events for the subscription will bill to the specified business entity. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used. Only allowed if the `timeframe` is not `now`."
+            },
+            "business_entity_id": {
+              "type": "string",
+              "description": "The `business_entity_id` is the value that represents a specific business entity for an end customer. When `business_entity_id` is used to assign a business entity to the subscription, all future billing events for the subscription will bill to the specified business entity. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used. Only allowed if the `timeframe` is not `now`."
+            },
+            "collection_method": {
+              "type": "string",
+              "enum": [
+                "automatic",
+                "manual"
+              ],
+              "description": "Collection method"
+            },
+            "coupon_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of coupon_codes to be redeemed on the subscription during the change. Only allowed if timeframe is now and you change something about the subscription that creates an invoice."
+            },
+            "custom_fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Fields must be created in the UI before values can be assigned to them."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Any values that resemble a credit card number or security code (CVV/CVC) will be rejected."
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "description": "Custom field"
+              },
+              "description": "The custom fields will only be altered when they are included in a request. Sending an empty array will not remove any existing values. To remove a field send the name with a null or empty value."
+            },
+            "net_terms": {
+              "type": "integer",
+              "description": "Integer normally paired with `Net Terms Type` and representing the number of days past the current date (for `net` Net Terms Type) or days after the last day of the current month (for `eom` Net Terms Type) that the invoice will become past due. During a subscription change, it's not necessary to provide both the `Net Terms Type` and `Net Terms` parameters. For more information on how net terms work with `manual` collection visit our docs page (https://docs.recurly.com/docs/manual-payments#sectio"
+            },
+            "net_terms_type": {
+              "type": "string",
+              "enum": [
+                "net",
+                "eom"
+              ],
+              "description": "Optionally supplied string that may be either `net` or `eom` (end-of-month). When `net`, an invoice becomes past due the specified number of `Net Terms` days from the current date. When `eom` an invoice becomes past due the specified number of `Net Terms` days from the last day of the current month."
+            },
+            "next_bill_date": {
+              "type": "string",
+              "format": "date-time",
+              "description": "If present, this sets the date the subscription's next billing period will start (`current_period_ends_at`). When combined with proration_settings, proration calculation should occur, only supported when timeframe is now."
+            },
+            "plan_code": {
+              "type": "string",
+              "description": "If you want to change to a new plan, you can provide the plan's code or id. If both are provided the `plan_id` will be used."
+            },
+            "plan_id": {
+              "type": "string",
+              "description": "If you want to change to a new plan, you can provide the plan's code or id. If both are provided the `plan_id` will be used."
+            },
+            "po_number": {
+              "type": "string",
+              "description": "For manual invoicing, this identifies the PO number associated with the subscription."
+            },
+            "price_segment_id": {
+              "type": "string",
+              "description": "The price segment ID, e.g. `e28zov4fw0v2`."
+            },
+            "proration_settings": {
+              "type": "object",
+              "properties": {
+                "charge": {
+                  "type": "string",
+                  "enum": [
+                    "full_amount",
+                    "prorated_amount",
+                    "none"
+                  ],
+                  "description": "Determines how the amount charged is determined for this change"
+                },
+                "credit": {
+                  "type": "string",
+                  "enum": [
+                    "full_amount",
+                    "prorated_amount",
+                    "none"
+                  ],
+                  "description": "Determines how the amount credited is determined for this change"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Allows you to control how any resulting charges and credits will be calculated and prorated."
+            },
+            "quantity": {
+              "type": "integer",
+              "description": "Optionally override the default quantity of 1."
+            },
+            "ramp_intervals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "starting_billing_cycle": {
+                    "type": "integer",
+                    "description": "Represents the billing cycle where a ramp interval starts."
+                  },
+                  "unit_amount": {
+                    "type": "number",
+                    "description": "Represents the price for the ramp interval."
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Subscription Ramp Interval"
+              },
+              "description": "The new set of ramp intervals for the subscription."
+            },
+            "revenue_schedule_type": {
+              "type": "string",
+              "enum": [
+                "at_range_end",
+                "at_range_start",
+                "evenly",
+                "never"
+              ],
+              "description": "Revenue schedule type"
+            },
+            "shipping": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "company": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string",
+                      "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "geo_code": {
+                      "type": "string",
+                      "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "nickname": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "postal_code": {
+                      "type": "string",
+                      "description": "Zip or postal code."
+                    },
+                    "region": {
+                      "type": "string",
+                      "description": "State or province."
+                    },
+                    "street1": {
+                      "type": "string"
+                    },
+                    "street2": {
+                      "type": "string"
+                    },
+                    "vat_number": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "first_name",
+                    "last_name",
+                    "street1",
+                    "city",
+                    "postal_code",
+                    "country"
+                  ]
+                },
+                "address_id": {
+                  "type": "string",
+                  "description": "Assign a shipping address from the account's existing shipping addresses. If this and address are both present, address will take precedence."
+                },
+                "amount": {
+                  "type": "number",
+                  "description": "Assigns the subscription's shipping cost. If this is greater than zero then a `method_id` or `method_code` is required."
+                },
+                "method_code": {
+                  "type": "string",
+                  "description": "The code of the shipping method used to deliver the subscription. To remove shipping set this to `null` and the `amount=0`. If `method_id` and `method_code` are both present, `method_id` will be used."
+                },
+                "method_id": {
+                  "type": "string",
+                  "description": "The id of the shipping method used to deliver the subscription. To remove shipping set this to `null` and the `amount=0`. If `method_id` and `method_code` are both present, `method_id` will be used."
+                }
+              },
+              "additionalProperties": false,
+              "description": "Shipping addresses are tied to a customer's account. Each account can have up to 20 different shipping addresses, and if you have enabled multiple subscriptions per account, you can associate different shipping addresses to each subscription."
+            },
+            "tax_inclusive": {
+              "type": "boolean",
+              "description": "This field is deprecated. Please do not use it."
+            },
+            "timeframe": {
+              "type": "string",
+              "enum": [
+                "bill_date",
+                "now",
+                "renewal",
+                "term_end"
+              ],
+              "description": "The timeframe parameter controls when the upgrade or downgrade takes place. The subscription change can occur now, when the subscription is next billed, or when the subscription term ends. Generally, if you're performing an upgrade, you will want the change to occur immediately (now). If you're performing a downgrade, you should set the timeframe to `term_end` or `bill_date` so the change takes effect at a scheduled billing date. The `renewal` timeframe option is accepted as an alias for `term_e"
+            },
+            "transaction_type": {
+              "type": "string",
+              "enum": [
+                "moto"
+              ],
+              "description": "An optional type designation for the payment gateway transaction created by this request. Supports 'moto' value, which is the acronym for mail order and telephone transactions."
+            },
+            "unit_amount": {
+              "type": "number",
+              "description": "Optionally, sets custom pricing for the subscription, overriding the plan's default unit amount. The subscription's current currency will be used."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "preview_purchase",
+      "kind": "rest_read",
+      "summary": "Preview a new purchase",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
+      "rest": {
+        "method": "POST",
+        "path": "/purchases/preview",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "acquisition": {
+                  "type": "object",
+                  "properties": {
+                    "acquired_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Date the account was first created if different than the account.created_at. ie Importing accounts."
+                    },
+                    "campaign": {
+                      "type": "string",
+                      "description": "An arbitrary identifier for the marketing campaign that led to the acquisition of this account."
+                    },
+                    "channel": {
+                      "type": "string",
+                      "enum": [
+                        "advertising",
+                        "blog",
+                        "direct_traffic",
+                        "email",
+                        "events",
+                        "marketing_content",
+                        "organic_search",
+                        "other",
+                        "outbound_sales",
+                        "paid_search",
+                        "public_relations",
+                        "referral",
+                        "social_media"
+                      ],
+                      "description": "The channel through which the account was acquired."
+                    },
+                    "cost": {
+                      "type": "object",
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "description": "The amount of the corresponding currency used to acquire the account."
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "3-letter ISO 4217 currency code."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Account balance"
+                    },
+                    "subchannel": {
+                      "type": "string",
+                      "description": "An arbitrary subchannel string representing a distinction/subcategory within a broader channel."
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "address": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string",
+                      "description": "City"
+                    },
+                    "country": {
+                      "type": "string",
+                      "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                    },
+                    "geo_code": {
+                      "type": "string",
+                      "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Phone number"
+                    },
+                    "postal_code": {
+                      "type": "string",
+                      "description": "Zip or postal code."
+                    },
+                    "region": {
+                      "type": "string",
+                      "description": "State or province."
+                    },
+                    "street1": {
+                      "type": "string",
+                      "description": "Street 1"
+                    },
+                    "street2": {
+                      "type": "string",
+                      "description": "Street 2"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "bill_date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The preferred billing date for the account. This date will be used as the billing date for when activating new subscriptions on the account."
+                },
+                "bill_to": {
+                  "type": "string",
+                  "enum": [
+                    "parent",
+                    "self"
+                  ],
+                  "description": "An enumerable describing the billing behavior of the account, specifically whether the account is self-paying or will rely on the parent account to pay."
+                },
+                "billing_info": {
+                  "type": "object",
+                  "properties": {
+                    "account_number": {
+                      "type": "string",
+                      "description": "The bank account number. (ACH, Bacs only)"
+                    },
+                    "account_type": {
+                      "type": "string",
+                      "enum": [
+                        "checking",
+                        "savings"
+                      ],
+                      "description": "The bank account type. (ACH only)"
+                    },
+                    "address": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string",
+                          "description": "City"
+                        },
+                        "country": {
+                          "type": "string",
+                          "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                        },
+                        "geo_code": {
+                          "type": "string",
+                          "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+                        },
+                        "phone": {
+                          "type": "string",
+                          "description": "Phone number"
+                        },
+                        "postal_code": {
+                          "type": "string",
+                          "description": "Zip or postal code."
+                        },
+                        "region": {
+                          "type": "string",
+                          "description": "State or province."
+                        },
+                        "street1": {
+                          "type": "string",
+                          "description": "Street 1"
+                        },
+                        "street2": {
+                          "type": "string",
+                          "description": "Street 2"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "adyen_risk_profile_reference_id": {
+                      "type": "string",
+                      "description": "The Adyen Risk Profile Reference ID is used to identify the risk profile for the payment method."
+                    },
+                    "amazon_billing_agreement_id": {
+                      "type": "string",
+                      "description": "Only supported on Amazon V1. For Amazon V2, use token_id with Recurly.js."
+                    },
+                    "authentication_method": {
+                      "type": "string",
+                      "enum": [
+                        "vpa",
+                        "qr-code",
+                        "app-deep-links"
+                      ],
+                      "description": "UPI Autopay authentication method. Specifies how the customer authorizes the enrollment mandate. Defaults to 'vpa' if omitted."
+                    },
+                    "backup_payment_method": {
+                      "type": "boolean",
+                      "description": "The `backup_payment_method` field is used to designate a billing info as a backup on the account that will be tried if the initial billing info used for an invoice is declined. All payment methods, including the billing info marked `primary_payment_method` can be set as a backup. An account can have a maximum of 1 backup, if a user sets a different payment method as a backup, the existing backup will no longer be marked as such."
+                    },
+                    "card_network_preference": {
+                      "type": "string",
+                      "enum": [
+                        "Bancontact",
+                        "CartesBancaires",
+                        "Dankort",
+                        "MasterCard",
+                        "Visa"
+                      ],
+                      "description": "Represents the card network preference associated with the billing info for dual badged cards. Must be a supported card network."
+                    },
+                    "card_type": {
+                      "type": "string",
+                      "enum": [
+                        "American Express",
+                        "Dankort",
+                        "Diners Club",
+                        "Discover",
+                        "ELO",
+                        "Forbrugsforeningen",
+                        "Hipercard",
+                        "JCB",
+                        "Laser",
+                        "Maestro",
+                        "MasterCard",
+                        "Test Card",
+                        "Union Pay",
+                        "Unknown",
+                        "Visa",
+                        "Tarjeta Naranja"
+                      ]
+                    },
+                    "company": {
+                      "type": "string",
+                      "description": "Company name"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "3-letter ISO 4217 currency code."
+                    },
+                    "cvv": {
+                      "type": "string",
+                      "description": "*STRONGLY RECOMMENDED*"
+                    },
+                    "external_hpp_type": {
+                      "type": "string",
+                      "enum": [
+                        "adyen"
+                      ],
+                      "description": "Use for Adyen HPP billing info. This should only be used as part of a pending purchase request, when the billing info is nested inside an account object."
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "description": "First name"
+                    },
+                    "fraud_session_id": {
+                      "type": "string",
+                      "description": "Fraud Session ID"
+                    },
+                    "gateway_attributes": {
+                      "type": "object",
+                      "properties": {
+                        "account_reference": {
+                          "type": "string",
+                          "description": "Used by Adyen and Braintree gateways. For Adyen the Shopper Reference value used when the external token was created. Must be used in conjunction with gateway_token and gateway_code. For Braintree the PayPal PayerID is populated in the response."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Additional attributes to send to the gateway."
+                    },
+                    "gateway_code": {
+                      "type": "string",
+                      "description": "An identifier for a specific payment gateway."
+                    },
+                    "gateway_token": {
+                      "type": "string",
+                      "description": "A token used in place of a credit card in order to perform transactions. Must be used in conjunction with `gateway_code`."
+                    },
+                    "iban": {
+                      "type": "string",
+                      "description": "The International Bank Account Number, up to 34 alphanumeric characters comprising a country code; two check digits; and a number that includes the domestic bank account number, branch identifier, and potential routing information"
+                    },
+                    "ip_address": {
+                      "type": "string",
+                      "description": "*STRONGLY RECOMMENDED* Customer's IP address when updating their billing information."
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "description": "Last name"
+                    },
+                    "month": {
+                      "type": "string",
+                      "description": "Expiration month"
+                    },
+                    "name_on_account": {
+                      "type": "string",
+                      "description": "The name associated with the bank account (ACH, SEPA, Bacs only)"
+                    },
+                    "number": {
+                      "type": "string",
+                      "description": "Credit card number, spaces and dashes are accepted."
+                    },
+                    "online_banking_payment_type": {
+                      "type": "string",
+                      "enum": [
+                        "ideal",
+                        "sofort"
+                      ],
+                      "description": "Use for Online Banking billing info. This should only be used as part of a pending purchase request, when the billing info is nested inside an account object."
+                    },
+                    "payment_gateway_references": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "reference_type": {
+                            "type": "string",
+                            "enum": [
+                              "stripe_confirmation_token",
+                              "upi_vpa"
+                            ],
+                            "description": "The type of reference token. Required if token is passed in for Stripe Gateway or Ebanx UPI."
+                          },
+                          "token": {
+                            "type": "string",
+                            "description": "Reference value used when the external token was created. If a Stripe gateway or Ebanx gateway is used, this value will need to be accompanied by its reference_type."
+                          }
+                        },
+                        "additionalProperties": false,
+                        "description": "Array of Payment Gateway References, each a reference to a third-party gateway object of varying types."
+                      },
+                      "description": "Array of Payment Gateway References, each a reference to a third-party gateway object of varying types."
+                    },
+                    "paypal_billing_agreement_id": {
+                      "type": "string",
+                      "description": "PayPal billing agreement ID"
+                    },
+                    "primary_payment_method": {
+                      "type": "boolean",
+                      "description": "The `primary_payment_method` field is used to designate the primary billing info on the account. The first billing info created on an account will always become primary. Adding additional billing infos provides the flexibility to mark another billing info as primary, or adding additional non-primary billing infos. This can be accomplished by passing the `primary_payment_method` with a value of `true`. When adding billing infos via the billing_info and /accounts endpoints, this value is not permi"
+                    },
+                    "return_url": {
+                      "type": "string",
+                      "description": "Specifies a URL to which a consumer will be redirected upon completion of a redirect payment flow. Only redirect payment flows operating through Adyen Components will utilize this return URL."
+                    },
+                    "roku_billing_agreement_id": {
+                      "type": "string",
+                      "description": "Roku's CIB if billing through Roku"
+                    },
+                    "routing_number": {
+                      "type": "string",
+                      "description": "The bank's rounting number. (ACH only)"
+                    },
+                    "sort_code": {
+                      "type": "string",
+                      "description": "Bank identifier code for UK based banks. Required for Bacs based billing infos. (Bacs only)"
+                    },
+                    "tax_identifier": {
+                      "type": "string",
+                      "description": "Tax identifier is required if adding a billing info that is a consumer card in Brazil or in Argentina. This would be the customer's CPF/CNPJ (Brazil) and CUIT (Argentina). CPF, CNPJ and CUIT are tax identifiers for all residents who pay taxes in Brazil and Argentina respectively."
+                    },
+                    "tax_identifier_type": {
+                      "type": "string",
+                      "enum": [
+                        "cpf",
+                        "cnpj",
+                        "cuit"
+                      ],
+                      "description": "This field and a value of `cpf`, `cnpj` or `cuit` are required if adding a billing info that is an elo or hipercard type in Brazil or in Argentina."
+                    },
+                    "three_d_secure_action_result_token_id": {
+                      "type": "string",
+                      "description": "A token generated by Recurly.js after completing a 3-D Secure device fingerprinting or authentication challenge."
+                    },
+                    "token_id": {
+                      "type": "string",
+                      "description": "A token [generated by Recurly.js](https://recurly.com/developers/reference/recurly-js/#getting-a-token)."
+                    },
+                    "transaction_type": {
+                      "type": "string",
+                      "enum": [
+                        "moto"
+                      ],
+                      "description": "An optional type designation for the payment gateway transaction created by this request. Supports 'moto' value, which is the acronym for mail order and telephone transactions."
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "bacs",
+                        "becs",
+                        "pix-automatico",
+                        "mercadopago",
+                        "upi-autopay"
+                      ],
+                      "description": "The payment method type for a non-credit card based billing info. `bacs`, `becs`, `pix-automatico`, `mercadopago`, `upi-autopay` are the only accepted values."
+                    },
+                    "vat_number": {
+                      "type": "string",
+                      "description": "VAT number"
+                    },
+                    "year": {
+                      "type": "string",
+                      "description": "Expiration year"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "cc_emails": {
+                  "type": "string",
+                  "description": "Additional email address that should receive account correspondence. These should be separated only by commas. These CC emails will receive all emails that the `email` field also receives."
+                },
+                "code": {
+                  "type": "string",
+                  "description": "The unique identifier of the account. This cannot be changed once the account is created."
+                },
+                "company": {
+                  "type": "string"
+                },
+                "custom_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Fields must be created in the UI before values can be assigned to them."
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Any values that resemble a credit card number or security code (CVV/CVC) will be rejected."
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "value"
+                    ],
+                    "description": "Custom field"
+                  },
+                  "description": "The custom fields will only be altered when they are included in a request. Sending an empty array will not remove any existing values. To remove a field send the name with a null or empty value."
+                },
+                "dunning_campaign_id": {
+                  "type": "string",
+                  "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "The email address used for communicating with this customer. The customer will also use this email address to log into your hosted account management pages. This value does not need to be unique."
+                },
+                "entity_use_code": {
+                  "type": "string",
+                  "description": "The Avalara AvaTax value that can be passed to identify the customer type for tax purposes. The range of values can be A - R (more info at Avalara). Value is case-sensitive."
+                },
+                "exemption_certificate": {
+                  "type": "string",
+                  "description": "The tax exemption certificate number for the account. If the merchant has an integration for the Vertex tax provider, this optional value will be sent in any tax calculation requests for the account."
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Optional, but if present allows an existing account to be used and updated as part of the purchase."
+                },
+                "invoice_template_id": {
+                  "type": "string",
+                  "description": "Unique ID to identify an invoice template. Available when the site is on a Pro or Elite plan. Used to specify which invoice template, if any, should be used to generate invoices for the account."
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "override_business_entity_id": {
+                  "type": "string",
+                  "description": "Unique ID to identify the business entity assigned to the account. Available when the `Multiple Business Entities` feature is enabled."
+                },
+                "parent_account_code": {
+                  "type": "string",
+                  "description": "The account code of the parent account to be associated with this account. Passing an empty value removes any existing parent association from this account. If both `parent_account_code` and `parent_account_id` are passed, the non-blank value in `parent_account_id` will be used. Only one level of parent child relationship is allowed. You cannot assign a parent account that itself has a parent account."
+                },
+                "parent_account_id": {
+                  "type": "string",
+                  "description": "The UUID of the parent account to be associated with this account. Passing an empty value removes any existing parent association from this account. If both `parent_account_code` and `parent_account_id` are passed, the non-blank value in `parent_account_id` will be used. Only one level of parent child relationship is allowed. You cannot assign a parent account that itself has a parent account."
+                },
+                "preferred_locale": {
+                  "type": "string",
+                  "enum": [
+                    "da-DK",
+                    "de-CH",
+                    "de-DE",
+                    "en-AU",
+                    "en-CA",
+                    "en-GB",
+                    "en-IE",
+                    "en-NZ",
+                    "en-US",
+                    "es-ES",
+                    "es-MX",
+                    "es-US",
+                    "fi-FI",
+                    "fr-BE",
+                    "fr-CA",
+                    "fr-CH",
+                    "fr-FR",
+                    "hi-IN",
+                    "it-IT",
+                    "ja-JP",
+                    "ko-KR",
+                    "nl-BE",
+                    "nl-NL",
+                    "pl-PL",
+                    "pt-BR",
+                    "pt-PT",
+                    "ro-RO",
+                    "ru-RU",
+                    "sk-SK",
+                    "sv-SE",
+                    "tr-TR",
+                    "zh-CN"
+                  ],
+                  "description": "Used to determine the language and locale of emails sent on behalf of the merchant to the customer. The list of locales is restricted to those the merchant has enabled on the site."
+                },
+                "preferred_time_zone": {
+                  "type": "string",
+                  "description": "Used to determine the time zone of emails sent on behalf of the merchant to the customer. Must be a [supported IANA time zone name](https://docs.recurly.com/docs/email-time-zones-and-time-stamps#supported-api-iana-time-zone-names)"
+                },
+                "tax_exempt": {
+                  "type": "boolean",
+                  "description": "The tax status of the account. `true` exempts tax on the account, `false` applies tax on the account."
+                },
+                "transaction_type": {
+                  "type": "string",
+                  "enum": [
+                    "moto"
+                  ],
+                  "description": "An optional type designation for the payment gateway transaction created by this request. Supports 'moto' value, which is the acronym for mail order and telephone transactions."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "A secondary value for the account."
+                },
+                "vat_number": {
+                  "type": "string",
+                  "description": "The VAT number of the account (to avoid having the VAT applied). This is only used for manually collected invoices."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "code"
+              ]
+            },
+            "billing_info_id": {
+              "type": "string",
+              "description": "The `billing_info_id` is the value that represents a specific billing info for an end customer. When `billing_info_id` is used to assign billing info to the subscription, all future billing events for the subscription will bill to the specified billing info. `billing_info_id` can ONLY be used for sites utilizing the Wallet feature."
+            },
+            "business_entity_code": {
+              "type": "string",
+              "description": "The `business_entity_code` is the value that represents a specific business entity for an end customer. When `business_entity_code` is used to assign a business entity to the subscription, all future billing events for the subscription will bill to the specified business entity. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used."
+            },
+            "business_entity_id": {
+              "type": "string",
+              "description": "The `business_entity_id` is the value that represents a specific business entity for an end customer. When `business_entity_id` is used to assign a business entity to the subscription, all future billing events for the subscription will bill to the specified business entity. Available when the `Multiple Business Entities` feature is enabled. If both `business_entity_id` and `business_entity_code` are present, `business_entity_id` will be used."
+            },
+            "collection_method": {
+              "type": "string",
+              "enum": [
+                "automatic",
+                "manual"
+              ],
+              "description": "Must be set to manual in order to preview a purchase for an Account that does not have payment information associated with the Billing Info."
+            },
+            "coupon_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of coupon_codes to be redeemed on the subscription or account during the purchase."
+            },
+            "credit_application_policy_override": {
+              "type": "object",
+              "properties": {
+                "allowed_origins": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "line_item_refund",
+                      "open_amount_refund",
+                      "immediate_change",
+                      "termination",
+                      "credit",
+                      "write_off",
+                      "refund",
+                      "external_refund",
+                      "carryforward_credit",
+                      "usage_correction",
+                      "prepayment",
+                      "gift_card",
+                      "carryforward_gift_credit"
+                    ],
+                    "description": "The origin type of a credit invoice that can be allowed in a credit application policy"
+                  },
+                  "description": "Optional array of credit invoice origin types to allow when mode is `all`. If not specified when mode is `all`, credits from all origins are applied. Only valid when mode is `all`."
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "none"
+                  ],
+                  "description": "Determines which credit invoices are applied to invoices: - `all`: All available credit invoices are applied (default) - `none`: No credit invoices are applied automatically"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "mode"
+              ],
+              "description": "Controls whether credit invoices are automatically applied to new invoices. The `mode` field determines the application behavior. When mode is `all`, the optional `allowed_origins` array can restrict which credit invoice origins are applied."
+            },
+            "credit_customer_notes": {
+              "type": "string",
+              "description": "Notes to be put on the credit invoice resulting from credits in the purchase, if any."
+            },
+            "currency": {
+              "type": "string",
+              "description": "3-letter ISO 4217 currency code."
+            },
+            "customer_notes": {
+              "type": "string",
+              "description": "Customer notes"
+            },
+            "gateway_code": {
+              "type": "string",
+              "description": "The default payment gateway identifier to be used for the purchase transaction. This will also be applied as the default for any subscriptions included in the purchase request."
+            },
+            "gift_card_redemption_code": {
+              "type": "string",
+              "description": "A gift card redemption code to be redeemed on the purchase invoice."
+            },
+            "line_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "accounting_code": {
+                    "type": "string",
+                    "description": "Accounting Code for the `LineItem`. If `item_code`/`item_id` is part of the request then `accounting_code` must be absent."
+                  },
+                  "avalara_service_type": {
+                    "type": "integer",
+                    "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the line item is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types. If an `Item` is associated to the `LineItem`, then the `avalara_service_type` must be absent."
+                  },
+                  "avalara_transaction_type": {
+                    "type": "integer",
+                    "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the line item is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types. If an `Item` is associated to the `LineItem`, then the `avalara_transaction_type` must be absent."
+                  },
+                  "credit_reason_code": {
+                    "type": "string",
+                    "enum": [
+                      "general",
+                      "promotional",
+                      "service"
+                    ],
+                    "description": "The reason the credit was given when line item is `type=credit`. When the Credit Invoices feature is enabled, the value can be set and will default to `general`. When the Credit Invoices feature is not enabled, the value will always be `null`."
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "3-letter ISO 4217 currency code. If `item_code`/`item_id` is part of the request then `currency` is optional, if the site has a single default currency. `currency` is required if `item_code`/`item_id` is present, and there are multiple currencies defined on the site. If `item_code`/`item_id` is not present `currency` is required."
+                  },
+                  "custom_fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Fields must be created in the UI before values can be assigned to them."
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Any values that resemble a credit card number or security code (CVV/CVC) will be rejected."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "description": "Custom field"
+                    },
+                    "description": "The custom fields will only be altered when they are included in a request. Sending an empty array will not remove any existing values. To remove a field send the name with a null or empty value."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description that appears on the invoice. If `item_code`/`item_id` is part of the request then `description` must be absent."
+                  },
+                  "destination_tax_address_source": {
+                    "type": "string",
+                    "enum": [
+                      "destination",
+                      "origin"
+                    ],
+                    "description": "The source of the address that will be used as the destinaion in determining taxes. Available only when the site is on an Elite plan. A value of \"destination\" refers to the \"Customer tax address\". A value of \"origin\" refers to the \"Business entity tax address\"."
+                  },
+                  "end_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "If this date is provided, it indicates the end of a time range."
+                  },
+                  "harmonized_system_code": {
+                    "type": "string",
+                    "description": "The Harmonized System (HS) code is an internationally standardized system of names and numbers to classify traded products. The HS code, sometimes called Commodity Code, is used by customs authorities around the world to identify products when assessing duties and taxes. The HS code may also be referred to as the tariff code or customs code. Values should contain only digits and decimals. If `item_code`/`item_id` is part of the request then `harmonized_system_code` must be absent."
+                  },
+                  "item_code": {
+                    "type": "string",
+                    "description": "Unique code to identify an item. Available when the Credit Invoices feature is enabled."
+                  },
+                  "item_id": {
+                    "type": "string",
+                    "description": "System-generated unique identifier for an item. Available when the Credit Invoices feature is enabled."
+                  },
+                  "liability_gl_account_id": {
+                    "type": "string",
+                    "description": "The ID of a general ledger account. General ledger accounts are only accessible as a part of the Recurly RevRec Standard and Recurly RevRec Advanced features."
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "external_gift_card",
+                      "prepayment"
+                    ],
+                    "description": "Origin `external_gift_card` is allowed if the Gift Cards feature is enabled on your site, `type` is `credit` and `tax_exempt` is `true` if you are using taxes. Set this value in order to track gift card credits from external gift cards (like InComm). It also skips billing information requirements. Origin `prepayment` is only allowed if `type` is `charge` and `tax_exempt` is left blank or set to true. This origin creates a charge and opposite credit on the account to be used for future invoices."
+                  },
+                  "origin_tax_address_source": {
+                    "type": "string",
+                    "enum": [
+                      "origin",
+                      "destination"
+                    ],
+                    "description": "The source of the address that will be used as the origin in determining taxes. Available only when the site is on an Elite plan. A value of \"origin\" refers to the \"Business entity tax address\". A value of \"destination\" refers to the \"Customer tax address\"."
+                  },
+                  "performance_obligation_id": {
+                    "type": "string",
+                    "description": "The ID of a performance obligation. Performance obligations are only accessible as a part of the Recurly RevRec Standard and Recurly RevRec Advanced features."
+                  },
+                  "product_code": {
+                    "type": "string",
+                    "description": "Optional field to track a product code or SKU for the line item. This can be used to later reporting on product purchases. For Vertex tax calculations, this field will be used as the Vertex `product` field. If `item_code`/`item_id` is part of the request then `product_code` must be absent."
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "This number will be multiplied by the unit amount to compute the subtotal before any discounts or taxes."
+                  },
+                  "revenue_gl_account_id": {
+                    "type": "string",
+                    "description": "The ID of a general ledger account. General ledger accounts are only accessible as a part of the Recurly RevRec Standard and Recurly RevRec Advanced features."
+                  },
+                  "revenue_schedule_type": {
+                    "type": "string",
+                    "enum": [
+                      "at_invoice",
+                      "at_range_end",
+                      "at_range_start",
+                      "evenly",
+                      "never"
+                    ],
+                    "description": "Revenue schedule type"
+                  },
+                  "start_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "If an end date is present, this is value indicates the beginning of a billing time range. If no end date is present it indicates billing for a specific date. Defaults to the current date-time."
+                  },
+                  "tax_code": {
+                    "type": "string",
+                    "description": "Optional field used by Avalara, Vertex, and Recurly's In-the-Box tax solution to determine taxation rules. You can pass in specific tax codes using any of these tax integrations. For Recurly's In-the-Box tax offering you can also choose to instead use simple values of `unknown`, `physical`, or `digital` tax codes."
+                  },
+                  "tax_exempt": {
+                    "type": "boolean",
+                    "description": "`true` exempts tax on charges, `false` applies tax on charges. If not defined, then defaults to the Plan and Site settings. This attribute does not work for credits (negative line items). Credits are always applied post-tax. Pre-tax discounts should use the Coupons feature."
+                  },
+                  "tax_inclusive": {
+                    "type": "boolean",
+                    "description": "Determines whether or not tax is included in the unit amount. The Tax Inclusive Pricing feature (separate from the Mixed Tax Pricing feature) must be enabled to use this flag."
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "charge",
+                      "credit"
+                    ],
+                    "description": "Line item type. If `item_code`/`item_id` is present then `type` should not be present. If `item_code`/`item_id` is not present then `type` is required."
+                  },
+                  "unit_amount": {
+                    "type": "number",
+                    "description": "A positive or negative amount with `type=charge` will result in a positive `unit_amount`. A positive or negative amount with `type=credit` will result in a negative `unit_amount`. If `item_code`/`item_id` is present, `unit_amount` can be passed in, to override the `Item`'s `unit_amount`. If `item_code`/`item_id` is not present then `unit_amount` is required."
+                  },
+                  "vertex_transaction_type": {
+                    "type": "string",
+                    "enum": [
+                      "sale",
+                      "rental",
+                      "lease"
+                    ],
+                    "description": "Used by Vertex for tax calculations. Possible values are sale, rental, lease."
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "currency",
+                  "unit_amount",
+                  "type"
+                ]
+              },
+              "description": "A list of one time charges or credits to be created with the purchase."
+            },
+            "net_terms": {
+              "type": "integer",
+              "description": "Integer paired with `Net Terms Type` and representing the number of days past the current date (for `net` Net Terms Type) or days after the last day of the current month (for `eom` Net Terms Type) that the invoice will become past due. For `manual` collection method, an additional 24 hours is added to ensure the customer has the entire last day to make payment before becoming past due. For example: If an invoice is due `net 0`, it is due 'On Receipt' and will become past due 24 hours after it's "
+            },
+            "net_terms_type": {
+              "type": "string",
+              "enum": [
+                "net",
+                "eom"
+              ],
+              "description": "Optionally supplied string that may be either `net` or `eom` (end-of-month). When `net`, an invoice becomes past due the specified number of `Net Terms` days from the current date. When `eom` an invoice becomes past due the specified number of `Net Terms` days from the last day of the current month."
+            },
+            "po_number": {
+              "type": "string",
+              "description": "For manual invoicing, this identifies the PO number associated with the subscription."
+            },
+            "shipping": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "company": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string",
+                      "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "geo_code": {
+                      "type": "string",
+                      "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "nickname": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "postal_code": {
+                      "type": "string",
+                      "description": "Zip or postal code."
+                    },
+                    "region": {
+                      "type": "string",
+                      "description": "State or province."
+                    },
+                    "street1": {
+                      "type": "string"
+                    },
+                    "street2": {
+                      "type": "string"
+                    },
+                    "vat_number": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "first_name",
+                    "last_name",
+                    "street1",
+                    "city",
+                    "postal_code",
+                    "country"
+                  ]
+                },
+                "address_id": {
+                  "type": "string",
+                  "description": "Assign a shipping address from the account's existing shipping addresses. If this and `address` are both present, `address` will take precedence."
+                },
+                "fees": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "number",
+                        "description": "This is priced in the purchase's currency."
+                      },
+                      "method_code": {
+                        "type": "string",
+                        "description": "The code of the shipping method used to deliver the purchase. If `method_id` and `method_code` are both present, `method_id` will be used."
+                      },
+                      "method_id": {
+                        "type": "string",
+                        "description": "The id of the shipping method used to deliver the purchase. If `method_id` and `method_code` are both present, `method_id` will be used."
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "description": "A list of shipping fees to be created as charges with the purchase."
+                }
+              },
+              "additionalProperties": false
+            },
+            "subscriptions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "add_ons": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "add_on_source": {
+                          "type": "string",
+                          "enum": [
+                            "plan_add_on",
+                            "item"
+                          ],
+                          "description": "Used to determine where the associated add-on data is pulled from. If this value is set to `plan_add_on` or left blank, then add-on data will be pulled from the plan's add-ons. If the associated `plan` has `allow_any_item_on_subscriptions` set to `true` and this field is set to `item`, then the associated add-on data will be pulled from the site's item catalog."
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "If `add_on_source` is set to `plan_add_on` or left blank, then plan's add-on `code` should be used. If `add_on_source` is set to `item`, then the `code` from the associated item should be used."
+                        },
+                        "percentage_tiers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "ending_amount": {
+                                "type": "number",
+                                "description": "Ending amount for the tier. Allows up to 2 decimal places. Must be left empty if it is the final tier."
+                              },
+                              "usage_percentage": {
+                                "type": "string",
+                                "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places represented as a string."
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "description": "If percentage tiers are provided in the request, all existing percentage tiers on the Subscription Add-on will be removed and replaced by the percentage tiers in the request. There must be one tier without ending_amount value which represents the final tier. Use only if add_on.tier_type is tiered or volume and add_on.usage_type is percentage. This feature is currently in development and requires approval and enablement, please contact support."
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "description": "Quantity"
+                        },
+                        "revenue_schedule_type": {
+                          "type": "string",
+                          "enum": [
+                            "at_range_end",
+                            "at_range_start",
+                            "evenly",
+                            "never"
+                          ],
+                          "description": "Revenue schedule type"
+                        },
+                        "tiers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "ending_quantity": {
+                                "type": "integer",
+                                "description": "Ending quantity for the tier. This represents a unit amount for unit-priced add ons. Must be left empty if it is the final tier."
+                              },
+                              "unit_amount": {
+                                "type": "number",
+                                "description": "Allows up to 2 decimal places. Optionally, override the tiers' default unit amount. If add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided."
+                              },
+                              "unit_amount_decimal": {
+                                "type": "string",
+                                "description": "Allows up to 9 decimal places. Optionally, override tiers' default unit amount. If `unit_amount_decimal` is provided, `unit_amount` cannot be provided. If add-on's `add_on_type` is `usage` and `usage_type` is `percentage`, cannot be provided."
+                              },
+                              "usage_percentage": {
+                                "type": "string",
+                                "description": "(deprecated) -- Use the percentage_tiers object instead."
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "description": "If the plan add-on's `tier_type` is `flat`, then `tiers` must be absent. The `tiers` object must include one to many tiers with `ending_quantity` and `unit_amount`. There must be one tier without an `ending_quantity` value which represents the final tier. See our [Guide](https://recurly.com/developers/guides/item-addon-guide.html) for an overview of how to configure quantity-based pricing models."
+                        },
+                        "unit_amount": {
+                          "type": "number",
+                          "description": "Allows up to 2 decimal places. Optionally, override the add-on's default unit amount. If the plan add-on's `tier_type` is `tiered`, `volume`, or `stairstep`, then `unit_amount` cannot be provided."
+                        },
+                        "unit_amount_decimal": {
+                          "type": "string",
+                          "description": "Allows up to 9 decimal places. Optionally, override the add-on's default unit amount. If the plan add-on's `tier_type` is `tiered`, `volume`, or `stairstep`, then `unit_amount_decimal` cannot be provided. If `unit_amount_decimal` is provided, `unit_amount` cannot be provided."
+                        },
+                        "usage_percentage": {
+                          "type": "number",
+                          "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places. A value between 0.0 and 100.0. Required if `add_on_type` is usage and `usage_type` is percentage. Must be omitted otherwise. `usage_percentage` does not support tiers. See our [Guide](https://recurly.com/developers/guides/usage-based-billing-guide.html) for an overview of how to configure usage add-ons."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "code"
+                      ]
+                    },
+                    "description": "Add-ons"
+                  },
+                  "auto_renew": {
+                    "type": "boolean",
+                    "description": "Whether the subscription renews at the end of its term."
+                  },
+                  "bulk": {
+                    "type": "boolean",
+                    "description": "Optional field to be used only when needing to bypass the 60 second limit on creating subscriptions. Should only be used when creating subscriptions in bulk from the API."
+                  },
+                  "credit_application_policy": {
+                    "type": "object",
+                    "properties": {
+                      "allowed_origins": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "line_item_refund",
+                            "open_amount_refund",
+                            "immediate_change",
+                            "termination",
+                            "credit",
+                            "write_off",
+                            "refund",
+                            "external_refund",
+                            "carryforward_credit",
+                            "usage_correction",
+                            "prepayment",
+                            "gift_card",
+                            "carryforward_gift_credit"
+                          ],
+                          "description": "The origin type of a credit invoice that can be allowed in a credit application policy"
+                        },
+                        "description": "Optional array of credit invoice origin types to allow when mode is `all`. If not specified when mode is `all`, credits from all origins are applied. Only valid when mode is `all`."
+                      },
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "all",
+                          "none"
+                        ],
+                        "description": "Determines which credit invoices are applied to invoices: - `all`: All available credit invoices are applied (default) - `none`: No credit invoices are applied automatically"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "mode"
+                    ],
+                    "description": "Controls whether credit invoices are automatically applied to new invoices. The `mode` field determines the application behavior. When mode is `all`, the optional `allowed_origins` array can restrict which credit invoice origins are applied."
+                  },
+                  "custom_fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Fields must be created in the UI before values can be assigned to them."
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Any values that resemble a credit card number or security code (CVV/CVC) will be rejected."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "description": "Custom field"
+                    },
+                    "description": "The custom fields will only be altered when they are included in a request. Sending an empty array will not remove any existing values. To remove a field send the name with a null or empty value."
+                  },
+                  "next_bill_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "If present, this sets the date the subscription's next billing period will start (`current_period_ends_at`). This can be used to align the subscription\u2019s billing to a specific day of the month. The initial invoice will be prorated for the period between the subscription's activation date and the billing period end date. Subsequent periods will be based off the plan interval. For a subscription with a trial period, this will change when the trial expires."
+                  },
+                  "plan_code": {
+                    "type": "string",
+                    "description": "Plan code"
+                  },
+                  "plan_id": {
+                    "type": "string",
+                    "description": "Plan ID"
+                  },
+                  "price_segment_id": {
+                    "type": "string",
+                    "description": "The price segment ID or code. For ID no prefix is used e.g. `e28zov4fw0v2`. For requests, the code can also be used. Use prefix `code-`, e.g. `code-gold`."
+                  },
+                  "proration_settings": {
+                    "type": "object",
+                    "properties": {
+                      "charge": {
+                        "type": "string",
+                        "enum": [
+                          "full_amount",
+                          "prorated_amount"
+                        ],
+                        "description": "Determines how the amount charged is determined for this change"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Allows you to control how any resulting charges will be calculated and prorated."
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Optionally override the default quantity of 1."
+                  },
+                  "ramp_intervals": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "starting_billing_cycle": {
+                          "type": "integer",
+                          "description": "Represents the billing cycle where a ramp interval starts."
+                        },
+                        "unit_amount": {
+                          "type": "number",
+                          "description": "Represents the price for the ramp interval."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Subscription Ramp Interval"
+                    },
+                    "description": "The new set of ramp intervals for the subscription."
+                  },
+                  "renewal_billing_cycles": {
+                    "type": "integer",
+                    "description": "If `auto_renew=true`, when a term completes, `total_billing_cycles` takes this value as the length of subsequent terms. Defaults to the plan's `total_billing_cycles`."
+                  },
+                  "revenue_schedule_type": {
+                    "type": "string",
+                    "enum": [
+                      "at_range_end",
+                      "at_range_start",
+                      "evenly",
+                      "never"
+                    ],
+                    "description": "Revenue schedule type"
+                  },
+                  "shipping": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "number",
+                        "description": "Assigns the subscription's shipping cost. If this is greater than zero then a `method_id` or `method_code` is required."
+                      },
+                      "expected_first_delivery_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The expected date of the first delivery for the subscription."
+                      },
+                      "method_code": {
+                        "type": "string",
+                        "description": "The code of the shipping method used to deliver the subscription. If `method_id` and `method_code` are both present, `method_id` will be used."
+                      },
+                      "method_id": {
+                        "type": "string",
+                        "description": "The id of the shipping method used to deliver the subscription. If `method_id` and `method_code` are both present, `method_id` will be used."
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Create a shipping address on the account and assign it to the subscription."
+                  },
+                  "starts_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "If set, the subscription will begin on this specified date. The subscription will apply the setup fee and trial period, unless the plan has no trial. Omit this field if the subscription should be started immediately."
+                  },
+                  "tax_inclusive": {
+                    "type": "boolean",
+                    "description": "Determines whether or not tax is included in the unit amount. The Tax Inclusive Pricing feature (separate from the Mixed Tax Pricing feature) must be enabled to use this flag."
+                  },
+                  "total_billing_cycles": {
+                    "type": "integer",
+                    "description": "The number of cycles/billing periods in a term. When `remaining_billing_cycles=0`, if `auto_renew=true` the subscription will renew and a new term will begin, otherwise the subscription will expire."
+                  },
+                  "trial_ends_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "If set, overrides the default trial behavior for the subscription. When the current date time or a past date time is provided the subscription will begin with no trial phase (overriding any plan default trial). When a future date time is provided the subscription will begin with a trial phase ending at the specified date time."
+                  },
+                  "unit_amount": {
+                    "type": "number",
+                    "description": "Override the unit amount of the subscription plan by setting this value. If not provided, the subscription will inherit the price from the subscription plan for the provided currency."
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plan_code"
+                ]
+              },
+              "description": "A list of subscriptions to be created with the purchase."
+            },
+            "terms_and_conditions": {
+              "type": "string",
+              "description": "Terms and conditions to be put on the purchase invoice."
+            },
+            "transaction": {
+              "type": "object",
+              "properties": {
+                "descriptor_suffix": {
+                  "type": "string",
+                  "description": "Optionally overrides the suffix component of the composed transaction descriptor. If omitted, the suffix is derived from the subscription's plan name or the invoice description, with a Trial prefix on Visa trial conversions. Subject to gateway availability and payment method support."
+                },
+                "initiator": {
+                  "type": "string"
+                },
+                "merchant_reason_code": {
+                  "type": "string"
+                },
+                "skip_all_fraud": {
+                  "type": "boolean",
+                  "description": "When set to `true`, skips all fraud checks for this transaction, including both gateway-level fraud checks and Recurly's fraud detection services. This is useful for trusted transactions where fraud screening is not required."
+                },
+                "skip_gateway_fraud": {
+                  "type": "boolean",
+                  "description": "When set to `true`, instructs the payment gateway to skip fraud checks for this transaction. This is useful for recurring transactions where fraud checks have already been performed on the initial transaction. Note that not all gateways support this feature. For Stripe, this skips Radar fraud rules; for Adyen, this skips"
+                },
+                "skip_recurly_fraud": {
+                  "type": "boolean",
+                  "description": "When set to `true`, skips Recurly's fraud detection checks for this transaction, including Kount and IP-based fraud screening. Does not affect gateway-level fraud checks. Use `skip_all_fraud` to skip all fraud checks."
+                }
+              },
+              "additionalProperties": false,
+              "description": "(Transaction Data, Card on File) - Options for flagging transactions as Customer or Merchant Initiated Unscheduled."
+            },
+            "transaction_type": {
+              "type": "string",
+              "enum": [
+                "moto"
+              ],
+              "description": "An optional type designation for the payment gateway transaction created by this request. Supports 'moto' value, which is the acronym for mail order and telephone transactions."
+            },
+            "vat_reverse_charge_notes": {
+              "type": "string",
+              "description": "VAT reverse charge notes for cross border European tax settlement."
+            },
+            "vertex_transaction_type": {
+              "type": "string",
+              "enum": [
+                "sale",
+                "rental",
+                "lease"
+              ],
+              "description": "Used by Vertex for tax calculations. Possible values are sale, rental, lease."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "account"
+          ],
+          "description": "A purchase is only a request data type and is not persistent in Recurly, an InvoiceCollection will be the returned type."
+        }
+      }
+    },
+    {
+      "id": "get_export_dates",
+      "kind": "binary_download",
+      "summary": "List the dates that have an available export to download.",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
+      "binary": {
+        "method": "GET",
+        "path": "/export_dates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "get_export_files",
+      "kind": "binary_download",
+      "summary": "List of the export files that are available to download.",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
+      "binary": {
+        "method": "GET",
+        "path": "/export_dates/{export_date}/export_files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "preview_gift_card",
+      "kind": "rest_read",
+      "summary": "Preview gift card",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
+      "rest": {
+        "method": "POST",
+        "path": "/gift_cards/preview",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "type": "string",
+              "description": "3-letter ISO 4217 currency code."
+            },
+            "product_code": {
+              "type": "string",
+              "description": "The product code or SKU of the gift card product."
+            },
+            "tax_service_opt_out": {
+              "type": "boolean",
+              "description": "Set to `true` to bypass sending the purchase to your configured tax service. Defaults to `false`."
+            },
+            "unit_amount": {
+              "type": "number",
+              "description": "The amount of the gift card, which is the amount of the charge to the gifter account and the amount of credit that is applied to the recipient account upon successful redemption."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "product_code",
+            "unit_amount",
+            "currency"
+          ],
+          "description": "Gift card details"
+        }
+      }
+    }
+  ]
+}

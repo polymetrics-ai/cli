@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Metricool brand profiles and per-brand Instagram, Facebook, LinkedIn, and TikTok post analytics through the Metricool REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -29,28 +31,28 @@ CONFIGURATION
   blog_ids
   end_date
   start_date
-  user_id
+  user_id (required)
   user_token (secret)
 
 ETL STREAMS
   brands:
     primary key: id
-    fields: id(), label(), timezone(), title(), url(), userId()
+    fields: id(integer), label(string), timezone(string), title(string), url(string), userId(integer)
   instagram_posts:
     primary key: blogId, postId
-    fields: blogId(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), reach(), saved(), text(), type(), url()
+    fields: blogId(string), comments(number), impressions(number), interactions(number), likes(number), postId(string), publishDate(string), reach(number), saved(number), text(string), type(string), url(string)
   facebook_posts:
     primary key: blogId, postId
-    fields: blogId(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), reach(), shares(), text(), type(), url()
+    fields: blogId(string), comments(number), impressions(number), interactions(number), likes(number), postId(string), publishDate(string), reach(number), shares(number), text(string), type(string), url(string)
   linkedin_posts:
     primary key: blogId, postId
-    fields: blogId(), clicks(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), shares(), text(), type(), url()
+    fields: blogId(string), clicks(number), comments(number), impressions(number), interactions(number), likes(number), postId(string), publishDate(string), shares(number), text(string), type(string), url(string)
   tiktok_posts:
     primary key: blogId, videoId
-    fields: blogId(), comments(), engagement(), likes(), publishDate(), reach(), shares(), text(), url(), videoId(), views()
+    fields: blogId(string), comments(number), engagement(number), likes(number), publishDate(string), reach(number), shares(number), text(string), url(string), videoId(string), views(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Metricool API read of brand-scoped social analytics for the configured user_id/blog_ids

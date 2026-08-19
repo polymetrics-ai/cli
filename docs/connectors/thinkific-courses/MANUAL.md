@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Thinkific Admin API v1 courses, bundles, categories, coupons, enrollments, orders, groups, instructors, products, promotions, reviews, users, and site scripts.
 
 ICON
+  id: thinkific
   asset: icons/thinkific.svg
   source: official
   review_status: official_verified
@@ -44,137 +45,137 @@ CONFIGURATION
   promotion_id
   provider
   site_script_id
-  subdomain
+  subdomain (required)
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   courses:
     primary key: id
-    fields: created_at(), description(), id(), name(), slug(), updated_at()
+    fields: created_at(string), description(string), id(integer), name(string), slug(string), updated_at(string)
   chapters:
     primary key: id
-    fields: course_id(), created_at(), id(), name(), position(), updated_at()
+    fields: course_id(integer), created_at(string), id(integer), name(string), position(integer), updated_at(string)
   lessons:
     primary key: id
-    fields: chapter_id(), course_id(), created_at(), id(), name(), position(), updated_at()
+    fields: chapter_id(integer), course_id(integer), created_at(string), id(integer), name(string), position(integer), updated_at(string)
   enrollments:
     primary key: id
-    fields: activated_at(), completed_at(), course_id(), id(), percentage_completed(), updated_at(), user_id()
+    fields: activated_at(string), completed_at(string), course_id(integer), id(integer), percentage_completed(number), updated_at(string), user_id(integer)
   bundle:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   bundle_courses:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   bundle_enrollments:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   chapter:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   chapter_contents:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   collections:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   collection:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   collection_products:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   coupons:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   coupon:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   content:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   course:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   course_chapters:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   custom_profile_field_definitions:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   enrollment:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   groups:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   group:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   group_analysts:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   instructors:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   instructor:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   orders:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   order:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   product_publish_requests:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   product_publish_request:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   products:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   product:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   related_products:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   promotions:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   promotion:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   promotion_by_coupon:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   course_reviews:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   course_review:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   users:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   user:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   user_authentication:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   site_scripts:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
   site_script:
     primary key: id
-    fields: course_id(), created_at(), description(), email(), id(), items(), meta(), name(), percentage_completed(), product_id(), slug(), title(), updated_at(), user_id()
+    fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_bundle_enrollment:

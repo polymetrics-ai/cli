@@ -11,9 +11,11 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,7 +30,7 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 
 - application_id
 - appsession_id
-- base_url
+- base_url (required)
 - biosample_id
 - dataset_id
 - datasettype_id
@@ -43,116 +45,116 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 - user
 - user_id
 - workgroup_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
   - cursor: date_created
-  - fields: date_created(), date_modified(), href(), id(), name(), total_size(), user_owned_by()
+  - fields: date_created(string), date_modified(string), href(string), id(string), name(string), total_size(integer), user_owned_by(object)
 - runs:
   - primary key: id
   - cursor: date_created
-  - fields: date_created(), date_modified(), experiment_name(), href(), id(), instrument_name(), name(), status(), total_size()
+  - fields: date_created(string), date_modified(string), experiment_name(string), href(string), id(string), instrument_name(string), name(string), status(string), total_size(integer)
 - samples:
   - primary key: id
   - cursor: date_created
-  - fields: date_created(), href(), id(), name(), num_reads_pf(), num_reads_raw(), sample_id(), status(), total_size()
+  - fields: date_created(string), href(string), id(string), name(string), num_reads_pf(integer), num_reads_raw(integer), sample_id(string), status(string), total_size(integer)
 - appsessions:
   - primary key: id
   - cursor: date_created
-  - fields: application(), date_completed(), date_created(), href(), id(), name(), status(), status_summary(), total_size()
+  - fields: application(object), date_completed(string), date_created(string), href(string), id(string), name(string), status(string), status_summary(string), total_size(integer)
 - datasets:
   - primary key: id
   - cursor: date_created
-  - fields: dataset_type(), date_created(), href(), id(), name(), project(), total_size()
+  - fields: dataset_type(object), date_created(string), href(string), id(string), name(string), project(object), total_size(integer)
 - applications:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - application:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - application_qcthresholds:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - application_settings:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - application_workflowdependencies:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsessions_all:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsession:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsession_comments:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsessions_logfiles:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsession_properties:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsession_property:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - appsession_property_items:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - biosamples:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - biosample_labrequeues:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - biosample:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - biosample_libraries:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - biosample_runlane_summaries:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - datasets_all:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - dataset:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - dataset_comments:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - dataset_files:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - datasettype:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - instrumentstatistics:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - labrequeues:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - labrequeue:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - laneqcthresholds:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - lane:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - lane_comments:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - libraries:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - librarypool_libraries:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - project:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - project_datasets:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - run_files:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - trash:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - trash_2:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - current_user:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - current_user_subscription:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - current_user_usage:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - current_user_workgroups:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - user:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - user_settings:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - workgroup:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 - configured_user:
-  - fields: Id(), id()
+  - fields: Id(string), id(string)
 
 ## Sync Modes
 

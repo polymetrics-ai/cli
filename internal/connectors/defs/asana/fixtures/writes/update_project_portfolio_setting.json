@@ -1,0 +1,17 @@
+{
+  "record": {
+    "project_portfolio_setting_gid": "fixture-project-portfolio-setting-gid",
+    "data": {
+      "is_access_control_inherited": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/project_portfolio_settings/fixture-project-portfolio-setting-gid",
+    "body": {
+      "data": {
+        "is_access_control_inherited": true
+      }
+    }
+  }
+}

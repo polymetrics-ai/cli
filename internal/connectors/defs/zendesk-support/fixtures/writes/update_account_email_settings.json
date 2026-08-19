@@ -1,0 +1,36 @@
+{
+  "record": {
+    "settings": {
+      "email": {
+        "email_status": true,
+        "accept_wildcard_emails": true,
+        "email_sender_authentication": true,
+        "email_sender_authentication_profile": "fixture-email-sender-authentication-profile",
+        "email_template_photos": true,
+        "email_template_selection": true,
+        "modern_email_template": true,
+        "multi_recipient_email_tickets": true,
+        "rich_content_in_emails": true
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/account/email_settings",
+    "body": {
+      "settings": {
+        "email": {
+          "email_status": true,
+          "accept_wildcard_emails": true,
+          "email_sender_authentication": true,
+          "email_sender_authentication_profile": "fixture-email-sender-authentication-profile",
+          "email_template_photos": true,
+          "email_template_selection": true,
+          "modern_email_template": true,
+          "multi_recipient_email_tickets": true,
+          "rich_content_in_emails": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/orders",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "orders": [
+        {
+          "id": "fixture_id",
+          "customer": {},
+          "store_id": "fixture_store_id",
+          "campaign_id": "fixture_campaign_id",
+          "cart_id": "fixture_cart_id",
+          "landing_site": "fixture_landing_site",
+          "financial_status": "fixture_financial_status",
+          "fulfillment_status": "fixture_fulfillment_status"
+        }
+      ]
+    }
+  }
+}

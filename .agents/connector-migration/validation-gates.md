@@ -18,6 +18,12 @@ handoff.
 - Common findings: write action with no `covered_by` entry in `api_surface.json`, schema mismatch,
   missing required file (`metadata.json`/`spec.json`/`streams.json`), unknown execution model.
 
+## Connector ownership guard gate
+
+- Connector implementation lanes declare exactly one target connector.
+- Run the assigned changed-path ownership guard for that target connector and record ownership guard evidence in the PR body and worker handoff. If the target-aware guard is not available in the checkout, record the exact blocker and do not claim changed-path compliance.
+- The diff must stay inside target connector scope and authorized generated/docs outputs. Shared runtime/tooling, schema, generated-index, or unrelated connector changes fail the connector lane and must move to a separate foundation issue/PR.
+
 ## Connector boundary guard gate
 
 - `go run ./cmd/connectorgen boundary . --json`
@@ -61,6 +67,11 @@ handoff.
 - When connector docs or `*_surface.json` files change: `cd website && pnpm run gen:website-data`
   must be idempotent — regenerate twice with no diff — and the regenerated files must be
   committed so the "Verify generated website data" CI step passes.
+
+## no-mistakes connector-lane gate
+
+- If no-mistakes validation identifies generic shared runtime/tooling, schema, generated-index, or unrelated connector changes in a connector PR, stop/ask for a foundation split. Do not approve an auto-fix that absorbs those paths into the connector PR.
+- Record the no-mistakes foundation split status in the PR body and worker handoff.
 
 ## Review gate
 

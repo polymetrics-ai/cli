@@ -11,9 +11,17 @@ Reads and writes Zoho Books API v3 accounting resources using the declarative co
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-zoho-books
+- asset: icons/simple-icons/zoho-books.svg
+- title: Zoho
+- simple_icon_slug: zoho
+- simple_icon_hex: E42527
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
+- match: curated-alias
+- matched_by: zoho
 
 ## Capabilities
 
@@ -101,706 +109,706 @@ Reads and writes Zoho Books API v3 accounting resources using the declarative co
 - vendor_credit_id
 - vendor_credit_refund_id
 - vendorpayment_refund_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), contact_name(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: contact_id(string), contact_name(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), invoice_id(), invoice_number(), last_modified_time(), name(), status(), updated_at()
+  - fields: id(string), invoice_id(string), invoice_number(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - items:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), item_id(), last_modified_time(), name(), status(), updated_at()
+  - fields: id(string), item_id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_bank_accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), account_name(), id(), name(), status(), updated_at()
+  - fields: account_id(string), account_name(string), id(string), name(string), status(string), updated_at(string)
 - get_bank_account:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), account_name(), id(), name(), status(), updated_at()
+  - fields: account_id(string), account_name(string), id(string), name(string), status(string), updated_at(string)
 - get_last_imported_bank_statement:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), statement_id(), status(), updated_at()
+  - fields: id(string), name(string), statement_id(string), status(string), updated_at(string)
 - list_bank_account_rules:
   - primary key: id
   - cursor: updated_at
-  - fields: account_name(), id(), name(), rule_id(), status(), updated_at()
+  - fields: account_name(string), id(string), name(string), rule_id(string), status(string), updated_at(string)
 - get_bank_account_rule:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), target_account_id(), target_account_name(), updated_at()
+  - fields: id(string), name(string), status(string), target_account_id(string), target_account_name(string), updated_at(string)
 - list_bank_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: account_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  - fields: account_name(string), date(string), id(string), name(string), status(string), transaction_id(string), updated_at(string)
 - get_matching_bank_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  - fields: contact_name(string), date(string), id(string), name(string), status(string), transaction_id(string), updated_at(string)
 - get_bank_transaction:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  - fields: customer_name(string), date(string), id(string), name(string), status(string), transaction_id(string), updated_at(string)
 - list_base_currency_adjustments:
   - primary key: id
   - cursor: updated_at
-  - fields: base_currency_adjustment_id(), id(), name(), status(), updated_at()
+  - fields: base_currency_adjustment_id(string), id(string), name(string), status(string), updated_at(string)
 - list_base_currency_adjustment_accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: currency_id(), id(), name(), status(), updated_at()
+  - fields: currency_id(string), id(string), name(string), status(string), updated_at(string)
 - list_base_currency_adjustment_contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), contact_name(), id(), name(), status(), updated_at()
+  - fields: contact_id(string), contact_name(string), id(string), name(string), status(string), updated_at(string)
 - get_base_currency_adjustment:
   - primary key: id
   - cursor: updated_at
-  - fields: base_currency_adjustment_id(), id(), name(), status(), updated_at()
+  - fields: base_currency_adjustment_id(string), id(string), name(string), status(string), updated_at(string)
 - list_bills:
   - primary key: id
   - cursor: updated_at
-  - fields: bill_id(), id(), last_modified_time(), name(), status(), updated_at(), vendor_name()
+  - fields: bill_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string), vendor_name(string)
 - convert_purchase_order_to_bill:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - get_bill:
   - primary key: id
   - cursor: updated_at
-  - fields: bill_id(), id(), last_modified_time(), name(), status(), updated_at(), vendor_name()
+  - fields: bill_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string), vendor_name(string)
 - get_bill_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_bill_payments:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), payment_id(), status(), updated_at(), vendor_name()
+  - fields: date(string), id(string), name(string), payment_id(string), status(string), updated_at(string), vendor_name(string)
 - list_chart_of_accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), account_name(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: account_id(string), account_name(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_chart_of_account_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: categorized_transaction_id(), id(), name(), offset_account_name(), status(), updated_at()
+  - fields: categorized_transaction_id(string), id(string), name(string), offset_account_name(string), status(string), updated_at(string)
 - get_chart_of_account:
   - primary key: id
   - cursor: updated_at
-  - fields: customfield_id(), id(), name(), status(), updated_at()
+  - fields: customfield_id(string), id(string), name(string), status(string), updated_at(string)
 - list_contact_persons:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_person_id(), first_name(), id(), name(), status(), updated_at()
+  - fields: contact_person_id(string), first_name(string), id(string), name(string), status(string), updated_at(string)
 - get_contact_person:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), first_name(), id(), name(), status(), updated_at()
+  - fields: contact_id(string), first_name(string), id(string), name(string), status(string), updated_at(string)
 - get_contact:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), contact_name(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: contact_id(string), contact_name(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - get_contact_address:
   - primary key: id
   - cursor: updated_at
-  - fields: address_id(), id(), name(), status(), updated_at()
+  - fields: address_id(string), id(string), name(string), status(string), updated_at(string)
 - list_contact_autobill_recurring_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), recurrence_name(), recurring_invoice_id(), status(), updated_at()
+  - fields: id(string), name(string), recurrence_name(string), recurring_invoice_id(string), status(string), updated_at(string)
 - list_contact_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), contact_name(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), contact_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_unused_retainer_payments:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), payment_id(), payment_number(), status(), updated_at()
+  - fields: date(string), id(string), name(string), payment_id(string), payment_number(string), status(string), updated_at(string)
 - list_contact_credit_note_refunds:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  - fields: creditnote_refund_id(string), customer_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_contact_statement_mail:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), file_name(), id(), name(), status(), updated_at()
+  - fields: contact_id(string), file_name(string), id(string), name(string), status(string), updated_at(string)
 - list_credit_notes:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_id(), customer_name(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: creditnote_id(string), customer_name(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_credit_note_refunds_of_all_credit_notes:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  - fields: creditnote_refund_id(string), customer_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_credit_note_refund_by_id:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  - fields: creditnote_refund_id(string), customer_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_credit_note_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_credit_note:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_id(), customer_name(), id(), name(), status(), updated_at(), updated_time()
+  - fields: creditnote_id(string), customer_name(string), id(string), name(string), status(string), updated_at(string), updated_time(string)
 - list_credit_note_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_credit_note_custom_fields:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - get_credit_note_email:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), file_name(), id(), name(), status(), updated_at()
+  - fields: customer_id(string), file_name(string), id(string), name(string), status(string), updated_at(string)
 - get_credit_note_email_history:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), mailhistory_id(), name(), status(), updated_at()
+  - fields: date(string), id(string), mailhistory_id(string), name(string), status(string), updated_at(string)
 - list_invoices_of_credit_note:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_id(), date(), id(), invoice_number(), name(), status(), updated_at()
+  - fields: creditnote_id(string), date(string), id(string), invoice_number(string), name(string), status(string), updated_at(string)
 - list_credit_note_refunds_of_a_credit_note:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  - fields: creditnote_refund_id(string), customer_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_credit_note_refund:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  - fields: creditnote_refund_id(string), customer_name(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_currencies:
   - primary key: id
   - cursor: updated_at
-  - fields: currency_id(), currency_name(), id(), name(), status(), updated_at()
+  - fields: currency_id(string), currency_name(string), id(string), name(string), status(string), updated_at(string)
 - get_currency:
   - primary key: id
   - cursor: updated_at
-  - fields: currency_id(), currency_name(), id(), name(), status(), updated_at()
+  - fields: currency_id(string), currency_name(string), id(string), name(string), status(string), updated_at(string)
 - list_exchange_rates:
   - primary key: id
   - cursor: updated_at
-  - fields: exchange_rate_id(), id(), name(), status(), updated_at()
+  - fields: exchange_rate_id(string), id(string), name(string), status(string), updated_at(string)
 - get_exchange_rate:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_custom_modules:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), module_id(), module_name(), name(), status(), updated_at()
+  - fields: id(string), module_id(string), module_name(string), name(string), status(string), updated_at(string)
 - get_custom_module:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), module_id(), module_name(), name(), status(), updated_at()
+  - fields: id(string), module_id(string), module_name(string), name(string), status(string), updated_at(string)
 - list_custom_module_records:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), module_api_name(), module_record_id(), name(), status(), updated_at()
+  - fields: id(string), last_modified_time(string), module_api_name(string), module_record_id(string), name(string), status(string), updated_at(string)
 - get_custom_module_record:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - get_customer_debit_note:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), invoice_id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), id(string), invoice_id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_customer_payments:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), invoice_number(), name(), payment_id(), status(), updated_at()
+  - fields: date(string), id(string), invoice_number(string), name(string), payment_id(string), status(string), updated_at(string)
 - list_customer_payment_refunds:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), name(), payment_refund_id(), status(), updated_at()
+  - fields: customer_name(string), date(string), id(string), name(string), payment_refund_id(string), status(string), updated_at(string)
 - get_customer_payment_refund:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), payment_refund_id(), reference_number(), status(), updated_at()
+  - fields: date(string), id(string), name(string), payment_refund_id(string), reference_number(string), status(string), updated_at(string)
 - get_customer_payment:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), name(), payment_id(), status(), updated_at()
+  - fields: customer_name(string), date(string), id(string), name(string), payment_id(string), status(string), updated_at(string)
 - list_delivery_challans:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), deliverychallan_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), deliverychallan_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_delivery_challan_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_delivery_challan:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), deliverychallan_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), deliverychallan_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_estimates:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), estimate_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), estimate_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_estimate_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_estimate:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), estimate_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), estimate_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_estimate_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_estimate_email:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_employees:
   - primary key: id
   - cursor: updated_at
-  - fields: employee_id(), id(), name(), status(), updated_at()
+  - fields: employee_id(string), id(string), name(string), status(string), updated_at(string)
 - get_employee:
   - primary key: id
   - cursor: updated_at
-  - fields: employee_id(), id(), name(), status(), updated_at()
+  - fields: employee_id(string), id(string), name(string), status(string), updated_at(string)
 - list_expenses:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), expense_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), expense_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - get_expense:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), expense_id(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), expense_id(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_expense_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), id(string), name(string), status(string), updated_at(string)
 - list_fixed_assets:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_name(), fixed_asset_id(), id(), name(), status(), updated_at()
+  - fields: asset_name(string), fixed_asset_id(string), id(string), name(string), status(string), updated_at(string)
 - get_fixed_asset:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_name(), fixed_asset_id(), id(), name(), status(), updated_at()
+  - fields: asset_name(string), fixed_asset_id(string), id(string), name(string), status(string), updated_at(string)
 - get_fixed_asset_forecast:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - get_fixed_asset_history:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at(), valuation_id()
+  - fields: id(string), name(string), status(string), updated_at(string), valuation_id(string)
 - get_fixed_asset_type_list:
   - primary key: id
   - cursor: updated_at
-  - fields: fixed_asset_type_id(), fixed_asset_type_name(), id(), name(), status(), updated_at()
+  - fields: fixed_asset_type_id(string), fixed_asset_type_name(string), id(string), name(string), status(string), updated_at(string)
 - list_invoice_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_invoice:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), invoice_id(), last_modified_time(), name(), status(), updated_at()
+  - fields: customer_name(string), id(string), invoice_id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - list_invoice_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_invoice_credits_applied:
   - primary key: id
   - cursor: updated_at
-  - fields: creditnote_id(), creditnotes_number(), id(), name(), status(), updated_at()
+  - fields: creditnote_id(string), creditnotes_number(string), id(string), name(string), status(string), updated_at(string)
 - get_invoice_document_details:
   - primary key: id
   - cursor: updated_at
-  - fields: document_id(), document_name(), id(), last_modified_time(), name(), status(), updated_at()
+  - fields: document_id(string), document_name(string), id(string), last_modified_time(string), name(string), status(string), updated_at(string)
 - get_invoice_email:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  - fields: customer_name(string), entity_id(string), id(string), name(string), status(string), updated_at(string)
 - get_payment_reminder_mail_content_for_invoice:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  - fields: customer_name(string), entity_id(string), id(string), name(string), status(string), updated_at(string)
 - list_invoice_payments:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), payment_id(), payment_number(), status(), updated_at()
+  - fields: date(string), id(string), name(string), payment_id(string), payment_number(string), status(string), updated_at(string)
 - generate_invoice_payment_link:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_item_details:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), item_id(), name(), status(), updated_at()
+  - fields: id(string), item_id(string), name(string), status(string), updated_at(string)
 - get_item:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), item_id(), name(), status(), updated_at()
+  - fields: id(string), item_id(string), name(string), status(string), updated_at(string)
 - list_journals:
   - primary key: id
   - cursor: updated_at
-  - fields: entry_number(), id(), journal_id(), name(), status(), updated_at()
+  - fields: entry_number(string), id(string), journal_id(string), name(string), status(string), updated_at(string)
 - get_journal:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  - fields: id(string), journal_id(string), last_modified_time(string), location_name(string), name(string), status(string), updated_at(string)
 - list_journal_credits:
   - primary key: id
   - cursor: updated_at
-  - fields: credit_id(), id(), name(), status(), updated_at()
+  - fields: credit_id(string), id(string), name(string), status(string), updated_at(string)
 - list_recurring_journals:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  - fields: id(string), journal_id(string), last_modified_time(string), location_name(string), name(string), status(string), updated_at(string)
 - get_recurring_journal:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  - fields: id(string), journal_id(string), last_modified_time(string), location_name(string), name(string), status(string), updated_at(string)
 - list_child_journals:
   - primary key: id
   - cursor: updated_at
-  - fields: entry_number(), id(), journal_id(), name(), status(), updated_at()
+  - fields: entry_number(string), id(string), journal_id(string), name(string), status(string), updated_at(string)
 - get_transaction_journal_view:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  - fields: id(string), journal_id(string), last_modified_time(string), location_name(string), name(string), status(string), updated_at(string)
 - list_locations:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), location_id(), location_name(), name(), status(), updated_at()
+  - fields: id(string), location_id(string), location_name(string), name(string), status(string), updated_at(string)
 - list_opening_balance_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), transaction_id(), updated_at()
+  - fields: id(string), name(string), status(string), transaction_id(string), updated_at(string)
 - list_opening_balance_details:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), opening_balance_id(), status(), updated_at()
+  - fields: date(string), id(string), name(string), opening_balance_id(string), status(string), updated_at(string)
 - get_opening_balance:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), opening_balance_id(), status(), updated_at()
+  - fields: date(string), id(string), name(string), opening_balance_id(string), status(string), updated_at(string)
 - list_organizations:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), organization_id(), status(), updated_at()
+  - fields: id(string), name(string), organization_id(string), status(string), updated_at(string)
 - list_organizations_for_user:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), organization_id(), status(), updated_at()
+  - fields: id(string), name(string), organization_id(string), status(string), updated_at(string)
 - get_organization:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), organization_id(), status(), updated_at()
+  - fields: id(string), name(string), organization_id(string), status(string), updated_at(string)
 - list_pricebooks:
   - primary key: id
   - cursor: updated_at
-  - fields: currency_id(), id(), name(), status(), updated_at()
+  - fields: currency_id(string), id(string), name(string), status(string), updated_at(string)
 - list_projects:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), name(), project_id(), status(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), name(string), project_id(string), status(string), updated_at(string)
 - get_project:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), name(), project_id(), status(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), name(string), project_id(string), status(string), updated_at(string)
 - list_project_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_project_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), invoice_id(), name(), status(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), invoice_id(string), name(string), status(string), updated_at(string)
 - list_project_tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), name(), project_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), name(string), project_id(string), status(string), updated_at(string)
 - get_project_task:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), project_id(), project_name(), status(), updated_at()
+  - fields: id(string), name(string), project_id(string), project_name(string), status(string), updated_at(string)
 - list_project_users:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at(), user_id(), user_name()
+  - fields: id(string), name(string), status(string), updated_at(string), user_id(string), user_name(string)
 - get_project_user:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at(), user_id(), user_name()
+  - fields: id(string), name(string), status(string), updated_at(string), user_id(string), user_name(string)
 - list_purchase_orders:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), purchaseorder_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), purchaseorder_id(string), status(string), updated_at(string), vendor_name(string)
 - list_purchase_order_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_purchase_order:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), purchaseorder_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), purchaseorder_id(string), status(string), updated_at(string), vendor_name(string)
 - list_purchase_order_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_recurring_bill:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), recurring_bill_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), recurring_bill_id(string), status(string), updated_at(string), vendor_name(string)
 - list_recurring_bills:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), recurring_bill_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), recurring_bill_id(string), status(string), updated_at(string), vendor_name(string)
 - list_recurring_expenses:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), recurring_expense_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), recurring_expense_id(string), status(string), updated_at(string)
 - get_recurring_expense:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), recurring_expense_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), recurring_expense_id(string), status(string), updated_at(string)
 - list_recurring_expense_history:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_child_expenses_of_recurring_expense:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), expense_id(), id(), name(), status(), updated_at()
+  - fields: customer_name(string), date(string), expense_id(string), id(string), name(string), status(string), updated_at(string)
 - list_recurring_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), name(), recurring_invoice_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), name(string), recurring_invoice_id(string), status(string), updated_at(string)
 - get_recurring_invoice:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), name(), recurring_invoice_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), name(string), recurring_invoice_id(string), status(string), updated_at(string)
 - list_recurring_invoice_history:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_recurring_invoice_child_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), invoice_id(), name(), status(), updated_at()
+  - fields: customer_name(string), date(string), id(string), invoice_id(string), name(string), status(string), updated_at(string)
 - get_register_budget_vs_actuals:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_register_bulk_action_history:
   - primary key: id
   - cursor: updated_at
-  - fields: bulk_action_id(), date(), id(), name(), status(), updated_at(), user_name()
+  - fields: bulk_action_id(string), date(string), id(string), name(string), status(string), updated_at(string), user_name(string)
 - get_register_bulk_action_history:
   - primary key: id
   - cursor: updated_at
-  - fields: account_name(), bulk_action_id(), date(), id(), name(), status(), updated_at()
+  - fields: account_name(string), bulk_action_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_register_bulk_update_editpage:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_register_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - get_tags:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tag_id(), tag_name(), updated_at()
+  - fields: id(string), name(string), status(string), tag_id(string), tag_name(string), updated_at(string)
 - all_tag_options:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), option_id(), option_name(), status(), updated_at()
+  - fields: id(string), name(string), option_id(string), option_name(string), status(string), updated_at(string)
 - get_all_tag_options:
   - primary key: id
   - cursor: updated_at
-  - fields: dependent_id(), dependent_name(), id(), name(), status(), updated_at()
+  - fields: dependent_id(string), dependent_name(string), id(string), name(string), status(string), updated_at(string)
 - list_retainer_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), retainerinvoice_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), retainerinvoice_id(string), status(string), updated_at(string)
 - list_retainer_invoice_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_retainer_invoice:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), retainerinvoice_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), retainerinvoice_id(string), status(string), updated_at(string)
 - list_retainer_invoice:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_retainer_invoice_email:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - list_sales_orders:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), salesorder_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), salesorder_id(string), status(string), updated_at(string)
 - list_sales_order_templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  - fields: id(string), name(string), status(string), template_id(string), template_name(string), updated_at(string)
 - get_sales_order:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), date(), id(), name(), salesperson_name(), status(), updated_at()
+  - fields: customer_id(string), date(string), id(string), name(string), salesperson_name(string), status(string), updated_at(string)
 - get_sales_order_email:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  - fields: customer_name(string), entity_id(string), id(string), name(string), status(string), updated_at(string)
 - list_sales_receipts:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), sales_receipt_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), sales_receipt_id(string), status(string), updated_at(string)
 - get_sales_receipt:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), id(), last_modified_time(), name(), sales_receipt_id(), status(), updated_at()
+  - fields: customer_name(string), id(string), last_modified_time(string), name(string), sales_receipt_id(string), status(string), updated_at(string)
 - list_tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_name(), created_time(), id(), name(), status(), task_id(), updated_at()
+  - fields: contact_name(string), created_time(string), id(string), name(string), status(string), task_id(string), updated_at(string)
 - get_task:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_name(), id(), last_modified_by_id(), name(), status(), task_id(), updated_at()
+  - fields: contact_name(string), id(string), last_modified_by_id(string), name(string), status(string), task_id(string), updated_at(string)
 - list_task_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - get_task_document:
   - primary key: id
   - cursor: updated_at
-  - fields: document_id(), file_name(), id(), name(), status(), updated_at()
+  - fields: document_id(string), file_name(string), id(string), name(string), status(string), updated_at(string)
 - list_tax_authorities:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_authority_id(), tax_authority_name(), updated_at()
+  - fields: id(string), name(string), status(string), tax_authority_id(string), tax_authority_name(string), updated_at(string)
 - get_tax_authority:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_authority_id(), tax_authority_name(), updated_at()
+  - fields: id(string), name(string), status(string), tax_authority_id(string), tax_authority_name(string), updated_at(string)
 - list_taxes:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_id(), tax_name(), updated_at()
+  - fields: id(string), name(string), status(string), tax_id(string), tax_name(string), updated_at(string)
 - get_tax:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_id(), tax_name(), updated_at()
+  - fields: id(string), name(string), status(string), tax_id(string), tax_name(string), updated_at(string)
 - list_tax_exemptions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_exemption_id(), updated_at()
+  - fields: id(string), name(string), status(string), tax_exemption_id(string), updated_at(string)
 - get_tax_exemption:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_exemption_id(), updated_at()
+  - fields: id(string), name(string), status(string), tax_exemption_id(string), updated_at(string)
 - get_tax_group:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), tax_group_id(), tax_group_name(), updated_at()
+  - fields: id(string), name(string), status(string), tax_group_id(string), tax_group_name(string), updated_at(string)
 - list_time_entries:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), name(string), status(string), time_entry_id(string), updated_at(string)
 - get_running_timer:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), name(string), status(string), time_entry_id(string), updated_at(string)
 - get_time_entry:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  - fields: created_time(string), customer_name(string), id(string), name(string), status(string), time_entry_id(string), updated_at(string)
 - get_accounting_period_transaction_lock:
   - primary key: id
   - cursor: updated_at
-  - fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  - fields: accounting_period_name(string), id(string), name(string), status(string), transaction_lock_id(string), updated_at(string)
 - get_transaction_lock:
   - primary key: id
   - cursor: updated_at
-  - fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  - fields: accounting_period_name(string), id(string), name(string), status(string), transaction_lock_id(string), updated_at(string)
 - list_transaction_locks:
   - primary key: id
   - cursor: updated_at
-  - fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  - fields: accounting_period_name(string), id(string), name(string), status(string), transaction_lock_id(string), updated_at(string)
 - list_users:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at(), user_id()
+  - fields: id(string), name(string), status(string), updated_at(string), user_id(string)
 - get_current_user:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), id(), name(), status(), updated_at(), user_id()
+  - fields: created_time(string), id(string), name(string), status(string), updated_at(string), user_id(string)
 - get_user:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), id(), name(), status(), updated_at(), user_id()
+  - fields: created_time(string), id(string), name(string), status(string), updated_at(string), user_id(string)
 - list_vendor_credits:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), status(), updated_at(), vendor_credit_id(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), status(string), updated_at(string), vendor_credit_id(string), vendor_name(string)
 - list_vendor_credit_refunds_of_all_vendor_credits:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  - fields: customer_name(string), date(string), id(string), name(string), status(string), updated_at(string), vendor_credit_refund_id(string)
 - get_vendor_credit:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), status(), updated_at(), vendor_credit_id(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), status(string), updated_at(string), vendor_credit_id(string), vendor_name(string)
 - list_bills_credited:
   - primary key: id
   - cursor: updated_at
-  - fields: bill_number(), date(), id(), name(), status(), updated_at(), vendor_credit_id()
+  - fields: bill_number(string), date(string), id(string), name(string), status(string), updated_at(string), vendor_credit_id(string)
 - list_vendor_credit_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: comment_id(), date(), id(), name(), status(), updated_at()
+  - fields: comment_id(string), date(string), id(string), name(string), status(string), updated_at(string)
 - list_vendor_credit_refunds_of_a_vendor_credit:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  - fields: customer_name(string), date(string), id(string), name(string), status(string), updated_at(string), vendor_credit_refund_id(string)
 - get_vendor_credit_refund:
   - primary key: id
   - cursor: updated_at
-  - fields: account_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  - fields: account_name(string), date(string), id(string), name(string), status(string), updated_at(string), vendor_credit_refund_id(string)
 - list_vendor_payments:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), payment_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), payment_id(string), status(string), updated_at(string), vendor_name(string)
 - get_vendor_payment:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), last_modified_time(), name(), payment_id(), status(), updated_at(), vendor_name()
+  - fields: id(string), last_modified_time(string), name(string), payment_id(string), status(string), updated_at(string), vendor_name(string)
 - get_vendor_payment_email_content:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_person_id(), first_name(), id(), name(), status(), updated_at()
+  - fields: contact_person_id(string), first_name(string), id(string), name(string), status(string), updated_at(string)
 - list_vendor_payment_refunds:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), reference_number(), status(), updated_at(), vendorpayment_refund_id()
+  - fields: date(string), id(string), name(string), reference_number(string), status(string), updated_at(string), vendorpayment_refund_id(string)
 - get_vendor_payment_refund:
   - primary key: id
   - cursor: updated_at
-  - fields: date(), id(), name(), status(), to_account_name(), updated_at(), vendorpayment_refund_id()
+  - fields: date(string), id(string), name(string), status(string), to_account_name(string), updated_at(string), vendorpayment_refund_id(string)
 
 ## Sync Modes
 

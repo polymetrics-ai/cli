@@ -1,0 +1,5810 @@
+{
+  "actions": [
+    {
+      "name": "absence_management_create_workers_by_id_correct_time_off_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/absenceManagement/v5/workers/{{ record.ID }}/correctTimeOffEntry",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /absenceManagement/v5/workers/{ID}/correctTimeOffEntry; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "absence_management_create_workers_by_id_request_time_off",
+      "kind": "create",
+      "method": "POST",
+      "path": "/absenceManagement/v5/workers/{{ record.ID }}/requestTimeOff",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /absenceManagement/v5/workers/{ID}/requestTimeOff; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "accounts_payable_create_send_supplier_invoice_attachments_for_scanning",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accountsPayable/v1/sendSupplierInvoiceAttachmentsForScanning",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /accountsPayable/v1/sendSupplierInvoiceAttachmentsForScanning; changes tenant data."
+    },
+    {
+      "name": "accounts_payable_create_supplier_invoice_requests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /accountsPayable/v1/supplierInvoiceRequests; changes tenant data."
+    },
+    {
+      "name": "accounts_payable_create_supplier_invoice_requests_by_id_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests/{{ record.ID }}/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "accounts_payable_create_supplier_invoice_requests_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /accountsPayable/v1/supplierInvoiceRequests/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "common_create_validate_worktags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/common/v1/validateWorktags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /api/common/v1/validateWorktags; changes tenant data."
+    },
+    {
+      "name": "common_create_workers_by_id_business_title_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/common/v1/workers/{{ record.ID }}/businessTitleChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "me"
+            ]
+          }
+        }
+      },
+      "risk": "Workday POST on /api/common/v1/workers/{ID}/businessTitleChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ],
+      "query": {
+        "type": {
+          "template": "{{ record.type }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "common_create_workers_by_id_job_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/common/v1/workers/{{ record.ID }}/jobChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/common/v1/workers/{ID}/jobChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_buckets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/buckets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/buckets; changes tenant data."
+    },
+    {
+      "name": "prism_analytics_replace_buckets",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /api/prismAnalytics/v3/{tenant}/buckets/{id}; changes tenant data.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_buckets_by_id_complete",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}/complete",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/buckets/{id}/complete; changes tenant data.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_buckets_by_id_files",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}/files",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "uploadFile"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "uploadFile": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/buckets/{id}/files; changes tenant data.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_data_changes_by_data_change_id_activities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/dataChanges/{{ record.dataChangeID }}/activities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "dataChangeID"
+        ],
+        "properties": {
+          "dataChangeID": {
+            "type": "string"
+          },
+          "fileContainerWid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/dataChanges/{dataChangeID}/activities; changes tenant data.",
+      "path_fields": [
+        "dataChangeID"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_data_changes_by_data_change_id_cancel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/dataChanges/{{ record.dataChangeID }}/cancel/{{ record.activityID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "dataChangeID",
+          "activityID"
+        ],
+        "properties": {
+          "dataChangeID": {
+            "type": "string"
+          },
+          "activityID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/dataChanges/{dataChangeID}/cancel/{activityID}; changes tenant data.",
+      "path_fields": [
+        "dataChangeID",
+        "activityID"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_file_containers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/fileContainers",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/fileContainers; changes tenant data."
+    },
+    {
+      "name": "prism_analytics_create_file_containers_by_file_container_id_files",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/fileContainers/{{ record.fileContainerID }}/files",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "fileContainerID",
+          "file"
+        ],
+        "properties": {
+          "fileContainerID": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/fileContainers/{fileContainerID}/files; changes tenant data.",
+      "path_fields": [
+        "fileContainerID"
+      ]
+    },
+    {
+      "name": "prism_analytics_create_tables",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/tables",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /api/prismAnalytics/v3/{tenant}/tables; changes tenant data."
+    },
+    {
+      "name": "prism_analytics_update_tables",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/tables/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /api/prismAnalytics/v3/{tenant}/tables/{id}; changes tenant data.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "prism_analytics_replace_tables",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/api/prismAnalytics/v3/{{ config.tenant }}/tables/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /api/prismAnalytics/v3/{tenant}/tables/{id}; changes tenant data.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "asor_create_agent_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/asor/v1/agentDefinition",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /asor/v1/agentDefinition; changes tenant data."
+    },
+    {
+      "name": "benefit_partner_create_programs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/benefitPartner/v1/programs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /benefitPartner/v1/programs; changes tenant data."
+    },
+    {
+      "name": "budgets_create_run_budget_check",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/v1/runBudgetCheck",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /budgets/v1/runBudgetCheck; changes tenant data."
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_approve",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/approve",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/approve; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_deny",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/deny",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/deny; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_questionnaire",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/questionnaire",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/questionnaire; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_reassign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/reassign",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/reassign; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_send_back",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/sendBack",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/sendBack; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_event_steps_by_id_to_do",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/eventSteps/{{ record.ID }}/toDo",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/eventSteps/{ID}/toDo; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_events_by_id_cancel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/events/{{ record.ID }}/cancel",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/events/{ID}/cancel; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "business_process_create_events_by_id_rescind",
+      "kind": "create",
+      "method": "POST",
+      "path": "/businessProcess/v1/events/{{ record.ID }}/rescind",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /businessProcess/v1/events/{ID}/rescind; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "communications_create_managed_recipient",
+      "kind": "create",
+      "method": "POST",
+      "path": "/communications/v1/managedRecipient",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /communications/v1/managedRecipient; changes tenant data."
+    },
+    {
+      "name": "compensation_create_scorecard_results",
+      "kind": "create",
+      "method": "POST",
+      "path": "/compensation/v3/scorecardResults",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /compensation/v3/scorecardResults; changes tenant data."
+    },
+    {
+      "name": "compensation_delete_scorecard_results",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/compensation/v3/scorecardResults/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /compensation/v3/scorecardResults/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "compensation_update_scorecard_results_by_id_scores",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/compensation/v3/scorecardResults/{{ record.ID }}/scores/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /compensation/v3/scorecardResults/{ID}/scores/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "compensation_create_scorecards",
+      "kind": "create",
+      "method": "POST",
+      "path": "/compensation/v3/scorecards",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /compensation/v3/scorecards; changes tenant data."
+    },
+    {
+      "name": "compensation_delete_scorecards",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/compensation/v3/scorecards/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /compensation/v3/scorecards/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "compensation_replace_scorecards",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/compensation/v3/scorecards/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /compensation/v3/scorecards/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "compensation_create_workers_by_id_request_one_time_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/compensation/v3/workers/{{ record.ID }}/requestOneTimePayment",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /compensation/v3/workers/{ID}/requestOneTimePayment; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "connect_create_message_templates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/connect/v2/messageTemplates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /connect/v2/messageTemplates; changes tenant data."
+    },
+    {
+      "name": "connect_update_message_templates",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/connect/v2/messageTemplates/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /connect/v2/messageTemplates/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "connect_replace_message_templates",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/connect/v2/messageTemplates/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /connect/v2/messageTemplates/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "connect_create_send_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/connect/v2/sendMessage",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /connect/v2/sendMessage; changes tenant data."
+    },
+    {
+      "name": "custom_object_create_custom_objects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObject/v2/customObjects/{{ record.customObjectAlias }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customObjectAlias"
+        ],
+        "properties": {
+          "customObjectAlias": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObject/v2/customObjects/{customObjectAlias}; changes tenant data.",
+      "path_fields": [
+        "customObjectAlias"
+      ]
+    },
+    {
+      "name": "custom_object_delete_custom_objects_by_custom_object_alias",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObject/v2/customObjects/{{ record.customObjectAlias }}/{{ record.customObjectID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customObjectAlias",
+          "customObjectID"
+        ],
+        "properties": {
+          "customObjectAlias": {
+            "type": "string"
+          },
+          "customObjectID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}; changes tenant data.",
+      "path_fields": [
+        "customObjectAlias",
+        "customObjectID"
+      ]
+    },
+    {
+      "name": "custom_object_replace_custom_objects_by_custom_object_alias",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObject/v2/customObjects/{{ record.customObjectAlias }}/{{ record.customObjectID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customObjectAlias",
+          "customObjectID"
+        ],
+        "properties": {
+          "customObjectAlias": {
+            "type": "string"
+          },
+          "customObjectID": {
+            "type": "string"
+          },
+          "textField": {
+            "type": "string"
+          },
+          "integerField": {
+            "type": "number"
+          },
+          "booleanField": {
+            "type": "boolean"
+          },
+          "dateField": {
+            "type": "string"
+          },
+          "decimalField": {
+            "type": "number"
+          },
+          "currencyField": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "customListSingleInstance": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          "customListMultiInstance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}; changes tenant data.",
+      "path_fields": [
+        "customObjectAlias",
+        "customObjectID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_definitions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/definitions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/definitions; changes tenant data."
+    },
+    {
+      "name": "custom_object_definition_delete_definitions",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /customObjectDefinition/v1/definitions/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_replace_definitions",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/definitions/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_definitions_by_id_activate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/activate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/definitions/{ID}/activate; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_definitions_by_id_condition_rules",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/definitions/{ID}/conditionRules; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_delete_definitions_by_id_condition_rules",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/conditionRules/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_replace_definitions_by_id_condition_rules",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/definitions/{ID}/conditionRules/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_definitions_by_id_fields",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/definitions/{ID}/fields; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_delete_definitions_by_id_fields",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/fields/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/fields/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_replace_definitions_by_id_fields",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/fields/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/definitions/{ID}/fields/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_definitions_by_id_validations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/validations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/definitions/{ID}/validations; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_delete_definitions_by_id_validations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/validations/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/validations/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_replace_definitions_by_id_validations",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/definitions/{{ record.ID }}/validations/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/definitions/{ID}/validations/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_field_types",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/fieldTypes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/fieldTypes; changes tenant data."
+    },
+    {
+      "name": "custom_object_definition_replace_field_types",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/fieldTypes/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_create_field_types_by_id_list_values",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ record.ID }}/listValues",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customObjectDefinition/v1/fieldTypes/{ID}/listValues; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "custom_object_definition_replace_field_types_by_id_list_values",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ record.ID }}/listValues/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /customObjectDefinition/v1/fieldTypes/{ID}/listValues/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "customer_accounts_create_payments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customerAccounts/v1/payments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /customerAccounts/v1/payments; changes tenant data."
+    },
+    {
+      "name": "customer_accounts_create_payments_by_id_remittance_details",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customerAccounts/v1/payments/{{ record.ID }}/remittanceDetails",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /customerAccounts/v1/payments/{ID}/remittanceDetails; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_create_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expense/v1/entries",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /expense/v1/entries; changes tenant data."
+    },
+    {
+      "name": "expense_delete_entries",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expense/v1/entries/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /expense/v1/entries/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_update_entries",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/expense/v1/entries/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /expense/v1/entries/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_replace_entries",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/expense/v1/entries/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /expense/v1/entries/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_create_entries_by_id_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expense/v1/entries/{{ record.ID }}/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /expense/v1/entries/{ID}/attachments; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_create_reports",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expense/v1/reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /expense/v1/reports; changes tenant data."
+    },
+    {
+      "name": "expense_create_reports_by_id_lines",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expense/v1/reports/{{ record.ID }}/lines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /expense/v1/reports/{ID}/lines; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "expense_create_reports_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expense/v1/reports/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /expense/v1/reports/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "fin_tax_public_create_electronic_reporting_runs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/finTaxPublic/v1/electronicReportingRuns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /finTaxPublic/v1/electronicReportingRuns; changes tenant data."
+    },
+    {
+      "name": "global_payroll_create_effective_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/globalPayroll/v1/effectiveChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /globalPayroll/v1/effectiveChanges; changes tenant data."
+    },
+    {
+      "name": "global_payroll_create_event_driven_integration_vendor_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/globalPayroll/v1/eventDrivenIntegrationVendorResponse",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /globalPayroll/v1/eventDrivenIntegrationVendorResponse; changes tenant data."
+    },
+    {
+      "name": "global_payroll_create_notifications",
+      "kind": "create",
+      "method": "POST",
+      "path": "/globalPayroll/v1/notifications",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /globalPayroll/v1/notifications; changes tenant data."
+    },
+    {
+      "name": "global_payroll_update_pay_groups_by_id_periods",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/globalPayroll/v1/payGroups/{{ record.ID }}/periods/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /globalPayroll/v1/payGroups/{ID}/periods/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_article_update_article_versions_by_id_approval_decision",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/helpArticle/v1/articleVersions/{{ record.ID }}/approvalDecision/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /helpArticle/v1/articleVersions/{ID}/approvalDecision/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_article_create_article_versions_by_id_approval_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpArticle/v1/articleVersions/{{ record.ID }}/approvalRequest",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /helpArticle/v1/articleVersions/{ID}/approvalRequest; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_article_update_article_versions_by_id_approval_request",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/helpArticle/v1/articleVersions/{{ record.ID }}/approvalRequest/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /helpArticle/v1/articleVersions/{ID}/approvalRequest/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_article_create_article_versions_by_id_article_effective_date",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpArticle/v1/articleVersions/{{ record.ID }}/articleEffectiveDate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /helpArticle/v1/articleVersions/{ID}/articleEffectiveDate; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_article_delete_article_versions_by_id_article_effective_date",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/helpArticle/v1/articleVersions/{{ record.ID }}/articleEffectiveDate/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /helpArticle/v1/articleVersions/{ID}/articleEffectiveDate/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_case_create_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /helpCase/v4/attachments; changes tenant data."
+    },
+    {
+      "name": "help_case_create_cases",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/cases",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /helpCase/v4/cases; changes tenant data."
+    },
+    {
+      "name": "help_case_update_cases",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/helpCase/v4/cases/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /helpCase/v4/cases/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_case_create_cases_by_id_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/cases/{{ record.ID }}/comment",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /helpCase/v4/cases/{ID}/comment; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_case_create_cases_by_id_internal_note_timeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /helpCase/v4/cases/{ID}/internalNoteTimeline; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_case_delete_cases_by_id_internal_note_timeline",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /helpCase/v4/cases/{ID}/internalNoteTimeline/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_case_update_cases_by_id_internal_note_timeline",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /helpCase/v4/cases/{ID}/internalNoteTimeline/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "help_case_create_cases_by_id_reopen",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/cases/{{ record.ID }}/reopen",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /helpCase/v4/cases/{ID}/reopen; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "help_case_create_external_creators",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/externalCreators",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /helpCase/v4/externalCreators; changes tenant data."
+    },
+    {
+      "name": "help_case_create_external_records",
+      "kind": "create",
+      "method": "POST",
+      "path": "/helpCase/v4/externalRecords",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /helpCase/v4/externalRecords; changes tenant data."
+    },
+    {
+      "name": "help_case_replace_external_records",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/helpCase/v4/externalRecords/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /helpCase/v4/externalRecords/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "journeys_create_distribution_requests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/journeys/v1/distributionRequests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /journeys/v1/distributionRequests; changes tenant data."
+    },
+    {
+      "name": "learning_update_enrollments",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/learning/v1/enrollments/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /learning/v1/enrollments/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "learning_create_enrollments_by_id_lesson_trackings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/learning/v1/enrollments/{{ record.ID }}/lessonTrackings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /learning/v1/enrollments/{ID}/lessonTrackings; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "learning_update_enrollments_by_id_lesson_trackings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/learning/v1/enrollments/{{ record.ID }}/lessonTrackings/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /learning/v1/enrollments/{ID}/lessonTrackings/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "learning_create_manage_digital_courses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/learning/v1/manageDigitalCourses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /learning/v1/manageDigitalCourses; changes tenant data."
+    },
+    {
+      "name": "learning_create_manage_enrollments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/learning/v1/manageEnrollments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /learning/v1/manageEnrollments; changes tenant data."
+    },
+    {
+      "name": "payroll_create_payroll_inputs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payroll/v2/payrollInputs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /payroll/v2/payrollInputs; changes tenant data."
+    },
+    {
+      "name": "payroll_delete_payroll_inputs",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/payroll/v2/payrollInputs/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /payroll/v2/payrollInputs/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "payroll_update_payroll_inputs",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/payroll/v2/payrollInputs/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /payroll/v2/payrollInputs/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "payroll_create_tax_rates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payroll/v2/taxRates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /payroll/v2/taxRates; changes tenant data."
+    },
+    {
+      "name": "performance_enablement_create_cascaded_goal_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/cascadedGoalEvent",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/cascadedGoalEvent; changes tenant data."
+    },
+    {
+      "name": "performance_enablement_update_give_requested_feedback_events",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/performanceEnablement/v5/giveRequestedFeedbackEvents/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /performanceEnablement/v5/giveRequestedFeedbackEvents/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_my_performance_reviews",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/myPerformanceReviews",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/myPerformanceReviews; changes tenant data."
+    },
+    {
+      "name": "performance_enablement_create_organization_goals",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/organizationGoals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/organizationGoals; changes tenant data."
+    },
+    {
+      "name": "performance_enablement_update_organization_goals",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/performanceEnablement/v5/organizationGoals/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /performanceEnablement/v5/organizationGoals/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_worker_goal_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workerGoalEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workerGoalEvents; changes tenant data."
+    },
+    {
+      "name": "performance_enablement_create_worker_goal_events_by_id_goals",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workerGoalEvents/{{ record.ID }}/goals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workerGoalEvents/{ID}/goals; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_worker_goal_events_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workerGoalEvents/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workerGoalEvents/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_workers_by_id_anytime_feedback_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workers/{{ record.ID }}/anytimeFeedbackEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workers/{ID}/anytimeFeedbackEvents; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_update_workers_by_id_development_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/performanceEnablement/v5/workers/{{ record.ID }}/developmentItems/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /performanceEnablement/v5/workers/{ID}/developmentItems/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_workers_by_id_requested_feedback_on_self_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workers/{{ record.ID }}/requestedFeedbackOnSelfEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workers/{ID}/requestedFeedbackOnSelfEvents; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "performance_enablement_create_workers_by_id_requested_feedback_on_worker_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/performanceEnablement/v5/workers/{{ record.ID }}/requestedFeedbackOnWorkerEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /performanceEnablement/v5/workers/{ID}/requestedFeedbackOnWorkerEvents; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/addresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/addresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_home_contact_information_changes_by_id_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_replace_home_contact_information_changes_by_id_addresses",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_email_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/emailAddresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_home_contact_information_changes_by_id_email_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_home_contact_information_changes_by_id_email_addresses",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_instant_messengers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/instantMessengers; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_home_contact_information_changes_by_id_instant_messengers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_home_contact_information_changes_by_id_instant_messengers",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_phone_numbers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_home_contact_information_changes_by_id_phone_numbers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_home_contact_information_changes_by_id_phone_numbers",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_create_home_contact_information_changes_by_id_web_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/homeContactInformationChanges/{ID}/webAddresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_home_contact_information_changes_by_id_web_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_home_contact_information_changes_by_id_web_addresses",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_work_contact_information_changes",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/workContactInformationChanges/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/addresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/addresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_work_contact_information_changes_by_id_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_replace_work_contact_information_changes_by_id_addresses",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_email_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/emailAddresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_work_contact_information_changes_by_id_email_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/workContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_work_contact_information_changes_by_id_email_addresses",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/workContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_instant_messengers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/instantMessengers; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_work_contact_information_changes_by_id_instant_messengers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/workContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_work_contact_information_changes_by_id_instant_messengers",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/workContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_phone_numbers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/phoneNumbers; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_work_contact_information_changes_by_id_phone_numbers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/workContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_work_contact_information_changes_by_id_phone_numbers",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/workContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_create_work_contact_information_changes_by_id_web_addresses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /person/v4/workContactInformationChanges/{ID}/webAddresses; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "person_delete_work_contact_information_changes_by_id_web_addresses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /person/v4/workContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "person_update_work_contact_information_changes_by_id_web_addresses",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /person/v4/workContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions; changes tenant data."
+    },
+    {
+      "name": "procurement_update_requisitions",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /procurement/v5/requisitions/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions_by_id_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions/{ID}/attachments; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_delete_requisitions_by_id_attachments",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/attachments/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /procurement/v5/requisitions/{ID}/attachments/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "procurement_update_requisitions_by_id_attachments",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/attachments/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /procurement/v5/requisitions/{ID}/attachments/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions_by_id_cancel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/cancel",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions/{ID}/cancel; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions_by_id_close",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/close",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions/{ID}/close; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions_by_id_requisition_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/requisitionEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions/{ID}/requisitionEvents; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_create_requisitions_by_id_requisition_lines",
+      "kind": "create",
+      "method": "POST",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/requisitionLines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /procurement/v5/requisitions/{ID}/requisitionLines; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "procurement_delete_requisitions_by_id_requisition_lines",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/requisitionLines/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /procurement/v5/requisitions/{ID}/requisitionLines/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "procurement_update_requisitions_by_id_requisition_lines",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/procurement/v5/requisitions/{{ record.ID }}/requisitionLines/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /procurement/v5/requisitions/{ID}/requisitionLines/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "projects_create_ad_hoc_project_time_transactions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/adHocProjectTimeTransactions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/adHocProjectTimeTransactions; changes tenant data."
+    },
+    {
+      "name": "projects_create_plan_phases",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/planPhases",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/planPhases; changes tenant data."
+    },
+    {
+      "name": "projects_delete_plan_phases",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/v3/planPhases/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /projects/v3/planPhases/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_update_plan_phases",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/v3/planPhases/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /projects/v3/planPhases/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_create_plan_tasks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/planTasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/planTasks; changes tenant data."
+    },
+    {
+      "name": "projects_delete_plan_tasks",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/v3/planTasks/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /projects/v3/planTasks/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_update_plan_tasks",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/v3/planTasks/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /projects/v3/planTasks/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_create_projects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/projects; changes tenant data."
+    },
+    {
+      "name": "projects_create_projects_by_id_edit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/projects/{{ record.ID }}/edit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /projects/v3/projects/{ID}/edit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_create_resource_forecast_lines_by_id_allocations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/resourceForecastLines/{{ record.ID }}/allocations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /projects/v3/resourceForecastLines/{ID}/allocations; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_update_resource_forecast_lines_by_id_allocations",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/v3/resourceForecastLines/{{ record.ID }}/allocations/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /projects/v3/resourceForecastLines/{ID}/allocations/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "projects_create_resource_plan_lines",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/resourcePlanLines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/resourcePlanLines; changes tenant data."
+    },
+    {
+      "name": "projects_create_resource_plan_lines_by_id_edit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/resourcePlanLines/{{ record.ID }}/edit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /projects/v3/resourcePlanLines/{ID}/edit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_create_task_resources",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/v3/taskResources",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /projects/v3/taskResources; changes tenant data."
+    },
+    {
+      "name": "projects_delete_task_resources",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/v3/taskResources/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /projects/v3/taskResources/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "projects_update_task_resources",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/v3/taskResources/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /projects/v3/taskResources/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_interviews_by_id_feedback",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/interviews/{{ record.ID }}/feedback",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/interviews/{ID}/feedback; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_prospects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects; changes tenant data."
+    },
+    {
+      "name": "recruiting_create_prospects_by_id_educations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects/{{ record.ID }}/educations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects/{ID}/educations; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_prospects_by_id_experiences",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects/{{ record.ID }}/experiences",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects/{ID}/experiences; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_prospects_by_id_languages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects/{{ record.ID }}/languages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects/{ID}/languages; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_prospects_by_id_resume_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects/{{ record.ID }}/resumeAttachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects/{ID}/resumeAttachments; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "recruiting_create_prospects_by_id_skills",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recruiting/v4/prospects/{{ record.ID }}/skills",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /recruiting/v4/prospects/{ID}/skills; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "request_create_requests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/request/v2/requests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /request/v2/requests; changes tenant data."
+    },
+    {
+      "name": "request_create_requests_by_id_close",
+      "kind": "create",
+      "method": "POST",
+      "path": "/request/v2/requests/{{ record.ID }}/close",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /request/v2/requests/{ID}/close; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "revenue_update_billable_transactions",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/revenue/v1/billableTransactions/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /revenue/v1/billableTransactions/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_administrative",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/administrative/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/administrative/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_business_title",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/businessTitle/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/businessTitle/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/comment/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/comment/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_contract",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/contract/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/contract/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_job_classification",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/jobClassification/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/jobClassification/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_job_profile",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/jobProfile/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/jobProfile/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_location",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/location/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/location/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_move_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/moveTeam/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/moveTeam/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_opening",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/opening/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/opening/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_position",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/position/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/position/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_job_changes_by_id_start_details",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/startDetails/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/jobChanges/{ID}/startDetails/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_create_job_changes_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/jobChanges/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/jobChanges/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_organization_assignment_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/organizationAssignmentChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /staffing/v7/organizationAssignmentChanges; changes tenant data."
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_business_unit",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/businessUnit/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/businessUnit/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/comment/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/comment/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_company",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/company/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/company/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_cost_center",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/costCenter/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/costCenter/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_costing",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/costing/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/costing/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_custom_organizations",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/customOrganizations/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/customOrganizations/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_region",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/region/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/region/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_organization_assignment_changes_by_id_start_details",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/startDetails/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/startDetails/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_create_organization_assignment_changes_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/organizationAssignmentChanges/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_check_in_topics",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkInTopics",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/checkInTopics; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_delete_workers_by_id_check_in_topics",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkInTopics/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_workers_by_id_check_in_topics",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkInTopics/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "archive"
+            ]
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ],
+      "query": {
+        "type": {
+          "template": "{{ record.type }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "staffing_create_workers_by_id_check_ins",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkIns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/checkIns; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_delete_workers_by_id_check_ins",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkIns/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /staffing/v7/workers/{ID}/checkIns/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_update_workers_by_id_check_ins",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/staffing/v7/workers/{{ record.ID }}/checkIns/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "archive"
+            ]
+          }
+        }
+      },
+      "risk": "Workday PATCH on /staffing/v7/workers/{ID}/checkIns/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ],
+      "query": {
+        "type": {
+          "template": "{{ record.type }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "staffing_create_workers_by_id_explicit_skills",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/explicitSkills",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/explicitSkills; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_external_skill_level",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/externalSkillLevel",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/externalSkillLevel; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_replace_workers_by_id_external_skill_level",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/staffing/v7/workers/{{ record.ID }}/externalSkillLevel/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /staffing/v7/workers/{ID}/externalSkillLevel/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_home_contact_information_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/homeContactInformationChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/homeContactInformationChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_job_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/jobChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/jobChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_organization_assignment_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/organizationAssignmentChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/organizationAssignmentChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_skill_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/skillItems",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/skillItems; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "staffing_create_workers_by_id_work_contact_information_changes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/staffing/v7/workers/{{ record.ID }}/workContactInformationChanges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /staffing/v7/workers/{ID}/workContactInformationChanges; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_create_holds_by_id_override_hold",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/holds/{{ record.ID }}/overrideHold",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/holds/{ID}/overrideHold; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_create_holds_by_id_remove_hold",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/holds/{{ record.ID }}/removeHold",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/holds/{ID}/removeHold; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_create_holds_by_id_update_hold",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/holds/{{ record.ID }}/updateHold",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/holds/{ID}/updateHold; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_create_immigration_events_by_id_dependent_immigration_data",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_delete_immigration_events_by_id_dependent_immigration_data",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "student_core_replace_immigration_events_by_id_dependent_immigration_data",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "student_core_create_immigration_events_by_id_immigration_data",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/immigrationData",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/immigrationEvents/{ID}/immigrationData; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_replace_immigration_events_by_id_immigration_data",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/immigrationData/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /studentCore/v1/immigrationEvents/{ID}/immigrationData/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "student_core_create_immigration_events_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/immigrationEvents/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/immigrationEvents/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_core_create_students_by_id_apply_hold",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentCore/v1/students/{{ record.ID }}/applyHold",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentCore/v1/students/{ID}/applyHold; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_finance_create_students_by_id_payments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/studentFinance/v1/students/{{ record.ID }}/payments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /studentFinance/v1/students/{ID}/payments; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "student_finance_update_students_by_id_payments",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/studentFinance/v1/students/{{ record.ID }}/payments/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /studentFinance/v1/students/{ID}/payments/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "talent_management_create_create_mentorship_for_me",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/createMentorshipForMe",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /talentManagement/v2/createMentorshipForMe; changes tenant data."
+    },
+    {
+      "name": "talent_management_create_create_mentorship_for_worker",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/createMentorshipForWorker",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /talentManagement/v2/createMentorshipForWorker; changes tenant data."
+    },
+    {
+      "name": "talent_management_create_mentorships_by_id_close",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/mentorships/{{ record.ID }}/close",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /talentManagement/v2/mentorships/{ID}/close; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "talent_management_create_mentorships_by_id_edit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/mentorships/{{ record.ID }}/edit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /talentManagement/v2/mentorships/{ID}/edit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "talent_management_create_succession_plan_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/successionPlanEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /talentManagement/v2/successionPlanEvents; changes tenant data."
+    },
+    {
+      "name": "talent_management_create_succession_plan_events_by_id_candidates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /talentManagement/v2/successionPlanEvents/{ID}/candidates; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "talent_management_delete_succession_plan_events_by_id_candidates",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /talentManagement/v2/successionPlanEvents/{ID}/candidates/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "talent_management_update_succession_plan_events_by_id_candidates",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /talentManagement/v2/successionPlanEvents/{ID}/candidates/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "talent_management_create_succession_plan_events_by_id_submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ record.ID }}/submit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /talentManagement/v2/successionPlanEvents/{ID}/submit; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "talent_management_create_succession_plans",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talentManagement/v2/successionPlans",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /talentManagement/v2/successionPlans; changes tenant data."
+    },
+    {
+      "name": "time_tracking_create_time_clock_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeTracking/v5/timeClockEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /timeTracking/v5/timeClockEvents; changes tenant data."
+    },
+    {
+      "name": "time_tracking_delete_time_clock_events",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/timeTracking/v5/timeClockEvents/{{ record.ID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /timeTracking/v5/timeClockEvents/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "time_tracking_replace_time_clock_events",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/timeTracking/v5/timeClockEvents/{{ record.ID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PUT on /timeTracking/v5/timeClockEvents/{ID}; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "time_tracking_create_worker_time_attestation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeTracking/v5/workerTimeAttestation",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "Workday POST on /timeTracking/v5/workerTimeAttestation; changes tenant data."
+    },
+    {
+      "name": "time_tracking_create_workers_by_id_time_review_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeTracking/v5/workers/{{ record.ID }}/timeReviewEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /timeTracking/v5/workers/{ID}/timeReviewEvents; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "time_tracking_create_workers_by_id_worker_time_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday POST on /timeTracking/v5/workers/{ID}/workerTimeBlock; changes tenant data.",
+      "path_fields": [
+        "ID"
+      ]
+    },
+    {
+      "name": "time_tracking_delete_workers_by_id_worker_time_block",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock/{{ record.subresourceID }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday DELETE on /timeTracking/v5/workers/{ID}/workerTimeBlock/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    },
+    {
+      "name": "time_tracking_update_workers_by_id_worker_time_block",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock/{{ record.subresourceID }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ID",
+          "subresourceID"
+        ],
+        "properties": {
+          "ID": {
+            "type": "string"
+          },
+          "subresourceID": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Workday PATCH on /timeTracking/v5/workers/{ID}/workerTimeBlock/{subresourceID}; changes tenant data.",
+      "path_fields": [
+        "ID",
+        "subresourceID"
+      ]
+    }
+  ]
+}

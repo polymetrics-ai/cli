@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/domain-performance",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "domains": [
+        {
+          "campaign_id": "fixture_campaign_id",
+          "domain": "fixture_domain",
+          "emails_sent": 1,
+          "bounces": 1,
+          "opens": 1,
+          "clicks": 1,
+          "unsubs": 1,
+          "delivered": 1
+        }
+      ]
+    }
+  }
+}

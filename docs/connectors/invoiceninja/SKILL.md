@@ -11,9 +11,17 @@ Reads Invoice Ninja clients, invoices, products, payments, and quotes through th
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-invoiceninja
+- asset: icons/simple-icons/invoiceninja.svg
+- title: Invoice Ninja
+- simple_icon_slug: invoiceninja
+- simple_icon_hex: 000000
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Invoice%20Ninja
+- match: exact-name-or-slug
+- matched_by: invoiceninja
 
 ## Capabilities
 
@@ -30,29 +38,29 @@ Reads Invoice Ninja clients, invoices, products, payments, and quotes through th
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - clients:
   - primary key: id
-  - fields: archived_at(), balance(), created_at(), currency_id(), display_name(), id(), is_deleted(), name(), number(), paid_to_date(), phone(), updated_at(), vat_number(), website()
+  - fields: archived_at(integer), balance(number), created_at(integer), currency_id(string), display_name(string), id(string), is_deleted(boolean), name(string), number(string), paid_to_date(number), phone(string), updated_at(integer), vat_number(string), website(string)
 - invoices:
   - primary key: id
-  - fields: amount(), balance(), client_id(), created_at(), currency_id(), date(), due_date(), id(), is_deleted(), number(), paid_to_date(), status_id(), updated_at()
+  - fields: amount(number), balance(number), client_id(string), created_at(integer), currency_id(string), date(string), due_date(string), id(string), is_deleted(boolean), number(string), paid_to_date(number), status_id(string), updated_at(integer)
 - products:
   - primary key: id
-  - fields: cost(), created_at(), id(), is_deleted(), notes(), price(), product_key(), quantity(), tax_name1(), tax_rate1(), updated_at()
+  - fields: cost(number), created_at(integer), id(string), is_deleted(boolean), notes(string), price(number), product_key(string), quantity(number), tax_name1(string), tax_rate1(number), updated_at(integer)
 - payments:
   - primary key: id
-  - fields: amount(), applied(), client_id(), created_at(), currency_id(), date(), id(), is_deleted(), number(), refunded(), status_id(), transaction_reference(), updated_at()
+  - fields: amount(number), applied(number), client_id(string), created_at(integer), currency_id(string), date(string), id(string), is_deleted(boolean), number(string), refunded(number), status_id(string), transaction_reference(string), updated_at(integer)
 - quotes:
   - primary key: id
-  - fields: amount(), balance(), client_id(), created_at(), currency_id(), date(), due_date(), id(), is_deleted(), number(), status_id(), updated_at(), valid_until()
+  - fields: amount(number), balance(number), client_id(string), created_at(integer), currency_id(string), date(string), due_date(string), id(string), is_deleted(boolean), number(string), status_id(string), updated_at(integer), valid_until(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

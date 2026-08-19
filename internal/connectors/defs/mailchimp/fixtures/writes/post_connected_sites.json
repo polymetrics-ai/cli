@@ -1,0 +1,20 @@
+{
+  "record": {
+    "foreign_id": "fixture_foreign_id",
+    "domain": "fixture_domain"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/connected-sites",
+    "body": {
+      "foreign_id": "fixture_foreign_id",
+      "domain": "fixture_domain"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_connected_sites"
+    }
+  }
+}

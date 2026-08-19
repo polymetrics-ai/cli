@@ -1,0 +1,20 @@
+{
+  "record": {
+    "comment_id": "fixture_comment_id",
+    "rich_text": []
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/comments/fixture_comment_id",
+    "body": {
+      "rich_text": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

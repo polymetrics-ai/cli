@@ -11,6 +11,7 @@ Reads selected NetSuite REST Record API resources (customers, vendors, items, sa
 
 ## Icon
 
+- id: netsuite
 - asset: icons/netsuite.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,34 +28,34 @@ Reads selected NetSuite REST Record API resources (customers, vendors, items, sa
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
-- realm
-- consumer_key (secret)
-- consumer_secret (secret)
-- token_key (secret)
-- token_secret (secret)
+- realm (required)
+- consumer_key (secret) (required)
+- consumer_secret (secret) (required)
+- token_key (secret) (required)
+- token_secret (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - vendors:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - items:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - sales_orders:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 
 ## Sync Modes
 

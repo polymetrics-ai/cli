@@ -11,9 +11,11 @@ Reads NinjaOne RMM organizations, devices, locations, activities, and policies t
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,26 +31,26 @@ Reads NinjaOne RMM organizations, devices, locations, activities, and policies t
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - organizations:
   - primary key: id
-  - fields: description(), id(), name(), node_approval_mode()
+  - fields: description(string), id(integer), name(string), node_approval_mode(string)
 - devices:
   - primary key: id
-  - fields: approval_status(), dns_name(), id(), location_id(), node_class(), offline(), organization_id(), system_name()
+  - fields: approval_status(string), dns_name(string), id(integer), location_id(integer), node_class(string), offline(boolean), organization_id(integer), system_name(string)
 - locations:
   - primary key: id
-  - fields: address(), description(), id(), name(), organization_id()
+  - fields: address(string), description(string), id(integer), name(string), organization_id(integer)
 - activities:
   - primary key: id
   - cursor: activityTime
-  - fields: activityTime(), activity_type(), device_id(), id(), message(), status()
+  - fields: activityTime(number), activity_type(string), device_id(integer), id(integer), message(string), status(string)
 - policies:
   - primary key: id
-  - fields: description(), id(), name(), node_class()
+  - fields: description(string), id(integer), name(string), node_class(string)
 
 ## Sync Modes
 

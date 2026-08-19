@@ -11,6 +11,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
 
 ## Icon
 
+- id: pipedrive
 - asset: icons/pipedrive.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,79 +30,79 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
 
 - base_url
 - replication_start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - deals:
   - primary key: id
   - cursor: update_time
-  - fields: add_time(), currency(), id(), org_id(), person_id(), stage_id(), status(), title(), update_time(), value()
+  - fields: add_time(string), currency(string), id(integer), org_id(integer), person_id(integer), stage_id(integer), status(string), title(string), update_time(string), value(number)
 - persons:
   - primary key: id
   - cursor: update_time
-  - fields: add_time(), email(), id(), name(), org_id(), owner_id(), phone(), update_time()
+  - fields: add_time(string), email(array), id(integer), name(string), org_id(integer), owner_id(integer), phone(array), update_time(string)
 - organizations:
   - primary key: id
   - cursor: update_time
-  - fields: add_time(), id(), name(), owner_id(), people_count(), update_time()
+  - fields: add_time(string), id(integer), name(string), owner_id(integer), people_count(integer), update_time(string)
 - activities:
   - primary key: id
   - cursor: update_time
-  - fields: add_time(), deal_id(), done(), due_date(), id(), org_id(), person_id(), subject(), type(), update_time()
+  - fields: add_time(string), deal_id(integer), done(boolean), due_date(string), id(integer), org_id(integer), person_id(integer), subject(string), type(string), update_time(string)
 - products:
   - primary key: id
-  - fields: active_flag(), add_time(), code(), id(), name(), owner_id(), unit(), update_time()
+  - fields: active_flag(boolean), add_time(string), code(string), id(integer), name(string), owner_id(integer), unit(string), update_time(string)
 - users:
   - primary key: id
-  - fields: active_flag(), created(), email(), id(), is_admin(), modified(), name()
+  - fields: active_flag(boolean), created(string), email(string), id(integer), is_admin(integer), modified(string), name(string)
 - notes:
   - primary key: id
   - cursor: update_time
-  - fields: active_flag(), add_time(), content(), deal(), deal_id(), id(), last_update_user_id(), lead_id(), org_id(), organization(), person(), person_id(), pinned_to_deal_flag(), pinned_to_organization_flag(), pinned_to_person_flag(), pinned_to_project_flag(), pinned_to_task_flag(), project(), project_id(), task(), task_id(), update_time(), user(), user_id()
+  - fields: active_flag(boolean), add_time(string), content(string), deal(object), deal_id(integer), id(integer), last_update_user_id(integer), lead_id(string), org_id(integer), organization(object), person(object), person_id(integer), pinned_to_deal_flag(boolean), pinned_to_organization_flag(boolean), pinned_to_person_flag(boolean), pinned_to_project_flag(boolean), pinned_to_task_flag(boolean), project(object), project_id(integer), task(object), task_id(integer), update_time(string), user(object), user_id(integer)
 - leads:
   - primary key: id
   - cursor: update_time
-  - fields: add_time(), cc_email(), channel(), channel_id(), creator_id(), expected_close_date(), id(), is_archived(), label_ids(), next_activity_id(), organization_id(), origin(), origin_id(), owner_id(), person_id(), source_deal_id(), source_name(), title(), update_time(), value(), visible_to(), was_seen()
+  - fields: add_time(string), cc_email(string), channel(integer), channel_id(string), creator_id(integer), expected_close_date(string), id(string), is_archived(boolean), label_ids(array), next_activity_id(integer), organization_id(integer), origin(string), origin_id(string), owner_id(integer), person_id(integer), source_deal_id(integer), source_name(string), title(string), update_time(string), value(object), visible_to(string), was_seen(boolean)
 - deal_fields:
   - primary key: id
-  - fields: active_flag(), add_time(), add_visible_flag(), bulk_edit_allowed(), created_by_user_id(), details_visible_flag(), edit_flag(), field_type(), filtering_allowed(), id(), important_flag(), index_visible_flag(), is_subfield(), key(), last_updated_by_user_id(), mandatory_flag(), name(), options(), options_deleted(), order_nr(), searchable_flag(), sortable_flag(), subfields(), update_time()
+  - fields: active_flag(boolean), add_time(string), add_visible_flag(boolean), bulk_edit_allowed(boolean), created_by_user_id(integer), details_visible_flag(boolean), edit_flag(boolean), field_type(string), filtering_allowed(boolean), id(integer), important_flag(boolean), index_visible_flag(boolean), is_subfield(boolean), key(string), last_updated_by_user_id(integer), mandatory_flag(boolean), name(string), options(array), options_deleted(object), order_nr(integer), searchable_flag(boolean), sortable_flag(boolean), subfields(array), update_time(string)
 - person_fields:
   - primary key: id
-  - fields: active_flag(), add_time(), add_visible_flag(), bulk_edit_allowed(), created_by_user_id(), details_visible_flag(), edit_flag(), field_type(), filtering_allowed(), id(), important_flag(), index_visible_flag(), is_subfield(), key(), last_updated_by_user_id(), mandatory_flag(), name(), options(), options_deleted(), order_nr(), searchable_flag(), sortable_flag(), subfields(), update_time()
+  - fields: active_flag(boolean), add_time(string), add_visible_flag(boolean), bulk_edit_allowed(boolean), created_by_user_id(integer), details_visible_flag(boolean), edit_flag(boolean), field_type(string), filtering_allowed(boolean), id(integer), important_flag(boolean), index_visible_flag(boolean), is_subfield(boolean), key(string), last_updated_by_user_id(integer), mandatory_flag(boolean), name(string), options(array), options_deleted(object), order_nr(integer), searchable_flag(boolean), sortable_flag(boolean), subfields(array), update_time(string)
 - organization_fields:
   - primary key: id
-  - fields: active_flag(), add_time(), add_visible_flag(), bulk_edit_allowed(), created_by_user_id(), details_visible_flag(), edit_flag(), field_type(), filtering_allowed(), id(), important_flag(), index_visible_flag(), is_subfield(), key(), last_updated_by_user_id(), mandatory_flag(), name(), options(), options_deleted(), order_nr(), searchable_flag(), sortable_flag(), subfields(), update_time()
+  - fields: active_flag(boolean), add_time(string), add_visible_flag(boolean), bulk_edit_allowed(boolean), created_by_user_id(integer), details_visible_flag(boolean), edit_flag(boolean), field_type(string), filtering_allowed(boolean), id(integer), important_flag(boolean), index_visible_flag(boolean), is_subfield(boolean), key(string), last_updated_by_user_id(integer), mandatory_flag(boolean), name(string), options(array), options_deleted(object), order_nr(integer), searchable_flag(boolean), sortable_flag(boolean), subfields(array), update_time(string)
 - product_fields:
   - primary key: id
-  - fields: active_flag(), add_time(), add_visible_flag(), bulk_edit_allowed(), created_by_user_id(), details_visible_flag(), edit_flag(), field_type(), filtering_allowed(), id(), important_flag(), index_visible_flag(), is_subfield(), key(), last_updated_by_user_id(), mandatory_flag(), name(), options(), options_deleted(), order_nr(), searchable_flag(), sortable_flag(), subfields(), update_time()
+  - fields: active_flag(boolean), add_time(string), add_visible_flag(boolean), bulk_edit_allowed(boolean), created_by_user_id(integer), details_visible_flag(boolean), edit_flag(boolean), field_type(string), filtering_allowed(boolean), id(integer), important_flag(boolean), index_visible_flag(boolean), is_subfield(boolean), key(string), last_updated_by_user_id(integer), mandatory_flag(boolean), name(string), options(array), options_deleted(object), order_nr(integer), searchable_flag(boolean), sortable_flag(boolean), subfields(array), update_time(string)
 - lead_fields:
   - primary key: id
-  - fields: active_flag(), add_time(), add_visible_flag(), bulk_edit_allowed(), created_by_user_id(), details_visible_flag(), edit_flag(), field_type(), filtering_allowed(), id(), important_flag(), index_visible_flag(), is_subfield(), key(), last_updated_by_user_id(), mandatory_flag(), name(), options(), options_deleted(), order_nr(), searchable_flag(), sortable_flag(), subfields(), update_time()
+  - fields: active_flag(boolean), add_time(string), add_visible_flag(boolean), bulk_edit_allowed(boolean), created_by_user_id(integer), details_visible_flag(boolean), edit_flag(boolean), field_type(string), filtering_allowed(boolean), id(integer), important_flag(boolean), index_visible_flag(boolean), is_subfield(boolean), key(string), last_updated_by_user_id(integer), mandatory_flag(boolean), name(string), options(array), options_deleted(object), order_nr(integer), searchable_flag(boolean), sortable_flag(boolean), subfields(array), update_time(string)
 - roles:
   - primary key: id
-  - fields: active_flag(), assignment_count(), id(), level(), name(), parent_role_id(), sub_role_count()
+  - fields: active_flag(boolean), assignment_count(string), id(integer), level(integer), name(string), parent_role_id(integer), sub_role_count(string)
 - filters:
   - primary key: id
-  - fields: active_flag(), add_time(), custom_view_id(), filter_code(), id(), is_editable(), last_used_time(), name(), temporary_flag(), type(), update_time(), user_id(), visible_to()
+  - fields: active_flag(boolean), add_time(string), custom_view_id(integer), filter_code(string), id(integer), is_editable(boolean), last_used_time(string), name(string), temporary_flag(boolean), type(string), update_time(string), user_id(integer), visible_to(string)
 - activity_types:
   - primary key: id
-  - fields: active_flag(), add_time(), color(), icon_key(), id(), is_custom_flag(), key_string(), name(), order_nr(), update_time()
+  - fields: active_flag(boolean), add_time(string), color(string), icon_key(string), id(integer), is_custom_flag(boolean), key_string(string), name(string), order_nr(integer), update_time(string)
 - legacy_teams:
   - primary key: id
-  - fields: active_flag(), add_time(), created_by_user_id(), deleted_flag(), description(), id(), manager_id(), name(), users()
+  - fields: active_flag(boolean), add_time(string), created_by_user_id(integer), deleted_flag(boolean), description(string), id(integer), manager_id(integer), name(string), users(array)
 - webhooks:
   - primary key: id
-  - fields: add_time(), admin_id(), company_id(), event_action(), event_object(), http_auth_user(), id(), is_active(), last_delivery_time(), last_http_status(), name(), owner_id(), remove_reason(), remove_time(), subscription_url(), type(), user_id(), version()
+  - fields: add_time(string), admin_id(integer), company_id(integer), event_action(string), event_object(string), http_auth_user(string), id(integer), is_active(boolean), last_delivery_time(string), last_http_status(integer), name(string), owner_id(integer), remove_reason(string), remove_time(string), subscription_url(string), type(string), user_id(integer), version(string)
 - lead_labels:
   - primary key: id
-  - fields: add_time(), color(), id(), name(), update_time()
+  - fields: add_time(string), color(string), id(string), name(string), update_time(string)
 - lead_sources:
   - primary key: name
-  - fields: name()
+  - fields: name(string)
 - currencies:
   - primary key: id
-  - fields: active_flag(), code(), decimal_points(), id(), is_custom_flag(), name(), symbol()
+  - fields: active_flag(boolean), code(string), decimal_points(integer), id(integer), is_custom_flag(boolean), name(string), symbol(string)
 
 ## Sync Modes
 
@@ -111,6 +112,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
 
 - create_lead:
   - endpoint: POST /leads
+  - required fields: title
   - risk: creates a new lead; low-risk external mutation, no approval required
 - update_lead:
   - endpoint: PATCH /leads/{{ record.id }}
@@ -122,10 +124,11 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
   - risk: permanently deletes a lead; destructive external mutation, approval required
 - create_note:
   - endpoint: POST /notes
+  - required fields: content
   - risk: creates a new note attached to a deal/person/organization/lead; low-risk external mutation, no approval required
 - update_note:
   - endpoint: PUT /notes/{{ record.id }}
-  - required fields: id
+  - required fields: id, content
   - risk: updates an existing note's content; external mutation, approval required
 - delete_note:
   - endpoint: DELETE /notes/{{ record.id }}
@@ -133,10 +136,11 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
   - risk: permanently deletes a note; destructive external mutation, approval required
 - create_filter:
   - endpoint: POST /filters
+  - required fields: name, conditions, type
   - risk: creates a new saved filter; low-risk external mutation, no approval required
 - update_filter:
   - endpoint: PUT /filters/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, conditions
   - risk: updates an existing saved filter's name/conditions; external mutation, approval required
 - delete_filter:
   - endpoint: DELETE /filters/{{ record.id }}
@@ -144,6 +148,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
   - risk: permanently deletes a saved filter; destructive external mutation, approval required
 - create_activity_type:
   - endpoint: POST /activityTypes
+  - required fields: name, icon_key
   - risk: creates a new custom activity type; low-risk external mutation, no approval required
 - update_activity_type:
   - endpoint: PUT /activityTypes/{{ record.id }}
@@ -155,6 +160,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
   - risk: permanently deletes a custom activity type; destructive external mutation, approval required
 - create_lead_label:
   - endpoint: POST /leadLabels
+  - required fields: name, color
   - risk: creates a new lead label; low-risk external mutation, no approval required
 - update_lead_label:
   - endpoint: PATCH /leadLabels/{{ record.id }}
@@ -166,6 +172,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
   - risk: permanently deletes a lead label; destructive external mutation, approval required
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: subscription_url, event_action, event_object, name
   - risk: registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}

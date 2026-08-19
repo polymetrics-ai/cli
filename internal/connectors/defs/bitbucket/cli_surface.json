@@ -1,0 +1,207 @@
+{
+  "commands": [
+    {
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories"
+        }
+      ],
+      "availability": "implemented",
+      "examples": [
+        "pm bitbucket repositories list --json --limit 100"
+      ],
+      "intent": "etl",
+      "path": "repositories list",
+      "stream": "repositories",
+      "summary": "List public Bitbucket repositories as paginated ETL records."
+    },
+    {
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "approval": "Requires reverse ETL plan -> preview -> explicit approval -> execute.",
+      "availability": "implemented",
+      "examples": [
+        "pm bitbucket repositories create --workspace <workspace> --repo-slug <slug> --scm git --preview"
+      ],
+      "flags": [
+        {
+          "maps_to": "record.workspace",
+          "name": "workspace",
+          "summary": "Workspace slug or UUID.",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.repo_slug",
+          "name": "repo-slug",
+          "summary": "Repository slug to create.",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.scm",
+          "name": "scm",
+          "summary": "Repository SCM type.",
+          "type": "enum",
+          "values": [
+            "git"
+          ]
+        },
+        {
+          "maps_to": "record.is_private",
+          "name": "private",
+          "summary": "Whether the repository is private.",
+          "type": "boolean"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "repositories create",
+      "risk": "Creates a Bitbucket repository; reverse ETL plan, preview, explicit approval, execute are required.",
+      "summary": "Create or initialize a Bitbucket repository through typed reverse ETL.",
+      "write": "create_repositories_workspace_repo_slug"
+    },
+    {
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "approval": "Requires reverse ETL plan -> preview -> explicit approval -> execute plus typed destructive confirmation.",
+      "availability": "implemented",
+      "examples": [
+        "pm bitbucket repositories delete --workspace <workspace> --repo-slug <slug> --confirm destructive --preview"
+      ],
+      "flags": [
+        {
+          "maps_to": "record.workspace",
+          "name": "workspace",
+          "summary": "Workspace slug or UUID.",
+          "type": "string"
+        },
+        {
+          "maps_to": "record.repo_slug",
+          "name": "repo-slug",
+          "summary": "Repository slug to delete.",
+          "type": "string"
+        }
+      ],
+      "intent": "reverse_etl",
+      "path": "repositories delete",
+      "risk": "Permanently deletes a Bitbucket repository; action has confirm: destructive.",
+      "summary": "Delete a Bitbucket repository through a destructive typed reverse-ETL action.",
+      "write": "delete_repositories_workspace_repo_slug"
+    },
+    {
+      "approval": "blocked pending #2985",
+      "availability": "planned",
+      "intent": "direct_read",
+      "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed.",
+      "operation": "get_teams_username_search_code",
+      "output_policy": "json_redacted",
+      "path": "search code",
+      "risk": "planned bounded provider query; no raw query escape hatch is exposed",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985."
+    },
+    {
+      "approval": "blocked pending bounded binary executor",
+      "availability": "planned",
+      "intent": "direct_read",
+      "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed.",
+      "operation": "get_repositories_workspace_repo_slug_downloads_filename",
+      "output_policy": "binary_file_bounded",
+      "path": "downloads get",
+      "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation."
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "summary": "Credential name to use for Bitbucket requests.",
+      "type": "string"
+    },
+    {
+      "name": "config",
+      "summary": "Connector config override as key=value.",
+      "type": "string_array"
+    },
+    {
+      "name": "json",
+      "summary": "Emit machine-readable JSON output.",
+      "type": "boolean"
+    },
+    {
+      "name": "limit",
+      "summary": "Maximum ETL records to emit.",
+      "type": "integer"
+    },
+    {
+      "name": "preview",
+      "summary": "Preview a reverse-ETL write without executing it.",
+      "type": "boolean"
+    },
+    {
+      "name": "approval-token-stdin",
+      "summary": "Read the approval token as one bounded line from standard input.",
+      "type": "boolean"
+    },
+    {
+      "name": "confirm",
+      "summary": "Typed confirmation for destructive reverse-ETL writes.",
+      "type": "string"
+    }
+  ],
+  "groups": [
+    {
+      "commands": [
+        "repositories"
+      ],
+      "id": "repositories",
+      "title": "Repositories"
+    },
+    {
+      "commands": [
+        "repositories create",
+        "repositories delete"
+      ],
+      "id": "writes",
+      "title": "Reverse ETL writes"
+    },
+    {
+      "commands": [
+        "search code",
+        "downloads get"
+      ],
+      "id": "planned",
+      "title": "Planned bounded direct/binary operations"
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "bitbucket-auth",
+      "summary": "Use OAuth access tokens or username/app-password credentials from the credential store; never pass secrets in command text."
+    },
+    {
+      "name": "bitbucket-writes",
+      "summary": "Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked."
+    },
+    {
+      "name": "bitbucket-binary-direct",
+      "summary": "Binary and provider-search operation ledger rows are present but command execution is blocked until the shared bounded-command foundations land."
+    }
+  ],
+  "source_cli": {
+    "docs": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "name": "Bitbucket Cloud REST API",
+    "reference": "OpenAPI 3.0 Bitbucket API 2.0",
+    "source": "provider_api"
+  },
+  "tagline": "Read Bitbucket Cloud resources and plan typed repository mutations safely.",
+  "usage": "pm bitbucket <command> [flags]"
+}

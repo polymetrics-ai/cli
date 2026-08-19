@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using HTTP Basic authentication.
 
 ICON
+  id: kissmetrics
   asset: icons/kissmetrics.svg
   source: official
   review_status: official_verified
@@ -31,25 +32,25 @@ CONFIGURATION
   mode
   page_size
   product_id
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   products:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(string), name(string), updated_at(string)
   reports:
     primary key: id
-    fields: created_at(), id(), name(), product_id(), type(), updated_at()
+    fields: created_at(string), id(string), name(string), product_id(string), type(string), updated_at(string)
   events:
     primary key: id
-    fields: created_at(), display_name(), id(), name(), product_id()
+    fields: created_at(string), display_name(string), id(string), name(string), product_id(string)
   properties:
     primary key: id
-    fields: created_at(), display_name(), id(), name(), product_id(), type()
+    fields: created_at(string), display_name(string), id(string), name(string), product_id(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Kissmetrics query API read of product analytics metadata

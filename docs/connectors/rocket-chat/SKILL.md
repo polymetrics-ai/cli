@@ -11,6 +11,7 @@ Reads Rocket.Chat users, public channels, private groups, direct messages, and r
 
 ## Icon
 
+- id: rocket-chat
 - asset: icons/rocket-chat.svg
 - source: official
 - review_status: official_verified
@@ -27,37 +28,37 @@ Reads Rocket.Chat users, public channels, private groups, direct messages, and r
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - fields
 - mode
 - query
 - room_id
 - updated_since
-- auth_token (secret)
-- user_id (secret)
+- auth_token (secret) (required)
+- user_id (secret) (required)
 
 ## ETL Streams
 
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: emails(), id(), name(), status(), stream(), updated_at(), username()
+  - fields: emails(array), id(string), name(string), status(string), stream(string), updated_at(string), username(string)
 - channels:
   - primary key: id
   - cursor: updated_at
-  - fields: fname(), id(), msgs(), name(), stream(), updated_at()
+  - fields: fname(string), id(string), msgs(integer), name(string), stream(string), updated_at(string)
 - groups:
   - primary key: id
   - cursor: updated_at
-  - fields: fname(), id(), msgs(), name(), stream(), updated_at()
+  - fields: fname(string), id(string), msgs(integer), name(string), stream(string), updated_at(string)
 - direct_messages:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), msgs(), stream(), updated_at(), usernames()
+  - fields: id(string), msgs(integer), stream(string), updated_at(string), usernames(array)
 - rooms:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), stream(), type(), updated_at()
+  - fields: id(string), name(string), stream(string), type(string), updated_at(string)
 
 ## Sync Modes
 

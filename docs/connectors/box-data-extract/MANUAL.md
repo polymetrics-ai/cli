@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Box folder files and per-file detail metadata, and writes file rename/description updates, through the Box REST API using the OAuth2 client-credentials grant.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -32,17 +34,17 @@ CONFIGURATION
   mode
   page_size
   token_url
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   files:
     primary key: id
-    fields: id(), name(), type()
+    fields: id(string), name(string), type(string)
   file_details:
     primary key: id
     cursor: modified_at
-    fields: content_created_at(), content_modified_at(), created_at(), created_by(), description(), etag(), file_id(), id(), item_status(), modified_at(), modified_by(), name(), owned_by(), parent(), path_collection(), purged_at(), sha1(), shared_link(), size(), trashed_at(), type()
+    fields: content_created_at(string), content_modified_at(string), created_at(string), created_by(object), description(string), etag(string), file_id(string), id(string), item_status(string), modified_at(string), modified_by(object), name(string), owned_by(object), parent(object), path_collection(object), purged_at(string), sha1(string), shared_link(object), size(integer), trashed_at(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

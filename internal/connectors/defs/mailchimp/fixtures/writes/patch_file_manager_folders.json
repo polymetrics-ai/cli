@@ -1,0 +1,19 @@
+{
+  "record": {
+    "folder_id": "fixture_folder_id",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/file-manager/folders/fixture_folder_id",
+    "body": {
+      "name": "fixture_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_file_manager_folders"
+    }
+  }
+}

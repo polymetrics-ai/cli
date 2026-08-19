@@ -1,0 +1,23 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "id": "fixture_id",
+    "email_address": "fixture@example.invalid",
+    "sms_phone_number": "fixture_sms_phone_number"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ecommerce/stores/fixture_store_id/customers",
+    "body": {
+      "id": "fixture_id",
+      "email_address": "fixture@example.invalid",
+      "sms_phone_number": "fixture_sms_phone_number"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_ecommerce_stores_customers"
+    }
+  }
+}

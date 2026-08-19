@@ -13,6 +13,7 @@ DESCRIPTION
   Reads records from a configured Infor Nexus export dataset through the Infor Nexus Data API (v3.1) using HMAC-SHA256 request signing. Read-only.
 
 ICON
+  id: nexus-datasets
   asset: icons/nexus-datasets.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -25,20 +26,20 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  dataset_name
+  base_url (required)
+  dataset_name (required)
   mode
   start_date
-  access_key_id (secret)
-  api_key (secret)
-  secret_key (secret)
-  user_id (secret)
+  access_key_id (secret) (required)
+  api_key (secret) (required)
+  secret_key (secret) (required)
+  user_id (secret) (required)
 
 ETL STREAMS
   datasets:
     primary key: id
     cursor: updated_at
-    fields: dataset_name(), id(), raw_data(), raw_data_string(), updated_at()
+    fields: dataset_name(string), id(string), raw_data(object), raw_data_string(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

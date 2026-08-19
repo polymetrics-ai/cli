@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.
 
 ICON
+  id: workday
   asset: icons/workday.svg
   source: official
   review_status: official_verified
@@ -27,23 +28,23 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  tenant
-  password (secret)
-  username (secret)
+  tenant (required)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   workers:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   organizations:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), type(), updated_at()
+    fields: id(string), name(string), type(string), updated_at(string)
   positions:
     primary key: id
     cursor: updated_at
-    fields: id(), title(), updated_at(), worker_id()
+    fields: id(string), title(string), updated_at(string), worker_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

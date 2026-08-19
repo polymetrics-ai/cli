@@ -11,6 +11,7 @@ Reads Adjust report-service report rows for configured dimensions and metrics. R
 
 ## Icon
 
+- id: adjust
 - asset: icons/adjust.svg
 - source: official
 - review_status: official_verified
@@ -34,12 +35,12 @@ Reads Adjust report-service report rows for configured dimensions and metrics. R
 - metrics
 - mode
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - reports:
-  - fields: app(), clicks(), cost(), country(), date(), installs()
+  - fields: app(string), clicks(number), cost(number), country(string), date(string), installs(number)
 
 ## Sync Modes
 

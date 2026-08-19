@@ -1,0 +1,20 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "subscriber_hash": "fixture_subscriber_hash",
+    "note": "fixture_note"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/members/fixture_subscriber_hash/notes",
+    "body": {
+      "note": "fixture_note"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_members_notes"
+    }
+  }
+}

@@ -11,6 +11,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 
 ## Icon
 
+- id: younium
 - asset: icons/younium.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,35 +31,35 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 - base_url
 - legal_entity
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), id(), name(), updated_at()
+  - fields: account_id(string), id(string), name(string), updated_at(string)
 - subscriptions:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), id(), name(), updated_at()
+  - fields: account_id(string), id(string), name(string), updated_at(string)
 - invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), id(), name(), updated_at()
+  - fields: account_id(string), id(string), name(string), updated_at(string)
 - products:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - payment_terms:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - currencies:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - webhooks:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 
@@ -68,6 +69,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 
 - create_account:
   - endpoint: POST /Accounts
+  - required fields: name, currency
   - risk: creates a new billing account in Younium; external mutation, approval required
 - update_account:
   - endpoint: PATCH /Accounts/{{ record.id }}
@@ -75,7 +77,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
   - risk: mutates an existing account's billing/contact/tax metadata; external mutation, approval required
 - cancel_subscription:
   - endpoint: POST /Subscriptions/cancel/{{ record.id }}
-  - required fields: id
+  - required fields: id, cancellationDate, cancellationMode
   - risk: irreversibly schedules or immediately cancels an active subscription, ending future billing; external mutation, approval required
 - post_invoice:
   - endpoint: POST /Invoices/{{ record.id }}/post

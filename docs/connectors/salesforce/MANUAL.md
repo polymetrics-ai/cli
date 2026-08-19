@@ -13,10 +13,11 @@ DESCRIPTION
   Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQL queries through the REST API. Read-only.
 
 ICON
+  id: salesforce
   asset: icons/salesforce.svg
-  source: upstream_registry
-  review_status: upstream_seeded
-  review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
+  source: official
+  review_status: official_verified
+  review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,26 +28,26 @@ AUTHENTICATION
 
 CONFIGURATION
   api_version
-  instance_url
+  instance_url (required)
   mode
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   sobjects:
     primary key: qualified_api_name
-    fields: label(), qualified_api_name()
+    fields: label(string), qualified_api_name(string)
   accounts:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
   contacts:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
   leads:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Salesforce API read of object metadata, Account, Contact, and Lead records

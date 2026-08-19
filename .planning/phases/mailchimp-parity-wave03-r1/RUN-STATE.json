@@ -1,0 +1,31 @@
+{
+  "phase": "mailchimp-parity-wave03-r1",
+  "branch": "fm/cli-mailchimp-parity-wave03-r1",
+  "gsdMode": "manual-fallback",
+  "gsdFallbackReason": "scripts/gsd prompt programming-loop returned unknown GSD command; scripts/gsd doctor passed and execute-phase prompt was inspected",
+  "verificationPassed": true,
+  "operationCounts": {
+    "officialOperations": 298,
+    "implementedRows": 295,
+    "streams": 79,
+    "directReads": 68,
+    "writeActions": 148,
+    "blockedRows": 3,
+    "excludedRows": 0,
+    "liveCertifiedRows": 0
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single isolated firstmate worker implementing Mailchimp scope; mutating subagents not spawned into this checkout"
+    },
+    {
+      "cycle": "verification-fix",
+      "decision": "generic_tooling_scalability",
+      "reason": "expanded bundle required single-bundle validate support and immutable bundle parse caching to keep exact local gates green"
+    }
+  ],
+  "humanGates": [],
+  "blockers": []
+}

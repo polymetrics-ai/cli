@@ -1,0 +1,28 @@
+{
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": true
+  },
+  "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; exposes closed-schema repository creation and path-only deletes while blocking untyped JSON-body and multipart writes.",
+  "display_name": "Bitbucket",
+  "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+  "integration_type": "api",
+  "name": "bitbucket",
+  "rate_limit": {
+    "requests_per_minute": 1000
+  },
+  "release_stage": "alpha",
+  "risk": {
+    "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions.",
+    "read": "Read-only Bitbucket Cloud REST calls against configured workspaces, repositories, or typed resource identifiers.",
+    "write": "Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist. Redaction claims apply to newly created plans that persist redact_fields metadata; stale-plan hydration is a shared runtime dependency outside this connector bundle."
+  }
+}

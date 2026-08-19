@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -25,29 +27,29 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   max_pages
   mode
   page_size
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   buildings:
     primary key: id
-    fields: city(), country(), id(), name(), stateProvince(), streetAddress1(), streetAddress2(), zipPostalCode()
+    fields: city(string), country(string), id(string), name(string), stateProvince(string), streetAddress1(string), streetAddress2(string), zipPostalCode(string)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   categories:
     primary key: id
-    fields: id(), name(), priority()
+    fields: id(string), name(string), priority(integer)
   scripts:
     primary key: id
-    fields: categoryId(), categoryName(), id(), info(), name(), notes(), osRequirements(), priority()
+    fields: categoryId(string), categoryName(string), id(string), info(string), name(string), notes(string), osRequirements(string), priority(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Jamf Pro API read of MDM configuration data (buildings, departments, categories, scripts)

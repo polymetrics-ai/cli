@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reporting/surveys/synthetic-conformance-value/responses",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "responses": [
+        {
+          "survey_id": "fixture_survey_id",
+          "response_id": "fixture_response_id",
+          "submitted_at": "fixture_submitted_at",
+          "contact": {},
+          "is_new_contact": true
+        }
+      ]
+    }
+  }
+}

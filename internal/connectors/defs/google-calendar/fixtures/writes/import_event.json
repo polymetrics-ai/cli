@@ -1,0 +1,4 @@
+{
+  "record": {"calendar_id": "calendar_fixture_1", "iCalUID": "event-fixture-1@example.invalid", "summary": "Imported Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}},
+  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/events/import", "body": {"iCalUID": "event-fixture-1@example.invalid", "summary": "Imported Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}}}
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/advice",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "advice": [
+        {
+          "campaign_id": "fixture_campaign_id",
+          "type": "fixture_type",
+          "message": "fixture_message",
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

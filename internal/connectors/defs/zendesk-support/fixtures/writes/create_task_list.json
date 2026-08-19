@@ -1,0 +1,17 @@
+{
+  "record": {
+    "ticket_id": "fixture-ticket-id",
+    "task_list": {
+      "task_list_template_id": "fixture-task-list-template-id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/tickets/fixture-ticket-id/task_lists",
+    "body": {
+      "task_list": {
+        "task_list_template_id": "fixture-task-list-template-id"
+      }
+    }
+  }
+}

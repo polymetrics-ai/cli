@@ -11,6 +11,7 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 
 ## Icon
 
+- id: zendesk-talk
 - asset: icons/zendesk-talk.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,7 +28,7 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - access_token (secret)
 - api_token (secret)
 - email (secret)
@@ -37,19 +38,19 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 - phone_numbers:
   - primary key: id
   - cursor: created_at
-  - fields: country_code(), created_at(), display_number(), id(), nickname(), number(), recorded(), sms_enabled(), toll_free(), voice_enabled()
+  - fields: country_code(string), created_at(string), display_number(string), id(integer), nickname(string), number(string), recorded(boolean), sms_enabled(boolean), toll_free(boolean), voice_enabled(boolean)
 - greetings:
   - primary key: id
-  - fields: active(), audio_name(), audio_url(), category_id(), default(), has_sub_settings(), id(), name()
+  - fields: active(boolean), audio_name(string), audio_url(string), category_id(integer), default(boolean), has_sub_settings(boolean), id(integer), name(string)
 - greeting_categories:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - ivrs:
   - primary key: id
-  - fields: id(), name(), phone_number_ids(), phone_number_names()
+  - fields: id(integer), name(string), phone_number_ids(array), phone_number_names(array)
 - agents_activity:
   - primary key: agent_id
-  - fields: agent_id(), agent_state(), available_time(), avatar_url(), away_time(), call_status(), calls_accepted(), calls_denied(), calls_missed(), forwarding_number(), name(), online_time(), total_call_duration(), total_talk_time(), total_wrap_up_time(), via()
+  - fields: agent_id(integer), agent_state(string), available_time(integer), avatar_url(string), away_time(integer), call_status(string), calls_accepted(integer), calls_denied(integer), calls_missed(integer), forwarding_number(string), name(string), online_time(integer), total_call_duration(integer), total_talk_time(integer), total_wrap_up_time(integer), via(string)
 
 ## Sync Modes
 

@@ -11,6 +11,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
 
 ## Icon
 
+- id: vantage
 - asset: icons/vantage.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,100 +29,101 @@ Reads cost, budget, resource-management, segment, notification, and integration 
 ## Configuration
 
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - costs:
   - primary key: id
-  - fields: amount(), date(), id(), service()
+  - fields: amount(string), date(string), id(string), service(string)
 - cost_reports:
   - primary key: token
-  - fields: created_at(), date_interval(), filter(), folder_token(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), filter(string), folder_token(string), title(string), token(string), updated_at(string), workspace_token(string)
 - budgets:
   - primary key: token
-  - fields: created_at(), name(), period_amount(), period_duration(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), name(string), period_amount(string), period_duration(string), token(string), updated_at(string), workspace_token(string)
 - folders:
   - primary key: token
-  - fields: created_at(), parent_folder_token(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), parent_folder_token(string), title(string), token(string), updated_at(string), workspace_token(string)
 - dashboards:
   - primary key: token
-  - fields: created_at(), date_interval(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), title(string), token(string), updated_at(string), workspace_token(string)
 - business_metrics:
   - primary key: token
-  - fields: created_at(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), title(string), token(string), updated_at(string), workspace_token(string)
 - resource_reports:
   - primary key: token
-  - fields: created_at(), filter(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), title(string), token(string), updated_at(string), workspace_token(string)
 - recommendations:
   - primary key: token
-  - fields: created_at(), monthly_savings(), state(), token(), type(), updated_at()
+  - fields: created_at(string), monthly_savings(string), state(string), token(string), type(string), updated_at(string)
 - teams:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - saved_filters:
   - primary key: token
-  - fields: created_at(), filter(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), title(string), token(string), updated_at(string), workspace_token(string)
 - workspaces:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - virtual_tag_configs:
   - primary key: token
-  - fields: backfill_until(), created_at(), key(), token(), updated_at()
+  - fields: backfill_until(string), created_at(string), key(string), token(string), updated_at(string)
 - tags:
   - primary key: key
-  - fields: key(), values_count()
+  - fields: key(string), values_count(integer)
 - cost_alerts:
   - primary key: token
-  - fields: created_at(), filter(), threshold(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), threshold(string), title(string), token(string), updated_at(string), workspace_token(string)
 - budget_alerts:
   - primary key: token
-  - fields: budget_token(), created_at(), threshold(), token(), updated_at(), user_token()
+  - fields: budget_token(string), created_at(string), threshold(string), token(string), updated_at(string), user_token(string)
 - anomaly_alerts:
   - primary key: token
-  - fields: created_at(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), title(string), token(string), updated_at(string), workspace_token(string)
 - managed_accounts:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - financial_commitments:
   - primary key: token
-  - fields: commitment_type(), created_at(), provider(), token(), updated_at()
+  - fields: commitment_type(string), created_at(string), provider(string), token(string), updated_at(string)
 - segments:
   - primary key: token
-  - fields: created_at(), description(), filter(), parent_segment_token(), priority(), title(), token(), track_unallocated(), updated_at(), workspace_token()
+  - fields: created_at(string), description(string), filter(string), parent_segment_token(string), priority(integer), title(string), token(string), track_unallocated(boolean), updated_at(string), workspace_token(string)
 - report_notifications:
   - primary key: token
-  - fields: change(), cost_report_token(), created_at(), frequency(), recipient_channels(), title(), token(), updated_at(), user_tokens()
+  - fields: change(string), cost_report_token(string), created_at(string), frequency(string), recipient_channels(array), title(string), token(string), updated_at(string), user_tokens(array)
 - recommendation_views:
   - primary key: token
-  - fields: account_ids(), billing_account_ids(), created_at(), end_date(), min_savings(), provider_ids(), regions(), start_date(), tag_key(), tag_value(), title(), token(), types(), updated_at(), workspace_token()
+  - fields: account_ids(array), billing_account_ids(array), created_at(string), end_date(string), min_savings(number), provider_ids(array), regions(array), start_date(string), tag_key(string), tag_value(string), title(string), token(string), types(array), updated_at(string), workspace_token(string)
 - network_flow_reports:
   - primary key: token
-  - fields: created_at(), date_interval(), end_date(), filter(), flow_direction(), flow_weight(), groupings(), start_date(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), end_date(string), filter(string), flow_direction(string), flow_weight(string), groupings(array), start_date(string), title(string), token(string), updated_at(string), workspace_token(string)
 - kubernetes_efficiency_reports:
   - primary key: token
-  - fields: aggregated_by(), created_at(), date_bucket(), date_interval(), end_date(), filter(), groupings(), start_date(), title(), token(), updated_at(), workspace_token()
+  - fields: aggregated_by(string), created_at(string), date_bucket(string), date_interval(string), end_date(string), filter(string), groupings(array), start_date(string), title(string), token(string), updated_at(string), workspace_token(string)
 - anomaly_notifications:
   - primary key: token
-  - fields: cost_report_token(), created_at(), recipient_channels(), threshold(), token(), updated_at(), user_tokens()
+  - fields: cost_report_token(string), created_at(string), recipient_channels(array), threshold(integer), token(string), updated_at(string), user_tokens(array)
 - canvases:
   - primary key: token
-  - fields: created_at(), prompt(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), prompt(string), title(string), token(string), updated_at(string), workspace_token(string)
 - invoices:
   - primary key: token
-  - fields: account_token(), billing_period_end(), billing_period_start(), created_at(), status(), token(), total(), updated_at()
+  - fields: account_token(string), billing_period_end(string), billing_period_start(string), created_at(string), status(string), token(string), total(string), updated_at(string)
 - integrations:
   - primary key: token
-  - fields: account_identifier(), created_at(), provider(), token(), updated_at()
+  - fields: account_identifier(string), created_at(string), provider(string), token(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_budget:
   - endpoint: POST /v2/budgets
+  - required fields: name, period_amount
   - risk: external mutation; approval required
 - update_budget:
   - endpoint: PUT /v2/budgets/{{ record.budget_token }}
@@ -133,6 +135,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_folder:
   - endpoint: POST /v2/folders
+  - required fields: title
   - risk: external mutation; approval required
 - update_folder:
   - endpoint: PUT /v2/folders/{{ record.folder_token }}
@@ -144,6 +147,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_dashboard:
   - endpoint: POST /v2/dashboards
+  - required fields: title
   - risk: external mutation; approval required
 - update_dashboard:
   - endpoint: PUT /v2/dashboards/{{ record.dashboard_token }}
@@ -155,6 +159,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_cost_report:
   - endpoint: POST /v2/cost_reports
+  - required fields: title
   - risk: external mutation; approval required
 - update_cost_report:
   - endpoint: PUT /v2/cost_reports/{{ record.cost_report_token }}
@@ -166,6 +171,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_saved_filter:
   - endpoint: POST /v2/saved_filters
+  - required fields: title, filter
   - risk: external mutation; approval required
 - delete_saved_filter:
   - endpoint: DELETE /v2/saved_filters/{{ record.saved_filter_token }}
@@ -173,6 +179,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_workspace:
   - endpoint: POST /v2/workspaces
+  - required fields: name
   - risk: external mutation; approval required
 - delete_workspace:
   - endpoint: DELETE /v2/workspaces/{{ record.workspace_token }}
@@ -180,6 +187,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_team:
   - endpoint: POST /v2/teams
+  - required fields: name
   - risk: external mutation; approval required
 - delete_team:
   - endpoint: DELETE /v2/teams/{{ record.team_token }}
@@ -187,6 +195,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_cost_alert:
   - endpoint: POST /v2/cost_alerts
+  - required fields: title
   - risk: external mutation; approval required
 - update_cost_alert:
   - endpoint: PUT /v2/cost_alerts/{{ record.cost_alert_token }}
@@ -198,6 +207,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_budget_alert:
   - endpoint: POST /v2/budget_alerts
+  - required fields: budget_token, user_token, threshold
   - risk: external mutation; approval required
 - delete_budget_alert:
   - endpoint: DELETE /v2/budget_alerts/{{ record.budget_alert_token }}
@@ -205,6 +215,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_business_metric:
   - endpoint: POST /v2/business_metrics
+  - required fields: title
   - risk: external mutation; approval required
 - update_business_metric:
   - endpoint: PUT /v2/business_metrics/{{ record.business_metric_token }}
@@ -244,6 +255,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: external mutation; approval required
 - create_segment:
   - endpoint: POST /v2/segments
+  - required fields: title
   - risk: external mutation; approval required
 - update_segment:
   - endpoint: PUT /v2/segments/{{ record.segment_token }}
@@ -255,6 +267,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_report_notification:
   - endpoint: POST /v2/report_notifications
+  - required fields: title, cost_report_token, frequency, change
   - risk: external mutation; approval required
 - update_report_notification:
   - endpoint: PUT /v2/report_notifications/{{ record.report_notification_token }}
@@ -266,6 +279,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_recommendation_view:
   - endpoint: POST /v2/recommendation_views
+  - required fields: title, workspace_token
   - risk: external mutation; approval required
 - update_recommendation_view:
   - endpoint: PUT /v2/recommendation_views/{{ record.recommendation_view_token }}
@@ -277,6 +291,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_network_flow_report:
   - endpoint: POST /v2/network_flow_reports
+  - required fields: workspace_token, title
   - risk: external mutation; approval required
 - update_network_flow_report:
   - endpoint: PUT /v2/network_flow_reports/{{ record.network_flow_report_token }}
@@ -288,6 +303,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_kubernetes_efficiency_report:
   - endpoint: POST /v2/kubernetes_efficiency_reports
+  - required fields: workspace_token, title
   - risk: external mutation; approval required
 - update_kubernetes_efficiency_report:
   - endpoint: PUT /v2/kubernetes_efficiency_reports/{{ record.kubernetes_efficiency_report_token }}
@@ -299,6 +315,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_anomaly_notification:
   - endpoint: POST /v2/anomaly_notifications
+  - required fields: cost_report_token
   - risk: external mutation; approval required
 - update_anomaly_notification:
   - endpoint: PUT /v2/anomaly_notifications/{{ record.anomaly_notification_token }}
@@ -310,6 +327,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_canvas:
   - endpoint: POST /v2/canvases
+  - required fields: title, prompt
   - risk: external mutation; approval required
 - update_canvas:
   - endpoint: PUT /v2/canvases/{{ record.canvas_token }}
@@ -321,6 +339,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_resource_report:
   - endpoint: POST /v2/resource_reports
+  - required fields: workspace_token
   - risk: external mutation; approval required
 - update_resource_report:
   - endpoint: PUT /v2/resource_reports/{{ record.resource_report_token }}
@@ -332,6 +351,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
   - risk: destructive external mutation; approval required
 - create_virtual_tag_config:
   - endpoint: POST /v2/virtual_tag_configs
+  - required fields: key, overridable, values
   - risk: external mutation; approval required
 
 ## Security

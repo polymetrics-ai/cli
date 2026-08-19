@@ -11,10 +11,11 @@ Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQ
 
 ## Icon
 
+- id: salesforce
 - asset: icons/salesforce.svg
-- source: upstream_registry
-- review_status: upstream_seeded
-- review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
+- source: official
+- review_status: official_verified
+- review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
 
 ## Capabilities
 
@@ -28,28 +29,28 @@ Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQ
 ## Configuration
 
 - api_version
-- instance_url
+- instance_url (required)
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - sobjects:
   - primary key: qualified_api_name
-  - fields: label(), qualified_api_name()
+  - fields: label(string), qualified_api_name(string)
 - accounts:
   - primary key: id
-  - fields: email(), id(), last_modified_date(), name()
+  - fields: email(string), id(string), last_modified_date(string), name(string)
 - contacts:
   - primary key: id
-  - fields: email(), id(), last_modified_date(), name()
+  - fields: email(string), id(string), last_modified_date(string), name(string)
 - leads:
   - primary key: id
-  - fields: email(), id(), last_modified_date(), name()
+  - fields: email(string), id(string), last_modified_date(string), name(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

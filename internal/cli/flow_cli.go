@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -11,20 +12,25 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
+	"polymetrics.ai/internal/schedule"
 )
 
-// runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
+// runFlow dispatches pm flow subcommands: create | plan | preview | run | status | list.
+// pmcert:workflow flow_authoring
 func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
-		return usageErrorf("flow: subcommand required (plan|preview|run|status|list)")
+		return usageErrorf("flow: subcommand required (create|plan|preview|run|status|list)")
 	}
 
 	sub := args[0]
 	rest := args[1:]
 
 	switch sub {
+	case "create":
+		return flowCreate(ctx, a, rest, stdout, jsonOut)
 	case "plan":
 		return flowPlan(ctx, rest, stdout, jsonOut, false)
 	case "preview":
@@ -40,8 +46,42 @@ func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	}
 }
 
-// parseFlowFlags extracts --file, --force, --flows-dir from args.
-func parseFlowFlags(args []string) (file, flowsDir string, force bool, positional []string) {
+func flowCreate(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+	if a == nil {
+		return errors.New("flow create requires an initialized project")
+	}
+	file, _, _, authorization, _ := parseFlowFlags(args)
+	if authorization != "" {
+		return usageErrorf("flow create derives approval from jobs; --authorization is not accepted")
+	}
+	if file == "" {
+		return usageErrorf("flow create: --file <path> is required")
+	}
+	manifest, err := readManifestFile(file)
+	if err != nil {
+		return err
+	}
+	resolved, err := resolveManifestJobs(ctx, a, manifest)
+	if err != nil {
+		return err
+	}
+	order, err := flow.BuildDAG(resolved)
+	if err != nil {
+		return err
+	}
+	if err := saveFlowManifest(a.ProjectDir(), manifest); err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "Flow", "ok": true, "flow": manifest.Name, "order": order})
+	}
+	_, _ = fmt.Fprintf(stdout, "Created flow %s from approved jobs\n", manifest.Name)
+	return nil
+}
+
+// parseFlowFlags extracts the flow-owned flags without accepting arbitrary
+// destination or request controls.
+func parseFlowFlags(args []string) (file, flowsDir string, force bool, authorization string, positional []string) {
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
 		case "--file":
@@ -56,6 +96,11 @@ func parseFlowFlags(args []string) (file, flowsDir string, force bool, positiona
 			}
 		case "--force":
 			force = true
+		case "--authorization":
+			if i+1 < len(args) {
+				i++
+				authorization = args[i]
+			}
 		default:
 			if !strings.HasPrefix(args[i], "--") {
 				positional = append(positional, args[i])
@@ -101,7 +146,7 @@ func resolveManifestPaths(baseDir string, m *flow.FlowManifest) {
 // flowPlan parses + validates the manifest and prints the DAG order.
 // dryRun=true makes it behave as "preview".
 func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, dryRun bool) error {
-	file, _, _, _ := parseFlowFlags(args)
+	file, _, _, _, _ := parseFlowFlags(args)
 	if file == "" {
 		return usageErrorf("flow plan: --file <path> is required")
 	}
@@ -128,19 +173,36 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 			"order":  order,
 		})
 	}
-	fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
+	_, _ = fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
 	for i, id := range order {
-		fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
+		_, _ = fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
 	}
 	return nil
 }
 
 // flowRun executes the flow.
 func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	file, flowsDir, force, positional := parseFlowFlags(args)
+	file, flowsDir, force, authorization, positional := parseFlowFlags(args)
+	if authorization != "" {
+		return usageErrorf("flow run derives approval from its jobs; --authorization is not accepted")
+	}
+	var fireLease *schedule.FireLease
 	if file == "" {
 		if len(positional) == 0 {
 			return usageErrorf("flow run: --file <path> or <flow-name> is required")
+		}
+		flowName := positional[0]
+		if a != nil {
+			root := filepath.Dir(a.ProjectDir())
+			if scheduled, found, err := schedule.FindByFlow(root, flowName); err != nil {
+				return err
+			} else if found {
+				fireLease, err = schedule.BeginFire(root, scheduled.Name)
+				if err != nil {
+					return err
+				}
+				force = true
+			}
 		}
 		if flowsDir == "" {
 			if a != nil {
@@ -157,7 +219,13 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 
 	m, err := readManifestFile(file)
 	if err != nil {
-		return err
+		return parkScheduledFlow(fireLease, err)
+	}
+	if a != nil {
+		m, err = resolveManifestJobs(ctx, a, m)
+		if err != nil {
+			return parkScheduledFlow(fireLease, err)
+		}
 	}
 
 	// Build a no-op adapter when app is nil (testing without real app).
@@ -180,22 +248,47 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 		Checkpoint: cs,
 		LockDir:    dir,
 	}
+	if a != nil {
+		manifestDigest, err := flow.ManifestDigest(m)
+		if err != nil {
+			return parkScheduledFlow(fireLease, err)
+		}
+		e.ActionRunner = &connectorFlowActionRunner{app: a, flowName: m.Name, manifestDigest: manifestDigest}
+	}
 
 	result, err := e.Run(ctx, flow.RunOptions{Force: force})
 	if err != nil {
-		return err
+		return parkScheduledFlow(fireLease, err)
+	}
+	if fireLease != nil {
+		if err := fireLease.Complete(schedule.FireReceipt{
+			FlowName: result.FlowName, FlowStatus: result.Status,
+			ReceiptIDs: flowReceiptIDs(result), PreparedExecutionIdentities: flowPreparedExecutionIdentities(result),
+		}); err != nil {
+			return err
+		}
 	}
 
 	if jsonOut {
 		return writeJSON(stdout, result)
 	}
-	fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
+	_, _ = fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
 	return nil
+}
+
+func parkScheduledFlow(lease *schedule.FireLease, runErr error) error {
+	if lease == nil || runErr == nil {
+		return runErr
+	}
+	if err := lease.Park(scheduleFireStopReason(runErr)); err != nil {
+		return fmt.Errorf("park scheduled flow after failure: %w", err)
+	}
+	return runErr
 }
 
 // flowStatus returns last checkpoint info for a named flow.
 func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, positional := parseFlowFlags(args)
+	_, flowsDir, _, _, positional := parseFlowFlags(args)
 	if len(positional) == 0 {
 		return usageErrorf("flow status: flow name required")
 	}
@@ -232,16 +325,16 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"flow": name, "steps": statuses})
 	}
-	fmt.Fprintf(stdout, "Flow: %s\n", name)
+	_, _ = fmt.Fprintf(stdout, "Flow: %s\n", name)
 	for _, s := range statuses {
-		fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
+		_, _ = fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
 	}
 	return nil
 }
 
 // flowList lists flow manifest files in the flows directory.
 func flowList(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, _ := parseFlowFlags(args)
+	_, flowsDir, _, _, _ := parseFlowFlags(args)
 	if flowsDir == "" {
 		flowsDir = ".polymetrics/flows"
 	}
@@ -267,11 +360,11 @@ func flowList(args []string, stdout io.Writer, jsonOut bool) error {
 		return err
 	}
 	if len(flows) == 0 {
-		fmt.Fprintln(stdout, "(no flows)")
+		_, _ = fmt.Fprintln(stdout, "(no flows)")
 		return nil
 	}
 	for _, f := range flows {
-		fmt.Fprintln(stdout, f)
+		_, _ = fmt.Fprintln(stdout, f)
 	}
 	return nil
 }
@@ -282,7 +375,10 @@ type noopAppAdapter struct{}
 func (n *noopAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.ETLResult, error) {
 	return flow.ETLResult{}, nil
 }
-func (n *noopAppAdapter) QuerySQL(_ context.Context, _ string, _ int) ([]map[string]any, error) {
+func (n *noopAppAdapter) QuerySQL(_ context.Context, _, _ string, _ int) ([]map[string]any, error) {
+	return nil, nil
+}
+func (n *noopAppAdapter) ReadActionSource(_ context.Context, _, _ string) ([]map[string]any, error) {
 	return nil, nil
 }
 func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -308,16 +404,33 @@ func (a *appFlowAdapter) ETLRun(ctx context.Context, connectionID string, stream
 	return result, nil
 }
 
-func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, sql, limit)
+func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        sql,
+		Connection: connection,
+		Limit:      limit,
+		Origin:     app.QuerySQLOriginFlow,
+	})
 	if err != nil {
 		return nil, err
 	}
+	return recordsToFlowRows(records), nil
+}
+
+func (a *appFlowAdapter) ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error) {
+	records, err := a.app.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: table, Connection: connection})
+	if err != nil {
+		return nil, err
+	}
+	return recordsToFlowRows(records), nil
+}
+
+func recordsToFlowRows(records []connectors.Record) []map[string]any {
 	out := make([]map[string]any, len(records))
 	for i, r := range records {
 		out[i] = map[string]any(r)
 	}
-	return out, nil
+	return out
 }
 
 func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -335,7 +448,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 		return flow.RLMResult{}, err
 	}
 	if closer != nil {
-		defer closer()
+		defer func() { _ = closer() }()
 	}
 
 	result, err := analyzer.Run(ctx, rlm.RunRequest{

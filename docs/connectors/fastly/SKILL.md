@@ -11,9 +11,17 @@ Reads Fastly services, the current user, the current customer (account), and dat
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-fastly
+- asset: icons/simple-icons/fastly.svg
+- title: Fastly
+- simple_icon_slug: fastly
+- simple_icon_hex: FF282D
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Fastly
+- match: exact-name-or-slug
+- matched_by: fastly
 
 ## Capabilities
 
@@ -34,22 +42,22 @@ Reads Fastly services, the current user, the current customer (account), and dat
 - services:
   - primary key: id
   - cursor: updated_at
-  - fields: comment(), created_at(), customer_id(), deleted_at(), id(), name(), paused(), type(), updated_at(), version()
+  - fields: comment(string), created_at(string), customer_id(string), deleted_at(string), id(string), name(string), paused(boolean), type(string), updated_at(string), version(integer)
 - current_user:
   - primary key: id
-  - fields: created_at(), customer_id(), email_hash(), id(), locked(), login(), name(), role(), two_factor_auth_enabled(), updated_at()
+  - fields: created_at(string), customer_id(string), email_hash(string), id(string), locked(boolean), login(string), name(string), role(string), two_factor_auth_enabled(boolean), updated_at(string)
 - current_customer:
   - primary key: id
-  - fields: billing_contact_id(), can_stream_syslog(), created_at(), has_account_panel(), id(), name(), owner_id(), pricing_plan(), updated_at()
+  - fields: billing_contact_id(string), can_stream_syslog(boolean), created_at(string), has_account_panel(boolean), id(string), name(string), owner_id(string), pricing_plan(string), updated_at(string)
 - datacenters:
   - primary key: code
-  - fields: code(), coordinates(), group(), name(), shield()
+  - fields: code(string), coordinates(object), group(string), name(string), shield(string)
 - service_details:
   - primary key: service_id
-  - fields: activated_version(), comment(), created_at(), customer_id(), deleted_at(), environments(), id(), name(), service_id(), type(), updated_at(), version(), versions()
+  - fields: activated_version(object), comment(string), created_at(string), customer_id(string), deleted_at(string), environments(array), id(string), name(string), service_id(string), type(string), updated_at(string), version(object), versions(array)
 - users:
   - primary key: id
-  - fields: created_at(), customer_id(), email_hash(), id(), locked(), login(), name(), role(), two_factor_auth_enabled(), updated_at()
+  - fields: created_at(string), customer_id(string), email_hash(string), id(string), locked(boolean), login(string), name(string), role(string), two_factor_auth_enabled(boolean), updated_at(string)
 
 ## Sync Modes
 

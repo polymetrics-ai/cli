@@ -1,0 +1,24 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "merge_id": "fixture_merge_id",
+    "tag": "fixture_tag",
+    "name": "fixture_name",
+    "required": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/lists/fixture_list_id/merge-fields/fixture_merge_id",
+    "body": {
+      "tag": "fixture_tag",
+      "name": "fixture_name",
+      "required": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_lists_merge_fields"
+    }
+  }
+}

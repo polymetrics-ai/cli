@@ -1,0 +1,51 @@
+{
+  "tagline": "REST write test fixture commands.",
+  "usage": "pm restwrite-demo <command> [flags]",
+  "groups": [
+    { "id": "writes", "title": "Typed writes", "commands": ["vote", "widget update"] }
+  ],
+  "global_flags": [
+    { "name": "credential", "type": "string", "summary": "Credential name to use." },
+    { "name": "preview", "type": "boolean", "summary": "Preview a write without executing it." },
+    { "name": "approval-token-stdin", "type": "boolean", "summary": "Read the approval token as one bounded line from standard input." },
+    { "name": "confirm", "type": "string", "summary": "Typed destructive confirmation." }
+  ],
+  "commands": [
+    {
+      "path": "vote",
+      "summary": "Cast one fixture vote.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "restwrite-demo.vote",
+      "api_surface": [
+        { "method": "POST", "path": "/api/vote" }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Casts one vote as the configured fixture identity.",
+      "approval": "Requires plan -> no-network preview -> explicit single-use approval -> execute.",
+      "flags": [
+        { "name": "id", "type": "string", "summary": "Target id.", "maps_to": "body.id", "required": true },
+        { "name": "dir", "type": "integer", "summary": "Vote direction.", "maps_to": "body.dir", "required": true }
+      ],
+      "examples": ["pm restwrite-demo vote --id t3_abc --dir 1 --preview"]
+    },
+    {
+      "path": "widget update",
+      "summary": "Update one fixture widget.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "restwrite-demo.widget-update",
+      "api_surface": [
+        { "method": "PATCH", "path": "/api/widgets/{id}" }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Updates one fixture widget.",
+      "approval": "Requires plan -> no-network preview -> explicit single-use approval -> execute.",
+      "flags": [
+        { "name": "id", "type": "string", "summary": "Target id.", "maps_to": "path.id", "required": true },
+        { "name": "name", "type": "string", "summary": "New widget name.", "maps_to": "body.name", "required": true }
+      ],
+      "examples": ["pm restwrite-demo widget update --id w_1 --name Ada --preview"]
+    }
+  ]
+}

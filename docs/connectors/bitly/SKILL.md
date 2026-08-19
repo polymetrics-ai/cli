@@ -11,9 +11,17 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-bitly
+- asset: icons/simple-icons/bitly.svg
+- title: Bitly
+- simple_icon_slug: bitly
+- simple_icon_hex: EE6123
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Bitly
+- match: exact-name-or-slug
+- matched_by: bitly
 
 ## Capabilities
 
@@ -28,46 +36,47 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 - base_url
 - group_guid
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - organizations:
   - primary key: guid
-  - fields: created(), guid(), is_active(), modified(), name(), role(), tier(), tier_display_name(), tier_family()
+  - fields: created(string), guid(string), is_active(boolean), modified(string), name(string), role(string), tier(string), tier_display_name(string), tier_family(string)
 - groups:
   - primary key: guid
-  - fields: bsds(), created(), guid(), is_active(), modified(), name(), organization_guid(), role()
+  - fields: bsds(array), created(string), guid(string), is_active(boolean), modified(string), name(string), organization_guid(string), role(string)
 - campaigns:
   - primary key: guid
-  - fields: channel_guids(), created(), description(), group_guid(), guid(), modified(), name()
+  - fields: channel_guids(array), created(string), description(string), group_guid(string), guid(string), modified(string), name(string)
 - channels:
   - primary key: guid
-  - fields: bitlinks(), campaign_guid(), created(), group_guid(), guid(), modified(), name()
+  - fields: bitlinks(array), campaign_guid(string), created(string), group_guid(string), guid(string), modified(string), name(string)
 - bsds:
   - primary key: account
-  - fields: account(), bsds()
+  - fields: account(string), bsds(array)
 - webhooks:
   - primary key: guid
-  - fields: campaign_guid(), client_id(), created(), event(), group_guid(), guid(), is_active(), modified(), updated_by(), url()
+  - fields: campaign_guid(string), client_id(string), created(string), event(string), group_guid(string), guid(string), is_active(boolean), modified(string), updated_by(string), url(string)
 - qr_codes:
   - primary key: qrcode_id
-  - fields: archived(), bitlink_id(), created(), created_by(), destination(), expiration_at(), group_guid(), is_customized(), modified(), qr_code_type(), qrcode_id(), tags(), title()
+  - fields: archived(boolean), bitlink_id(string), created(string), created_by(string), destination(object), expiration_at(string), group_guid(string), is_customized(boolean), modified(string), qr_code_type(string), qrcode_id(string), tags(array), title(string)
 - group_tags:
   - primary key: group_guid
-  - fields: group_guid(), tags()
+  - fields: group_guid(string), tags(array)
 - bitlinks:
   - primary key: id
-  - fields: archived(), created_at(), deeplinks(), id(), link(), long_url(), references(), tags(), title()
+  - fields: archived(boolean), created_at(string), deeplinks(array), id(string), link(string), long_url(string), references(object), tags(array), title(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_bitlink:
   - endpoint: POST /bitlinks
+  - required fields: long_url
   - risk: creates a new publicly-resolvable short link; low-risk external mutation, no approval required
 - update_bitlink:
   - endpoint: PATCH /bitlinks/{{ record.id }}
@@ -79,16 +88,15 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve
 - update_bitlink_tags:
   - endpoint: PATCH /bitlinks/{{ record.id }}/tags
-  - required fields: id
-  - optional fields: tags
+  - required fields: id, tags
   - risk: replaces the full tag set on a bitlink; overwrites any tags not included in the submitted list
 - delete_bitlink_tags:
   - endpoint: DELETE /bitlinks/{{ record.id }}/tags
-  - required fields: id
-  - optional fields: tags
+  - required fields: id, tags
   - risk: removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags
 - create_campaign:
   - endpoint: POST /campaigns
+  - required fields: group_guid
   - risk: creates a new campaign container in the target group; low-risk external mutation, no approval required
 - update_campaign:
   - endpoint: PATCH /campaigns/{{ record.guid }}
@@ -100,8 +108,7 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: renames or re-parents an existing group; a visible change for every member of that group
 - update_group_preferences:
   - endpoint: PATCH /groups/{{ record.group_guid }}/preferences
-  - required fields: group_guid
-  - optional fields: domain_preference
+  - required fields: group_guid, domain_preference
   - risk: changes the default branded short domain new bitlinks in this group are created with
 - create_channel:
   - endpoint: POST /channels
@@ -112,6 +119,7 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: mutates an existing channel's name or campaign association
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: group_guid, event, url
   - risk: registers a new outbound webhook that will POST live event data (clicks/scans) to an external URL of the caller's choosing; verify the target endpoint before enabling
 - update_webhook:
   - endpoint: PATCH /webhooks/{{ record.guid }}
@@ -123,14 +131,15 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately
 - create_custom_bitlink:
   - endpoint: POST /custom_bitlinks
+  - required fields: custom_bitlink, bitlink_id
   - risk: claims a custom keyword/back-half on a branded short domain and points it at a bitlink; consumes a finite custom-bitlink allocation on the domain
 - update_custom_bitlink:
   - endpoint: PATCH /custom_bitlinks/{{ record.custom_bitlink }}
-  - required fields: custom_bitlink
-  - optional fields: bitlink_id
+  - required fields: custom_bitlink, bitlink_id
   - risk: re-points an existing custom keyword at a different bitlink; redirects all future traffic hitting that custom URL to the new destination
 - create_qr_code:
   - endpoint: POST /qr-codes
+  - required fields: group_guid, destination
   - risk: creates a new QR code resource pointed at a bitlink or long_url; low-risk external mutation, no approval required
 - update_qr_code:
   - endpoint: PATCH /qr-codes/{{ record.qrcode_id }}

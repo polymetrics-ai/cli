@@ -13,9 +13,11 @@ DESCRIPTION
   Reads JustSift people directory profiles and person field definitions through the Sift REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,18 +29,18 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   peoples:
     primary key: id
-    fields: companyName(), connector(), department(), directReportCount(), directoryId(), displayName(), email(), firstName(), id(), isTeamLeader(), lastName(), officeCity(), officeState(), phone(), pictureUrl(), title()
+    fields: companyName(string), connector(string), department(string), directReportCount(number), directoryId(string), displayName(string), email(string), firstName(string), id(string), isTeamLeader(boolean), lastName(string), officeCity(string), officeState(string), phone(string), pictureUrl(string), title(string)
   fields:
     primary key: id
-    fields: connector(), displayName(), filterable(), id(), objectKey(), searchable(), type()
+    fields: connector(string), displayName(string), filterable(boolean), id(string), objectKey(string), searchable(boolean), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external JustSift API read of people directory profiles and field definitions

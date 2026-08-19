@@ -1,6 +1,6 @@
 # Overview
 
-Zendesk Support reads 33 stream(s), and writes through 27 action(s).
+Zendesk Support inventories 625 official Support API operation(s) from the Zendesk OAS 2.0.0 ledger. The executable fixture-backed bundle currently reads 33 stream(s), and writes through 84 action(s).
 
 Readable streams: `tickets`, `users`, `organizations`, `groups`, `satisfaction_ratings`,
 `deleted_tickets`, `account_attributes`, `attribute_definitions`, `brands`, `custom_roles`,
@@ -9,12 +9,15 @@ Readable streams: `tickets`, `users`, `organizations`, `groups`, `satisfaction_r
 `organization_fields`, `organization_memberships`, `posts`, `ticket_activities`, `ticket_audits`,
 `ticket_metric_events`, `ticket_events`, `ticket_skips`, `triggers`, `views`.
 
-Write actions: `create_ticket`, `update_ticket`, `delete_ticket`, `create_user`, `update_user`,
-`delete_user`, `create_organization`, `update_organization`, `delete_organization`, `create_group`,
-`update_group`, `delete_group`, `create_macro`, `update_macro`, `delete_macro`, `create_trigger`,
-`update_trigger`, `delete_trigger`, `create_automation`, `update_automation`, `delete_automation`,
-`create_view`, `update_view`, `delete_view`, `create_ticket_field`, `update_ticket_field`,
-`delete_ticket_field`.
+Write actions: 84 named actions (43 `create`, 32 `update`, 9 `delete`) covering tickets, users,
+organizations, groups, macros, triggers and trigger categories, automations, views, ticket fields,
+ticket forms and form statuses, custom statuses, custom objects (records, fields, access rules,
+object triggers), IT asset management, brands, workspaces, saved searches, bookmarks, approval
+requests, task lists and templates, group/organization memberships, deletion schedules, ticket
+imports, attachments, and account/current-user settings. `writes.json` is the authoritative
+per-action contract; `pm connectors inspect zendesk-support` and the generated
+`docs/connectors/zendesk-support/SKILL.md` render every action's endpoint, required record fields,
+and risk note.
 
 Service API documentation: https://developer.zendesk.com/api-reference/ticketing/introduction/.
 
@@ -156,109 +159,47 @@ next_url: `deleted_tickets`, `account_attributes`, `attribute_definitions`, `bra
 
 ## Write actions & risks
 
-Overall write risk: allow-listed Zendesk Support mutations for tickets, users, organizations,
-groups, macros, triggers, automations, views, and ticket fields; destructive deletes require
-approval.
+Overall write risk: allow-listed Zendesk Support mutations across the ticketing, people, routing,
+custom-object, IT-asset-management, and account-configuration surfaces; destructive deletes require
+approval plus typed destructive confirmation.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+Reverse ETL writes must be planned, previewed, approved, and then executed. `writes.json` is the
+authoritative per-action contract (endpoint, bounded record schema, required/accepted fields, path
+fields, idempotency and confirmation notes); read it with `pm connectors inspect zendesk-support` or
+in the generated `docs/connectors/zendesk-support/SKILL.md`. This file does not restate per-action
+fields.
 
-- `create_ticket`: POST `/api/v2/tickets` - kind `create`; body type `json`; body fields `ticket`;
-  required record fields `ticket`; accepted fields `ticket`; risk: creates a Zendesk ticket record;
-  external mutation requiring approval.
-- `update_ticket`: PUT `/api/v2/tickets/{{ record.id }}` - kind `update`; body type `json`; path
-  fields `id`; body fields `ticket`; required record fields `id`, `ticket`; accepted fields `id`,
-  `ticket`; risk: updates a Zendesk ticket record; external mutation requiring approval.
-- `delete_ticket`: DELETE `/api/v2/tickets/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; confirmation `destructive`; risk: deletes a Zendesk ticket record; destructive
-  external mutation requiring approval.
-- `create_user`: POST `/api/v2/users` - kind `create`; body type `json`; body fields `user`;
-  required record fields `user`; accepted fields `user`; risk: creates a Zendesk user record;
-  external mutation requiring approval.
-- `update_user`: PUT `/api/v2/users/{{ record.id }}` - kind `update`; body type `json`; path fields
-  `id`; body fields `user`; required record fields `id`, `user`; accepted fields `id`, `user`; risk:
-  updates a Zendesk user record; external mutation requiring approval.
-- `delete_user`: DELETE `/api/v2/users/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; confirmation `destructive`; risk: deletes a Zendesk user record; destructive
-  external mutation requiring approval.
-- `create_organization`: POST `/api/v2/organizations` - kind `create`; body type `json`; body fields
-  `organization`; required record fields `organization`; accepted fields `organization`; risk:
-  creates a Zendesk organization record; external mutation requiring approval.
-- `update_organization`: PUT `/api/v2/organizations/{{ record.id }}` - kind `update`; body type
-  `json`; path fields `id`; body fields `organization`; required record fields `id`, `organization`;
-  accepted fields `id`, `organization`; risk: updates a Zendesk organization record; external
-  mutation requiring approval.
-- `delete_organization`: DELETE `/api/v2/organizations/{{ record.id }}` - kind `delete`; body type
-  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
-  treated as success for status `404`; confirmation `destructive`; risk: deletes a Zendesk
-  organization record; destructive external mutation requiring approval.
-- `create_group`: POST `/api/v2/groups` - kind `create`; body type `json`; body fields `group`;
-  required record fields `group`; accepted fields `group`; risk: creates a Zendesk group record;
-  external mutation requiring approval.
-- `update_group`: PUT `/api/v2/groups/{{ record.id }}` - kind `update`; body type `json`; path
-  fields `id`; body fields `group`; required record fields `id`, `group`; accepted fields `group`,
-  `id`; risk: updates a Zendesk group record; external mutation requiring approval.
-- `delete_group`: DELETE `/api/v2/groups/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; confirmation `destructive`; risk: deletes a Zendesk group record; destructive
-  external mutation requiring approval.
-- `create_macro`: POST `/api/v2/macros` - kind `create`; body type `json`; body fields `macro`;
-  required record fields `macro`; accepted fields `macro`; risk: creates a Zendesk macro record;
-  external mutation requiring approval.
-- `update_macro`: PUT `/api/v2/macros/{{ record.id }}` - kind `update`; body type `json`; path
-  fields `id`; body fields `macro`; required record fields `id`, `macro`; accepted fields `id`,
-  `macro`; risk: updates a Zendesk macro record; external mutation requiring approval.
-- `delete_macro`: DELETE `/api/v2/macros/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; confirmation `destructive`; risk: deletes a Zendesk macro record; destructive
-  external mutation requiring approval.
-- `create_trigger`: POST `/api/v2/triggers` - kind `create`; body type `json`; body fields
-  `trigger`; required record fields `trigger`; accepted fields `trigger`; risk: creates a Zendesk
-  trigger record; external mutation requiring approval.
-- `update_trigger`: PUT `/api/v2/triggers/{{ record.id }}` - kind `update`; body type `json`; path
-  fields `id`; body fields `trigger`; required record fields `id`, `trigger`; accepted fields `id`,
-  `trigger`; risk: updates a Zendesk trigger record; external mutation requiring approval.
-- `delete_trigger`: DELETE `/api/v2/triggers/{{ record.id }}` - kind `delete`; body type `none`;
-  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
-  success for status `404`; confirmation `destructive`; risk: deletes a Zendesk trigger record;
-  destructive external mutation requiring approval.
-- `create_automation`: POST `/api/v2/automations` - kind `create`; body type `json`; body fields
-  `automation`; required record fields `automation`; accepted fields `automation`; risk: creates a
-  Zendesk automation record; external mutation requiring approval.
-- `update_automation`: PUT `/api/v2/automations/{{ record.id }}` - kind `update`; body type `json`;
-  path fields `id`; body fields `automation`; required record fields `id`, `automation`; accepted
-  fields `automation`, `id`; risk: updates a Zendesk automation record; external mutation requiring
-  approval.
-- `delete_automation`: DELETE `/api/v2/automations/{{ record.id }}` - kind `delete`; body type
-  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
-  treated as success for status `404`; confirmation `destructive`; risk: deletes a Zendesk
-  automation record; destructive external mutation requiring approval.
-- `create_view`: POST `/api/v2/views` - kind `create`; body type `json`; body fields `view`;
-  required record fields `view`; accepted fields `view`; risk: creates a Zendesk view record;
-  external mutation requiring approval.
-- `update_view`: PUT `/api/v2/views/{{ record.id }}` - kind `update`; body type `json`; path fields
-  `id`; body fields `view`; required record fields `id`, `view`; accepted fields `id`, `view`; risk:
-  updates a Zendesk view record; external mutation requiring approval.
-- `delete_view`: DELETE `/api/v2/views/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; confirmation `destructive`; risk: deletes a Zendesk view record; destructive
-  external mutation requiring approval.
-- `create_ticket_field`: POST `/api/v2/ticket_fields` - kind `create`; body type `json`; body fields
-  `ticket_field`; required record fields `ticket_field`; accepted fields `ticket_field`; risk:
-  creates a Zendesk ticket field record; external mutation requiring approval.
-- `update_ticket_field`: PUT `/api/v2/ticket_fields/{{ record.id }}` - kind `update`; body type
-  `json`; path fields `id`; body fields `ticket_field`; required record fields `id`, `ticket_field`;
-  accepted fields `id`, `ticket_field`; risk: updates a Zendesk ticket field record; external
-  mutation requiring approval.
-- `delete_ticket_field`: DELETE `/api/v2/ticket_fields/{{ record.id }}` - kind `delete`; body type
-  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
-  treated as success for status `404`; confirmation `destructive`; risk: deletes a Zendesk ticket
-  field record; destructive external mutation requiring approval.
+Risk classes:
+
+- Nine `delete` actions (`delete_ticket`, `delete_user`, `delete_organization`, `delete_group`,
+  `delete_macro`, `delete_trigger`, `delete_automation`, `delete_view`, `delete_ticket_field`) carry
+  the legacy `confirm: "destructive"` declaration normalized by the shared typed gate and treat
+  status `404` as success. They are the only destructive actions. The shared gate makes the 88
+  remaining `destructive_action` rows technically bindable, but they stay unbound pending
+  connector-local typed action schemas, canonical command mappings, and fixtures;
+  `reverse_etl_execute_test.go`'s `TestDestructiveOperationsStayBlocked` fails if that count moves
+  without that authoring work.
+- Bulk and import actions (`tickets_create_many`, `ticket_import`, `ticket_bulk_import`,
+  `group_membership_bulk_create`, `update_many_macros`, `update_many_triggers`,
+  `update_many_object_triggers`, `bulk_update_default_custom_status`,
+  `bulk_recover_suspended_tickets`, `custom_object_record_bulk_jobs`, `itam_asset_bulk_jobs`,
+  `batch_operate_trigger_categories`) mutate many provider records per request; their record schemas
+  bound the array element shape rather than accepting a free-form payload.
+- Account- and tenant-wide settings actions (`update_account_email_settings`,
+  `update_current_user_settings`, `reorder_workspaces`) change configuration for the whole Zendesk
+  account rather than a single record.
+- The 27 pre-existing `writes <action> plan` commands stay at `availability: "partial"` in
+  `cli_surface.json`: this foundation supplies the shared gate but deliberately does not promote or
+  bind connector commands; that remains connector-authoring work.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 33 stream-backed endpoint group(s), 27 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=1, duplicate_of=3, out_of_scope=11.
+- Official ledger source: Zendesk Support OAS 2.0.0 from `https://developer.zendesk.com/zendesk/oas.yaml`. The 2026-08-01 parity checkpoint re-fetched the OpenAPI 3.0.3 document (`info.version` 2.0.0) and counted 434 paths / 625 unique operations: GET 325, POST 111, PUT 89, PATCH 14, DELETE 86. `api_surface.json` inventories all 625 official operations exactly once with 0 missing, 0 stale, and 0 duplicate official endpoint keys, plus 6 supplemental `covered_by` row(s) for existing fixture-backed bundle surfaces that are not present in that Support OAS.
+- Executable fixture-backed surfaces are 33 streams and 84 reverse-ETL write actions (117 `covered_by` rows). `operations.json` and planned `cli_surface.json` entries are typed, connector-owned metadata only; they do not enable a raw API escape hatch or claim live certification.
+- Every write action's record schema is derived from the pinned OpenAPI source above, never inferred from response schemas. 105 mutation rows are therefore still blocked on purpose rather than shipped as guessed contracts: 98 because the pinned source declares no request body at all, and 7 because it declares an unbounded or bulk free-form payload region that a closed record schema cannot represent usefully from the command surface. `reverse_etl_execute_test.go` pins that arithmetic (57 promoted + 98 + 7 = the 162 rows originally carrying the blocked reverse-ETL reason), so rewording a blocked reason cannot hide the shortfall.
+- Envelope and resource levels of each record schema are closed with `additionalProperties: false`; deeply nested provider-defined regions stay `type: object` with `additionalProperties: true`, which is the bundle's bounded-but-not-exhaustive convention.
+- Destructive and `DELETE` operations are in scope. Existing delete write actions use `confirm: "destructive"` and idempotent 404 handling. Remaining destructive official operations are blocked by default until a connector-local typed action declares schema, risk, redaction/idempotency where applicable, and the plan -> preview -> explicit approval -> execute path with typed destructive confirmation.
+- Credential, password, and token operation rows are separately blocked as sensitive reverse ETL metadata with non-inline input where required, credential redaction, and typed sensitive confirmation before any future execution; credential-returning direct reads stay blocked until a bounded redacted output policy is reviewed.
+- Direct/provider-search/query operations are blocked pending the bounded provider command foundation (#2985); CDC/changefeed-style rows are blocked pending CDC truthfulness/state foundations (#2986/#2988); binary downloads and file-upload rows are blocked pending bounded binary/file executor support. File-upload operation rows retain connector-local upload direction, path, and `max_bytes` bounds; the source-backed method, required query parameters, content types, and multipart/body fields are recorded in operation descriptions until a shared file-operation schema/executor can validate them without exposing inline raw bytes.
+- The current draft-07 subset cannot express the `access_token` OR (`api_token` AND `email`) credential pairing. The schema documents the required pairing, and invalid combinations fail at the credential-free check request rather than reading or printing secret values.
+- Fixture-only evidence remains uncertified (`certified=0`). This bundle does not run live Zendesk credentials, live provider calls, live writes, VPS/Thaalam work, or release certification.

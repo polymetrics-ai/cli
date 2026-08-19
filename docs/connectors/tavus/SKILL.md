@@ -11,9 +11,11 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,42 +29,42 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - replicas:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - videos:
   - primary key: id
-  - fields: download_url(), error_details(), hosted_url(), id(), name(), status(), stream_url()
+  - fields: download_url(string), error_details(string), hosted_url(string), id(string), name(string), status(string), stream_url(string)
 - conversations:
   - primary key: id
   - cursor: created_at
-  - fields: callback_url(), conversation_url(), created_at(), face_id(), id(), name(), pal_id(), status(), updated_at()
+  - fields: callback_url(string), conversation_url(string), created_at(string), face_id(string), id(string), name(string), pal_id(string), status(string), updated_at(string)
 - pals:
   - primary key: id
-  - fields: conferencing_email(), default_face_id(), id(), name(), system_prompt()
+  - fields: conferencing_email(string), default_face_id(string), id(string), name(string), system_prompt(string)
 - guardrails:
   - primary key: id
-  - fields: callback_url(), guardrail_prompt(), id(), modality(), name(), tags()
+  - fields: callback_url(string), guardrail_prompt(string), id(string), modality(string), name(string), tags(array)
 - objectives:
   - primary key: id
-  - fields: confirmation_mode(), id(), modality(), name(), objective_prompt(), output_variables()
+  - fields: confirmation_mode(string), id(string), modality(string), name(string), objective_prompt(string), output_variables(array)
 - documents:
   - primary key: id
-  - fields: document_url(), error_message(), id(), name(), progress(), status()
+  - fields: document_url(string), error_message(string), id(string), name(string), progress(integer), status(string)
 - pronunciation_dictionaries:
   - primary key: id
-  - fields: id(), name(), rules_count()
+  - fields: id(string), name(string), rules_count(integer)
 - voices:
   - primary key: voice_name, face_id
-  - fields: audio_url(), face_id(), voice_name()
+  - fields: audio_url(string), face_id(string), voice_name(string)
 - skills:
   - primary key: skill_id
-  - fields: description(), display_name(), skill_id()
+  - fields: description(string), display_name(string), skill_id(string)
 
 ## Sync Modes
 
@@ -72,6 +74,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
 
 - create_video:
   - endpoint: POST /videos
+  - required fields: replica_id
   - risk: generates a new async video render from a face and script/audio; consumes video-generation minutes on the account
 - delete_video:
   - endpoint: DELETE /videos/{{ record.id }}
@@ -90,6 +93,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
   - risk: permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup
 - create_pal:
   - endpoint: POST /pals
+  - required fields: default_face_id
   - risk: creates a new PAL persona; low-risk external mutation, no approval required
 - delete_pal:
   - endpoint: DELETE /pals/{{ record.id }}
@@ -97,6 +101,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
   - risk: permanently deletes a PAL; any conversation still referencing its pal_id will fail to start
 - create_guardrail:
   - endpoint: POST /guardrails
+  - required fields: guardrail_name, guardrail_prompt
   - risk: creates a new behavioral guardrail; low-risk external mutation, no approval required
 - delete_guardrail:
   - endpoint: DELETE /guardrails/{{ record.id }}
@@ -104,6 +109,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
   - risk: permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately
 - create_objective:
   - endpoint: POST /objectives
+  - required fields: data
   - risk: creates one or more new PAL objectives; low-risk external mutation, no approval required
 - delete_objective:
   - endpoint: DELETE /objectives/{{ record.id }}
@@ -111,6 +117,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
   - risk: permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately
 - create_document:
   - endpoint: POST /documents
+  - required fields: document_url
   - risk: uploads a document to the knowledge base; processing is asynchronous and the document becomes available to PALs only once status reaches ready
 - delete_document:
   - endpoint: DELETE /documents/{{ record.id }}
@@ -118,6 +125,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
   - risk: permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately
 - create_pronunciation_dictionary:
   - endpoint: POST /pronunciation-dictionaries
+  - required fields: name
   - risk: creates a new pronunciation dictionary; low-risk external mutation, no approval required
 - delete_pronunciation_dictionary:
   - endpoint: DELETE /pronunciation-dictionaries/{{ record.id }}

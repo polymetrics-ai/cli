@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "policies": [
+    {
+      "id": "authenticated-user",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "auth_types": ["token", "oauth"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "rate_limit_account"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 5000,
+          "window_seconds": 3600
+        },
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 900,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "app-installation",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "auth_types": ["github_app"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "installation",
+        "subject_config": "installation_id"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 5000,
+          "window_seconds": 3600
+        },
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 900,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "actions-token",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "auth_types": ["github_token"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "endpoint",
+        "subject_config": "rate_limit_repository"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 1000,
+          "window_seconds": 3600
+        },
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 900,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "unauthenticated",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "auth_types": ["public", "none", "anonymous", "unauthenticated"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "ip",
+        "subject_config": "rate_limit_ip"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 60,
+          "window_seconds": 3600
+        },
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 900,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-authenticated-user-primary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["token", "oauth"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "rate_limit_account"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "points",
+          "limit": 5000,
+          "window_seconds": 3600,
+          "cost": {
+            "default_cost": 1,
+            "response_body": "graphql_rate_limit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-authenticated-user-secondary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["token", "oauth"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "rate_limit_account"
+      },
+      "budgets": [
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 2000,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-app-installation-primary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["github_app"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "installation",
+        "subject_config": "installation_id"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "points",
+          "limit": 5000,
+          "window_seconds": 3600,
+          "cost": {
+            "default_cost": 1,
+            "response_body": "graphql_rate_limit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-app-installation-secondary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["github_app"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "installation",
+        "subject_config": "installation_id"
+      },
+      "budgets": [
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 2000,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-actions-token-primary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["github_token"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "endpoint",
+        "subject_config": "rate_limit_repository"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "points",
+          "limit": 1000,
+          "window_seconds": 3600,
+          "cost": {
+            "default_cost": 1,
+            "response_body": "graphql_rate_limit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphql-actions-token-secondary",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "auth_types": ["github_token"],
+        "endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
+      },
+      "scope": {
+        "subject_kind": "endpoint",
+        "subject_config": "rate_limit_repository"
+      },
+      "budgets": [
+        {
+          "model": "sliding_window",
+          "dimension": "burst",
+          "unit": "points",
+          "limit": 2000,
+          "window_seconds": 60,
+          "cost": {
+            "default_cost": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "certification-authenticated-user",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["token", "oauth"],
+        "exclude_endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "account", "subject_config": "rate_limit_account"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "requests", "limit": 5000, "window_seconds": 3600},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 900, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-app-installation",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["github_app"],
+        "exclude_endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "requests", "limit": 5000, "window_seconds": 3600},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 900, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-actions-token",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["github_token"],
+        "exclude_endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "endpoint", "subject_config": "rate_limit_repository"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "requests", "limit": 1000, "window_seconds": 3600},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 900, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-unauthenticated",
+      "source": {
+        "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["public", "none", "anonymous", "unauthenticated"],
+        "exclude_endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "ip", "subject_config": "rate_limit_ip"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "requests", "limit": 60, "window_seconds": 3600},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 900, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-graphql-authenticated-user",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["token", "oauth"],
+        "endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "account", "subject_config": "rate_limit_account"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 5000, "window_seconds": 3600, "cost": {"default_cost": 1, "response_body": "graphql_rate_limit"}},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 2000, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-graphql-app-installation",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["github_app"],
+        "endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 5000, "window_seconds": 3600, "cost": {"default_cost": 1, "response_body": "graphql_rate_limit"}},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 2000, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    },
+    {
+      "id": "certification-graphql-actions-token",
+      "source": {
+        "url": "https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api",
+        "retrieved_at": "2026-08-14"
+      },
+      "selector": {
+        "tiers": ["certification"],
+        "auth_types": ["github_token"],
+        "endpoints": [{"method": "POST", "path": "/graphql"}]
+      },
+      "scope": {"subject_kind": "endpoint", "subject_config": "rate_limit_repository"},
+      "coordination": "require_shared",
+      "budgets": [
+        {"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 1000, "window_seconds": 3600, "cost": {"default_cost": 1, "response_body": "graphql_rate_limit"}},
+        {"model": "sliding_window", "dimension": "burst", "unit": "points", "limit": 2000, "window_seconds": 60, "cost": {"default_cost": 5}}
+      ]
+    }
+  ]
+}

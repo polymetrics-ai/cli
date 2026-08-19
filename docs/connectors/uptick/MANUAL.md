@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Uptick field service management data through the Uptick REST API using OAuth2 password-grant auth.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -25,53 +27,53 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   page_size
   start_date
-  username
-  client_id (secret)
-  client_secret (secret)
-  password (secret)
+  username (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  password (secret) (required)
 
 ETL STREAMS
   tasks:
     primary key: id
     cursor: updated
-    fields: client(), created(), deleted(), description(), due(), id(), is_active(), name(), priority(), property(), ref(), status(), updated()
+    fields: client(string), created(string), deleted(string), description(string), due(string), id(integer), is_active(boolean), name(string), priority(string), property(string), ref(string), status(string), updated(string)
   clients:
     primary key: id
     cursor: updated
-    fields: address(), contact_email(), contact_name(), contact_phone_bh(), created(), id(), is_active(), name(), notes(), ref(), updated()
+    fields: address(string), contact_email(string), contact_name(string), contact_phone_bh(string), created(string), id(integer), is_active(boolean), name(string), notes(string), ref(string), updated(string)
   properties:
     primary key: id
     cursor: updated
-    fields: address(), coords(), created(), id(), name(), ref(), status(), timezone(), updated()
+    fields: address(string), coords(string), created(string), id(integer), name(string), ref(string), status(string), timezone(string), updated(string)
   invoices:
     primary key: id
     cursor: updated
-    fields: created(), currency(), date(), description(), due_date(), gst(), id(), is_overdue(), is_sent(), number(), property(), ref(), status(), subtotal(), task(), total(), updated()
+    fields: created(string), currency(string), date(string), description(string), due_date(string), gst(string), id(integer), is_overdue(boolean), is_sent(boolean), number(string), property(string), ref(string), status(string), subtotal(string), task(string), total(string), updated(string)
   assets:
     primary key: id
     cursor: updated
-    fields: barcode(), created(), deleted(), id(), is_active(), label(), location(), make(), model(), property(), ref(), serviced_date(), size(), status(), type(), updated(), uptick_ref(), variant()
+    fields: barcode(string), created(string), deleted(string), id(integer), is_active(boolean), label(string), location(string), make(string), model(string), property(string), ref(string), serviced_date(string), size(string), status(string), type(string), updated(string), uptick_ref(string), variant(string)
   quotes:
     primary key: id
-    fields: created(), description(), id(), ref(), status(), total(), updated()
+    fields: created(string), description(string), id(integer), ref(string), status(string), total(integer), updated(string)
   purchaseorders:
     primary key: id
-    fields: created(), id(), ref(), status(), supplier(), total(), updated()
+    fields: created(string), id(integer), ref(string), status(string), supplier(string), total(number), updated(string)
   forms:
     primary key: id
-    fields: created(), description(), id(), name(), status(), updated()
+    fields: created(string), description(string), id(integer), name(string), status(string), updated(string)
   users:
     primary key: id
-    fields: created(), email(), id(), is_active(), name(), updated(), username()
+    fields: created(string), email(string), id(integer), is_active(boolean), name(string), updated(string), username(string)
   teams:
     primary key: id
-    fields: created(), description(), id(), is_active(), name(), updated()
+    fields: created(string), description(string), id(integer), is_active(boolean), name(string), updated(string)
   stockitems:
     primary key: id
-    fields: created(), description(), id(), is_active(), name(), ref(), updated()
+    fields: created(string), description(string), id(integer), is_active(boolean), name(string), ref(string), updated(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

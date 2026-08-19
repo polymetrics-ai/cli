@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and manages Instatus status pages, components, incidents, maintenances, templates, subscribers, metrics, monitors, and related status-page resources through the Instatus REST API.
 
 ICON
+  id: instatus
   asset: icons/instatus.svg
   source: official
   review_status: official_verified
@@ -41,95 +42,95 @@ CONFIGURATION
   page_size
   subscriber_search
   template_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   pages:
     primary key: id
-    fields: createdAt(), customDomain(), id(), language(), name(), publicEmail(), status(), subdomain(), updatedAt(), websiteUrl()
+    fields: createdAt(string), customDomain(string), id(string), language(string), name(string), publicEmail(string), status(string), subdomain(string), updatedAt(string), websiteUrl(string)
   components:
     primary key: id
-    fields: description(), group(), id(), name(), order(), showUptime(), status(), uniqueEmail()
+    fields: description(string), group(string), id(string), name(string), order(integer), showUptime(boolean), status(string), uniqueEmail(string)
   incidents:
     primary key: id
-    fields: createdAt(), id(), name(), resolved(), started(), status(), updatedAt()
+    fields: createdAt(string), id(string), name(string), resolved(string), started(string), status(string), updatedAt(string)
   maintenances:
     primary key: id
-    fields: autoEnd(), autoStart(), duration(), id(), name(), start(), status()
+    fields: autoEnd(boolean), autoStart(boolean), duration(integer), id(string), name(string), start(string), status(string)
   workspaces:
     primary key: id
-    fields: id()
+    fields: id(string)
   component_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   incident_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   incident_update_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   maintenance_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   maintenance_update_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   templates:
     primary key: id
-    fields: id()
+    fields: id(string)
   template_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   teammates:
     primary key: id
-    fields: id()
+    fields: id(string)
   subscribers:
     primary key: id
-    fields: id()
+    fields: id(string)
   metrics:
     primary key: id
-    fields: id()
+    fields: id(string)
   metric_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   user_profile:
     primary key: id
-    fields: id()
+    fields: id(string)
   audience_groups:
     primary key: id
-    fields: id()
+    fields: id(string)
   audience_group_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   generic_notices:
     primary key: id
-    fields: id()
+    fields: id(string)
   generic_notice_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   monitors:
     primary key: id
-    fields: id()
+    fields: id(string)
   monitor_inserted_logs_check:
-    fields: id()
+    fields: id(string)
   monitor_logs:
     primary key: id
-    fields: id()
+    fields: id(string)
   monitor_alerts:
     primary key: id
-    fields: id()
+    fields: id(string)
   routing_rules:
     primary key: id
-    fields: id()
+    fields: id(string)
   escalation_policies:
     primary key: id
-    fields: id()
+    fields: id(string)
   on_call_schedule_members:
     primary key: id
-    fields: id()
+    fields: id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_page:

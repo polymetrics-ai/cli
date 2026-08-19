@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Merge ATS common-model objects (candidates, applications, jobs, offers, departments, users) through the Merge unified REST API.
 
 ICON
+  id: merge
   asset: icons/merge.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,34 +31,34 @@ CONFIGURATION
   mode
   page_size
   start_date
-  account_token (secret)
-  api_token (secret)
+  account_token (secret) (required)
+  api_token (secret) (required)
 
 ETL STREAMS
   candidates:
     primary key: id
     cursor: modified_at
-    fields: can_email(), company(), first_name(), id(), is_private(), last_interaction_at(), last_name(), modified_at(), remote_created_at(), remote_id(), remote_updated_at(), remote_was_deleted(), title()
+    fields: can_email(boolean), company(string), first_name(string), id(string), is_private(boolean), last_interaction_at(string), last_name(string), modified_at(string), remote_created_at(string), remote_id(string), remote_updated_at(string), remote_was_deleted(boolean), title(string)
   applications:
     primary key: id
     cursor: modified_at
-    fields: applied_at(), candidate(), credited_to(), current_stage(), id(), job(), modified_at(), reject_reason(), rejected_at(), remote_id(), remote_was_deleted(), source()
+    fields: applied_at(string), candidate(string), credited_to(string), current_stage(string), id(string), job(string), modified_at(string), reject_reason(string), rejected_at(string), remote_id(string), remote_was_deleted(boolean), source(string)
   jobs:
     primary key: id
     cursor: modified_at
-    fields: code(), confidential(), description(), id(), modified_at(), name(), remote_created_at(), remote_id(), remote_updated_at(), remote_was_deleted(), status(), type()
+    fields: code(string), confidential(boolean), description(string), id(string), modified_at(string), name(string), remote_created_at(string), remote_id(string), remote_updated_at(string), remote_was_deleted(boolean), status(string), type(string)
   offers:
     primary key: id
     cursor: modified_at
-    fields: application(), closed_at(), creator(), id(), modified_at(), remote_created_at(), remote_id(), remote_was_deleted(), sent_at(), start_date(), status()
+    fields: application(string), closed_at(string), creator(string), id(string), modified_at(string), remote_created_at(string), remote_id(string), remote_was_deleted(boolean), sent_at(string), start_date(string), status(string)
   departments:
     primary key: id
     cursor: modified_at
-    fields: id(), modified_at(), name(), remote_id(), remote_was_deleted()
+    fields: id(string), modified_at(string), name(string), remote_id(string), remote_was_deleted(boolean)
   users:
     primary key: id
     cursor: modified_at
-    fields: access_role(), disabled(), email(), first_name(), id(), last_name(), modified_at(), remote_created_at(), remote_id(), remote_was_deleted()
+    fields: access_role(string), disabled(boolean), email(string), first_name(string), id(string), last_name(string), modified_at(string), remote_created_at(string), remote_id(string), remote_was_deleted(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

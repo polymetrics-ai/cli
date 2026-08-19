@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-free.
 
 ICON
+  id: pypi
   asset: icons/pypi.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,15 +28,15 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  project_name
+  project_name (required)
 
 ETL STREAMS
   project:
     primary key: name
-    fields: author(), author_email(), classifiers(), description(), home_page(), keywords(), license(), name(), project_url(), project_urls(), requires_python(), summary(), version(), yanked()
+    fields: author(string), author_email(string), classifiers(array), description(string), home_page(string), keywords(string), license(string), name(string), project_url(string), project_urls(object), requires_python(string), summary(string), version(string), yanked(boolean)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external PyPI JSON API read of public package metadata

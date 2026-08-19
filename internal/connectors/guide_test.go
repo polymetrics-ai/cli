@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestRenderCommandSurfaceCommandIncludesOperationMapping(t *testing.T) {
+	line := renderCommandSurfaceCommand(CommandSurfaceCommand{
+		Path:         "operations get_sources_by_target",
+		Summary:      "Get sources by target",
+		Intent:       "direct_read",
+		Availability: "planned",
+		Operation:    "zendesk-support.get_sources_by_target",
+	})
+
+	if !strings.Contains(line, "operation=zendesk-support.get_sources_by_target") {
+		t.Fatalf("rendered command missing operation mapping: %s", line)
+	}
+}
+
+func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
+	section := configSection(Manifest{SecretFields: []SecretField{{
+		Name:         "password",
+		RequiredWhen: "mode is not fixture",
+	}}})
+	if len(section.Lines) != 1 || section.Lines[0] != "password (secret) (required when mode is not fixture)" {
+		t.Fatalf("configSection() = %#v, want conditional password requirement", section.Lines)
+	}
+}
+
 func TestEveryRegisteredConnectorHasGuideManualAndSkill(t *testing.T) {
 	registry := NewRegistry()
 	for _, meta := range registry.List() {

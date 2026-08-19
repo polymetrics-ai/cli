@@ -11,9 +11,11 @@ Reads Simplecast podcasts and episodes through the Simplecast REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,18 +29,18 @@ Reads Simplecast podcasts and episodes through the Simplecast REST API.
 ## Configuration
 
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - podcasts:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), title(), updated_at()
+  - fields: id(string), status(string), title(string), updated_at(string)
 - episodes:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), title(), updated_at()
+  - fields: id(string), status(string), title(string), updated_at(string)
 
 ## Sync Modes
 

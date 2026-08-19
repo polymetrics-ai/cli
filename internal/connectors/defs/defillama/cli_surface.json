@@ -1,0 +1,194 @@
+{
+  "tagline": "Run DefiLlama's declared streams and reverse-ETL actions.",
+  "usage": "pm defillama \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "chains list",
+        "dexs list",
+        "fees list",
+        "historical chain tvl list",
+        "open interest list",
+        "options list",
+        "pools list",
+        "protocols list",
+        "stablecoin chains list",
+        "stablecoins list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "chains list",
+      "summary": "Run the chains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chains",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama chains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/chains"
+        }
+      ]
+    },
+    {
+      "path": "dexs list",
+      "summary": "Run the dexs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dexs",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama dexs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/overview/dexs"
+        }
+      ]
+    },
+    {
+      "path": "fees list",
+      "summary": "Run the fees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fees",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama fees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/overview/fees"
+        }
+      ]
+    },
+    {
+      "path": "historical chain tvl list",
+      "summary": "Run the historical chain tvl ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "historical_chain_tvl",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama historical chain tvl list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/historicalChainTvl"
+        }
+      ]
+    },
+    {
+      "path": "open interest list",
+      "summary": "Run the open interest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "open_interest",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama open interest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/overview/open-interest"
+        }
+      ]
+    },
+    {
+      "path": "options list",
+      "summary": "Run the options ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "options",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama options list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/overview/options"
+        }
+      ]
+    },
+    {
+      "path": "pools list",
+      "summary": "Run the pools ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pools",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama pools list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pools"
+        }
+      ]
+    },
+    {
+      "path": "protocols list",
+      "summary": "Run the protocols ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "protocols",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama protocols list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/protocols"
+        }
+      ]
+    },
+    {
+      "path": "stablecoin chains list",
+      "summary": "Run the stablecoin chains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stablecoin_chains",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama stablecoin chains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stablecoinchains"
+        }
+      ]
+    },
+    {
+      "path": "stablecoins list",
+      "summary": "Run the stablecoins ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stablecoins",
+      "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+      "examples": [
+        "pm defillama stablecoins list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stablecoins"
+        }
+      ]
+    }
+  ]
+}

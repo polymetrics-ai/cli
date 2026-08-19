@@ -11,9 +11,11 @@ Reads Guru collections, groups, members, and teams through the Guru REST API usi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -30,27 +32,27 @@ Reads Guru collections, groups, members, and teams through the Guru REST API usi
 - max_pages
 - mode
 - page_size
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - collections:
   - primary key: id
-  - fields: collectionType(), color(), dateCreated(), description(), id(), name(), publicCardsEnabled(), slug()
+  - fields: collectionType(string), color(string), dateCreated(string), description(string), id(string), name(string), publicCardsEnabled(boolean), slug(string)
 - groups:
   - primary key: id
-  - fields: dateCreated(), groupType(), id(), memberCount(), modifiable(), name()
+  - fields: dateCreated(string), groupType(string), id(string), memberCount(integer), modifiable(boolean), name(string)
 - members:
   - primary key: id
-  - fields: dateCreated(), email(), firstName(), id(), lastName(), status()
+  - fields: dateCreated(string), email(string), firstName(string), id(string), lastName(string), status(string)
 - teams:
   - primary key: id
-  - fields: dateCreated(), id(), name(), status()
+  - fields: dateCreated(string), id(string), name(string), status(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

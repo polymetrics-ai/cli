@@ -15,7 +15,7 @@ import {
 import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { SidebarLink } from '@/components/home/sidebar-link';
 import { DOCUMENTATION_NAV } from '@/components/docs/doc-nav';
-import { BLOG_POSTS, blogUrl } from '@/lib/blog';
+import { BLOG_POSTS, blogUrl, sortBlogPostsByPublishedAt } from '@/lib/blog';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 import {
   Sidebar,
@@ -69,7 +69,7 @@ const changelog = [
   { version: 'v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
 ];
 
-const latestBlogPosts = BLOG_POSTS.slice(0, 3);
+const latestBlogPosts = sortBlogPostsByPublishedAt(BLOG_POSTS).slice(0, 3);
 
 export function HomeSidebar({
   className = 'home-sidebar-panel',

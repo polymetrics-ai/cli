@@ -1,0 +1,9 @@
+{
+  "record": {
+    "requisition_field": "requisition_field_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/requisition_fields/requisition_field_fixture_1/options"
+  }
+}

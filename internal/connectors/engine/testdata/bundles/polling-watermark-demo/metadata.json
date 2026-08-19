@@ -1,0 +1,8 @@
+{
+  "name": "polling-watermark-demo",
+  "display_name": "Polling Watermark Demo",
+  "description": "Test-only declaration for the shared polling-watermark executor.",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
+}

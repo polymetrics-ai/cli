@@ -1,0 +1,31 @@
+{
+  "record": {
+    "feedback_template": "feedback_template_fixture_1",
+    "text": "Fixture text",
+    "instructions": "Fixture instructions",
+    "group": "Fixture group",
+    "fields": [
+      {
+        "type": "score-system",
+        "text": "Rating",
+        "required": true
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/feedback_templates/feedback_template_fixture_1",
+    "body": {
+      "text": "Fixture text",
+      "instructions": "Fixture instructions",
+      "group": "Fixture group",
+      "fields": [
+        {
+          "type": "score-system",
+          "text": "Rating",
+          "required": true
+        }
+      ]
+    }
+  }
+}

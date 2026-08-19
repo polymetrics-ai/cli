@@ -2,18 +2,160 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Recurly Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
-      "x-secret": true,
-      "description": "Recurly private API key, sent as the HTTP Basic username with an empty password (Authorization: Basic base64(api_key:)). Never logged."
+      "description": "Recurly API key. Never store or print secret values.",
+      "x-secret": true
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://v3.recurly.com",
-      "description": "Recurly API base URL override for tests or proxies."
+      "description": "Recurly V3 API base URL."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "account_note_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "add_on_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "billing_info_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "business_entity_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "coupon_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "coupon_redemption_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "credit_payment_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "custom_field_definition_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "dunning_campaign_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "export_date": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_account_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_invoice_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_payment_phase_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_product_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_product_reference_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "external_subscription_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "general_ledger_account_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "gift_card_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "invoice_template_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "line_item_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "measured_unit_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "performance_obligation_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "price_segment_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "redemption_code": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "shipping_address_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "shipping_method_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "unique_coupon_code_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+    },
+    "usage_id": {
+      "type": "string",
+      "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
     }
   }
 }

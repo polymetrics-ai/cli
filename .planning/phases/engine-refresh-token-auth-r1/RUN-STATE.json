@@ -1,0 +1,111 @@
+{
+  "phase": "engine-refresh-token-auth-r1",
+  "gsd_command": "/gsd-plan-phase engine-refresh-token-auth-r1",
+  "adapter": "pi-project-local",
+  "runtime": "claude-code",
+  "runtime_fallback": "manual-GSD inline execution; Pi runtime subagents unavailable in this session",
+  "trace": ".planning/traces/gsd-plan-phase-engine-refresh-token-auth-r1-prompt.md",
+  "status": "implemented-verified",
+  "branch": "fm/cli-engine-refresh-token-auth-r1",
+  "parent_issue": 3702,
+  "owned_paths": [
+    "internal/connectors/engine/**",
+    "internal/connectors/connsdk/**",
+    "internal/connectors/connectors.go",
+    "internal/app/**",
+    "docs/migration/conventions.md",
+    "docs/architecture/connector-architecture-v2-design.md",
+    ".planning/**"
+  ],
+  "excluded_paths": [
+    "internal/connectors/defs/**",
+    "internal/connectors/certify/**",
+    "internal/connectors/commandrunner/**",
+    "cmd/**",
+    "website/**"
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "name": "connsdk-oauth2-refresh-token-authenticator",
+      "state": "done",
+      "issues": [
+        3703,
+        3704,
+        3707
+      ]
+    },
+    {
+      "id": 2,
+      "name": "connsdk-auth-refresher-401-hook",
+      "state": "done",
+      "issues": [
+        3706
+      ]
+    },
+    {
+      "id": 3,
+      "name": "engine-oauth2-refresh-token-mode",
+      "state": "done",
+      "issues": [
+        3703
+      ]
+    },
+    {
+      "id": 4,
+      "name": "vault-backed-secret-store-seam",
+      "state": "done",
+      "issues": [
+        3705
+      ]
+    },
+    {
+      "id": 5,
+      "name": "docs-conventions-and-design",
+      "state": "done",
+      "issues": [
+        3702
+      ]
+    }
+  ],
+  "human_gates": [
+    "merge of this PR into main",
+    "clearing draft status"
+  ],
+  "constraints": {
+    "additive_and_opt_in": true,
+    "no_raw_request_escape_hatch": true,
+    "secrets_never_in_argv_logs_or_error_text": true,
+    "persisted_state_local_and_encrypted": "internal/vault (AES-256-GCM, .polymetrics/vault, 0600)",
+    "connector_bundles_untouched": true
+  },
+  "verification": {
+    "harness": "verifyharness (scratch, deleted after the run) \u2014 real bundle on disk, real engine.Load/Read, live httptest token+API servers, real internal/vault project",
+    "scenarios_all_green": [
+      "first exchange",
+      "reuse before expiry",
+      "refresh at expiry",
+      "refresh on 401",
+      "persistent 401 terminates",
+      "rotation persisted + used on next run",
+      "concurrent callers => one exchange"
+    ],
+    "race": "go test -race over the 20 new connsdk tests \u2014 pass",
+    "mutation_checks": [
+      "redaction assertion",
+      "static ResolveCheckAuthSpec coverage"
+    ],
+    "connectors_loaded": 554,
+    "boundary_outcome": "clean",
+    "website_catalog_diff": "none (no connector bundle touched)"
+  },
+  "measured_findings": [
+    {
+      "finding": "engine.Read builds one authenticator per call (read.go:48 newRuntime), so a sync costs one token exchange per stream rather than one in total",
+      "measured": "3 Reads of a 3-page stream = 9 upstream requests, 3 token exchanges",
+      "in_scope": false,
+      "reason": "sharing an authenticator across streams needs a cache keyed on credential identity; a wrong key is credential confusion between connectors, so it is a separate security-sensitive change",
+      "action": "filed as issue #3708 (perf(engine): consider sharing one authenticator across a sync's streams)"
+    }
+  ]
+}

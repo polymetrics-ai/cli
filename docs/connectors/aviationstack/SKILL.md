@@ -11,9 +11,11 @@ Reads aviationstack flights and aviation reference data (airlines, airports, air
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,26 +30,26 @@ Reads aviationstack flights and aviation reference data (airlines, airports, air
 
 - base_url
 - mode
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 
 - flights:
   - primary key: flight_date, flight_iata
   - cursor: flight_date
-  - fields: airline_iata(), airline_name(), arrival_airport(), arrival_iata(), arrival_scheduled(), departure_airport(), departure_iata(), departure_scheduled(), flight_date(), flight_iata(), flight_icao(), flight_number(), flight_status()
+  - fields: airline_iata(string), airline_name(string), arrival_airport(string), arrival_iata(string), arrival_scheduled(string), departure_airport(string), departure_iata(string), departure_scheduled(string), flight_date(string), flight_iata(string), flight_icao(string), flight_number(string), flight_status(string)
 - airlines:
   - primary key: id
-  - fields: airline_name(), callsign(), country_iso2(), country_name(), date_founded(), fleet_size(), iata_code(), icao_code(), id(), status(), type()
+  - fields: airline_name(string), callsign(string), country_iso2(string), country_name(string), date_founded(string), fleet_size(string), iata_code(string), icao_code(string), id(string), status(string), type(string)
 - airports:
   - primary key: id
-  - fields: airport_name(), city_iata_code(), country_iso2(), country_name(), gmt(), iata_code(), icao_code(), id(), latitude(), longitude(), timezone()
+  - fields: airport_name(string), city_iata_code(string), country_iso2(string), country_name(string), gmt(string), iata_code(string), icao_code(string), id(string), latitude(string), longitude(string), timezone(string)
 - airplanes:
   - primary key: id
-  - fields: airline_iata_code(), first_flight_date(), iata_type(), icao_code_hex(), id(), model_code(), model_name(), plane_owner(), plane_status(), production_line(), registration_number()
+  - fields: airline_iata_code(string), first_flight_date(string), iata_type(string), icao_code_hex(string), id(string), model_code(string), model_name(string), plane_owner(string), plane_status(string), production_line(string), registration_number(string)
 - countries:
   - primary key: id
-  - fields: capital(), continent(), country_iso2(), country_iso3(), country_iso_numeric(), country_name(), currency_code(), id(), phone_prefix(), population()
+  - fields: capital(string), continent(string), country_iso2(string), country_iso3(string), country_iso_numeric(string), country_name(string), currency_code(string), id(string), phone_prefix(string), population(string)
 
 ## Sync Modes
 

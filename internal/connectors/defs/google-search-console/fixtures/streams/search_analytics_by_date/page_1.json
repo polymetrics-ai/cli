@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "POST",
-    "path": "/sites/synthetic-conformance-value/searchAnalytics/query"
+    "path": "/webmasters/v3/sites/synthetic-conformance-value/searchAnalytics/query"
   },
   "response": {
     "status": 200,

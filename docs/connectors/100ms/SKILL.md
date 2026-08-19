@@ -11,9 +11,11 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,41 +30,41 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 
 - base_url
 - mode
-- management_token (secret)
+- management_token (secret) (required)
 
 ## ETL Streams
 
 - rooms:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), customer_id(), description(), enabled(), id(), large_room(), max_duration_seconds(), name(), region(), template_id(), updated_at()
+  - fields: created_at(string), customer_id(string), description(string), enabled(boolean), id(string), large_room(boolean), max_duration_seconds(integer), name(string), region(string), template_id(string), updated_at(string)
 - sessions:
   - primary key: id
   - cursor: created_at
-  - fields: active(), created_at(), customer_id(), id(), room_id(), updated_at()
+  - fields: active(boolean), created_at(string), customer_id(string), id(string), room_id(string), updated_at(string)
 - recordings:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), duration(), id(), room_id(), session_id(), size(), status(), updated_at()
+  - fields: created_at(string), duration(integer), id(string), room_id(string), session_id(string), size(integer), status(string), updated_at(string)
 - templates:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), customer_id(), default(), id(), name(), updated_at()
+  - fields: created_at(string), customer_id(string), default(boolean), id(string), name(string), updated_at(string)
 - live_streams:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), destination(), id(), meeting_url(), room_id(), session_id(), started_at(), status(), stopped_at()
+  - fields: created_at(string), destination(string), id(string), meeting_url(string), room_id(string), session_id(string), started_at(string), status(string), stopped_at(string)
 - external_streams:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), destination(), id(), meeting_url(), recording(), room_id(), session_id(), started_at(), status(), stopped_at()
+  - fields: created_at(string), destination(string), id(string), meeting_url(string), recording(boolean), room_id(string), session_id(string), started_at(string), status(string), stopped_at(string)
 - recording_assets:
   - primary key: id
-  - fields: duration(), id(), job_id(), path(), room_id(), session_id(), size(), status(), type()
+  - fields: duration(integer), id(string), job_id(string), path(string), room_id(string), session_id(string), size(integer), status(string), type(string)
 - webhook_events:
   - primary key: event_id
   - cursor: event_timestamp
-  - fields: event_id(), event_name(), event_timestamp(), room_id()
+  - fields: event_id(string), event_name(string), event_timestamp(string), room_id(string)
 
 ## Sync Modes
 
@@ -79,6 +81,7 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
   - risk: mutates an existing room's metadata, or disables/re-enables it via the enabled field (100ms's disable/enable API is the same POST /rooms/{id} endpoint); disabling blocks all future joins to that room. External mutation, approval required
 - create_template:
   - endpoint: POST /templates
+  - required fields: name
   - risk: creates a new room-policy template (roles/settings); external mutation, approval required
 - create_room_code:
   - endpoint: POST /room-codes/room/{{ record.room_id }}
@@ -86,6 +89,7 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
   - risk: generates join-authentication room codes for every role in the named room; codes act as join credentials, external mutation, approval required
 - update_room_code:
   - endpoint: POST /room-codes/code
+  - required fields: code, enabled
   - risk: enables or disables a specific join-credential room code; disabling revokes that code's ability to join. External mutation, approval required
 - start_recording:
   - endpoint: POST /recordings/room/{{ record.room_id }}/start

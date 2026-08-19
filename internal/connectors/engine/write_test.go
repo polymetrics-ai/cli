@@ -1,8 +1,10 @@
 package engine
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -11,11 +13,13 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -34,6 +38,24 @@ func newWriteTestBundle(srv *httptest.Server, action WriteAction) Bundle {
 			action,
 		},
 	}
+}
+
+func writeSpecWithDefaultBaseURL(t *testing.T, defaultURL string) *Schema {
+	t.Helper()
+	rawDefault, err := json.Marshal(defaultURL)
+	if err != nil {
+		t.Fatalf("json.Marshal defaultURL: %v", err)
+	}
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": ` + string(rawDefault) + `}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	return spec
 }
 
 func captureServer(t *testing.T, status int, body string) (*httptest.Server, *capturedRequest) {
@@ -63,6 +85,326 @@ type capturedRequest struct {
 	contentType string
 }
 
+func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "custom",
+		Method:     http.MethodDelete,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "remove_widget", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil)
+	if err == nil {
+		t.Fatal("Write() dispatched DELETE without typed approval evidence")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "approval") {
+		t.Fatalf("Write() error = %v, want approval rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("DELETE dispatched before approval gate; calls=%d", calls)
+	}
+}
+
+func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
+	approvedCalls := 0
+	unapprovedCalls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/approved/42":
+			approvedCalls++
+			http.Redirect(w, r, "/unapproved/42", http.StatusTemporaryRedirect)
+		case "/unapproved/42":
+			unapprovedCalls++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			t.Fatalf("unexpected request path %q", r.URL.Path)
+		}
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       "/approved/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+	records := []connectors.Record{{"id": "42"}}
+	req := approvedWriteRequest(t, b, "remove_widget", records, nil)
+
+	if _, err := Write(context.Background(), b, req, records, nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+		t.Fatalf("Write() error = %v, want redirect refusal", err)
+	}
+	if approvedCalls != 1 {
+		t.Fatalf("approved target calls = %d, want 1", approvedCalls)
+	}
+	if unapprovedCalls != 0 {
+		t.Fatalf("unapproved redirect target calls = %d, want 0", unapprovedCalls)
+	}
+}
+
+func TestGateRejectsForgedAndReplayedDestructiveEvidence(t *testing.T) {
+	prepared := PreparedWrite{Target: DestructiveTarget{
+		Connector:     "acme",
+		Operation:     "delete_widget",
+		Method:        http.MethodDelete,
+		MutationClass: "delete",
+		Confirmation:  connectors.ConfirmationKindDestructive,
+	}, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", ApprovalScope: connectors.WriteApprovalScopeFixture, Batchable: false, RecordsStaged: 1, Action: "delete_widget", Definition: map[string]any{"kind": "delete"}, Requests: []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}}}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+
+	t.Run("forged", func(t *testing.T) {
+		executed := false
+		err := ExecutePreparedWrite(context.Background(), prepared, &connectors.WriteApprovalEvidence{}, preview.Digest, func(context.Context) error {
+			executed = true
+			return nil
+		})
+		if err == nil || executed {
+			t.Fatal("GateDestructiveExecution() accepted caller-minted evidence")
+		}
+	})
+
+	t.Run("caller-selected-authority", func(t *testing.T) {
+		authority, err := connectors.NewUntrustedWriteApprovalAuthority(bytes.Repeat([]byte{0x31}, sha256.Size))
+		if err != nil {
+			t.Fatalf("NewUntrustedWriteApprovalAuthority() error = %v", err)
+		}
+		evidence := approvedEvidenceWithAuthority(t, authority, preview)
+		executed := false
+		err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(context.Context) error {
+			executed = true
+			return nil
+		})
+		if err == nil || executed {
+			t.Fatal("ExecutePreparedWrite() trusted caller-selected approval authority")
+		}
+	})
+
+	t.Run("replayed", func(t *testing.T) {
+		evidence := approvedEvidenceForPreview(t, preview)
+		copiedEvidence := *evidence
+		var executions int
+		for _, attemptEvidence := range []*connectors.WriteApprovalEvidence{evidence, &copiedEvidence} {
+			_ = ExecutePreparedWrite(context.Background(), prepared, attemptEvidence, preview.Digest, func(context.Context) error {
+				executions++
+				return nil
+			})
+		}
+		if executions != 1 {
+			t.Fatalf("approved closure executions = %d, want exactly one", executions)
+		}
+	})
+}
+
+func TestGateBindsConfigurationAndBatchability(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "delete_widget", Method: http.MethodDelete,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-one",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              "delete_widget",
+		Definition:          map[string]any{"kind": "delete"},
+		Requests: []PreparedRequest{{
+			Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42",
+		}},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	for _, mutate := range []struct {
+		name string
+		fn   func(*PreparedWrite)
+	}{
+		{name: "configuration", fn: func(changed *PreparedWrite) { changed.ConfigurationDigest = "fixture-configuration-two" }},
+		{name: "batchability", fn: func(changed *PreparedWrite) { changed.Batchable = true }},
+	} {
+		t.Run(mutate.name, func(t *testing.T) {
+			changed := prepared
+			mutate.fn(&changed)
+			executed := false
+			err := ExecutePreparedWrite(context.Background(), changed, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+				executed = true
+				return nil
+			})
+			if err == nil || executed {
+				t.Fatalf("ExecutePreparedWrite() accepted %s drift", mutate.name)
+			}
+		})
+	}
+}
+
+func TestZeroRecordPreparedWriteNeverInvokesExecutor(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "purge_widgets", Method: http.MethodPost,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Action:              "purge_widgets",
+		Definition:          map[string]any{"kind": "delete"},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	executed := false
+	err = ExecutePreparedWrite(context.Background(), prepared, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ExecutePreparedWrite() error = %v", err)
+	}
+	if executed {
+		t.Fatal("ExecutePreparedWrite() invoked executor for an empty prepared write")
+	}
+}
+
+func TestWriteFailsClosedForUnknownConfirmationDeclaration(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "dangerous_widget_action",
+		Kind:     "custom",
+		Method:   http.MethodPost,
+		Path:     "/widgets",
+		BodyType: "json",
+		Confirm:  "type-anything",
+	})
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "dangerous_widget_action", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil); err == nil {
+		t.Fatal("Write() accepted an unknown non-empty confirmation declaration")
+	}
+	if calls != 0 {
+		t.Fatalf("write dispatched after unknown confirmation declaration; calls=%d", calls)
+	}
+}
+
+func TestRestWriteOperationUsesSharedDestructiveExecutionGate(t *testing.T) {
+	executed := false
+	operation := OperationSpec{
+		ID:            "acme.widgets.delete",
+		Kind:          "rest_write",
+		MutationClass: "delete",
+		REST:          &RESTOperationSpec{Method: http.MethodDelete, Path: "/widgets/{id}"},
+		Confirmation:  &ConfirmationSpec{Kind: "destructive"},
+	}
+	prepared := PreparedWrite{
+		Target:              DestructiveTargetForOperation("acme", operation),
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              operation.ID,
+		Definition:          operation,
+		Requests:            []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite(rest_write): %v", err)
+	}
+	if err := ExecutePreparedWrite(context.Background(), prepared, nil, preview.Digest, func(context.Context) error {
+		executed = true
+		return nil
+	}); err == nil {
+		t.Fatal("unapproved rest_write closure executed without approval evidence")
+	}
+	if executed {
+		t.Fatal("unapproved rest_write closure was invoked")
+	}
+
+	evidence := approvedEvidenceForPreview(t, preview)
+	err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(executeCtx context.Context) error {
+		if !transportpolicy.IsDestructive(executeCtx) {
+			return errors.New("destructive transport policy was not propagated")
+		}
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("GateDestructiveExecution(rest_write): %v", err)
+	}
+	if !executed {
+		t.Fatal("approved rest_write closure was not executed")
+	}
+}
+
+func TestRestWriteDestructiveFlagCannotBeOverriddenByMutationClass(t *testing.T) {
+	target := DestructiveTargetForOperation("acme", OperationSpec{
+		ID:            "acme.widgets.admin_delete",
+		Kind:          "rest_write",
+		MutationClass: "admin",
+		Destructive:   true,
+		REST:          &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets/delete"},
+	})
+	if !target.RequiresApproval() {
+		t.Fatal("destructive operation flag was downgraded by a non-empty mutation class")
+	}
+}
+
+func TestSecretOperationTypedConfirmationPolicyReachesSharedWriteGate(t *testing.T) {
+	target := DestructiveTargetForOperation("acme", OperationSpec{
+		ID:            "acme.organization.migration",
+		Kind:          "graphql_mutation",
+		MutationClass: "secret",
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "env",
+			ApprovalMode: "typed_confirmation",
+		},
+		GraphQL: &GraphQLOperationSpec{Path: "/graphql"},
+	})
+	if target.Confirmation != connectors.ConfirmationKindDestructive {
+		t.Fatalf("secret operation confirmation = %q, want typed destructive confirmation", target.Confirmation)
+	}
+	if !target.RequiresApproval() {
+		t.Fatal("secret operation typed-confirmation policy did not require approval")
+	}
+}
+
+func TestPreparedWriteRejectsRequestMethodOutsideTargetPolicy(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{Connector: "acme", Operation: "delete_widget", Method: http.MethodPost},
+		Action: "delete_widget",
+		Requests: []PreparedRequest{{
+			Method: http.MethodDelete,
+			URL:    "https://api.example.test/widgets/42",
+		}},
+	}
+	if _, err := PreviewPreparedWrite(prepared); err == nil {
+		t.Fatal("PreviewPreparedWrite() accepted a DELETE outside the normalized target policy")
+	}
+}
+
 func (c *capturedRequest) form() url.Values {
 	v, _ := url.ParseQuery(string(c.body))
 	return v
@@ -72,6 +414,151 @@ func (c *capturedRequest) json() map[string]any {
 	var m map[string]any
 	_ = json.Unmarshal(c.body, &m)
 	return m
+}
+
+func approvedWriteRequest(t *testing.T, b Bundle, action string, records []connectors.Record, h Hooks) connectors.WriteRequest {
+	t.Helper()
+	authority := fixtureWriteApprovalAuthority(t)
+	revision, err := authority.CredentialRevision("fixture-credential", nil)
+	if err != nil {
+		t.Fatalf("CredentialRevision(%s): %v", action, err)
+	}
+	configurationDigest, err := authority.ConfigurationDigest("fixture-credential", nil)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest(%s): %v", action, err)
+	}
+	req := connectors.WriteRequest{Action: action, Config: connectors.RuntimeConfig{
+		CredentialRevision: revision, ConfigurationDigest: configurationDigest,
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}
+	preview, err := DryRunWrite(context.Background(), b, req, records, h)
+	if err != nil {
+		t.Fatalf("DryRunWrite(%s): %v", action, err)
+	}
+	req.Approval = approvedEvidenceWithAuthority(t, authority, preview)
+	return req
+}
+
+func fixtureWriteApprovalAuthority(t *testing.T) *connectors.WriteApprovalAuthority {
+	t.Helper()
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	return authority
+}
+
+func approvedEvidenceForPreview(t *testing.T, preview connectors.WritePreview) *connectors.WriteApprovalEvidence {
+	t.Helper()
+	return approvedEvidenceWithAuthority(t, fixtureWriteApprovalAuthority(t), preview)
+}
+
+func approvedEvidenceWithAuthority(t *testing.T, authority *connectors.WriteApprovalAuthority, preview connectors.WritePreview) *connectors.WriteApprovalEvidence {
+	t.Helper()
+	token := "fixture-approval-token"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant() error = %v", err)
+	}
+	evidence, err := authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant() error = %v", err)
+	}
+	return evidence
+}
+
+func TestDryRunWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		Spec: writeSpecWithDefaultBaseURL(t, "https://api.example.test/v1"),
+		HTTP: HTTPBase{URL: "{{ config.base_url }}"},
+		Writes: []WriteAction{{
+			Name:       "update_widget",
+			Kind:       "update",
+			Method:     http.MethodPost,
+			Path:       "/widgets/{{ record.id }}",
+			PathFields: []string{"id"},
+		}},
+	}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{
+		"id": "42",
+	}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	if len(preview.Warnings) < 2 || preview.Warnings[1] != "resolved request: POST https://api.example.test/v1/widgets/42" {
+		t.Fatalf("warnings = %#v", preview.Warnings)
+	}
+}
+
+func TestWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPatch,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+	})
+	b.Spec = writeSpecWithDefaultBaseURL(t, srv.URL)
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
+		{"id": "42", "name": "new-name"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/widgets/42" {
+		t.Fatalf("path = %q, want /widgets/42", cap.path)
+	}
+}
+
+func TestWritePreservesConfiguredBaseURLOverride(t *testing.T) {
+	defaultSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+	}))
+	defer defaultSrv.Close()
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPatch,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+	})
+	b.Spec = writeSpecWithDefaultBaseURL(t, defaultSrv.URL)
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL}}
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget", Config: cfg}, []connectors.Record{
+		{"id": "42", "name": "new-name"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/widgets/42" {
+		t.Fatalf("path = %q, want /widgets/42", cap.path)
+	}
 }
 
 // --- body construction: json default (record minus path_fields) ---
@@ -155,9 +642,8 @@ func TestWriteNoneBodyTypeSendsNoBody(t *testing.T) {
 		BodyType:   "none",
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
-		{"id": "42"},
-	}, nil)
+	records := []connectors.Record{{"id": "42"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "update_widget", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -177,9 +663,8 @@ func TestWriteBodyFieldsAllowListForDeleteWithBody(t *testing.T) {
 		BodyFields: []string{"message", "sha", "branch"},
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_file"}, []connectors.Record{
-		{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"},
-	}, nil)
+	records := []connectors.Record{{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_file", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -219,9 +704,8 @@ func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
 		}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -295,9 +779,8 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want GraphQL errors[] to fail closed")
 	}
@@ -363,10 +846,10 @@ func TestValidateWriteRecordSchemaValidPasses(t *testing.T) {
 
 // --- DryRunWrite ---
 
-func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
+func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T) {
 	b := Bundle{
 		Name: "acme",
-		HTTP: HTTPBase{URL: "https://api.example.com"},
+		HTTP: HTTPBase{URL: "https://api.example.com/{{ secrets.client_secret }}"},
 		Writes: []WriteAction{{
 			Name:         "update_customer",
 			Kind:         "update",
@@ -377,7 +860,7 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 		}},
 	}
 
-	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"client_secret": "sk_live_abc123"}}
+	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"client_secret": "fixture-preview-secret"}}
 	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: cfg}, []connectors.Record{
 		{"id": "cus_1", "name": "New Name"},
 	}, nil)
@@ -394,12 +877,81 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 	if !strings.Contains(joined, "POST") || !strings.Contains(joined, "/customers/cus_1") {
 		t.Fatalf("Warnings = %v, want resolved method+path", preview.Warnings)
 	}
-	if strings.Contains(joined, "sk_live_abc123") {
-		t.Fatalf("Warnings = %v, secret leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "fixture-preview-secret") {
+		t.Fatalf("Warnings = %v, want complete resolved secret value", preview.Warnings)
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
+func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.T) {
+	records := []connectors.Record{{"id": "42", "keep": "yes", "drop": "no"}}
+	base := Bundle{
+		Name: "twilio",
+		HTTP: HTTPBase{URL: "https://api.twilio.test/Accounts/{{ secrets.account_sid }}"},
+		Writes: []WriteAction{{
+			Name:       "delete_message",
+			Kind:       "delete",
+			Method:     http.MethodDelete,
+			Path:       "/Messages/{{ record.id }}",
+			PathFields: []string{"id"},
+			BodyFields: []string{"keep"},
+			Query:      map[string]QueryParam{"mode": {Template: "soft"}},
+			Hook:       "twilio-v1",
+		}},
+	}
+
+	preview := func(t *testing.T, bundle Bundle, sid string) connectors.WritePreview {
+		t.Helper()
+		authority := fixtureWriteApprovalAuthority(t)
+		revision, err := authority.CredentialRevision("twilio-fixture", map[string]string{"account_sid": sid})
+		if err != nil {
+			t.Fatalf("CredentialRevision() error = %v", err)
+		}
+		configurationDigest, err := authority.ConfigurationDigest("twilio-fixture", nil)
+		if err != nil {
+			t.Fatalf("ConfigurationDigest() error = %v", err)
+		}
+		got, err := DryRunWrite(context.Background(), bundle, connectors.WriteRequest{
+			Action: "delete_message",
+			Config: connectors.RuntimeConfig{
+				Secrets: map[string]string{"account_sid": sid}, CredentialRevision: revision,
+				ConfigurationDigest: configurationDigest, WriteApprovalScope: connectors.WriteApprovalScopeProject,
+			},
+		}, records, nil)
+		if err != nil {
+			t.Fatalf("DryRunWrite() error = %v", err)
+		}
+		return got
+	}
+
+	original := preview(t, base, "AC-one")
+	changedCredential := preview(t, base, "AC-two")
+	if original.Digest == changedCredential.Digest {
+		t.Fatal("preview digest did not bind the secret-derived account target")
+	}
+
+	changedQuery := base
+	changedQuery.Writes = append([]WriteAction(nil), base.Writes...)
+	changedQuery.Writes[0].Query = map[string]QueryParam{"mode": {Template: "hard"}}
+	if original.Digest == preview(t, changedQuery, "AC-one").Digest {
+		t.Fatal("preview digest did not bind the resolved query")
+	}
+
+	changedBody := base
+	changedBody.Writes = append([]WriteAction(nil), base.Writes...)
+	changedBody.Writes[0].BodyFields = []string{"drop"}
+	if original.Digest == preview(t, changedBody, "AC-one").Digest {
+		t.Fatal("preview digest did not bind body construction")
+	}
+
+	changedHook := base
+	changedHook.Writes = append([]WriteAction(nil), base.Writes...)
+	changedHook.Writes[0].Hook = "twilio-v2"
+	if original.Digest == preview(t, changedHook, "AC-one").Digest {
+		t.Fatal("preview digest did not bind hook identity")
+	}
+}
+
+func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -421,15 +973,15 @@ func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if strings.Contains(joined, "patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, record path field leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, want complete record path field", preview.Warnings)
 	}
-	if !strings.Contains(joined, "/patients/redacted") {
-		t.Fatalf("Warnings = %v, want redacted request path", preview.Warnings)
+	if !strings.Contains(joined, "/patients/patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, want complete resolved request path", preview.Warnings)
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -452,8 +1004,11 @@ func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T)
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if strings.Contains(joined, "patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, nested record path field leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, want complete nested record path field", preview.Warnings)
+	}
+	if !strings.Contains(joined, "/patients/patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, want complete resolved nested request path", preview.Warnings)
 	}
 	if patient["uuid"] != "patient-nested-uuid" {
 		t.Fatalf("DryRunWrite mutated caller record: %v", patient)
@@ -462,7 +1017,7 @@ func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T)
 
 // --- delete semantics: missing_ok_status ---
 
-func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
+func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
@@ -476,14 +1031,41 @@ func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err != nil {
-		t.Fatalf("Write: %v (404 on idempotent delete should count as written, not error)", err)
+		t.Fatalf("Write: %v (allow-listed missing response should remain an idempotent no-op)", err)
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		t.Fatalf("result = %+v, want 404 counted as written", result)
+	if result.RecordsWritten != 0 || result.RecordsFailed != 0 || result.RecordsUnchanged != 1 {
+		t.Fatalf("result = %+v, want provider 404 counted as one unchanged record", result)
+	}
+}
+
+func TestWriteDeleteFailureAccountingExcludesPriorUnchangedRecords(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, "/absent") {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "delete_label",
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       "/labels/{{ record.name }}",
+		PathFields: []string{"name"},
+		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
+	})
+
+	records := []connectors.Record{{"name": "absent"}, {"name": "bad"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
+	if err == nil {
+		t.Fatal("Write: want the second delete failure")
+	}
+	if result.RecordsWritten != 0 || result.RecordsUnchanged != 1 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want 0 written / 1 unchanged / 1 failed", result)
 	}
 }
 
@@ -501,9 +1083,8 @@ func TestWriteDeleteNonListed404Fails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: false},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 404 not in missing_ok_status")
 	}
@@ -528,9 +1109,8 @@ func TestWriteNonListedStatusFails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 400 (not a missing_ok_status match)")
 	}
@@ -984,4 +1564,368 @@ type writeHookFunc struct {
 func (w *writeHookFunc) ConnectorName() string { return "write-hook-func-test" }
 func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
 	return w.fn(ctx, action, rec, rt)
+}
+
+// --- array cardinality reach ----------------------------------------------
+//
+// One keyword pair added to the shared dialect must reach every request-building
+// path with no per-site change. That property is what turns a single rule into
+// 25 unblocked Airtable operations, so it is asserted directly rather than
+// assumed: record_schema here, json_array body_schema below, and operation
+// rest.body_schema in direct_read_test.go.
+
+func TestWriteRecordSchemaMinItemsRejectsEmptyArray(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:   "delete_records",
+		Kind:   "delete",
+		Method: http.MethodDelete,
+		Path:   "/v0/base/table",
+		Risk:   "critical",
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["records"],
+			"additionalProperties": false,
+			"properties": {
+				"records": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+			}
+		}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_records"},
+		[]connectors.Record{{"records": []any{}}}, nil)
+	if err == nil {
+		t.Fatal("empty documented array: want validation error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if cap.method != "" {
+		t.Fatalf("request must not be issued for an invalid record, got %s %s", cap.method, cap.path)
+	}
+
+	validRecords := []connectors.Record{{"records": []any{"rec1"}}}
+	if _, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_records", validRecords, nil), validRecords, nil); err != nil {
+		t.Fatalf("non-empty array: unexpected error: %v", err)
+	}
+}
+
+func TestWriteJSONArrayBodySchemaMinItems(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "upsert_records",
+		Kind:       "upsert",
+		Method:     http.MethodPut,
+		Path:       "/v0/acct/table/upsertRecords",
+		Risk:       "critical",
+		BodyType:   "json_array",
+		BodyField:  "records",
+		BodySchema: json.RawMessage(`{"type":"array","minItems":1,"items":{"type":"object"}}`),
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["records"],
+			"properties": {"records": {"type": "array"}}
+		}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upsert_records"},
+		[]connectors.Record{{"records": []any{}}}, nil)
+	if err == nil {
+		t.Fatal("empty json_array body: want validation error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if cap.method != "" {
+		t.Fatalf("request must not be issued, got %s %s", cap.method, cap.path)
+	}
+}
+
+// --- bounded base64 upload -------------------------------------------------
+//
+// Airtable's ledger blocks POST /v0/{baseId}/{recordId}/{field}/uploadAttachment
+// "until an Airtable-owned executor validates official base64 encoding and
+// decoded-size bounds before transmission". The only alternative would be a raw
+// body escape hatch, which is banned outright.
+
+func base64UploadAction(spec *Base64UploadSpec) WriteAction {
+	return WriteAction{
+		Name:         "upload_attachment",
+		Kind:         "create",
+		Method:       http.MethodPost,
+		Path:         "/v0/base/rec/fld/uploadAttachment",
+		Risk:         "medium",
+		BodyType:     "base64_upload",
+		Base64Upload: spec,
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["file_path", "filename", "contentType"],
+			"additionalProperties": false,
+			"properties": {
+				"file_path": {"type": "string"},
+				"filename": {"type": "string"},
+				"contentType": {"type": "string"}
+			}
+		}`),
+	}
+}
+
+func writeTempPayload(t *testing.T, name string, content []byte) (projectDir, rel string) {
+	t.Helper()
+	dir := t.TempDir()
+	rel = name
+	if err := os.WriteFile(filepath.Join(dir, name), content, 0o600); err != nil {
+		t.Fatalf("write payload: %v", err)
+	}
+	return dir, rel
+}
+
+func TestWriteBase64UploadEncodesFileAndOmitsSourceField(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"id":"att1"}`)
+	dir, rel := writeTempPayload(t, "payload.txt", []byte("hello attachment"))
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "payload.txt", "contentType": "text/plain"}}, nil); err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+
+	var body map[string]any
+	if err := json.Unmarshal(cap.body, &body); err != nil {
+		t.Fatalf("decode body: %v (raw %s)", err, cap.body)
+	}
+	want := base64.StdEncoding.EncodeToString([]byte("hello attachment"))
+	if got, _ := body["file"].(string); got != want {
+		t.Fatalf("body[file] = %q, want %q", got, want)
+	}
+	// The source field carries a LOCAL FILESYSTEM PATH. Transmitting it would
+	// leak the operator's directory layout to the provider.
+	if _, present := body["file_path"]; present {
+		t.Fatalf("source field must never reach the wire, body = %v", body)
+	}
+	// Ordinary declared fields still travel, governed by record_schema.
+	if got, _ := body["filename"].(string); got != "payload.txt" {
+		t.Fatalf("body[filename] = %q, want payload.txt", got)
+	}
+	if got, _ := body["contentType"].(string); got != "text/plain" {
+		t.Fatalf("body[contentType] = %q, want text/plain", got)
+	}
+}
+
+func TestWriteBase64UploadRejectsOversizePayload(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	dir, rel := writeTempPayload(t, "big.bin", bytes.Repeat([]byte("x"), 64))
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 32,
+	}))
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "big.bin", "contentType": "application/octet-stream"}}, nil)
+	if err == nil {
+		t.Fatal("oversize payload: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "too large") {
+		t.Fatalf("error should name the size bound, got %v", err)
+	}
+	// Rejected, never truncated: a truncated attachment is a silently corrupt
+	// upload, which is worse than a failed one.
+	if cap.method != "" {
+		t.Fatalf("oversize payload must not be transmitted, got %s %s", cap.method, cap.path)
+	}
+}
+
+func TestWriteBase64UploadRejectsPathEscape(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	dir := t.TempDir()
+	outside := filepath.Join(t.TempDir(), "secret.txt")
+	if err := os.WriteFile(outside, []byte("secret"), 0o600); err != nil {
+		t.Fatalf("write outside file: %v", err)
+	}
+	// A symlink inside the project pointing out of it is the case a purely
+	// lexical path check cannot catch.
+	if err := os.Symlink(outside, filepath.Join(dir, "link.txt")); err != nil {
+		t.Skipf("symlink unsupported: %v", err)
+	}
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	for _, raw := range []string{"../escape.txt", "link.txt"} {
+		cap.method = ""
+		_, err := Write(context.Background(), b, connectors.WriteRequest{
+			Action: "upload_attachment",
+			Config: connectors.RuntimeConfig{ProjectDir: dir},
+		}, []connectors.Record{{"file_path": raw, "filename": "x", "contentType": "text/plain"}}, nil)
+		if err == nil {
+			t.Fatalf("%q: want containment error, got nil", raw)
+		}
+		if cap.method != "" {
+			t.Fatalf("%q: must not be transmitted", raw)
+		}
+	}
+}
+
+func TestWriteBase64UploadStrictSourceRejectsSloppyEncoding(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	action := base64UploadAction(&Base64UploadSpec{
+		Source:          "base64",
+		SourceField:     "content",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	})
+	action.RecordSchema = json.RawMessage(`{
+		"type": "object",
+		"required": ["content"],
+		"additionalProperties": false,
+		"properties": {"content": {"type": "string"}}
+	}`)
+	b := newWriteTestBundle(srv, action)
+
+	// "Official base64" means RFC 4648 standard alphabet, canonical padding, no
+	// line breaks — exactly what StdEncoding.Strict() enforces.
+	for _, bad := range []string{
+		"aGVsbG8",             // missing padding
+		"aGVs\nbG8=",          // embedded newline
+		"aGVsbG8h_w==",        // URL-safe alphabet
+		"not base64 at all!!", // not base64
+	} {
+		cap.method = ""
+		_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_attachment"},
+			[]connectors.Record{{"content": bad}}, nil)
+		if err == nil {
+			t.Fatalf("%q: want strict-base64 rejection, got nil", bad)
+		}
+		if cap.method != "" {
+			t.Fatalf("%q: must not be transmitted", bad)
+		}
+	}
+
+	good := base64.StdEncoding.EncodeToString([]byte("hello"))
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_attachment"},
+		[]connectors.Record{{"content": good}}, nil); err != nil {
+		t.Fatalf("canonical base64: unexpected error: %v", err)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(cap.body, &body); err != nil {
+		t.Fatalf("decode body: %v", err)
+	}
+	if got, _ := body["file"].(string); got != good {
+		t.Fatalf("body[file] = %q, want %q", got, good)
+	}
+}
+
+func TestWriteBase64UploadEnforcesEncodedBound(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, `{}`)
+	dir, rel := writeTempPayload(t, "p.bin", bytes.Repeat([]byte("y"), 40))
+
+	// 40 decoded bytes encode to 56 base64 characters. Real APIs (Airtable's
+	// 5 MB attachment cap among them) document the ENCODED limit, so both are
+	// checked.
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+		MaxEncodedBytes: 50,
+	}))
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "p.bin", "contentType": "application/octet-stream"}}, nil)
+	if err == nil {
+		t.Fatal("over encoded bound: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "encoded") {
+		t.Fatalf("error should name the encoded bound, got %v", err)
+	}
+}
+
+func TestWriteBase64UploadHonorsApprovedPayloadDigest(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	content := []byte("approved bytes")
+	dir, rel := writeTempPayload(t, "file_path_payload.txt", content)
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+	sum := sha256.Sum256(content)
+	digest := hex.EncodeToString(sum[:])
+	rec := []connectors.Record{{"file_path": rel, "filename": "p.txt", "contentType": "text/plain"}}
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): digest},
+		},
+	}, rec, nil); err != nil {
+		t.Fatalf("matching digest: unexpected error: %v", err)
+	}
+	if cap.method == "" {
+		t.Fatal("matching digest: request should have been issued")
+	}
+
+	cap.method = ""
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): strings.Repeat("0", 64)},
+		},
+	}, rec, nil)
+	if err == nil {
+		t.Fatal("substituted payload: want digest mismatch error, got nil")
+	}
+	if cap.method != "" {
+		t.Fatal("substituted payload must not be transmitted")
+	}
+
+	cap.method = ""
+	_, err = Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "other"): digest},
+		},
+	}, rec, nil)
+	if err == nil {
+		t.Fatal("unapproved field: want error, got nil")
+	}
+}
+
+func TestDryRunBase64UploadDoesNotReadTheFile(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: t.TempDir()},
+	}, []connectors.Record{{"file_path": "not-on-disk.txt", "filename": "x", "contentType": "text/plain"}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite must not touch the filesystem: %v", err)
+	}
+	if preview.RecordsStaged != 1 {
+		t.Fatalf("RecordsStaged = %d, want 1", preview.RecordsStaged)
+	}
 }

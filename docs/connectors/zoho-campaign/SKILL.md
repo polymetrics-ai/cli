@@ -11,9 +11,17 @@ Reads Zoho Campaigns lists, campaigns, and contacts through the Zoho Campaigns R
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-zoho-campaign
+- asset: icons/simple-icons/zoho-campaign.svg
+- title: Zoho
+- simple_icon_slug: zoho
+- simple_icon_hex: E42527
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
+- match: curated-alias
+- matched_by: zoho
 
 ## Capabilities
 
@@ -30,22 +38,22 @@ Reads Zoho Campaigns lists, campaigns, and contacts through the Zoho Campaigns R
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - lists:
   - primary key: id
   - cursor: updated_at
-  - fields: createdtime(), id(), list_name(), listkey(), listname(), listtype(), modified_time(), name(), tag(), updated_at()
+  - fields: createdtime(string), id(string), list_name(string), listkey(string), listname(string), listtype(string), modified_time(string), name(string), tag(string), updated_at(string)
 - campaigns:
   - primary key: id
   - cursor: updated_at
-  - fields: campaign_key(), campaign_name(), campaignkey(), campaignname(), from_email(), id(), modified_time(), name(), sent_time(), status(), subject(), updated_at()
+  - fields: campaign_key(string), campaign_name(string), campaignkey(string), campaignname(string), from_email(string), id(string), modified_time(string), name(string), sent_time(string), status(string), subject(string), updated_at(string)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: contact_id(), contact_key(), email(), first_name(), id(), last_name(), modified_time(), name(), status(), updated_at()
+  - fields: contact_id(string), contact_key(string), email(string), first_name(string), id(string), last_name(string), modified_time(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

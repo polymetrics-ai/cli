@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_entries",
+  "type": "object",
+  "x-primary-key": [
+    "_id"
+  ],
+  "required": [
+    "_id"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "resource": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projectName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projectType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projectStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryTemplateId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

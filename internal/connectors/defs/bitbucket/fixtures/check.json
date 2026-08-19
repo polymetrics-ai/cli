@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories"
+  },
+  "response": {
+    "body": {
+      "page": 1,
+      "pagelen": 10,
+      "values": []
+    },
+    "status": 200
+  }
+}

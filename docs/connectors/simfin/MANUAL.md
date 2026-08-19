@@ -13,9 +13,11 @@ DESCRIPTION
   Reads SimFin company, financial statement, price, share, filing, and database-change data through the SimFin REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -39,45 +41,45 @@ CONFIGURATION
   start_date
   statements
   tickers
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   companies:
     primary key: id
-    fields: id(), name(), ticker(), updated_at()
+    fields: id(string), name(string), ticker(string), updated_at(string)
   statements:
     primary key: id
-    fields: id(), name(), ticker(), updated_at()
+    fields: id(string), name(string), ticker(string), updated_at(string)
   markets:
     primary key: id
-    fields: id(), name(), ticker(), updated_at()
+    fields: id(string), name(string), ticker(string), updated_at(string)
   company_general_compact:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   company_general_verbose:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   company_statements_compact:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   company_statements_verbose:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   company_prices_compact:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   company_prices_verbose:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   common_shares_outstanding:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   weighted_shares_outstanding:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   filings_by_company:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   filings:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   changed_companies:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
   data_change_log:
-    fields: changes(), columns(), companyId(), companyName(), data(), date(), filingIdentifier(), filingType(), fiscalPeriod(), fiscalYear(), id(), name(), prices(), shares(), simId(), statements(), ticker()
+    fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external SimFin API read of company, statement, price, share, filing, and change-log data

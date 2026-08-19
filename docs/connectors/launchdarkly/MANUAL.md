@@ -13,6 +13,7 @@ DESCRIPTION
   Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.
 
 ICON
+  id: launchdarkly
   asset: icons/launchdarkly.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,25 +30,25 @@ CONFIGURATION
   base_url
   mode
   project_key
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   projects:
     primary key: _id
-    fields: _id(), key(), name(), tags()
+    fields: _id(string), key(string), name(string), tags(array)
   members:
     primary key: _id
-    fields: _id(), _pendingInvite(), email(), firstName(), lastName(), role()
+    fields: _id(string), _pendingInvite(boolean), email(string), firstName(string), lastName(string), role(string)
   auditlog:
     primary key: _id
     cursor: date
-    fields: _id(), date(), description(), kind(), name(), shortDescription()
+    fields: _id(string), date(integer), description(string), kind(string), name(string), shortDescription(string)
   flags:
     primary key: key
-    fields: creationDate(), description(), key(), kind(), name(), tags(), temporary()
+    fields: creationDate(integer), description(string), key(string), kind(string), name(string), tags(array), temporary(boolean)
   environments:
     primary key: _id
-    fields: _id(), color(), defaultTtl(), key(), name(), tags()
+    fields: _id(string), color(string), defaultTtl(integer), key(string), name(string), tags(array)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

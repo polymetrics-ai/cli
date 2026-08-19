@@ -1,9 +1,1155 @@
 {
-  "api": "Mailchimp Marketing API v3 (https://<dc>.api.mailchimp.com/3.0)",
-  "docs": "https://mailchimp.com/developer/release-notes/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Mailchimp Marketing API surface (audience members, automations workflow-emails sub-resource, templates, e-commerce stores, webhooks, etc.) is out of scope outside this connector's current declared surface",
+  "api": "Mailchimp Marketing API v3.0",
+  "docs": "https://api.mailchimp.com/schema/3.0/Swagger.json",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Current official Mailchimp Marketing Swagger 2.0 root plus all 181 provider-owned path refs. Count unit is HTTP method plus normalized path. Executable rows are definition-owned streams, typed direct reads, or named reverse-ETL actions. Blocked rows are exact safety/runtime blockers, not advertised executable work.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Provider metadata/health endpoint; `pm connectors inspect` and `pm etl check` cover local discovery/health without exposing this as a data operation.",
+        "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Root/Namespace.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account-exports",
+      "covered_by": {
+        "stream": "account_exports_exports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/account-exports",
+      "covered_by": {
+        "write": "post_account_exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account-exports/{export_id}",
+      "covered_by": {
+        "direct_read": "account-exports get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity-feed/chimp-chatter",
+      "covered_by": {
+        "stream": "activity_feed_chimp_chatter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences",
+      "covered_by": {
+        "stream": "audiences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{audience_id}",
+      "covered_by": {
+        "direct_read": "audiences get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{audience_id}/contacts",
+      "covered_by": {
+        "stream": "audiences_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audiences/{audience_id}/contacts",
+      "covered_by": {
+        "write": "post_audiences_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{audience_id}/contacts/{contact_id}",
+      "covered_by": {
+        "direct_read": "audiences contacts get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/audiences/{audience_id}/contacts/{contact_id}",
+      "covered_by": {
+        "write": "patch_audiences_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audiences/{audience_id}/contacts/{contact_id}/actions/archive",
+      "covered_by": {
+        "write": "archive_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audiences/{audience_id}/contacts/{contact_id}/actions/forget",
+      "covered_by": {
+        "write": "forget_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/authorized-apps",
+      "covered_by": {
+        "stream": "authorized_apps_apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/authorized-apps/{app_id}",
+      "covered_by": {
+        "direct_read": "authorized-apps get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations",
+      "covered_by": {
+        "stream": "automations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations",
+      "covered_by": {
+        "write": "post_automations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}",
+      "covered_by": {
+        "direct_read": "automations get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/actions/archive",
+      "covered_by": {
+        "write": "archive_automations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/actions/pause-all-emails",
+      "covered_by": {
+        "write": "pause_all_emails_automations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/actions/start-all-emails",
+      "covered_by": {
+        "write": "start_all_emails_automations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails",
+      "covered_by": {
+        "stream": "automations_emails"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "write": "delete_automations_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "direct_read": "automations emails get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "write": "patch_automations_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/pause",
+      "covered_by": {
+        "write": "pause_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/start",
+      "covered_by": {
+        "write": "start_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
+      "covered_by": {
+        "stream": "automations_emails_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
+      "covered_by": {
+        "write": "post_automations_emails_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "automations emails queue get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/removed-subscribers",
+      "covered_by": {
+        "stream": "automations_removed_subscribers_subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/removed-subscribers",
+      "covered_by": {
+        "write": "post_automations_removed_subscribers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "automations removed-subscribers get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batch-webhooks",
+      "covered_by": {
+        "stream": "batch_webhooks_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batch-webhooks",
+      "covered_by": {
+        "write": "post_batch_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "write": "delete_batch_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "direct_read": "batch-webhooks get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "write": "patch_batch_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batches",
+      "covered_by": {
+        "stream": "batches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Mailchimp batch creation accepts arbitrary method/path/body operations; exposing it would be a generic HTTP write passthrough, which AGENTS.md forbids.",
+        "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Collection.json",
+        "notes": "Use named stream, direct-read, or reverse-ETL actions instead of raw batch operation submission."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/batches/{batch_id}",
+      "covered_by": {
+        "write": "delete_batches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batches/{batch_id}",
+      "covered_by": {
+        "direct_read": "batches get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaign-folders",
+      "covered_by": {
+        "stream": "campaign_folders_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign-folders",
+      "covered_by": {
+        "write": "post_campaign_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaign-folders/{folder_id}",
+      "covered_by": {
+        "write": "delete_campaign_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaign-folders/{folder_id}",
+      "covered_by": {
+        "direct_read": "campaign-folders get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaign-folders/{folder_id}",
+      "covered_by": {
+        "write": "patch_campaign_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns",
+      "covered_by": {
+        "write": "post_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaigns/{campaign_id}",
+      "covered_by": {
+        "write": "delete_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}",
+      "covered_by": {
+        "direct_read": "campaigns get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}",
+      "covered_by": {
+        "write": "patch_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/cancel-send",
+      "covered_by": {
+        "write": "cancel_send_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/create-resend",
+      "covered_by": {
+        "write": "create_resend_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/pause",
+      "covered_by": {
+        "write": "pause_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/replicate",
+      "covered_by": {
+        "write": "replicate_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/resume",
+      "covered_by": {
+        "write": "resume_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/schedule",
+      "covered_by": {
+        "write": "schedule_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/send",
+      "covered_by": {
+        "write": "send_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/test",
+      "covered_by": {
+        "write": "test_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/unschedule",
+      "covered_by": {
+        "write": "unschedule_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/content",
+      "covered_by": {
+        "direct_read": "campaigns content get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/campaigns/{campaign_id}/content",
+      "covered_by": {
+        "write": "put_campaigns_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/feedback",
+      "covered_by": {
+        "stream": "campaigns_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/feedback",
+      "covered_by": {
+        "write": "post_campaigns_feedback"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+      "covered_by": {
+        "write": "delete_campaigns_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+      "covered_by": {
+        "direct_read": "campaigns feedback get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+      "covered_by": {
+        "write": "patch_campaigns_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/send-checklist",
+      "covered_by": {
+        "direct_read": "campaigns send-checklist get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connected-sites",
+      "covered_by": {
+        "stream": "connected_sites_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/connected-sites",
+      "covered_by": {
+        "write": "post_connected_sites"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/connected-sites/{connected_site_id}",
+      "covered_by": {
+        "write": "delete_connected_sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connected-sites/{connected_site_id}",
+      "covered_by": {
+        "direct_read": "connected-sites get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/connected-sites/{connected_site_id}/actions/disable-pixel",
+      "covered_by": {
+        "write": "disable_pixel_connected_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/connected-sites/{connected_site_id}/actions/enable-pixel",
+      "covered_by": {
+        "write": "enable_pixel_connected_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/connected-sites/{connected_site_id}/actions/verify-script-installation",
+      "covered_by": {
+        "write": "verify_script_installation_connected_sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "direct_read": "conversations get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "stream": "conversations_messages_conversation_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/messages/{message_id}",
+      "covered_by": {
+        "direct_read": "conversations messages get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer-journeys/journeys/{journey_id}/steps/{step_id}/actions/trigger",
+      "covered_by": {
+        "write": "trigger_steps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/orders",
+      "covered_by": {
+        "stream": "ecommerce_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores",
+      "covered_by": {
+        "stream": "ecommerce_stores"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores",
+      "covered_by": {
+        "write": "post_ecommerce_stores"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/carts",
+      "covered_by": {
+        "stream": "ecommerce_stores_carts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/carts",
+      "covered_by": {
+        "write": "post_ecommerce_stores_carts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_carts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores carts get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_carts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines",
+      "covered_by": {
+        "stream": "ecommerce_stores_carts_lines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines",
+      "covered_by": {
+        "write": "post_ecommerce_stores_carts_lines"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_carts_lines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores carts lines get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_carts_lines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/customers",
+      "covered_by": {
+        "stream": "ecommerce_stores_customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/customers",
+      "covered_by": {
+        "write": "post_ecommerce_stores_customers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores customers get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_customers"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "write": "put_ecommerce_stores_customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/orders",
+      "covered_by": {
+        "stream": "ecommerce_stores_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/orders",
+      "covered_by": {
+        "write": "post_ecommerce_stores_orders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores orders get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_orders"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+      "covered_by": {
+        "write": "put_ecommerce_stores_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines",
+      "covered_by": {
+        "stream": "ecommerce_stores_orders_lines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines",
+      "covered_by": {
+        "write": "post_ecommerce_stores_orders_lines"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_orders_lines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores orders lines get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_orders_lines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products",
+      "covered_by": {
+        "stream": "ecommerce_stores_products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/products",
+      "covered_by": {
+        "write": "post_ecommerce_stores_products"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores products get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_products"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "write": "put_ecommerce_stores_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/images",
+      "covered_by": {
+        "stream": "ecommerce_stores_products_images"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/images",
+      "covered_by": {
+        "write": "post_ecommerce_stores_products_images"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_products_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores products images get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_products_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants",
+      "covered_by": {
+        "stream": "ecommerce_stores_products_variants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants",
+      "covered_by": {
+        "write": "post_ecommerce_stores_products_variants"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_products_variants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores products variants get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_products_variants"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+      "covered_by": {
+        "write": "put_ecommerce_stores_products_variants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/promo-rules",
+      "covered_by": {
+        "stream": "ecommerce_stores_promo_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/promo-rules",
+      "covered_by": {
+        "write": "post_ecommerce_stores_promo_rules"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_promo_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores promo-rules get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_promo_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes",
+      "covered_by": {
+        "stream": "ecommerce_stores_promo_rules_promo_codes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes",
+      "covered_by": {
+        "write": "post_ecommerce_stores_promo_rules_promo_codes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+      "covered_by": {
+        "write": "delete_ecommerce_stores_promo_rules_promo_codes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+      "covered_by": {
+        "direct_read": "ecommerce stores promo-rules promo-codes get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+      "covered_by": {
+        "write": "patch_ecommerce_stores_promo_rules_promo_codes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facebook-ads",
+      "covered_by": {
+        "stream": "facebook_ads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facebook-ads/{outreach_id}",
+      "covered_by": {
+        "direct_read": "facebook-ads get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file-manager/files",
+      "covered_by": {
+        "stream": "file_manager_files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file-manager/files",
+      "covered_by": {
+        "write": "post_file_manager_files"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/file-manager/files/{file_id}",
+      "covered_by": {
+        "write": "delete_file_manager_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file-manager/files/{file_id}",
+      "covered_by": {
+        "direct_read": "file-manager files get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/file-manager/files/{file_id}",
+      "covered_by": {
+        "write": "patch_file_manager_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file-manager/folders",
+      "covered_by": {
+        "stream": "file_manager_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file-manager/folders",
+      "covered_by": {
+        "write": "post_file_manager_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/file-manager/folders/{folder_id}",
+      "covered_by": {
+        "write": "delete_file_manager_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file-manager/folders/{folder_id}",
+      "covered_by": {
+        "direct_read": "file-manager folders get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/file-manager/folders/{folder_id}",
+      "covered_by": {
+        "write": "patch_file_manager_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file-manager/folders/{folder_id}/files",
+      "covered_by": {
+        "stream": "file_manager_folders_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/landing-pages",
+      "covered_by": {
+        "stream": "landing_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/landing-pages",
+      "covered_by": {
+        "write": "post_landing_pages"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/landing-pages/{page_id}",
+      "covered_by": {
+        "write": "delete_landing_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/landing-pages/{page_id}",
+      "covered_by": {
+        "direct_read": "landing-pages get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/landing-pages/{page_id}",
+      "covered_by": {
+        "write": "patch_landing_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/landing-pages/{page_id}/actions/publish",
+      "covered_by": {
+        "write": "publish_landing_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/landing-pages/{page_id}/actions/unpublish",
+      "covered_by": {
+        "write": "unpublish_landing_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/landing-pages/{page_id}/content",
+      "covered_by": {
+        "direct_read": "landing-pages content get"
+      }
+    },
     {
       "method": "GET",
       "path": "/lists",
@@ -12,10 +1158,603 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/campaigns",
+      "method": "POST",
+      "path": "/lists",
       "covered_by": {
-        "stream": "campaigns"
+        "write": "post_lists"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}",
+      "covered_by": {
+        "write": "delete_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}",
+      "covered_by": {
+        "direct_read": "lists get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}",
+      "covered_by": {
+        "write": "patch_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}",
+      "covered_by": {
+        "write": "post_lists_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/abuse-reports",
+      "covered_by": {
+        "stream": "lists_abuse_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/abuse-reports/{report_id}",
+      "covered_by": {
+        "direct_read": "lists abuse-reports get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/activity",
+      "covered_by": {
+        "stream": "lists_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/clients",
+      "covered_by": {
+        "stream": "lists_clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/growth-history",
+      "covered_by": {
+        "stream": "lists_growth_history_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/growth-history/{month}",
+      "covered_by": {
+        "direct_read": "lists growth-history get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/interest-categories",
+      "covered_by": {
+        "stream": "lists_interest_categories_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/interest-categories",
+      "covered_by": {
+        "write": "post_lists_interest_categories"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+      "covered_by": {
+        "write": "delete_lists_interest_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+      "covered_by": {
+        "direct_read": "lists interest-categories get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+      "covered_by": {
+        "write": "patch_lists_interest_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests",
+      "covered_by": {
+        "stream": "lists_interest_categories_interests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests",
+      "covered_by": {
+        "write": "post_lists_interest_categories_interests"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+      "covered_by": {
+        "write": "delete_lists_interest_categories_interests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+      "covered_by": {
+        "direct_read": "lists interest-categories interests get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+      "covered_by": {
+        "write": "patch_lists_interest_categories_interests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/locations",
+      "covered_by": {
+        "stream": "lists_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members",
+      "covered_by": {
+        "stream": "lists_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/members",
+      "covered_by": {
+        "write": "post_lists_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "write": "delete_lists_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "lists members get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "write": "patch_lists_members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{list_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "write": "put_lists_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/actions/delete-permanent",
+      "covered_by": {
+        "write": "delete_permanent_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/activity",
+      "covered_by": {
+        "stream": "lists_members_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/activity-feed",
+      "covered_by": {
+        "direct_read": "lists members activity-feed get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/events",
+      "covered_by": {
+        "stream": "lists_members_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/events",
+      "covered_by": {
+        "write": "post_lists_members_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/goals",
+      "covered_by": {
+        "stream": "lists_members_goals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/notes",
+      "covered_by": {
+        "stream": "lists_members_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/notes",
+      "covered_by": {
+        "write": "post_lists_members_notes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+      "covered_by": {
+        "write": "delete_lists_members_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+      "covered_by": {
+        "direct_read": "lists members notes get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+      "covered_by": {
+        "write": "patch_lists_members_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/tags",
+      "covered_by": {
+        "stream": "lists_members_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/members/{subscriber_hash}/tags",
+      "covered_by": {
+        "write": "post_lists_members_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/merge-fields",
+      "covered_by": {
+        "stream": "lists_merge_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/merge-fields",
+      "covered_by": {
+        "write": "post_lists_merge_fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/merge-fields/{merge_id}",
+      "covered_by": {
+        "write": "delete_lists_merge_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/merge-fields/{merge_id}",
+      "covered_by": {
+        "direct_read": "lists merge-fields get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/merge-fields/{merge_id}",
+      "covered_by": {
+        "write": "patch_lists_merge_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/segments",
+      "covered_by": {
+        "stream": "lists_segments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/segments",
+      "covered_by": {
+        "write": "post_lists_segments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/segments/{segment_id}",
+      "covered_by": {
+        "write": "delete_lists_segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/segments/{segment_id}",
+      "covered_by": {
+        "direct_read": "lists segments get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/segments/{segment_id}",
+      "covered_by": {
+        "write": "patch_lists_segments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/segments/{segment_id}",
+      "covered_by": {
+        "write": "post_lists_segments_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/segments/{segment_id}/members",
+      "covered_by": {
+        "stream": "lists_segments_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/segments/{segment_id}/members",
+      "covered_by": {
+        "write": "post_lists_segments_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/segments/{segment_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "write": "delete_lists_segments_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/signup-forms",
+      "covered_by": {
+        "stream": "lists_signup_forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/signup-forms",
+      "covered_by": {
+        "write": "post_lists_signup_forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/surveys",
+      "covered_by": {
+        "stream": "lists_surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/surveys",
+      "covered_by": {
+        "write": "post_lists_surveys"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/surveys/{survey_id}",
+      "covered_by": {
+        "write": "delete_lists_surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/surveys/{survey_id}",
+      "covered_by": {
+        "direct_read": "lists surveys get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/surveys/{survey_id}",
+      "covered_by": {
+        "write": "patch_lists_surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/surveys/{survey_id}/actions/create-email",
+      "covered_by": {
+        "write": "create_email_surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/surveys/{survey_id}/actions/publish",
+      "covered_by": {
+        "write": "publish_surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/surveys/{survey_id}/actions/replicate",
+      "covered_by": {
+        "write": "replicate_surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/surveys/{survey_id}/actions/unpublish",
+      "covered_by": {
+        "write": "unpublish_surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/tag-search",
+      "covered_by": {
+        "direct_read": "lists tag-search get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/webhooks",
+      "covered_by": {
+        "stream": "lists_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/webhooks",
+      "covered_by": {
+        "write": "post_lists_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{list_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_lists_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "direct_read": "lists webhooks get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/lists/{list_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "patch_lists_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ping",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Provider metadata/health endpoint; `pm connectors inspect` and `pm etl check` cover local discovery/health without exposing this as a data operation.",
+        "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ping/Namespace.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/facebook-ads",
+      "covered_by": {
+        "stream": "reporting_facebook_ads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/facebook-ads/{outreach_id}",
+      "covered_by": {
+        "direct_read": "reporting facebook-ads get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/facebook-ads/{outreach_id}/ecommerce-product-activity",
+      "covered_by": {
+        "stream": "reporting_facebook_ads_ecommerce_product_activity_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/landing-pages",
+      "covered_by": {
+        "stream": "reporting_landing_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/landing-pages/{outreach_id}",
+      "covered_by": {
+        "direct_read": "reporting landing-pages get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys",
+      "covered_by": {
+        "stream": "reporting_surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}",
+      "covered_by": {
+        "direct_read": "reporting surveys get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}/questions",
+      "covered_by": {
+        "stream": "reporting_surveys_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}/questions/{question_id}",
+      "covered_by": {
+        "direct_read": "reporting surveys questions get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}/questions/{question_id}/answers",
+      "covered_by": {
+        "stream": "reporting_surveys_questions_answers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}/responses",
+      "covered_by": {
+        "stream": "reporting_surveys_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reporting/surveys/{survey_id}/responses/{response_id}",
+      "covered_by": {
+        "direct_read": "reporting surveys responses get"
       }
     },
     {
@@ -27,49 +1766,345 @@
     },
     {
       "method": "GET",
-      "path": "/automations",
+      "path": "/reports/{campaign_id}",
       "covered_by": {
-        "stream": "automations"
+        "direct_read": "reports get"
       }
     },
     {
       "method": "GET",
-      "path": "/lists/{list_id}/members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/reports/{campaign_id}/abuse-reports",
+      "covered_by": {
+        "stream": "reports_abuse_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/abuse-reports/{report_id}",
+      "covered_by": {
+        "direct_read": "reports abuse-reports get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/advice",
+      "covered_by": {
+        "stream": "reports_advice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/click-details",
+      "covered_by": {
+        "stream": "reports_click_details_urls_clicked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/click-details/{link_id}",
+      "covered_by": {
+        "direct_read": "reports click-details get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/click-details/{link_id}/members",
+      "covered_by": {
+        "stream": "reports_click_details_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/click-details/{link_id}/members/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "reports click-details members get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/domain-performance",
+      "covered_by": {
+        "stream": "reports_domain_performance_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/ecommerce-product-activity",
+      "covered_by": {
+        "stream": "reports_ecommerce_product_activity_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/eepurl",
+      "covered_by": {
+        "stream": "reports_eepurl_referrers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/email-activity",
+      "covered_by": {
+        "stream": "reports_email_activity_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/email-activity/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "reports email-activity get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/locations",
+      "covered_by": {
+        "stream": "reports_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/open-details",
+      "covered_by": {
+        "stream": "reports_open_details_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/open-details/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "reports open-details get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/sent-to",
+      "covered_by": {
+        "stream": "reports_sent_to"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/sent-to/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "reports sent-to get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/sub-reports",
+      "covered_by": {
+        "stream": "reports_sub_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/unsubscribed",
+      "covered_by": {
+        "stream": "reports_unsubscribed_unsubscribes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{campaign_id}/unsubscribed/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "reports unsubscribed get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search-campaigns",
+      "covered_by": {
+        "direct_read": "search-campaigns get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search-members",
+      "covered_by": {
+        "direct_read": "search-members get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-campaigns",
+      "covered_by": {
+        "stream": "sms_campaigns"
       }
     },
     {
       "method": "POST",
-      "path": "/lists/{list_id}/members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/sms-campaigns",
+      "covered_by": {
+        "write": "post_sms_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms-campaigns/{sms_campaign_id}",
+      "covered_by": {
+        "write": "delete_sms_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-campaigns/{sms_campaign_id}",
+      "covered_by": {
+        "direct_read": "sms-campaigns get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/sms-campaigns/{sms_campaign_id}",
+      "covered_by": {
+        "write": "patch_sms_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms-campaigns/{sms_campaign_id}/actions/cancel-send",
+      "covered_by": {
+        "write": "cancel_send_sms_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms-campaigns/{sms_campaign_id}/actions/schedule",
+      "covered_by": {
+        "write": "schedule_sms_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms-campaigns/{sms_campaign_id}/actions/send",
+      "covered_by": {
+        "write": "send_sms_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-campaigns/{sms_campaign_id}/content",
+      "covered_by": {
+        "direct_read": "sms-campaigns content get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms-campaigns/{sms_campaign_id}/content",
+      "covered_by": {
+        "write": "put_sms_campaigns_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/template-folders",
+      "covered_by": {
+        "stream": "template_folders_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/template-folders",
+      "covered_by": {
+        "write": "post_template_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "write": "delete_template_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "direct_read": "template-folders get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "write": "patch_template_folders"
       }
     },
     {
       "method": "GET",
       "path": "/templates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/ecommerce/stores",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "templates"
       }
     },
     {
       "method": "POST",
-      "path": "/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/templates",
+      "covered_by": {
+        "write": "post_templates"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{template_id}",
+      "covered_by": {
+        "write": "delete_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{template_id}",
+      "covered_by": {
+        "direct_read": "templates get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/templates/{template_id}",
+      "covered_by": {
+        "write": "patch_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{template_id}/default-content",
+      "covered_by": {
+        "direct_read": "templates default-content get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verified-domains",
+      "covered_by": {
+        "stream": "verified_domains_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verified-domains",
+      "covered_by": {
+        "write": "post_verified_domains"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/verified-domains/{domain_name}",
+      "covered_by": {
+        "write": "delete_verified_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verified-domains/{domain_name}",
+      "covered_by": {
+        "direct_read": "verified-domains get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verified-domains/{domain_name}/actions/verify",
+      "covered_by": {
+        "write": "verify_verified_domains"
       }
     }
   ]

@@ -4,7 +4,8 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
-This connector is read-only; no write actions are declared.
+The provider-owned OpenAPI v3 inventory covers 1,745 callable GitLab operations. This G1 wave makes
+only the four existing stream reads executable; it does not add any new provider operation.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
 
@@ -23,7 +24,7 @@ Connection fields:
   matching since-filter (last_activity_after for projects, created_after for users, updated_after
   for issues; groups has no since-filter upstream).
 
-Secret fields are redacted in logs and write previews: `access_token`.
+Secret fields are protected in credential storage and never logged: `access_token`.
 
 Default configuration values: `base_url=https://gitlab.com/api/v4`, `page_size=50`.
 
@@ -53,12 +54,22 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external GitLab API read of projects, groups, users, and
-issues.
+The GitLab provider inventory includes 975 writes. `capabilities.write=false` until at least one
+GitLab write action is executable; the provider inventory is not an executable capability. This G1
+bundle declares no GitLab write action.
+
+Read behavior: external GitLab API read of projects, groups, users, and issues. Any future write must
+use plan, preview, explicit approval, and execute. Output is not redacted by this connector.
 
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 4 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=7.
+- Provider inventory: 1,745 callable OpenAPI operations (770 reads; 975 writes), sourced from GitLab
+  OpenAPI 3.0.0 `info.version` `19.3.0-pre`, retrieved 2026-08-05.
+- Executable in G1: 4 stream-backed reads (`GET /projects`, `GET /groups`, `GET /users`, and
+  `GET /issues`).
+- Remaining provider operations: 1,618 need connector-owned declarations; 45 are blocked on the
+  named multipart/file-upload operation foundation; 64 are provider-restricted; and 14 are deprecated
+  justified exclusions. Each disposition is in `api_surface.json`; the four G1 command citations are
+  in `cli_surface.json`.
+- The next planned wave is a bounded collaboration read slice (no more than 20 operations).

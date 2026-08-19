@@ -13,6 +13,7 @@ DESCRIPTION
   Reads tweets and their authors matching a search query from the Twitter (X) API v2 recent search endpoint using an App-only Bearer token.
 
 ICON
+  id: twitter
   asset: icons/twitter.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -31,7 +32,7 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  query
+  query (required)
   start_date
   api_key (secret)
 
@@ -39,10 +40,10 @@ ETL STREAMS
   tweets:
     primary key: id
     cursor: created_at
-    fields: author_id(), conversation_id(), created_at(), id(), in_reply_to_user_id(), lang(), possibly_sensitive(), public_metrics(), source(), text()
+    fields: author_id(string), conversation_id(string), created_at(string), id(string), in_reply_to_user_id(string), lang(string), possibly_sensitive(boolean), public_metrics(object), source(string), text(string)
   authors:
     primary key: id
-    fields: created_at(), description(), id(), location(), name(), protected(), public_metrics(), url(), username(), verified()
+    fields: created_at(string), description(string), id(string), location(string), name(string), protected(boolean), public_metrics(object), url(string), username(string), verified(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -11,6 +11,7 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 
 ## Icon
 
+- id: genesys
 - asset: icons/genesys.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,33 +28,33 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
 - scope
-- token_url
-- client_id (secret)
-- client_secret (secret)
+- token_url (required)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - users:
   - primary key: id
-  - fields: display_name(), email(), id(), name(), state()
+  - fields: display_name(string), email(string), id(string), name(string), state(string)
 - queues:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - groups:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - divisions:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

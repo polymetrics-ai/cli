@@ -4,22 +4,25 @@
 // Emits: website/data/connectors.generated.json
 
 import {
-  copyFileSync,
-  existsSync,
   readFileSync,
   writeFileSync,
   mkdirSync,
   readdirSync,
 } from 'node:fs';
-import { dirname, relative, resolve, join, sep } from 'node:path';
+import { dirname, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { mapCLISurface } from './lib/cli-surface.mjs';
+import {
+  assertInside,
+  collectConnectorIconPaths,
+  syncConnectorIcons,
+  validConnectorIconPath,
+} from './lib/connector-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
-const ICON_OVERRIDES = resolve(__dirname, '../data/icon_overrides.json');
 const ICON_SOURCE_ROOT = resolve(__dirname, '../../docs/connectors');
 const ICON_PUBLIC_ROOT = resolve(__dirname, '../public/connectors');
 const OUT = resolve(__dirname, '../data/connectors.generated.json');
@@ -40,10 +43,6 @@ function readMD(filePath) {
   }
 }
 
-function stripPrefix(name) {
-  return String(name || '').replace(/^(source|destination)-/, '');
-}
-
 function trim(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
@@ -60,13 +59,6 @@ function normalizePrimaryKey(value) {
   return [];
 }
 
-function assertInside(root, target, label) {
-  const rel = relative(root, target);
-  if (rel.startsWith('..') || rel === '..' || rel.includes(`..${sep}`) || rel === '') {
-    throw new Error(`${label} escapes expected root: ${target}`);
-  }
-}
-
 function readSchema(base, schemaPath) {
   if (!trim(schemaPath)) return null;
   const target = resolve(base, schemaPath);
@@ -74,92 +66,30 @@ function readSchema(base, schemaPath) {
   return readJSON(target);
 }
 
-const validIconPath = (path) => /^icons\/(?:[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+\.svg$/.test(path);
 const iconRaw = readJSON(ICON_DATA) ?? [];
-const iconOverrideRaw = readJSON(ICON_OVERRIDES) ?? [];
+const iconEntries = Array.isArray(iconRaw) ? iconRaw : [];
+const copiedIconPaths = collectConnectorIconPaths(iconEntries);
 const iconByConnector = new Map();
-for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
-  if (!icon?.connector) continue;
-  iconByConnector.set(icon.connector, icon);
-  iconByConnector.set(stripPrefix(icon.connector), icon);
+for (const icon of iconEntries) {
+  const connector = trim(icon?.connector);
+  if (!connector) continue;
+  if (/^(source|destination)-/.test(connector)) {
+    throw new Error(`Connector icon registry key must be bare: ${connector}`);
+  }
+  if (iconByConnector.has(connector)) {
+    throw new Error(`Duplicate connector icon registry key: ${connector}`);
+  }
+  iconByConnector.set(connector, icon);
 }
 
-const iconOverrideByConnector = new Map();
-for (const icon of Array.isArray(iconOverrideRaw) ? iconOverrideRaw : []) {
-  if (!icon?.connector) continue;
-  iconOverrideByConnector.set(icon.connector, icon);
-  iconOverrideByConnector.set(stripPrefix(icon.connector), icon);
-}
-
-const copiedIconPaths = new Set();
-for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
-  const path = trim(icon?.path);
-  if (path && validIconPath(path)) {
-    copiedIconPaths.add(path);
+function mapIcon(slug) {
+  const icon = iconByConnector.get(slug);
+  if (!icon) {
+    throw new Error(`Missing canonical connector icon registry entry for ${slug}`);
   }
-}
-
-function resolveIconPath(root, iconPath, label) {
-  if (!validIconPath(iconPath)) {
-    throw new Error(`Invalid connector icon path: ${iconPath}`);
-  }
-
-  const target = resolve(root, iconPath);
-  assertInside(root, target, label);
-  return target;
-}
-
-function syncConnectorIcons(paths) {
-  const outDir = resolve(ICON_PUBLIC_ROOT, 'icons');
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    if (!existsSync(src)) {
-      throw new Error(`Missing connector icon asset: ${iconPath}`);
-    }
-  }
-
-  mkdirSync(outDir, { recursive: true });
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    const out = resolveIconPath(ICON_PUBLIC_ROOT, iconPath, 'connector icon output');
-    mkdirSync(dirname(out), { recursive: true });
-    copyFileSync(src, out);
-  }
-}
-
-function mapIcon(slug, metadata) {
-  const candidates = [
-    slug,
-    metadata.name,
-    stripPrefix(metadata.name),
-    `source-${slug}`,
-    `destination-${slug}`,
-  ].filter(Boolean);
-
-  const override = candidates.map((candidate) => iconOverrideByConnector.get(candidate)).find(Boolean);
-  if (override) {
-    const path = trim(override.path);
-    if (!validIconPath(path)) {
-      throw new Error(`Invalid connector icon override path for ${slug}: ${path}`);
-    }
-
-    return {
-      id: trim(override.id),
-      path,
-      publicPath: `/connectors/${path}`,
-      source: trim(override.source),
-      reviewStatus: trim(override.review_status),
-      reviewUrl: trim(override.review_url),
-    };
-  }
-
-  const icon = candidates.map((candidate) => iconByConnector.get(candidate)).find(Boolean);
-  if (!icon) return null;
 
   const path = trim(icon.path);
-  if (!validIconPath(path)) {
+  if (!validConnectorIconPath(path)) {
     throw new Error(`Invalid connector icon path for ${slug}: ${path}`);
   }
 
@@ -186,9 +116,12 @@ for (const dirName of entries) {
   const metadata = readJSON(join(base, 'metadata.json'));
   if (!metadata) continue;
 
-  const slug = stripPrefix(metadata.name || dirName);
+  const slug = trim(metadata.name || dirName);
   if (!slug) {
     throw new Error(`Connector bundle has empty name: ${dirName}`);
+  }
+  if (/^(source|destination)-/.test(slug)) {
+    throw new Error(`Connector bundle must use a bare name: ${slug}`);
   }
   
   const streamsData = readJSON(join(base, 'streams.json'));
@@ -247,14 +180,17 @@ for (const dirName of entries) {
     write_actions: writeActions,
     cli_surface: cliSurface,
     docs_md: docsMd,
-    icon: mapIcon(slug, metadata),
+    icon: mapIcon(slug),
   });
 }
 
 // Sort alphabetically by name
 connectors.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
-syncConnectorIcons(copiedIconPaths);
+syncConnectorIcons(copiedIconPaths, {
+  sourceRoot: ICON_SOURCE_ROOT,
+  publicRoot: ICON_PUBLIC_ROOT,
+});
 
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, JSON.stringify(connectors, null, 2), 'utf8');

@@ -4,13 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -41,15 +39,249 @@ func cloneRecords(in []connectors.Record) []connectors.Record {
 	return out
 }
 
-func mapReverseRecords(records []connectors.Record, mappings map[string]string, planID string) []connectors.Record {
+func RedactReversePlanRecords(in []connectors.Record, fields []string) []connectors.Record {
+	out := make([]connectors.Record, 0, len(in))
+	for _, record := range in {
+		out = append(out, redactReversePlanRecord(record, fields))
+	}
+	return out
+}
+
+func redactReversePlanRecord(in connectors.Record, fields []string) connectors.Record {
+	out := deepCloneRecord(in)
+	for _, field := range fields {
+		redactReversePlanField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+	}
+	return out
+}
+
+func deepCloneRecord(in connectors.Record) connectors.Record {
+	out := make(connectors.Record, len(in))
+	for k, v := range in {
+		out[k] = deepCloneRecordValue(v)
+	}
+	return out
+}
+
+func deepCloneRecordValue(v any) any {
+	switch typed := v.(type) {
+	case connectors.Record:
+		return deepCloneRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for k, value := range typed {
+			out[k] = deepCloneRecordValue(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, value := range typed {
+			out[i] = deepCloneRecordValue(value)
+		}
+		return out
+	case []connectors.Record:
+		out := make([]connectors.Record, len(typed))
+		for i, value := range typed {
+			out[i] = deepCloneRecord(value)
+		}
+		return out
+	default:
+		return v
+	}
+}
+
+// resolveRecordParent walks a dotted field path and returns the map that holds
+// the leaf together with the leaf key. It reports false when any intermediate
+// segment is absent or is not itself a record, which is the single traversal
+// every field helper below shares.
+func resolveRecordParent(record connectors.Record, field string) (map[string]any, string, bool) {
+	if field == "" {
+		return nil, "", false
+	}
+	parts := strings.Split(field, ".")
+	current := map[string]any(record)
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return nil, "", false
+		}
+		nested, ok := asRecordMap(next)
+		if !ok {
+			return nil, "", false
+		}
+		current = nested
+	}
+	return current, parts[len(parts)-1], true
+}
+
+func redactReversePlanField(record connectors.Record, field string) {
+	parent, leaf, ok := resolveRecordParent(record, field)
+	if !ok {
+		return
+	}
+	if _, present := parent[leaf]; present {
+		parent[leaf] = "redacted"
+	}
+}
+
+// withholdRecordFields returns a clone of in with every declared field removed
+// outright, alongside the fields it actually removed. The key is absent rather
+// than set to a placeholder: an absent key is unambiguous, where a placeholder
+// is indistinguishable from an operator who really supplied that string and
+// would be dispatched verbatim.
+//
+// The second return value is what makes re-supply solvable. A declared field
+// the operator never supplied was never in the record and was never withheld,
+// so demanding it back would be an unsatisfiable precondition on a plan whose
+// hash was computed without it. Only the fields removed here are owed back.
+//
+// fields must already be record-relative; connectorCommandRedactFields strips
+// the declaring surface's prefix.
+func withholdRecordFields(in connectors.Record, fields []string) (connectors.Record, []string) {
+	out := deepCloneRecord(in)
+	var withheld []string
+	for _, field := range fields {
+		trimmed := strings.TrimSpace(field)
+		if deleteRecordField(out, trimmed) {
+			withheld = append(withheld, trimmed)
+		}
+	}
+	return out, withheld
+}
+
+// deleteRecordField removes a dotted field and reports whether it was present.
+func deleteRecordField(record connectors.Record, field string) bool {
+	parent, leaf, ok := resolveRecordParent(record, field)
+	if !ok {
+		return false
+	}
+	if _, present := parent[leaf]; !present {
+		return false
+	}
+	delete(parent, leaf)
+	return true
+}
+
+// recordHasField reports whether a dotted field is present. A plan written
+// before fields were withheld still carries them, so nothing is re-supplied for
+// it.
+func recordHasField(record connectors.Record, field string) bool {
+	parent, leaf, ok := resolveRecordParent(record, strings.TrimSpace(field))
+	if !ok {
+		return false
+	}
+	_, present := parent[leaf]
+	return present
+}
+
+// mergeRecordFields overlays supplied onto base, descending into nested maps so
+// a withheld leaf is restored without discarding its siblings.
+func mergeRecordFields(base, overlay connectors.Record) connectors.Record {
+	out := deepCloneRecord(base)
+	for key, value := range overlay {
+		out[key] = mergeRecordValue(out[key], value)
+	}
+	return out
+}
+
+func mergeRecordValue(existing, overlay any) any {
+	existingMap, okExisting := asRecordMap(existing)
+	overlayMap, okOverlay := asRecordMap(overlay)
+	if !okExisting || !okOverlay {
+		return overlay
+	}
+	merged := make(map[string]any, len(existingMap)+len(overlayMap))
+	for key, value := range existingMap {
+		merged[key] = value
+	}
+	for key, value := range overlayMap {
+		merged[key] = mergeRecordValue(merged[key], value)
+	}
+	return merged
+}
+
+func asRecordMap(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
+// connectorCommandRedactFields answers "what does this plan withhold?" for a
+// connector-command plan. It dispatches on mode and never falls back between
+// the two branches: operation IDs and write-action names are separate
+// namespaces that collide by name in at least one bundle, so a fallback could
+// withhold an unrelated action's fields. An operation whose metadata cannot be
+// resolved is an error, never an empty withhold set.
+func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, error) {
+	operation = strings.TrimSpace(operation)
+	prefix := connectorCommandRecordPrefix(operation)
+	if operation == "" {
+		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), nil
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(operation)
+	if err != nil {
+		return nil, err
+	}
+	if metadata.Operation != operation {
+		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+	}
+	return recordRelativeFields(metadata.RedactFields, prefix), nil
+}
+
+// connectorCommandRecordPrefix is the field-path prefix the declaring surface
+// uses for the record a connector-command plan carries. A direct_write
+// operation's record IS its request body, so it declares body.<path>; a write
+// action declares record.<path>. commandrunner.ReconstituteWithheldFields
+// dispatches on the same rule, and the two halves have to agree or a withheld
+// field silently stays on disk.
+func connectorCommandRecordPrefix(operation string) string {
+	if strings.TrimSpace(operation) != "" {
+		return "body."
+	}
+	return "record."
+}
+
+// recordRelativeFields strips the declaring surface's prefix so every field
+// path a plan persists is relative to the record itself.
+func recordRelativeFields(fields []string, prefix string) []string {
+	out := make([]string, 0, len(fields))
+	for _, field := range fields {
+		trimmed := strings.TrimPrefix(strings.TrimSpace(field), prefix)
+		if trimmed == "" {
+			continue
+		}
+		out = append(out, trimmed)
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
+func reversePlanRedactFields(connector connectors.Connector, actionName string) []string {
+	for _, action := range connectors.ManifestOf(connector).WriteActions {
+		if action.Name == actionName {
+			return append([]string(nil), action.RedactFields...)
+		}
+	}
+	return nil
+}
+
+func mapReverseRecords(records []connectors.Record, mappings map[string]string) []connectors.Record {
 	mapped := make([]connectors.Record, 0, len(records))
 	for _, record := range records {
 		out := connectors.Record{}
 		for source, dest := range mappings {
 			out[dest] = record[source]
-		}
-		if planID != "" {
-			out["_polymetrics_reverse_plan_id"] = planID
 		}
 		mapped = append(mapped, out)
 	}
@@ -105,6 +337,30 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 	return hashJSON(payload)
 }
 
+// operationConnectorCommandPlanHash is the direct_write variant of a
+// connector-command plan hash. The path/query/body fields are all part of the
+// approved request, so they must be bound before a preview can mint a
+// single-use approval token.
+func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
+	payload := map[string]any{
+		"name":         planName,
+		"connector":    connector,
+		"credential":   credential,
+		"config":       cloneStringMap(config),
+		"command":      command,
+		"path":         append([]string(nil), path...),
+		"operation":    operation,
+		"path_params":  cloneStringMap(pathParams),
+		"query":        cloneStringMap(query),
+		"record_count": 1,
+		"body":         cloneRecord(body),
+	}
+	if len(payloadIdentity) > 0 {
+		payload["payload_identity"] = append([]PayloadIdentity(nil), payloadIdentity...)
+	}
+	return hashJSON(payload)
+}
+
 func approvedPayloadSHA256(identities []PayloadIdentity) map[string]string {
 	if len(identities) == 0 {
 		return nil
@@ -123,22 +379,55 @@ func approvedPayloadSHA256(identities []PayloadIdentity) map[string]string {
 }
 
 func payloadIdentitiesForRecords(projectDir string, records []connectors.Record) ([]PayloadIdentity, error) {
-	var identities []PayloadIdentity
-	for i, record := range records {
-		keys := make([]string, 0, len(record))
+	fields := make(map[string]struct{})
+	for _, record := range records {
 		for key := range record {
-			keys = append(keys, key)
+			if isPayloadPathField(key) {
+				fields[key] = struct{}{}
+			}
 		}
-		sort.Strings(keys)
-		for _, key := range keys {
-			if !isPayloadPathField(key) {
+	}
+	return payloadIdentitiesForDeclaredFields(projectDir, records, fieldSetSlice(fields))
+}
+
+// payloadIdentitiesForConnectorCommand uses the connector's closed operation
+// metadata for multipart source fields. Older non-multipart direct writes keep
+// their established file_path discovery behavior.
+func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, record connectors.Record) ([]PayloadIdentity, error) {
+	if strings.TrimSpace(operation) == "" {
+		return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return nil, fmt.Errorf("connector %q does not expose direct-write metadata", connector.Name())
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(operation)
+	if err != nil {
+		return nil, err
+	}
+	if metadata.Operation != operation {
+		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+	}
+	if metadata.PayloadFileFields != nil {
+		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
+	}
+	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+}
+
+// payloadIdentitiesForDeclaredFields captures only declaration-owned file
+// paths. It never guesses from arbitrary user fields, so multipart support
+// cannot broaden the accepted local-file input surface.
+func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.Record, declaredFields []string) ([]PayloadIdentity, error) {
+	var identities []PayloadIdentity
+	fields := fieldSetSlice(stringSliceSet(declaredFields))
+	for i, record := range records {
+		for _, field := range fields {
+			value, present := recordPathValue(record, field)
+			raw, ok := value.(string)
+			if !present || !ok || strings.TrimSpace(raw) == "" {
 				continue
 			}
-			raw, ok := record[key].(string)
-			if !ok || strings.TrimSpace(raw) == "" {
-				continue
-			}
-			identity, err := payloadIdentityForPath(projectDir, i, key, raw)
+			identity, err := payloadIdentityForPath(projectDir, i, field, raw)
 			if err != nil {
 				return nil, err
 			}
@@ -146,6 +435,49 @@ func payloadIdentitiesForRecords(projectDir string, records []connectors.Record)
 		}
 	}
 	return identities, nil
+}
+
+func stringSliceSet(values []string) map[string]struct{} {
+	set := make(map[string]struct{}, len(values))
+	for _, value := range values {
+		if value = strings.TrimSpace(value); value != "" {
+			set[value] = struct{}{}
+		}
+	}
+	return set
+}
+
+func fieldSetSlice(fields map[string]struct{}) []string {
+	keys := make([]string, 0, len(fields))
+	for field := range fields {
+		keys = append(keys, field)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func recordPathValue(record connectors.Record, field string) (any, bool) {
+	var current any = map[string]any(record)
+	for _, segment := range strings.Split(field, ".") {
+		if strings.TrimSpace(segment) == "" {
+			return nil, false
+		}
+		var values map[string]any
+		switch typed := current.(type) {
+		case map[string]any:
+			values = typed
+		case connectors.Record:
+			values = map[string]any(typed)
+		default:
+			return nil, false
+		}
+		value, ok := values[segment]
+		if !ok {
+			return nil, false
+		}
+		current = value
+	}
+	return current, true
 }
 
 func isPayloadPathField(name string) bool {
@@ -177,7 +509,7 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	if err != nil {
 		return "", nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	before, err := file.Stat()
 	if err != nil {
@@ -230,29 +562,6 @@ func resolvePayloadPath(projectDir, raw string) (string, error) {
 		return resolved, nil
 	}
 	return "", fmt.Errorf("payload file path outside the project root is not allowed")
-}
-
-func parseSelectAll(sql string) (string, int, error) {
-	fields := strings.Fields(strings.TrimSpace(strings.TrimSuffix(sql, ";")))
-	if len(fields) < 4 {
-		return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-	}
-	if !strings.EqualFold(fields[0], "select") || fields[1] != "*" || !strings.EqualFold(fields[2], "from") {
-		return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-	}
-	table := fields[3]
-	limit := 100
-	if len(fields) > 4 {
-		if len(fields) != 6 || !strings.EqualFold(fields[4], "limit") {
-			return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-		}
-		n, err := strconv.Atoi(fields[5])
-		if err != nil || n <= 0 {
-			return "", 0, fmt.Errorf("invalid limit %q", fields[5])
-		}
-		limit = n
-	}
-	return table, limit, nil
 }
 
 func min(a, b int) int {

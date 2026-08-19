@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_external_product_external_product_reference record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "External Product ID",
+      "description": "System-generated unique identifier for an external product ID, e.g. `e28zov4fw0v2`."
+    },
+    "object": {
+      "type": "string",
+      "title": "object"
+    },
+    "reference_code": {
+      "type": "string",
+      "title": "reference_code",
+      "description": "A code which associates the external product to a corresponding object or resource in an external platform like the Apple App Store or Google Play Store."
+    },
+    "external_connection_type": {
+      "type": "string",
+      "title": "external_connection_type",
+      "description": "Source connection platform."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the external product was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the external product was updated in Recurly."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

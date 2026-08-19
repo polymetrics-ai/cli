@@ -9,14 +9,12 @@ import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import { basename, dirname, isAbsolute, join, resolve, sep } from "node:path";
 import * as os from "node:os";
-import { fileURLToPath } from "node:url";
 import { StringEnum } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ThemeColor } from "@earendil-works/pi-coding-agent";
 import {
 	DEFAULT_MAX_BYTES,
 	DEFAULT_MAX_LINES,
 	formatSize,
-	getAgentDir,
 	getMarkdownTheme,
 	getSettingsListTheme,
 	keyText,
@@ -32,30 +30,22 @@ import {
 	THINKING_LEVELS,
 	discoverAgents,
 	resolveAgentModel,
+	shouldConfirmProjectAgents,
 	updateAgentSettingsContent,
 } from "./agents.js";
+import {
+	SUBAGENT_DEPTH_ENV,
+	canStartSubagent,
+	childInvocationArgs,
+	getSubagentDepth,
+	resolveChildToolAllowlist,
+} from "./child-policy.js";
 
-const extensionDir = dirname(fileURLToPath(import.meta.url));
 const MAX_PARALLEL_TASKS = 8;
 const MAX_CHAIN_STEPS = 8;
 const MAX_CONCURRENCY = 4;
 const COLLAPSED_ITEM_COUNT = 10;
-const SUBAGENT_TOOL_NAME = "subagent";
-const BUNDLED_AGENT_NAMES = "scout, planner, worker, reviewer, debugger, verifier, security-auditor, docs-writer, refactorer";
-const BUNDLED_AGENT_SELECTION_GUIDANCE = [
-	"Use scout for codebase recon.",
-	"Use planner for implementation plans.",
-	"Use worker for general implementation.",
-	"Use reviewer for code quality review.",
-	"Use debugger for root-cause investigation.",
-	"Use verifier for running checks.",
-	"Use security-auditor for security review.",
-	"Use docs-writer for documentation.",
-	"Use refactorer for behavior-preserving cleanup.",
-] as const;
-const AGENT_NAME_DESCRIPTION = `Name of the agent to invoke. Bundled agents: ${BUNDLED_AGENT_NAMES}. Use these exact names for bundled agents; do not invent names such as default, general-purpose, security, or general.`;
-const SUBAGENT_DEPTH_ENV = "PI_SUB_AGENT_DEPTH";
-const MAX_SUBAGENT_DEPTH = 1;
+const AGENT_NAME_DESCRIPTION = "Name of the agent to invoke. The clean-project default exposes only pm-delivery-worker and pm-connector-worker.";
 
 interface UsageStats {
 	input: number;
@@ -89,7 +79,7 @@ interface RawMessage {
 
 interface SingleResult {
 	agent: string;
-	agentSource: "user" | "project" | "extension" | "unknown";
+	agentSource: "user" | "project" | "unknown";
 	task: string;
 	exitCode: number;
 	messages: RawMessage[];
@@ -335,29 +325,6 @@ function getInvalidSubagentCwdReason(cwd: string): string | undefined {
 	}
 }
 
-function getSubagentDepth(value = process.env[SUBAGENT_DEPTH_ENV]): number {
-	if (value === undefined) return 0;
-	const parsed = Number.parseInt(value, 10);
-	return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
-}
-
-function normalizeToolNames(toolNames: readonly string[] | undefined): string[] | undefined {
-	if (toolNames === undefined) return undefined;
-	return Array.from(new Set(toolNames.map((tool) => tool.trim()).filter((tool) => Boolean(tool) && tool !== SUBAGENT_TOOL_NAME)));
-}
-
-function resolveChildToolAllowlist(
-	agentTools: readonly string[] | undefined,
-	parentActiveTools: readonly string[] | undefined,
-): string[] | undefined {
-	const parentTools = normalizeToolNames(parentActiveTools);
-	const requestedTools = normalizeToolNames(agentTools);
-	if (parentTools === undefined) return requestedTools;
-	if (requestedTools === undefined) return parentTools;
-	const parentToolSet = new Set(parentTools);
-	return requestedTools.filter((tool) => parentToolSet.has(tool));
-}
-
 function writeFullOutputTempFile(text: string): string {
 	const tmpDir = fs.mkdtempSync(join(os.tmpdir(), "pi-subagent-output-"));
 	const filePath = join(tmpDir, "output.txt");
@@ -559,12 +526,9 @@ async function runSingleAgent(
 	}
 
 	// Polymetrics local modification (vendored from pi-sub-agent@0.1.5, MIT): child sessions are
-	// recordable via PI_SUBAGENT_SESSION_DIR for loop observability (loop-trace digests). Upstream
-	// hardcodes --no-session; we keep that default when the env var is unset.
-	const subSessionDir = process.env.PI_SUBAGENT_SESSION_DIR;
-	const args = subSessionDir
-		? ["--mode", "json", "-p", "--session-dir", subSessionDir]
-		: ["--mode", "json", "-p", "--no-session"];
+	// recordable via PI_SUBAGENT_SESSION_DIR for loop observability (loop-trace digests). Every
+	// child also disables extensions, so no ambient extension can re-register delegation tools.
+	const args = childInvocationArgs();
 	const stdinPrompt = `Task: ${task}`;
 	const selectedModel = resolveAgentModel(agent, fallbackModel);
 	if (selectedModel) {
@@ -793,9 +757,9 @@ const ChainItem = Type.Object({
 	cwd: Type.Optional(Type.String({ description: "Working directory override for this task", minLength: 1 })),
 });
 
-const AgentScopeSchema = StringEnum(["user", "project", "both"] as const, {
-	description: 'Which agent directories to use. Default: "user". Use "both" to include project-local agents.',
-	default: "user",
+const AgentScopeSchema = StringEnum(["clean-project", "user", "project", "both"] as const, {
+	description: 'Which agent directories to use. Default: "clean-project", which admits only the generated canonical project workers.',
+	default: "clean-project",
 });
 
 const SubagentParams = Type.Object({
@@ -815,8 +779,7 @@ function formatAgentSettings(agent: Pick<AgentConfig, "model" | "thinking">): st
 }
 
 function getAgentSettingsTarget(agent: AgentConfig): string {
-	if (agent.source !== "extension") return agent.filePath;
-	return join(getAgentDir(), "agents", `${agent.name}.md`);
+	return agent.filePath;
 }
 
 function persistAgentSettings(agent: AgentConfig): string {
@@ -844,7 +807,7 @@ export default function (pi: ExtensionAPI): void {
 				return;
 			}
 
-			const discovery = discoverAgents(ctx.cwd, "user", join(extensionDir, "agents"));
+			const discovery = discoverAgents(ctx.cwd, "user");
 			const agents = discovery.agents.sort((a, b) => a.name.localeCompare(b.name));
 			if (agents.length === 0) {
 				ctx.ui.notify("No sub-agents found", "warning");
@@ -966,7 +929,7 @@ export default function (pi: ExtensionAPI): void {
 					render(width: number) {
 						return [
 							theme.fg("accent", theme.bold("Sub-agent Settings")),
-							theme.fg("dim", "Configure models and thinking effort. Bundled agents save as user overrides."),
+							theme.fg("dim", "Configure models and thinking effort for user-defined agents."),
 							"",
 							...settingsList.render(width),
 						];
@@ -993,33 +956,31 @@ export default function (pi: ExtensionAPI): void {
 		name: "subagent",
 		label: "Subagent",
 		description: [
-			"Delegate tasks to specialized subagents with isolated context.",
+			"Delegate tasks to the canonical clean-project workers with isolated context.",
 			`Supports single, parallel, and chain flows; parallel mode is capped at ${MAX_PARALLEL_TASKS} tasks and chain mode at ${MAX_CHAIN_STEPS} steps.`,
 			`LLM-facing output is truncated per included subagent output to ${DEFAULT_MAX_LINES} lines or ${formatSize(DEFAULT_MAX_BYTES)}; full structured details remain available for rendering.`,
-			"Nested subagent calls are disabled to avoid runaway recursive delegation.",
-			`Bundled agents: ${BUNDLED_AGENT_NAMES}. Use these exact names; do not invent names such as default, general-purpose, security, or general.`,
-			'User agents are used by default from ~/.pi/agent/agents.',
-			'Use agentScope "project" or "both" to include trusted project-local agents from .pi/agents.',
+			"Nested subagent calls are disabled to avoid runaway recursive delegation, and child Pi processes disable extensions.",
+			'agentScope "clean-project" is the default and loads only the generated pm-delivery-worker and pm-connector-worker definitions from .pi/agents.',
+			'Use agentScope "user", "project", or "both" only when an explicit non-default scope is intended.',
 		].join(" "),
 		promptSnippet: "Delegate work to specialized subagents in isolated Pi processes; supports single, parallel, and chain modes.",
 		promptGuidelines: [
-			"Use subagent when a task benefits from isolated context, parallel research, or specialized bundled/user/project agents.",
-			`Bundled agents: ${BUNDLED_AGENT_NAMES}. Use these exact names; do not invent names such as default, general-purpose, security, or general.`,
-			...BUNDLED_AGENT_SELECTION_GUIDANCE,
+			"Use clean-project subagents only when a task benefits from isolated context, parallel research, or the canonical delivery workers.",
+			"The default clean-project scope exposes only pm-delivery-worker and pm-connector-worker; do not invent additional clean-project roles.",
 			`Keep subagent parallel task lists to ${MAX_PARALLEL_TASKS} tasks or fewer and chain step lists to ${MAX_CHAIN_STEPS} steps or fewer.`,
 			"Use exactly one argument mode: single {agent, task, cwd?}, parallel {tasks, cwd?}, or chain {chain, cwd?}. Top-level cwd is a default for every subagent run in the call; per-task or per-step cwd overrides it.",
-			'Use subagent with agentScope "project" or "both" only for trusted repositories because project agents are repo-controlled prompts.',
+			'Use any project-aware scope only for trusted repositories because project agents are repo-controlled prompts.',
 			"Use subagent chain tasks with {previous} only when each step should consume the previous agent output.",
 			"Do not ask subagent-launched agents to call subagent again; recursive delegation is blocked.",
 		],
 		parameters: SubagentParams,
 		async execute(_toolCallId, params, signal, onUpdate, ctx) {
-			const agentScope: AgentScope = params.agentScope ?? "user";
+			const agentScope: AgentScope = params.agentScope ?? "clean-project";
 			const parentActiveTools = typeof pi.getActiveTools === "function" ? pi.getActiveTools() : undefined;
 			const parentThinkingLevel = typeof pi.getThinkingLevel === "function" ? pi.getThinkingLevel() : "off";
 			const parentThinkingSuffix = parentThinkingLevel && parentThinkingLevel !== "off" ? `:${parentThinkingLevel}` : "";
 			const parentModel = ctx.model ? `${ctx.model.provider}/${ctx.model.id}${parentThinkingSuffix}` : undefined;
-			const discovery = discoverAgents(ctx.cwd, agentScope, join(extensionDir, "agents"));
+			const discovery = discoverAgents(ctx.cwd, agentScope);
 			const agents = discovery.agents;
 			const makeDetails = (mode: "single" | "parallel" | "chain") => (results: SingleResult[], error?: string): SubagentDetails => ({
 				mode,
@@ -1052,7 +1013,7 @@ export default function (pi: ExtensionAPI): void {
 
 			const selectedMode = hasChain ? "chain" : hasParallel ? "parallel" : "single";
 			const currentDepth = getSubagentDepth();
-			if (currentDepth >= MAX_SUBAGENT_DEPTH) {
+			if (!canStartSubagent()) {
 				const error = "Nested subagent execution is disabled to avoid runaway recursive delegation.";
 				return {
 					content: [
@@ -1066,7 +1027,7 @@ export default function (pi: ExtensionAPI): void {
 			}
 			const childSubagentDepth = currentDepth + 1;
 
-			if ((agentScope === "project" || agentScope === "both") && params.confirmProjectAgents !== false) {
+			if (shouldConfirmProjectAgents(agentScope) && params.confirmProjectAgents !== false) {
 				const names = new Set<string>();
 				if (params.agent) names.add(params.agent);
 				for (const task of params.tasks ?? []) names.add(task.agent);
@@ -1284,7 +1245,7 @@ export default function (pi: ExtensionAPI): void {
 			};
 		},
 		renderCall(args, theme) {
-			const scope: AgentScope = args.agentScope ?? "user";
+			const scope: AgentScope = args.agentScope ?? "clean-project";
 			if (args.chain && args.chain.length > 0) {
 				let text =
 					theme.fg("toolTitle", theme.bold("subagent ")) +

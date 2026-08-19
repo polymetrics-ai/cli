@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/revenue/subscriptions/ads/estimates), reference data (categories/countries/languages/currencies/stores/SDKs), release events, connected external accounts, account users, and account info through the Appfigures v2 REST API, and manages release events and review responses.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -30,73 +32,73 @@ CONFIGURATION
   group_by
   search_store
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   reviews:
     primary key: id
-    fields: author(), date(), has_response(), id(), iso(), original_title(), product(), review(), stars(), title(), version(), weight()
+    fields: author(string), date(string), has_response(boolean), id(string), iso(string), original_title(string), product(integer), review(string), stars(number), title(string), version(string), weight(integer)
   products:
     primary key: id
-    fields: added(), developer(), id(), name(), ref_no(), sku(), store(), store_id(), updated(), vendor_identifier()
+    fields: added(string), developer(string), id(integer), name(string), ref_no(string), sku(string), store(string), store_id(integer), updated(string), vendor_identifier(string)
   sales:
-    fields: date(), downloads(), net_downloads(), promos(), returns(), revenue(), updates()
+    fields: date(string), downloads(integer), net_downloads(integer), promos(integer), returns(integer), revenue(string), updates(integer)
   ratings:
-    fields: average(), breakdown(), date(), stars()
+    fields: average(number), breakdown(string), date(string), stars(number)
   categories:
     primary key: id
-    fields: device(), id(), name(), store(), subtype()
+    fields: device(string), id(integer), name(string), store(string), subtype(string)
   revenue:
     primary key: report
-    fields: ads(), business(), edu(), gross_business(), gross_edu(), gross_iaps(), gross_returns(), gross_sales(), gross_subscriptions(), gross_total(), iaps(), report(), returns(), sales(), subscriptions(), total()
+    fields: ads(string), business(string), edu(string), gross_business(string), gross_edu(string), gross_iaps(string), gross_returns(string), gross_sales(string), gross_subscriptions(string), gross_total(string), iaps(string), report(string), returns(string), sales(string), subscriptions(string), total(string)
   subscriptions:
     primary key: report
-    fields: active_free_trials(), active_subscriptions(), actual_revenue(), cancellations(), cancelled_subscriptions(), churn(), gross_mrr(), gross_revenue(), mrr(), new_subscriptions(), new_trials(), reactivations(), renewals(), report(), trial_conversion_rate(), trial_conversions()
+    fields: active_free_trials(integer), active_subscriptions(integer), actual_revenue(string), cancellations(integer), cancelled_subscriptions(integer), churn(string), gross_mrr(string), gross_revenue(string), mrr(string), new_subscriptions(integer), new_trials(integer), reactivations(integer), renewals(integer), report(string), trial_conversion_rate(string), trial_conversions(integer)
   ads:
     primary key: report
-    fields: clicks(), ctr(), ecpm(), fillrate(), impressions(), report(), requests(), requests_filled(), revenue()
+    fields: clicks(integer), ctr(number), ecpm(string), fillrate(number), impressions(integer), report(string), requests(integer), requests_filled(integer), revenue(string)
   estimates:
     primary key: report
-    fields: downloads(), report(), revenue()
+    fields: downloads(integer), report(string), revenue(string)
   events:
     primary key: id
-    fields: caption(), date(), details(), id(), origin(), products()
+    fields: caption(string), date(string), details(string), id(integer), origin(string), products(array)
   external_accounts:
     primary key: id
-    fields: account_id(), auto_import(), id(), metadata(), nickname(), store(), store_id(), username()
+    fields: account_id(integer), auto_import(boolean), id(integer), metadata(object), nickname(string), store(string), store_id(integer), username(string)
   users:
     primary key: id
-    fields: account(), active(), avatar_url(), currency(), date_format(), email(), entitlements(), id(), is_owner(), last_login(), name(), products(), region(), role(), timezone()
+    fields: account(object), active(boolean), avatar_url(string), currency(string), date_format(string), email(string), entitlements(array), id(integer), is_owner(boolean), last_login(string), name(string), products(array), region(string), role(string), timezone(string)
   account_info:
     primary key: user_id
-    fields: daily_limit(), daily_used(), sequence(), user_email(), user_id(), user_name(), version()
+    fields: daily_limit(integer), daily_used(integer), sequence(integer), user_email(string), user_id(integer), user_name(string), version(string)
   data_countries:
     primary key: iso
-    fields: apple_store_no(), iso(), name()
+    fields: apple_store_no(string), iso(string), name(string)
   data_languages:
     primary key: code
-    fields: code(), iso(), name()
+    fields: code(string), iso(string), name(string)
   data_stores:
     primary key: store_key
-    fields: code(), countries(), id(), name(), short_name(), store_key(), storefronts(), supported_features(), type()
+    fields: code(string), countries(array), id(integer), name(string), short_name(string), store_key(string), storefronts(array), supported_features(array), type(string)
   data_currencies:
     primary key: Currency
-    fields: Currency(), Symbol()
+    fields: Currency(string), Symbol(string)
   data_sdks:
     primary key: id
-    fields: active(), code(), description(), developer(), external_links(), id(), name(), notes(), release_date(), started_tracking(), tags(), tracked_platforms()
+    fields: active(boolean), code(string), description(string), developer(object), external_links(array), id(string), name(string), notes(string), release_date(string), started_tracking(string), tags(array), tracked_platforms(array)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   reply_to_review:
     endpoint: POST /reviews/{{ record.id }}/response
-    required fields: id
-    optional fields: content
+    required fields: id, content
     risk: publishes a developer response to a customer review, visible on the public app store listing
   create_event:
     endpoint: POST /events/
+    required fields: caption, date
     risk: creates a release/marketing event marker overlaid on every Appfigures analytics chart
   update_event:
     endpoint: PUT /events/{{ record.id }}

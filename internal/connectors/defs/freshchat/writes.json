@@ -8,12 +8,24 @@
       "record_schema": {
         "type": "object",
         "properties": {
-          "email": { "type": "string" },
-          "first_name": { "type": "string" },
-          "last_name": { "type": "string" },
-          "phone": { "type": "string" },
-          "properties": { "type": "array" },
-          "reference_id": { "type": "string" }
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "array"
+          },
+          "reference_id": {
+            "type": "string"
+          }
         },
         "additionalProperties": true,
         "minProperties": 1
@@ -25,18 +37,36 @@
       "kind": "update",
       "method": "PUT",
       "path": "/users/{{ record.user_id }}",
-      "path_fields": ["user_id"],
+      "path_fields": [
+        "user_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["user_id"],
+        "required": [
+          "user_id"
+        ],
         "properties": {
-          "user_id": { "type": "string" },
-          "email": { "type": "string" },
-          "first_name": { "type": "string" },
-          "last_name": { "type": "string" },
-          "phone": { "type": "string" },
-          "properties": { "type": "array" },
-          "reference_id": { "type": "string" }
+          "user_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "array"
+          },
+          "reference_id": {
+            "type": "string"
+          }
         },
         "additionalProperties": true,
         "minProperties": 2
@@ -48,16 +78,32 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.user_id }}",
-      "path_fields": ["user_id"],
+      "path_fields": [
+        "user_id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "confirm": "destructive",
       "record_schema": {
         "type": "object",
-        "required": ["user_id"],
-        "properties": { "user_id": { "type": "string" } }
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "deletes a Freshchat user/contact"
+      "risk": "deletes a Freshchat user/contact; destructive and idempotent for configured missing statuses",
+      "redact_fields": [
+        "user_id"
+      ]
     },
     {
       "name": "create_conversation",
@@ -67,10 +113,18 @@
       "record_schema": {
         "type": "object",
         "properties": {
-          "user_id": { "type": "string" },
-          "channel_id": { "type": "string" },
-          "messages": { "type": "array" },
-          "properties": { "type": "object" }
+          "user_id": {
+            "type": "string"
+          },
+          "channel_id": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array"
+          },
+          "properties": {
+            "type": "object"
+          }
         },
         "additionalProperties": true,
         "minProperties": 1
@@ -82,17 +136,33 @@
       "kind": "update",
       "method": "PUT",
       "path": "/conversations/{{ record.conversation_id }}",
-      "path_fields": ["conversation_id"],
+      "path_fields": [
+        "conversation_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["conversation_id"],
+        "required": [
+          "conversation_id"
+        ],
         "properties": {
-          "conversation_id": { "type": "string" },
-          "status": { "type": "string" },
-          "assigned_agent_id": { "type": "string" },
-          "assigned_group_id": { "type": "string" },
-          "priority": { "type": "string" },
-          "properties": { "type": "object" }
+          "conversation_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "assigned_agent_id": {
+            "type": "string"
+          },
+          "assigned_group_id": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object"
+          }
         },
         "additionalProperties": true,
         "minProperties": 2
@@ -104,15 +174,27 @@
       "kind": "create",
       "method": "POST",
       "path": "/conversations/{{ record.conversation_id }}/messages",
-      "path_fields": ["conversation_id"],
+      "path_fields": [
+        "conversation_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["conversation_id"],
+        "required": [
+          "conversation_id"
+        ],
         "properties": {
-          "conversation_id": { "type": "string" },
-          "message_parts": { "type": "array" },
-          "actor_type": { "type": "string" },
-          "actor_id": { "type": "string" }
+          "conversation_id": {
+            "type": "string"
+          },
+          "message_parts": {
+            "type": "array"
+          },
+          "actor_type": {
+            "type": "string"
+          },
+          "actor_id": {
+            "type": "string"
+          }
         },
         "additionalProperties": true,
         "minProperties": 2
@@ -126,72 +208,137 @@
       "path": "/agents",
       "record_schema": {
         "type": "object",
-        "required": ["email"],
+        "required": [
+          "email"
+        ],
         "properties": {
-          "email": { "type": "string" },
-          "first_name": { "type": "string" },
-          "last_name": { "type": "string" },
-          "role_id": { "type": "string" },
-          "groups": { "type": "array" }
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array"
+          }
         },
         "additionalProperties": true
       },
-      "risk": "creates a Freshchat agent account"
+      "risk": "creates a Freshchat admin/agent account; requires typed destructive confirmation because this is an administrative user-management action",
+      "confirm": "destructive",
+      "redact_fields": [
+        "email"
+      ]
     },
     {
       "name": "update_agent",
       "kind": "update",
       "method": "PUT",
       "path": "/agents/{{ record.agent_id }}",
-      "path_fields": ["agent_id"],
+      "path_fields": [
+        "agent_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["agent_id"],
+        "required": [
+          "agent_id"
+        ],
         "properties": {
-          "agent_id": { "type": "string" },
-          "first_name": { "type": "string" },
-          "last_name": { "type": "string" },
-          "role_id": { "type": "string" },
-          "groups": { "type": "array" },
-          "is_deactivated": { "type": "boolean" }
+          "agent_id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array"
+          },
+          "is_deactivated": {
+            "type": "boolean"
+          }
         },
         "additionalProperties": true,
         "minProperties": 2
       },
-      "risk": "updates an existing Freshchat agent"
+      "risk": "updates a Freshchat admin/agent account; requires typed destructive confirmation because this mutates administrative access metadata",
+      "confirm": "destructive",
+      "redact_fields": [
+        "agent_id"
+      ]
     },
     {
       "name": "update_agent_status",
       "kind": "update",
       "method": "PATCH",
       "path": "/agents/{{ record.agent_id }}",
-      "path_fields": ["agent_id"],
+      "path_fields": [
+        "agent_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["agent_id", "status"],
+        "required": [
+          "agent_id",
+          "status"
+        ],
         "properties": {
-          "agent_id": { "type": "string" },
-          "status": { "type": "string" }
+          "agent_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
         },
         "additionalProperties": true
       },
-      "risk": "updates an agent's Freshchat availability status"
+      "risk": "updates a Freshchat agent availability status; requires typed destructive confirmation for administrative agent-state mutation",
+      "confirm": "destructive",
+      "redact_fields": [
+        "agent_id"
+      ]
     },
     {
       "name": "delete_agent",
       "kind": "delete",
       "method": "DELETE",
       "path": "/agents/{{ record.agent_id }}",
-      "path_fields": ["agent_id"],
+      "path_fields": [
+        "agent_id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "confirm": "destructive",
       "record_schema": {
         "type": "object",
-        "required": ["agent_id"],
-        "properties": { "agent_id": { "type": "string" } }
+        "required": [
+          "agent_id"
+        ],
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "deletes a Freshchat agent"
+      "risk": "deletes a Freshchat admin/agent account; destructive and idempotent for configured missing statuses",
+      "redact_fields": [
+        "agent_id"
+      ]
     },
     {
       "name": "send_outbound_whatsapp_message",
@@ -201,10 +348,18 @@
       "record_schema": {
         "type": "object",
         "properties": {
-          "from": { "type": "object" },
-          "to": { "type": "object" },
-          "provider": { "type": "string" },
-          "template": { "type": "object" }
+          "from": {
+            "type": "object"
+          },
+          "to": {
+            "type": "object"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "template": {
+            "type": "object"
+          }
         },
         "additionalProperties": true,
         "minProperties": 1
@@ -218,12 +373,25 @@
       "path": "/reports/raw",
       "record_schema": {
         "type": "object",
-        "required": ["start", "end", "event", "format"],
+        "required": [
+          "start",
+          "end",
+          "event",
+          "format"
+        ],
         "properties": {
-          "start": { "type": "string" },
-          "end": { "type": "string" },
-          "event": { "type": "string" },
-          "format": { "type": "string" }
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          }
         },
         "additionalProperties": true
       },
@@ -234,14 +402,24 @@
       "kind": "create",
       "method": "POST",
       "path": "/csat/{{ record.conversation_id }}",
-      "path_fields": ["conversation_id"],
+      "path_fields": [
+        "conversation_id"
+      ],
       "record_schema": {
         "type": "object",
-        "required": ["conversation_id"],
+        "required": [
+          "conversation_id"
+        ],
         "properties": {
-          "conversation_id": { "type": "string" },
-          "rating": { "type": "integer" },
-          "comment": { "type": "string" }
+          "conversation_id": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          }
         },
         "additionalProperties": true,
         "minProperties": 2

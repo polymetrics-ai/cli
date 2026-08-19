@@ -2,6 +2,7 @@ package conformance
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -127,12 +128,225 @@ func TestCheckInterpolationsResolve_AuthWhenClauseUsesFullGrammar(t *testing.T) 
 	}
 }
 
+// TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage pins the
+// covered_by bookkeeping for the binary_download intent. An api_surface row
+// records which CLI command consumes an endpoint; which executor runs that
+// command does not change who covers it, so an implemented binary_download
+// command satisfies covered_by.direct_reads exactly as a direct_read does
+// (the same rule cmd/connectorgen's checkSurfaceComplete already applies).
+// Availability still has to be honoured: a planned command covers nothing.
+func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/files/{file_id}/download",
+				CoveredBy: &engine.SurfaceCoverage{DirectReads: []string{"file download"}},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "file download",
+				Intent:       "binary_download",
+				Availability: "implemented",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: implemented binary_download must cover its covered_by.direct_reads endpoint: %v", err)
+	}
+
+	plannedB := b
+	plannedB.CLISurface = &engine.CLISurface{
+		Commands: []engine.CLICommand{{
+			Path:         "file download",
+			Intent:       "binary_download",
+			Availability: "planned",
+		}},
+	}
+	if err := checkSurfaceComplete(plannedB); err == nil {
+		t.Fatal("checkSurfaceComplete: a planned binary_download command must not satisfy covered_by.direct_reads")
+	}
+}
+
+// TestCheckSurfaceComplete_FixedGraphQLOperationsSatisfyCoverage keeps a
+// shared physical GraphQL transport honest.  The endpoint is covered only by
+// the fixed operation IDs it names; it is neither an arbitrary POST read nor a
+// generic raw GraphQL escape hatch.
+func TestCheckSurfaceComplete_FixedGraphQLOperationsSatisfyCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name:     "acme",
+		Metadata: engine.Metadata{Capabilities: engine.Capabilities{Read: true, Write: true}},
+		Operations: []engine.OperationSpec{
+			{ID: "acme.graphql.query.viewer", Kind: "graphql_query", GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"}},
+			{ID: "acme.graphql.mutation.close_widget", Kind: "graphql_mutation", GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"}},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/graphql",
+				CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.viewer", "acme.graphql.mutation.close_widget"}},
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: fixed GraphQL operation coverage = %v, want pass", err)
+	}
+
+	missing := b
+	missing.Surface = &engine.APISurface{
+		API: "https://api.acme.test",
+		Endpoints: []engine.SurfaceEndpoint{{
+			Method:    "POST",
+			Path:      "/graphql",
+			CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.missing"}},
+		}},
+	}
+	if err := checkSurfaceComplete(missing); err == nil || !strings.Contains(err.Error(), "not a declared fixed GraphQL operation") {
+		t.Fatalf("checkSurfaceComplete missing operation error = %v, want exact fixed GraphQL binding rejection", err)
+	}
+}
+
+func TestCheckSurfaceComplete_RequiresV2EndpointProvenance(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}},
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/widgets",
+				CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"},
+			}},
+		},
+	}
+
+	err := checkSurfaceComplete(b)
+	if err == nil {
+		t.Fatal("checkSurfaceComplete: v2 endpoint without provenance passed")
+	}
+	if !strings.Contains(err.Error(), "provenance is required") {
+		t.Fatalf("checkSurfaceComplete error = %q, want missing provenance diagnostic", err)
+	}
+}
+
+func TestCheckSurfaceComplete_ProvenanceDoesNotSatisfyCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method: "GET",
+				Path:   "/widgets",
+				Provenance: &engine.SurfaceProvenance{
+					Artifact:  "acme-openapi-2026-08-06",
+					SourceURL: "https://docs.acme.test/api/widgets",
+				},
+			}},
+		},
+	}
+
+	err := checkSurfaceComplete(b)
+	if err == nil {
+		t.Fatal("checkSurfaceComplete: provenance-only endpoint passed without a coverage classifier")
+	}
+	if !strings.Contains(err.Error(), "has no classifier") {
+		t.Fatalf("checkSurfaceComplete error = %q, want unchanged covered_by classifier diagnostic", err)
+	}
+}
+
+func TestCheckSurfaceComplete_V2ProvenanceSuppliesBlockedOperationCitation(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method: "POST",
+				Path:   "/widgets",
+				Provenance: &engine.SurfaceProvenance{
+					Artifact:  "acme-openapi-2026-08-06",
+					SourceURL: "https://docs.acme.test/api/widgets#create",
+				},
+				Operation: &engine.SurfaceOperation{
+					Model:            "sensitive_reverse_etl",
+					Status:           "blocked",
+					Risk:             "high",
+					BlockedByDefault: true,
+					Reason:           "requires sensitive-data safeguards",
+				},
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: v2 endpoint provenance should supply the blocked-operation citation: %v", err)
+	}
+}
+
+func TestCheckSurfaceComplete_POSTDirectReadDoesNotRequireWriteCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true, Write: false},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/freeBusy",
+				CoveredBy: &engine.SurfaceCoverage{DirectRead: "freebusy query"},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "freebusy query",
+				Intent:       "direct_read",
+				Availability: "implemented",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete rejected POST direct read with write disabled: %v", err)
+	}
+}
+
 // sanity: confirm the invalid corpus directories actually exist on disk
 // under this package (own corpus, not shared with cmd/connectorgen).
 func TestInvalidCorpus_DirsExist(t *testing.T) {
 	for _, dir := range []string{
 		"bad-spec-schema", "bad-stream-schema", "pk-missing", "cursor-missing",
-		"unresolved-interp", "write-schema-invalid", "surface-incomplete",
+		"unresolved-interp", "stream-path-literal-placeholder",
+		"write-schema-invalid", "surface-incomplete",
 		"docs-missing-heading", "secret-in-fixture", "no-fixtures",
 	} {
 		if _, err := os.Stat("testdata/invalid/" + dir); err != nil {

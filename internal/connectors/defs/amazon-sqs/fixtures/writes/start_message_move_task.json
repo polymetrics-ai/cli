@@ -1,0 +1,10 @@
+{
+  "record": {
+    "source_arn": "arn:aws:sqs:us-east-1:123456789012:orders-dlq",
+    "max_number_of_messages_per_second": 10
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.StartMessageMoveTask"
+  }
+}

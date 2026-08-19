@@ -1,7 +1,17 @@
 {
-  "request": { "method": "GET", "path": "/Organisation" },
+  "request": {
+    "method": "GET",
+    "path": "/Organisation"
+  },
   "response": {
     "status": 200,
-    "body": { "Id": "fixture-check", "Status": "OK", "Organisations": [{ "OrganisationID": "org_fixture_1", "Name": "Fixture Org" }] }
+    "body": {
+      "Organisations": [
+        {
+          "OrganisationID": "organisation_fixture_1",
+          "Name": "Fixture Organisation"
+        }
+      ]
+    }
   }
 }

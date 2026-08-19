@@ -1,0 +1,14 @@
+# `go test -timeout 20m ./internal/connectors/database -run 'TestDeriveChangeDeliveryWorksetImmutableIdentity' -count=1`
+
+```text
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/parquet_delivery_workset_test.go:17:25: undefined: database.DeriveChangeDeliveryWorkset
+internal/connectors/database/parquet_delivery_workset_test.go:21:26: undefined: database.DeriveChangeDeliveryWorkset
+internal/connectors/database/parquet_delivery_workset_test.go:34:38: undefined: database.DeriveChangeDeliveryWorkset
+internal/connectors/database/parquet_delivery_workset_test.go:44:33: undefined: database.DeriveChangeDeliveryWorkset
+internal/connectors/database/parquet_delivery_workset_test.go:54:30: undefined: database.DeriveChangeDeliveryWorkset
+internal/connectors/database/parquet_delivery_workset_test.go:80:117: undefined: database.ChangeDeliveryWorksetRequest
+internal/connectors/database/parquet_delivery_workset_test.go:99:18: undefined: database.ChangeDeliveryWorksetRequest
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+```

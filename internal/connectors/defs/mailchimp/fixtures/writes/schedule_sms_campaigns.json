@@ -1,0 +1,16 @@
+{
+  "record": {
+    "sms_campaign_id": "fixture_sms_campaign_id",
+    "schedule_time": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sms-campaigns/fixture_sms_campaign_id/actions/schedule"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_schedule_sms_campaigns"
+    }
+  }
+}

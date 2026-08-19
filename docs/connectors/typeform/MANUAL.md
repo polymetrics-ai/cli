@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Typeform forms, workspaces, themes, and images through the Typeform REST API.
 
 ICON
+  id: typeform
   asset: icons/typeform.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -36,20 +37,20 @@ ETL STREAMS
   forms:
     primary key: id
     cursor: last_updated_at
-    fields: created_at(), id(), is_public(), last_updated_at(), self_href(), theme_href(), title(), type()
+    fields: created_at(string), id(string), is_public(boolean), last_updated_at(string), self_href(string), theme_href(string), title(string), type(string)
   responses:
     primary key: response_id
     cursor: submitted_at
-    fields: answers(), calculated(), form_id(), hidden(), landed_at(), landing_id(), metadata(), response_id(), submitted_at(), token()
+    fields: answers(array), calculated(object), form_id(string), hidden(object), landed_at(string), landing_id(string), metadata(object), response_id(string), submitted_at(string), token(string)
   workspaces:
     primary key: id
-    fields: account_id(), default(), id(), name(), self_href(), shared()
+    fields: account_id(string), default(boolean), id(string), name(string), self_href(string), shared(boolean)
   themes:
     primary key: id
-    fields: background(), colors(), font(), id(), name(), visibility()
+    fields: background(object), colors(object), font(string), id(string), name(string), visibility(string)
   images:
     primary key: id
-    fields: file_name(), has_alpha(), height(), id(), media_type(), src(), width()
+    fields: file_name(string), has_alpha(boolean), height(integer), id(string), media_type(string), src(string), width(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

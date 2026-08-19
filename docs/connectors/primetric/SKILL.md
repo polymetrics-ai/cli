@@ -11,6 +11,7 @@ Reads Primetric employees, projects, clients, and roles through OAuth-authentica
 
 ## Icon
 
+- id: primetric
 - asset: icons/primetric.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,27 +30,27 @@ Reads Primetric employees, projects, clients, and roles through OAuth-authentica
 
 - base_url
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - employees:
   - primary key: id
-  - fields: created_at(), email(), first_name(), id(), last_name(), name(), updated_at()
+  - fields: created_at(string), email(string), first_name(string), id(integer), last_name(string), name(string), updated_at(string)
 - projects:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - clients:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - roles:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

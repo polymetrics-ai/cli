@@ -1,0 +1,17 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "survey_id": "fixture_survey_id",
+    "title": "fixture_title"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/surveys/fixture_survey_id/actions/replicate"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_replicate_surveys"
+    }
+  }
+}

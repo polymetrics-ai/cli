@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST API using OAuth2 client-credentials authentication.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -28,26 +30,26 @@ CONFIGURATION
   base_url
   mode
   start_date
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   bookings:
     primary key: uuid
     cursor: last_modified
-    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+    fields: approval_status(string), base_price(number), booking_fee(number), booking_id(string), booking_method(string), booking_status(string), booking_type(string), cancelled_at(string), confirmation_number(string), created(string), currency(string), destination(string), domestic(boolean), end_date(string), expensed(boolean), grand_total(number), last_modified(string), start_date(string), uuid(string)
   hotel_bookings:
     primary key: uuid
     cursor: last_modified
-    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+    fields: approval_status(string), base_price(number), booking_fee(number), booking_id(string), booking_method(string), booking_status(string), booking_type(string), cancelled_at(string), confirmation_number(string), created(string), currency(string), destination(string), domestic(boolean), end_date(string), expensed(boolean), grand_total(number), last_modified(string), start_date(string), uuid(string)
   car_bookings:
     primary key: uuid
     cursor: last_modified
-    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+    fields: approval_status(string), base_price(number), booking_fee(number), booking_id(string), booking_method(string), booking_status(string), booking_type(string), cancelled_at(string), confirmation_number(string), created(string), currency(string), destination(string), domestic(boolean), end_date(string), expensed(boolean), grand_total(number), last_modified(string), start_date(string), uuid(string)
   rail_bookings:
     primary key: uuid
     cursor: last_modified
-    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+    fields: approval_status(string), base_price(number), booking_fee(number), booking_id(string), booking_method(string), booking_status(string), booking_type(string), cancelled_at(string), confirmation_number(string), created(string), currency(string), destination(string), domestic(boolean), end_date(string), expensed(boolean), grand_total(number), last_modified(string), start_date(string), uuid(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

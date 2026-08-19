@@ -1,0 +1,120 @@
+{
+  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
+  "usage": "pm zoom <users|meetings|webinars> list [flags]",
+  "source_cli": {
+    "name": "Zoom API reference",
+    "docs": "https://developers.zoom.us/docs/api/",
+    "reference": "OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "users",
+      "title": "Users",
+      "commands": ["users"]
+    },
+    {
+      "id": "meetings",
+      "title": "Meetings and webinars",
+      "commands": ["meetings", "webinars"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Zoom request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from a stream command."
+    }
+  ],
+  "commands": [
+    {
+      "path": "users list",
+      "summary": "Read Zoom users through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /v2/users",
+      "source_url": "https://developers.zoom.us/docs/api/users.md",
+      "api_surface": [
+        { "method": "GET", "path": "/v2/users" }
+      ],
+      "examples": [
+        "pm zoom users list --credential zoom-fixture --limit 25 --json"
+      ]
+    },
+    {
+      "path": "meetings list",
+      "summary": "Read meetings for one Zoom user through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "meetings",
+      "source_cli_path": "GET /v2/users/{userId}/meetings",
+      "source_url": "https://developers.zoom.us/docs/api/meetings.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom user ID or email; overrides credential config user_id for this request.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/v2/users/{userId}/meetings" }
+      ],
+      "examples": [
+        "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
+      ]
+    },
+    {
+      "path": "webinars list",
+      "summary": "Read webinars for one Zoom user through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webinars",
+      "source_cli_path": "GET /v2/users/{userId}/webinars",
+      "source_url": "https://developers.zoom.us/docs/api/meetings.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom user ID or email; overrides credential config user_id for this request.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        { "method": "GET", "path": "/v2/users/{userId}/webinars" }
+      ],
+      "examples": [
+        "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "provider-inventory",
+      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads."
+    }
+  ]
+}

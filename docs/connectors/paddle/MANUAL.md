@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Paddle customers, subscriptions, transactions, and products through the Paddle REST API.
 
 ICON
+  id: paddle
   asset: icons/paddle.svg
   source: official
   review_status: official_verified
@@ -28,25 +29,25 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   transactions:
     primary key: id
     cursor: created_at
-    fields: created_at(), currency_code(), customer_id(), id(), status(), subscription_id()
+    fields: created_at(string), currency_code(string), customer_id(string), id(string), status(string), subscription_id(string)
   customers:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), name()
+    fields: created_at(string), email(string), id(string), name(string)
   subscriptions:
     primary key: id
     cursor: created_at
-    fields: created_at(), customer_id(), id(), status()
+    fields: created_at(string), customer_id(string), id(string), status(string)
   products:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

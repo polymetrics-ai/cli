@@ -1,0 +1,28 @@
+{
+  "name": "hubspot",
+  "display_name": "HubSpot",
+  "description": "Discovers each HubSpot account's CRM object/property schema and reads its provider-described object collections. Other documented operations remain blocked.",
+  "integration_type": "api",
+  "docs_url": "https://developers.hubspot.com/docs/api/overview",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": false,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
+  },
+  "risk": {
+    "read": "Catalog and stream reads call only the discovered HubSpot CRM object collection route. Discovery may be partial and must be refreshed when stale; every other documented HubSpot read remains blocked.",
+    "write": "No HubSpot write execution is enabled in this connector-local ledger slice; DELETE/destructive writes are included as typed destructive-confirmation candidates, not exclusions.",
+    "approval": "Future reverse ETL actions must use plan -> preview -> explicit approval -> execute; destructive actions must require typed destructive confirmation."
+  }
+}

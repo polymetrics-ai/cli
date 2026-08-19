@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:orgs_assign_team_to_org_role",
+  "provider": "github",
+  "executed_at": "2026-08-18T03:54:40Z",
+  "run_id": "github-mutation-slice3-orgs-assign-team-to-org-role-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "b2af457377be74e2c7b86f6b09ee460b78304a2468815ff009ac1c1bac22ba84",
+    "pm_command_fingerprint": "{{pmcertfp:v1:d174c5dd350c3410e26414d44ef85d7036a296a5558da46dfd1500948edb89f1}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:baa4cc0033fe7a0fff95bc3611f968da2192e52001a15620b5bc724becd14f42}}"],
+    "http_exchanges": [
+      {
+        "operation": "orgs_assign_team_to_org_role_agent_derived_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:f61d967eb7022719e2d5b1541c9f38d2f56d54f0a78f650d8eac9246ee4e94d6}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"assertion_source": "{{pmcertfp:v1:c90e9daa2b2f412cca488245fa7845cb95f1cec462ea89522f07f0282c8b711a}}", "matched": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}", "wrong_answer_rejected": "{{pmcertfp:v1:1909fc0cff4f7b43f70450f68c7dda8dda3f15ed6ce071034612b89c8c0a85f4}}", "team_id": "{{pmcertfp:v1:6cee5f04eba2c0556c7c09c3b40479a62f40262234213c5fb70dbc8b64af64a9}}", "team_slug": "{{pmcertfp:v1:9e0aa2b10a5c3ea396634957dee977446f93b1a524d1a7798d85f5e90be1ce61}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_assign_team_to_org_role_direct_cleanup",
+        "request": {"method": "DELETE", "target": "{{pmcertfp:v1:e3e2437917ff50e101d1d311166e333eeee6a04ec05603e873bad0d975dab013}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 204, "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_assign_team_to_org_role_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:f61d967eb7022719e2d5b1541c9f38d2f56d54f0a78f650d8eac9246ee4e94d6}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"cleanup": "{{pmcertfp:v1:50c943824f164114734edada393d47c286f93fe2309128acb63547f332511bc8}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_assign_team_to_org_role_container_delete",
+        "request": {"method": "DELETE", "target": "{{pmcertfp:v1:4997cfa614b6b63a8c585d99d9eed53003dd74fe75cbd65f58f61d5752cdb1ea}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 204, "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_assign_team_to_org_role_container_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:4997cfa614b6b63a8c585d99d9eed53003dd74fe75cbd65f58f61d5752cdb1ea}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 404, "headers": [], "body": {"encoding": "json", "value": {"message": "{{pmcertfp:v1:130177b45bd177f1ab6e2114888760b05b987f6c02d662b6ee22d1fb08b66e16}}"}, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

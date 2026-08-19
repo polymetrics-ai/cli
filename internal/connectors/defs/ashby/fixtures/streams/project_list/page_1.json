@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/project.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "project_list_id_fixture_39",
+          "createdAt": "2026-02-11T15:00:00Z",
+          "title": "Title fixture 39",
+          "isArchived": true,
+          "authorId": "project_list_authorid_fixture_39",
+          "description": "Description fixture 39",
+          "confidential": true,
+          "customFieldEntries": [
+            {
+              "id": "project_list_id_fixture_39",
+              "isPrivate": true,
+              "title": "Title fixture 39",
+              "value": {
+                "value": 39.0,
+                "currencyCode": "project_list_currencycode_fixture_39"
+              },
+              "valueLabel": "project_list_valuelabel_fixture_39"
+            }
+          ]
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

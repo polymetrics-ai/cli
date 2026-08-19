@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "github_direct_read_throughput_observation",
+  "connector": "github",
+  "candidate_source": {
+    "pull_request": 4214,
+    "head": "7306b9ec3e079b51ac9c70a674605a3a27f6e09b",
+    "state_at_measurement": "open",
+    "selection": "10=first 10 generated; 100=97 generated plus first 3 existing direct-read overrides"
+  },
+  "execution": {
+    "mode": "direct_read_only",
+    "serial": true,
+    "credential": "disposable environment-provided identity; secret omitted",
+    "timing_boundary": "fresh project setup through credential validation, direct reads, checkpoint/report persistence, and teardown",
+    "pass_predicate": "candidate /response object_or_array assertion passed"
+  },
+  "batches": [
+    {
+      "id": "batch-10",
+      "operations": 10,
+      "wall_ms": 25527.667968,
+      "per_operation_ms": 2552.766797,
+      "produced_value_passes": 2,
+      "product_defects": 4,
+      "missing_fixtures": 0,
+      "provider_refusals": 4,
+      "resumed_stages": 0
+    },
+    {
+      "id": "batch-100-fresh",
+      "operations": 100,
+      "wall_ms": 158521.083904,
+      "per_operation_ms": 1585.210839,
+      "produced_value_passes": 33,
+      "product_defects": 14,
+      "missing_fixtures": 6,
+      "provider_refusals": 47,
+      "resumed_stages": 0
+    },
+    {
+      "id": "batch-100-repeat-1",
+      "operations": 100,
+      "wall_ms": 155620.976896,
+      "per_operation_ms": 1556.209769,
+      "produced_value_passes": 33,
+      "product_defects": 14,
+      "missing_fixtures": 6,
+      "provider_refusals": 47,
+      "resumed_stages": 0
+    },
+    {
+      "id": "batch-100-repeat-2",
+      "operations": 100,
+      "wall_ms": 150351.252992,
+      "per_operation_ms": 1503.51253,
+      "produced_value_passes": 33,
+      "product_defects": 14,
+      "missing_fixtures": 6,
+      "provider_refusals": 47,
+      "resumed_stages": 0
+    }
+  ],
+  "resumability_probe": {
+    "operations": 100,
+    "resumed_stages": 17,
+    "checkpoint_completed": 34,
+    "included_in_fresh_curve": false
+  },
+  "rate_limit_observation": {
+    "provider_reset_header_observations_per_100_batch": 93,
+    "admission_waits_per_100_batch": 0,
+    "not_sent_by_limiter_per_100_batch": 0,
+    "throttle_point_reached": false,
+    "bound": "310 timed target stages; raw headers intentionally omitted from certification reports"
+  },
+  "projection": {
+    "measurement": "three fresh 100-operation batches, mean 1548.311046 ms per target operation",
+    "implemented_direct_reads_remaining": 639,
+    "serial_lifecycle_seconds": 989.871,
+    "declared_direct_read_rows": 655,
+    "serial_lifecycle_seconds_if_all_runnable": 1014.144
+  },
+  "publication": {
+    "status": "withheld",
+    "accepted_evidence_record_emitted": false,
+    "scope_contract": "PR #4215 merged; its verified scope construction is present in the rebased base",
+    "reason": "the landed importer supports transport and change-capture only; generic GitHub live-evidence import remains open as PR #4216",
+    "next_step_after_importer_lands": "import this bounded observation through PR #4216's generic importer and validate under the fixed contract; do not emit a full-parity claim"
+  }
+}

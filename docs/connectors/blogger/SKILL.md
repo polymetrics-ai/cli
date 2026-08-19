@@ -11,9 +11,17 @@ Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-vi
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-blogger
+- asset: icons/simple-icons/blogger.svg
+- title: Blogger
+- simple_icon_slug: blogger
+- simple_icon_hex: FF5722
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Blogger
+- match: exact-name-or-slug
+- matched_by: blogger
 
 ## Capabilities
 
@@ -27,34 +35,34 @@ Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-vi
 ## Configuration
 
 - base_url
-- blog_id
+- blog_id (required)
 - page_size
 - token_url
-- client_id (secret)
-- client_refresh_token (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_refresh_token (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - blogs:
   - primary key: id
   - cursor: updated
-  - fields: description(), id(), kind(), name(), pages_total(), posts_total(), published(), updated(), url()
+  - fields: description(string), id(string), kind(string), name(string), pages_total(integer), posts_total(integer), published(string), updated(string), url(string)
 - posts:
   - primary key: id
   - cursor: updated
-  - fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), published(), replies_total(), status(), title(), updated(), url()
+  - fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), published(string), replies_total(integer), status(string), title(string), updated(string), url(string)
 - pages:
   - primary key: id
   - cursor: updated
-  - fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), published(), status(), title(), updated(), url()
+  - fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), published(string), status(string), title(string), updated(string), url(string)
 - comments:
   - primary key: id
   - cursor: updated
-  - fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), post_id(), published(), status(), updated()
+  - fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), post_id(string), published(string), status(string), updated(string)
 - pageviews:
   - primary key: blog_id, time_range
-  - fields: blog_id(), count(), time_range()
+  - fields: blog_id(string), count(string), time_range(string)
 
 ## Sync Modes
 

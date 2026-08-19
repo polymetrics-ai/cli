@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses, configuration templates, policy objects, branding policies, SAML roles, and organization audit logs from the Meraki Dashboard API v1.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -28,45 +30,45 @@ CONFIGURATION
   base_url
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   organizations:
     primary key: id
-    fields: api(), cloud(), id(), licensing(), management(), name(), url()
+    fields: api(object), cloud(object), id(string), licensing(object), management(object), name(string), url(string)
   organization_networks:
     primary key: id
-    fields: enrollmentString(), id(), isBoundToConfigTemplate(), name(), notes(), organizationId(), productTypes(), tags(), timeZone(), url()
+    fields: enrollmentString(string), id(string), isBoundToConfigTemplate(boolean), name(string), notes(string), organizationId(string), productTypes(array), tags(array), timeZone(string), url(string)
   organization_devices:
     primary key: serial
-    fields: address(), firmware(), lat(), lng(), mac(), model(), name(), networkId(), organizationId(), productType(), serial(), tags()
+    fields: address(string), firmware(string), lat(number), lng(number), mac(string), model(string), name(string), networkId(string), organizationId(string), productType(string), serial(string), tags(array)
   organization_admins:
     primary key: id
-    fields: accountStatus(), authenticationMethod(), email(), hasApiKey(), id(), lastActive(), name(), networks(), orgAccess(), organizationId(), tags(), twoFactorAuthEnabled()
+    fields: accountStatus(string), authenticationMethod(string), email(string), hasApiKey(boolean), id(string), lastActive(string), name(string), networks(array), orgAccess(string), organizationId(string), tags(array), twoFactorAuthEnabled(boolean)
   organization_licenses:
     primary key: id
-    fields: activationDate(), claimDate(), deviceSerial(), durationInDays(), expirationDate(), headLicenseId(), id(), licenseType(), networkId(), orderNumber(), organizationId(), seatCount(), state(), totalDurationInDays()
+    fields: activationDate(string), claimDate(string), deviceSerial(string), durationInDays(integer), expirationDate(string), headLicenseId(string), id(string), licenseType(string), networkId(string), orderNumber(string), organizationId(string), seatCount(integer), state(string), totalDurationInDays(integer)
   organization_config_templates:
     primary key: id
-    fields: id(), name(), organizationId(), productTypes(), timeZone()
+    fields: id(string), name(string), organizationId(string), productTypes(array), timeZone(string)
   organization_policy_objects:
     primary key: id
     cursor: updatedAt
-    fields: category(), cidr(), createdAt(), groupIds(), id(), name(), networkIds(), organizationId(), type(), updatedAt()
+    fields: category(string), cidr(string), createdAt(string), groupIds(array), id(string), name(string), networkIds(array), organizationId(string), type(string), updatedAt(string)
   organization_branding_policies:
     primary key: organizationId, name
-    fields: adminSettings(), customLogo(), enabled(), helpSettings(), name(), organizationId()
+    fields: adminSettings(object), customLogo(object), enabled(boolean), helpSettings(object), name(string), organizationId(string)
   organization_saml_roles:
     primary key: id
-    fields: camera(), id(), networks(), orgAccess(), organizationId(), role(), tags()
+    fields: camera(object), id(string), networks(array), orgAccess(string), organizationId(string), role(string), tags(array)
   organization_configuration_changes:
     primary key: organizationId, ts, label
     cursor: ts
-    fields: adminEmail(), adminId(), adminName(), client(), label(), networkId(), networkName(), networkUrl(), newValue(), oldValue(), organizationId(), page(), ssidName(), ssidNumber(), ts()
+    fields: adminEmail(string), adminId(string), adminName(string), client(object), label(string), networkId(string), networkName(string), networkUrl(string), newValue(string), oldValue(string), organizationId(string), page(string), ssidName(string), ssidNumber(integer), ts(string)
   organization_api_requests:
     primary key: organizationId, ts, path, method
     cursor: ts
-    fields: adminId(), client(), host(), method(), operationId(), organizationId(), path(), queryString(), responseCode(), sourceIp(), ts(), userAgent(), version()
+    fields: adminId(string), client(object), host(string), method(string), operationId(string), organizationId(string), path(string), queryString(string), responseCode(integer), sourceIp(string), ts(string), userAgent(string), version(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -74,7 +76,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_network:
     endpoint: POST /organizations/{{ record.organizationId }}/networks
-    required fields: organizationId
+    required fields: organizationId, name, productTypes
     risk: external mutation; creates a new Meraki network under an organization
   update_network:
     endpoint: PUT /networks/{{ record.id }}
@@ -90,7 +92,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates an existing device's name, tags, physical location, or notes
   create_admin:
     endpoint: POST /organizations/{{ record.organizationId }}/admins
-    required fields: organizationId
+    required fields: organizationId, email, name, orgAccess
     risk: external mutation; grants a new dashboard administrator access to this organization
   update_admin:
     endpoint: PUT /organizations/{{ record.organizationId }}/admins/{{ record.id }}
@@ -102,7 +104,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external revocation of a dashboard administrator's access to this organization; approval required
   create_config_template:
     endpoint: POST /organizations/{{ record.organizationId }}/configTemplates
-    required fields: organizationId
+    required fields: organizationId, name
     risk: external mutation; creates a new configuration template under an organization
   update_config_template:
     endpoint: PUT /organizations/{{ record.organizationId }}/configTemplates/{{ record.id }}
@@ -114,7 +116,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a configuration template; may unbind networks currently attached to it; approval required
   create_policy_object:
     endpoint: POST /organizations/{{ record.organizationId }}/policyObjects
-    required fields: organizationId
+    required fields: organizationId, name, category, type
     risk: external mutation; creates a new network policy object (CIDR/FQDN definition) used by firewall/traffic-shaping rules
   update_policy_object:
     endpoint: PUT /organizations/{{ record.organizationId }}/policyObjects/{{ record.id }}

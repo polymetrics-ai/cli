@@ -1,0 +1,19 @@
+# Green verification
+
+```text
+$ go test -timeout 20m ./internal/connectors/database -run 'TestDeriveChangeDeliveryWorkset' -count=1
+ok   polymetrics.ai/internal/connectors/database  0.731s
+
+$ go test -timeout 20m ./internal/warehouse/... ./internal/connectors/database/... ./internal/synctransport/... -count=1
+ok   polymetrics.ai/internal/warehouse             0.860s
+ok   polymetrics.ai/internal/connectors/database   7.015s
+ok   polymetrics.ai/internal/synctransport         1.077s
+
+$ go test -race -timeout 20m ./internal/connectors/database -run 'TestDeriveChangeDeliveryWorkset' -count=1
+ok   polymetrics.ai/internal/connectors/database  1.821s
+
+$ go vet ./...
+$ go build ./cmd/pm
+$ golangci-lint run ./internal/connectors/database/...
+0 issues.
+```

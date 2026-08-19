@@ -11,6 +11,7 @@ Reads and writes Zapier Storage key/value records.
 
 ## Icon
 
+- id: zapiersupportedstorage
 - asset: icons/zapiersupportedstorage.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,14 +30,14 @@ Reads and writes Zapier Storage key/value records.
 
 - base_url
 - mode
-- secret (secret)
+- secret (secret) (required)
 
 ## ETL Streams
 
 - records:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), key(), updated_at(), value()
+  - fields: id(string), key(string), updated_at(string), value(string)
 
 ## Sync Modes
 
@@ -46,9 +47,11 @@ Reads and writes Zapier Storage key/value records.
 
 - set_record:
   - endpoint: PATCH /api/records
+  - required fields: action, data
   - risk: creates or overwrites a single key/value pair in the caller's Zapier Storage bucket (optionally only when the existing value matches only_if_value); external mutation, no approval required
 - increment_record:
   - endpoint: PATCH /api/records
+  - required fields: action, data
   - risk: atomically increments a numeric-valued key by amount (creating it at amount if absent); external mutation, no approval required
 - delete_record:
   - endpoint: DELETE /api/records?key={{ record.key }}

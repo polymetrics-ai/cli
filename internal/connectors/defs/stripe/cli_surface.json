@@ -1,0 +1,188 @@
+{
+  "tagline": "Read Stripe billing streams and safely plan customer write actions.",
+  "usage": "pm stripe <command> [flags]",
+  "source_cli": {
+    "name": "Stripe API",
+    "docs": "https://stripe.com/docs/api",
+    "reference": "OpenAPI spec3 2026-07-29.dahlia",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "customers",
+      "title": "Customers",
+      "commands": ["customers"]
+    },
+    {
+      "id": "billing",
+      "title": "Billing streams",
+      "commands": ["charges", "invoices", "subscriptions", "products"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Stripe request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream commands."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "customers list",
+      "summary": "Read Stripe customers through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_cli_path": "GET /v1/customers",
+      "source_url": "https://stripe.com/docs/api/customers/list",
+      "api_surface": [{ "method": "GET", "path": "/v1/customers" }],
+      "examples": ["pm stripe customers list --credential stripe-prod --limit 25 --json"]
+    },
+    {
+      "path": "customers create",
+      "summary": "Plan creation of a Stripe customer through reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
+      "source_cli_path": "POST /v1/customers",
+      "source_url": "https://stripe.com/docs/api/customers/create",
+      "flags": [
+        { "name": "email", "type": "string", "summary": "Customer email address.", "maps_to": "record.email", "allow_empty": false },
+        { "name": "name", "type": "string", "summary": "Customer display name.", "maps_to": "record.name", "allow_empty": false },
+        { "name": "description", "type": "string", "summary": "Customer description.", "maps_to": "record.description", "allow_empty": false },
+        { "name": "phone", "type": "string", "summary": "Customer phone number.", "maps_to": "record.phone", "allow_empty": false }
+      ],
+      "api_surface": [{ "method": "POST", "path": "/v1/customers" }],
+      "risk": "Creates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": ["pm stripe customers create --credential stripe-prod --email fixture@example.com --name 'Fixture Customer' --preview --json"]
+    },
+    {
+      "path": "customers update",
+      "summary": "Plan an update to a Stripe customer through reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_cli_path": "POST /v1/customers/{customer}",
+      "source_url": "https://stripe.com/docs/api/customers/update",
+      "flags": [
+        { "name": "id", "type": "string", "summary": "Stripe customer ID to update.", "maps_to": "record.id", "allow_empty": false },
+        { "name": "email", "type": "string", "summary": "Customer email address.", "maps_to": "record.email", "allow_empty": false },
+        { "name": "name", "type": "string", "summary": "Customer display name.", "maps_to": "record.name", "allow_empty": false },
+        { "name": "description", "type": "string", "summary": "Customer description.", "maps_to": "record.description", "allow_empty": false },
+        { "name": "phone", "type": "string", "summary": "Customer phone number.", "maps_to": "record.phone", "allow_empty": false }
+      ],
+      "api_surface": [{ "method": "POST", "path": "/v1/customers/{customer}" }],
+      "risk": "Mutates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": ["pm stripe customers update --credential stripe-prod --id cus_fixture_1 --email updated-fixture@example.com --preview --json"]
+    },
+    {
+      "path": "customers delete",
+      "summary": "Plan deletion of a Stripe customer with typed destructive confirmation and customer ID redaction.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer",
+      "source_cli_path": "DELETE /v1/customers/{customer}",
+      "source_url": "https://stripe.com/docs/api/customers/delete",
+      "flags": [
+        { "name": "id", "type": "string", "summary": "Stripe customer ID to delete.", "maps_to": "record.id", "allow_empty": false }
+      ],
+      "redact_fields": ["id"],
+      "api_surface": [{ "method": "DELETE", "path": "/v1/customers/{customer}" }],
+      "risk": "Destructive Stripe customer deletion; redacts the customer ID from previews and write errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+      "examples": ["pm stripe customers delete --credential stripe-prod --id cus_fixture_delete_1 --preview --json"]
+    },
+    {
+      "path": "charges list",
+      "summary": "Read Stripe charges through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "charges",
+      "source_cli_path": "GET /v1/charges",
+      "source_url": "https://stripe.com/docs/api/charges/list",
+      "api_surface": [{ "method": "GET", "path": "/v1/charges" }],
+      "examples": ["pm stripe charges list --credential stripe-prod --limit 25 --json"]
+    },
+    {
+      "path": "invoices list",
+      "summary": "Read Stripe invoices through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_cli_path": "GET /v1/invoices",
+      "source_url": "https://stripe.com/docs/api/invoices/list",
+      "api_surface": [{ "method": "GET", "path": "/v1/invoices" }],
+      "examples": ["pm stripe invoices list --credential stripe-prod --limit 25 --json"]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Read Stripe subscriptions through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_cli_path": "GET /v1/subscriptions",
+      "source_url": "https://stripe.com/docs/api/subscriptions/list",
+      "api_surface": [{ "method": "GET", "path": "/v1/subscriptions" }],
+      "examples": ["pm stripe subscriptions list --credential stripe-prod --limit 25 --json"]
+    },
+    {
+      "path": "products list",
+      "summary": "Read Stripe products through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_cli_path": "GET /v1/products",
+      "source_url": "https://stripe.com/docs/api/products/list",
+      "api_surface": [{ "method": "GET", "path": "/v1/products" }],
+      "examples": ["pm stripe products list --credential stripe-prod --limit 25 --json"]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "destructive-confirmation",
+      "summary": "Stripe DELETE/destructive operations are in scope only through typed destructive confirmation and the reverse ETL plan → preview → approval → execute path."
+    }
+  ]
+}

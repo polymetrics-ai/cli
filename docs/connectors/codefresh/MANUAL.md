@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, container images, registries, triggers, and annotations, and can create/update/delete/run projects, pipelines, contexts, and agents through the Codefresh REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-codefresh
+  asset: icons/simple-icons/codefresh.svg
+  title: Codefresh
+  simple_icon_slug: codefresh
+  simple_icon_hex: 08B1AB
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Codefresh
+  match: exact-name-or-slug
+  matched_by: codefresh
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -28,41 +36,41 @@ CONFIGURATION
   account_id
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:
     primary key: id
-    fields: favorite(), id(), pipelines_number(), project_name(), updated_at()
+    fields: favorite(boolean), id(string), pipelines_number(integer), project_name(string), updated_at(string)
   pipelines:
     primary key: id
-    fields: created_at(), id(), is_public(), name(), project(), updated_at()
+    fields: created_at(string), id(string), is_public(boolean), name(string), project(string), updated_at(string)
   agents:
     primary key: id
-    fields: created_at(), id(), name(), status(), version()
+    fields: created_at(string), id(string), name(string), status(string), version(string)
   contexts:
     primary key: id
-    fields: id(), name(), owner(), type()
+    fields: id(string), name(string), owner(string), type(string)
   builds:
     primary key: id
     cursor: created
-    fields: branch_name(), commit_message(), committer(), created(), finished(), id(), pipeline_name(), progress(), project(), project_id(), provider(), repo_name(), repo_owner(), revision(), status(), trigger(), trigger_type(), triggered_by()
+    fields: branch_name(string), commit_message(string), committer(string), created(string), finished(string), id(string), pipeline_name(string), progress(string), project(string), project_id(string), provider(string), repo_name(string), repo_owner(string), revision(string), status(string), trigger(string), trigger_type(string), triggered_by(string)
   images:
     primary key: id
     cursor: created
-    fields: branch(), commit(), commit_url(), created(), id(), image_display_name(), image_name(), repo(), sha(), size()
+    fields: branch(string), commit(string), commit_url(string), created(string), id(string), image_display_name(string), image_name(string), repo(string), sha(string), size(integer)
   registries:
     primary key: id
-    fields: behind_firewall(), default(), domain(), id(), internal(), kind(), name(), primary(), provider()
+    fields: behind_firewall(boolean), default(boolean), domain(string), id(string), internal(boolean), kind(string), name(string), primary(boolean), provider(string)
   triggers:
     primary key: event, pipeline
-    fields: event(), event_description(), event_status(), event_type(), filter_tag(), pipeline()
+    fields: event(string), event_description(string), event_status(string), event_type(string), filter_tag(string), pipeline(string)
   trigger_events:
     primary key: uri
-    fields: account(), description(), endpoint(), kind(), status(), type(), uri()
+    fields: account(string), description(string), endpoint(string), kind(string), status(string), type(string), uri(string)
   annotations:
     primary key: id
-    fields: account_id(), entity_id(), entity_type(), id(), key(), type(), value()
+    fields: account_id(string), entity_id(string), entity_type(string), id(string), key(string), type(string), value(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -70,6 +78,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_project:
     endpoint: POST /projects
+    required fields: projectName
     risk: external mutation; creates a new Codefresh project; approval required
   delete_project:
     endpoint: DELETE /projects/{{ record.id }}
@@ -77,10 +86,11 @@ REVERSE ETL ACTIONS
     risk: destructive; irreversible deletion of a Codefresh project; approval required
   create_pipeline:
     endpoint: POST /pipelines
+    required fields: metadata
     risk: external mutation; creates a new Codefresh pipeline; approval required
   update_pipeline:
     endpoint: PUT /pipelines/{{ record.name }}
-    required fields: name
+    required fields: name, metadata
     risk: external mutation; replaces an existing Codefresh pipeline's spec; approval required
   delete_pipeline:
     endpoint: DELETE /pipelines/{{ record.name }}
@@ -92,6 +102,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; triggers a real Codefresh pipeline run (build minutes/resources consumed); approval required
   create_context:
     endpoint: POST /contexts
+    required fields: metadata, spec
     risk: external mutation; creates a new Codefresh shared context (may hold configuration values); approval required
   delete_context:
     endpoint: DELETE /contexts/{{ record.name }}
@@ -99,6 +110,7 @@ REVERSE ETL ACTIONS
     risk: destructive; irreversible deletion of a Codefresh shared context; approval required
   create_agent:
     endpoint: POST /agents
+    required fields: name
     risk: external mutation; registers a new Codefresh runner agent; approval required
   delete_agent:
     endpoint: DELETE /agent/{{ record.id }}

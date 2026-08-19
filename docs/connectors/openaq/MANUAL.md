@@ -13,6 +13,7 @@ DESCRIPTION
   Reads OpenAQ air quality reference data (countries, parameters, locations, instruments, and manufacturers) from the OpenAQ v3 REST API.
 
 ICON
+  id: openaq
   asset: icons/openaq.svg
   source: official
   review_status: official_verified
@@ -29,27 +30,27 @@ CONFIGURATION
   base_url
   countries_id
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   countries:
     primary key: id
-    fields: code(), datetimeFirst(), datetimeLast(), id(), name(), parameters()
+    fields: code(string), datetimeFirst(string), datetimeLast(string), id(integer), name(string), parameters(array)
   parameters:
     primary key: id
-    fields: description(), displayName(), id(), name(), units()
+    fields: description(string), displayName(string), id(integer), name(string), units(string)
   locations:
     primary key: id
-    fields: coordinates(), country(), datetimeFirst(), datetimeLast(), id(), isMobile(), isMonitor(), locality(), name(), owner(), provider(), sensors(), timezone()
+    fields: coordinates(object), country(object), datetimeFirst(object), datetimeLast(object), id(integer), isMobile(boolean), isMonitor(boolean), locality(string), name(string), owner(object), provider(object), sensors(array), timezone(string)
   instruments:
     primary key: id
-    fields: id(), isMonitor(), manufacturer(), name()
+    fields: id(integer), isMonitor(boolean), manufacturer(object), name(string)
   manufacturers:
     primary key: id
-    fields: id(), instruments(), name()
+    fields: id(integer), instruments(array), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external OpenAQ API read of public air-quality reference data

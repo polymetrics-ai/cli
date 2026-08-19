@@ -35,7 +35,7 @@ func recordRuntimeETL(ctx context.Context, run app.Run, cfg config.Config) error
 		return fmt.Errorf("runtime dependencies are not healthy; run `pm runtime doctor --json` for details")
 	}
 	dragonfly := pmruntime.OpenDragonflyLeaseStore(runtimeCfg.DragonflyAddr)
-	defer dragonfly.Close()
+	defer func() { _ = dragonfly.Close() }()
 	pg, err := pmruntime.OpenPostgresRunLedger(ctx, runtimeCfg.PostgresURL)
 	if err != nil {
 		return err

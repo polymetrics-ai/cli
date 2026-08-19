@@ -11,6 +11,7 @@ Reads Pinterest ad accounts, boards, campaigns, ad groups, and audiences through
 
 ## Icon
 
+- id: pinterest
 - asset: icons/pinterest.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,31 +33,31 @@ Reads Pinterest ad accounts, boards, campaigns, ad groups, and audiences through
 - mode
 - page_size
 - token_url
-- client_id (secret)
-- client_secret (secret)
-- refresh_token (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
+- refresh_token (secret) (required)
 
 ## ETL Streams
 
 - ad_accounts:
   - primary key: id
-  - fields: country(), currency(), id(), name(), owner()
+  - fields: country(string), currency(string), id(string), name(string), owner(object)
 - boards:
   - primary key: id
-  - fields: created_at(), description(), follower_count(), id(), name(), owner(), pin_count(), privacy()
+  - fields: created_at(string), description(string), follower_count(integer), id(string), name(string), owner(object), pin_count(integer), privacy(string)
 - campaigns:
   - primary key: id
-  - fields: ad_account_id(), created_time(), id(), name(), objective_type(), status(), updated_time()
+  - fields: ad_account_id(string), created_time(integer), id(string), name(string), objective_type(string), status(string), updated_time(integer)
 - ad_groups:
   - primary key: id
-  - fields: ad_account_id(), campaign_id(), created_time(), id(), name(), status(), updated_time()
+  - fields: ad_account_id(string), campaign_id(string), created_time(integer), id(string), name(string), status(string), updated_time(integer)
 - audiences:
   - primary key: id
-  - fields: ad_account_id(), audience_type(), created_timestamp(), id(), name(), size(), status()
+  - fields: ad_account_id(string), audience_type(string), created_timestamp(integer), id(string), name(string), size(integer), status(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

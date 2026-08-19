@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes the documented Pylon REST API surface through concrete streams and write actions.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -50,163 +52,163 @@ CONFIGURATION
   ticket_form_id
   training_data_id
   user_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   issues:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), state(string), title(string), updated_at(string)
   accounts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), state(string), title(string), updated_at(string)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), state(string), title(string), updated_at(string)
   users:
     primary key: id
-    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), state(string), title(string), updated_at(string)
   messages:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), state(string), title(string), updated_at(string)
   account_relationships:
     primary key: id
-    fields: child_account_id(), created_at(), id(), parent_account_id(), related_object_id(), relationship_type(), updated_at()
+    fields: child_account_id(string), created_at(string), id(string), parent_account_id(string), related_object_id(string), relationship_type(string), updated_at(string)
   account:
     primary key: id
-    fields: channels(), created_at(), crm_settings(), custom_fields(), domain(), domains(), external_ids(), id(), is_disabled(), latest_customer_activity_time(), name(), owner(), primary_domain(), tags(), type(), updated_at()
+    fields: channels(array), created_at(string), crm_settings(object), custom_fields(object), domain(string), domains(array), external_ids(array), id(string), is_disabled(boolean), latest_customer_activity_time(string), name(string), owner(object), primary_domain(string), tags(array), type(string), updated_at(string)
   activity_types:
     primary key: id
-    fields: icon_url(), id(), label(), slug()
+    fields: icon_url(string), id(string), label(string), slug(string)
   audit_logs:
     primary key: id
-    fields: action(), action_happened_at(), actor_contact_id(), actor_user_id(), attributes(), created_at(), id(), link(), metadata(), object_id(), object_type(), source()
+    fields: action(string), action_happened_at(string), actor_contact_id(string), actor_user_id(string), attributes(object), created_at(string), id(string), link(string), metadata(object), object_id(string), object_type(string), source(string)
   call_recording:
     primary key: id
-    fields: account_id(), calendar_event_id(), created_at(), custom_fields(), duration_ms(), end_time(), external_id(), id(), participant_emails(), source(), start_time(), summary(), title(), updated_at(), url()
+    fields: account_id(string), calendar_event_id(string), created_at(string), custom_fields(object), duration_ms(integer), end_time(string), external_id(string), id(string), participant_emails(array), source(string), start_time(string), summary(string), title(string), updated_at(string), url(string)
   contact:
     primary key: id
-    fields: account(), avatar_url(), custom_fields(), email(), emails(), external_ids(), id(), integration_user_ids(), name(), phone_numbers(), portal_role(), portal_role_id(), primary_phone_number()
+    fields: account(object), avatar_url(string), custom_fields(object), email(string), emails(array), external_ids(array), id(string), integration_user_ids(array), name(string), phone_numbers(array), portal_role(string), portal_role_id(string), primary_phone_number(string)
   custom_fields:
     primary key: id
-    fields: created_at(), default_value(), default_values(), description(), id(), is_read_only(), label(), number_metadata(), object_type(), select_metadata(), slug(), source(), type(), updated_at()
+    fields: created_at(string), default_value(string), default_values(array), description(string), id(string), is_read_only(boolean), label(string), number_metadata(object), object_type(string), select_metadata(object), slug(string), source(string), type(string), updated_at(string)
   custom_field:
     primary key: id
-    fields: created_at(), default_value(), default_values(), description(), id(), is_read_only(), label(), number_metadata(), object_type(), select_metadata(), slug(), source(), type(), updated_at()
+    fields: created_at(string), default_value(string), default_values(array), description(string), id(string), is_read_only(boolean), label(string), number_metadata(object), object_type(string), select_metadata(object), slug(string), source(string), type(string), updated_at(string)
   custom_objects:
     primary key: id
-    fields: created_at(), custom_fields(), id(), name(), relations(), type(), updated_at()
+    fields: created_at(string), custom_fields(object), id(string), name(string), relations(array), type(string), updated_at(string)
   custom_object:
     primary key: id
-    fields: created_at(), custom_fields(), id(), name(), relations(), type(), updated_at()
+    fields: created_at(string), custom_fields(object), id(string), name(string), relations(array), type(string), updated_at(string)
   feature_request:
     primary key: id
-    fields: created_at(), custom_fields(), description(), evidence(), evidence_count(), id(), portal_visible_to_account_ids(), request_status(), title(), updated_at()
+    fields: created_at(string), custom_fields(object), description(string), evidence(array), evidence_count(integer), id(string), portal_visible_to_account_ids(array), request_status(string), title(string), updated_at(string)
   issue_statuses:
     primary key: slug
-    fields: category(), is_archived(), is_default_status(), label(), slug()
+    fields: category(string), is_archived(boolean), is_default_status(boolean), label(string), slug(string)
   issue:
     primary key: id
-    fields: account(), assignee(), attachment_urls(), author_unverified(), body_html(), business_hours_first_response_seconds(), business_hours_resolution_seconds(), business_hours_time_in_status_seconds(), chat_widget_info(), child_issues(), created_at(), csat_responses(), custom_fields(), customer_portal_visible(), external_issues(), first_response_breach_time(), first_response_seconds(), first_response_time(), id(), latest_message_time(), link(), number(), number_of_touches(), parent_issue_group(), requester(), resolution_breach_time(), resolution_seconds(), resolution_time(), slack(), snoozed_until_time(), source(), state(), tags(), team(), team_slas(), time_in_status_seconds(), title(), type(), updated_at()
+    fields: account(object), assignee(object), attachment_urls(array), author_unverified(boolean), body_html(string), business_hours_first_response_seconds(integer), business_hours_resolution_seconds(integer), business_hours_time_in_status_seconds(object), chat_widget_info(object), child_issues(array), created_at(string), csat_responses(array), custom_fields(object), customer_portal_visible(boolean), external_issues(array), first_response_breach_time(string), first_response_seconds(integer), first_response_time(string), id(string), latest_message_time(string), link(string), number(integer), number_of_touches(integer), parent_issue_group(object), requester(object), resolution_breach_time(string), resolution_seconds(integer), resolution_time(string), slack(object), snoozed_until_time(string), source(string), state(string), tags(array), team(object), team_slas(array), time_in_status_seconds(object), title(string), type(string), updated_at(string)
   issue_followers:
     primary key: id
-    fields: id(), type()
+    fields: id(string), type(string)
   issue_messages:
     primary key: id
-    fields: author(), email_info(), file_urls(), id(), is_private(), message_html(), source(), thread_id(), timestamp()
+    fields: author(object), email_info(object), file_urls(array), id(string), is_private(boolean), message_html(string), source(string), thread_id(string), timestamp(string)
   issue_threads:
     primary key: id
-    fields: channel_id(), id(), issue_id(), name(), source(), thread_id()
+    fields: channel_id(string), id(string), issue_id(string), name(string), source(string), thread_id(string)
   issue_voice_calls:
     primary key: id
-    fields: created_at(), duration_sec(), from_phone_number(), id(), recordings(), to_phone_number()
+    fields: created_at(string), duration_sec(integer), from_phone_number(string), id(string), recordings(array), to_phone_number(string)
   knowledge_bases:
     primary key: id
-    fields: default_language(), id(), slug(), supported_languages(), title()
+    fields: default_language(string), id(string), slug(string), supported_languages(array), title(string)
   knowledge_base:
     primary key: id
-    fields: default_language(), id(), slug(), supported_languages(), title()
+    fields: default_language(string), id(string), slug(string), supported_languages(array), title(string)
   articles:
     primary key: id
-    fields: approval_info(), author_user_id(), collection_id(), created_at(), current_draft_content_html(), current_published_content_html(), id(), identifier(), is_published(), is_unlisted(), last_edited_at(), last_published_at(), slug(), title(), url(), visibility_config()
+    fields: approval_info(object), author_user_id(string), collection_id(string), created_at(string), current_draft_content_html(string), current_published_content_html(string), id(string), identifier(string), is_published(boolean), is_unlisted(boolean), last_edited_at(string), last_published_at(string), slug(string), title(string), url(string), visibility_config(object)
   article:
     primary key: id
-    fields: approval_info(), author_user_id(), collection_id(), created_at(), current_draft_content_html(), current_published_content_html(), id(), identifier(), is_published(), is_unlisted(), last_edited_at(), last_published_at(), slug(), title(), url(), visibility_config()
+    fields: approval_info(object), author_user_id(string), collection_id(string), created_at(string), current_draft_content_html(string), current_published_content_html(string), id(string), identifier(string), is_published(boolean), is_unlisted(boolean), last_edited_at(string), last_published_at(string), slug(string), title(string), url(string), visibility_config(object)
   collections:
     primary key: id
-    fields: created_at(), description(), icon(), id(), parent_collection_id(), slug(), title(), visibility_config()
+    fields: created_at(string), description(string), icon(string), id(string), parent_collection_id(string), slug(string), title(string), visibility_config(object)
   collection:
     primary key: id
-    fields: created_at(), description(), icon(), id(), parent_collection_id(), slug(), title(), visibility_config()
+    fields: created_at(string), description(string), icon(string), id(string), parent_collection_id(string), slug(string), title(string), visibility_config(object)
   macro_groups:
     primary key: id
-    fields: created_at(), id(), title(), updated_at()
+    fields: created_at(string), id(string), title(string), updated_at(string)
   macros:
     primary key: id
-    fields: actions(), created_at(), has_actions(), id(), macro_group_id(), name(), text_html(), text_type(), updated_at(), visibility()
+    fields: actions(array), created_at(string), has_actions(boolean), id(string), macro_group_id(string), name(string), text_html(string), text_type(string), updated_at(string), visibility(object)
   macro:
     primary key: id
-    fields: actions(), created_at(), has_actions(), id(), macro_group_id(), name(), text_html(), text_type(), updated_at(), visibility()
+    fields: actions(array), created_at(string), has_actions(boolean), id(string), macro_group_id(string), name(string), text_html(string), text_type(string), updated_at(string), visibility(object)
   me:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   milestone:
     primary key: id
-    fields: account(), created_at(), due_date(), id(), name(), project(), updated_at()
+    fields: account(object), created_at(string), due_date(string), id(string), name(string), project(object), updated_at(string)
   project:
     primary key: id
-    fields: account(), archived_at(), created_at(), custom_fields(), customer_portal_visible(), description_html(), end_date(), id(), is_archived(), name(), owner_id(), project_template(), start_date(), updated_at()
+    fields: account(object), archived_at(string), created_at(string), custom_fields(object), customer_portal_visible(boolean), description_html(string), end_date(string), id(string), is_archived(boolean), name(string), owner_id(string), project_template(object), start_date(string), updated_at(string)
   surveys:
     primary key: id
-    fields: id(), name(), type(), updated_at()
+    fields: id(string), name(string), type(string), updated_at(string)
   survey:
     primary key: id
-    fields: id(), name(), type(), updated_at()
+    fields: id(string), name(string), type(string), updated_at(string)
   survey_responses:
     primary key: id
-    fields: account_id(), answers(), contact_id(), id(), submitted_at()
+    fields: account_id(string), answers(array), contact_id(string), id(string), submitted_at(string)
   tags:
     primary key: id
-    fields: hex_color(), id(), object_type(), value()
+    fields: hex_color(string), id(string), object_type(string), value(string)
   tag:
     primary key: id
-    fields: hex_color(), id(), object_type(), value()
+    fields: hex_color(string), id(string), object_type(string), value(string)
   tasks:
     primary key: id
-    fields: account(), assignee(), body_html(), created_at(), custom_fields(), customer_portal_visible(), due_date(), id(), milestone(), parent_task_id(), project(), status(), subtask_ids(), title(), updated_at()
+    fields: account(object), assignee(object), body_html(string), created_at(string), custom_fields(object), customer_portal_visible(boolean), due_date(string), id(string), milestone(object), parent_task_id(string), project(object), status(string), subtask_ids(array), title(string), updated_at(string)
   task:
     primary key: id
-    fields: account(), assignee(), body_html(), created_at(), custom_fields(), customer_portal_visible(), due_date(), id(), milestone(), parent_task_id(), project(), status(), subtask_ids(), title(), updated_at()
+    fields: account(object), assignee(object), body_html(string), created_at(string), custom_fields(object), customer_portal_visible(boolean), due_date(string), id(string), milestone(object), parent_task_id(string), project(object), status(string), subtask_ids(array), title(string), updated_at(string)
   task_comments:
     primary key: id
-    fields: author(), body_html(), created_at(), id(), is_internal(), last_edited_at(), task_id(), updated_at()
+    fields: author(object), body_html(string), created_at(string), id(string), is_internal(boolean), last_edited_at(string), task_id(string), updated_at(string)
   teams:
     primary key: id
-    fields: id(), name(), users()
+    fields: id(string), name(string), users(array)
   team:
     primary key: id
-    fields: id(), name(), users()
+    fields: id(string), name(string), users(array)
   ticket_forms:
     primary key: id
-    fields: description_html(), fields(), id(), is_public(), name(), slug(), url()
+    fields: description_html(string), fields(array), id(string), is_public(boolean), name(string), slug(string), url(string)
   ticket_form:
     primary key: id
-    fields: description_html(), fields(), id(), is_public(), name(), slug(), url()
+    fields: description_html(string), fields(array), id(string), is_public(boolean), name(string), slug(string), url(string)
   training_data:
     primary key: id
-    fields: created_at(), documents(), exclude_from_kb_search(), id(), name(), scrape_status(), type(), updated_at(), visibility()
+    fields: created_at(string), documents(array), exclude_from_kb_search(boolean), id(string), name(string), scrape_status(object), type(string), updated_at(string), visibility(string)
   training_data_detail:
     primary key: id
-    fields: created_at(), documents(), exclude_from_kb_search(), id(), name(), scrape_status(), type(), updated_at(), visibility()
+    fields: created_at(string), documents(array), exclude_from_kb_search(boolean), id(string), name(string), scrape_status(object), type(string), updated_at(string), visibility(string)
   user_roles:
     primary key: id
-    fields: id(), name(), slug()
+    fields: id(string), name(string), slug(string)
   user:
     primary key: id
-    fields: avatar_url(), email(), emails(), id(), name(), role_id(), status()
+    fields: avatar_url(string), email(string), emails(array), id(string), name(string), role_id(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -214,19 +216,23 @@ SYNC MODES
 REVERSE ETL ACTIONS
   update_accounts:
     endpoint: PATCH /accounts
+    required fields: account_ids
     risk: external Pylon PATCH /accounts; approval required
   create_account:
     endpoint: POST /accounts
+    required fields: name
     risk: external Pylon POST /accounts; approval required
   merge_accounts:
     endpoint: POST /accounts/merge
+    required fields: merge_into_account_id, merge_account_ids
     risk: destructive external Pylon POST /accounts/merge; approval required
   search_accounts:
     endpoint: POST /accounts/search
+    required fields: filter
     risk: external Pylon POST /accounts/search; approval required
   create_account_highlight:
     endpoint: POST /accounts/{{ record.account_id }}/highlights
-    required fields: account_id
+    required fields: account_id, content_html
     risk: external Pylon POST /accounts/{account_id}/highlights; approval required
   delete_account_highlight:
     endpoint: DELETE /accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}
@@ -238,7 +244,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /accounts/{account_id}/highlights/{highlight_id}; approval required
   create_account_relationship:
     endpoint: POST /accounts/{{ record.account_id }}/relationship
-    required fields: account_id
+    required fields: account_id, related_object_id, relationship_type
     risk: external Pylon POST /accounts/{account_id}/relationship; approval required
   delete_account_relationship:
     endpoint: DELETE /accounts/{{ record.account_id }}/relationships/{{ record.relationship_id }}
@@ -254,7 +260,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /accounts/{id}; approval required
   create_activity:
     endpoint: POST /accounts/{{ record.account_id }}/activities
-    required fields: account_id
+    required fields: account_id, slug
     risk: external Pylon POST /accounts/{id}/activities; approval required
   search_audit_logs:
     endpoint: POST /audit-logs/search
@@ -272,9 +278,11 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /call-recordings/{id}; approval required
   create_contact:
     endpoint: POST /contacts
+    required fields: name
     risk: external Pylon POST /contacts; approval required
   search_contacts:
     endpoint: POST /contacts/search
+    required fields: filter
     risk: external Pylon POST /contacts/search; approval required
   delete_contact:
     endpoint: DELETE /contacts/{{ record.contact_id }}
@@ -286,6 +294,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /contacts/{id}; approval required
   create_custom_field:
     endpoint: POST /custom-fields
+    required fields: object_type, label, type
     risk: external Pylon POST /custom-fields; approval required
   update_custom_field:
     endpoint: PATCH /custom-fields/{{ record.custom_field_id }}
@@ -293,15 +302,15 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /custom-fields/{id}; approval required
   update_custom_objects:
     endpoint: PATCH /custom-objects/{{ record.custom_object_type }}
-    required fields: custom_object_type
+    required fields: custom_object_type, ids
     risk: external Pylon PATCH /custom-objects/{type}; approval required
   create_custom_object:
     endpoint: POST /custom-objects/{{ record.custom_object_type }}
-    required fields: custom_object_type
+    required fields: custom_object_type, name
     risk: external Pylon POST /custom-objects/{type}; approval required
   search_custom_objects:
     endpoint: POST /custom-objects/{{ record.custom_object_type }}/search
-    required fields: custom_object_type
+    required fields: custom_object_type, filter
     risk: external Pylon POST /custom-objects/{type}/search; approval required
   delete_custom_object:
     endpoint: DELETE /custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}
@@ -313,6 +322,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /custom-objects/{type}/{id}; approval required
   create_feature_request:
     endpoint: POST /feature-requests
+    required fields: title
     risk: external Pylon POST /feature-requests; approval required
   search_feature_requests:
     endpoint: POST /feature-requests/search
@@ -327,23 +337,27 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /feature-requests/{id}; approval required
   set_feature_request_portal_visibility:
     endpoint: POST /feature-requests/{{ record.feature_request_id }}/set-portal-visibility
-    required fields: feature_request_id
+    required fields: feature_request_id, account_ids, visible
     risk: external Pylon POST /feature-requests/{id}/set-portal-visibility; approval required
   import_contact:
     endpoint: POST /import/contacts
+    required fields: name, email
     risk: external Pylon POST /import/contacts; approval required
   import_issue:
     endpoint: POST /import/issues
+    required fields: title, state, messages
     risk: external Pylon POST /import/issues; approval required
   import_messages:
     endpoint: POST /import/issues/{{ record.issue_id }}/messages
-    required fields: issue_id
+    required fields: issue_id, messages
     risk: external Pylon POST /import/issues/{id}/messages; approval required
   create_issue:
     endpoint: POST /issues
+    required fields: title, body_html
     risk: external Pylon POST /issues; approval required
   search_issues:
     endpoint: POST /issues/search
+    required fields: filter
     risk: external Pylon POST /issues/search; approval required
   delete_issue:
     endpoint: DELETE /issues/{{ record.issue_id }}
@@ -355,11 +369,11 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /issues/{id}; approval required
   create_issue_ai_response:
     endpoint: POST /issues/{{ record.issue_id }}/ai-response
-    required fields: issue_id
+    required fields: issue_id, ai_agent_id
     risk: external Pylon POST /issues/{id}/ai-response; approval required
   link_external_issue:
     endpoint: POST /issues/{{ record.issue_id }}/external-issues
-    required fields: issue_id
+    required fields: issue_id, source, external_issue_id
     risk: external Pylon POST /issues/{id}/external-issues; approval required
   add_issue_followers:
     endpoint: POST /issues/{{ record.issue_id }}/followers
@@ -375,15 +389,15 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon POST /issues/{id}/messages/{message_id}/redact; approval required
   create_issue_note:
     endpoint: POST /issues/{{ record.issue_id }}/note
-    required fields: issue_id
+    required fields: issue_id, body_html
     risk: external Pylon POST /issues/{id}/note; approval required
   create_issue_reply:
     endpoint: POST /issues/{{ record.issue_id }}/reply
-    required fields: issue_id
+    required fields: issue_id, body_html, message_id
     risk: external Pylon POST /issues/{id}/reply; approval required
   snooze_issue:
     endpoint: POST /issues/{{ record.issue_id }}/snooze
-    required fields: issue_id
+    required fields: issue_id, snooze_until
     risk: external Pylon POST /issues/{id}/snooze; approval required
   create_issue_thread:
     endpoint: POST /issues/{{ record.issue_id }}/threads
@@ -391,7 +405,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /issues/{id}/threads; approval required
   create_article:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/articles
-    required fields: knowledge_base_id
+    required fields: knowledge_base_id, title, author_user_id, body_html
     risk: external Pylon POST /knowledge-bases/{id}/articles; approval required
   delete_article:
     endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}
@@ -407,7 +421,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /knowledge-bases/{id}/articles/{article_id}/request-review; approval required
   create_collection:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/collections
-    required fields: knowledge_base_id
+    required fields: knowledge_base_id, title
     risk: external Pylon POST /knowledge-bases/{id}/collections; approval required
   delete_collection:
     endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}
@@ -419,10 +433,11 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /knowledge-bases/{id}/collections/{collection_id}; approval required
   create_route_redirect:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/route-redirects
-    required fields: knowledge_base_id
+    required fields: knowledge_base_id, from_path, object_id, object_type
     risk: external Pylon POST /knowledge-bases/{id}/route-redirects; approval required
   create_macro:
     endpoint: POST /macros
+    required fields: name, text_html, macro_group_id
     risk: external Pylon POST /macros; approval required
   update_macro:
     endpoint: PATCH /macros/{{ record.macro_id }}
@@ -430,6 +445,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /macros/{id}; approval required
   create_milestone:
     endpoint: POST /milestones
+    required fields: name, project_id
     risk: external Pylon POST /milestones; approval required
   delete_milestone:
     endpoint: DELETE /milestones/{{ record.milestone_id }}
@@ -441,6 +457,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /milestones/{id}; approval required
   create_project:
     endpoint: POST /projects
+    required fields: name, account_id
     risk: external Pylon POST /projects; approval required
   search_projects:
     endpoint: POST /projects/search
@@ -458,6 +475,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /surveys/search; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: object_type, value
     risk: external Pylon POST /tags; approval required
   delete_tag:
     endpoint: DELETE /tags/{{ record.tag_id }}
@@ -469,6 +487,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /tags/{id}; approval required
   create_task:
     endpoint: POST /tasks
+    required fields: title
     risk: external Pylon POST /tasks; approval required
   search_tasks:
     endpoint: POST /tasks/search
@@ -483,7 +502,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /tasks/{id}; approval required
   create_task_comment:
     endpoint: POST /tasks/{{ record.task_id }}/comments
-    required fields: task_id
+    required fields: task_id, body_html
     risk: external Pylon POST /tasks/{id}/comments; approval required
   delete_task_comment:
     endpoint: DELETE /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
@@ -491,7 +510,7 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon DELETE /tasks/{id}/comments/{comment_id}; approval required
   update_task_comment:
     endpoint: PATCH /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
-    required fields: task_id, comment_id
+    required fields: task_id, comment_id, body_html
     risk: external Pylon PATCH /tasks/{id}/comments/{comment_id}; approval required
   create_team:
     endpoint: POST /teams
@@ -512,6 +531,7 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon DELETE /training-data/{id}/documents; approval required
   search_users:
     endpoint: POST /users/search
+    required fields: filter
     risk: external Pylon POST /users/search; approval required
   update_user:
     endpoint: PATCH /users/{{ record.user_id }}

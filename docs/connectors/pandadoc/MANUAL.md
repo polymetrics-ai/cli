@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes documented PandaDoc public API resources across documents, templates, contacts, folders, forms, logs, members, webhooks, workspaces, notary, and catalog surfaces.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -38,121 +40,121 @@ CONFIGURATION
   template_id
   upload_id
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   documents:
     primary key: id
     cursor: date_created
-    fields: date_created(), date_modified(), id(), name(), status()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string)
   templates:
     primary key: id
     cursor: date_created
-    fields: date_created(), date_modified(), id(), name()
+    fields: date_created(string), date_modified(string), id(string), name(string)
   contacts:
     primary key: id
     cursor: created_date
-    fields: created_date(), email(), first_name(), id(), last_name()
+    fields: created_date(string), email(string), first_name(string), id(string), last_name(string)
   documents_document_id_ai_metadata:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_content:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_docx_export_tasks_task_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_summary:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_search:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   contacts_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   content_library_items:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   content_library_items_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   content_library_items_id_details:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_auto_reminders:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_auto_reminders_status:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_esign_disclosure:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_sections:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_sections_section_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_sections_uploads_upload_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id_attachments:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id_attachments_attachment_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id_details:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id_fields:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_id_linked_objects:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_folders:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_linked_objects:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   forms:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   logs:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   logs_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   members:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   members_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   members_current:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   sms_opt_outs:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   templates_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   templates_id_details:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   templates_folders:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   users:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   users_user_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   webhook_events:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   webhook_events_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   webhook_subscriptions:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   webhook_subscriptions_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   workspaces:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_audit_trail:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   documents_document_id_settings:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   logs_detail:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   logs_id_detail:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   notary_notaries:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   notary_notarization_requests:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   notary_notarization_requests_session_request_id:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   product_catalog_items_item_uuid:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   product_catalog_items_search:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
   templates_template_id_settings:
-    fields: date_created(), date_modified(), id(), name(), status(), uuid()
+    fields: date_created(string), date_modified(string), id(string), name(string), status(string), uuid(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

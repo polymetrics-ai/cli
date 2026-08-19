@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Phyllo users, accounts, profiles, social content/comments, audience, and income data, and writes user/webhook/account-config mutations using Basic-auth REST endpoints.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -30,64 +32,64 @@ CONFIGURATION
   phyllo_account_id
   phyllo_user_id
   phyllo_work_platform_id
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   users:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   accounts:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   profiles:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   social_contents:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   work_platforms:
     primary key: id
-    fields: category(), created_at(), id(), logo_url(), name(), status(), updated_at()
+    fields: category(string), created_at(string), id(string), logo_url(string), name(string), status(string), updated_at(string)
   audience:
     primary key: account_id
-    fields: account_id(), age_group(), cities(), countries(), follower_count(), gender(), languages(), platform_username()
+    fields: account_id(string), age_group(array), cities(array), countries(array), follower_count(integer), gender(array), languages(array), platform_username(string)
   social_content_groups:
     primary key: id
-    fields: account_id(), created_at(), id(), platform(), status(), title(), type(), updated_at()
+    fields: account_id(string), created_at(string), id(string), platform(string), status(string), title(string), type(string), updated_at(string)
   social_comments:
     primary key: id
-    fields: account_id(), commenter_username(), content_id(), created_at(), id(), like_count(), platform(), reply_count(), text(), updated_at()
+    fields: account_id(string), commenter_username(string), content_id(string), created_at(string), id(string), like_count(integer), platform(string), reply_count(integer), text(string), updated_at(string)
   social_income_transactions:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), platform(), transaction_date(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), platform(string), transaction_date(string), type(string), updated_at(string)
   social_income_payouts:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), payout_date(), platform(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), payout_date(string), platform(string), type(string), updated_at(string)
   commerce_income_transactions:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), platform(), transaction_date(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), platform(string), transaction_date(string), type(string), updated_at(string)
   commerce_income_payouts:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), payout_date(), platform(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), payout_date(string), platform(string), updated_at(string)
   commerce_income_balances:
     primary key: id
-    fields: account_id(), amount(), balance_date(), created_at(), currency_code(), id(), platform(), updated_at()
+    fields: account_id(string), amount(number), balance_date(string), created_at(string), currency_code(string), id(string), platform(string), updated_at(string)
   webhooks:
     primary key: id
-    fields: created_at(), events(), id(), status(), updated_at(), url()
+    fields: created_at(string), events(array), id(string), status(string), updated_at(string), url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /v1/users
+    required fields: name, external_id
     risk: creates a new Phyllo end-user record that every subsequent Connect/account/profile flow is anchored to; low-risk external mutation, no destructive side effect, no approval required
   update_account:
     endpoint: PATCH /v1/accounts/{{ record.id }}
-    required fields: id
-    optional fields: data
+    required fields: id, data
     risk: changes an account's identity/engagement/income monitoring configuration (e.g. STANDARD vs EXTENSIVE data collection level), affecting what data Phyllo collects going forward; external mutation, approval required
   disconnect_account:
     endpoint: POST /v1/accounts/{{ record.id }}/disconnect
@@ -95,10 +97,11 @@ REVERSE ETL ACTIONS
     risk: revokes Phyllo's connection to the creator's linked social/creator platform account, permanently stopping all future data collection for it; destructive external mutation, approval required
   create_webhook:
     endpoint: POST /v1/webhooks
+    required fields: url, events
     risk: registers a new webhook endpoint that will receive Phyllo event notifications; low-risk external mutation, no approval required
   update_webhook:
     endpoint: PUT /v1/webhooks/{{ record.id }}
-    required fields: id
+    required fields: id, url, events
     risk: changes an existing webhook's target URL and/or subscribed event set, redirecting future event delivery; external mutation, approval required
   delete_webhook:
     endpoint: DELETE /v1/webhooks/{{ record.id }}

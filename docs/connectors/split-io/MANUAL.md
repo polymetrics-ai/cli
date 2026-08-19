@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Split.io workspaces, environments, feature flags, segments, groups, traffic types, and users, and writes feature-flag kill/restore/archive/unarchive and segment-key mutations through the Split Admin API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -28,32 +30,32 @@ CONFIGURATION
   base_url
   mode
   workspace_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   workspaces:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   environments:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   splits:
     primary key: id
     cursor: updatedAt
-    fields: environment(), id(), name(), status(), trafficType(), updatedAt()
+    fields: environment(string), id(string), name(string), status(string), trafficType(string), updatedAt(string)
   segments:
     primary key: id
     cursor: updatedAt
-    fields: id(), name(), status(), updatedAt()
+    fields: id(string), name(string), status(string), updatedAt(string)
   groups:
     primary key: id
-    fields: description(), id(), name(), type()
+    fields: description(string), id(string), name(string), type(string)
   traffic_types:
     primary key: id
-    fields: displayAttributeId(), id(), name()
+    fields: displayAttributeId(string), id(string), name(string)
   users:
     primary key: id
-    fields: email(), groups(), id(), name(), status()
+    fields: email(string), groups(array), id(string), name(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -77,11 +79,11 @@ REVERSE ETL ACTIONS
     risk: restores an archived feature flag to active use account-wide; approval required
   add_segment_keys_in_environment:
     endpoint: PUT /internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/uploadKeys
-    required fields: environment_id, segment_name
+    required fields: environment_id, segment_name, keys
     risk: adds member keys to a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required
   remove_segment_keys_from_environment:
     endpoint: PUT /internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/removeKeys
-    required fields: environment_id, segment_name
+    required fields: environment_id, segment_name, keys
     risk: removes member keys from a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required
 
 SECURITY

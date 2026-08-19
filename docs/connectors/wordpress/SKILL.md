@@ -11,9 +11,17 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-wordpress
+- asset: icons/simple-icons/wordpress.svg
+- title: WordPress
+- simple_icon_slug: wordpress
+- simple_icon_hex: 21759B
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=WordPress
+- match: exact-name-or-slug
+- matched_by: wordpress
 
 ## Capabilities
 
@@ -26,7 +34,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - start_date
 - password (secret)
 - username (secret)
@@ -36,37 +44,37 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 - posts:
   - primary key: id
   - cursor: date
-  - fields: _links(), author(), categories(), comment_status(), content(), date(), date_gmt(), excerpt(), featured_media(), format(), guid(), id(), link(), modified(), modified_gmt(), ping_status(), slug(), status(), sticky(), tags(), template(), title(), type()
+  - fields: _links(object), author(integer), categories(array), comment_status(string), content(object), date(string), date_gmt(string), excerpt(object), featured_media(integer), format(string), guid(object), id(integer), link(string), modified(string), modified_gmt(string), ping_status(string), slug(string), status(string), sticky(boolean), tags(array), template(string), title(object), type(string)
 - pages:
   - primary key: id
   - cursor: date
-  - fields: _links(), author(), comment_status(), content(), date(), date_gmt(), excerpt(), featured_media(), guid(), id(), link(), menu_order(), modified(), modified_gmt(), parent(), ping_status(), slug(), status(), template(), title(), type()
+  - fields: _links(object), author(integer), comment_status(string), content(object), date(string), date_gmt(string), excerpt(object), featured_media(integer), guid(object), id(integer), link(string), menu_order(integer), modified(string), modified_gmt(string), parent(integer), ping_status(string), slug(string), status(string), template(string), title(object), type(string)
 - comments:
   - primary key: id
   - cursor: date
-  - fields: _links(), author(), author_avatar_urls(), author_name(), author_url(), content(), date(), date_gmt(), id(), link(), parent(), post(), status(), type()
+  - fields: _links(object), author(integer), author_avatar_urls(object), author_name(string), author_url(string), content(object), date(string), date_gmt(string), id(integer), link(string), parent(integer), post(integer), status(string), type(string)
 - media:
   - primary key: id
   - cursor: date
-  - fields: _links(), author(), comment_status(), date(), date_gmt(), guid(), id(), link(), media_details(), media_type(), mime_type(), modified(), modified_gmt(), ping_status(), post(), slug(), source_url(), status(), title(), type()
+  - fields: _links(object), author(integer), comment_status(string), date(string), date_gmt(string), guid(object), id(integer), link(string), media_details(object), media_type(string), mime_type(string), modified(string), modified_gmt(string), ping_status(string), post(integer), slug(string), source_url(string), status(string), title(object), type(string)
 - users:
   - primary key: id
-  - fields: _links(), avatar_urls(), description(), id(), link(), name(), slug(), url()
+  - fields: _links(object), avatar_urls(object), description(string), id(integer), link(string), name(string), slug(string), url(string)
 - categories:
   - primary key: id
-  - fields: _links(), count(), description(), id(), link(), name(), parent(), slug(), taxonomy()
+  - fields: _links(object), count(integer), description(string), id(integer), link(string), name(string), parent(integer), slug(string), taxonomy(string)
 - tags:
   - primary key: id
-  - fields: _links(), count(), description(), id(), link(), name(), slug(), taxonomy()
+  - fields: _links(object), count(integer), description(string), id(integer), link(string), name(string), slug(string), taxonomy(string)
 - taxonomies:
   - primary key: slug
-  - fields: description(), hierarchical(), name(), rest_base(), slug(), types()
+  - fields: description(string), hierarchical(boolean), name(string), rest_base(string), slug(string), types(array)
 - types:
   - primary key: slug
-  - fields: description(), has_archive(), hierarchical(), name(), rest_base(), slug(), taxonomies()
+  - fields: description(string), has_archive(boolean), hierarchical(boolean), name(string), rest_base(string), slug(string), taxonomies(array)
 - statuses:
   - primary key: slug
-  - fields: date_floating(), name(), public(), queryable(), slug()
+  - fields: date_floating(boolean), name(string), public(boolean), queryable(boolean), slug(string)
 
 ## Sync Modes
 
@@ -98,6 +106,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: external deletion of public site content (moves to trash unless force=true is embedded in the path); approval required
 - create_comment:
   - endpoint: POST /wp-json/wp/v2/comments
+  - required fields: post, content
   - risk: external mutation; publishes a public-facing comment; approval required
 - update_comment:
   - endpoint: POST /wp-json/wp/v2/comments/{{ record.id }}
@@ -117,6 +126,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a media/attachment item (WordPress core requires force=true; attachments do not support trashing); approval required
 - create_user:
   - endpoint: POST /wp-json/wp/v2/users
+  - required fields: username, email, password
   - risk: external mutation; creates a new site user account with a password; approval required
 - update_user:
   - endpoint: POST /wp-json/wp/v2/users/{{ record.id }}
@@ -128,6 +138,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a site user account (WordPress core requires force=true and a reassign target; users do not support trashing); approval required
 - create_category:
   - endpoint: POST /wp-json/wp/v2/categories
+  - required fields: name
   - risk: external mutation; approval required
 - update_category:
   - endpoint: POST /wp-json/wp/v2/categories/{{ record.id }}
@@ -139,6 +150,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a category (WordPress core requires force=true; terms do not support trashing); approval required
 - create_tag:
   - endpoint: POST /wp-json/wp/v2/tags
+  - required fields: name
   - risk: external mutation; approval required
 - update_tag:
   - endpoint: POST /wp-json/wp/v2/tags/{{ record.id }}

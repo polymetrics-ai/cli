@@ -1,0 +1,15 @@
+{
+  "record": {
+    "campaign_id": "fixture_campaign_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/fixture_campaign_id/actions/unschedule"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_unschedule_campaigns"
+    }
+  }
+}

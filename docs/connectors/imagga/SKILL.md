@@ -11,9 +11,11 @@ Reads Imagga account API usage and per-image tags/categories via the Imagga REST
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,24 +30,24 @@ Reads Imagga account API usage and per-image tags/categories via the Imagga REST
 
 - base_url
 - image_urls
-- api_key (secret)
-- api_secret (secret)
+- api_key (secret) (required)
+- api_secret (secret) (required)
 
 ## ETL Streams
 
 - usage:
   - primary key: period
-  - fields: daily_processed(), monthly_limit(), monthly_processed(), period(), requests()
+  - fields: daily_processed(integer), monthly_limit(integer), monthly_processed(integer), period(string), requests(integer)
 - tags:
   - primary key: image_url, tag
-  - fields: confidence(), image_url(), tag()
+  - fields: confidence(number), image_url(string), tag(string)
 - categories:
   - primary key: image_url, category
-  - fields: category(), confidence(), image_url()
+  - fields: category(string), confidence(number), image_url(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

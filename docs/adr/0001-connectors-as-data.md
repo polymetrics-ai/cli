@@ -4,7 +4,11 @@
 - Deciders: user (approved plan `~/.claude/plans/please-check-all-the-serialized-storm.md`)
 - Context docs: `docs/architecture/connector-architecture-v2-design.md` (full design),
   `docs/architecture/connector-certification-design.md`,
-  `docs/plans/universal-programming-loop-prd.md`
+  `docs/connector-canon/INDEX.md`
+
+> **Historical decision record:** this ADR preserves the accepted architectural direction. Its
+> 2026-07 inventory and rollout measurements are not current capability or certification claims;
+> use the connector canon for those.
 
 ## Context
 

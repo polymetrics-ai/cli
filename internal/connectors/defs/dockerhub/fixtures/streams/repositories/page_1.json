@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/repositories/synthetic-conformance-value/", "query": { "page": "1" } },
+  "request": { "method": "GET", "path": "/namespaces/synthetic-conformance-value/repositories", "query": { "page": "1" } },
   "response": {
     "status": 200,
     "body": {

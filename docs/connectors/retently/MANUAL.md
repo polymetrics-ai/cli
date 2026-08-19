@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Retently customers, survey responses, surveys, and campaigns through the REST API.
 
 ICON
+  id: retently
   asset: icons/retently.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -31,25 +32,25 @@ CONFIGURATION
   created_after
   email
   updated_after
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
     cursor: updated_at
-    fields: company(), email(), full_name(), id(), stream(), updated_at()
+    fields: company(string), email(string), full_name(string), id(string), stream(string), updated_at(string)
   responses:
     primary key: id
     cursor: created_at
-    fields: comment(), created_at(), customer_id(), id(), score(), stream()
+    fields: comment(string), created_at(string), customer_id(string), id(string), score(string), stream(string)
   surveys:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), stream(), type(), updated_at()
+    fields: id(string), name(string), status(string), stream(string), type(string), updated_at(string)
   campaigns:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), stream(), updated_at()
+    fields: id(string), name(string), status(string), stream(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

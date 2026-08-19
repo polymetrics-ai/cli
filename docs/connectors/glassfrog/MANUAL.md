@@ -13,6 +13,7 @@ DESCRIPTION
   Reads GlassFrog circles, roles, people, projects, and assignments through the GlassFrog API v3 (read-only full-refresh source).
 
 ICON
+  id: glassfrog
   asset: icons/glassfrog.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,27 +28,27 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   assignments:
     primary key: id
-    fields: election(), exclude_from_meetings(), focus(), id(), person_id(), role_id()
+    fields: election(string), exclude_from_meetings(boolean), focus(string), id(integer), person_id(integer), role_id(integer)
   circles:
     primary key: id
-    fields: id(), name(), organization_id(), short_name(), strategy(), supported_role_id()
+    fields: id(integer), name(string), organization_id(integer), short_name(string), strategy(string), supported_role_id(integer)
   people:
     primary key: id
-    fields: email(), external_id(), id(), name(), tag_names()
+    fields: email(string), external_id(string), id(integer), name(string), tag_names(array)
   projects:
     primary key: id
-    fields: archived_at(), created_at(), description(), effort(), id(), link(), private_to_circle(), roi(), status(), value(), waiting_on_what(), waiting_on_who()
+    fields: archived_at(string), created_at(string), description(string), effort(string), id(integer), link(string), private_to_circle(boolean), roi(string), status(string), value(string), waiting_on_what(string), waiting_on_who(string)
   roles:
     primary key: id
-    fields: elected_until(), id(), is_core(), name(), name_with_circle_for_core_roles(), organization_id(), purpose()
+    fields: elected_until(string), id(integer), is_core(boolean), name(string), name_with_circle_for_core_roles(string), organization_id(integer), purpose(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external GlassFrog API read of circle, role, person, project, and assignment data

@@ -1,0 +1,323 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_billing_infos record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "account_id": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "title": "Phone number"
+        },
+        "street1": {
+          "type": "string",
+          "title": "Street 1"
+        },
+        "street2": {
+          "type": "string",
+          "title": "Street 2"
+        },
+        "city": {
+          "type": "string",
+          "title": "City"
+        },
+        "region": {
+          "type": "string",
+          "title": "State/Province",
+          "description": "State or province."
+        },
+        "postal_code": {
+          "type": "string",
+          "title": "Zip/Postal code",
+          "description": "Zip or postal code."
+        },
+        "country": {
+          "type": "string",
+          "title": "Country",
+          "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+        },
+        "geo_code": {
+          "type": "string",
+          "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+        }
+      },
+      "additionalProperties": false
+    },
+    "vat_number": {
+      "type": "string",
+      "description": "Customer's VAT number (to avoid having the VAT applied). This is only used for automatically collected invoices."
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "payment_method": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string",
+          "enum": [
+            "bacs",
+            "amazon",
+            "amazon_billing_agreement",
+            "apple_pay",
+            "apple_pay_merchant_token",
+            "bank_account_info",
+            "braintree_apple_pay",
+            "check",
+            "credit_card",
+            "eft",
+            "gateway_token",
+            "google_pay",
+            "google_pay_device_pan",
+            "iban_bank_account",
+            "money_order",
+            "other",
+            "paypal",
+            "paypal_billing_agreement",
+            "roku",
+            "sepadirectdebit",
+            "venmo",
+            "wire_transfer",
+            "braintree_v_zero",
+            "boleto",
+            "cash_app",
+            "upi_autopay",
+            "pix_automatico",
+            "mercadopago",
+            "klarna",
+            "braintree_google_pay",
+            "stripe_link"
+          ]
+        },
+        "card_type": {
+          "type": "string",
+          "enum": [
+            "American Express",
+            "Dankort",
+            "Diners Club",
+            "Discover",
+            "ELO",
+            "Forbrugsforeningen",
+            "Hipercard",
+            "JCB",
+            "Laser",
+            "Maestro",
+            "MasterCard",
+            "Test Card",
+            "Union Pay",
+            "Unknown",
+            "Visa",
+            "Tarjeta Naranja"
+          ],
+          "description": "Visa, MasterCard, American Express, Discover, JCB, etc."
+        },
+        "first_six": {
+          "type": "string",
+          "description": "Credit card number's first six digits."
+        },
+        "last_four": {
+          "type": "string",
+          "description": "Credit card number's last four digits. Will refer to bank account if payment method is ACH."
+        },
+        "last_two": {
+          "type": "string",
+          "description": "The IBAN bank account's last two digits."
+        },
+        "exp_month": {
+          "type": "integer",
+          "description": "Expiration month."
+        },
+        "exp_year": {
+          "type": "integer",
+          "description": "Expiration year."
+        },
+        "gateway_token": {
+          "type": "string",
+          "description": "A token used in place of a credit card in order to perform transactions."
+        },
+        "cc_bin_country": {
+          "type": "string",
+          "description": "The 2-letter ISO 3166-1 alpha-2 country code associated with the card's issuer, if known."
+        },
+        "funding_source": {
+          "type": "string",
+          "enum": [
+            "credit",
+            "debit",
+            "charge",
+            "prepaid",
+            "deferred_debit"
+          ],
+          "description": "The funding source of the card, if known."
+        },
+        "gateway_code": {
+          "type": "string",
+          "description": "An identifier for a specific payment gateway."
+        },
+        "gateway_attributes": {
+          "type": "object",
+          "properties": {
+            "account_reference": {
+              "type": "string",
+              "description": "Used by Adyen and Braintree gateways. For Adyen the Shopper Reference value used when the external token was created. For Braintree the PayPal PayerID is populated in the response."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Gateway specific attributes associated with this PaymentMethod"
+        },
+        "card_network_preference": {
+          "type": "string",
+          "enum": [
+            "Bancontact",
+            "CartesBancaires",
+            "Dankort",
+            "MasterCard",
+            "Visa"
+          ],
+          "description": "Represents the card network preference associated with the billing info for dual badged cards. Must be a supported card network."
+        },
+        "billing_agreement_id": {
+          "type": "string",
+          "description": "Billing Agreement identifier. Only present for Amazon or Paypal payment methods."
+        },
+        "name_on_account": {
+          "type": "string",
+          "description": "The name associated with the bank account."
+        },
+        "account_type": {
+          "type": "string",
+          "enum": [
+            "checking",
+            "savings"
+          ],
+          "description": "The bank account type. Only present for ACH payment methods."
+        },
+        "routing_number": {
+          "type": "string",
+          "description": "The bank account's routing number. Only present for ACH payment methods."
+        },
+        "routing_number_bank": {
+          "type": "string",
+          "description": "The bank name of this routing number."
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the associated payment method. Currently only associated with Venmo."
+        }
+      },
+      "additionalProperties": false
+    },
+    "fraud": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "integer",
+          "title": "Kount score"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "decline",
+            "escalate",
+            "review"
+          ],
+          "title": "Kount decision"
+        },
+        "risk_rules_triggered": {
+          "type": "object",
+          "additionalProperties": true,
+          "title": "Kount rules"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Fraud information",
+      "description": "Most recent fraud result."
+    },
+    "primary_payment_method": {
+      "type": "boolean",
+      "description": "The `primary_payment_method` field is used to indicate the primary billing info on the account. The first billing info created on an account will always become primary. This payment method will be used"
+    },
+    "backup_payment_method": {
+      "type": "boolean",
+      "description": "The `backup_payment_method` field is used to indicate a billing info as a backup on the account that will be tried if the initial billing info used for an invoice is declined."
+    },
+    "payment_gateway_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token",
+            "description": "Reference value used when the external token was created. If a Stripe gateway or Ebanx gateway is used, this value will need to be accompanied by its reference_type."
+          },
+          "reference_type": {
+            "type": "string",
+            "enum": [
+              "stripe_confirmation_token",
+              "upi_vpa"
+            ],
+            "title": "Reference Type",
+            "description": "The type of reference token. Required if token is passed in for Stripe Gateway or Ebanx UPI."
+          }
+        },
+        "additionalProperties": false,
+        "title": "Payment Gateway References Object",
+        "description": "Array of Payment Gateway References, each a reference to a third-party gateway object of varying types."
+      },
+      "description": "Array of Payment Gateway References, each a reference to a third-party gateway object of varying types."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the billing information was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the billing information was last changed."
+    },
+    "updated_by": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "description": "Customer's IP address when updating their billing information."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country, 2-letter ISO 3166-1 alpha-2 code matching the origin IP address, if known by Recurly."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

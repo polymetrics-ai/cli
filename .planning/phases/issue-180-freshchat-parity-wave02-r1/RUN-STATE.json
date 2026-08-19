@@ -1,0 +1,32 @@
+{
+  "phase": "issue-180-freshchat-parity-wave02-r1",
+  "status": "implementation_committed_ready",
+  "verificationPassed": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "One worker owns one connector directory; mutating subworkers would collide in Freshchat-owned JSON/docs/fixtures."
+    },
+    {
+      "cycle": "verification",
+      "decision": "stop_before_push_pr",
+      "reason": "User explicitly requested local implementation commit only; no no-mistakes validation workflow, push, or PR until firstmate resumes."
+    }
+  ],
+  "verification": {
+    "connectorgenRootValidate": "passed: go run ./cmd/connectorgen validate internal/connectors/defs (549 connector(s), 0 findings)",
+    "freshchatSinglePathValidate": "known path-shape failure: scans fixtures/ and schemas/ as connector roots",
+    "freshchatConformance": "passed: go test ./internal/connectors/conformance -run 'TestConformance/freshchat' -count=1",
+    "cliGolden": "passed: go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "goVet": "passed: go vet ./...",
+    "goTestAll": "passed: go test -timeout 30m ./... (20m default timed out in internal/connectors/certify)",
+    "goBuild": "passed: go build ./cmd/pm",
+    "connectorBoundary": "passed: make connector-boundary",
+    "diffCheck": "passed: git diff --check",
+    "makeVerify": "passed: make verify"
+  },
+  "captainPolicyAddendum": "applied with gh-axi to #180-#187; marker count exactly 1 on each issue",
+  "providerCalls": false,
+  "pushOrPr": false
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores/synthetic-conformance-value/products",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "products": [
+        {
+          "id": "fixture_id",
+          "store_id": "fixture_store_id",
+          "currency_code": "fixture_currency_code",
+          "title": "fixture_title",
+          "handle": "fixture_handle",
+          "url": "https://example.invalid/mailchimp-fixture",
+          "description": "fixture_description",
+          "type": "fixture_type"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_account_acquisition record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "cost": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "title": "Currency",
+          "description": "3-letter ISO 4217 currency code."
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "title": "Amount",
+          "description": "The amount of the corresponding currency used to acquire the account."
+        }
+      },
+      "additionalProperties": false,
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "title": "Account balance"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "advertising",
+        "blog",
+        "direct_traffic",
+        "email",
+        "events",
+        "marketing_content",
+        "organic_search",
+        "other",
+        "outbound_sales",
+        "paid_search",
+        "public_relations",
+        "referral",
+        "social_media"
+      ],
+      "description": "The channel through which the account was acquired."
+    },
+    "subchannel": {
+      "type": "string",
+      "description": "An arbitrary subchannel string representing a distinction/subcategory within a broader channel."
+    },
+    "campaign": {
+      "type": "string",
+      "description": "An arbitrary identifier for the marketing campaign that led to the acquisition of this account."
+    },
+    "acquired_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date the account was first created if different than the account.created_at. ie Importing accounts."
+    },
+    "id": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "description": "The unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address used for communicating with this customer."
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "title": "Dunning Campaign ID",
+          "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Account mini details"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the account acquisition data was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the account acquisition data was last changed."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

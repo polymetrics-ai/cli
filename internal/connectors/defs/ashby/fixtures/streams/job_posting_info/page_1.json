@@ -1,0 +1,204 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/jobPosting.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "job_posting_info_id_fixture_22",
+        "title": "Title fixture 22",
+        "status": "Draft",
+        "descriptionPlain": "job_posting_info_descriptionplain_fixture_22",
+        "descriptionHtml": "<p>Descriptionhtml fixture 22</p>",
+        "descriptionSocial": "job_posting_info_descriptionsocial_fixture_22",
+        "descriptionParts": {
+          "descriptionOpening": {
+            "html": "<p>Html fixture 22</p>",
+            "plain": "job_posting_info_plain_fixture_22"
+          },
+          "descriptionBody": {
+            "html": "<p>Html fixture 22</p>",
+            "plain": "job_posting_info_plain_fixture_22"
+          },
+          "descriptionClosing": {
+            "html": "<p>Html fixture 22</p>",
+            "plain": "job_posting_info_plain_fixture_22"
+          }
+        },
+        "departmentName": "Job Posting Info Departmentname Fixture 22",
+        "teamName": "Job Posting Info Teamname Fixture 22",
+        "teamNameHierarchy": [
+          "job_posting_info_teamnamehierarchy_fixture_22"
+        ],
+        "jobId": "job_posting_info_jobid_fixture_22",
+        "locationName": "Job Posting Info Locationname Fixture 22",
+        "locationAddress": "job_posting_info_locationaddress_fixture_22",
+        "locationIds": {
+          "primaryLocationId": "job_posting_info_primarylocationid_fixture_22",
+          "secondaryLocationIds": [
+            "job_posting_info_secondarylocationid_fixture_22"
+          ]
+        },
+        "linkedData": {
+          "@context": "@Context fixture 22",
+          "@type": "fixture",
+          "title": "Title fixture 22",
+          "description": "Description fixture 22",
+          "datePosted": "job_posting_info_dateposted_fixture_22",
+          "employmentType": "fixture",
+          "hiringOrganization": {
+            "@type": "fixture",
+            "name": "Job Posting Info Name Fixture 22",
+            "sameAs": "job_posting_info_sameas_fixture_22"
+          },
+          "identifier": {
+            "@type": "fixture",
+            "name": "Job Posting Info Name Fixture 22",
+            "value": "job_posting_info_value_fixture_22"
+          },
+          "jobLocation": {
+            "@type": "fixture",
+            "address": {
+              "@type": "fixture"
+            }
+          }
+        },
+        "publishedDate": "2026-01-22",
+        "applicationDeadline": "2026-01-22T02:00:00Z",
+        "address": {
+          "postalAddress": {
+            "addressCountry": "job_posting_info_addresscountry_fixture_22",
+            "addressRegion": "job_posting_info_addressregion_fixture_22",
+            "addressLocality": "job_posting_info_addresslocality_fixture_22",
+            "postalCode": "job_posting_info_postalcode_fixture_22",
+            "streetAddress": "job_posting_info_streetaddress_fixture_22"
+          }
+        },
+        "isRemote": false,
+        "workplaceType": "OnSite",
+        "employmentType": "fixture",
+        "applicationFormDefinition": {
+          "sections": [
+            {
+              "title": "Title fixture 22",
+              "descriptionHtml": "<p>Descriptionhtml fixture 22</p>",
+              "descriptionPlain": "job_posting_info_descriptionplain_fixture_22",
+              "fields": [
+                {
+                  "isRequired": false,
+                  "descriptionHtml": "<p>Descriptionhtml fixture 22</p>",
+                  "descriptionPlain": "job_posting_info_descriptionplain_fixture_22",
+                  "field": {
+                    "id": "job_posting_info_id_fixture_22",
+                    "type": "fixture",
+                    "path": "job_posting_info_path_fixture_22",
+                    "humanReadablePath": "job_posting_info_humanreadablepath_fixture_22",
+                    "title": "Title fixture 22",
+                    "isNullable": false,
+                    "selectableValues": [
+                      {
+                        "label": "job_posting_info_label_fixture_22",
+                        "value": "job_posting_info_value_fixture_22"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "surveyFormDefinitions": [
+          {
+            "id": "job_posting_info_id_fixture_22",
+            "title": "Title fixture 22",
+            "isArchived": false,
+            "formDefinition": {
+              "sections": [
+                {
+                  "title": "Title fixture 22",
+                  "descriptionHtml": "<p>Descriptionhtml fixture 22</p>",
+                  "descriptionPlain": "job_posting_info_descriptionplain_fixture_22",
+                  "fields": [
+                    {
+                      "isRequired": false,
+                      "descriptionHtml": "<p>Descriptionhtml fixture 22</p>",
+                      "descriptionPlain": "job_posting_info_descriptionplain_fixture_22",
+                      "field": {
+                        "id": "job_posting_info_id_fixture_22",
+                        "type": "fixture",
+                        "path": "job_posting_info_path_fixture_22",
+                        "humanReadablePath": "job_posting_info_humanreadablepath_fixture_22",
+                        "title": "Title fixture 22",
+                        "isNullable": false,
+                        "selectableValues": [
+                          {
+                            "label": "job_posting_info_label_fixture_22",
+                            "value": "job_posting_info_value_fixture_22"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "surveyType": "EEOC"
+          }
+        ],
+        "isListed": false,
+        "suppressDescriptionOpening": false,
+        "suppressDescriptionClosing": false,
+        "externalLink": "https://example.invalid/ashby/job_posting_info/externallink/22",
+        "applyLink": "https://example.invalid/ashby/job_posting_info/applylink/22",
+        "compensation": {
+          "compensationTierSummary": "job_posting_info_compensationtiersummary_fixture_22",
+          "summaryComponents": [
+            {
+              "summary": "job_posting_info_summary_fixture_22",
+              "label": "job_posting_info_label_fixture_22",
+              "compensationType": "fixture",
+              "interval": "job_posting_info_interval_fixture_22",
+              "currencyCode": "job_posting_info_currencycode_fixture_22",
+              "minValue": 22.0,
+              "maxValue": 22.0
+            }
+          ],
+          "compensationTiers": [
+            {
+              "id": "job_posting_info_id_fixture_22",
+              "tierSummary": "job_posting_info_tiersummary_fixture_22",
+              "title": "Title fixture 22",
+              "additionalInformation": "job_posting_info_additionalinformation_fixture_22",
+              "components": [
+                {
+                  "summary": "job_posting_info_summary_fixture_22",
+                  "label": "job_posting_info_label_fixture_22",
+                  "compensationType": "fixture",
+                  "interval": "job_posting_info_interval_fixture_22",
+                  "currencyCode": "job_posting_info_currencycode_fixture_22",
+                  "minValue": 22.0,
+                  "maxValue": 22.0,
+                  "id": "job_posting_info_id_fixture_22"
+                }
+              ]
+            }
+          ],
+          "shouldDisplayCompensation": false
+        },
+        "updatedAt": "2026-02-22T22:00:00Z",
+        "applicationLimitCalloutHtml": "<p>Applicationlimitcallouthtml fixture 22</p>",
+        "applicationConfirmationEmailTemplateId": "job_posting_info.applicationconfirmationemailtemplateid.22@example.invalid",
+        "job": {
+          "id": "job_posting_info_job_fixture_22"
+        }
+      }
+    }
+  },
+  "read_query": {
+    "jobPostingId": "jobpostingid_fixture"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "acl_rule",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "etag": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object"
+    },
+    "role": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

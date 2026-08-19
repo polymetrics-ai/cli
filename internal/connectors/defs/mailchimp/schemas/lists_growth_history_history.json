@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_growth_history_history",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "month": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "existing": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "imports": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "optins": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "subscribed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unsubscribed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "reconfirm": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "cleaned": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pending": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "deleted": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "transactional": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

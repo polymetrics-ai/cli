@@ -1,23 +1,25 @@
 {
   "name": "hubplanner",
   "display_name": "Hubplanner",
-  "description": "Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.",
+  "description": "Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.",
   "integration_type": "api",
   "docs_url": "https://github.com/hubplanner/API",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 200
+    "read_page_size": 200,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Hubplanner API read of scheduling, project, and billing data",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external Hubplanner API reads of scheduling, project, resource, client, time, vacation, billing, and webhook-subscription data",
+    "write": "typed reverse-ETL actions create, update, patch, and delete Hubplanner records using fixed documented REST paths only",
+    "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation for deletes"
   }
 }

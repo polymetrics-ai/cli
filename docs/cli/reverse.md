@@ -7,9 +7,11 @@ SYNOPSIS
 
 USAGE
   pm reverse list [--json]
-  pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
-  pm reverse preview <plan-id> [--json]
-  pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
+  pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
+  pm reverse preview <plan-id> [--<withheld-flag> <value>...]
+    [--from-env <env-only-flag>=ENV]... [--json]
+  pm reverse run <plan-id> --approval-token-stdin [--confirm <challenge>]
+    [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
@@ -27,6 +29,51 @@ DESCRIPTION
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
+  The connector command runner does not mask ETL or reverse-ETL command records
+  from declared redact_fields; it dispatches the values it was given.
+  This runner policy does not change source-table output or other execution paths.
+
+  A connector-command plan does not persist the fields declared sensitive by the
+  write action it runs (writes.json redact_fields) or, for a direct_write
+  operation, by that operation (operations.json sensitive_policy.redact_fields).
+  A redact_fields list on the command itself is not consulted, so a command-level
+  declaration withholds nothing; pm connectors inspect <name> --json shows every
+  declaration, not only the binding one.
+  Withheld keys are removed outright rather than stored as a placeholder, so they
+  never reach the project state file. Preview and run therefore need those values
+  re-supplied on the same command. Ordinary withheld fields use the connector
+  command's own --<flag> <value> form. A field declared env_only must instead
+  use --from-env <flag>=ENV, which reads the value from the named environment
+  variable without placing it in argv. For example: pm reverse preview <plan-id>
+  --from-env input=ENV, and use the same form again on pm reverse run.
+  Where a declared field covers a subtree that several flags fill, those flags
+  re-supply it. Only fields the plan actually removed are asked for, so a
+  declared field you never supplied is never demanded back. A re-supplied value
+  that does not match the one the plan was built from fails the plan-hash check
+  before anything is dispatched. Nothing is re-persisted at preview or run.
+  DryRunWrite engine preview warnings preserve the resolved execution request.
+  Engine direct-read, operation-direct-read, and binary-download executors
+  preserve bounded HTTP URL/query/body diagnostics before downstream rendering.
+  Declared redact_fields remain compatible metadata, but do not replace values
+  in DryRunWrite preview warnings. A stored source-table sample is an app-level
+  summary; the engine preview is authoritative for approval.
+
+  Destructive plans do not receive an approval token during planning. Preview
+  performs the connector's no-network dry run, persists a digest of the complete
+  staged request set and its execution identity, and only then issues a
+  time-bounded token in human-readable output. Execution recomputes that digest
+  before dispatch and also requires the closed typed confirmation --confirm
+  destructive. HTTP DELETE is treated as destructive even when connector
+  metadata omits a confirmation declaration.
+
+  A connector may declare a write action non-batchable (batchable: false).
+  Bulk plans over --source-table refuse such an action, naming the action and
+  the individual pm command that still runs it. Those actions stay fully
+  available one record at a time as pm <connector> <command>, which keeps the
+  plan, preview, approval, and execute steps. Use it for operations that must
+  never be fanned out over many rows under a single approval. It is separate
+  from --confirm: batchable controls whether an action may run in bulk at all,
+  --confirm controls how severe one call is.
 
 COMMANDS
   list
@@ -34,29 +81,57 @@ COMMANDS
 
   plan
     Create a reverse ETL plan from a local warehouse table to a destination
-    connector. A human-readable plan prints an approval token for the user.
-    JSON output redacts the token.
+    connector. A human-readable non-destructive plan prints an approval token;
+    a destructive plan prints no token until preview succeeds. JSON output
+    always omits tokens. A non-batchable destination action is refused here,
+    before any plan or approval token exists.
+
+    Each connection materializes its tables into its own directory, so several
+    connections can hold a table of the same name. Pass --connection when they
+    do. The connection is resolved once, here, and recorded on the plan, so
+    preview and run keep reading the same table afterwards; neither takes a
+    connection selector of its own. Use --connection _unattributed for a
+    root-level table that no connection owns.
 
   preview
-    Show a stored plan, mapped sample rows, destination connector, action, and
-    record count before execution.
+    Show a stored plan's mapped sample rows, action, and count. For a destructive
+    plan, also materialize the request through the destination's no-network dry
+    run, persist its digest, and issue the approval token in human-readable
+    output. JSON omits the token. DryRunWrite engine preview warnings preserve
+    the resolved execution request, including fields declared in redact_fields;
+    that preview is what the digest binds before dispatch. A connector-command
+    plan that withheld declared sensitive fields needs them re-supplied here:
+    --from-env <flag>=ENV for an env_only field, or --<flag> <value> otherwise.
+    The error names each missing flag.
 
   run
-    Execute a stored plan only when --approve is supplied with the approval
-    token from the human plan output. Destructive or sensitive plans can also
-    require the typed --confirm challenge printed by the plan output.
+    Execute a stored plan only when the bare --approval-token-stdin marker is
+    supplied and standard input contains the approval token as one bounded line
+    from human-readable plan or preview output. Destructive plans require a
+    matching persisted preview and the closed --confirm destructive value. A
+    connector-command plan that withheld declared sensitive fields needs the
+    same re-supply form: --from-env <flag>=ENV for an env_only field, or
+    --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
+    automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
 
 FLAGS
   --source-table table         local warehouse table to read
+  --connection name            connection whose table to read; required only
+                               when several connections share the table name
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
-  --approve token              approval token required by run
+  --approval-token-stdin       read the approval token as one bounded line from
+                               standard input; the marker accepts no value
   --confirm challenge          typed confirmation required by gated plans
+  --<withheld-flag> value      re-supply a non-env_only field the plan withheld;
+                               the flag is connector-owned, never persisted
+  --from-env flag=ENV          re-supply a declared env_only field from ENV;
+                               its value never enters argv or project state
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 
@@ -97,13 +172,26 @@ EXAMPLES
   pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
   pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --map reviewers:reviewers
   pm reverse preview rplan_abc123 --json
-  pm reverse run rplan_abc123 --approve <approval-token>
+  pm reverse run rplan_abc123 --approval-token-stdin
   pm reverse status rrun_abc123 --json
 
 SECURITY
-  Execution requires an approval token created by a prior plan. JSON plan output
-  omits the token so agents cannot silently self-approve external writes.
-  Reverse ETL never exposes raw secret values.
+  Execution requires a time-bounded, single-use approval token on standard
+  input. Destructive tokens are created only after preview; execution revalidates
+  the preview digest before dispatch. JSON plan and preview output omit tokens
+  so agents cannot silently self-approve external writes. The stdin carrier is
+  one bounded line and the token is never accepted through command arguments,
+  environment, or project files. A connector-command plan never
+  persists the fields its write action declares in redact_fields, or its
+  direct_write operation declares in sensitive_policy.redact_fields; they are
+  re-supplied per invocation and are not written back at preview or run. A
+  redact_fields list declared on the command itself is not a withholding
+  guarantee and never has been. DryRunWrite engine
+  preview warnings preserve the resolved execution request, including fields
+  declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
+  download executors preserve bounded HTTP URL/query/body diagnostics before
+  downstream rendering. These engine-level guarantees do not establish
+  complete pm CLI output. Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

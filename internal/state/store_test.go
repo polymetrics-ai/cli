@@ -137,6 +137,72 @@ func TestJSONStoreUpdateUnlocksWhenCallbackReturnsError(t *testing.T) {
 	}
 }
 
+func TestJSONStoreUpdateReportsCommittedOutcomeAfterUnlockFailure(t *testing.T) {
+	store := state.JSONStore[testConfig]{
+		Path:   filepath.Join(t.TempDir(), "state.json"),
+		Locker: &failingUnlockLocker{},
+	}
+
+	updated, err := store.Update(func(current testConfig) (testConfig, error) {
+		current.Count++
+		return current, nil
+	})
+	var outcome *state.CommitOutcomeError
+	if !errors.As(err, &outcome) {
+		t.Fatalf("Update() error = %T %v, want CommitOutcomeError", err, err)
+	}
+	if outcome.Outcome != state.CommitOutcomeCommitted || !outcome.Outcome.MayHaveCommitted() {
+		t.Fatalf("commit outcome = %q, want committed", outcome.Outcome)
+	}
+	if updated.Count != 1 {
+		t.Fatalf("updated count = %d, want 1", updated.Count)
+	}
+
+	persisted, err := store.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if persisted.Count != updated.Count {
+		t.Fatalf("persisted count = %d, want %d", persisted.Count, updated.Count)
+	}
+}
+
+func TestJSONStoreUpdateReportsIndeterminateOutcomeAfterDirectorySyncFailure(t *testing.T) {
+	wantErr := errors.New("directory sync failed")
+	store := state.JSONStore[testConfig]{
+		Path: filepath.Join(t.TempDir(), "state.json"),
+		SyncDirectory: func(string) error {
+			return wantErr
+		},
+	}
+
+	updated, err := store.Update(func(current testConfig) (testConfig, error) {
+		current.Count++
+		return current, nil
+	})
+	var outcome *state.CommitOutcomeError
+	if !errors.As(err, &outcome) {
+		t.Fatalf("Update() error = %T %v, want CommitOutcomeError", err, err)
+	}
+	if outcome.Outcome != state.CommitOutcomeIndeterminate || !outcome.Outcome.MayHaveCommitted() {
+		t.Fatalf("commit outcome = %q, want indeterminate", outcome.Outcome)
+	}
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("Update() error = %v, want wrapped %v", err, wantErr)
+	}
+	if updated.Count != 1 {
+		t.Fatalf("updated count = %d, want 1", updated.Count)
+	}
+
+	persisted, err := store.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if persisted.Count != updated.Count {
+		t.Fatalf("persisted count = %d, want %d", persisted.Count, updated.Count)
+	}
+}
+
 func TestJSONStoreRedactedSnapshot(t *testing.T) {
 	type credentials struct {
 		Name   string         `json:"name"`
@@ -224,11 +290,127 @@ func TestFileLockUsesExclusiveLockFile(t *testing.T) {
 	}
 }
 
+func TestJSONStoreUpdateAfterPreflightRejectsWithoutStateLock(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "state.json")
+	store := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	if err := store.Save(testConfig{Name: "active"}); err != nil {
+		t.Fatalf("Save() error = %v", err)
+	}
+	before, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile(before) error = %v", err)
+	}
+
+	wantErr := errors.New("approval already consumed")
+	_, err = store.UpdateAfterPreflight(func(testConfig) error {
+		return wantErr
+	}, func(current testConfig) (testConfig, error) {
+		current.Count++
+		return current, nil
+	})
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("UpdateAfterPreflight() error = %v, want %v", err, wantErr)
+	}
+	after, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile(after) error = %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("preflight rejection rewrote state")
+	}
+	if _, err := os.Stat(path + ".lock"); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("preflight rejection created a state lock: %v", err)
+	}
+}
+
+func TestJSONStoreUpdateAfterPreflightHonorsLegacyStateLock(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "state.json")
+	legacy := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	if err := legacy.Save(testConfig{Name: "active"}); err != nil {
+		t.Fatalf("legacy Save() error = %v", err)
+	}
+
+	entered := make(chan struct{})
+	release := make(chan struct{})
+	legacyResult := make(chan error, 1)
+	go func() {
+		_, err := legacy.Update(func(current testConfig) (testConfig, error) {
+			close(entered)
+			<-release
+			current.Count++
+			return current, nil
+		})
+		legacyResult <- err
+	}()
+	<-entered
+
+	released := false
+	defer func() {
+		if !released {
+			close(release)
+		}
+	}()
+	store := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	updated := false
+	_, err := store.UpdateAfterPreflight(func(current testConfig) error {
+		if current.Name != "active" {
+			return errors.New("unexpected state")
+		}
+		return nil
+	}, func(current testConfig) (testConfig, error) {
+		updated = true
+		current.Count++
+		return current, nil
+	})
+	if !errors.Is(err, os.ErrExist) {
+		t.Fatalf("UpdateAfterPreflight() error = %v, want legacy lock conflict", err)
+	}
+	if updated {
+		t.Fatal("update ran while the legacy lock was held")
+	}
+
+	close(release)
+	released = true
+	if err := <-legacyResult; err != nil {
+		t.Fatalf("legacy Update() error = %v", err)
+	}
+	loaded, err := store.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if loaded.Count != 1 {
+		t.Fatalf("Count = %d, want only the legacy update", loaded.Count)
+	}
+}
+
 type fakeLocker struct {
 	mu        sync.Mutex
 	active    int
 	maxActive int
 	calls     int
+}
+
+type failingUnlockLocker struct {
+	failed bool
+}
+
+func (l *failingUnlockLocker) Lock() (func() error, error) {
+	return func() error {
+		if l.failed {
+			return nil
+		}
+		l.failed = true
+		return errors.New("unlock failed")
+	}, nil
 }
 
 func (l *fakeLocker) Lock() (func() error, error) {

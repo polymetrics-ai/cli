@@ -11,9 +11,11 @@ Reads Microsoft Entra ID (Azure AD) directory objects — users, groups, applica
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -41,23 +43,23 @@ Reads Microsoft Entra ID (Azure AD) directory objects — users, groups, applica
 
 - users:
   - primary key: id
-  - fields: account_enabled(), department(), display_name(), given_name(), id(), job_title(), mail(), mobile_phone(), office_location(), surname(), user_principal_name()
+  - fields: account_enabled(boolean), department(string), display_name(string), given_name(string), id(string), job_title(string), mail(string), mobile_phone(string), office_location(string), surname(string), user_principal_name(string)
 - groups:
   - primary key: id
-  - fields: created_date_time(), description(), display_name(), id(), mail(), mail_enabled(), mail_nickname(), security_enabled(), visibility()
+  - fields: created_date_time(string), description(string), display_name(string), id(string), mail(string), mail_enabled(boolean), mail_nickname(string), security_enabled(boolean), visibility(string)
 - applications:
   - primary key: id
-  - fields: app_id(), created_date_time(), description(), display_name(), id(), publisher_domain(), sign_in_audience()
+  - fields: app_id(string), created_date_time(string), description(string), display_name(string), id(string), publisher_domain(string), sign_in_audience(string)
 - serviceprincipals:
   - primary key: id
-  - fields: account_enabled(), app_id(), app_owner_organization_id(), display_name(), id(), service_principal_type(), sign_in_audience()
+  - fields: account_enabled(boolean), app_id(string), app_owner_organization_id(string), display_name(string), id(string), service_principal_type(string), sign_in_audience(string)
 - directoryroles:
   - primary key: id
-  - fields: description(), display_name(), id(), role_template_id()
+  - fields: description(string), display_name(string), id(string), role_template_id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

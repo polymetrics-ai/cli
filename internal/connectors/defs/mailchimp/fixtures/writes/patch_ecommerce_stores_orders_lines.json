@@ -1,0 +1,25 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "order_id": "fixture_order_id",
+    "line_id": "fixture_line_id",
+    "product_id": "fixture_product_id",
+    "product_variant_id": "fixture_product_variant_id",
+    "quantity": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ecommerce/stores/fixture_store_id/orders/fixture_order_id/lines/fixture_line_id",
+    "body": {
+      "product_id": "fixture_product_id",
+      "product_variant_id": "fixture_product_variant_id",
+      "quantity": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_ecommerce_stores_orders_lines"
+    }
+  }
+}

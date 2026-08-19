@@ -11,6 +11,7 @@ Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgeni
 
 ## Icon
 
+- id: source-opsgenie
 - asset: icons/source-opsgenie.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,27 +29,27 @@ Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgeni
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - alerts:
   - primary key: id
   - cursor: created_at
-  - fields: alias(), created_at(), details(), id(), last_occurred_at(), message(), owner(), priority(), responders(), source(), status(), tags(), tiny_id(), updated_at()
+  - fields: alias(string), created_at(string), details(object), id(string), last_occurred_at(string), message(string), owner(string), priority(string), responders(array), source(string), status(string), tags(array), tiny_id(string), updated_at(string)
 - incidents:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), description(), id(), impacted_services(), message(), owner_team(), priority(), responders(), status(), tags(), tiny_id(), updated_at()
+  - fields: created_at(string), description(string), id(string), impacted_services(array), message(string), owner_team(object), priority(string), responders(array), status(string), tags(array), tiny_id(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: blocked(), full_name(), id(), locale(), role(), time_zone(), username(), verified()
+  - fields: blocked(boolean), full_name(string), id(string), locale(string), role(object), time_zone(string), username(string), verified(boolean)
 - teams:
   - primary key: id
-  - fields: created_at(), description(), id(), members(), name(), updated_at()
+  - fields: created_at(string), description(string), id(string), members(array), name(string), updated_at(string)
 - services:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), tags(), team_id(), updated_at(), visibility()
+  - fields: created_at(string), description(string), id(string), name(string), tags(array), team_id(string), updated_at(string), visibility(string)
 
 ## Sync Modes
 

@@ -1,0 +1,11 @@
+$ go test -timeout 20m ./internal/connectors/native/postgres/... ./internal/connectors/database/... ./internal/warehouse/... -count=1
+ok  \tpolymetrics.ai/internal/connectors/native/postgres\t1.165s
+ok  \tpolymetrics.ai/internal/connectors/database\t8.033s
+ok  \tpolymetrics.ai/internal/warehouse\t3.041s
+
+$ go test -race -timeout 20m ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test(ChangeDelivery|FileChangeDelivery|PostgresManagedTargetWorksetDelivery)' -count=1
+ok  \tpolymetrics.ai/internal/connectors/database\t2.017s
+ok  \tpolymetrics.ai/internal/connectors/native/postgres\t1.823s [no tests to run]
+
+$ golangci-lint run ./internal/connectors/database/...
+0 issues.

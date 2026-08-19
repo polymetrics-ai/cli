@@ -1,0 +1,25 @@
+{
+  "record": {
+    "time_tracking_entry_gid": "fixture-time-tracking-entry-gid",
+    "data": {
+      "categories": [
+        "fixture-categories"
+      ],
+      "attributable_to": "fixture-attributable-to",
+      "billable_status": "fixture-billable-status"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/time_tracking_entries/fixture-time-tracking-entry-gid",
+    "body": {
+      "data": {
+        "categories": [
+          "fixture-categories"
+        ],
+        "attributable_to": "fixture-attributable-to",
+        "billable_status": "fixture-billable-status"
+      }
+    }
+  }
+}

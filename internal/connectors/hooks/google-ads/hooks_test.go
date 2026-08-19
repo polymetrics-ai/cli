@@ -54,8 +54,8 @@ func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 
 func TestReadStream_EmptyStreamNameDefaultsToAccessibleCustomers(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet || r.URL.Path != "/customers:listAccessibleCustomers" {
-			t.Errorf("request = %s %s, want GET /customers:listAccessibleCustomers", r.Method, r.URL.Path)
+		if r.Method != http.MethodGet || r.URL.Path != "/v22/customers:listAccessibleCustomers" {
+			t.Errorf("request = %s %s, want GET /v22/customers:listAccessibleCustomers", r.Method, r.URL.Path)
 		}
 		_, _ = w.Write([]byte(`{"resourceNames":[]}`))
 	}))
@@ -75,7 +75,7 @@ func TestReadStream_EmptyStreamNameDefaultsToAccessibleCustomers(t *testing.T) {
 
 func TestReadStream_AccessibleCustomersDerivesCustomerIDFromResourceName(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet || r.URL.Path != "/customers:listAccessibleCustomers" {
+		if r.Method != http.MethodGet || r.URL.Path != "/v22/customers:listAccessibleCustomers" {
 			t.Fatalf("request = %s %s", r.Method, r.URL.Path)
 		}
 		_, _ = w.Write([]byte(`{"resourceNames":["customers/1111111111","customers/2222222222"]}`))
@@ -134,6 +134,15 @@ func TestReadStream_CampaignsRequiresCustomerID(t *testing.T) {
 	}
 }
 
+func TestReadStream_CampaignsRejectsMalformedCustomerID(t *testing.T) {
+	h := Hooks{}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"customer_id": "123/../bad"}}
+	_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "campaigns"}, connectors.ReadRequest{Config: cfg}, newRuntime("http://example.invalid"), func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("ReadStream: want error when customer_id contains path characters, got nil")
+	}
+}
+
 type gaqlSearchRequest struct {
 	Query     string `json:"query"`
 	PageSize  int    `json:"pageSize"`
@@ -178,8 +187,8 @@ func TestReadStream_CampaignsPaginatesViaBodyPageToken(t *testing.T) {
 	if !handled {
 		t.Fatal("handled = false, want true")
 	}
-	if sawMethod != http.MethodPost || sawPath != "/customers/1234567890/googleAds:search" {
-		t.Fatalf("request = %s %s, want POST /customers/1234567890/googleAds:search", sawMethod, sawPath)
+	if sawMethod != http.MethodPost || sawPath != "/v22/customers/1234567890/googleAds:search" {
+		t.Fatalf("request = %s %s, want POST /v22/customers/1234567890/googleAds:search", sawMethod, sawPath)
 	}
 	if len(sawTokens) != 2 || sawTokens[0] != "" || sawTokens[1] != "next-page" {
 		t.Fatalf("page tokens = %v", sawTokens)

@@ -6,7 +6,7 @@
   "properties": {
     "host": {
       "type": "string",
-      "description": "Bare hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected)."
+      "description": "TCP hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected). Unix-socket/peer authentication is not supported."
     },
     "port": {
       "type": "string",
@@ -23,16 +23,28 @@
     "password": {
       "type": "string",
       "x-secret": true,
-      "description": "Database role password. Never logged."
+      "description": "Required for live password authentication. Fixture mode does not require it. Never logged."
     },
     "sslmode": {
       "type": "string",
-      "enum": ["disable", "allow", "prefer", "require", "verify-ca", "verify-full"],
-      "description": "libpq sslmode. Defaults to disable when omitted."
+      "enum": ["disabled", "preferred", "required", "verify-ca", "verify-identity", "disable", "allow", "prefer", "require", "verify-full", "verify_ca", "verify_identity"],
+      "description": "Transport security. Canonical values are disabled (the default), preferred, required, verify-ca, and verify-identity. Existing libpq and underscore spellings are accepted for compatibility."
+    },
+    "sslrootcert": {
+      "type": "string",
+      "description": "Absolute path to a PEM CA bundle used by verify-ca and verify-identity. Defaults to the host trust store when omitted."
+    },
+    "sslservername": {
+      "type": "string",
+      "description": "Server name to verify under verify-identity when it differs from host, such as an IP-addressed endpoint fronting a named certificate."
     },
     "schema": {
       "type": "string",
-      "description": "PostgreSQL schema to discover tables from. Defaults to public."
+      "description": "PostgreSQL user/application schema to discover tables from. Defaults to public. pg_catalog, information_schema, pg_toast, pg_toast_*, and pg_temp_* are rejected before a live catalog connection is opened."
+    },
+    "cdc_publication": {
+      "type": "string",
+      "description": "Publication used by PostgreSQL logical-replication CDC. It must include the selected schema.table stream; defaults to pm_publication."
     },
     "cursor_field": {
       "type": "string",

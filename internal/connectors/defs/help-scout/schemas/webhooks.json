@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "events": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notification": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payloadVersion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mailboxIds": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

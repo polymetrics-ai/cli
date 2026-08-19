@@ -13,9 +13,11 @@ DESCRIPTION
   Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,29 +28,29 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: jnid
     cursor: date_updated
-    fields: address_line1(), city(), company(), country_name(), date_created(), date_updated(), display_name(), email(), first_name(), home_phone(), is_active(), is_archived(), jnid(), last_name(), mobile_phone(), record_type_name(), sales_rep_name(), state_text(), status_name(), type(), work_phone(), zip()
+    fields: address_line1(string), city(string), company(string), country_name(string), date_created(integer), date_updated(integer), display_name(string), email(string), first_name(string), home_phone(string), is_active(boolean), is_archived(boolean), jnid(string), last_name(string), mobile_phone(string), record_type_name(string), sales_rep_name(string), state_text(string), status_name(string), type(string), work_phone(string), zip(string)
   jobs:
     primary key: jnid
     cursor: date_updated
-    fields: address_line1(), approved_estimate_total(), approved_invoice_total(), city(), customer(), date_created(), date_status_change(), date_updated(), is_active(), is_archived(), jnid(), name(), number(), record_type_name(), sales_rep_name(), state_text(), status_name(), type(), zip()
+    fields: address_line1(string), approved_estimate_total(number), approved_invoice_total(number), city(string), customer(string), date_created(integer), date_status_change(integer), date_updated(integer), is_active(boolean), is_archived(boolean), jnid(string), name(string), number(string), record_type_name(string), sales_rep_name(string), state_text(string), status_name(string), type(string), zip(string)
   tasks:
     primary key: jnid
     cursor: date_updated
-    fields: customer(), date_created(), date_end(), date_start(), date_updated(), description(), is_active(), is_archived(), is_completed(), jnid(), number(), priority(), record_type_name(), title(), type()
+    fields: customer(string), date_created(integer), date_end(integer), date_start(integer), date_updated(integer), description(string), is_active(boolean), is_archived(boolean), is_completed(boolean), jnid(string), number(string), priority(integer), record_type_name(string), title(string), type(string)
   activities:
     primary key: jnid
     cursor: date_updated
-    fields: created_by_name(), customer(), date_created(), date_updated(), is_active(), is_archived(), is_status_change(), jnid(), note(), record_type_name(), sales_rep_name(), source(), type()
+    fields: created_by_name(string), customer(string), date_created(integer), date_updated(integer), is_active(boolean), is_archived(boolean), is_status_change(boolean), jnid(string), note(string), record_type_name(string), sales_rep_name(string), source(string), type(string)
   files:
     primary key: jnid
     cursor: date_updated
-    fields: content_type(), created_by_name(), customer(), date_created(), date_file_created(), date_updated(), description(), filename(), is_active(), jnid(), md5(), record_type_name(), size(), type()
+    fields: content_type(string), created_by_name(string), customer(string), date_created(integer), date_file_created(integer), date_updated(integer), description(string), filename(string), is_active(boolean), jnid(string), md5(string), record_type_name(string), size(number), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

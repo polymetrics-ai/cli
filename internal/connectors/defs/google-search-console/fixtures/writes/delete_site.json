@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/sites/https://fixture.example.com/"
+    "path": "/webmasters/v3/sites/https://fixture.example.com/"
   },
   "response": {
     "status": 404,

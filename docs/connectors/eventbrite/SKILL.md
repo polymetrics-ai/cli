@@ -11,9 +11,11 @@ Reads Eventbrite organizations, events, attendees, orders, and ticket classes th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -30,28 +32,28 @@ Reads Eventbrite organizations, events, attendees, orders, and ticket classes th
 - event_id
 - organization_id
 - start_date
-- private_token (secret)
+- private_token (secret) (required)
 
 ## ETL Streams
 
 - organizations:
   - primary key: id
-  - fields: id(), image_id(), locale(), name(), vertical()
+  - fields: id(string), image_id(string), locale(string), name(string), vertical(string)
 - events:
   - primary key: id
   - cursor: changed
-  - fields: capacity(), changed(), created(), currency(), description(), end(), id(), listed(), name(), online_event(), organization_id(), published(), start(), status(), url(), venue_id()
+  - fields: capacity(integer), changed(string), created(string), currency(string), description(string), end(string), id(string), listed(boolean), name(string), online_event(boolean), organization_id(string), published(string), start(string), status(string), url(string), venue_id(string)
 - attendees:
   - primary key: id
   - cursor: changed
-  - fields: cancelled(), changed(), checked_in(), created(), email(), event_id(), id(), name(), order_id(), quantity(), refunded(), status(), ticket_class_id(), ticket_class_name()
+  - fields: cancelled(boolean), changed(string), checked_in(boolean), created(string), email(string), event_id(string), id(string), name(string), order_id(string), quantity(integer), refunded(boolean), status(string), ticket_class_id(string), ticket_class_name(string)
 - orders:
   - primary key: id
   - cursor: changed
-  - fields: changed(), created(), email(), event_id(), id(), name(), status(), time_remaining()
+  - fields: changed(string), created(string), email(string), event_id(string), id(string), name(string), status(string), time_remaining(integer)
 - ticket_classes:
   - primary key: id
-  - fields: cost(), description(), event_id(), fee(), free(), hidden(), id(), name(), on_sale_status(), quantity_sold(), quantity_total()
+  - fields: cost(string), description(string), event_id(string), fee(string), free(boolean), hidden(boolean), id(string), name(string), on_sale_status(string), quantity_sold(integer), quantity_total(integer)
 
 ## Sync Modes
 

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads California Irrigation Management Information System (CIMIS) weather station metadata and station/spatial zip-code reference lists through the CIMIS Web API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -32,16 +34,16 @@ CONFIGURATION
 ETL STREAMS
   stations:
     primary key: StationNbr
-    fields: City(), ConnectDate(), County(), DisconnectDate(), Elevation(), GroundCover(), HmsLatitude(), HmsLongitude(), IsActive(), IsEtoStation(), Name(), RegionalOffice(), SitingDesc(), StationNbr(), ZipCodes()
+    fields: City(string), ConnectDate(string), County(string), DisconnectDate(string), Elevation(string), GroundCover(string), HmsLatitude(string), HmsLongitude(string), IsActive(string), IsEtoStation(string), Name(string), RegionalOffice(string), SitingDesc(string), StationNbr(string), ZipCodes(array)
   station_zip_codes:
     primary key: StationNbr, ZipCode
-    fields: ConnectDate(), DisconnectDate(), IsActive(), StationNbr(), ZipCode()
+    fields: ConnectDate(string), DisconnectDate(string), IsActive(string), StationNbr(integer), ZipCode(string)
   spatial_zip_codes:
     primary key: ZipCode
-    fields: ConnectDate(), DisconnectDate(), IsActive(), ZipCode()
+    fields: ConnectDate(string), DisconnectDate(string), IsActive(string), ZipCode(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external CIMIS API read of public weather station metadata

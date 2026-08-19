@@ -11,9 +11,11 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,64 +30,64 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 
 - base_url
 - start_date
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - users:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), updated_at()
+  - fields: created_at(string), email(string), id(string), name(string), updated_at(string)
 - content:
   - primary key: id
-  - fields: created_at(), id(), title(), type(), updated_at()
+  - fields: created_at(string), id(string), title(string), type(string), updated_at(string)
 - completions:
   - primary key: id
-  - fields: completed_at(), content_id(), id(), updated_at(), user_id()
+  - fields: completed_at(string), content_id(string), id(string), updated_at(string), user_id(string)
 - activities:
   - primary key: id
   - cursor: date
-  - fields: contextId(), contextType(), date(), id(), name(), type(), user()
+  - fields: contextId(string), contextType(string), date(string), id(string), name(string), type(string), user(string)
 - contents_v1:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), description(), duration(), id(), isOfficial(), tags(), title(), type(), updatedAt()
+  - fields: createdAt(string), description(string), duration(number), id(string), isOfficial(boolean), tags(array), title(string), type(string), updatedAt(string)
 - learning_completions:
   - primary key: id
-  - fields: activeUntil(), completedAt(), completionType(), contentId(), contentVersion(), hadDueDate(), id(), isRPL(), skills(), userId()
+  - fields: activeUntil(string), completedAt(string), completionType(string), contentId(string), contentVersion(number), hadDueDate(boolean), id(string), isRPL(boolean), skills(array), userId(string)
 - assignments:
   - primary key: id
   - cursor: updatedAt
-  - fields: alternativeContentIds(), audienceId(), completionPeriod(), createdAt(), deletedAt(), hideAlternativeContent(), id(), isActive(), isDeleted(), primaryContentId(), recurrence(), updatedAt()
+  - fields: alternativeContentIds(array), audienceId(string), completionPeriod(object), createdAt(string), deletedAt(string), hideAlternativeContent(boolean), id(string), isActive(boolean), isDeleted(boolean), primaryContentId(string), recurrence(object), updatedAt(string)
 - assignment_enrolments:
   - primary key: id
   - cursor: updatedAt
-  - fields: assignmentId(), assignment_id(), audienceId(), availableDate(), dueDate(), id(), lastCompletedAt(), primaryContentId(), status(), updatedAt(), userId()
+  - fields: assignmentId(string), assignment_id(string), audienceId(string), availableDate(string), dueDate(string), id(string), lastCompletedAt(string), primaryContentId(string), status(string), updatedAt(string), userId(string)
 - audiences:
   - primary key: id
   - cursor: updatedAt
-  - fields: apiControlled(), category(), createdAt(), id(), name(), parent(), reference(), type(), updatedAt()
+  - fields: apiControlled(boolean), category(string), createdAt(string), id(string), name(string), parent(string), reference(string), type(string), updatedAt(string)
 - audience_members:
   - primary key: audience_id, userId
-  - fields: audience_id(), email(), reference(), userId()
+  - fields: audience_id(string), email(string), reference(string), userId(string)
 - audience_managers:
   - primary key: audience_id, userId
-  - fields: audience_id(), email(), permissions(), reference(), userId()
+  - fields: audience_id(string), email(string), permissions(object), reference(string), userId(string)
 - tags:
   - primary key: id
-  - fields: campaigns(), contents(), id(), tag()
+  - fields: campaigns(array), contents(array), id(string), tag(string)
 - cpd_categories:
   - primary key: categoryId
-  - fields: categoryId(), name()
+  - fields: categoryId(string), name(string)
 - cpd_entries:
   - primary key: logEntryId
-  - fields: activity(), category(), description(), durationMinutes(), entryDate(), isVerified(), logEntryId(), userId()
+  - fields: activity(string), category(string), description(string), durationMinutes(number), entryDate(string), isVerified(boolean), logEntryId(string), userId(string)
 - cpd_requirements:
   - primary key: audienceRequirementId
-  - fields: audienceId(), audienceRequirementId(), createdAt(), requiredMinutes()
+  - fields: audienceId(string), audienceRequirementId(string), createdAt(string), requiredMinutes(integer)
 - skill_levels:
   - primary key: value
-  - fields: isEnabled(), name(), value()
+  - fields: isEnabled(boolean), name(string), value(number)
 
 ## Sync Modes
 

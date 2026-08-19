@@ -11,6 +11,7 @@ Reads Railz businesses, connections, customers, invoices, and bills through the 
 
 ## Icon
 
+- id: railz
 - asset: icons/railz.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -35,20 +36,20 @@ Reads Railz businesses, connections, customers, invoices, and bills through the 
 - businesses:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 - connections:
   - primary key: id
   - cursor: created_at
-  - fields: business_id(), created_at(), id(), status()
+  - fields: business_id(string), created_at(string), id(string), status(string)
 - customers:
   - primary key: id
-  - fields: business_id(), email(), id(), name()
+  - fields: business_id(string), email(string), id(string), name(string)
 - invoices:
   - primary key: id
-  - fields: business_id(), customer_id(), id(), status(), total_amount(), vendor_id()
+  - fields: business_id(string), customer_id(string), id(string), status(string), total_amount(number), vendor_id(string)
 - bills:
   - primary key: id
-  - fields: business_id(), id(), status(), total_amount(), vendor_id()
+  - fields: business_id(string), id(string), status(string), total_amount(number), vendor_id(string)
 
 ## Sync Modes
 

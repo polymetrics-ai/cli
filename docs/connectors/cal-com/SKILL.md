@@ -11,9 +11,17 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-caldotcom
+- asset: icons/simple-icons/caldotcom.svg
+- title: Cal.com
+- simple_icon_slug: caldotcom
+- simple_icon_hex: 292929
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Cal.com
+- match: curated-alias
+- matched_by: caldotcom
 
 ## Capabilities
 
@@ -28,34 +36,35 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 - api_version
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - bookings:
   - primary key: id
-  - fields: createdAt(), description(), end(), eventTypeId(), id(), start(), status(), title(), uid(), updatedAt()
+  - fields: createdAt(string), description(string), end(string), eventTypeId(integer), id(integer), start(string), status(string), title(string), uid(string), updatedAt(string)
 - schedules:
   - primary key: id
-  - fields: id(), isDefault(), name(), ownerId(), timeZone()
+  - fields: id(integer), isDefault(boolean), name(string), ownerId(integer), timeZone(string)
 - event_types:
   - primary key: id
-  - fields: description(), hidden(), id(), length(), position(), slug(), title()
+  - fields: description(string), hidden(boolean), id(integer), length(integer), position(integer), slug(string), title(string)
 - webhooks:
   - primary key: id
-  - fields: active(), id(), payloadTemplate(), secret(), subscriberUrl(), triggers(), userId()
+  - fields: active(boolean), id(integer), payloadTemplate(string), secret(string), subscriberUrl(string), triggers(array), userId(integer)
 - my_profile:
   - primary key: id
-  - fields: email(), id(), name(), timeFormat(), timeZone(), username(), weekStart()
+  - fields: email(string), id(integer), name(string), timeFormat(integer), timeZone(string), username(string), weekStart(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_booking:
   - endpoint: POST /v2/bookings
+  - required fields: start, eventTypeId, attendee
   - risk: external mutation; books a real meeting slot on the target event type and notifies attendees; approval required
 - cancel_booking:
   - endpoint: POST /v2/bookings/{{ record.uid }}/cancel
@@ -71,10 +80,11 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: external mutation; declines a booking pending host approval, notifying the attendee; approval required
 - reschedule_booking:
   - endpoint: POST /v2/bookings/{{ record.uid }}/reschedule
-  - required fields: uid
+  - required fields: uid, start
   - risk: external mutation; moves a real booking to a new time and notifies attendees; approval required
 - create_event_type:
   - endpoint: POST /v2/event-types
+  - required fields: title, slug, lengthInMinutes
   - risk: external mutation; creates a new publicly-bookable event type; approval required
 - update_event_type:
   - endpoint: PATCH /v2/event-types/{{ record.id }}
@@ -86,6 +96,7 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: destructive; permanently deletes an event type, breaking any existing public booking links; approval required
 - create_schedule:
   - endpoint: POST /v2/schedules
+  - required fields: name, timeZone, isDefault
   - risk: external mutation; creates a new availability schedule, which can be attached to event types and change public availability; approval required
 - update_schedule:
   - endpoint: PATCH /v2/schedules/{{ record.id }}
@@ -97,6 +108,7 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: destructive; permanently deletes an availability schedule; approval required
 - create_webhook:
   - endpoint: POST /v2/webhooks
+  - required fields: subscriberUrl, triggers, active
   - risk: external mutation; registers a new webhook endpoint that will receive live booking event payloads; approval required
 - delete_webhook:
   - endpoint: DELETE /v2/webhooks/{{ record.id }}

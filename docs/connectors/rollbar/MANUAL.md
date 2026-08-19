@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes documented Rollbar API v1 resources through the declarative connector engine.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-rollbar
+  asset: icons/simple-icons/rollbar.svg
+  title: Rollbar
+  simple_icon_slug: rollbar
+  simple_icon_hex: 3569F3
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Rollbar
+  match: exact-name-or-slug
+  matched_by: rollbar
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -43,99 +51,99 @@ CONFIGURATION
   user_id
   uuid
   version
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   activated_counts_report:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   deploy:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   deploys:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   email_notification_rule:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   email_notification_rules:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   environments:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   invitation:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   item_by_counter:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   item_by_id:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   item_by_uuid:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   item_occurrences:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   items:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   occurrence:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   occurrence_counts_report:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   occurrences:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   pagerduty_notification_rule:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   pagerduty_notification_rules:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   person_deletion_job:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   project:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   project_teams:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   projects:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   rql_job:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   rql_job_result:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   rql_jobs:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   service_link:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   service_links:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   session_replay:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   slack_notification_rule:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   slack_notification_rules:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team_invitations:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team_project_assignment:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team_projects:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team_user_assignment:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   team_users:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   teams:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   top_active_items_report:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   user:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   user_projects:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   user_teams:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   users:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   version:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   version_items:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   webhook_notification_rule:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
   webhook_notification_rules:
-    fields: err(), id(), name(), result(), status(), title()
+    fields: err(integer), id(integer), name(string), result(), status(string), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite

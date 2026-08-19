@@ -11,9 +11,11 @@ Reads Oveit events, orders, and attendees.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,25 +29,25 @@ Reads Oveit events, orders, and attendees.
 ## Configuration
 
 - base_url
-- email
+- email (required)
 - page_size
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 
 - events:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 - orders:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 - attendees:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

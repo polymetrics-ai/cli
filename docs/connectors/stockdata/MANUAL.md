@@ -13,6 +13,7 @@ DESCRIPTION
   Reads StockData market quotes, prices, splits, dividends, news, entity stats, entities, and source metadata through the StockData API.
 
 ICON
+  id: stockdata
   asset: icons/stockdata.svg
   source: official
   review_status: official_verified
@@ -43,59 +44,59 @@ CONFIGURATION
   sentiment_gte
   sentiment_lte
   symbols
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   tickers:
     primary key: symbol
-    fields: exchange(), name(), symbol()
+    fields: exchange(string), name(string), symbol(string)
   eod_prices:
     primary key: ticker, date
     cursor: date
-    fields: close(), date(), ticker()
+    fields: close(number), date(string), ticker(string)
   intraday_prices:
     primary key: ticker, date
     cursor: date
-    fields: close(), date(), ticker()
+    fields: close(number), date(string), ticker(string)
   news:
     primary key: url
-    fields: published_at(), title(), url()
+    fields: published_at(string), title(string), url(string)
   quotes:
     primary key: ticker
-    fields: day_high(), day_low(), day_open(), exchange(), last_trade_time(), name(), previous_close_price(), price(), ticker()
+    fields: day_high(number), day_low(number), day_open(number), exchange(string), last_trade_time(string), name(string), previous_close_price(number), price(number), ticker(string)
   intraday_adjusted_prices:
     primary key: ticker, date
     cursor: date
-    fields: close(), date(), ticker(), volume()
+    fields: close(number), date(string), ticker(string), volume(number)
   splits:
     primary key: ticker, date
     cursor: date
-    fields: date(), split_factor(), split_ratio(), ticker()
+    fields: date(string), split_factor(number), split_ratio(string), ticker(string)
   dividends:
     primary key: ticker, date
     cursor: date
-    fields: currency(), date(), dividend(), ticker()
+    fields: currency(string), date(string), dividend(number), ticker(string)
   news_similar:
     primary key: uuid
-    fields: entities(), language(), published_at(), source(), title(), url(), uuid()
+    fields: entities(array), language(string), published_at(string), source(string), title(string), url(string), uuid(string)
   news_by_uuid:
     primary key: uuid
-    fields: entities(), language(), published_at(), source(), title(), url(), uuid()
+    fields: entities(array), language(string), published_at(string), source(string), title(string), url(string), uuid(string)
   news_stats_intraday:
     primary key: date
-    fields: data(), date()
+    fields: data(array), date(string)
   news_stats_aggregation:
     primary key: key
-    fields: key(), sentiment_avg(), total_documents()
+    fields: key(string), sentiment_avg(number), total_documents(number)
   news_stats_trending:
     primary key: key
-    fields: key(), score(), sentiment_avg(), total_documents()
+    fields: key(string), score(number), sentiment_avg(number), total_documents(number)
   entity_search:
     primary key: symbol
-    fields: country(), exchange(), industry(), name(), symbol(), type()
+    fields: country(string), exchange(string), industry(string), name(string), symbol(string), type(string)
   news_sources:
     primary key: source_id
-    fields: domain(), language(), source_id()
+    fields: domain(string), language(string), source_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

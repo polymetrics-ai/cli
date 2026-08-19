@@ -11,9 +11,11 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,18 +30,18 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 
 - base_url
 - form_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - forms:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), slug(), title(), updated_at()
+  - fields: created_at(string), id(string), slug(string), title(string), updated_at(string)
 - submissions:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), data(), form_id(), id(), updated_at()
+  - fields: created_at(string), data(object), form_id(string), id(string), updated_at(string)
 
 ## Sync Modes
 

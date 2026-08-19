@@ -11,6 +11,7 @@ Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcalle
 
 ## Icon
 
+- id: freshcaller
 - asset: icons/freshcaller.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,23 +32,23 @@ Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcalle
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - calls:
   - primary key: id
   - cursor: call_time
-  - fields: agent_id(), call_time(), direction(), duration(), id(), phone_number(), status()
+  - fields: agent_id(integer), call_time(string), direction(string), duration(integer), id(integer), phone_number(string), status(string)
 - agents:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(integer), name(string), status(string)
 - teams:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - numbers:
   - primary key: id
-  - fields: id(), name(), phone_number()
+  - fields: id(integer), name(string), phone_number(string)
 
 ## Sync Modes
 

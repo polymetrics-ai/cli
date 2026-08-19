@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SendPulse address books, campaigns, senders, per-book emails, and the account blacklist, and writes address-book/sender/blacklist lifecycle mutations and campaign create/cancel actions through the SendPulse API.
 
 ICON
+  id: sendpulse
   asset: icons/sendpulse.svg
   source: official
   review_status: official_verified
@@ -28,36 +29,37 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   token_url
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   addressbooks:
     primary key: id
-    fields: all_email_qty(), id(), name()
+    fields: all_email_qty(integer), id(integer), name(string)
   campaigns:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(integer), name(string), status(string)
   senders:
     primary key: email
-    fields: email(), name()
+    fields: email(string), name(string)
   blacklist:
     primary key: email
-    fields: comment(), email()
+    fields: comment(string), email(string)
   emails_in_book:
     primary key: email
-    fields: book_id(), email(), status()
+    fields: book_id(string), email(string), status(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_addressbook:
     endpoint: POST /addressbooks
+    required fields: bookName
     risk: creates a new address book (mailing list); external mutation, approval required
   update_addressbook:
     endpoint: PUT /addressbooks/{{ record.id }}
-    required fields: id
+    required fields: id, name
     risk: renames an existing address book
   delete_addressbook:
     endpoint: DELETE /addressbooks/{{ record.id }}
@@ -65,16 +67,15 @@ REVERSE ETL ACTIONS
     risk: permanently removes an address book and all its subscriber associations; irreversible
   add_emails_to_book:
     endpoint: POST /addressbooks/{{ record.id }}/emails
-    required fields: id
-    optional fields: emails
+    required fields: id, emails
     risk: subscribes new email addresses to an address book; each add may trigger a double opt-in confirmation email depending on account settings
   remove_emails_from_book:
     endpoint: DELETE /addressbooks/{{ record.id }}/emails
-    required fields: id
-    optional fields: emails
+    required fields: id, emails
     risk: unsubscribes the given email addresses from an address book; irreversible without re-adding them
   create_campaign:
     endpoint: POST /campaigns
+    required fields: sender_name, sender_email, subject, body, list_id
     risk: creates a new email campaign against a real address book; depending on account settings this may schedule actual sending to real subscribers, the highest-impact action in this bundle, approval required
   cancel_campaign:
     endpoint: DELETE /campaigns/{{ record.id }}
@@ -82,17 +83,19 @@ REVERSE ETL ACTIONS
     risk: cancels a scheduled/in-progress campaign; stops further sends but does not un-send already-delivered emails
   add_sender:
     endpoint: POST /senders
+    required fields: email, name
     risk: registers a new sender email address, which SendPulse will send an activation email to; low-risk external mutation
   remove_sender:
     endpoint: DELETE /senders
-    optional fields: email
+    required fields: email
     risk: removes a sender email address; any campaign still referencing it as its sender will fail to send
   add_to_blacklist:
     endpoint: POST /blacklist
+    required fields: emails
     risk: permanently suppresses future sends to the given address(es) account-wide
   remove_from_blacklist:
     endpoint: DELETE /blacklist
-    optional fields: emails
+    required fields: emails
     risk: removes an address from the account-wide suppression list; future campaigns can reach it again
 
 SECURITY

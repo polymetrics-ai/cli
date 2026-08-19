@@ -11,6 +11,7 @@ Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows f
 
 ## Icon
 
+- id: twilio
 - asset: icons/twilio.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,31 +29,31 @@ Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows f
 ## Configuration
 
 - base_url
-- workspace_sid
-- account_sid (secret)
-- auth_token (secret)
+- workspace_sid (required)
+- account_sid (secret) (required)
+- auth_token (secret) (required)
 
 ## ETL Streams
 
 - workers:
   - primary key: sid
-  - fields: activity_name(), available(), friendly_name(), sid()
+  - fields: activity_name(string), available(boolean), friendly_name(string), sid(string)
 - tasks:
   - primary key: sid
-  - fields: assignment_status(), sid(), workflow_sid()
+  - fields: assignment_status(string), sid(string), workflow_sid(string)
 - activities:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 - task_queues:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 - workflows:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

@@ -181,6 +181,9 @@ func TestStaticChecks_TargetedFailures(t *testing.T) {
 		{"pk-missing", "pk_fields_exist"},
 		{"cursor-missing", "cursor_fields_exist"},
 		{"unresolved-interp", "interpolations_resolve"},
+		// ResolveCheck matches {{ }} only, so a bare {widgetId} in a stream
+		// path was invisible to this check and reached the wire verbatim.
+		{"stream-path-literal-placeholder", "interpolations_resolve"},
 		{"write-schema-invalid", "write_schemas_valid"},
 		{"surface-incomplete", "surface_complete"},
 		{"docs-missing-heading", "docs_present"},

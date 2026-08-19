@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, custom audiences, and performance insights, and creates/updates campaigns and ad sets, through the Graph API.
 
 ICON
+  id: facebook
   asset: icons/facebook.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,37 +29,38 @@ AUTHENTICATION
 CONFIGURATION
   ad_account_id
   base_url
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   ad_accounts:
     primary key: id
-    fields: account_id(), account_status(), currency(), id(), name(), timezone_name()
+    fields: account_id(string), account_status(string), currency(string), id(string), name(string), timezone_name(string)
   campaigns:
     primary key: id
-    fields: created_time(), effective_status(), id(), name(), objective(), status(), updated_time()
+    fields: created_time(string), effective_status(string), id(string), name(string), objective(string), status(string), updated_time(string)
   ads:
     primary key: id
-    fields: created_time(), effective_status(), id(), name(), status(), updated_time()
+    fields: created_time(string), effective_status(string), id(string), name(string), status(string), updated_time(string)
   ad_sets:
     primary key: id
-    fields: bid_amount(), billing_event(), campaign_id(), created_time(), daily_budget(), effective_status(), end_time(), id(), lifetime_budget(), name(), optimization_goal(), start_time(), status(), updated_time()
+    fields: bid_amount(integer), billing_event(string), campaign_id(string), created_time(string), daily_budget(string), effective_status(string), end_time(string), id(string), lifetime_budget(string), name(string), optimization_goal(string), start_time(string), status(string), updated_time(string)
   ad_creatives:
     primary key: id
-    fields: id(), name(), object_story_id(), object_type(), status(), thumbnail_url()
+    fields: id(string), name(string), object_story_id(string), object_type(string), status(string), thumbnail_url(string)
   custom_audiences:
     primary key: id
-    fields: approximate_count_lower_bound(), approximate_count_upper_bound(), description(), id(), name(), operation_status(), subtype(), time_created(), time_updated()
+    fields: approximate_count_lower_bound(integer), approximate_count_upper_bound(integer), description(string), id(string), name(string), operation_status(object), subtype(string), time_created(string), time_updated(string)
   insights:
     primary key: id
-    fields: ad_id(), ad_name(), adset_id(), adset_name(), campaign_id(), campaign_name(), clicks(), cpc(), cpm(), ctr(), date_start(), date_stop(), frequency(), id(), impressions(), reach(), spend()
+    fields: ad_id(string), ad_name(string), adset_id(string), adset_name(string), campaign_id(string), campaign_name(string), clicks(string), cpc(string), cpm(string), ctr(string), date_start(string), date_stop(string), frequency(string), id(string), impressions(string), reach(string), spend(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_campaign:
     endpoint: POST /{{ config.ad_account_id }}/campaigns
+    required fields: name, objective, status, special_ad_categories
     risk: external mutation on a live Facebook ad account; creates a campaign that can incur ad spend once ads are attached; approval required
   update_campaign:
     endpoint: POST /{{ record.id }}
@@ -66,6 +68,7 @@ REVERSE ETL ACTIONS
     risk: external mutation on a live Facebook ad account (e.g. pausing/resuming spend); approval required
   create_ad_set:
     endpoint: POST /{{ config.ad_account_id }}/adsets
+    required fields: name, campaign_id, billing_event, optimization_goal, targeting, status
     risk: external mutation on a live Facebook ad account; creates an ad set that can incur ad spend once ads are attached; approval required
 
 SECURITY

@@ -1,0 +1,2699 @@
+{
+  "tagline": "Read Greenhouse Harvest records and safely plan typed Greenhouse mutations.",
+  "usage": "pm greenhouse <command> [flags]",
+  "source_cli": {
+    "name": "Greenhouse Harvest API",
+    "docs": "https://developers.greenhouse.io/harvest.html",
+    "reference": "Greenhouse Harvest reference fetched 2026-08-07 (HTTP 200, 1,636,662 bytes)",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "candidates",
+        "applications",
+        "jobs",
+        "offers",
+        "users",
+        "activity-feed",
+        "application",
+        "approvals-for-job",
+        "approval-flow",
+        "pending-approvals-for-user",
+        "candidate",
+        "close-reasons",
+        "custom-fields",
+        "custom-field",
+        "custom-field-options",
+        "demographic-question-sets",
+        "demographic-question-set",
+        "demographic-questions",
+        "demographic-questions-for-demographic-question-set",
+        "demographic-question",
+        "demographic-answer-options",
+        "demographic-answer-options-for-demographic-question",
+        "demographic-answer-option",
+        "demographic-answers",
+        "demographic-answers-for-application",
+        "demographic-answer",
+        "departments",
+        "department",
+        "degrees",
+        "disciplines",
+        "schools",
+        "eeoc",
+        "eeoc-data-for-application",
+        "email-templates",
+        "email-template",
+        "job-openings",
+        "opening-for-job",
+        "job-posts",
+        "job-post",
+        "job-posts-for-job",
+        "job-post-for-job",
+        "custom-locations-for-job-post",
+        "job-stages",
+        "job-stages-for-job",
+        "job-stage",
+        "job",
+        "hiring-team",
+        "offers-for-application",
+        "current-offer-for-application",
+        "offer",
+        "offices",
+        "office",
+        "prospect-pools",
+        "prospect-pool",
+        "rejection-reasons",
+        "scheduled-interviews",
+        "scheduled-interviews-for-application",
+        "scheduled-interview",
+        "scorecards",
+        "scorecards-for-application",
+        "scorecard",
+        "sources",
+        "candidate-tags",
+        "tags-applied-to-candidate",
+        "tracking-link-data-for-token",
+        "user",
+        "job-permissions",
+        "future-job-permissions",
+        "user-roles"
+      ]
+    },
+    {
+      "id": "writes",
+      "title": "Reverse ETL write plans",
+      "commands": [
+        "delete-application",
+        "add-application-to-candidate-prospect",
+        "update-application",
+        "advance-application",
+        "move-application-different-job",
+        "move-application-same-job",
+        "convert-prospect-to-candidate",
+        "add-attachment-to-application",
+        "hire-application",
+        "reject-application",
+        "update-rejection-reason",
+        "unreject-application",
+        "request-approvals",
+        "replace-an-approver-in-an-approver-group",
+        "create-or-replace-an-approval-flow",
+        "delete-candidate",
+        "edit-candidate",
+        "add-attachment",
+        "add-candidate",
+        "add-note",
+        "add-e-mail-note",
+        "add-education",
+        "remove-education-from-candidate",
+        "add-employment",
+        "remove-employment-from-candidate",
+        "add-prospect",
+        "anonymize-candidate",
+        "merge-candidates",
+        "create-custom-field",
+        "update-custom-field",
+        "delete-custom-field",
+        "create-custom-field-options",
+        "update-custom-field-options",
+        "remove-custom-field-options",
+        "edit-department",
+        "add-department",
+        "edit-openings",
+        "create-new-openings",
+        "update-job",
+        "create-job",
+        "replace-hiring-team",
+        "add-hiring-team-members",
+        "remove-hiring-team-member",
+        "update-current-offer",
+        "edit-office",
+        "add-office",
+        "remove-scheduled-interview",
+        "add-candidate-tag",
+        "remove-tag-from-candidate",
+        "destroy-candidate-tag",
+        "add-a-candidate-tag",
+        "change-user-permission-level",
+        "add-user",
+        "add-e-mail-address-to-user",
+        "remove-a-job-permission",
+        "add-a-job-permission",
+        "remove-a-future-job-permission",
+        "add-a-future-job-permission"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Greenhouse request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum bounded direct-read response bytes."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "candidates list",
+      "summary": "Read Greenhouse List Candidates as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "candidates",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-candidates",
+      "examples": [
+        "pm greenhouse candidates list --json"
+      ]
+    },
+    {
+      "path": "applications list",
+      "summary": "Read Greenhouse List Applications as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "applications",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-applications",
+      "examples": [
+        "pm greenhouse applications list --json"
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "Read Greenhouse List Jobs as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-jobs",
+      "examples": [
+        "pm greenhouse jobs list --json"
+      ]
+    },
+    {
+      "path": "offers list",
+      "summary": "Read Greenhouse List Offers as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offers",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offers",
+      "examples": [
+        "pm greenhouse offers list --json"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Read Greenhouse List Users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-users",
+      "examples": [
+        "pm greenhouse users list --json"
+      ]
+    },
+    {
+      "path": "activity-feed list",
+      "summary": "Read Greenhouse Retrieve Activity Feed as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_feed",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-activity-feed",
+      "examples": [
+        "pm greenhouse activity-feed list --json --candidate-id <candidate-id>"
+      ],
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id that scopes this read.",
+          "maps_to": "config.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "application list",
+      "summary": "Read Greenhouse Retrieve Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-application",
+      "examples": [
+        "pm greenhouse application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "approvals-for-job list",
+      "summary": "Read Greenhouse List Approvals For Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approvals_for_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-approvals-for-job",
+      "examples": [
+        "pm greenhouse approvals-for-job list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "approval-flow list",
+      "summary": "Read Greenhouse Retrieve Approval Flow as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approval_flow",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-approval-flow",
+      "examples": [
+        "pm greenhouse approval-flow list --json --approval-flow-id <approval-flow-id>"
+      ],
+      "flags": [
+        {
+          "name": "approval-flow-id",
+          "type": "string",
+          "summary": "Greenhouse approval flow id that scopes this read.",
+          "maps_to": "config.approval_flow_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "pending-approvals-for-user list",
+      "summary": "Read Greenhouse Pending Approvals For User as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pending_approvals_for_user",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-pending-approvals-for-user",
+      "examples": [
+        "pm greenhouse pending-approvals-for-user list --json --user-id <user-id>"
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id that scopes this read.",
+          "maps_to": "config.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "candidate list",
+      "summary": "Read Greenhouse Retrieve Candidate as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-candidate",
+      "examples": [
+        "pm greenhouse candidate list --json --candidate-id <candidate-id>"
+      ],
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id that scopes this read.",
+          "maps_to": "config.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "close-reasons list",
+      "summary": "Read Greenhouse List Close Reasons as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "close_reasons",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-close-reasons",
+      "examples": [
+        "pm greenhouse close-reasons list --json"
+      ]
+    },
+    {
+      "path": "custom-fields list",
+      "summary": "Read Greenhouse List Custom Fields as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-custom-fields",
+      "examples": [
+        "pm greenhouse custom-fields list --json --field-type <field-type>"
+      ],
+      "flags": [
+        {
+          "name": "field-type",
+          "type": "string",
+          "summary": "Greenhouse field type that scopes this read.",
+          "maps_to": "config.field_type",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "custom-field list",
+      "summary": "Read Greenhouse Retrieve Custom Field as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-custom-field",
+      "examples": [
+        "pm greenhouse custom-field list --json --custom-field-id <custom-field-id>"
+      ],
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id that scopes this read.",
+          "maps_to": "config.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "custom-field-options list",
+      "summary": "Read Greenhouse List Custom Field Options as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field_options",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-custom-field-options",
+      "examples": [
+        "pm greenhouse custom-field-options list --json --custom-field-id <custom-field-id>"
+      ],
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id that scopes this read.",
+          "maps_to": "config.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-question-sets list",
+      "summary": "Read Greenhouse List Demographic Question Sets as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_question_sets",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-question-sets",
+      "examples": [
+        "pm greenhouse demographic-question-sets list --json"
+      ]
+    },
+    {
+      "path": "demographic-question-set list",
+      "summary": "Read Greenhouse Retrieve Demographic Question Set as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_question_set",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-question-set",
+      "examples": [
+        "pm greenhouse demographic-question-set list --json --demographic-question-set-id <demographic-question-set-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-question-set-id",
+          "type": "string",
+          "summary": "Greenhouse demographic question set id that scopes this read.",
+          "maps_to": "config.demographic_question_set_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-questions list",
+      "summary": "Read Greenhouse List Demographic Questions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_questions",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-questions",
+      "examples": [
+        "pm greenhouse demographic-questions list --json"
+      ]
+    },
+    {
+      "path": "demographic-questions-for-demographic-question-set list",
+      "summary": "Read Greenhouse List Demographic Questions For Demographic Question Set as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_questions_for_demographic_question_set",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-questions-for-demographic-question-set",
+      "examples": [
+        "pm greenhouse demographic-questions-for-demographic-question-set list --json --demographic-question-set-id <demographic-question-set-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-question-set-id",
+          "type": "string",
+          "summary": "Greenhouse demographic question set id that scopes this read.",
+          "maps_to": "config.demographic_question_set_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-question list",
+      "summary": "Read Greenhouse Retrieve Demographic Question as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_question",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-question",
+      "examples": [
+        "pm greenhouse demographic-question list --json --demographic-question-id <demographic-question-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-question-id",
+          "type": "string",
+          "summary": "Greenhouse demographic question id that scopes this read.",
+          "maps_to": "config.demographic_question_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-answer-options list",
+      "summary": "Read Greenhouse List Demographic Answer Options as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answer_options",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answer-options",
+      "examples": [
+        "pm greenhouse demographic-answer-options list --json"
+      ]
+    },
+    {
+      "path": "demographic-answer-options-for-demographic-question list",
+      "summary": "Read Greenhouse List Demographic Answer Options For Demographic Question as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answer_options_for_demographic_question",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answer-options-for-demographic-question",
+      "examples": [
+        "pm greenhouse demographic-answer-options-for-demographic-question list --json --demographic-question-id <demographic-question-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-question-id",
+          "type": "string",
+          "summary": "Greenhouse demographic question id that scopes this read.",
+          "maps_to": "config.demographic_question_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-answer-option list",
+      "summary": "Read Greenhouse Retrieve Demographic Answer Option as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answer_option",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-answer-option",
+      "examples": [
+        "pm greenhouse demographic-answer-option list --json --demographic-answer-option-id <demographic-answer-option-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-answer-option-id",
+          "type": "string",
+          "summary": "Greenhouse demographic answer option id that scopes this read.",
+          "maps_to": "config.demographic_answer_option_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-answers list",
+      "summary": "Read Greenhouse List Demographic Answers as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answers",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answers",
+      "examples": [
+        "pm greenhouse demographic-answers list --json"
+      ]
+    },
+    {
+      "path": "demographic-answers-for-application list",
+      "summary": "Read Greenhouse List Demographic Answers For Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answers_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-demographic-answers-for-application",
+      "examples": [
+        "pm greenhouse demographic-answers-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "demographic-answer list",
+      "summary": "Read Greenhouse Retrieve Demographic Answer as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "demographic_answer",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-demographic-answer",
+      "examples": [
+        "pm greenhouse demographic-answer list --json --demographic-answer-id <demographic-answer-id>"
+      ],
+      "flags": [
+        {
+          "name": "demographic-answer-id",
+          "type": "string",
+          "summary": "Greenhouse demographic answer id that scopes this read.",
+          "maps_to": "config.demographic_answer_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "departments list",
+      "summary": "Read Greenhouse List Departments as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "departments",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-departments",
+      "examples": [
+        "pm greenhouse departments list --json"
+      ]
+    },
+    {
+      "path": "department list",
+      "summary": "Read Greenhouse Retrieve Department as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "department",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-department",
+      "examples": [
+        "pm greenhouse department list --json --department-id <department-id>"
+      ],
+      "flags": [
+        {
+          "name": "department-id",
+          "type": "string",
+          "summary": "Greenhouse department id that scopes this read.",
+          "maps_to": "config.department_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "degrees list",
+      "summary": "Read Greenhouse List Degrees as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "degrees",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-degrees",
+      "examples": [
+        "pm greenhouse degrees list --json"
+      ]
+    },
+    {
+      "path": "disciplines list",
+      "summary": "Read Greenhouse List Disciplines as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "disciplines",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-disciplines",
+      "examples": [
+        "pm greenhouse disciplines list --json"
+      ]
+    },
+    {
+      "path": "schools list",
+      "summary": "Read Greenhouse List Schools as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schools",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-schools",
+      "examples": [
+        "pm greenhouse schools list --json"
+      ]
+    },
+    {
+      "path": "eeoc list",
+      "summary": "Read Greenhouse List EEOC as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "eeoc",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-eeoc",
+      "examples": [
+        "pm greenhouse eeoc list --json"
+      ]
+    },
+    {
+      "path": "eeoc-data-for-application list",
+      "summary": "Read Greenhouse Retrieve EEOC Data for Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "eeoc_data_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-eeoc-data-for-application",
+      "examples": [
+        "pm greenhouse eeoc-data-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "email-templates list",
+      "summary": "Read Greenhouse List Email Templates as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_templates",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-email-templates",
+      "examples": [
+        "pm greenhouse email-templates list --json"
+      ]
+    },
+    {
+      "path": "email-template list",
+      "summary": "Read Greenhouse Retrieve Email Template as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_template",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-email-template",
+      "examples": [
+        "pm greenhouse email-template list --json --email-template-id <email-template-id>"
+      ],
+      "flags": [
+        {
+          "name": "email-template-id",
+          "type": "string",
+          "summary": "Greenhouse email template id that scopes this read.",
+          "maps_to": "config.email_template_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-openings list",
+      "summary": "Read Greenhouse List Job Openings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_openings",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-openings",
+      "examples": [
+        "pm greenhouse job-openings list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "opening-for-job list",
+      "summary": "Read Greenhouse Single Opening For Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opening_for_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-single-opening-for-job",
+      "examples": [
+        "pm greenhouse opening-for-job list --json --job-id <job-id> --opening-id <opening-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "opening-id",
+          "type": "string",
+          "summary": "Greenhouse opening id that scopes this read.",
+          "maps_to": "config.opening_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-posts list",
+      "summary": "Read Greenhouse List Job Posts as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_posts",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-posts",
+      "examples": [
+        "pm greenhouse job-posts list --json"
+      ]
+    },
+    {
+      "path": "job-post list",
+      "summary": "Read Greenhouse Retrieve Job Post as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_post",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-post",
+      "examples": [
+        "pm greenhouse job-post list --json --job-post-id <job-post-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-post-id",
+          "type": "string",
+          "summary": "Greenhouse job post id that scopes this read.",
+          "maps_to": "config.job_post_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-posts-for-job list",
+      "summary": "Read Greenhouse List Job Posts for Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_posts_for_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-posts-for-job",
+      "examples": [
+        "pm greenhouse job-posts-for-job list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-post-for-job list",
+      "summary": "Read Greenhouse Retrieve Job Post for Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_post_for_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-post-for-job",
+      "examples": [
+        "pm greenhouse job-post-for-job list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "custom-locations-for-job-post list",
+      "summary": "Read Greenhouse Retrieve Custom Locations for Job Post as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_locations_for_job_post",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-custom-locations-for-job-post",
+      "examples": [
+        "pm greenhouse custom-locations-for-job-post list --json --job-post-id <job-post-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-post-id",
+          "type": "string",
+          "summary": "Greenhouse job post id that scopes this read.",
+          "maps_to": "config.job_post_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-stages list",
+      "summary": "Read Greenhouse List Job Stages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_stages",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-stages",
+      "examples": [
+        "pm greenhouse job-stages list --json"
+      ]
+    },
+    {
+      "path": "job-stages-for-job list",
+      "summary": "Read Greenhouse List Job Stages for Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_stages_for_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-stages-for-job",
+      "examples": [
+        "pm greenhouse job-stages-for-job list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-stage list",
+      "summary": "Read Greenhouse Retrieve Job Stage as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_stage",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job-stage",
+      "examples": [
+        "pm greenhouse job-stage list --json --job-stage-id <job-stage-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-stage-id",
+          "type": "string",
+          "summary": "Greenhouse job stage id that scopes this read.",
+          "maps_to": "config.job_stage_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job list",
+      "summary": "Read Greenhouse Retrieve Job as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-job",
+      "examples": [
+        "pm greenhouse job list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "hiring-team list",
+      "summary": "Read Greenhouse Hiring Team as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "hiring_team",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-hiring-team",
+      "examples": [
+        "pm greenhouse hiring-team list --json --job-id <job-id>"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id that scopes this read.",
+          "maps_to": "config.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "offers-for-application list",
+      "summary": "Read Greenhouse List Offers for Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offers_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offers-for-application",
+      "examples": [
+        "pm greenhouse offers-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "current-offer-for-application list",
+      "summary": "Read Greenhouse Retrieve Current Offer for Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_offer_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-current-offer-for-application",
+      "examples": [
+        "pm greenhouse current-offer-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "offer list",
+      "summary": "Read Greenhouse Retrieve Offer as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offer",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-offer",
+      "examples": [
+        "pm greenhouse offer list --json --offer-id <offer-id>"
+      ],
+      "flags": [
+        {
+          "name": "offer-id",
+          "type": "string",
+          "summary": "Greenhouse offer id that scopes this read.",
+          "maps_to": "config.offer_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "offices list",
+      "summary": "Read Greenhouse List Offices as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offices",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-offices",
+      "examples": [
+        "pm greenhouse offices list --json"
+      ]
+    },
+    {
+      "path": "office list",
+      "summary": "Read Greenhouse Retrieve Office as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "office",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-office",
+      "examples": [
+        "pm greenhouse office list --json --office-id <office-id>"
+      ],
+      "flags": [
+        {
+          "name": "office-id",
+          "type": "string",
+          "summary": "Greenhouse office id that scopes this read.",
+          "maps_to": "config.office_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "prospect-pools list",
+      "summary": "Read Greenhouse List Prospect Pools as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospect_pools",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-prospect-pools",
+      "examples": [
+        "pm greenhouse prospect-pools list --json"
+      ]
+    },
+    {
+      "path": "prospect-pool list",
+      "summary": "Read Greenhouse Retrieve Prospect Pool as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospect_pool",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-prospect-pool",
+      "examples": [
+        "pm greenhouse prospect-pool list --json --prospect-pool-id <prospect-pool-id>"
+      ],
+      "flags": [
+        {
+          "name": "prospect-pool-id",
+          "type": "string",
+          "summary": "Greenhouse prospect pool id that scopes this read.",
+          "maps_to": "config.prospect_pool_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "rejection-reasons list",
+      "summary": "Read Greenhouse List Rejection Reasons as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rejection_reasons",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-rejection-reasons",
+      "examples": [
+        "pm greenhouse rejection-reasons list --json"
+      ]
+    },
+    {
+      "path": "scheduled-interviews list",
+      "summary": "Read Greenhouse List Scheduled Interviews as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheduled_interviews",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scheduled-interviews",
+      "examples": [
+        "pm greenhouse scheduled-interviews list --json"
+      ]
+    },
+    {
+      "path": "scheduled-interviews-for-application list",
+      "summary": "Read Greenhouse List Scheduled Interviews for Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheduled_interviews_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scheduled-interviews-for-application",
+      "examples": [
+        "pm greenhouse scheduled-interviews-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "scheduled-interview list",
+      "summary": "Read Greenhouse Retrieve Scheduled Interview as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheduled_interview",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-scheduled-interview",
+      "examples": [
+        "pm greenhouse scheduled-interview list --json --scheduled-interview-id <scheduled-interview-id>"
+      ],
+      "flags": [
+        {
+          "name": "scheduled-interview-id",
+          "type": "string",
+          "summary": "Greenhouse scheduled interview id that scopes this read.",
+          "maps_to": "config.scheduled_interview_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "scorecards list",
+      "summary": "Read Greenhouse List Scorecards as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scorecards",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scorecards",
+      "examples": [
+        "pm greenhouse scorecards list --json"
+      ]
+    },
+    {
+      "path": "scorecards-for-application list",
+      "summary": "Read Greenhouse List Scorecards for Application as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scorecards_for_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-scorecards-for-application",
+      "examples": [
+        "pm greenhouse scorecards-for-application list --json --application-id <application-id>"
+      ],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id that scopes this read.",
+          "maps_to": "config.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "scorecard list",
+      "summary": "Read Greenhouse Retrieve Scorecard as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scorecard",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-scorecard",
+      "examples": [
+        "pm greenhouse scorecard list --json --scorecard-id <scorecard-id>"
+      ],
+      "flags": [
+        {
+          "name": "scorecard-id",
+          "type": "string",
+          "summary": "Greenhouse scorecard id that scopes this read.",
+          "maps_to": "config.scorecard_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Read Greenhouse List Sources as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-sources",
+      "examples": [
+        "pm greenhouse sources list --json"
+      ]
+    },
+    {
+      "path": "candidate-tags list",
+      "summary": "Read Greenhouse List Candidate Tags as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "candidate_tags",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-candidate-tags",
+      "examples": [
+        "pm greenhouse candidate-tags list --json"
+      ]
+    },
+    {
+      "path": "tags-applied-to-candidate list",
+      "summary": "Read Greenhouse List tags applied to candidate as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags_applied_to_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-tags-applied-to-candidate",
+      "examples": [
+        "pm greenhouse tags-applied-to-candidate list --json --candidate-id <candidate-id>"
+      ],
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id that scopes this read.",
+          "maps_to": "config.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "tracking-link-data-for-token list",
+      "summary": "Read Greenhouse Tracking Link Data for Token as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tracking_link_data_for_token",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-tracking-link-data-for-token",
+      "examples": [
+        "pm greenhouse tracking-link-data-for-token list --json --token <token>"
+      ],
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Greenhouse token that scopes this read.",
+          "maps_to": "config.token",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user list",
+      "summary": "Read Greenhouse Retrieve User as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-retrieve-user",
+      "examples": [
+        "pm greenhouse user list --json --user-id <user-id>"
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id that scopes this read.",
+          "maps_to": "config.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "job-permissions list",
+      "summary": "Read Greenhouse List Job Permissions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job_permissions",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-job-permissions",
+      "examples": [
+        "pm greenhouse job-permissions list --json --user-id <user-id>"
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id that scopes this read.",
+          "maps_to": "config.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "future-job-permissions list",
+      "summary": "Read Greenhouse List Future Job Permissions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "future_job_permissions",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-future-job-permissions",
+      "examples": [
+        "pm greenhouse future-job-permissions list --json --user-id <user-id>"
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id that scopes this read.",
+          "maps_to": "config.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user-roles list",
+      "summary": "Read Greenhouse List User Roles as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_roles",
+      "source_url": "https://developers.greenhouse.io/harvest.html#get-list-user-roles",
+      "examples": [
+        "pm greenhouse user-roles list --json"
+      ]
+    },
+    {
+      "path": "delete-application plan",
+      "summary": "Delete Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse delete-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-application-to-candidate-prospect plan",
+      "summary": "Add Application to Candidate/Prospect.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_application_to_candidate_prospect",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-application-to-candidate-prospect",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Application to Candidate/Prospect.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-application-to-candidate-prospect plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-application plan",
+      "summary": "Update Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "advance-application plan",
+      "summary": "Advance Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "advance_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-advance-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Advance Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse advance-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "move-application-different-job plan",
+      "summary": "Move Application (Different Job).",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_application_different_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-move-application-different-job",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Move Application (Different Job).",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse move-application-different-job plan --preview --json"
+      ]
+    },
+    {
+      "path": "move-application-same-job plan",
+      "summary": "Move Application (Same Job).",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_application_same_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-move-application-same-job",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Move Application (Same Job).",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse move-application-same-job plan --preview --json"
+      ]
+    },
+    {
+      "path": "convert-prospect-to-candidate plan",
+      "summary": "Convert Prospect To Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "convert_prospect_to_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-convert-prospect-to-candidate",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Convert Prospect To Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse convert-prospect-to-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-attachment-to-application plan",
+      "summary": "Add Attachment to Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_attachment_to_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-attachment-to-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Attachment to Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-attachment-to-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "hire-application plan",
+      "summary": "Hire Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "hire_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-hire-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Hire Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse hire-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "reject-application plan",
+      "summary": "Reject Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "reject_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-reject-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: POST: Reject Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse reject-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-rejection-reason plan",
+      "summary": "Update Rejection Reason.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_rejection_reason",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-rejection-reason",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Rejection Reason.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-rejection-reason plan --preview --json"
+      ]
+    },
+    {
+      "path": "unreject-application plan",
+      "summary": "Unreject Application.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unreject_application",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-unreject-application",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Unreject Application.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse unreject-application plan --preview --json"
+      ]
+    },
+    {
+      "path": "request-approvals plan",
+      "summary": "Request Approvals.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "request_approvals",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-request-approvals",
+      "flags": [
+        {
+          "name": "approval-flow-id",
+          "type": "string",
+          "summary": "Greenhouse approval flow id the mutation targets.",
+          "maps_to": "record.approval_flow_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Request Approvals.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse request-approvals plan --preview --json"
+      ]
+    },
+    {
+      "path": "replace-an-approver-in-an-approver-group plan",
+      "summary": "Replace an approver in an approver group.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "replace_an_approver_in_an_approver_group",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-replace-an-approver-in-an-approver-group",
+      "flags": [
+        {
+          "name": "approver-group-id",
+          "type": "string",
+          "summary": "Greenhouse approver group id the mutation targets.",
+          "maps_to": "record.approver_group_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Replace an approver in an approver group.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse replace-an-approver-in-an-approver-group plan --preview --json"
+      ]
+    },
+    {
+      "path": "create-or-replace-an-approval-flow plan",
+      "summary": "Create or replace an approval flow.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_or_replace_an_approval_flow",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-create-or-replace-an-approval-flow",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Create or replace an approval flow.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse create-or-replace-an-approval-flow plan --preview --json"
+      ]
+    },
+    {
+      "path": "delete-candidate plan",
+      "summary": "Delete Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse delete-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "edit-candidate plan",
+      "summary": "Edit Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Edit Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse edit-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-attachment plan",
+      "summary": "Add Attachment.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_attachment",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-attachment",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Attachment.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-attachment plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-candidate plan",
+      "summary": "Add Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-candidate",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-note plan",
+      "summary": "Add Note.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_note",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-note",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Note.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-note plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-e-mail-note plan",
+      "summary": "Add E-mail Note.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_e_mail_note",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-e-mail-note",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add E-mail Note.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-e-mail-note plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-education plan",
+      "summary": "Add Education.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_education",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-education",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Education.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-education plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-education-from-candidate plan",
+      "summary": "Remove Education From Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_education_from_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-education-from-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "education-id",
+          "type": "string",
+          "summary": "Greenhouse education id the mutation targets.",
+          "maps_to": "record.education_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Education From Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-education-from-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-employment plan",
+      "summary": "Add Employment.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_employment",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-employment",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Employment.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-employment plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-employment-from-candidate plan",
+      "summary": "Remove Employment From Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_employment_from_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-employment-from-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "employment-id",
+          "type": "string",
+          "summary": "Greenhouse employment id the mutation targets.",
+          "maps_to": "record.employment_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Employment From Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-employment-from-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-prospect plan",
+      "summary": "Add Prospect.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_prospect",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-prospect",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add Prospect.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-prospect plan --preview --json"
+      ]
+    },
+    {
+      "path": "anonymize-candidate plan",
+      "summary": "Anonymize Candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "anonymize_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-anonymize-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "field-names",
+          "type": "string",
+          "summary": "Greenhouse field names the mutation targets.",
+          "maps_to": "record.field_names",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: PUT: Anonymize Candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse anonymize-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "merge-candidates plan",
+      "summary": "Merge Candidates.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_candidates",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-merge-candidates",
+      "flags": [],
+      "risk": "Destructive Greenhouse mutation: PUT: Merge Candidates.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse merge-candidates plan --preview --json"
+      ]
+    },
+    {
+      "path": "create-custom-field plan",
+      "summary": "Create Custom Field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_field",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-custom-field",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Create Custom Field.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse create-custom-field plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-custom-field plan",
+      "summary": "Update Custom Field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_field",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-custom-field",
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id the mutation targets.",
+          "maps_to": "record.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Custom Field.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-custom-field plan --preview --json"
+      ]
+    },
+    {
+      "path": "delete-custom-field plan",
+      "summary": "Delete Custom Field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_field",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-delete-custom-field",
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id the mutation targets.",
+          "maps_to": "record.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Custom Field.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse delete-custom-field plan --preview --json"
+      ]
+    },
+    {
+      "path": "create-custom-field-options plan",
+      "summary": "Create Custom Field Options.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_field_options",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-custom-field-options",
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id the mutation targets.",
+          "maps_to": "record.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Create Custom Field Options.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse create-custom-field-options plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-custom-field-options plan",
+      "summary": "Update Custom Field Options.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_field_options",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-custom-field-options",
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id the mutation targets.",
+          "maps_to": "record.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Custom Field Options.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-custom-field-options plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-custom-field-options plan",
+      "summary": "Remove Custom Field Options.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_custom_field_options",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-custom-field-options",
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Greenhouse custom field id the mutation targets.",
+          "maps_to": "record.custom_field_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Custom Field Options.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-custom-field-options plan --preview --json"
+      ]
+    },
+    {
+      "path": "edit-department plan",
+      "summary": "Edit Department.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_department",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-department",
+      "flags": [
+        {
+          "name": "department-id",
+          "type": "string",
+          "summary": "Greenhouse department id the mutation targets.",
+          "maps_to": "record.department_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Edit Department.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse edit-department plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-department plan",
+      "summary": "Add Department.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_department",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-department",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add Department.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-department plan --preview --json"
+      ]
+    },
+    {
+      "path": "edit-openings plan",
+      "summary": "Edit Openings.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_openings",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-openings",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "opening-id",
+          "type": "string",
+          "summary": "Greenhouse opening id the mutation targets.",
+          "maps_to": "record.opening_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Edit Openings.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse edit-openings plan --preview --json"
+      ]
+    },
+    {
+      "path": "create-new-openings plan",
+      "summary": "Create New Openings.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_new_openings",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-new-openings",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Create New Openings.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse create-new-openings plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-job plan",
+      "summary": "Update Job.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-job",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Job.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-job plan --preview --json"
+      ]
+    },
+    {
+      "path": "create-job plan",
+      "summary": "Create Job.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_job",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-create-job",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Create Job.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse create-job plan --preview --json"
+      ]
+    },
+    {
+      "path": "replace-hiring-team plan",
+      "summary": "Replace Hiring Team.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "replace_hiring_team",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-replace-hiring-team",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Replace Hiring Team.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse replace-hiring-team plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-hiring-team-members plan",
+      "summary": "Add Hiring Team Members.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_hiring_team_members",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-hiring-team-members",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add Hiring Team Members.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-hiring-team-members plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-hiring-team-member plan",
+      "summary": "Remove Hiring Team Member.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_hiring_team_member",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-hiring-team-member",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Greenhouse job id the mutation targets.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-hiring-team-member plan --preview --json"
+      ]
+    },
+    {
+      "path": "update-current-offer plan",
+      "summary": "Update Current Offer.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_current_offer",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-update-current-offer",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Greenhouse application id the mutation targets.",
+          "maps_to": "record.application_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Update Current Offer.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse update-current-offer plan --preview --json"
+      ]
+    },
+    {
+      "path": "edit-office plan",
+      "summary": "Edit Office.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_office",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-edit-office",
+      "flags": [
+        {
+          "name": "office-id",
+          "type": "string",
+          "summary": "Greenhouse office id the mutation targets.",
+          "maps_to": "record.office_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PATCH: Edit Office.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse edit-office plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-office plan",
+      "summary": "Add Office.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_office",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-office",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add Office.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-office plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-scheduled-interview plan",
+      "summary": "Remove Scheduled Interview.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_scheduled_interview",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-scheduled-interview",
+      "flags": [
+        {
+          "name": "scheduled-interview-id",
+          "type": "string",
+          "summary": "Greenhouse scheduled interview id the mutation targets.",
+          "maps_to": "record.scheduled_interview_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: Delete: Remove Scheduled Interview.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-scheduled-interview plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-candidate-tag plan",
+      "summary": "Add New Candidate Tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_candidate_tag",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-new-candidate-tag",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add New Candidate Tag.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-candidate-tag plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-tag-from-candidate plan",
+      "summary": "Remove tag from candidate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_tag_from_candidate",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-tag-from-candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Greenhouse tag id the mutation targets.",
+          "maps_to": "record.tag_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove tag from candidate.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-tag-from-candidate plan --preview --json"
+      ]
+    },
+    {
+      "path": "destroy-candidate-tag plan",
+      "summary": "Destroy a candidate tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "destroy_candidate_tag",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-destroy-a-candidate-tag",
+      "flags": [
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Greenhouse tag id the mutation targets.",
+          "maps_to": "record.tag_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Greenhouse queues an asynchronous job that strips this tag from EVERY candidate it is applied to before deleting the tag itself, so the blast radius is organisation-wide and is not bounded by any candidate id.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse destroy-candidate-tag plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-a-candidate-tag plan",
+      "summary": "Add a candidate tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_a_candidate_tag",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-candidate-tag",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Greenhouse candidate id the mutation targets.",
+          "maps_to": "record.candidate_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Greenhouse tag id the mutation targets.",
+          "maps_to": "record.tag_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Add a candidate tag.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-a-candidate-tag plan --preview --json"
+      ]
+    },
+    {
+      "path": "change-user-permission-level plan",
+      "summary": "Change user permission level.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "change_user_permission_level",
+      "source_url": "https://developers.greenhouse.io/harvest.html#patch-change-user-permission-level",
+      "flags": [],
+      "risk": "Greenhouse mutation: PATCH: Change user permission level.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse change-user-permission-level plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-user plan",
+      "summary": "Add User.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_user",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-user",
+      "flags": [],
+      "risk": "Greenhouse mutation: POST: Add User.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-user plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-e-mail-address-to-user plan",
+      "summary": "Add E-mail Address To User.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_e_mail_address_to_user",
+      "source_url": "https://developers.greenhouse.io/harvest.html#post-add-e-mail-address-to-user",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id the mutation targets.",
+          "maps_to": "record.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: POST: Add E-mail Address To User.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-e-mail-address-to-user plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-a-job-permission plan",
+      "summary": "Remove a Job Permission.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_a_job_permission",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-a-job-permission",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id the mutation targets.",
+          "maps_to": "record.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove a Job Permission.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-a-job-permission plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-a-job-permission plan",
+      "summary": "Add a Job Permission.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_a_job_permission",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-job-permission",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id the mutation targets.",
+          "maps_to": "record.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Add a Job Permission.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-a-job-permission plan --preview --json"
+      ]
+    },
+    {
+      "path": "remove-a-future-job-permission plan",
+      "summary": "Remove a Future Job Permission.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_a_future_job_permission",
+      "source_url": "https://developers.greenhouse.io/harvest.html#delete-remove-a-future-job-permission",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id the mutation targets.",
+          "maps_to": "record.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove a Future Job Permission.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.",
+      "examples": [
+        "pm greenhouse remove-a-future-job-permission plan --preview --json"
+      ]
+    },
+    {
+      "path": "add-a-future-job-permission plan",
+      "summary": "Add a Future Job Permission.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_a_future_job_permission",
+      "source_url": "https://developers.greenhouse.io/harvest.html#put-add-a-future-job-permission",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Greenhouse user id the mutation targets.",
+          "maps_to": "record.user_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "risk": "Greenhouse mutation: PUT: Add a Future Job Permission.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "examples": [
+        "pm greenhouse add-a-future-job-permission plan --preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "operation-ledger",
+      "summary": "Greenhouse Harvest documents 138 operations; 127 are covered by this bundle and 11 are blocked with a named dependency."
+    },
+    {
+      "name": "write-safety",
+      "summary": "Greenhouse write commands use reverse ETL plan -> preview -> approval -> execute; destructive actions require typed confirmation."
+    }
+  ]
+}

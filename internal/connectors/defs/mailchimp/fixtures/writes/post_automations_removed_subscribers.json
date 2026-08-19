@@ -1,0 +1,19 @@
+{
+  "record": {
+    "workflow_id": "fixture_workflow_id",
+    "email_address": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/automations/fixture_workflow_id/removed-subscribers",
+    "body": {
+      "email_address": "fixture@example.invalid"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_automations_removed_subscribers"
+    }
+  }
+}

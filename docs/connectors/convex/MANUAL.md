@@ -13,10 +13,11 @@ DESCRIPTION
   Reads Convex tables and documents through the deployment HTTP API.
 
 ICON
+  id: convex
   asset: icons/convex.svg
-  source: upstream_registry
-  review_status: upstream_seeded
-  review_url: https://docs.convex.dev/http-api/
+  source: official
+  review_status: official_verified
+  review_url: https://docs.convex.dev/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,21 +27,21 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  deployment_url
+  deployment_url (required)
   mode
   table
-  access_key (secret)
+  access_key (secret) (required)
 
 ETL STREAMS
   tables:
     primary key: name
-    fields: name()
+    fields: name(string)
   documents:
     primary key: id
-    fields: _id(), id()
+    fields: _id(string), id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Convex deployment API read of table metadata and documents

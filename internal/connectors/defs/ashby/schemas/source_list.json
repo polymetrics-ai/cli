@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "source_list",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The source's unique identifier"
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the source"
+    },
+    "isArchived": {
+      "type": "boolean",
+      "description": "Whether the source has been archived"
+    },
+    "sourceType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The source type's unique identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the source type"
+        },
+        "isArchived": {
+          "type": "boolean",
+          "description": "Whether the source type has been archived"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "isArchived"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

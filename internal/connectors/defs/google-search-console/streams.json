@@ -5,7 +5,7 @@
     "auth": [
       { "mode": "bearer", "token": "{{ secrets.access_token }}" }
     ],
-    "check": { "method": "GET", "path": "/sites" },
+    "check": { "method": "GET", "path": "/webmasters/v3/sites" },
     "error_map": [
       { "status": 401, "hint": "google-search-console access_token is missing, expired, or invalid; re-run pm credentials add google-search-console" },
       { "status": 403, "hint": "google-search-console account lacks access for this site property/request" },
@@ -15,7 +15,7 @@
   "streams": [
     {
       "name": "sites",
-      "path": "/sites",
+      "path": "/webmasters/v3/sites",
       "records": { "path": "siteEntry" },
       "computed_fields": {
         "site_url": "{{ record.siteUrl }}",
@@ -25,7 +25,7 @@
     },
     {
       "name": "site_details",
-      "path": "/sites/{{ config.site_url }}",
+      "path": "/webmasters/v3/sites/{{ config.site_url }}",
       "records": { "path": ".", "single_object": true },
       "pagination": { "type": "none" },
       "computed_fields": {
@@ -36,7 +36,7 @@
     },
     {
       "name": "sitemaps",
-      "path": "/sites/{{ fanout.id }}/sitemaps",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/sitemaps",
       "records": { "path": "sitemap" },
       "fan_out": {
         "ids_from": { "config_key": "site_urls" },
@@ -57,7 +57,7 @@
     },
     {
       "name": "sitemap_details",
-      "path": "/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}",
+      "path": "/webmasters/v3/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}",
       "records": { "path": ".", "single_object": true },
       "pagination": { "type": "none" },
       "computed_fields": {
@@ -75,7 +75,7 @@
     },
     {
       "name": "search_analytics_by_date",
-      "path": "/sites/{{ fanout.id }}/searchAnalytics/query",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
       "records": { "path": "rows" },
       "fan_out": {
@@ -84,13 +84,13 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered, proven by internal/connectors/hooks/google-search-console/hooks_test.go -- conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_date.json"
     },
     {
       "name": "search_analytics_by_country",
-      "path": "/sites/{{ fanout.id }}/searchAnalytics/query",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
       "records": { "path": "rows" },
       "fan_out": {
@@ -99,13 +99,13 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered, proven by internal/connectors/hooks/google-search-console/hooks_test.go -- conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_country.json"
     },
     {
       "name": "search_analytics_by_device",
-      "path": "/sites/{{ fanout.id }}/searchAnalytics/query",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
       "records": { "path": "rows" },
       "fan_out": {
@@ -114,13 +114,13 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered, proven by internal/connectors/hooks/google-search-console/hooks_test.go -- conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_device.json"
     },
     {
       "name": "search_analytics_by_page",
-      "path": "/sites/{{ fanout.id }}/searchAnalytics/query",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
       "records": { "path": "rows" },
       "fan_out": {
@@ -129,13 +129,13 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered, proven by internal/connectors/hooks/google-search-console/hooks_test.go -- conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_page.json"
     },
     {
       "name": "search_analytics_by_query",
-      "path": "/sites/{{ fanout.id }}/searchAnalytics/query",
+      "path": "/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query",
       "method": "POST",
       "records": { "path": "rows" },
       "fan_out": {
@@ -144,7 +144,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered, proven by internal/connectors/hooks/google-search-console/hooks_test.go -- conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_query.json"
     }

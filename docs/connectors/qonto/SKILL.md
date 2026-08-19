@@ -11,6 +11,7 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 
 ## Icon
 
+- id: qonto
 - asset: icons/qonto.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,20 +31,20 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 - base_url
 - iban
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - transactions:
   - primary key: id
   - cursor: settled_at
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 - memberships:
   - primary key: id
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 - accounts:
   - primary key: id
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 
 ## Sync Modes
 

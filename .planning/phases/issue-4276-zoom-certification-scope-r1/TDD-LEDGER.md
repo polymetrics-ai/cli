@@ -1,0 +1,5 @@
+# TDD ledger — issue 4276
+
+| Slice | Red evidence | Green evidence | Refactor / scope evidence |
+| --- | --- | --- | --- |
+| Zoom certification scope | **Red (2026-08-19):** `go run ./cmd/agentcontractgen certification-gate --root /Users/karthiksivadas/.treehouse/cli-83d592/45/cli --connector zoom --transition integrate_sub_pr` returned `HALT` with `capability/zoom/missing`; `go run ./cmd/connectorgen certification-matrix --connector zoom --check` rejected Zoom as not certification-allowlisted. The first full test then exposed two legacy fixed-count assertions. | **Green (2026-08-19):** after rebasing onto `origin/main` at `31bfe62eb`, `go run ./cmd/connectorgen certification-matrix --connector zoom`, `... --all`, and both scoped/global `--check` commands passed. The two status tests now assert exact set consistency with the generated allowlist projection, and the focused packages pass. The gate returns `RETRY` for unproven Zoom cells, not the scope `HALT`. | Only central scope, generator-owned Zoom/status artifacts, and the two allowlist-set test expectations may change; no Zoom definition source or unrelated connector scope is allowed. |

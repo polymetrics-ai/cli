@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "title": "fixture_title",
+    "description": "fixture_description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/landing-pages",
+    "body": {
+      "name": "fixture_name",
+      "title": "fixture_title",
+      "description": "fixture_description"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_landing_pages"
+    }
+  }
+}

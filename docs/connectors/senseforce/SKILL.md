@@ -11,6 +11,7 @@ Reads records from a configured Senseforce dataset through the Senseforce API.
 
 ## Icon
 
+- id: senseforce
 - asset: icons/senseforce.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -26,19 +27,19 @@ Reads records from a configured Senseforce dataset through the Senseforce API.
 
 ## Configuration
 
-- backend_url
-- dataset_id
-- access_token (secret)
+- backend_url (required)
+- dataset_id (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - records:
   - primary key: id
-  - fields: Timestamp(), id(), value()
+  - fields: Timestamp(string), id(string), value(number)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

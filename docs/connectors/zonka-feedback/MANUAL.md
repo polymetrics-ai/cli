@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, users, workspaces, stats, and distribution logs; writes responses, contacts, survey sends, and tasks through the Zonka Feedback REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -43,68 +45,69 @@ CONFIGURATION
 ETL STREAMS
   responses:
     primary key: id
-    fields: id(), name(), rating(), updated_at()
+    fields: id(string), name(string), rating(number), updated_at(string)
   surveys:
     primary key: id
-    fields: id(), name(), rating(), updated_at()
+    fields: id(string), name(string), rating(number), updated_at(string)
   contacts:
     primary key: id
-    fields: id(), name(), rating(), updated_at()
+    fields: id(string), name(string), rating(number), updated_at(string)
   response_details:
     primary key: id
-    fields: channel(), id(), recievedDate(), respondentId(), responseURL(), surveyId(), surveyName()
+    fields: channel(string), id(string), recievedDate(string), respondentId(string), responseURL(string), surveyId(string), surveyName(string)
   workspaces:
     primary key: id
-    fields: id(), modifiedBy(), modifiedDate(), workspaceName()
+    fields: id(string), modifiedBy(string), modifiedDate(string), workspaceName(string)
   survey_stats:
     primary key: surveyId
-    fields: CES(), CSAT(), NPS(), averageTime(), completionRate(), responses(), surveyId(), surveyLanguage(), surveyName()
+    fields: CES(object), CSAT(object), NPS(object), averageTime(string), completionRate(integer), responses(integer), surveyId(string), surveyLanguage(string), surveyName(string)
   survey_details:
     primary key: id
-    fields: id(), isActive(), modifiedBy(), modifiedDate(), surveyDescription(), surveyName(), webSurveyTitle()
+    fields: id(string), isActive(boolean), modifiedBy(string), modifiedDate(string), surveyDescription(string), surveyName(string), webSurveyTitle(string)
   contact_details:
     primary key: id
-    fields: channel(), email(), externalId(), id(), mobile(), name(), pendingTasks(), totalResponses()
+    fields: channel(string), email(string), externalId(string), id(string), mobile(string), name(string), pendingTasks(integer), totalResponses(integer)
   contact_segments:
     primary key: id
-    fields: contacts(), id(), name(), type()
+    fields: contacts(string), id(string), name(string), type(string)
   devices:
     primary key: id
-    fields: appStatus(), description(), deviceCategory(), deviceOS(), friendlyName(), id(), isActive(), lastCommunication(), locationId(), name()
+    fields: appStatus(string), description(string), deviceCategory(string), deviceOS(string), friendlyName(string), id(string), isActive(boolean), lastCommunication(string), locationId(string), name(string)
   device_details:
     primary key: id
-    fields: appStatus(), deviceBrand(), deviceModel(), deviceOS(), friendlyName(), id(), lastCommunication(), name()
+    fields: appStatus(string), deviceBrand(string), deviceModel(string), deviceOS(string), friendlyName(string), id(string), lastCommunication(string), name(string)
   device_uptime:
     primary key: deviceId
-    fields: deviceId(), totalUptime()
+    fields: deviceId(string), totalUptime(integer)
   device_responses:
     primary key: deviceId
-    fields: deviceId(), responses(), totalResponses()
+    fields: deviceId(string), responses(integer), totalResponses(integer)
   tasks:
     primary key: id
-    fields: assignedTo(), contactId(), description(), dueDateTime(), id(), isCompleted(), name(), reminderSetting(), responseId(), type()
+    fields: assignedTo(array), contactId(string), description(string), dueDateTime(string), id(string), isCompleted(boolean), name(string), reminderSetting(string), responseId(string), type(object)
   locations:
     primary key: id
-    fields: address(), externalId(), id(), isActive(), labels(), name()
+    fields: address(string), externalId(string), id(string), isActive(boolean), labels(array), name(string)
   location_details:
     primary key: id
-    fields: address(), externalId(), id(), isActive(), labels(), name()
+    fields: address(string), externalId(string), id(string), isActive(boolean), labels(array), name(string)
   users:
     primary key: id
-    fields: designation(), email(), id(), isActive(), isOwner(), lastLogin(), locationId(), mobile(), name(), role()
+    fields: designation(string), email(string), id(string), isActive(boolean), isOwner(boolean), lastLogin(string), locationId(array), mobile(string), name(string), role(string)
   user_details:
     primary key: id
-    fields: designation(), email(), id(), isActive(), isOwner(), lastLogin(), mobile(), name(), role()
+    fields: designation(string), email(string), id(string), isActive(boolean), isOwner(boolean), lastLogin(string), mobile(string), name(string), role(string)
   distribution_logs:
     primary key: sentDateTime
-    fields: SurveySubmitted(), channel(), emailOpened(), locationName(), sentDateTime(), status(), surveyId(), surveyName(), surveyOpened(), to()
+    fields: SurveySubmitted(string), channel(string), emailOpened(string), locationName(string), sentDateTime(string), status(string), surveyId(string), surveyName(string), surveyOpened(string), to(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   add_response:
     endpoint: POST /responses
+    required fields: surveyId, response
     risk: creates a Zonka Feedback survey response; approval required
   update_response:
     endpoint: PATCH /responses/{{ record.responseId }}
@@ -115,18 +118,23 @@ REVERSE ETL ACTIONS
     risk: creates or updates Zonka Feedback contact records; approval required
   send_email_survey:
     endpoint: POST /sendemail
+    required fields: surveyId, email
     risk: sends or schedules email survey invitations; approval required
   send_sms_survey:
     endpoint: POST /sendsms
+    required fields: surveyId, mobile
     risk: sends or schedules SMS survey invitations; approval required
   send_two_way_sms_survey:
     endpoint: POST /send2waysms
+    required fields: surveyId, mobile
     risk: sends or schedules two-way SMS survey invitations; approval required
   send_whatsapp_survey:
     endpoint: POST /send-wa-message
+    required fields: surveyId, mobile
     risk: sends or schedules WhatsApp survey invitations; approval required
   add_task:
     endpoint: POST /tasks/add
+    required fields: taskName
     risk: creates a Zonka Feedback task; approval required
   update_task:
     endpoint: POST /tasks/{{ record.taskId }}
@@ -134,6 +142,7 @@ REVERSE ETL ACTIONS
     risk: updates a Zonka Feedback task; approval required
   delete_tasks:
     endpoint: DELETE /tasks/delete
+    required fields: taskId
     risk: deletes one or more Zonka Feedback tasks; approval required
 
 SECURITY

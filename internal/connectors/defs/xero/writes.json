@@ -5,7 +5,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Accounts",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -133,7 +132,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero account resources in the connected tenant; approval required"
     },
@@ -157,7 +156,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero account resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -166,7 +165,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "account_id"
+      ]
     },
     {
       "name": "update_account",
@@ -194,16 +196,18 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero account resources in the connected tenant; approval required"
+      "risk": "mutates Xero account resources in the connected tenant; approval required",
+      "redact_fields": [
+        "account_id"
+      ]
     },
     {
       "name": "upsert_bank_transactions",
       "kind": "update",
       "method": "POST",
       "path": "BankTransactions",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -229,7 +233,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero bank transactions resources in the connected tenant; approval required"
     },
@@ -238,7 +242,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "BankTransactions",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -264,7 +267,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero bank transactions resources in the connected tenant; approval required"
     },
@@ -306,9 +309,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero bank transaction resources in the connected tenant; approval required"
+      "risk": "mutates Xero bank transaction resources in the connected tenant; approval required",
+      "redact_fields": [
+        "bank_transaction_id"
+      ]
     },
     {
       "name": "create_bank_transaction_history_record",
@@ -318,28 +324,64 @@
       "path_fields": [
         "bank_transaction_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "bank_transaction_id"
+          "bank_transaction_id",
+          "HistoryRecords"
         ],
         "properties": {
           "bank_transaction_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero bank transaction history record resources in the connected tenant; approval required"
+      "risk": "creates Xero bank transaction history record resources in the connected tenant; approval required",
+      "redact_fields": [
+        "bank_transaction_id"
+      ]
     },
     {
       "name": "create_bank_transfer",
       "kind": "create",
       "method": "PUT",
       "path": "BankTransfers",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -353,9 +395,83 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero bank transfer resources in the connected tenant; approval required"
+    },
+    {
+      "name": "delete_bank_transfers",
+      "kind": "delete",
+      "method": "POST",
+      "path": "BankTransfers",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "BankTransfers"
+        ],
+        "properties": {
+          "BankTransfers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "BankTransferID",
+                "Status"
+              ],
+              "properties": {
+                "BankTransferID": {
+                  "type": "string"
+                },
+                "Status": {
+                  "type": "string",
+                  "enum": [
+                    "DELETED"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Destructive Xero Accounting API action: sets one or more bank transfers to DELETED; reverse ETL must preview records and require explicit approval before execute.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_bank_transfer",
+      "kind": "delete",
+      "method": "POST",
+      "path": "BankTransfers/{{ record.bank_transfer_id }}",
+      "path_fields": [
+        "bank_transfer_id"
+      ],
+      "redact_fields": [
+        "bank_transfer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "bank_transfer_id",
+          "Status"
+        ],
+        "properties": {
+          "bank_transfer_id": {
+            "type": "string"
+          },
+          "Status": {
+            "type": "string",
+            "enum": [
+              "DELETED"
+            ]
+          }
+        }
+      },
+      "risk": "Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.",
+      "confirm": "destructive"
     },
     {
       "name": "create_bank_transfer_history_record",
@@ -365,28 +481,64 @@
       "path_fields": [
         "bank_transfer_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "bank_transfer_id"
+          "bank_transfer_id",
+          "HistoryRecords"
         ],
         "properties": {
           "bank_transfer_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero bank transfer history record resources in the connected tenant; approval required"
+      "risk": "creates Xero bank transfer history record resources in the connected tenant; approval required",
+      "redact_fields": [
+        "bank_transfer_id"
+      ]
     },
     {
       "name": "delete_batch_payment",
       "kind": "delete",
       "method": "POST",
       "path": "BatchPayments",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -409,7 +561,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero batch payment resources in the connected tenant; approval required",
       "confirm": "destructive"
@@ -419,7 +571,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "BatchPayments",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -433,7 +584,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero batch payment resources in the connected tenant; approval required"
     },
@@ -464,10 +615,13 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero batch payment by url param resources in the connected tenant; approval required",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "redact_fields": [
+        "batch_payment_id"
+      ]
     },
     {
       "name": "create_batch_payment_history_record",
@@ -477,21 +631,58 @@
       "path_fields": [
         "batch_payment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "batch_payment_id"
+          "batch_payment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "batch_payment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero batch payment history record resources in the connected tenant; approval required"
+      "risk": "creates Xero batch payment history record resources in the connected tenant; approval required",
+      "redact_fields": [
+        "batch_payment_id"
+      ]
     },
     {
       "name": "create_branding_theme_payment_services",
@@ -519,16 +710,18 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero branding theme payment services resources in the connected tenant; approval required"
+      "risk": "creates Xero branding theme payment services resources in the connected tenant; approval required",
+      "redact_fields": [
+        "branding_theme_id"
+      ]
     },
     {
       "name": "create_contact_group",
       "kind": "create",
       "method": "PUT",
       "path": "ContactGroups",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -542,7 +735,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero contact group resources in the connected tenant; approval required"
     },
@@ -572,9 +765,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero contact group resources in the connected tenant; approval required"
+      "risk": "mutates Xero contact group resources in the connected tenant; approval required",
+      "redact_fields": [
+        "contact_group_id"
+      ]
     },
     {
       "name": "delete_contact_group_contacts",
@@ -596,7 +792,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero contact group contacts resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -605,7 +801,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "contact_group_id"
+      ]
     },
     {
       "name": "create_contact_group_contacts",
@@ -645,9 +844,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero contact group contacts resources in the connected tenant; approval required"
+      "risk": "creates Xero contact group contacts resources in the connected tenant; approval required",
+      "redact_fields": [
+        "contact_group_id"
+      ]
     },
     {
       "name": "delete_contact_group_contact",
@@ -674,7 +876,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero contact group contact resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -683,14 +885,17 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "contact_group_id",
+        "contact_id"
+      ]
     },
     {
       "name": "upsert_contacts",
       "kind": "update",
       "method": "POST",
       "path": "Contacts",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -716,7 +921,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero contacts resources in the connected tenant; approval required"
     },
@@ -725,7 +930,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Contacts",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -751,7 +955,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero contacts resources in the connected tenant; approval required"
     },
@@ -793,9 +997,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero contact resources in the connected tenant; approval required"
+      "risk": "mutates Xero contact resources in the connected tenant; approval required",
+      "redact_fields": [
+        "contact_id"
+      ]
     },
     {
       "name": "create_contact_history",
@@ -805,28 +1012,64 @@
       "path_fields": [
         "contact_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "contact_id"
+          "contact_id",
+          "HistoryRecords"
         ],
         "properties": {
           "contact_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero contact history resources in the connected tenant; approval required"
+      "risk": "creates Xero contact history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "contact_id"
+      ]
     },
     {
       "name": "upsert_credit_notes",
       "kind": "update",
       "method": "POST",
       "path": "CreditNotes",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -852,7 +1095,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero credit notes resources in the connected tenant; approval required"
     },
@@ -861,7 +1104,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "CreditNotes",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -887,7 +1129,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero credit notes resources in the connected tenant; approval required"
     },
@@ -929,9 +1171,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero credit note resources in the connected tenant; approval required"
+      "risk": "mutates Xero credit note resources in the connected tenant; approval required",
+      "redact_fields": [
+        "credit_note_id"
+      ]
     },
     {
       "name": "create_credit_note_allocation",
@@ -959,9 +1204,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero credit note allocation resources in the connected tenant; approval required"
+      "risk": "creates Xero credit note allocation resources in the connected tenant; approval required",
+      "redact_fields": [
+        "credit_note_id"
+      ]
     },
     {
       "name": "delete_credit_note_allocations",
@@ -988,7 +1236,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero credit note allocations resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -997,7 +1245,11 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "allocation_id",
+        "credit_note_id"
+      ]
     },
     {
       "name": "create_credit_note_history",
@@ -1007,28 +1259,64 @@
       "path_fields": [
         "credit_note_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "credit_note_id"
+          "credit_note_id",
+          "HistoryRecords"
         ],
         "properties": {
           "credit_note_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero credit note history resources in the connected tenant; approval required"
+      "risk": "creates Xero credit note history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "credit_note_id"
+      ]
     },
     {
       "name": "create_currency",
       "kind": "create",
       "method": "PUT",
       "path": "Currencies",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1048,7 +1336,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero currency resources in the connected tenant; approval required"
     },
@@ -1057,7 +1345,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "ExpenseClaims",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1071,7 +1358,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero expense claims resources in the connected tenant; approval required"
     },
@@ -1101,9 +1388,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero expense claim resources in the connected tenant; approval required"
+      "risk": "mutates Xero expense claim resources in the connected tenant; approval required",
+      "redact_fields": [
+        "expense_claim_id"
+      ]
     },
     {
       "name": "create_expense_claim_history",
@@ -1113,28 +1403,64 @@
       "path_fields": [
         "expense_claim_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "expense_claim_id"
+          "expense_claim_id",
+          "HistoryRecords"
         ],
         "properties": {
           "expense_claim_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero expense claim history resources in the connected tenant; approval required"
+      "risk": "creates Xero expense claim history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "expense_claim_id"
+      ]
     },
     {
       "name": "upsert_invoices",
       "kind": "update",
       "method": "POST",
       "path": "Invoices",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1160,7 +1486,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero invoices resources in the connected tenant; approval required"
     },
@@ -1169,7 +1495,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Invoices",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1195,7 +1520,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero invoices resources in the connected tenant; approval required"
     },
@@ -1237,9 +1562,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero invoice resources in the connected tenant; approval required"
+      "risk": "mutates Xero invoice resources in the connected tenant; approval required",
+      "redact_fields": [
+        "invoice_id"
+      ]
     },
     {
       "name": "email_invoice",
@@ -1267,9 +1595,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "executes Xero email invoice resources in the connected tenant; approval required"
+      "risk": "executes Xero email invoice resources in the connected tenant; approval required",
+      "redact_fields": [
+        "invoice_id"
+      ]
     },
     {
       "name": "create_invoice_history",
@@ -1279,28 +1610,64 @@
       "path_fields": [
         "invoice_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "invoice_id"
+          "invoice_id",
+          "HistoryRecords"
         ],
         "properties": {
           "invoice_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero invoice history resources in the connected tenant; approval required"
+      "risk": "creates Xero invoice history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "invoice_id"
+      ]
     },
     {
       "name": "upsert_items",
       "kind": "update",
       "method": "POST",
       "path": "Items",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1314,7 +1681,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero items resources in the connected tenant; approval required"
     },
@@ -1323,7 +1690,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Items",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1337,7 +1703,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero items resources in the connected tenant; approval required"
     },
@@ -1361,7 +1727,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero item resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -1370,7 +1736,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "item_id"
+      ]
     },
     {
       "name": "update_item",
@@ -1398,9 +1767,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero item resources in the connected tenant; approval required"
+      "risk": "mutates Xero item resources in the connected tenant; approval required",
+      "redact_fields": [
+        "item_id"
+      ]
     },
     {
       "name": "create_item_history",
@@ -1410,28 +1782,64 @@
       "path_fields": [
         "item_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "item_id"
+          "item_id",
+          "HistoryRecords"
         ],
         "properties": {
           "item_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero item history resources in the connected tenant; approval required"
+      "risk": "creates Xero item history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "item_id"
+      ]
     },
     {
       "name": "create_linked_transaction",
       "kind": "create",
       "method": "PUT",
       "path": "LinkedTransactions",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1505,7 +1913,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero linked transaction resources in the connected tenant; approval required"
     },
@@ -1529,7 +1937,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero linked transaction resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -1538,7 +1946,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "linked_transaction_id"
+      ]
     },
     {
       "name": "update_linked_transaction",
@@ -1566,16 +1977,18 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero linked transaction resources in the connected tenant; approval required"
+      "risk": "mutates Xero linked transaction resources in the connected tenant; approval required",
+      "redact_fields": [
+        "linked_transaction_id"
+      ]
     },
     {
       "name": "upsert_manual_journals",
       "kind": "update",
       "method": "POST",
       "path": "ManualJournals",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1601,7 +2014,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero manual journals resources in the connected tenant; approval required"
     },
@@ -1610,7 +2023,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "ManualJournals",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1636,7 +2048,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero manual journals resources in the connected tenant; approval required"
     },
@@ -1678,9 +2090,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero manual journal resources in the connected tenant; approval required"
+      "risk": "mutates Xero manual journal resources in the connected tenant; approval required",
+      "redact_fields": [
+        "manual_journal_id"
+      ]
     },
     {
       "name": "create_manual_journal_history_record",
@@ -1690,21 +2105,58 @@
       "path_fields": [
         "manual_journal_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "manual_journal_id"
+          "manual_journal_id",
+          "HistoryRecords"
         ],
         "properties": {
           "manual_journal_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero manual journal history record resources in the connected tenant; approval required"
+      "risk": "creates Xero manual journal history record resources in the connected tenant; approval required",
+      "redact_fields": [
+        "manual_journal_id"
+      ]
     },
     {
       "name": "create_overpayment_allocations",
@@ -1732,9 +2184,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero overpayment allocations resources in the connected tenant; approval required"
+      "risk": "creates Xero overpayment allocations resources in the connected tenant; approval required",
+      "redact_fields": [
+        "overpayment_id"
+      ]
     },
     {
       "name": "delete_overpayment_allocations",
@@ -1761,7 +2216,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero overpayment allocations resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -1770,7 +2225,11 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "allocation_id",
+        "overpayment_id"
+      ]
     },
     {
       "name": "create_overpayment_history",
@@ -1780,28 +2239,64 @@
       "path_fields": [
         "overpayment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "overpayment_id"
+          "overpayment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "overpayment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero overpayment history resources in the connected tenant; approval required"
+      "risk": "creates Xero overpayment history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "overpayment_id"
+      ]
     },
     {
       "name": "create_payment",
       "kind": "create",
       "method": "POST",
       "path": "Payments",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1980,7 +2475,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero payment resources in the connected tenant; approval required"
     },
@@ -1989,7 +2484,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Payments",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2015,7 +2509,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero payments resources in the connected tenant; approval required"
     },
@@ -2046,10 +2540,13 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero payment resources in the connected tenant; approval required",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "redact_fields": [
+        "payment_id"
+      ]
     },
     {
       "name": "create_payment_history",
@@ -2059,28 +2556,64 @@
       "path_fields": [
         "payment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "payment_id"
+          "payment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "payment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero payment history resources in the connected tenant; approval required"
+      "risk": "creates Xero payment history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "payment_id"
+      ]
     },
     {
       "name": "create_payment_service",
       "kind": "create",
       "method": "PUT",
       "path": "PaymentServices",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2094,7 +2627,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero payment service resources in the connected tenant; approval required"
     },
@@ -2124,9 +2657,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero prepayment allocations resources in the connected tenant; approval required"
+      "risk": "creates Xero prepayment allocations resources in the connected tenant; approval required",
+      "redact_fields": [
+        "prepayment_id"
+      ]
     },
     {
       "name": "delete_prepayment_allocations",
@@ -2153,7 +2689,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero prepayment allocations resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -2162,7 +2698,11 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "allocation_id",
+        "prepayment_id"
+      ]
     },
     {
       "name": "create_prepayment_history",
@@ -2172,28 +2712,64 @@
       "path_fields": [
         "prepayment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "prepayment_id"
+          "prepayment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "prepayment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero prepayment history resources in the connected tenant; approval required"
+      "risk": "creates Xero prepayment history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "prepayment_id"
+      ]
     },
     {
       "name": "upsert_purchase_orders",
       "kind": "update",
       "method": "POST",
       "path": "PurchaseOrders",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2219,7 +2795,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero purchase orders resources in the connected tenant; approval required"
     },
@@ -2228,7 +2804,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "PurchaseOrders",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2254,7 +2829,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero purchase orders resources in the connected tenant; approval required"
     },
@@ -2296,9 +2871,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero purchase order resources in the connected tenant; approval required"
+      "risk": "mutates Xero purchase order resources in the connected tenant; approval required",
+      "redact_fields": [
+        "purchase_order_id"
+      ]
     },
     {
       "name": "create_purchase_order_history",
@@ -2308,28 +2886,64 @@
       "path_fields": [
         "purchase_order_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "purchase_order_id"
+          "purchase_order_id",
+          "HistoryRecords"
         ],
         "properties": {
           "purchase_order_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero purchase order history resources in the connected tenant; approval required"
+      "risk": "creates Xero purchase order history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "purchase_order_id"
+      ]
     },
     {
       "name": "upsert_quotes",
       "kind": "update",
       "method": "POST",
       "path": "Quotes",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2343,7 +2957,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero quotes resources in the connected tenant; approval required"
     },
@@ -2352,7 +2966,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "Quotes",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2366,7 +2979,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero quotes resources in the connected tenant; approval required"
     },
@@ -2396,9 +3009,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero quote resources in the connected tenant; approval required"
+      "risk": "mutates Xero quote resources in the connected tenant; approval required",
+      "redact_fields": [
+        "quote_id"
+      ]
     },
     {
       "name": "create_quote_history",
@@ -2408,28 +3024,64 @@
       "path_fields": [
         "quote_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "quote_id"
+          "quote_id",
+          "HistoryRecords"
         ],
         "properties": {
           "quote_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero quote history resources in the connected tenant; approval required"
+      "risk": "creates Xero quote history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "quote_id"
+      ]
     },
     {
       "name": "create_receipt",
       "kind": "create",
       "method": "PUT",
       "path": "Receipts",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2443,7 +3095,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero receipt resources in the connected tenant; approval required"
     },
@@ -2473,9 +3125,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero receipt resources in the connected tenant; approval required"
+      "risk": "mutates Xero receipt resources in the connected tenant; approval required",
+      "redact_fields": [
+        "receipt_id"
+      ]
     },
     {
       "name": "create_receipt_history",
@@ -2485,28 +3140,64 @@
       "path_fields": [
         "receipt_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "receipt_id"
+          "receipt_id",
+          "HistoryRecords"
         ],
         "properties": {
           "receipt_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero receipt history resources in the connected tenant; approval required"
+      "risk": "creates Xero receipt history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "receipt_id"
+      ]
     },
     {
       "name": "upsert_repeating_invoices",
       "kind": "update",
       "method": "POST",
       "path": "RepeatingInvoices",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2520,7 +3211,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero repeating invoices resources in the connected tenant; approval required"
     },
@@ -2529,7 +3220,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "RepeatingInvoices",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2543,7 +3233,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero repeating invoices resources in the connected tenant; approval required"
     },
@@ -2573,9 +3263,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero repeating invoice resources in the connected tenant; approval required"
+      "risk": "mutates Xero repeating invoice resources in the connected tenant; approval required",
+      "redact_fields": [
+        "repeating_invoice_id"
+      ]
     },
     {
       "name": "create_repeating_invoice_history",
@@ -2585,28 +3278,64 @@
       "path_fields": [
         "repeating_invoice_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "repeating_invoice_id"
+          "repeating_invoice_id",
+          "HistoryRecords"
         ],
         "properties": {
           "repeating_invoice_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero repeating invoice history resources in the connected tenant; approval required"
+      "risk": "creates Xero repeating invoice history resources in the connected tenant; approval required",
+      "redact_fields": [
+        "repeating_invoice_id"
+      ]
     },
     {
       "name": "setup_organisation",
       "kind": "update",
       "method": "POST",
       "path": "Setup",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2632,7 +3361,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero setup resources in the connected tenant; approval required"
     },
@@ -2641,7 +3370,6 @@
       "kind": "update",
       "method": "POST",
       "path": "TaxRates",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2655,7 +3383,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "mutates Xero tax rate resources in the connected tenant; approval required"
     },
@@ -2664,7 +3392,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "TaxRates",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2678,7 +3405,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero tax rates resources in the connected tenant; approval required"
     },
@@ -2687,7 +3414,6 @@
       "kind": "create",
       "method": "PUT",
       "path": "TrackingCategories",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2731,7 +3457,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "creates Xero tracking category resources in the connected tenant; approval required"
     },
@@ -2755,7 +3481,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero tracking category resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -2764,7 +3490,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "tracking_category_id"
+      ]
     },
     {
       "name": "update_tracking_category",
@@ -2822,9 +3551,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero tracking category resources in the connected tenant; approval required"
+      "risk": "mutates Xero tracking category resources in the connected tenant; approval required",
+      "redact_fields": [
+        "tracking_category_id"
+      ]
     },
     {
       "name": "create_tracking_options",
@@ -2870,9 +3602,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates Xero tracking options resources in the connected tenant; approval required"
+      "risk": "creates Xero tracking options resources in the connected tenant; approval required",
+      "redact_fields": [
+        "tracking_category_id"
+      ]
     },
     {
       "name": "delete_tracking_options",
@@ -2899,7 +3634,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes Xero tracking options resources in the connected tenant; approval required",
       "confirm": "destructive",
@@ -2908,7 +3643,11 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "redact_fields": [
+        "tracking_category_id",
+        "tracking_option_id"
+      ]
     },
     {
       "name": "update_tracking_options",
@@ -2959,9 +3698,13 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "mutates Xero tracking options resources in the connected tenant; approval required"
+      "risk": "mutates Xero tracking options resources in the connected tenant; approval required",
+      "redact_fields": [
+        "tracking_category_id",
+        "tracking_option_id"
+      ]
     }
   ]
 }

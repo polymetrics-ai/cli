@@ -1,0 +1,32 @@
+{
+  "record": {
+    "data": {
+      "workspace": "fixture-workspace",
+      "export_request_parameters": [
+        {
+          "fields": [
+            "fixture-fields"
+          ],
+          "resource_type": "fixture-resource-type"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/resource",
+    "body": {
+      "data": {
+        "workspace": "fixture-workspace",
+        "export_request_parameters": [
+          {
+            "fields": [
+              "fixture-fields"
+            ],
+            "resource_type": "fixture-resource-type"
+          }
+        ]
+      }
+    }
+  }
+}

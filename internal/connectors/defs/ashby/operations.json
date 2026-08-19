@@ -1,0 +1,287 @@
+{
+  "operations": [
+    {
+      "id": "ashby.direct.candidate.search",
+      "kind": "rest_read",
+      "summary": "candidate.search",
+      "description": "Searches for candidates by email and/or name.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/candidatesearch",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/candidate.search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.job.search",
+      "kind": "rest_read",
+      "summary": "job.search",
+      "description": "Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.\n\n**Requires the [`jobsRead`](authentication#permissions-jobsearch) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/jobsearch",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/job.search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "requisitionId": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.notetaker.transcript.info",
+      "kind": "rest_read",
+      "summary": "notetakerTranscript.info",
+      "description": "Fetches metadata and a pre-signed download URL for an AI\nNotetaker transcript recording.\n\n**Prerequisites:**\n- Your organization must have the **AI Notetaker add-on**. If your organization does not have\n  the add-on, requests will fail with the `notetaker_transcript_not_enabled` error.\n\nThe response includes a signed URL with the transcript JSON. Download the file promptly after calling\n  this endpoint. If the URL has expired, call the endpoint again to get a fresh one.\n\nOn the free tier, transcripts expire after a retention period. Requesting an expired\ntranscript returns the `notetaker_transcript_expired` error. Organizations with unlimited\nAI Notetaker access are not subject to this expiry.\n\nUse the `notetakerTranscriptId` field from\n[`interviewEvent.list`](ref:intervieweventlist) or [`interviewSchedule.list`](ref:interviewschedulelist) to discover\ntranscript IDs for interview events.\n\n**Error codes:**\n\n| Code | Description |\n|---|---|\n| `notetaker_transcript_not_enabled` | Your org",
+      "source_url": "https://developers.ashbyhq.com/reference/notetakertranscriptinfo",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/notetakerTranscript.info",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "notetakerTranscriptId": {
+              "type": "string",
+              "description": "The unique id of the notetaker transcript to fetch"
+            }
+          },
+          "required": [
+            "notetakerTranscriptId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.opening.search",
+      "kind": "rest_read",
+      "summary": "opening.search",
+      "description": "Searches for openings by identifier.\n\n**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/openingsearch",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/opening.search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "description": "The identifier of the opening you want to search for"
+            }
+          },
+          "required": [
+            "identifier"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.project.search",
+      "kind": "rest_read",
+      "summary": "project.search",
+      "description": "Search for projects by title.\n\nResponses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if you approach this limit. This API is for use cases where you intend to operate on a final small set of projects, like building a project autocomplete.\n\n**Requires the [`candidatesRead`](authentication#permissions-projectsearch) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/projectsearch",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/project.search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "The project's title"
+            }
+          },
+          "required": [
+            "title"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.user.search",
+      "kind": "rest_read",
+      "summary": "user.search",
+      "description": "Searches for users by email address.\n\nReturns an array containing the user if found, or an empty array if no user with the given email exists.\n\n**Requires the [`organizationRead`](authentication#permissions-usersearch) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/usersearch",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/user.search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "The email address to search for",
+              "format": "email"
+            }
+          },
+          "required": [
+            "email"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.file.info",
+      "kind": "rest_read",
+      "summary": "file.info",
+      "description": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).\n\n**Please note** that running this with Ashby-generated demo data in an Ashby demo account can result in errors. We would recommend manually creating a test candidate in Ashby when trying out this endpoint.\n\n**Requires the [`candidatesRead`](authentication#permissions-fileinfo) permission.**",
+      "source_url": "https://developers.ashbyhq.com/reference/fileinfo",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/file.info",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "fileHandle": {
+              "type": "string",
+              "description": "A file handle retrieved from the public API"
+            }
+          },
+          "required": [
+            "fileHandle"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.user.interviewer.settings",
+      "kind": "rest_read",
+      "summary": "user.interviewerSettings",
+      "description": "Get interviewer settings for a user.",
+      "source_url": "https://developers.ashbyhq.com/reference/userinterviewersettings",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/user.interviewerSettings",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string",
+              "description": "The id of the user to get interviewer settings for"
+            }
+          },
+          "required": [
+            "userId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.report.generate",
+      "kind": "rest_read",
+      "summary": "report.generate",
+      "description": "Generates a new report or polls the status of an existing report generation.",
+      "source_url": "https://developers.ashbyhq.com/reference/reportgenerate",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/report.generate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "reportId": {
+              "type": "string",
+              "description": "The ID of the report"
+            },
+            "includeHeadersInData": {
+              "type": "boolean"
+            },
+            "resultStyle": {
+              "type": "string",
+              "enum": [
+                "inline",
+                "url"
+              ]
+            },
+            "requestId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "reportId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

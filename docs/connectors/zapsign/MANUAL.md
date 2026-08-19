@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes ZapSign documents, signers, templates, and webhooks.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,28 +28,29 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   documents:
     primary key: id
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
   signers:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(string), name(string)
   templates:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   webhooks:
     primary key: id
-    fields: enabled(), id(), type(), url()
+    fields: enabled(boolean), id(string), type(string), url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_document_from_template:
     endpoint: POST /models/create-doc/
+    required fields: template_id, signers
     risk: creates a new signable document from an existing template and notifies signers by email/WhatsApp if send_automatic_email/send_automatic_whatsapp is set; external mutation, approval required
   cancel_document:
     endpoint: POST /docs/{{ record.token }}/cancel/
@@ -59,8 +62,8 @@ REVERSE ETL ACTIONS
     risk: soft-deletes a document, hiding it from the ZapSign web interface for end users while it remains readable via the API
   add_signer:
     endpoint: POST /docs/{{ record.doc_token }}/add-signer/
-    required fields: doc_token
-    optional fields: name, email, phone_country, phone_number, auth_mode, send_automatic_email, send_automatic_whatsapp
+    required fields: doc_token, name
+    optional fields: email, phone_country, phone_number, auth_mode, send_automatic_email, send_automatic_whatsapp
     risk: adds a new signer to an existing document and, if send_automatic_email/send_automatic_whatsapp is set, immediately notifies them with a signing link
   update_signer:
     endpoint: POST /signers/{{ record.token }}/
@@ -72,6 +75,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a signer from a document; this is irreversible, and re-adding the same person issues a brand new signing token/link
   create_webhook:
     endpoint: POST /webhooks/
+    required fields: url, type
     risk: registers a new outbound webhook that will POST live document-event data to an external URL of the caller's choosing; verify the target endpoint before enabling
   delete_webhook:
     endpoint: DELETE /webhooks/{{ record.id }}/

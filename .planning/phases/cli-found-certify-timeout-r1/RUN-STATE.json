@@ -1,0 +1,142 @@
+{
+  "phase": "cli-found-certify-timeout-r1",
+  "parentIssue": 3795,
+  "subIssues": [3798, 3801, 3805, 3806, 3807],
+  "branch": "fm/cli-found-certify-timeout-r1",
+  "parentDraftPR": "https://github.com/polymetrics-ai/cli/pull/3808",
+  "status": "rebased_validated",
+  "workflow": {
+    "tddMode": true,
+    "adapter": "inline_manual_fallback",
+    "delegation": "none"
+  },
+  "adapterFallback": {
+    "doctor": "passed",
+    "commands": [
+      "scripts/gsd prompt discuss-phase 3795 --auto",
+      "scripts/gsd prompt plan-phase 3795 --tdd --skip-research"
+    ],
+    "reason": "The canonical delivery contract and active task require one worker; Pi role subagents are not used."
+  },
+  "stateMachine": [
+    "job_received",
+    "issue_map",
+    "parent_draft_pr",
+    "map_wave_phase",
+    "discuss_decisions",
+    "plan_tdd",
+    "execute_tdd"
+  ],
+  "redEvidence": {
+    "certifyRealCLIInvocations": 782,
+    "certifyPackageElapsedSeconds": 578.282,
+    "budget": 128,
+    "command": "go test -count=1 -v ./internal/connectors/certify",
+    "cliRealCLIInvocations": 213,
+    "cliPackageElapsedSeconds": 227.819,
+    "cliCommand": "go test -count=1 -v -run '^TestCertifyCLI' ./internal/cli"
+  },
+  "greenEvidence": {
+    "certifyRealCLIInvocations": 93,
+    "certifyInvocationBudget": 93,
+    "certifyPackageElapsedSeconds": 81.733,
+    "certifyPackageWallElapsedSeconds": 86.645,
+    "certifyCommand": "go test -count=1 ./internal/connectors/certify",
+    "cliRealCLIInvocations": 61,
+    "cliInvocationBudget": 61,
+    "cliPackageElapsedSeconds": 54.825,
+    "cliPackageWallElapsedSeconds": 60.665,
+    "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
+    "finalTimingMeasurements": [
+      {
+        "command": "make certify-timing",
+        "topology": "one real sample/outbox write lifecycle proof plus the full source sweep",
+        "certifyElapsedSeconds": 79.229,
+        "certifyWallElapsedSeconds": 84.769,
+        "cliElapsedSeconds": 70,
+        "cliWallElapsedSeconds": 76.467,
+        "totalElapsedSeconds": 149.229,
+        "totalWallElapsedSeconds": 161.236,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (62.050s)",
+        "writeLifecycleTest": "TestSampleOutboxWriteLifecycleAgainstRealCLI (7.280s)",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (49.950s)"
+      },
+      {
+        "command": "make certify-timing",
+        "purpose": "focused review verification",
+        "topology": "one real sample/outbox write lifecycle proof plus the full source sweep",
+        "certifyElapsedSeconds": 81.733,
+        "certifyWallElapsedSeconds": 86.645,
+        "cliElapsedSeconds": 54.825,
+        "cliWallElapsedSeconds": 60.665,
+        "totalElapsedSeconds": 136.558,
+        "totalWallElapsedSeconds": 147.309,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (59.260s)",
+        "writeLifecycleTest": "TestSampleOutboxWriteLifecycleAgainstRealCLI (8.480s)",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (34.630s)"
+      }
+    ],
+    "measuredWallTimeBudget": {
+      "historicalFormula": "max(161.236, 147.309) + (161.236 - 147.309), rounded up to the next 15 seconds",
+      "maximumWallElapsedSeconds": 161.236,
+      "observedSpreadSeconds": 13.927,
+      "unroundedSeconds": 175.163,
+      "historicalBudget": "3m",
+      "historicalBudgetSeconds": 180,
+      "historicalStatus": "superseded",
+      "activeBudget": "3m30s",
+      "activeBudgetSeconds": 210,
+      "activeBudgetSource": "hosted-measurement-derived"
+    },
+    "enforcementEvidence": {
+      "command": "make certify-timing",
+      "certifyWallElapsedSeconds": 86.645,
+      "cliWallElapsedSeconds": 60.665,
+      "totalWallElapsedSeconds": 147.309,
+      "certifyRealCLIInvocations": 93,
+      "cliRealCLIInvocations": 61,
+      "historicalAllowedDuration": "3m",
+      "status": "passed",
+      "statusContext": "historical 180-second enforcement, superseded by the active hosted-measurement-derived 3m30s cap"
+    },
+    "rebaseValidation": {
+      "base": "origin/main d215d9636",
+      "finalTopology": "one real sample/outbox write lifecycle proof with loud missing-inventory failure",
+      "maximumFinalTimingWallElapsedSeconds": 161.236,
+      "latestFinalTimingWallElapsedSeconds": 147.309,
+      "certifyRealCLIInvocations": 93,
+      "cliRealCLIInvocations": 61,
+      "followUp": "fresh hosted Verify required for the final commit range"
+    }
+  },
+  "ciRemediation": {
+    "source": "hosted Verify timing failure on cd20f1074",
+    "rootCause": "the direct full source sweep and the real CLI route duplicated the same Runner/harness certification topology",
+    "topology": "one real CLI --full route carries full source/read/flow/schedule assertions, JSON rendering, and persistence; the package retains the outbox lifecycle proof",
+    "certifyRealCLIInvocations": 25,
+    "certifyInvocationBudget": 25,
+    "cliRealCLIInvocations": 92,
+    "cliInvocationBudget": 92,
+    "timing": {
+      "command": "make certify-timing",
+      "certifyElapsedSeconds": 15.252,
+      "certifyWallElapsedSeconds": 19.691,
+      "cliElapsedSeconds": 77.33,
+      "cliWallElapsedSeconds": 80.413,
+      "totalElapsedSeconds": 92.582,
+      "totalWallElapsedSeconds": 100.104,
+      "allowedDuration": "3m30s",
+      "allowedDurationSeconds": 210,
+      "capSource": "hosted-measurement-derived",
+      "status": "passed"
+    },
+    "scopedVerification": [
+      "go test -count=1 ./internal/connectors/certify",
+      "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
+      "go test -count=1 ./internal/certifytiming ./cmd/certifytiming",
+      "go test -count=1 ./internal/cli"
+    ],
+    "followUp": "outer executor owns fresh hosted Verify"
+  },
+  "verificationPassed": false
+}

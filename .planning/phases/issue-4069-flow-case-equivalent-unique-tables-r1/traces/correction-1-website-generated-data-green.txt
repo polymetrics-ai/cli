@@ -1,0 +1,50 @@
+# #4069 correction 1 — Website generated-data GREEN
+
+Date: 2026-08-12
+Phase: issue-4069-flow-case-equivalent-unique-tables-r1
+Correction ledger: 1 / 5
+Canonical finish-plan SHA-256: 939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408
+RED plan checkpoint: 393b46bdc
+
+Generator command, run twice without installing dependencies:
+
+  cd website && npm run gen:website-data
+
+Both runs completed successfully. After each run:
+
+  git diff --name-only -- website
+  => website/lib/docs.generated.ts
+
+  shasum -a 256 website/lib/docs.generated.ts
+  => 38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106
+
+  git diff --check
+  => exit 0
+
+Affected no-install checks:
+
+  cd website && npm run lint
+  => exit 0; 13 known warnings in unchanged website component/auth files
+
+  cd website && npm run typecheck
+  => exit 0
+
+  cd website && npm run test:unit
+  => exit 0; 12 files and 80 tests passed
+
+  cd website && npm run test:scripts
+  => exit 0; 27 tests passed
+
+  cd website && npm run build
+  => exit 0; existing default-auth diagnostic remained non-fatal and no secret
+     was supplied
+
+Browser E2E is intentionally reserved for the natural exact-head GitHub
+workflow: its checked-in workflow installs Playwright Chromium, and this
+captain-authorized recovery forbids dependency/browser installation.
+
+Manual GSD verify-work and code-review result:
+
+  PASS — deterministic source-generator ownership, exact aggregate hash,
+  idempotence, scoped diff, and affected automated checks prove the only
+  permitted gap closure. No candidate finding remains.

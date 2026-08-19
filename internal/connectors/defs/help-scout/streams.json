@@ -17,10 +17,20 @@
       "start_page": 1,
       "page_size": 50
     },
-    "check": { "method": "GET", "path": "/mailboxes" },
+    "check": {
+      "method": "GET",
+      "path": "/mailboxes"
+    },
     "error_map": [
-      { "status": 401, "hint": "help-scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout" },
-      { "status": 429, "class": "rate_limited", "hint": "help-scout rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "help-scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "help-scout rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -30,10 +40,31 @@
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.conversations" },
+      "records": {
+        "path": "_embedded.conversations"
+      },
       "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "conversations_threads",
+      "path": "/conversations/{{ config.conversationid }}/threads",
+      "records": {
+        "path": "_embedded.threads"
+      },
+      "schema": "schemas/conversations_threads.json"
+    },
+    {
+      "name": "customer_properties",
+      "path": "/customer-properties",
+      "records": {
+        "path": "_embedded.properties"
+      },
+      "schema": "schemas/customer_properties.json"
     },
     {
       "name": "customers",
@@ -41,10 +72,55 @@
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.customers" },
+      "records": {
+        "path": "_embedded.customers"
+      },
       "schema": "schemas/customers.json"
+    },
+    {
+      "name": "customers_chats",
+      "path": "/customers/{{ config.customerid }}/chats",
+      "records": {
+        "path": "_embedded.chats"
+      },
+      "schema": "schemas/customers_chats.json"
+    },
+    {
+      "name": "customers_emails",
+      "path": "/customers/{{ config.customerid }}/emails",
+      "records": {
+        "path": "_embedded.emails"
+      },
+      "schema": "schemas/customers_emails.json"
+    },
+    {
+      "name": "customers_phones",
+      "path": "/customers/{{ config.customerid }}/phones",
+      "records": {
+        "path": "_embedded.phones"
+      },
+      "schema": "schemas/customers_phones.json"
+    },
+    {
+      "name": "customers_social_profiles",
+      "path": "/customers/{{ config.customerid }}/social-profiles",
+      "records": {
+        "path": "_embedded.profiles"
+      },
+      "schema": "schemas/customers_social_profiles.json"
+    },
+    {
+      "name": "customers_websites",
+      "path": "/customers/{{ config.customerid }}/websites",
+      "records": {
+        "path": "_embedded.websites"
+      },
+      "schema": "schemas/customers_websites.json"
     },
     {
       "name": "mailboxes",
@@ -52,10 +128,95 @@
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.mailboxes" },
+      "records": {
+        "path": "_embedded.mailboxes"
+      },
       "schema": "schemas/mailboxes.json"
+    },
+    {
+      "name": "mailboxes_fields",
+      "path": "/mailboxes/{{ config.mailboxid }}/fields",
+      "records": {
+        "path": "_embedded.fields"
+      },
+      "schema": "schemas/mailboxes_fields.json"
+    },
+    {
+      "name": "mailboxes_folders",
+      "path": "/mailboxes/{{ config.mailboxid }}/folders",
+      "records": {
+        "path": "_embedded.folders"
+      },
+      "schema": "schemas/mailboxes_folders.json"
+    },
+    {
+      "name": "mailboxes_saved_replies",
+      "path": "/mailboxes/{{ config.mailboxid }}/saved-replies",
+      "records": {
+        "path": "_embedded.replies"
+      },
+      "schema": "schemas/mailboxes_saved_replies.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "records": {
+        "path": "_embedded.organizations"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "organizations_properties",
+      "path": "/organizations/properties",
+      "records": {
+        "path": "_embedded.properties"
+      },
+      "schema": "schemas/organizations_properties.json"
+    },
+    {
+      "name": "organizations_conversations",
+      "path": "/organizations/{{ config.organizationid }}/conversations",
+      "records": {
+        "path": "_embedded.conversations"
+      },
+      "schema": "schemas/organizations_conversations.json"
+    },
+    {
+      "name": "organizations_customers",
+      "path": "/organizations/{{ config.organizationid }}/customers",
+      "records": {
+        "path": "_embedded.customers"
+      },
+      "schema": "schemas/organizations_customers.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": {
+        "path": "_embedded.tags"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": {
+        "path": "_embedded.teams"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "teams_members",
+      "path": "/teams/{{ config.teamid }}/members",
+      "records": {
+        "path": "_embedded.users"
+      },
+      "schema": "schemas/teams_members.json"
     },
     {
       "name": "users",
@@ -63,10 +224,39 @@
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.users" },
+      "records": {
+        "path": "_embedded.users"
+      },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "users_status",
+      "path": "/users/status",
+      "records": {
+        "path": "_embedded.userStatuses"
+      },
+      "schema": "schemas/users_status.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "_embedded.webhooks"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "workflows",
+      "path": "/workflows",
+      "records": {
+        "path": "_embedded.workflows"
+      },
+      "schema": "schemas/workflows.json"
     }
   ]
 }

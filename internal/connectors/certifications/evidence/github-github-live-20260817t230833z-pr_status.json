@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:etl_agent_derived_pr_status",
+  "provider": "github",
+  "executed_at": "2026-08-17T23:08:33.664Z",
+  "run_id": "github-live-20260817t230833z-pr_status",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "5d7e676587d8e62a2b9efed88892f22ef445a3ced30fb344c41bd44ab477b098",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c2981a3f6ab68ecd1644c5e5c8cabd73030925903f0f7c2fbc643902e4ee4277}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:232db93aef59bb6c7d000f34f53c4d0bf63bf90749553015318a270b0f2c04f0}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "etl_agent_derived_pr_status",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:1b868abfeea560074156e9e5ee2f741f992bdf47a85b152e567ed209c83e5093}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

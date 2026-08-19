@@ -1,0 +1,64 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/opening.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "opening_info_id_fixture_36",
+        "openedAt": "2026-02-08T12:00:00Z",
+        "closedAt": "2026-01-08T06:00:00Z",
+        "isArchived": false,
+        "closeReasonId": "opening_info_closereasonid_fixture_36",
+        "archivedAt": "2026-01-08T06:00:00Z",
+        "openingState": "Draft",
+        "latestVersion": {
+          "id": "opening_info_id_fixture_36",
+          "identifier": "opening_info_identifier_fixture_36",
+          "description": "Description fixture 36",
+          "authorId": "opening_info_authorid_fixture_36",
+          "createdAt": "2026-01-08T06:00:00Z",
+          "targetHireDate": "2026-01-08T06:00:00Z",
+          "targetStartDate": "2026-01-08T06:00:00Z",
+          "isBackfill": false,
+          "employmentType": "FullTime",
+          "teamId": "opening_info_teamid_fixture_36",
+          "jobIds": [
+            "opening_info_jobid_fixture_36"
+          ],
+          "locationIds": [
+            "opening_info_locationid_fixture_36"
+          ],
+          "hiringTeam": [
+            {
+              "userId": "opening_info_userid_fixture_36",
+              "firstName": "Opening Info Firstname Fixture 36",
+              "lastName": "Opening Info Lastname Fixture 36",
+              "email": "opening_info.email.36@example.invalid",
+              "role": "opening_info_role_fixture_36"
+            }
+          ],
+          "customFields": [
+            {
+              "id": "opening_info_id_fixture_36",
+              "isPrivate": false,
+              "title": "Title fixture 36",
+              "valueLabel": "opening_info_valuelabel_fixture_36",
+              "value": {
+                "value": 36.0,
+                "currencyCode": "opening_info_currencycode_fixture_36"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "read_query": {
+    "openingId": "openingid_fixture"
+  }
+}

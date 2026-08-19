@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "delete-confirmation-foundation-r1",
+  "mode": "inline",
+  "reason": "local_critical_path: one tightly coupled safety state machine; user assigned one autonomous crewmate",
+  "roles": [
+    "coordinator",
+    "planner",
+    "frontend",
+    "backend",
+    "tester",
+    "security",
+    "reliability-observability",
+    "reviewer"
+  ],
+  "updatedAt": "2026-08-04T19:12:49.289Z"
+}

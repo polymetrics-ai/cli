@@ -13,9 +13,11 @@ DESCRIPTION
   Reads FactorialHR employees, teams, time-off leaves, leave types, and locations through the Factorial REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,26 +29,26 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   employees:
     primary key: id
     cursor: updated_at
-    fields: active(), birthday_on(), company_id(), created_at(), email(), first_name(), full_name(), gender(), id(), last_name(), legal_entity_id(), location_id(), manager_id(), team_ids(), terminated_on(), updated_at()
+    fields: active(boolean), birthday_on(string), company_id(integer), created_at(string), email(string), first_name(string), full_name(string), gender(string), id(integer), last_name(string), legal_entity_id(integer), location_id(integer), manager_id(integer), team_ids(array), terminated_on(string), updated_at(string)
   teams:
     primary key: id
-    fields: avatar(), company_id(), description(), employee_ids(), id(), lead_ids(), name()
+    fields: avatar(string), company_id(integer), description(string), employee_ids(array), id(integer), lead_ids(array), name(string)
   leaves:
     primary key: id
     cursor: updated_at
-    fields: approved(), created_at(), description(), employee_id(), finish_on(), half_day(), id(), leave_type_id(), start_on(), updated_at()
+    fields: approved(boolean), created_at(string), description(string), employee_id(integer), finish_on(string), half_day(string), id(integer), leave_type_id(integer), start_on(string), updated_at(string)
   leave_types:
     primary key: id
-    fields: active(), approval_required(), color(), company_id(), id(), identifier(), name()
+    fields: active(boolean), approval_required(boolean), color(string), company_id(integer), id(integer), identifier(string), name(string)
   locations:
     primary key: id
-    fields: address_line_1(), city(), company_id(), country(), id(), main(), name(), postal_code(), state(), timezone()
+    fields: address_line_1(string), city(string), company_id(integer), country(string), id(integer), main(boolean), name(string), postal_code(string), state(string), timezone(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

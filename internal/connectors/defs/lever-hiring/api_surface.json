@@ -1,14 +1,550 @@
 {
-  "api": "Lever Data API (https://api.lever.co/v1)",
+  "api": "Lever Data API and webhook events (https://api.lever.co/v1)",
   "docs": "https://hire.lever.co/developer/documentation",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Lever surface (opportunity mutation, notes, feedback forms, panels, archive reasons, webhooks) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-07",
+  "operation_ledger_version": 1,
+  "scope": "Complete Lever Hiring API documented surface: 106 operations, normalised on method+path with :param placeholders unified and example query strings collapsed. Webhook events are excluded per the counting policy.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications/{application}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/deleted",
+      "covered_by": {
+        "stream": "deleted_applications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/archive_reasons/{archive_reason}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-archive-reason"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/archive_reasons",
+      "covered_by": {
+        "stream": "archive_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit_events",
+      "covered_by": {
+        "stream": "audit_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-contact",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/disposition_stages",
+      "covered_by": {
+        "stream": "disposition_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/eeo/responses/pii",
+      "covered_by": {
+        "direct_read": "direct retrieve-eeo-responses-with-pii"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-feedback-form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback",
+      "covered_by": {
+        "stream": "opportunity_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/feedback",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-feedback-form",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "covered_by": {
+        "write": "update_feedback"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "covered_by": {
+        "write": "delete_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feedback_templates/{feedback_template}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-feedback-template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feedback_templates",
+      "covered_by": {
+        "stream": "feedback_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feedback_templates",
+      "covered_by": {
+        "write": "create_feedback_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/feedback_templates/{feedback_template}",
+      "covered_by": {
+        "write": "update_feedback_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/feedback_templates/{feedback_template}",
+      "covered_by": {
+        "write": "delete_feedback_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/files",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#upload-a-single-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#list-all-files",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}/download",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#download-a-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#delete-a-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-interview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews",
+      "covered_by": {
+        "stream": "opportunity_interviews"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/interviews",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-an-interview",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-an-interview",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Lever operation is blocked until a closed schema, typed confirmation, redaction, and provider idempotency evidence are authored.",
+        "source_url": "https://hire.lever.co/developer/documentation#delete-an-interview",
+        "notes": "Named dependency: closed record schema, typed destructive confirmation, redaction and provider idempotency evidence. "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes",
+      "covered_by": {
+        "stream": "opportunity_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/notes",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-note",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/notes/{noteId}",
+      "covered_by": {
+        "write": "delete_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-note",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers",
+      "covered_by": {
+        "stream": "opportunity_offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers/{offer}/download",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#download-offer-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-opportunity"
+      }
+    },
     {
       "method": "GET",
       "path": "/opportunities",
       "covered_by": {
         "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/deleted",
+      "covered_by": {
+        "stream": "deleted_opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/file_actions",
+      "covered_by": {
+        "stream": "opportunity_file_actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-an-opportunity",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/stage",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-stage",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/archived",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-archived-state",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addLinks",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-contact-links-by-opportunity",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeLinks",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-contact-links-by-opportunity",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addTags",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-tags",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeTags",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-tags",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addSources",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-sources",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeSources",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-opportunity-sources",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-panel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels",
+      "covered_by": {
+        "stream": "opportunity_panels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/panels",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-panel",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-panel",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Lever operation is blocked until a closed schema, typed confirmation, redaction, and provider idempotency evidence are authored.",
+        "source_url": "https://hire.lever.co/developer/documentation#delete-a-panel",
+        "notes": "Named dependency: closed record schema, typed destructive confirmation, redaction and provider idempotency evidence. "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/postings/{posting}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-posting"
       }
     },
     {
@@ -20,9 +556,145 @@
     },
     {
       "method": "GET",
-      "path": "/users",
+      "path": "/postings/deleted",
       "covered_by": {
-        "stream": "users"
+        "stream": "deleted_postings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-posting",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postings/{posting}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-posting",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/postings/{posting}/apply",
+      "covered_by": {
+        "direct_read": "direct retrieve-posting-application-questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/postings/{posting}/users",
+      "covered_by": {
+        "stream": "posting_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postings/{posting}/apply",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#apply-to-a-posting",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms/{form}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-profile-form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms",
+      "covered_by": {
+        "stream": "opportunity_forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/forms",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-profile-form",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/form_templates/{form_template}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-profile-form-template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/form_templates",
+      "covered_by": {
+        "stream": "form_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/form_templates",
+      "covered_by": {
+        "write": "create_form_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/form_templates/{form_template}",
+      "covered_by": {
+        "write": "update_form_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/form_templates/{form_template}",
+      "covered_by": {
+        "write": "delete_form_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals/{referral}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-referral"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals",
+      "covered_by": {
+        "stream": "opportunity_referrals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisitions/{requisition}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-requisition"
       }
     },
     {
@@ -33,6 +705,172 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/requisitions",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-requisition",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/requisitions/{requisition}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-requisition",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requisitions/{requisition}",
+      "covered_by": {
+        "write": "delete_requisition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisition_fields/{requisition_field}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-requisition-field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisition_fields",
+      "covered_by": {
+        "stream": "requisition_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requisition_fields",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-requisition-field",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-requisition-field",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#updating-dropdown-fields",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#updating-dropdown-fields",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "covered_by": {
+        "write": "delete_requisition_field_options"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}",
+      "covered_by": {
+        "write": "delete_requisition_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-resume",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#list-all-resumes",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#download-a-resume-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stages/{stage}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-stage"
+      }
+    },
+    {
       "method": "GET",
       "path": "/stages",
       "covered_by": {
@@ -40,51 +878,149 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/surveys/diversity/{posting}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-diversity-survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "direct_read": "direct list-all-tags"
+      }
+    },
+    {
       "method": "POST",
-      "path": "/opportunities",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/uploads",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+        "source_url": "https://hire.lever.co/developer/documentation#upload-a-file",
+        "notes": "Named dependency: bounded binary/multipart transfer executor (engine.OperationBinaryDownload is GET-only and no generic file byte passthrough is exposed). "
       }
     },
     {
       "method": "GET",
-      "path": "/opportunities/{opportunity}/notes",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/users/{user}",
+      "covered_by": {
+        "direct_read": "direct retrieve-a-single-user"
       }
     },
     {
       "method": "GET",
-      "path": "/opportunities/{opportunity}/feedback",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
       }
     },
     {
-      "method": "GET",
-      "path": "/panels",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "method": "POST",
+      "path": "/users",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-user",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
       }
     },
     {
-      "method": "GET",
-      "path": "/archive_reasons",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "method": "PUT",
+      "path": "/users/{user}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-user",
+        "notes": "Named dependency: declarative write contract support for required query/form parameters and non-object request bodies (no generic passthrough is permitted). "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user}/deactivate",
+      "covered_by": {
+        "write": "deactivate_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user}/reactivate",
+      "covered_by": {
+        "write": "reactivate_user"
       }
     },
     {
       "method": "GET",
       "path": "/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+        "source_url": "https://hire.lever.co/developer/documentation#list-webhooks",
+        "notes": "Named dependency: webhook/CDC foundation #2986/#2988. "
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+        "source_url": "https://hire.lever.co/developer/documentation#create-a-webhook",
+        "notes": "Named dependency: webhook/CDC foundation #2986/#2988. "
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+        "source_url": "https://hire.lever.co/developer/documentation#update-a-webhook",
+        "notes": "Named dependency: webhook/CDC foundation #2986/#2988. "
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+        "source_url": "https://hire.lever.co/developer/documentation#delete-a-webhook",
+        "notes": "Named dependency: webhook/CDC foundation #2986/#2988. "
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/eeo/responses",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "EEO responses carry protected-characteristic data (race, gender, veteran and disability status). Named dependency: a bounded PII read policy for equal-employment data, the same gate already applied to GET /v1/eeo/responses/pii in this bundle.",
+        "source_url": "https://hire.lever.co/developer/documentation",
+        "notes": "Named dependency: EEO PII read policy. Documented on the Hiring API reference; the preserved lane missed it because the docs omit its leading slash."
       }
     }
   ]

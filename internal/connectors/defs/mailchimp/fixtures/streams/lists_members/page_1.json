@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/members",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "members": [
+        {
+          "id": "fixture_id",
+          "list_id": "fixture_list_id",
+          "last_changed": "2026-01-01T00:00:00Z",
+          "email_address": "fixture@example.invalid",
+          "unique_email_id": "fixture@example.invalid",
+          "contact_id": "fixture_contact_id",
+          "full_name": "fixture_full_name",
+          "web_id": 1
+        }
+      ]
+    }
+  }
+}

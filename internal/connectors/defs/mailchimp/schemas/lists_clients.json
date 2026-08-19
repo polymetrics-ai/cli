@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_clients",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "client": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "members": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "currency": "USD"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/invoices",
+    "body": {
+      "currency": "USD"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "object": "fixture_object"
+    }
+  }
+}

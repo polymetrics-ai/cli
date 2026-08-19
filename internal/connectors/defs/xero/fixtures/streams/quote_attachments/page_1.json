@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Quotes/synthetic-conformance-value/Attachments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Attachments": [
+        {
+          "AttachmentID": "attachment_id_fixture_1",
+          "FileName": "file_name_fixture",
+          "Url": "url_fixture",
+          "MimeType": "STANDARD",
+          "ContentLength": 1,
+          "IncludeOnline": false,
+          "quote_id": "quote_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

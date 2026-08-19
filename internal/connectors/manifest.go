@@ -1,6 +1,11 @@
 package connectors
 
-import "context"
+import (
+	"context"
+	"strings"
+
+	"polymetrics.ai/internal/synccontract"
+)
 
 type ConfigField struct {
 	Name        string `json:"name"`
@@ -10,9 +15,10 @@ type ConfigField struct {
 }
 
 type SecretField struct {
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	Required    bool   `json:"required,omitempty"`
+	Name         string `json:"name"`
+	Description  string `json:"description,omitempty"`
+	Required     bool   `json:"required,omitempty"`
+	RequiredWhen string `json:"required_when,omitempty"`
 }
 
 type PaginationSpec struct {
@@ -34,11 +40,48 @@ type WriteActionSpec struct {
 	Name           string   `json:"name"`
 	Description    string   `json:"description,omitempty"`
 	RequiredFields []string `json:"required_fields,omitempty"`
-	OptionalFields []string `json:"optional_fields,omitempty"`
-	Method         string   `json:"method,omitempty"`
-	Path           string   `json:"path,omitempty"`
-	Risk           string   `json:"risk,omitempty"`
-	Confirm        string   `json:"confirm,omitempty"`
+	// RequiredAnyFields carries an either/or requirement that RequiredFields
+	// cannot express: each inner slice is one group of fields that together
+	// satisfy the constraint, and a write must supply every field of at least
+	// one group. amazon-sqs set_queue_attributes is the shape it exists for —
+	// `attributes`, OR `attribute_name` together with `attribute_value`.
+	//
+	// It is a separate field because RequiredFields is a list of FIELD NAMES
+	// that `pm connectors inspect --json` publishes; folding a synthesized
+	// sentence into it would hand a machine consumer a string that is not a
+	// field.
+	RequiredAnyFields [][]string `json:"required_any_fields,omitempty"`
+	OptionalFields    []string   `json:"optional_fields,omitempty"`
+	Method            string     `json:"method,omitempty"`
+	Path              string     `json:"path,omitempty"`
+	RedactFields      []string   `json:"redact_fields,omitempty"`
+	Risk              string     `json:"risk,omitempty"`
+	// Batchable mirrors the bundle's "batchable" declaration. nil means the
+	// action never declared it and is therefore batchable; see IsBatchable for
+	// why this is a pointer rather than a bool.
+	Batchable *bool  `json:"batchable,omitempty"`
+	Confirm   string `json:"confirm,omitempty"`
+}
+
+// ConfirmationForWriteAction normalizes manifest metadata into the closed
+// runtime policy. DELETE is destructive by construction, so omission cannot
+// downgrade it. An unknown non-empty legacy declaration also fails closed.
+func ConfirmationForWriteAction(action WriteActionSpec) WriteConfirmation {
+	if strings.EqualFold(strings.TrimSpace(action.Method), "DELETE") {
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}
+	}
+	confirmation, err := ParseWriteConfirmation(action.Confirm)
+	if err != nil && strings.TrimSpace(action.Confirm) != "" {
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}
+	}
+	return confirmation
+}
+
+// IsBatchable reports whether the action may run from a bulk reverse ETL plan.
+// Only an explicit false says no, so connectors that never declare the field —
+// which is all of them today — stay batchable.
+func (s WriteActionSpec) IsBatchable() bool {
+	return s.Batchable == nil || *s.Batchable
 }
 
 type AuthModeSpec struct {
@@ -69,17 +112,21 @@ type ManifestProvider interface {
 }
 
 func ManifestOf(c Connector) Manifest {
+	var manifest Manifest
 	if provider, ok := c.(ManifestProvider); ok {
-		return manifestWithIcon(provider.Manifest())
+		manifest = provider.Manifest()
+	} else {
+		manifest = Manifest{
+			Metadata: c.Metadata(),
+			Risk: RiskSpec{
+				Read:     "connector-specific",
+				Write:    "connector-specific",
+				Approval: "external mutations require preview and approval",
+			},
+		}
 	}
-	return manifestWithIcon(Manifest{
-		Metadata: c.Metadata(),
-		Risk: RiskSpec{
-			Read:     "connector-specific",
-			Write:    "connector-specific",
-			Approval: "external mutations require preview and approval",
-		},
-	})
+	manifest.Metadata.Capabilities.CDC = MetadataOf(c).Capabilities.CDC
+	return manifestWithIcon(manifest)
 }
 
 func (r *Registry) Manifest(name string) (Manifest, bool) {
@@ -104,13 +151,7 @@ func (r *Registry) ListManifests() []Manifest {
 }
 
 func allSyncModes() []string {
-	return []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"incremental_append",
-		"incremental_append_deduped",
-	}
+	return synccontract.PublicModeNames()
 }
 
 func readSourceSyncModes() []string {
@@ -164,7 +205,7 @@ func (w Warehouse) Manifest() Manifest {
 		ConfigFields: []ConfigField{
 			{Name: "path", Description: "Local warehouse directory.", Required: false},
 		},
-		Streams:              []Stream{{Name: "tables", Description: "Local JSONL warehouse tables."}},
+		Streams:              []Stream{{Name: "tables", Description: "Local Parquet warehouse tables."}},
 		SyncModes:            allSyncModes(),
 		SourceSyncModes:      readSourceSyncModes(),
 		DestinationSyncModes: warehouseDestinationSyncModes(),

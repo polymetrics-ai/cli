@@ -13,9 +13,11 @@ DESCRIPTION
   Reads subscribers, lists, and campaigns, and writes subscriber create/upsert actions, through the tinyEmail API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,25 +28,26 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   subscribers:
     primary key: id
-    fields: created_at(), email(), first_name(), id(), last_name(), status()
+    fields: created_at(string), email(string), first_name(string), id(string), last_name(string), status(string)
   lists:
     primary key: id
-    fields: created_at(), id(), name(), subscriber_count()
+    fields: created_at(string), id(string), name(string), subscriber_count(string)
   campaigns:
     primary key: id
-    fields: created_at(), id(), name(), status(), subject()
+    fields: created_at(string), id(string), name(string), status(string), subject(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_subscriber:
     endpoint: POST /segment/customer
+    required fields: email
     risk: creates or upserts a subscriber (customer) into the caller's tinyEmail account, optionally into a named audience segment; low-risk external mutation, no approval required
 
 SECURITY

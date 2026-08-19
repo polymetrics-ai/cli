@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/location.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "location_list_id_fixture_29",
+          "name": "Location List Name Fixture 29",
+          "externalName": "Location List Externalname Fixture 29",
+          "isArchived": true,
+          "isRemote": true,
+          "address": {
+            "postalAddress": {
+              "addressCountry": "location_list_addresscountry_fixture_29",
+              "addressRegion": "location_list_addressregion_fixture_29",
+              "addressLocality": "location_list_addresslocality_fixture_29",
+              "postalCode": "location_list_postalcode_fixture_29",
+              "streetAddress": "location_list_streetaddress_fixture_29"
+            }
+          },
+          "parentLocationId": "location_list_parentlocationid_fixture_29",
+          "type": "Location",
+          "workplaceType": "OnSite",
+          "extraData": {
+            "id": "location_list_extradata_fixture_29"
+          }
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

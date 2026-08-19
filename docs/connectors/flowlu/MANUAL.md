@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues through the Flowlu REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -25,34 +27,34 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  company
+  company (required)
   api_key (secret)
 
 ETL STREAMS
   accounts:
     primary key: id
     cursor: updated_date
-    fields: active(), created_date(), email(), first_name(), id(), last_name(), name(), owner_id(), phone(), type(), updated_date()
+    fields: active(integer), created_date(string), email(string), first_name(string), id(integer), last_name(string), name(string), owner_id(integer), phone(string), type(integer), updated_date(string)
   leads:
     primary key: id
     cursor: updated_date
-    fields: active(), budget(), created_date(), id(), name(), owner_id(), pipeline_id(), stage_id(), title(), updated_date()
+    fields: active(integer), budget(string), created_date(string), id(integer), name(string), owner_id(integer), pipeline_id(integer), stage_id(integer), title(string), updated_date(string)
   tasks:
     primary key: id
     cursor: updated_date
-    fields: created_date(), deadline(), description(), id(), name(), owner_id(), priority(), responsible_id(), updated_date(), workflow_stage_id()
+    fields: created_date(string), deadline(string), description(string), id(integer), name(string), owner_id(integer), priority(integer), responsible_id(integer), updated_date(string), workflow_stage_id(integer)
   projects:
     primary key: id
     cursor: updated_date
-    fields: active(), created_date(), description(), id(), manager_id(), name(), owner_id(), stage_id(), updated_date()
+    fields: active(integer), created_date(string), description(string), id(integer), manager_id(integer), name(string), owner_id(integer), stage_id(integer), updated_date(string)
   invoices:
     primary key: id
     cursor: updated_date
-    fields: created_date(), currency_id(), customer_id(), id(), invoice_date(), invoice_number(), invoice_status(), name(), total_amount(), updated_date()
+    fields: created_date(string), currency_id(integer), customer_id(integer), id(integer), invoice_date(string), invoice_number(string), invoice_status(integer), name(string), total_amount(string), updated_date(string)
   agile_issues:
     primary key: id
     cursor: updated_date
-    fields: created_date(), description(), id(), name(), owner_id(), priority(), project_id(), sprint_id(), type(), updated_date()
+    fields: created_date(string), description(string), id(integer), name(string), owner_id(integer), priority(integer), project_id(integer), sprint_id(integer), type(integer), updated_date(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -1,0 +1,83 @@
+{
+  "phase": "gong-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "gong",
+  "state": "green",
+  "branch": "fm/cli-top50-fixed-schema-sweep-r1",
+  "artifact": {
+    "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+    "kind": "openapi",
+    "openapi": "3.0.1",
+    "info_version": "V2",
+    "info_title": "Gong API",
+    "retrieved_at": "2026-08-07",
+    "http_status": 200,
+    "bytes": 453605,
+    "public_no_auth": true,
+    "provider_reference_url": "https://gong.app.gong.io/settings/api/documentation"
+  },
+  "operations": {
+    "documented_total": 69,
+    "paths": 59,
+    "by_method": {
+      "GET": 29,
+      "POST": 28,
+      "PUT": 8,
+      "DELETE": 3,
+      "PATCH": 1
+    },
+    "read": 32,
+    "write": 37,
+    "ledger_carried_forward": 69,
+    "drift": "none — total reconciles exactly against the live artifact",
+    "split_correction": "ledger recorded 29 read / 40 write as a naive method split; policy classifies POST semantically, so the three official POST read-query endpoints (/v2/calls/extensive, /v2/calls/transcript, /v2/stats/interaction) are reads. Total unaffected.",
+    "deprecated": 1,
+    "deprecated_operations": [
+      "POST /v2/flows/prospects/assign/cool-off-override"
+    ],
+    "webhook_events": 0
+  },
+  "baseline": {
+    "api_surface_endpoints": 67,
+    "covered_by": 67,
+    "blank_dispositions": 0,
+    "legacy_excluded": 0,
+    "streams": 12,
+    "direct_reads": 29,
+    "writes": 26,
+    "reachable_commands": 67,
+    "unreachable_commands": 0,
+    "availability_implemented": 43,
+    "availability_partial": 24,
+    "api_surface_endpoints_after": 69,
+    "direct_reads_after": 30,
+    "writes_after": 27,
+    "reachable_commands_after": 69
+  },
+  "gap": {
+    "missing_operations": 0,
+    "stale_rows": 0,
+    "detail": [
+      {
+        "endpoint": "GET /v2/targets",
+        "operation_id": "listTargetDefinitions",
+        "bucket": "direct_read",
+        "reason": "uncursored {requestId, targets} envelope — not a paginated stream"
+      },
+      {
+        "endpoint": "POST /v2/targets/{targetId}/assignments",
+        "operation_id": "uploadAssignments",
+        "bucket": "binary_write",
+        "reason": "multipart/form-data, single file part with format: binary; uses existing engine.MultipartSpec"
+      }
+    ]
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/gong_api_surface_test.go",
+    "red_confirmed": true,
+    "red_failure": "endpoints = 67, want 69",
+    "green": true,
+    "green_evidence": "TestGongAPISurfaceOperationLedger PASS at 69; runtime preflight PASS; certify-timing PASS (92 real CLI invocations at budget); conformance PASS"
+  },
+  "next_action": "open the PR stating 67 -> 69 against the ledger target of 69, then drive no-mistakes to green CI"
+}

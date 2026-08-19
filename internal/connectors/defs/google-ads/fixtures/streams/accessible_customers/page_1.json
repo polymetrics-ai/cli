@@ -1,9 +1,15 @@
 {
-  "request": { "method": "GET", "path": "/customers:listAccessibleCustomers" },
+  "request": {
+    "method": "GET",
+    "path": "/v22/customers:listAccessibleCustomers"
+  },
   "response": {
     "status": 200,
     "body": {
-      "resourceNames": ["customers/1000000001", "customers/1000000002"]
+      "resourceNames": [
+        "customers/1000000001",
+        "customers/1000000002"
+      ]
     }
   }
 }

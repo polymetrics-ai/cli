@@ -13,6 +13,7 @@ DESCRIPTION
   Reads CoinAPI market data: symbols, exchanges, assets, exchange rates, current quotes, current order book, the metrics catalog, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.
 
 ICON
+  id: coinapi
   asset: icons/coinapi.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -34,38 +35,38 @@ CONFIGURATION
   period
   start_date
   symbol_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   symbols:
     primary key: symbol_id
-    fields: asset_id_base(), asset_id_quote(), data_end(), data_start(), exchange_id(), symbol_id(), symbol_type()
+    fields: asset_id_base(string), asset_id_quote(string), data_end(string), data_start(string), exchange_id(string), symbol_id(string), symbol_type(string)
   exchanges:
     primary key: exchange_id
-    fields: data_quote_end(), data_quote_start(), data_symbols_count(), exchange_id(), name(), website()
+    fields: data_quote_end(string), data_quote_start(string), data_symbols_count(integer), exchange_id(string), name(string), website(string)
   assets:
     primary key: asset_id
-    fields: asset_id(), data_end(), data_start(), name(), price_usd(), type_is_crypto()
+    fields: asset_id(string), data_end(string), data_start(string), name(string), price_usd(number), type_is_crypto(integer)
   ohlcv_historical_data:
     primary key: symbol_id, time_period_start
     cursor: time_period_start
-    fields: period_id(), price_close(), price_high(), price_low(), price_open(), symbol_id(), time_close(), time_open(), time_period_end(), time_period_start(), trades_count(), volume_traded()
+    fields: period_id(string), price_close(number), price_high(number), price_low(number), price_open(number), symbol_id(string), time_close(string), time_open(string), time_period_end(string), time_period_start(string), trades_count(integer), volume_traded(number)
   trades_historical_data:
     primary key: symbol_id, uuid
     cursor: time_exchange
-    fields: price(), size(), symbol_id(), taker_side(), time_coinapi(), time_exchange(), uuid()
+    fields: price(number), size(number), symbol_id(string), taker_side(string), time_coinapi(string), time_exchange(string), uuid(string)
   exchange_rates:
     primary key: asset_id_base, asset_id_quote
-    fields: asset_id_base(), asset_id_quote(), rate(), time()
+    fields: asset_id_base(string), asset_id_quote(string), rate(number), time(string)
   quotes_current:
     primary key: symbol_id
-    fields: ask_price(), ask_size(), bid_price(), bid_size(), symbol_id(), time_coinapi(), time_exchange()
+    fields: ask_price(number), ask_size(number), bid_price(number), bid_size(number), symbol_id(string), time_coinapi(string), time_exchange(string)
   orderbook_current:
     primary key: symbol_id
-    fields: asks(), bids(), symbol_id(), time_coinapi(), time_exchange()
+    fields: asks(array), bids(array), symbol_id(string), time_coinapi(string), time_exchange(string)
   metrics_listing:
     primary key: metric_id
-    fields: description(), metric_id()
+    fields: description(string), metric_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

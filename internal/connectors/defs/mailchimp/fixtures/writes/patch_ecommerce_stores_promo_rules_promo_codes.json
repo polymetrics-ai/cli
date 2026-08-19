@@ -1,0 +1,25 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "promo_rule_id": "fixture_promo_rule_id",
+    "promo_code_id": "fixture_promo_code_id",
+    "code": "fixture_code",
+    "redemption_url": "https://example.invalid/mailchimp-fixture",
+    "usage_count": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ecommerce/stores/fixture_store_id/promo-rules/fixture_promo_rule_id/promo-codes/fixture_promo_code_id",
+    "body": {
+      "code": "fixture_code",
+      "redemption_url": "https://example.invalid/mailchimp-fixture",
+      "usage_count": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_ecommerce_stores_promo_rules_promo_codes"
+    }
+  }
+}

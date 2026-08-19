@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Planhat companies, end users, and licenses through the Planhat REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -29,21 +31,21 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   companies:
     primary key: id
     cursor: updated_at
-    fields: email(), id(), name(), phase(), updated_at()
+    fields: email(string), id(string), name(string), phase(string), updated_at(string)
   endusers:
     primary key: id
     cursor: updated_at
-    fields: email(), id(), name(), phase(), updated_at()
+    fields: email(string), id(string), name(string), phase(string), updated_at(string)
   licenses:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), phase(), updated_at()
+    fields: id(string), name(string), phase(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

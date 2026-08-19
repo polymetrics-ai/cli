@@ -1,0 +1,21 @@
+{
+  "record": {
+    "project_gid": "fixture-project-gid",
+    "data": {
+      "section": "fixture-section",
+      "after_section": "fixture-after-section",
+      "before_section": "fixture-before-section"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/fixture-project-gid/sections/insert",
+    "body": {
+      "data": {
+        "section": "fixture-section",
+        "after_section": "fixture-after-section",
+        "before_section": "fixture-before-section"
+      }
+    }
+  }
+}

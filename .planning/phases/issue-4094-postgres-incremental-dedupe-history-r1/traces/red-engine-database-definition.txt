@@ -1,0 +1,6 @@
+Red: go test -count=1 -run '^TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability$' ./internal/connectors/engine
+Result: FAIL
+
+The pre-#4094 expectation asserted only five modes while the landed PostgreSQL
+definition correctly contains incremental_dedupe_history as its sixth managed
+target mode. No other stale expectation or fixture was discovered.

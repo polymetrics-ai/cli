@@ -1,0 +1,98 @@
+{
+  "issue": 4067,
+  "phase": "issue-4067-acknowledged-completion-rebase-r1",
+  "branch": "feat/3864-closed-transport-dispatch-nm5",
+  "existing_pr": 4059,
+  "pr_base": "feat/3862-any-to-any-transport",
+  "rejected_candidate": "3f84693bfbc128523a66e22653db7227fb9c0869",
+  "prior_rejected_candidate": "883a86cf0040d559edcd4777413d1c2de20cd94a",
+  "lifecycle": {
+    "mode": "inline_manual_gsd_fallback",
+    "reason": "The custom issue phase is absent from the archived numeric roadmap and repository custody forbids lifecycle-role spawning.",
+    "discuss_phase": "r3_auto_manual_fallback_planned",
+    "plan_phase_tdd": "r3_planning_checkpoint_committed_before_red",
+    "execute_phase": "r3_green_committed_pending_expanded_verification",
+    "verify_work": "r3_local_goal_backward_verification_complete_pending_review",
+    "code_review": "r3_inline_standard_review_complete_no_unresolved_findings",
+    "delivery_revalidation": "r3_loop_4_local_only_pending"
+  },
+  "skills": [
+    "golang-how-to",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-context",
+    "golang-concurrency",
+    "golang-safety",
+    "golang-security",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-code-style",
+    "golang-lint",
+    "golang-documentation",
+    "golang-cli",
+    "github-issue-first-delivery",
+    "gsd-discuss-phase",
+    "gsd-plan-phase",
+    "gsd-execute-phase",
+    "gsd-verify-work",
+    "gsd-code-review",
+    "no-mistakes"
+  ],
+  "correction_ledger": {
+    "issue": 4067,
+    "status": "three_completed_runs_r2_scope_restored_r3_verified_pending_review_loop_4",
+    "budget_used": 3,
+    "budget_max": 5,
+    "forbidden_flag": "--yes",
+    "runs": [
+      {
+        "id": "01KZRPD9TSDDBG4F39VENDW9N4",
+        "head": "a17d8db98532c6b2569403f6fec30410acf7104b",
+        "result": "checks-passed",
+        "disposition": "The pipeline unexpectedly opened duplicate PR #4068 despite the stacked-only #4059 contract. #4068 was closed unmerged; the pipeline's unrelated warehouse-architecture document rewrite is reverted in the next committed scope-restoration slice."
+      },
+      {
+        "id": "01KZRTCV26XT15R2YCV6Y4BGMP",
+        "head": "cd5c90400c8e2781af59570cd42394e2b5c30162",
+        "result": "passed",
+        "delivery_steps": "push, pr, and ci skipped intentionally",
+        "disposition": "Review, focused persisted-state/race regressions, document, and lint completed with no findings. The run preserved a semantically equivalent Markdown-hard-break normalization in existing #3864 planning evidence; custody was returned with no production or behavior change. Manual delivery is required because only #4059 may be updated."
+      },
+      {
+        "id": "01KZS4Y49CT5CBPZ6SEGWR5YWT",
+        "submitted_head": "542cf9fe1c918c60fe77a31b625aa4b9d0155862",
+        "pipeline_head": "c83d148f18b03550f64c1cc516ef28506ca0035d",
+        "result": "passed",
+        "delivery_steps": "push, pr, and ci skipped intentionally",
+        "disposition": "Review, focused persisted-state/race validation, documentation, and lint completed with no unresolved finding. The document phase nevertheless committed an unrelated warehouse-architecture rewrite; required sync recovery returned custody and the following in-scope commit restores that file. No safe existing-#4059 delivery option exists in current no-mistakes help, so stop before any push or PR mutation."
+      }
+    ]
+  },
+  "immutable_old_no_mistakes_run": {
+    "id": "01KZQ0C1KEZRHNXX4WJFWXSCFB",
+    "policy": "never run, respond, sync, abort, rerun, recover, or otherwise control"
+  },
+  "scope": {
+    "production_boundary": "transport successful completion and narrow error finalization after an acknowledged checkpoint",
+    "focused_tests": "internal/app package-local persisted-state transport tests",
+    "existing_connector_evidence": "real pm build, current GitHub definition/hook and command-runner preflight tests, inspection, and only a valid branch-owned bounded harness; any sanctioned credentialed smoke is read-only and conditional",
+    "registration_limit": "Do not claim GitHub/PostgreSQL source or destination transport registration, a live warehouse round trip, or certification unless current inspection proves it; #4015 production wiring remains out of scope.",
+    "generated_only_via_canonical_generators": [
+      "website/lib/docs.generated.ts",
+      "internal/connectors/certifications/flow-matrix.json"
+    ],
+    "forbidden": [
+      "checkpoint retry",
+      "checkpoint overwrite",
+      "destination replay",
+      "generic state refresh",
+      "provider",
+      "credential",
+      "network",
+      "warehouse",
+      "container",
+      "external service",
+      "merge"
+    ]
+  }
+}

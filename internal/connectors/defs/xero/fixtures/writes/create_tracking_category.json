@@ -1,0 +1,32 @@
+{
+  "record": {
+    "TrackingCategoryID": "tracking_category_id_fixture_1",
+    "TrackingOptionID": "tracking_option_id_fixture_1",
+    "Name": "name_fixture",
+    "Option": "option_fixture",
+    "Status": "ACTIVE",
+    "Options": [
+      "option_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/TrackingCategories",
+    "body": {
+      "TrackingCategoryID": "tracking_category_id_fixture_1",
+      "TrackingOptionID": "tracking_option_id_fixture_1",
+      "Name": "name_fixture",
+      "Option": "option_fixture",
+      "Status": "ACTIVE",
+      "Options": [
+        "option_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

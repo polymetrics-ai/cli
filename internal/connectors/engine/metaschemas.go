@@ -10,6 +10,15 @@ import _ "embed"
 //go:embed schema/metadata.schema.json
 var metadataSchemaJSON string
 
+//go:embed schema/changefeed.schema.json
+var changefeedSchemaJSON string
+
+//go:embed schema/polling_watermark.schema.json
+var pollingWatermarkSchemaJSON string
+
+//go:embed schema/sync_transport.schema.json
+var syncTransportSchemaJSON string
+
 //go:embed schema/spec.schema.json
 var specSchemaJSON string
 
@@ -30,3 +39,6 @@ var cliSurfaceSchemaJSON string
 
 //go:embed schema/certification.schema.json
 var certificationSchemaJSON string
+
+//go:embed schema/rate_limits.schema.json
+var rateLimitsSchemaJSON string

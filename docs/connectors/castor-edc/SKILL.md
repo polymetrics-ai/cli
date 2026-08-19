@@ -11,9 +11,11 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,86 +31,86 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 - base_url
 - study_id
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - study:
   - primary key: study_id
   - cursor: updated_on
-  - fields: created_on(), crf_id(), duration(), gcp_enabled(), institute_id(), live(), main_contact(), name(), premium_support_enabled(), randomization_enabled(), study_id(), surveys_enabled(), updated_on()
+  - fields: created_on(string), crf_id(string), duration(integer), gcp_enabled(boolean), institute_id(string), live(boolean), main_contact(string), name(string), premium_support_enabled(boolean), randomization_enabled(boolean), study_id(string), surveys_enabled(boolean), updated_on(string)
 - user:
   - primary key: id
   - cursor: last_login
-  - fields: email_address(), first_name(), full_name(), id(), institute(), is_active(), last_login(), last_name(), user_id()
+  - fields: email_address(string), first_name(string), full_name(string), id(string), institute(string), is_active(boolean), last_login(string), last_name(string), user_id(string)
 - country:
   - primary key: id
-  - fields: country_cca2(), country_cca3(), country_id(), country_name(), country_tld(), id()
+  - fields: country_cca2(string), country_cca3(string), country_id(string), country_name(string), country_tld(string), id(integer)
 - audit_trail:
   - primary key: uuid
   - cursor: datetime
-  - fields: datetime(), event_details(), event_type(), user_email(), user_id(), user_name(), uuid()
+  - fields: datetime(string), event_details(object), event_type(string), user_email(string), user_id(string), user_name(string), uuid(string)
 - records:
   - primary key: record_id
-  - fields: archived(), archived_reason(), ccr_patient_id(), created_on(), email_address(), institute_id(), locked(), progress(), randomization_datetime(), randomization_group(), randomization_group_name(), record_id(), status(), updated_on()
+  - fields: archived(boolean), archived_reason(string), ccr_patient_id(string), created_on(string), email_address(string), institute_id(string), locked(boolean), progress(integer), randomization_datetime(string), randomization_group(string), randomization_group_name(string), record_id(string), status(string), updated_on(string)
 - fields:
   - primary key: id
-  - fields: additional_config(), created_on(), exclude_on_index(), field_hidden(), field_id(), field_info(), field_label(), field_length(), field_max(), field_min(), field_name(), field_number(), field_required(), field_slider_step(), field_summary_template(), field_type(), field_units(), id(), parent_id(), report_id(), step_id(), updated_on()
+  - fields: additional_config(string), created_on(string), exclude_on_index(boolean), field_hidden(boolean), field_id(string), field_info(string), field_label(string), field_length(integer), field_max(number), field_min(number), field_name(string), field_number(integer), field_required(boolean), field_slider_step(number), field_summary_template(string), field_type(string), field_units(string), id(string), parent_id(string), report_id(string), step_id(string), updated_on(string)
 - field_dependencies:
   - primary key: id
-  - fields: child_field_id(), id(), operator(), parent_field_id(), value()
+  - fields: child_field_id(string), id(string), operator(string), parent_field_id(string), value(string)
 - field_optiongroups:
   - primary key: id
-  - fields: id(), layout(), name(), options()
+  - fields: id(string), layout(boolean), name(string), options(array)
 - field_validations:
   - primary key: id
-  - fields: field_id(), id(), text(), type(), value()
+  - fields: field_id(string), id(string), text(string), type(string), value(string)
 - sites:
   - primary key: id
-  - fields: abbreviation(), code(), country_id(), id(), name(), number_of_records()
+  - fields: abbreviation(string), code(string), country_id(string), id(string), name(string), number_of_records(integer)
 - study_metadata:
   - primary key: id
-  - fields: element_type(), external_field_id(), external_metadatatype_id(), id(), parent_id()
+  - fields: element_type(string), external_field_id(string), external_metadatatype_id(string), id(string), parent_id(string)
 - metadata_types:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - phases:
   - primary key: id
-  - fields: description(), duration(), id(), name(), phase_order()
+  - fields: description(string), duration(integer), id(string), name(string), phase_order(integer)
 - queries:
   - primary key: id
-  - fields: created_by(), created_on(), field_id(), id(), instance_id(), query_text(), record_id(), status(), updated_on()
+  - fields: created_by(string), created_on(string), field_id(string), id(string), instance_id(string), query_text(string), record_id(string), status(string), updated_on(string)
 - reports:
   - primary key: id
-  - fields: description(), id(), name(), type()
+  - fields: description(string), id(string), name(string), type(string)
 - report_instances:
   - primary key: id
-  - fields: archived(), created_on(), id(), name(), name_custom(), parent_id(), record_id(), report_id(), updated_on()
+  - fields: archived(boolean), created_on(string), id(string), name(string), name_custom(string), parent_id(string), record_id(string), report_id(string), updated_on(string)
 - roles:
   - primary key: id
-  - fields: description(), id(), name(), permissions()
+  - fields: description(string), id(string), name(string), permissions(object)
 - steps:
   - primary key: id
-  - fields: id(), name(), phase_id(), step_description(), step_order()
+  - fields: id(string), name(string), phase_id(string), step_description(string), step_order(integer)
 - surveys:
   - primary key: id
-  - fields: description(), id(), intro_text(), name(), outro_text()
+  - fields: description(string), id(string), intro_text(string), name(string), outro_text(string)
 - survey_packages:
   - primary key: id
-  - fields: auto_lock_on_finish(), auto_send(), description(), expire_after_hours(), id(), name()
+  - fields: auto_lock_on_finish(boolean), auto_send(boolean), description(string), expire_after_hours(integer), id(string), name(string)
 - survey_package_instances:
   - primary key: id
-  - fields: ccr_patient_id(), created_on(), email_address(), finished_on(), id(), locked(), progress(), record_id(), started_on(), survey_package_id(), updated_on()
+  - fields: ccr_patient_id(string), created_on(string), email_address(string), finished_on(string), id(string), locked(boolean), progress(integer), record_id(string), started_on(string), survey_package_id(string), updated_on(string)
 - study_users:
   - primary key: id
-  - fields: email_address(), first_name(), full_name(), id(), institute_roles(), last_name(), manage_permission()
+  - fields: email_address(string), first_name(string), full_name(string), id(string), institute_roles(array), last_name(string), manage_permission(string)
 - verifications:
   - primary key: id
-  - fields: entity_id(), entity_type(), id(), record_id(), verification_type(), verified_by(), verified_on()
+  - fields: entity_id(string), entity_type(string), id(string), record_id(string), verification_type(string), verified_by(string), verified_on(string)
 - record_progress:
   - primary key: record_id
-  - fields: progress(), record_id(), steps()
+  - fields: progress(integer), record_id(string), steps(array)
 
 ## Sync Modes
 
@@ -118,19 +120,23 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 
 - create_record:
   - endpoint: POST /study/{{ config.study_id }}/record
+  - required fields: institute_id, email_address
   - risk: external mutation creating a new clinical-trial study participant record; approval required
 - create_site:
   - endpoint: POST /study/{{ config.study_id }}/site
+  - required fields: name, abbreviation, code, country_id
   - risk: external mutation creating a new study site/institute; approval required
 - create_role:
   - endpoint: POST /study/{{ config.study_id }}/role
+  - required fields: name, description, permissions
   - risk: external mutation creating a new study access-control role; approval required
 - create_survey_package_instance:
   - endpoint: POST /study/{{ config.study_id }}/surveypackageinstance
+  - required fields: survey_package_id, record_id, email_address
   - risk: external mutation dispatching a survey package invitation to a study participant; approval required
 - create_report_instance:
   - endpoint: POST /study/{{ config.study_id }}/record/{{ record.record_id }}/report-instance
-  - required fields: record_id
+  - required fields: record_id, report_id
   - risk: external mutation creating a new report instance for a study participant record; approval required
 - create_randomization:
   - endpoint: POST /study/{{ config.study_id }}/record/{{ record.record_id }}/randomization

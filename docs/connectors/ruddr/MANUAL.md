@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,22 +29,22 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  workspace_id
-  api_key (secret)
+  workspace_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   clients:
     primary key: id
-    fields: id(), name(), stream()
+    fields: id(string), name(string), stream(string)
   projects:
     primary key: id
-    fields: id(), name(), project_id(), stream()
+    fields: id(string), name(string), project_id(string), stream(string)
   time_entries:
     primary key: id
-    fields: hours(), id(), name(), project_id(), stream()
+    fields: hours(number), id(string), name(string), project_id(string), stream(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Ruddr API read of client, project, and time-entry data

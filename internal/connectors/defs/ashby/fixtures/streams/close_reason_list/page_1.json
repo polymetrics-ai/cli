@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/closeReason.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "close_reason_list_id_fixture_70",
+          "reasonText": "Reasontext fixture 70",
+          "isArchived": false
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

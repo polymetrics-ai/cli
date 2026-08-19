@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:direct_read_sweep_actions_runners",
+  "provider": "github",
+  "executed_at": "2026-08-17T20:56:41.272Z",
+  "run_id": "github-1787000167343-c1196c6d76ce-direct_read_sweep_actions_runners",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:6ca854b22a5ad76b485e9dfd7cc7c6d3f0e2020294935c8f9083f4623a15b320}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "direct_read_sweep_actions_runners",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:f698b13b0c9fd4d810d936a94d458fa9a6f6f13cb549f60c48717c535ae2eaec}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "runners": [],
+              "total_count": "{{pmcertfp:v1:10b99bf4cebac4343df7bfc3a523fcf64975a5e5e82cea7cc1afc7099fe353b8}}"
+            },
+            "original_bytes": 30,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

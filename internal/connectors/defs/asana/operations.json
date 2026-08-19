@@ -1,0 +1,4725 @@
+{
+  "operations": [
+    {
+      "id": "get_access_requests",
+      "kind": "rest_read",
+      "summary": "Get access requests",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getaccessrequests",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_access_requests",
+      "rest": {
+        "method": "GET",
+        "path": "/access_requests",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_access_request",
+      "kind": "rest_write",
+      "summary": "Create an access request",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createaccessrequest",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_access_request",
+      "rest": {
+        "method": "POST",
+        "path": "/access_requests",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "approve_access_request",
+      "kind": "rest_write",
+      "summary": "Approve an access request",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/approveaccessrequest",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.approve_access_request",
+      "rest": {
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/approve",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "reject_access_request",
+      "kind": "rest_write",
+      "summary": "Reject an access request",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/rejectaccessrequest",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.reject_access_request",
+      "rest": {
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/reject",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_agents_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get a list of agents in a workspace",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_agents_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/agents",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_agent",
+      "kind": "rest_read",
+      "summary": "Get an agent",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getagent",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_agent",
+      "rest": {
+        "method": "GET",
+        "path": "/agents/{agent_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_ai_studio_runs",
+      "kind": "rest_read",
+      "summary": "Get AI Studio credit utilization",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getaistudioruns",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_ai_studio_runs",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/runs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_ai_studio_seats",
+      "kind": "rest_read",
+      "summary": "Get AI Studio seats",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getaistudioseats",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_ai_studio_seats",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/seats",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_allocation",
+      "kind": "rest_read",
+      "summary": "Get an allocation",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getallocation",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_allocation",
+      "rest": {
+        "method": "GET",
+        "path": "/allocations/{allocation_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_allocation",
+      "kind": "rest_write",
+      "summary": "Update an allocation",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updateallocation",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_allocation",
+      "rest": {
+        "method": "PUT",
+        "path": "/allocations/{allocation_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allocation_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "allocation_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_allocation",
+      "kind": "rest_write",
+      "summary": "Delete an allocation",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteallocation",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_allocation",
+      "rest": {
+        "method": "DELETE",
+        "path": "/allocations/{allocation_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_allocations",
+      "kind": "rest_read",
+      "summary": "Get multiple allocations",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getallocations",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_allocations",
+      "rest": {
+        "method": "GET",
+        "path": "/allocations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_allocation",
+      "kind": "rest_write",
+      "summary": "Create an allocation",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createallocation",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_allocation",
+      "rest": {
+        "method": "POST",
+        "path": "/allocations",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_attachment",
+      "kind": "rest_read",
+      "summary": "Get an attachment",
+      "description": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getattachment",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_attachment",
+      "rest": {
+        "method": "GET",
+        "path": "/attachments/{attachment_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_attachment",
+      "kind": "rest_write",
+      "summary": "Delete an attachment",
+      "description": "planned destructive attachment operation; blocked until named write action has a typed schema, redaction, idempotency evidence, confirm: \"destructive\", and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteattachment",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_attachment",
+      "rest": {
+        "method": "DELETE",
+        "path": "/attachments/{attachment_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_attachments_for_object",
+      "kind": "rest_read",
+      "summary": "Get attachments from an object",
+      "description": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_attachments_for_object",
+      "rest": {
+        "method": "GET",
+        "path": "/attachments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_attachment_for_object",
+      "kind": "file_upload",
+      "summary": "Upload an attachment",
+      "description": "planned bounded attachment upload; blocked until file-upload input mode, JSON response redaction, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
+      "source_url": "https://developers.asana.com/reference/createattachmentforobject",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_attachment_for_object",
+      "file": {
+        "direction": "upload",
+        "path": "/attachments",
+        "max_bytes": 26214400
+      }
+    },
+    {
+      "id": "get_audit_log_events",
+      "kind": "rest_read",
+      "summary": "Get audit log events",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/getauditlogevents",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_audit_log_events",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/audit_log_events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_batch_request",
+      "kind": "composite",
+      "summary": "Submit parallel requests",
+      "description": "Asana /batch is a generic subrequest wrapper that would expose raw method/path/body passthrough; every underlying documented operation is represented as its own typed row instead.",
+      "source_url": "https://developers.asana.com/reference/createbatchrequest",
+      "risk": "high",
+      "approval": "not exposed; generic batch subrequests are disallowed to avoid raw API passthrough",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_batch_request",
+      "composite": {
+        "steps": [
+          "disallowed:batch_raw_subrequest_wrapper"
+        ]
+      }
+    },
+    {
+      "id": "get_budgets",
+      "kind": "rest_read",
+      "summary": "Get all budgets",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getbudgets",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_budgets",
+      "rest": {
+        "method": "GET",
+        "path": "/budgets",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_budget",
+      "kind": "rest_write",
+      "summary": "Create a budget",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createbudget",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_budget",
+      "rest": {
+        "method": "POST",
+        "path": "/budgets",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_budget",
+      "kind": "rest_read",
+      "summary": "Get a budget",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getbudget",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_budget",
+      "rest": {
+        "method": "GET",
+        "path": "/budgets/{budget_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_budget",
+      "kind": "rest_write",
+      "summary": "Update a budget",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updatebudget",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_budget",
+      "rest": {
+        "method": "PUT",
+        "path": "/budgets/{budget_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "budget_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "budget_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_budget",
+      "kind": "rest_write",
+      "summary": "Delete a budget",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletebudget",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_budget",
+      "rest": {
+        "method": "DELETE",
+        "path": "/budgets/{budget_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_field_settings_for_project",
+      "kind": "rest_read",
+      "summary": "Get a project's custom fields",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_field_settings_for_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}/custom_field_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_field_settings_for_portfolio",
+      "kind": "rest_read",
+      "summary": "Get a portfolio's custom fields",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforportfolio",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_field_settings_for_portfolio",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/custom_field_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_field_settings_for_goal",
+      "kind": "rest_read",
+      "summary": "Get a goal's custom fields",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforgoal",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_field_settings_for_goal",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{goal_gid}/custom_field_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_field_settings_for_team",
+      "kind": "rest_read",
+      "summary": "Get a team's custom fields",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_field_settings_for_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}/custom_field_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_field",
+      "kind": "rest_read",
+      "summary": "Get a custom field",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomfield",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_field",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_fields/{custom_field_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_custom_field",
+      "kind": "rest_write",
+      "summary": "Delete a custom field",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletecustomfield",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_custom_field",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_fields/{custom_field_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_fields_for_workspace",
+      "kind": "stream_etl",
+      "summary": "Get a workspace's custom fields",
+      "description": "Implemented Asana operation mapped to {'stream': 'custom_fields'}.",
+      "source_url": "https://developers.asana.com/reference/getcustomfieldsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_fields_for_workspace",
+      "composite": {
+        "steps": [
+          "stream:custom_fields"
+        ]
+      }
+    },
+    {
+      "id": "get_custom_types",
+      "kind": "rest_read",
+      "summary": "Get all custom types associated with an object",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomtypes",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_types",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_types",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_custom_type",
+      "kind": "rest_read",
+      "summary": "Get a custom type",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getcustomtype",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_custom_type",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_types/{custom_type_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_events",
+      "kind": "rest_read",
+      "summary": "Get events on a resource",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/getevents",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_events",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_goal_relationship",
+      "kind": "rest_read",
+      "summary": "Get a goal relationship",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getgoalrelationship",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_goal_relationship",
+      "rest": {
+        "method": "GET",
+        "path": "/goal_relationships/{goal_relationship_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_goal_relationships",
+      "kind": "rest_read",
+      "summary": "Get goal relationships",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getgoalrelationships",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_goal_relationships",
+      "rest": {
+        "method": "GET",
+        "path": "/goal_relationships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_supporting_relationship",
+      "kind": "rest_write",
+      "summary": "Removes a supporting goal relationship",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_supporting_relationship",
+      "rest": {
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeSupportingRelationship",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "goal_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "goal_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_goal",
+      "kind": "rest_read",
+      "summary": "Get a goal",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getgoal",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_goal",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{goal_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_goal",
+      "kind": "rest_write",
+      "summary": "Delete a goal",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletegoal",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_goal",
+      "rest": {
+        "method": "DELETE",
+        "path": "/goals/{goal_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_goals",
+      "kind": "rest_read",
+      "summary": "Get goals",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getgoals",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_goals",
+      "rest": {
+        "method": "GET",
+        "path": "/goals",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_followers",
+      "kind": "rest_write",
+      "summary": "Remove a collaborator from a goal",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removefollowers",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_followers",
+      "rest": {
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeFollowers",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "goal_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "goal_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_parent_goals_for_goal",
+      "kind": "rest_read",
+      "summary": "Get parent goals from a goal",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getparentgoalsforgoal",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_parent_goals_for_goal",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{goal_gid}/parentGoals",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_custom_field_setting_for_goal",
+      "kind": "rest_write",
+      "summary": "Remove a custom field from a goal",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_custom_field_setting_for_goal",
+      "rest": {
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeCustomFieldSetting",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "goal_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "goal_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_job",
+      "kind": "rest_read",
+      "summary": "Get a job by id",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/getjob",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_job",
+      "rest": {
+        "method": "GET",
+        "path": "/jobs/{job_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_memberships",
+      "kind": "rest_read",
+      "summary": "Get multiple memberships",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getmemberships",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_memberships",
+      "rest": {
+        "method": "GET",
+        "path": "/memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_membership",
+      "kind": "rest_write",
+      "summary": "Create a membership",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createmembership",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_membership",
+      "rest": {
+        "method": "POST",
+        "path": "/memberships",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_membership",
+      "kind": "rest_read",
+      "summary": "Get a membership",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getmembership",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_membership",
+      "rest": {
+        "method": "GET",
+        "path": "/memberships/{membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_membership",
+      "kind": "rest_write",
+      "summary": "Update a membership",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updatemembership",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_membership",
+      "rest": {
+        "method": "PUT",
+        "path": "/memberships/{membership_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "membership_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "membership_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_membership",
+      "kind": "rest_write",
+      "summary": "Delete a membership",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletemembership",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_membership",
+      "rest": {
+        "method": "DELETE",
+        "path": "/memberships/{membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_ooo_entry",
+      "kind": "rest_read",
+      "summary": "Get an OOO entry",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getoooentry",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_ooo_entry",
+      "rest": {
+        "method": "GET",
+        "path": "/ooo_entries/{ooo_entry_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_ooo_entry",
+      "kind": "rest_write",
+      "summary": "Delete an OOO entry",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteoooentry",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_ooo_entry",
+      "rest": {
+        "method": "DELETE",
+        "path": "/ooo_entries/{ooo_entry_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_ooo_entries",
+      "kind": "rest_read",
+      "summary": "Get OOO entries for a user",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getoooentries",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_ooo_entries",
+      "rest": {
+        "method": "GET",
+        "path": "/ooo_entries",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_organization_export",
+      "kind": "rest_write",
+      "summary": "Create an organization export request",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createorganizationexport",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_organization_export",
+      "rest": {
+        "method": "POST",
+        "path": "/organization_exports",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_organization_export",
+      "kind": "rest_read",
+      "summary": "Get details on an org export request",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getorganizationexport",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_organization_export",
+      "rest": {
+        "method": "GET",
+        "path": "/organization_exports/{organization_export_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_portfolio_memberships",
+      "kind": "rest_read",
+      "summary": "Get multiple portfolio memberships",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getportfoliomemberships",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_portfolio_memberships",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolio_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_portfolio_membership",
+      "kind": "rest_read",
+      "summary": "Get a portfolio membership",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getportfoliomembership",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_portfolio_membership",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolio_memberships/{portfolio_membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_portfolio_memberships_for_portfolio",
+      "kind": "rest_read",
+      "summary": "Get memberships from a portfolio",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getportfoliomembershipsforportfolio",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_portfolio_memberships_for_portfolio",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_portfolios",
+      "kind": "rest_read",
+      "summary": "Get multiple portfolios",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getportfolios",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_portfolios",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_portfolio",
+      "kind": "rest_read",
+      "summary": "Get a portfolio",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getportfolio",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_portfolio",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_portfolio",
+      "kind": "rest_write",
+      "summary": "Delete a portfolio",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteportfolio",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_portfolio",
+      "rest": {
+        "method": "DELETE",
+        "path": "/portfolios/{portfolio_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_items_for_portfolio",
+      "kind": "rest_read",
+      "summary": "Get portfolio items",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getitemsforportfolio",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_items_for_portfolio",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/items",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_item_for_portfolio",
+      "kind": "rest_write",
+      "summary": "Remove a portfolio item",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_item_for_portfolio",
+      "rest": {
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeItem",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "portfolio_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "portfolio_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_custom_field_setting_for_portfolio",
+      "kind": "rest_write",
+      "summary": "Remove a custom field from a portfolio",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_custom_field_setting_for_portfolio",
+      "rest": {
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeCustomFieldSetting",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "portfolio_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "portfolio_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_members_for_portfolio",
+      "kind": "rest_write",
+      "summary": "Remove users from a portfolio",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_members_for_portfolio",
+      "rest": {
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeMembers",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "portfolio_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "portfolio_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_project_brief",
+      "kind": "rest_read",
+      "summary": "Get a project brief",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectbrief",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_brief",
+      "rest": {
+        "method": "GET",
+        "path": "/project_briefs/{project_brief_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_project_brief",
+      "kind": "rest_write",
+      "summary": "Delete a project brief",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteprojectbrief",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_project_brief",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project_briefs/{project_brief_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_membership",
+      "kind": "rest_read",
+      "summary": "Get a project membership",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectmembership",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_membership",
+      "rest": {
+        "method": "GET",
+        "path": "/project_memberships/{project_membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_memberships_for_project",
+      "kind": "rest_read",
+      "summary": "Get memberships from a project",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectmembershipsforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_memberships_for_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_portfolio_setting",
+      "kind": "rest_read",
+      "summary": "Get a project portfolio setting",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectportfoliosetting",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_portfolio_setting",
+      "rest": {
+        "method": "GET",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_portfolio_settings_for_project",
+      "kind": "rest_read",
+      "summary": "Get project portfolio settings for a project",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_portfolio_settings_for_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_portfolio_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_portfolio_settings_for_portfolio",
+      "kind": "rest_read",
+      "summary": "Get project portfolio settings for a portfolio",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforportfolio",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_portfolio_settings_for_portfolio",
+      "rest": {
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_status",
+      "kind": "rest_read",
+      "summary": "Get a project status",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectstatus",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_status",
+      "rest": {
+        "method": "GET",
+        "path": "/project_statuses/{project_status_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_project_status",
+      "kind": "rest_write",
+      "summary": "Delete a project status",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteprojectstatus",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_project_status",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project_statuses/{project_status_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_statuses_for_project",
+      "kind": "stream_etl",
+      "summary": "Get statuses from a project",
+      "description": "Implemented Asana operation mapped to {'stream': 'project_statuses'}.",
+      "source_url": "https://developers.asana.com/reference/getprojectstatusesforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_statuses_for_project",
+      "composite": {
+        "steps": [
+          "stream:project_statuses"
+        ]
+      }
+    },
+    {
+      "id": "get_project_template",
+      "kind": "rest_read",
+      "summary": "Get a project template",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojecttemplate",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_template",
+      "rest": {
+        "method": "GET",
+        "path": "/project_templates/{project_template_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_project_template",
+      "kind": "rest_write",
+      "summary": "Delete a project template",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleteprojecttemplate",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_project_template",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project_templates/{project_template_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_templates",
+      "kind": "rest_read",
+      "summary": "Get multiple project templates",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojecttemplates",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_templates",
+      "rest": {
+        "method": "GET",
+        "path": "/project_templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_project_templates_for_team",
+      "kind": "rest_read",
+      "summary": "Get a team's project templates",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojecttemplatesforteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project_templates_for_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}/project_templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_projects",
+      "kind": "stream_etl",
+      "summary": "Get multiple projects",
+      "description": "Implemented Asana operation mapped to {'stream': 'projects'}.",
+      "source_url": "https://developers.asana.com/reference/getprojects",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_projects",
+      "composite": {
+        "steps": [
+          "stream:projects"
+        ]
+      }
+    },
+    {
+      "id": "create_project",
+      "kind": "rest_write",
+      "summary": "Create a project",
+      "description": "Implemented Asana operation mapped to {'write': 'create_project'}.",
+      "source_url": "https://developers.asana.com/reference/createproject",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_project",
+      "rest": {
+        "method": "POST",
+        "path": "/projects",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_project",
+      "kind": "rest_read",
+      "summary": "Get a project",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_project",
+      "kind": "rest_write",
+      "summary": "Update a project",
+      "description": "Implemented Asana operation mapped to {'write': 'update_project'}.",
+      "source_url": "https://developers.asana.com/reference/updateproject",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "update",
+      "destructive": false,
+      "audit_event": "asana.update_project",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{project_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "project_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_project",
+      "kind": "rest_write",
+      "summary": "Delete a project",
+      "description": "Implemented Asana operation mapped to {'write': 'delete_project'}.",
+      "source_url": "https://developers.asana.com/reference/deleteproject",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_project",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{project_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_projects_for_task",
+      "kind": "rest_read",
+      "summary": "Get projects a task is in",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectsfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_projects_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/projects",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_projects_for_team",
+      "kind": "rest_read",
+      "summary": "Get a team's projects",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectsforteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_projects_for_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}/projects",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_projects_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get all projects in a workspace",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getprojectsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_projects_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "search_projects_for_workspace",
+      "kind": "rest_read",
+      "summary": "Search projects in a workspace",
+      "description": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+      "source_url": "https://developers.asana.com/reference/searchprojectsforworkspace",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.search_projects_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects/search",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_custom_field_setting_for_project",
+      "kind": "rest_write",
+      "summary": "Remove a custom field from a project",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_custom_field_setting_for_project",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeCustomFieldSetting",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "project_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_task_counts_for_project",
+      "kind": "rest_read",
+      "summary": "Get task count of a project",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettaskcountsforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_task_counts_for_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}/task_counts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_members_for_project",
+      "kind": "rest_write",
+      "summary": "Remove users from a project",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removemembersforproject",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_members_for_project",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeMembers",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "project_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_followers_for_project",
+      "kind": "rest_write",
+      "summary": "Remove followers from a project",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removefollowersforproject",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_followers_for_project",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeFollowers",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "project_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_rates",
+      "kind": "rest_read",
+      "summary": "Get multiple rates",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getrates",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_rates",
+      "rest": {
+        "method": "GET",
+        "path": "/rates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_rate",
+      "kind": "rest_write",
+      "summary": "Create a rate",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createrate",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_rate",
+      "rest": {
+        "method": "POST",
+        "path": "/rates",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_rate",
+      "kind": "rest_read",
+      "summary": "Get a rate",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getrate",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_rate",
+      "rest": {
+        "method": "GET",
+        "path": "/rates/{rate_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_rate",
+      "kind": "rest_write",
+      "summary": "Update a rate",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updaterate",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_rate",
+      "rest": {
+        "method": "PUT",
+        "path": "/rates/{rate_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rate_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "rate_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_rate",
+      "kind": "rest_write",
+      "summary": "Delete a rate",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleterate",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_rate",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rates/{rate_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_reactions_on_object",
+      "kind": "rest_read",
+      "summary": "Get reactions with an emoji base on an object.",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getreactionsonobject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_reactions_on_object",
+      "rest": {
+        "method": "GET",
+        "path": "/reactions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_roles",
+      "kind": "rest_read",
+      "summary": "Get multiple roles",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getroles",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_roles",
+      "rest": {
+        "method": "GET",
+        "path": "/roles",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_role",
+      "kind": "rest_write",
+      "summary": "Create a role",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createrole",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_role",
+      "rest": {
+        "method": "POST",
+        "path": "/roles",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_role",
+      "kind": "rest_read",
+      "summary": "Get a role",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getrole",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_role",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{role_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_role",
+      "kind": "rest_write",
+      "summary": "Update a role",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updaterole",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_role",
+      "rest": {
+        "method": "PUT",
+        "path": "/roles/{role_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "role_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_role",
+      "kind": "rest_write",
+      "summary": "Delete a role",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deleterole",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_role",
+      "rest": {
+        "method": "DELETE",
+        "path": "/roles/{role_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_section",
+      "kind": "rest_read",
+      "summary": "Get a section",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getsection",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_section",
+      "rest": {
+        "method": "GET",
+        "path": "/sections/{section_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_section",
+      "kind": "rest_write",
+      "summary": "Update a section",
+      "description": "Implemented Asana operation mapped to {'write': 'update_section'}.",
+      "source_url": "https://developers.asana.com/reference/updatesection",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "update",
+      "destructive": false,
+      "audit_event": "asana.update_section",
+      "rest": {
+        "method": "PUT",
+        "path": "/sections/{section_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "section_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "section_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_section",
+      "kind": "rest_write",
+      "summary": "Delete a section",
+      "description": "Implemented Asana operation mapped to {'write': 'delete_section'}.",
+      "source_url": "https://developers.asana.com/reference/deletesection",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_section",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sections/{section_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_sections_for_project",
+      "kind": "stream_etl",
+      "summary": "Get sections in a project",
+      "description": "Implemented Asana operation mapped to {'stream': 'sections'}.",
+      "source_url": "https://developers.asana.com/reference/getsectionsforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_sections_for_project",
+      "composite": {
+        "steps": [
+          "stream:sections"
+        ]
+      }
+    },
+    {
+      "id": "create_section_for_project",
+      "kind": "rest_write",
+      "summary": "Create a section in a project",
+      "description": "Implemented Asana operation mapped to {'write': 'create_section'}.",
+      "source_url": "https://developers.asana.com/reference/createsectionforproject",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_section_for_project",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_gid}/sections",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "project_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_status",
+      "kind": "rest_read",
+      "summary": "Get a status update",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getstatus",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_status",
+      "rest": {
+        "method": "GET",
+        "path": "/status_updates/{status_update_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_status",
+      "kind": "rest_write",
+      "summary": "Delete a status update",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletestatus",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_status",
+      "rest": {
+        "method": "DELETE",
+        "path": "/status_updates/{status_update_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_statuses_for_object",
+      "kind": "rest_read",
+      "summary": "Get status updates from an object",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getstatusesforobject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_statuses_for_object",
+      "rest": {
+        "method": "GET",
+        "path": "/status_updates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_story",
+      "kind": "rest_read",
+      "summary": "Get a story",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getstory",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_story",
+      "rest": {
+        "method": "GET",
+        "path": "/stories/{story_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_story",
+      "kind": "rest_write",
+      "summary": "Delete a story",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletestory",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_story",
+      "rest": {
+        "method": "DELETE",
+        "path": "/stories/{story_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_stories_for_task",
+      "kind": "stream_etl",
+      "summary": "Get stories from a task",
+      "description": "Implemented Asana operation mapped to {'stream': 'stories'}.",
+      "source_url": "https://developers.asana.com/reference/getstoriesfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_stories_for_task",
+      "composite": {
+        "steps": [
+          "stream:stories"
+        ]
+      }
+    },
+    {
+      "id": "create_story_for_task",
+      "kind": "rest_write",
+      "summary": "Create a story on a task",
+      "description": "Implemented Asana operation mapped to {'write': 'add_comment'}.",
+      "source_url": "https://developers.asana.com/reference/createstoryfortask",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_story_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/stories",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_stories_for_goal",
+      "kind": "rest_read",
+      "summary": "Get stories from a goal",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getstoriesforgoal",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_stories_for_goal",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{goal_gid}/stories",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tags",
+      "kind": "stream_etl",
+      "summary": "Get multiple tags",
+      "description": "Implemented Asana operation mapped to {'stream': 'tags'}.",
+      "source_url": "https://developers.asana.com/reference/gettags",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tags",
+      "composite": {
+        "steps": [
+          "stream:tags"
+        ]
+      }
+    },
+    {
+      "id": "create_tag",
+      "kind": "rest_write",
+      "summary": "Create a tag",
+      "description": "Implemented Asana operation mapped to {'write': 'create_tag'}.",
+      "source_url": "https://developers.asana.com/reference/createtag",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_tag",
+      "rest": {
+        "method": "POST",
+        "path": "/tags",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_tag",
+      "kind": "rest_read",
+      "summary": "Get a tag",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettag",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tag",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{tag_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_tag",
+      "kind": "rest_write",
+      "summary": "Update a tag",
+      "description": "Implemented Asana operation mapped to {'write': 'update_tag'}.",
+      "source_url": "https://developers.asana.com/reference/updatetag",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "update",
+      "destructive": false,
+      "audit_event": "asana.update_tag",
+      "rest": {
+        "method": "PUT",
+        "path": "/tags/{tag_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "tag_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_tag",
+      "kind": "rest_write",
+      "summary": "Delete a tag",
+      "description": "Implemented Asana operation mapped to {'write': 'delete_tag'}.",
+      "source_url": "https://developers.asana.com/reference/deletetag",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_tag",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tags/{tag_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tags_for_task",
+      "kind": "rest_read",
+      "summary": "Get a task's tags",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettagsfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tags_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tags_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get tags in a workspace",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettagsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tags_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_task_templates",
+      "kind": "rest_read",
+      "summary": "Get multiple task templates",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasktemplates",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_task_templates",
+      "rest": {
+        "method": "GET",
+        "path": "/task_templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_task_template",
+      "kind": "rest_read",
+      "summary": "Get a task template",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasktemplate",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_task_template",
+      "rest": {
+        "method": "GET",
+        "path": "/task_templates/{task_template_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_task_template",
+      "kind": "rest_write",
+      "summary": "Delete a task template",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletetasktemplate",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_task_template",
+      "rest": {
+        "method": "DELETE",
+        "path": "/task_templates/{task_template_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tasks",
+      "kind": "stream_etl",
+      "summary": "Get multiple tasks",
+      "description": "Implemented Asana operation mapped to {'stream': 'tasks'}.",
+      "source_url": "https://developers.asana.com/reference/gettasks",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tasks",
+      "composite": {
+        "steps": [
+          "stream:tasks"
+        ]
+      }
+    },
+    {
+      "id": "create_task",
+      "kind": "rest_write",
+      "summary": "Create a task",
+      "description": "Implemented Asana operation mapped to {'write': 'create_task'}.",
+      "source_url": "https://developers.asana.com/reference/createtask",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_task",
+      "kind": "rest_read",
+      "summary": "Get a task",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_task",
+      "kind": "rest_write",
+      "summary": "Update a task",
+      "description": "Implemented Asana operation mapped to {'write': 'update_task'}.",
+      "source_url": "https://developers.asana.com/reference/updatetask",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "update",
+      "destructive": false,
+      "audit_event": "asana.update_task",
+      "rest": {
+        "method": "PUT",
+        "path": "/tasks/{task_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_task",
+      "kind": "rest_write",
+      "summary": "Delete a task",
+      "description": "Implemented Asana operation mapped to {'write': 'delete_task'}.",
+      "source_url": "https://developers.asana.com/reference/deletetask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_task",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/{task_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tasks_for_project",
+      "kind": "rest_read",
+      "summary": "Get tasks from a project",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasksforproject",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tasks_for_project",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_gid}/tasks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tasks_for_section",
+      "kind": "rest_read",
+      "summary": "Get tasks from a section",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasksforsection",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tasks_for_section",
+      "rest": {
+        "method": "GET",
+        "path": "/sections/{section_gid}/tasks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tasks_for_tag",
+      "kind": "rest_read",
+      "summary": "Get tasks from a tag",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasksfortag",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tasks_for_tag",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{tag_gid}/tasks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_tasks_for_user_task_list",
+      "kind": "rest_read",
+      "summary": "Get tasks from a user task list",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettasksforusertasklist",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_tasks_for_user_task_list",
+      "rest": {
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}/tasks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_subtasks_for_task",
+      "kind": "rest_read",
+      "summary": "Get subtasks from a task",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getsubtasksfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_subtasks_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/subtasks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_dependencies_for_task",
+      "kind": "rest_read",
+      "summary": "Get dependencies from a task",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getdependenciesfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_dependencies_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependencies",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_dependencies_for_task",
+      "kind": "rest_write",
+      "summary": "Unlink dependencies from a task",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_dependencies_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeDependencies",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_dependents_for_task",
+      "kind": "rest_read",
+      "summary": "Get dependents from a task",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getdependentsfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_dependents_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependents",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_dependents_for_task",
+      "kind": "rest_write",
+      "summary": "Unlink dependents from a task",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removedependentsfortask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_dependents_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeDependents",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_project_for_task",
+      "kind": "rest_write",
+      "summary": "Remove a project from a task",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removeprojectfortask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_project_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeProject",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_tag_for_task",
+      "kind": "rest_write",
+      "summary": "Remove a tag from a task",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removetagfortask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_tag_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeTag",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "remove_follower_for_task",
+      "kind": "rest_write",
+      "summary": "Remove followers from a task",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removefollowerfortask",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_follower_for_task",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeFollowers",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "task_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_task_for_custom_id",
+      "kind": "rest_read",
+      "summary": "Get a task for a given custom ID",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettaskforcustomid",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_task_for_custom_id",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "search_tasks_for_workspace",
+      "kind": "rest_read",
+      "summary": "Search tasks in a workspace",
+      "description": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+      "source_url": "https://developers.asana.com/reference/searchtasksforworkspace",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.search_tasks_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/search",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_team_membership",
+      "kind": "rest_read",
+      "summary": "Get a team membership",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getteammembership",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_team_membership",
+      "rest": {
+        "method": "GET",
+        "path": "/team_memberships/{team_membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_team_memberships",
+      "kind": "stream_etl",
+      "summary": "Get team memberships",
+      "description": "Implemented Asana operation mapped to {'stream': 'team_memberships'}.",
+      "source_url": "https://developers.asana.com/reference/getteammemberships",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_team_memberships",
+      "composite": {
+        "steps": [
+          "stream:team_memberships"
+        ]
+      }
+    },
+    {
+      "id": "get_team_memberships_for_team",
+      "kind": "rest_read",
+      "summary": "Get memberships from a team",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getteammembershipsforteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_team_memberships_for_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}/team_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_team_memberships_for_user",
+      "kind": "rest_read",
+      "summary": "Get memberships from a user",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getteammembershipsforuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_team_memberships_for_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}/team_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_team",
+      "kind": "rest_read",
+      "summary": "Get a team",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_teams_for_workspace",
+      "kind": "stream_etl",
+      "summary": "Get teams in a workspace",
+      "description": "Implemented Asana operation mapped to {'stream': 'teams'}.",
+      "source_url": "https://developers.asana.com/reference/getteamsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_teams_for_workspace",
+      "composite": {
+        "steps": [
+          "stream:teams"
+        ]
+      }
+    },
+    {
+      "id": "get_teams_for_user",
+      "kind": "rest_read",
+      "summary": "Get teams for a user",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getteamsforuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_teams_for_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}/teams",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_user_for_team",
+      "kind": "rest_write",
+      "summary": "Remove a user from a team",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removeuserforteam",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_user_for_team",
+      "rest": {
+        "method": "POST",
+        "path": "/teams/{team_gid}/removeUser",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "team_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "team_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_time_period",
+      "kind": "rest_read",
+      "summary": "Get a time period",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimeperiod",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_period",
+      "rest": {
+        "method": "GET",
+        "path": "/time_periods/{time_period_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_periods",
+      "kind": "rest_read",
+      "summary": "Get time periods",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimeperiods",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_periods",
+      "rest": {
+        "method": "GET",
+        "path": "/time_periods",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_tracking_category",
+      "kind": "rest_read",
+      "summary": "Get a time tracking category",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingcategory",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_category",
+      "rest": {
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_time_tracking_category",
+      "kind": "rest_write",
+      "summary": "Update a time tracking category",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_time_tracking_category",
+      "rest": {
+        "method": "PUT",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "time_tracking_category_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "time_tracking_category_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_time_tracking_category",
+      "kind": "rest_write",
+      "summary": "Delete a time tracking category",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletetimetrackingcategory",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_time_tracking_category",
+      "rest": {
+        "method": "DELETE",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_tracking_entries_for_time_tracking_category",
+      "kind": "rest_read",
+      "summary": "Get time tracking entries for a time tracking category",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortimetrackingcategory",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_entries_for_time_tracking_category",
+      "rest": {
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_tracking_categories",
+      "kind": "rest_read",
+      "summary": "Get time tracking categories for a workspace",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingcategories",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_categories",
+      "rest": {
+        "method": "GET",
+        "path": "/time_tracking_categories",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_time_tracking_category",
+      "kind": "rest_write",
+      "summary": "Create a time tracking category",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_time_tracking_category",
+      "rest": {
+        "method": "POST",
+        "path": "/time_tracking_categories",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_time_tracking_entries_for_task",
+      "kind": "rest_read",
+      "summary": "Get time tracking entries for a task",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortask",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_entries_for_task",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_gid}/time_tracking_entries",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_tracking_entry",
+      "kind": "rest_read",
+      "summary": "Get a time tracking entry",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingentry",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_entry",
+      "rest": {
+        "method": "GET",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "delete_time_tracking_entry",
+      "kind": "rest_write",
+      "summary": "Delete a time tracking entry",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/deletetimetrackingentry",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_time_tracking_entry",
+      "rest": {
+        "method": "DELETE",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_time_tracking_entries",
+      "kind": "rest_read",
+      "summary": "Get multiple time tracking entries",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimetrackingentries",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_time_tracking_entries",
+      "rest": {
+        "method": "GET",
+        "path": "/time_tracking_entries",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_timesheet_approval_status",
+      "kind": "rest_read",
+      "summary": "Get a timesheet approval status",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatus",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_timesheet_approval_status",
+      "rest": {
+        "method": "GET",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_timesheet_approval_status",
+      "kind": "rest_write",
+      "summary": "Update a timesheet approval status",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.update_timesheet_approval_status",
+      "rest": {
+        "method": "PUT",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "timesheet_approval_status_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "timesheet_approval_status_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_timesheet_approval_statuses",
+      "kind": "rest_read",
+      "summary": "Get multiple timesheet approval statuses",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatuses",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_timesheet_approval_statuses",
+      "rest": {
+        "method": "GET",
+        "path": "/timesheet_approval_statuses",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_timesheet_approval_status",
+      "kind": "rest_write",
+      "summary": "Create a timesheet approval status",
+      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "admin",
+      "destructive": true,
+      "audit_event": "asana.create_timesheet_approval_status",
+      "rest": {
+        "method": "POST",
+        "path": "/timesheet_approval_statuses",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "typeahead_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get objects via typeahead",
+      "description": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+      "source_url": "https://developers.asana.com/reference/typeaheadforworkspace",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.typeahead_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/typeahead",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_user_task_list",
+      "kind": "rest_read",
+      "summary": "Get a user task list",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getusertasklist",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_user_task_list",
+      "rest": {
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_user_task_list_for_user",
+      "kind": "rest_read",
+      "summary": "Get a user's task list",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getusertasklistforuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_user_task_list_for_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}/user_task_list",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_users",
+      "kind": "stream_etl",
+      "summary": "Get multiple users",
+      "description": "Implemented Asana operation mapped to {'stream': 'users'}.",
+      "source_url": "https://developers.asana.com/reference/getusers",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_users",
+      "composite": {
+        "steps": [
+          "stream:users"
+        ]
+      }
+    },
+    {
+      "id": "get_user",
+      "kind": "rest_read",
+      "summary": "Get a user",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_favorites_for_user",
+      "kind": "rest_read",
+      "summary": "Get a user's favorites",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getfavoritesforuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_favorites_for_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}/favorites",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_users_for_team",
+      "kind": "rest_read",
+      "summary": "Get users in a team",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getusersforteam",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_users_for_team",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_gid}/users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_users_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get users in a workspace or organization",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getusersforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_users_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_user_for_workspace",
+      "kind": "rest_read",
+      "summary": "Get a user in a workspace or organization",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getuserforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_user_for_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_webhooks",
+      "kind": "rest_read",
+      "summary": "Get multiple webhooks",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/getwebhooks",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_webhooks",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "create_webhook",
+      "kind": "rest_write",
+      "summary": "Establish a webhook",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/createwebhook",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "create",
+      "destructive": false,
+      "audit_event": "asana.create_webhook",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_webhook",
+      "kind": "rest_read",
+      "summary": "Get a webhook",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/getwebhook",
+      "risk": "medium",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_webhook",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhook_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "update_webhook",
+      "kind": "rest_write",
+      "summary": "Update a webhook",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/updatewebhook",
+      "risk": "medium",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "update",
+      "destructive": false,
+      "audit_event": "asana.update_webhook",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/{webhook_gid}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "webhook_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "webhook_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delete_webhook",
+      "kind": "rest_write",
+      "summary": "Delete a webhook",
+      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "source_url": "https://developers.asana.com/reference/deletewebhook",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "destructive",
+      "destructive": true,
+      "audit_event": "asana.delete_webhook",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhook_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_workspace_membership",
+      "kind": "rest_read",
+      "summary": "Get a workspace membership",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getworkspacemembership",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspace_membership",
+      "rest": {
+        "method": "GET",
+        "path": "/workspace_memberships/{workspace_membership_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_workspace_memberships_for_user",
+      "kind": "rest_read",
+      "summary": "Get workspace memberships for a user",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforuser",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspace_memberships_for_user",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_gid}/workspace_memberships",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "get_workspace_memberships_for_workspace",
+      "kind": "stream_etl",
+      "summary": "Get the workspace memberships for a workspace",
+      "description": "Implemented Asana operation mapped to {'stream': 'workspace_memberships'}.",
+      "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspace_memberships_for_workspace",
+      "composite": {
+        "steps": [
+          "stream:workspace_memberships"
+        ]
+      }
+    },
+    {
+      "id": "get_workspaces",
+      "kind": "stream_etl",
+      "summary": "Get multiple workspaces",
+      "description": "Implemented Asana operation mapped to {'stream': 'workspaces'}.",
+      "source_url": "https://developers.asana.com/reference/getworkspaces",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspaces",
+      "composite": {
+        "steps": [
+          "stream:workspaces"
+        ]
+      }
+    },
+    {
+      "id": "get_workspace",
+      "kind": "rest_read",
+      "summary": "Get a workspace",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getworkspace",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspace",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "remove_user_for_workspace",
+      "kind": "rest_write",
+      "summary": "Remove a user from a workspace or organization",
+      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "audit_event": "asana.remove_user_for_workspace",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/removeUser",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "workspace_gid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "workspace_gid",
+            "data"
+          ]
+        }
+      }
+    },
+    {
+      "id": "get_workspace_events",
+      "kind": "rest_read",
+      "summary": "Get workspace events",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "source_url": "https://developers.asana.com/reference/getworkspaceevents",
+      "risk": "none",
+      "approval": "none; read-only fixed-target operation remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "asana:personal-access-token"
+      ],
+      "mutation_class": "none",
+      "destructive": false,
+      "audit_event": "asana.get_workspace_events",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/events",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

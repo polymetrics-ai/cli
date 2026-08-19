@@ -11,6 +11,7 @@ Reads Microsoft Teams users, groups, channels, and device-usage reports through 
 
 ## Icon
 
+- id: microsoft-teams
 - asset: icons/microsoft-teams.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,7 +29,7 @@ Reads Microsoft Teams users, groups, channels, and device-usage reports through 
 ## Configuration
 
 - base_url
-- client_id
+- client_id (required)
 - login_base_url
 - max_pages
 - period
@@ -41,20 +42,20 @@ Reads Microsoft Teams users, groups, channels, and device-usage reports through 
 
 - users:
   - primary key: id
-  - fields: account_enabled(), display_name(), id(), job_title(), mail(), mobile_phone(), office_location(), user_principal_name()
+  - fields: account_enabled(boolean), display_name(string), id(string), job_title(string), mail(string), mobile_phone(string), office_location(string), user_principal_name(string)
 - groups:
   - primary key: id
-  - fields: created_date_time(), description(), display_name(), id(), mail(), mail_enabled(), mail_nickname(), security_enabled(), visibility()
+  - fields: created_date_time(string), description(string), display_name(string), id(string), mail(string), mail_enabled(boolean), mail_nickname(string), security_enabled(boolean), visibility(string)
 - channels:
   - primary key: id
-  - fields: created_date_time(), description(), display_name(), email(), id(), membership_type(), web_url()
+  - fields: created_date_time(string), description(string), display_name(string), email(string), id(string), membership_type(string), web_url(string)
 - team_device_usage_report:
   - primary key: id
-  - fields: id(), is_deleted(), last_activity_date(), report_period(), used_android_phone(), used_i_os(), used_mac(), used_web(), used_windows_phone(), user_principal_name()
+  - fields: id(string), is_deleted(boolean), last_activity_date(string), report_period(string), used_android_phone(boolean), used_i_os(boolean), used_mac(boolean), used_web(boolean), used_windows_phone(boolean), user_principal_name(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

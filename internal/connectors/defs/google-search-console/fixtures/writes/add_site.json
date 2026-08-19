@@ -4,6 +4,6 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/sites/https://fixture.example.com/"
+    "path": "/webmasters/v3/sites/https://fixture.example.com/"
   }
 }

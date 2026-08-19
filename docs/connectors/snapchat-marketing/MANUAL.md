@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Snapchat Marketing (Ads API) organizations, ad accounts, campaigns, ad squads, and ads via the OAuth2 refresh-token grant.
 
 ICON
+  id: snapchat
   asset: icons/snapchat.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,31 +31,31 @@ CONFIGURATION
   base_url
   organization_ids
   token_url
-  client_id (secret)
-  client_secret (secret)
-  refresh_token (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   organizations:
     primary key: id
     cursor: updated_at
-    fields: address_line_1(), administrative_district_level_1(), country(), created_at(), id(), locality(), name(), postal_code(), type(), updated_at()
+    fields: address_line_1(string), administrative_district_level_1(string), country(string), created_at(string), id(string), locality(string), name(string), postal_code(string), type(string), updated_at(string)
   adaccounts:
     primary key: id
     cursor: updated_at
-    fields: advertiser(), created_at(), currency(), id(), name(), organization_id(), status(), timezone(), type(), updated_at()
+    fields: advertiser(string), created_at(string), currency(string), id(string), name(string), organization_id(string), status(string), timezone(string), type(string), updated_at(string)
   campaigns:
     primary key: id
     cursor: updated_at
-    fields: ad_account_id(), created_at(), daily_budget_micro(), end_time(), id(), lifetime_spend_cap_micro(), name(), objective(), start_time(), status(), updated_at()
+    fields: ad_account_id(string), created_at(string), daily_budget_micro(integer), end_time(string), id(string), lifetime_spend_cap_micro(integer), name(string), objective(string), start_time(string), status(string), updated_at(string)
   adsquads:
     primary key: id
     cursor: updated_at
-    fields: bid_micro(), billing_event(), campaign_id(), created_at(), daily_budget_micro(), id(), name(), optimization_goal(), status(), type(), updated_at()
+    fields: bid_micro(integer), billing_event(string), campaign_id(string), created_at(string), daily_budget_micro(integer), id(string), name(string), optimization_goal(string), status(string), type(string), updated_at(string)
   ads:
     primary key: id
     cursor: updated_at
-    fields: ad_squad_id(), created_at(), creative_id(), id(), name(), review_status(), status(), type(), updated_at()
+    fields: ad_squad_id(string), created_at(string), creative_id(string), id(string), name(string), review_status(string), status(string), type(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

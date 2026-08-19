@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations_customers",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "firstName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gender": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jobTitle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organization": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "photoType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "photoUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "age": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "background": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organizationId": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,359 @@
+{
+  "operations": [
+    {
+      "id": "lever-hiring.retrieve_a_single_application",
+      "kind": "rest_read",
+      "summary": "Retrieve a single application",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-application",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/applications/{application}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_archive_reason",
+      "kind": "rest_read",
+      "summary": "Retrieve a single archive reason",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-archive-reason",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/archive_reasons/{archive_reason}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_contact",
+      "kind": "rest_read",
+      "summary": "Retrieve a single contact",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-contact",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{contact}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_eeo_responses_with_pii",
+      "kind": "rest_read",
+      "summary": "Retrieve EEO responses with PII",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-eeo-responses-with-pii",
+      "risk": "high",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "eeoResponses",
+          "applicationArchivedAt",
+          "applicationArchivedBy",
+          "appliedAt",
+          "currentStage",
+          "contact",
+          "gender",
+          "race",
+          "veteran",
+          "disability",
+          "disabilitySignatureDate",
+          "eeoSurveyRespondedAt",
+          "hiredDate",
+          "hiringManager",
+          "opportunityId",
+          "origin",
+          "posting",
+          "requisitionCodes",
+          "source"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v1/eeo/responses/pii",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_feedback_form",
+      "kind": "rest_read",
+      "summary": "Retrieve a feedback form",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-feedback-form",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/feedback/{feedback}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_feedback_template",
+      "kind": "rest_read",
+      "summary": "Retrieve a feedback template",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-feedback-template",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/feedback_templates/{feedback_template}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_interview",
+      "kind": "rest_read",
+      "summary": "Retrieve a single interview",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-interview",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/interviews/{interview}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_note",
+      "kind": "rest_read",
+      "summary": "Retrieve a single note",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-note",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/notes/{note}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_opportunity",
+      "kind": "rest_read",
+      "summary": "Retrieve a single opportunity",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-opportunity",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_panel",
+      "kind": "rest_read",
+      "summary": "Retrieve a single panel",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-panel",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/panels/{panel}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_posting",
+      "kind": "rest_read",
+      "summary": "Retrieve a single posting",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-posting",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/postings/{posting}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_posting_application_questions",
+      "kind": "rest_read",
+      "summary": "Retrieve posting application questions",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-posting-application-questions",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/postings/{posting}/apply",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_profile_form",
+      "kind": "rest_read",
+      "summary": "Retrieve a profile form",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-profile-form",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/forms/{form}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_profile_form_template",
+      "kind": "rest_read",
+      "summary": "Retrieve a profile form template",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-profile-form-template",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/form_templates/{form_template}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_referral",
+      "kind": "rest_read",
+      "summary": "Retrieve a single referral",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-referral",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/referrals/{referral}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_requisition",
+      "kind": "rest_read",
+      "summary": "Retrieve a single requisition",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-requisition",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/requisitions/{requisition}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_requisition_field",
+      "kind": "rest_read",
+      "summary": "Retrieve a single requisition field",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-requisition-field",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/requisition_fields/{requisition_field}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_stage",
+      "kind": "rest_read",
+      "summary": "Retrieve a single stage",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-stage",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{stage}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_diversity_survey",
+      "kind": "rest_read",
+      "summary": "Retrieve a diversity survey",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-diversity-survey",
+      "risk": "high",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "candidateLocations",
+          "countryCodes",
+          "fields",
+          "instructions",
+          "text",
+          "options",
+          "gender",
+          "ethnicity",
+          "race",
+          "veteran",
+          "disability",
+          "sexualOrientation",
+          "genderIdentity"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/surveys/diversity/{posting}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.list_all_tags",
+      "kind": "rest_read",
+      "summary": "List all tags",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#list-all-tags",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lever-hiring.retrieve_a_single_user",
+      "kind": "rest_read",
+      "summary": "Retrieve a single user",
+      "description": "Fixed-target Lever JSON direct read with bounded response size and redacted JSON output.",
+      "source_url": "https://hire.lever.co/developer/documentation#retrieve-a-single-user",
+      "risk": "medium",
+      "approval": "none: read-only fixed-target operation with bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user}",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

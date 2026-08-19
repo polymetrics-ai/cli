@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "billing_rate_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/billingRate/billing_rate_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "billing_rate_fixture_1"
+    }
+  }
+}

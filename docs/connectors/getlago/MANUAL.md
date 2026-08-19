@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Lago customers, invoices, subscriptions, plans, and billable metrics through the Lago REST API.
 
 ICON
+  id: getlago
   asset: icons/getlago.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,29 +31,29 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: lago_id
     cursor: created_at
-    fields: country(), created_at(), currency(), customer_type(), email(), external_id(), lago_id(), name(), sequential_id(), slug(), updated_at()
+    fields: country(string), created_at(string), currency(string), customer_type(string), email(string), external_id(string), lago_id(string), name(string), sequential_id(integer), slug(string), updated_at(string)
   invoices:
     primary key: lago_id
     cursor: created_at
-    fields: created_at(), currency(), fees_amount_cents(), invoice_type(), issuing_date(), lago_id(), number(), payment_status(), status(), taxes_amount_cents(), total_amount_cents(), updated_at()
+    fields: created_at(string), currency(string), fees_amount_cents(integer), invoice_type(string), issuing_date(string), lago_id(string), number(string), payment_status(string), status(string), taxes_amount_cents(integer), total_amount_cents(integer), updated_at(string)
   subscriptions:
     primary key: lago_id
     cursor: created_at
-    fields: billing_time(), created_at(), external_customer_id(), external_id(), lago_customer_id(), lago_id(), plan_code(), started_at(), status(), terminated_at()
+    fields: billing_time(string), created_at(string), external_customer_id(string), external_id(string), lago_customer_id(string), lago_id(string), plan_code(string), started_at(string), status(string), terminated_at(string)
   plans:
     primary key: lago_id
     cursor: created_at
-    fields: amount_cents(), amount_currency(), code(), created_at(), interval(), lago_id(), name(), pay_in_advance(), trial_period()
+    fields: amount_cents(integer), amount_currency(string), code(string), created_at(string), interval(string), lago_id(string), name(string), pay_in_advance(boolean), trial_period(number)
   billable_metrics:
     primary key: lago_id
     cursor: created_at
-    fields: aggregation_type(), code(), created_at(), field_name(), lago_id(), name(), recurring()
+    fields: aggregation_type(string), code(string), created_at(string), field_name(string), lago_id(string), name(string), recurring(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

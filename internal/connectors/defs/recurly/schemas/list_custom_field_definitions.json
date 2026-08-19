@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_custom_field_definitions record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Custom field definition ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "related_type": {
+      "type": "string",
+      "enum": [
+        "account",
+        "item",
+        "plan",
+        "subscription",
+        "charge"
+      ],
+      "title": "Related Recurly object type"
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "Used by the API to identify the field or reading and writing. The name can only be used once per Recurly object type.",
+      "pattern": "(?i)^[a-z0-9_-]+$"
+    },
+    "user_access": {
+      "type": "string",
+      "enum": [
+        "api_only",
+        "read_only",
+        "write",
+        "set_only"
+      ],
+      "title": "User access",
+      "description": "The access control applied inside Recurly's admin UI:\n- `api_only` - No one will be able to view or edit this field's data via the admin UI.\n- `read_only` - Users with the Customers role will be able to view this field's data via the admin UI, but\n  editing will only be available via the API.\n- `write` - Users with the Customers role will be able to view and edit this field's data via the admin UI.\n- `set_only` - Users with the Customers role will be able to set this field's data via the admin console.\n"
+    },
+    "display_name": {
+      "type": "string",
+      "title": "Display name",
+      "description": "Used to label the field when viewing and editing the field in Recurly's admin UI."
+    },
+    "tooltip": {
+      "type": "string",
+      "title": "Tooltip description",
+      "description": "Displayed as a tooltip when editing the field in the Recurly admin UI.",
+      "pattern": "(?i)^[a-z0-9_-]+$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    },
+    "deleted_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Deleted at",
+      "description": "Definitions are initially soft deleted, and once all the values are removed from the accouts or subscriptions, will be hard deleted an no longer visible."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

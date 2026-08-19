@@ -1,0 +1,16 @@
+{
+  "record": {
+    "comment_id": "fixture_comment_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/comments/fixture_comment_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "BatchPayments": [
+      "batch_payment_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/BatchPayments",
+    "body": {
+      "BatchPayments": [
+        "batch_payment_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

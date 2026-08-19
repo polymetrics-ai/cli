@@ -1,0 +1,21 @@
+{
+  "record": {
+    "task_gid": "fixture-task-gid",
+    "data": {
+      "dependencies": [
+        "fixture-dependencies"
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/fixture-task-gid/addDependencies",
+    "body": {
+      "data": {
+        "dependencies": [
+          "fixture-dependencies"
+        ]
+      }
+    }
+  }
+}

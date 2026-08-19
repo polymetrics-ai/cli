@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Google task lists and tasks through the Google Tasks REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-googletasks
+  asset: icons/simple-icons/googletasks.svg
+  title: Google Tasks
+  simple_icon_slug: googletasks
+  simple_icon_hex: 2684FC
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Google%20Tasks
+  match: exact-name-or-slug
+  matched_by: google-tasks
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -28,17 +36,17 @@ CONFIGURATION
   base_url
   mode
   records_limit
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tasklists:
     primary key: id
     cursor: updated
-    fields: etag(), id(), kind(), self_link(), title(), updated()
+    fields: etag(string), id(string), kind(string), self_link(string), title(string), updated(string)
   tasks:
     primary key: id
     cursor: updated
-    fields: completed(), deleted(), due(), etag(), hidden(), id(), kind(), notes(), parent(), position(), self_link(), status(), tasklist_id(), title(), updated()
+    fields: completed(string), deleted(boolean), due(string), etag(string), hidden(boolean), id(string), kind(string), notes(string), parent(string), position(string), self_link(string), status(string), tasklist_id(string), title(string), updated(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

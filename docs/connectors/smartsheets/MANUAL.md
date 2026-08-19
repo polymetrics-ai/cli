@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Smartsheet sheets, rows, folders, reports, dashboards, users, webhooks, attachments, discussions, proofs, update requests, and workspace metadata.
 
 ICON
+  id: smartsheet
   asset: icons/smartsheet.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -57,204 +58,204 @@ CONFIGURATION
   user_id
   webhook_id
   workspace_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   sheets:
     primary key: id
-    fields: id(), modifiedAt(), name(), permalink()
+    fields: id(integer), modifiedAt(string), name(string), permalink(string)
   sheet_rows:
     primary key: row_id
     cursor: modified_at
-    fields: cells(), modified_at(), row_id(), row_number(), sheet_id(), sheet_name()
+    fields: cells(array), modified_at(string), row_id(integer), row_number(integer), sheet_id(integer), sheet_name(string)
   contacts:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   contact:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   events:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   favorites:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   favorite:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   folder_metadata:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   folder_children:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   folder_path:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   home_contents:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   groups:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   group:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   home_folders:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   reports:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   report:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   report_path:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   report_publish:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   asset_shares:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   asset_share:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_attachments:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_attachment:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_attachment_versions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_automation_rules:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_automation_rule:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_columns:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_column:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_comment:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_cross_sheet_references:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_cross_sheet_reference:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_discussions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_discussion:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_discussion_attachments:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_path:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proofs:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proof:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proof_attachments:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proof_discussions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proof_request_actions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_proof_versions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_publish:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_row:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_row_attachments:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_cell_history:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_row_discussions:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_sent_update_requests:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_sent_update_request:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_summary:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_summary_fields:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_update_requests:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_update_request:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   sheet_version:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   dashboards:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   dashboard:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   dashboard_path:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   dashboard_publish:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   users:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   current_user:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   org_sheets:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   user:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   user_alternate_emails:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   user_alternate_email:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   user_plans:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   webhooks:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   webhook:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   workspaces:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   workspace_metadata:
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
   workspace_children:
     primary key: id
-    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+    fields: createdAt(string), data(array), email(string), enabled(boolean), folders(array), id(integer), items(array), modifiedAt(string), name(string), permalink(string), readOnly(boolean), reports(array), sheets(array), sights(array), templates(array), title(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

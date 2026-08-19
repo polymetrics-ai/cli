@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "automations_removed_subscribers_subscribers",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflow_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/batch-webhooks",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "webhooks": [
+        {
+          "id": "fixture_id",
+          "url": "https://example.invalid/mailchimp-fixture",
+          "enabled": true,
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

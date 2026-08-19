@@ -11,12 +11,20 @@ import (
 
 const modulePath = "polymetrics.ai"
 
+// nativeSupportPackages are helper libraries below native/, not connector
+// implementations. They must be available to native connectors but have no
+// package-level registration side effect to wire into production binaries.
+var nativeSupportPackages = map[string]struct{}{
+	"dbtest": {},
+	"sqltls": {},
+}
+
 // genHookset regenerates hooks/hookset/hookset_gen.go under hooksRoot: a
 // blank import for every internal/connectors/hooks/<name> package except
 // hookset itself. Deterministic and byte-stable across reruns for the same
 // input tree (sorted package names, fixed header text, no timestamps).
 func genHookset(hooksRoot string) error {
-	pkgs, err := wiringPackageNames(hooksRoot, "hookset")
+	pkgs, err := wiringPackageNames(hooksRoot, "hookset", nil)
 	if err != nil {
 		return fmt.Errorf("gen hookset: %w", err)
 	}
@@ -30,16 +38,16 @@ func genHookset(hooksRoot string) error {
 }
 
 // genNativeset regenerates native/nativeset/nativeset_gen.go under
-// nativeRoot: a blank import for every internal/connectors/native/<name>
+// nativeRoot: a blank import for every runtime internal/connectors/native/<name>
 // package except nativeset itself.
 func genNativeset(nativeRoot string) error {
-	pkgs, err := wiringPackageNames(nativeRoot, "nativeset")
+	pkgs, err := wiringPackageNames(nativeRoot, "nativeset", nativeSupportPackages)
 	if err != nil {
 		return fmt.Errorf("gen nativeset: %w", err)
 	}
 	src := renderWiringFile(wiringFileSpec{
 		Package:     "nativeset",
-		ImportsDoc:  "Package nativeset blank-imports every internal/connectors/native/<name>\n// Tier-3 component package so any package-level side effects (e.g. a\n// future documented registration) run in the built binary. In wave0 no\n// native package registers itself (see API-CONTRACT.md §6); this file is\n// pure wiring, regenerated deterministically as packages are added.",
+		ImportsDoc:  "Package nativeset blank-imports every runtime internal/connectors/native/<name>\n// Tier-3 component package so any package-level side effects (e.g. a\n// future documented registration) run in the built binary. In wave0 no\n// native package registers itself (see API-CONTRACT.md §6); this file is\n// pure wiring, regenerated deterministically as packages are added.",
 		ImportsRoot: modulePath + "/internal/connectors/native",
 		Packages:    pkgs,
 	})
@@ -47,12 +55,12 @@ func genNativeset(nativeRoot string) error {
 }
 
 // wiringPackageNames returns the sorted directory names under root that are
-// NOT selfName and are plain directories (no further filtering: package
-// declaration sniffing is unnecessary for wave0's empty-or-single-package
-// trees and would only add a false sense of precision — a directory without
-// a .go file simply produces an import that fails to build, which is the
-// correct, loud failure mode for a malformed hooks/native tree).
-func wiringPackageNames(root, selfName string) ([]string, error) {
+// neither selfName nor excluded and are plain directories (package declaration
+// sniffing is unnecessary for wave0's empty-or-single-package trees and would
+// only add a false sense of precision — a directory without a .go file simply
+// produces an import that fails to build, which is the correct, loud failure
+// mode for a malformed hooks/native tree).
+func wiringPackageNames(root, selfName string, excluded map[string]struct{}) ([]string, error) {
 	entries, err := os.ReadDir(root)
 	if err != nil {
 		return nil, fmt.Errorf("read %s: %w", root, err)
@@ -60,6 +68,9 @@ func wiringPackageNames(root, selfName string) ([]string, error) {
 	var names []string
 	for _, e := range entries {
 		if !e.IsDir() || e.Name() == selfName {
+			continue
+		}
+		if _, skip := excluded[e.Name()]; skip {
 			continue
 		}
 		names = append(names, e.Name())

@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:issues_list",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:43:13.422Z",
+  "run_id": "github-direct-issues_list-1787002990747",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:dbc9333258426393e34856b16756d4113f2095510898efc56d31f0d941e40cce}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:issues_list",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:72c8a1a4c1ca97209389286dc6baccd7bb153ca7a8688db357e78b2fec18425b}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

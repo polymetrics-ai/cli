@@ -1,0 +1,257 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/application.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "application_info_id_fixture_7",
+        "createdAt": "2026-01-07T07:00:00Z",
+        "updatedAt": "2026-02-07T07:00:00Z",
+        "status": "Hired",
+        "customFields": [
+          {
+            "id": "application_info_id_fixture_7",
+            "isPrivate": true,
+            "title": "Title fixture 7",
+            "valueLabel": "application_info_valuelabel_fixture_7",
+            "value": {
+              "value": 7.0,
+              "currencyCode": "application_info_currencycode_fixture_7"
+            }
+          }
+        ],
+        "candidate": {
+          "id": "application_info_id_fixture_7",
+          "name": "Application Info Name Fixture 7",
+          "primaryEmailAddress": {
+            "value": "application_info_value_fixture_7",
+            "type": "Personal",
+            "isPrimary": true
+          },
+          "primaryPhoneNumber": {
+            "value": "application_info_value_fixture_7",
+            "type": "Personal",
+            "isPrimary": true
+          }
+        },
+        "currentInterviewStage": {
+          "id": "application_info_id_fixture_7",
+          "title": "Title fixture 7",
+          "type": "fixture",
+          "orderInInterviewPlan": 7,
+          "interviewStageGroupId": "application_info_interviewstagegroupid_fixture_7",
+          "interviewPlanId": "application_info_interviewplanid_fixture_7"
+        },
+        "source": {
+          "id": "application_info_id_fixture_7",
+          "title": "Title fixture 7",
+          "isArchived": true,
+          "sourceType": {
+            "id": "application_info_id_fixture_7",
+            "title": "Title fixture 7",
+            "isArchived": true
+          }
+        },
+        "archiveReason": {
+          "id": "application_info_id_fixture_7",
+          "text": "Text fixture 7",
+          "reasonType": "RejectedByCandidate",
+          "isArchived": true,
+          "customFields": [
+            {
+              "id": "application_info_id_fixture_7",
+              "isPrivate": true,
+              "title": "Title fixture 7",
+              "valueLabel": "application_info_valuelabel_fixture_7",
+              "value": {
+                "value": 7.0,
+                "currencyCode": "application_info_currencycode_fixture_7"
+              }
+            }
+          ]
+        },
+        "archivedAt": "2026-01-07T07:00:00Z",
+        "job": {
+          "id": "application_info_id_fixture_7",
+          "title": "Title fixture 7",
+          "locationId": "application_info_locationid_fixture_7",
+          "departmentId": "application_info_departmentid_fixture_7"
+        },
+        "creditedToUser": {
+          "id": "application_info_id_fixture_7",
+          "firstName": "Application Info Firstname Fixture 7",
+          "lastName": "Application Info Lastname Fixture 7",
+          "email": "application_info.email.7@example.invalid",
+          "globalRole": "Organization Admin",
+          "isEnabled": true,
+          "updatedAt": "2026-01-07T07:00:00Z",
+          "managerId": "application_info_managerid_fixture_7",
+          "customFields": [
+            {
+              "id": "application_info_id_fixture_7",
+              "isPrivate": true,
+              "title": "Title fixture 7",
+              "value": {
+                "value": 7.0,
+                "currencyCode": "application_info_currencycode_fixture_7"
+              },
+              "valueLabel": "application_info_valuelabel_fixture_7"
+            }
+          ]
+        },
+        "hiringTeam": [
+          {
+            "userId": "application_info_userid_fixture_7",
+            "firstName": "Application Info Firstname Fixture 7",
+            "lastName": "Application Info Lastname Fixture 7",
+            "email": "application_info.email.7@example.invalid",
+            "role": "application_info_role_fixture_7"
+          }
+        ],
+        "appliedViaJobPostingId": "application_info_appliedviajobpostingid_fixture_7",
+        "submitterClientIp": "application_info_submitterclientip_fixture_7",
+        "submitterUserAgent": "application_info_submitteruseragent_fixture_7",
+        "openings": [
+          {
+            "id": "application_info_id_fixture_7",
+            "openedAt": "2026-01-07T07:00:00Z",
+            "closedAt": "2026-01-07T07:00:00Z",
+            "isArchived": true,
+            "archivedAt": "2026-01-07T07:00:00Z",
+            "closeReasonId": "application_info_closereasonid_fixture_7",
+            "openingState": "Approved",
+            "latestVersion": {
+              "id": "application_info_id_fixture_7",
+              "identifier": "application_info_identifier_fixture_7",
+              "description": "Description fixture 7",
+              "authorId": "application_info_authorid_fixture_7",
+              "createdAt": "2026-01-07T07:00:00Z",
+              "teamId": "application_info_teamid_fixture_7",
+              "jobIds": [
+                "application_info_jobid_fixture_7"
+              ],
+              "targetHireDate": "2026-01-07T07:00:00Z",
+              "targetStartDate": "2026-01-07T07:00:00Z",
+              "isBackfill": true,
+              "employmentType": "fixture",
+              "locationIds": [
+                "application_info_locationid_fixture_7"
+              ],
+              "hiringTeam": [
+                {
+                  "userId": "application_info_userid_fixture_7",
+                  "firstName": "Application Info Firstname Fixture 7",
+                  "lastName": "Application Info Lastname Fixture 7",
+                  "email": "application_info.email.7@example.invalid",
+                  "role": "application_info_role_fixture_7"
+                }
+              ],
+              "customFields": [
+                {
+                  "id": "application_info_id_fixture_7",
+                  "isPrivate": true,
+                  "title": "Title fixture 7",
+                  "valueLabel": "application_info_valuelabel_fixture_7",
+                  "value": {
+                    "value": 7.0,
+                    "currencyCode": "application_info_currencycode_fixture_7"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "applicationHistory": [
+          {
+            "id": "application_info_id_fixture_7",
+            "stageId": "application_info_stageid_fixture_7",
+            "title": "Title fixture 7",
+            "enteredStageAt": "2026-01-07T07:00:00Z",
+            "leftStageAt": "2026-01-07T07:00:00Z",
+            "stageNumber": 7,
+            "allowedActions": [
+              "none"
+            ],
+            "actorId": "application_info_actorid_fixture_7"
+          }
+        ],
+        "applicationFormSubmissions": [
+          {
+            "id": "application_info_id_fixture_7",
+            "formDefinition": {
+              "sections": [
+                {
+                  "title": "Title fixture 7",
+                  "descriptionHtml": "<p>Descriptionhtml fixture 7</p>",
+                  "descriptionPlain": "application_info_descriptionplain_fixture_7",
+                  "fields": [
+                    {
+                      "isRequired": true,
+                      "descriptionHtml": "<p>Descriptionhtml fixture 7</p>",
+                      "descriptionPlain": "application_info_descriptionplain_fixture_7",
+                      "field": {
+                        "id": "application_info_id_fixture_7",
+                        "type": "fixture",
+                        "path": "application_info_path_fixture_7",
+                        "humanReadablePath": "application_info_humanreadablepath_fixture_7",
+                        "title": "Title fixture 7",
+                        "isNullable": true,
+                        "selectableValues": [
+                          {
+                            "label": "application_info_label_fixture_7",
+                            "value": "application_info_value_fixture_7"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "submittedValues": "application_info_submittedvalues_fixture_7"
+          }
+        ],
+        "referrals": [
+          {
+            "user": {
+              "id": "application_info_id_fixture_7",
+              "firstName": "Application Info Firstname Fixture 7",
+              "lastName": "Application Info Lastname Fixture 7",
+              "email": "application_info.email.7@example.invalid",
+              "globalRole": "Organization Admin",
+              "isEnabled": true,
+              "updatedAt": "2026-01-07T07:00:00Z",
+              "managerId": "application_info_managerid_fixture_7",
+              "customFields": [
+                {
+                  "id": "application_info_id_fixture_7",
+                  "isPrivate": true,
+                  "title": "Title fixture 7",
+                  "value": {
+                    "value": 7.0,
+                    "currencyCode": "application_info_currencycode_fixture_7"
+                  },
+                  "valueLabel": "application_info_valuelabel_fixture_7"
+                }
+              ]
+            },
+            "referredAt": "2026-01-07T07:00:00Z"
+          }
+        ],
+        "resumeFileHandle": {
+          "id": "application_info_id_fixture_7",
+          "name": "Application Info Name Fixture 7",
+          "handle": "application_info_handle_fixture_7"
+        }
+      }
+    }
+  },
+  "read_query": {
+    "applicationId": "applicationid_fixture"
+  }
+}

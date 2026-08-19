@@ -11,6 +11,7 @@ Reads Reply.io legacy v1 objects and current v3 API resources; writes supported 
 
 ## Icon
 
+- id: reply-io
 - asset: icons/reply-io.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -49,7 +50,7 @@ Reads Reply.io legacy v1 objects and current v3 API resources; writes supported 
 - tagId
 - updated_after
 - variant_id
-- api_key (secret)
+- api_key (secret) (required)
 - bearer_token (secret)
 
 ## ETL Streams
@@ -57,262 +58,262 @@ Reads Reply.io legacy v1 objects and current v3 API resources; writes supported 
 - people:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), first_name(), id(), last_name(), status(), stream(), updated_at()
+  - fields: email(string), first_name(string), id(string), last_name(string), status(string), stream(string), updated_at(string)
 - campaigns:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), status(), stream(), updated_at()
+  - fields: created_at(string), id(string), name(string), status(string), stream(string), updated_at(string)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: due_date(), id(), status(), stream(), type(), updated_at()
+  - fields: due_date(string), id(string), status(string), stream(string), type(string), updated_at(string)
 - email_accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), status(), stream(), updated_at()
+  - fields: email(string), id(string), name(string), status(string), stream(string), updated_at(string)
 - list_knowledge_bases:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_knowledge_base:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_knowledge_base_links:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_knowledge_base_documents:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_reply_handlers:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_reply_handler:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_reengagement_cards:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_reengagement_card:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_offers:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_offer:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_playbooks:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_playbook:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_account_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_account_contacts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_account_lists:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_account_list_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_background_jobs:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_background_job_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contacts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_sequences:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_activities:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_statuses:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_domain_rules:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_domain_rule_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_email_rules:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_email_rule_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_email_exception_rules:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_blacklist_email_exception_rule_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_lists:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_list_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_contact_lists_for_contact:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_custom_fields:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_custom_field_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_email_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_email_account:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - connect_gmail_account:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - connect_office365_account:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_email_account_tags:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_email_templates:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_email_template:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_email_template_variables:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_email_template_folders:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_email_template_folder:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_holiday_calendars:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_holiday_calendar:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_inbox_threads:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_inbox_thread:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_inbox_thread_messages:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_inbox_categories:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_inbox_category:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_linked_in_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_linked_in_account:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_pending_linked_in_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_schedules:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_schedule:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_schedule_holiday_calendars:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequences:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_contacts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_contact_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_contacts_state:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_email_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_folders:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_folder_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_folder_sequences:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_linked_in_accounts:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_steps:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_step_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_step_variants:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_condition_properties:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_sequence_templates:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_settings:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_tasks:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_task_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - whoami:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - list_webhooks:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_webhook_events:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_webhook_by_id:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 - get_webhook_logs:
   - primary key: id
-  - fields: created(), id(), name(), status(), updated()
+  - fields: created(string), id(string), name(string), status(string), updated(string)
 
 ## Sync Modes
 

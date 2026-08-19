@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo API.
 
 ICON
+  id: sendinblue
   asset: icons/sendinblue.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,23 +28,23 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: id
     cursor: modifiedAt
-    fields: email(), id(), modifiedAt()
+    fields: email(string), id(integer), modifiedAt(string)
   email_campaigns:
     primary key: id
     cursor: modifiedAt
-    fields: id(), modifiedAt(), name(), status()
+    fields: id(integer), modifiedAt(string), name(string), status(string)
   contacts_lists:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   senders:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -1,0 +1,13 @@
+{
+  "issue": 3857,
+  "lifecycle": "manual-inline-gsd-fallback",
+  "stages": {
+    "discuss_phase": "completed",
+    "plan_phase_tdd": "completed",
+    "execute_phase": "completed",
+    "verify_work": "completed",
+    "code_review": "completed"
+  },
+  "reason": "This issue is not a numbered roadmap phase, a compatible isolated Pi runtime is unavailable, and the repository contract forbids role spawning for the single-worker delivery.",
+  "next": "commit the validated delivery record, then use the no-mistakes pipeline to open the required integration-base PR and verify checks."
+}

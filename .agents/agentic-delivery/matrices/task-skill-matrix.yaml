@@ -3,7 +3,7 @@ default_rules:
   - Read AGENTS.md and .agents/agentic-delivery/contracts/issue-agent-contract.md before work.
   - Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work.
   - Read .agents/agentic-delivery/references/required-skills-routing.md before implementation, review, CLI, docs, website, design, or connector work.
-  - Load and follow gsd-programming-loop through /gsd-programming-loop in Pi or scripts/gsd prompt programming-loop from shell for implementation or behavior-changing work.
+  - Use the installed GSD sequence through Pi aliases or scripts/gsd prompt for discuss-phase, plan-phase --tdd, execute-phase, verify-work with gap closure, and code-review.
   - For Go work, load golang-how-to first, then task-specific Go skills.
   - For CLI work, load golang-cli, golang-testing, golang-error-handling, golang-documentation, and golang-security when user input, credentials, filesystem paths, or external IO are involved.
   - For website/docs UI work, load frontend-design, web-design-guidelines, vercel-react-best-practices, and vercel-composition-patterns as applicable.
@@ -11,6 +11,7 @@ default_rules:
   - If the repo-local GSD/Pi adapter is unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - For CLI command, flag, output, connector surface, or help-topic changes, follow .agents/agentic-delivery/references/cli-help-docs-website-parity.md.
+  - For connector implementation lanes, require exactly one target connector, ownership guard evidence, changed-path compliance, and a separate foundation issue/PR for shared runtime/tooling or unrelated connector work.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Never push to main; stop only for a human gate or explicit coordinator handoff.
   - Keep PR scope to one primary issue.
@@ -25,7 +26,10 @@ skills:
       - PR linkage
     preferred_local_skills:
       - github-issue-first-delivery
-      - gsd-programming-loop
+      - gsd-plan-phase
+      - gsd-execute-phase
+      - gsd-verify-work
+      - gsd-code-review
     required_for:
       - github-project-setup
       - issue-roadmap
@@ -38,7 +42,10 @@ skills:
       - red-green-refactor
       - CLI and validation code
     required_local_skills:
-      - gsd-programming-loop
+      - gsd-plan-phase
+      - gsd-execute-phase
+      - gsd-verify-work
+      - gsd-code-review
       - golang-how-to
       - golang-testing
     preferred_local_skills:
@@ -129,16 +136,17 @@ skills:
   orchestration:
     capabilities:
       - parent issue state machine ownership
-      - Codex subagent task decomposition
-      - worker write-scope isolation
+      - single-worker ready-wave sequencing
+      - durable GitHub and GSD handoff state
       - sub-PR merge arbitration
       - parent PR automated review coverage routing
       - human gate escalation
-      - required skill routing for workers
+      - required skill routing for the active worker
     preferred_local_skills:
       - github-issue-first-delivery
-      - gsd-programming-loop
       - gsd-plan-phase
+      - gsd-execute-phase
+      - gsd-verify-work
       - gsd-code-review
       - golang-how-to
       - web-design-guidelines
@@ -169,8 +177,8 @@ skills:
 task_types:
   parent-orchestration:
     required_skill_groups: [orchestration, github_planning, review_disposition, security_review]
-    primary_agent: parent-issue-orchestrator
-    activation: active_owner
+    primary_agent: pm-delivery-worker
+    activation: inline_parent_owner
     compact_skill: caveman
   parent-roadmap:
     required_skill_groups: [github_planning, review_disposition, docs_and_ux]
@@ -180,6 +188,9 @@ task_types:
     primary_agent: issue-first-implementation-agent
   pr-guardrail:
     required_skill_groups: [github_planning, go_tdd, security_review]
+    primary_agent: issue-first-implementation-agent
+  connector-implementation:
+    required_skill_groups: [github_planning, api_architecture, go_tdd, security_review, review_disposition]
     primary_agent: issue-first-implementation-agent
   operation-ledger:
     required_skill_groups: [api_architecture, go_tdd, security_review]

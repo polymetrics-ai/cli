@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "colors",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "calendar": {
+      "type": "object"
+    },
+    "event": {
+      "type": "object"
+    }
+  },
+  "x-primary-key": [
+    "kind"
+  ]
+}

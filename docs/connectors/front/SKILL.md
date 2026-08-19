@@ -11,9 +11,11 @@ Reads Front contacts, conversations, inboxes, tags, teammates, and channels thro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,30 +30,30 @@ Reads Front contacts, conversations, inboxes, tags, teammates, and channels thro
 
 - base_url
 - page_limit
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), is_private(), is_spammer(), name(), updated_at()
+  - fields: created_at(number), description(string), id(string), is_private(boolean), is_spammer(boolean), name(string), updated_at(number)
 - conversations:
   - primary key: id
   - cursor: last_message_at
-  - fields: created_at(), id(), is_private(), last_message_at(), status(), subject(), waiting_since()
+  - fields: created_at(number), id(string), is_private(boolean), last_message_at(number), status(string), subject(string), waiting_since(number)
 - inboxes:
   - primary key: id
-  - fields: custom_fields(), id(), is_private(), is_public(), name()
+  - fields: custom_fields(object), id(string), is_private(boolean), is_public(boolean), name(string)
 - tags:
   - primary key: id
-  - fields: created_at(), highlight(), id(), is_private(), is_visible_in_conversation_lists(), name(), updated_at()
+  - fields: created_at(number), highlight(string), id(string), is_private(boolean), is_visible_in_conversation_lists(boolean), name(string), updated_at(number)
 - teammates:
   - primary key: id
-  - fields: email(), first_name(), id(), is_admin(), is_available(), is_blocked(), last_name(), username()
+  - fields: email(string), first_name(string), id(string), is_admin(boolean), is_available(boolean), is_blocked(boolean), last_name(string), username(string)
 - channels:
   - primary key: id
-  - fields: address(), id(), is_private(), is_valid(), name(), send_as(), type()
+  - fields: address(string), id(string), is_private(boolean), is_valid(boolean), name(string), send_as(string), type(string)
 
 ## Sync Modes
 

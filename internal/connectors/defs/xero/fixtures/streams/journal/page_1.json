@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Journals/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Journals": [
+        {
+          "JournalID": "journal_id_fixture_1",
+          "JournalDate": "2026-01-01T00:00:00Z",
+          "JournalNumber": 1,
+          "CreatedDateUTC": "2026-01-01T00:00:00Z",
+          "Reference": "reference_fixture",
+          "SourceID": "source_id_fixture_1",
+          "SourceType": "STANDARD",
+          "JournalLines": [
+            "journal_line_fixture"
+          ],
+          "journal_id": "journal_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

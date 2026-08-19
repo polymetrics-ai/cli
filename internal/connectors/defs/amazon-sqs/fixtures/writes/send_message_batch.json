@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "entry1",
+    "message_body": "fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.SendMessageBatch"
+  }
+}

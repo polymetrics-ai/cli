@@ -1,0 +1,31 @@
+{
+  "record": {
+    "bank_transaction_id": "bank_transaction_id_fixture_1",
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "BankTransactions": [
+      "bank_transaction_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/BankTransactions/bank_transaction_id_fixture_1",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "BankTransactions": [
+        "bank_transaction_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

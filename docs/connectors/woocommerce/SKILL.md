@@ -11,6 +11,7 @@ Reads WooCommerce orders, products, customers, and coupons through the WooCommer
 
 ## Icon
 
+- id: woocommerce
 - asset: icons/woocommerce.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,31 +28,31 @@ Reads WooCommerce orders, products, customers, and coupons through the WooCommer
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - page_size
 - start_date
-- api_key (secret)
-- api_secret (secret)
+- api_key (secret) (required)
+- api_secret (secret) (required)
 
 ## ETL Streams
 
 - orders:
   - primary key: id
   - cursor: date_modified_gmt
-  - fields: currency(), customer_id(), date_created(), date_created_gmt(), date_modified(), date_modified_gmt(), date_paid(), id(), number(), payment_method(), status(), total(), total_tax()
+  - fields: currency(string), customer_id(integer), date_created(string), date_created_gmt(string), date_modified(string), date_modified_gmt(string), date_paid(string), id(integer), number(string), payment_method(string), status(string), total(string), total_tax(string)
 - products:
   - primary key: id
   - cursor: date_modified_gmt
-  - fields: date_created_gmt(), date_modified_gmt(), id(), name(), price(), regular_price(), sale_price(), sku(), slug(), status(), stock_quantity(), stock_status(), total_sales(), type()
+  - fields: date_created_gmt(string), date_modified_gmt(string), id(integer), name(string), price(string), regular_price(string), sale_price(string), sku(string), slug(string), status(string), stock_quantity(integer), stock_status(string), total_sales(integer), type(string)
 - customers:
   - primary key: id
   - cursor: date_modified_gmt
-  - fields: date_created(), date_created_gmt(), date_modified(), date_modified_gmt(), email(), first_name(), id(), is_paying_customer(), last_name(), role(), username()
+  - fields: date_created(string), date_created_gmt(string), date_modified(string), date_modified_gmt(string), email(string), first_name(string), id(integer), is_paying_customer(boolean), last_name(string), role(string), username(string)
 - coupons:
   - primary key: id
   - cursor: date_modified_gmt
-  - fields: amount(), code(), date_created(), date_created_gmt(), date_expires(), date_modified(), date_modified_gmt(), discount_type(), id(), usage_count(), usage_limit()
+  - fields: amount(string), code(string), date_created(string), date_created_gmt(string), date_expires(string), date_modified(string), date_modified_gmt(string), discount_type(string), id(integer), usage_count(integer), usage_limit(integer)
 
 ## Sync Modes
 

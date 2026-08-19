@@ -11,9 +11,11 @@ Reads Apptivo CRM customers, contacts, leads, and opportunities through the Appt
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,27 +29,27 @@ Reads Apptivo CRM customers, contacts, leads, and opportunities through the Appt
 ## Configuration
 
 - base_url
-- access_key (secret)
-- api_key (secret)
+- access_key (secret) (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: customerId
-  - fields: creationDate(), currencyCode(), customerId(), customerName(), customerNumber(), emailAddress(), lastUpdateDate(), phoneNumber(), statusName(), website()
+  - fields: creationDate(string), currencyCode(string), customerId(string), customerName(string), customerNumber(string), emailAddress(string), lastUpdateDate(string), phoneNumber(string), statusName(string), website(string)
 - contacts:
   - primary key: contactId
-  - fields: companyName(), contactId(), creationDate(), emailAddress(), firstName(), fullName(), lastName(), lastUpdateDate(), phoneNumber()
+  - fields: companyName(string), contactId(string), creationDate(string), emailAddress(string), firstName(string), fullName(string), lastName(string), lastUpdateDate(string), phoneNumber(string)
 - leads:
   - primary key: id
-  - fields: companyName(), creationDate(), emailAddress(), firstName(), id(), lastName(), leadId(), leadSource(), phoneNumber(), statusName()
+  - fields: companyName(string), creationDate(string), emailAddress(string), firstName(string), id(string), lastName(string), leadId(string), leadSource(string), phoneNumber(string), statusName(string)
 - opportunities:
   - primary key: opportunityId
-  - fields: closingDate(), creationDate(), currencyCode(), customerName(), lastUpdateDate(), opportunityAmount(), opportunityId(), opportunityName(), salesStageName()
+  - fields: closingDate(string), creationDate(string), currencyCode(string), customerName(string), lastUpdateDate(string), opportunityAmount(string), opportunityId(string), opportunityName(string), salesStageName(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

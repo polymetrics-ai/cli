@@ -1,6 +1,107 @@
 # Connector Certification Harness Design — `pm connectors certify`
 
-Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
+Status: architecture design (2026-07-02). The superseded program PRD is archived;
+current delivery rules are in [the connector canon](../connector-canon/INDEX.md).
+
+> **Current status:** this design describes a target harness. It does not grant
+> certification, and there are currently zero accepted live certifications.
+> A `certification.json` definition, fixture, or generated file is not live
+> proof.
+
+> **Current certification authority (r1).** The generated proof-bearing
+> artifacts under `internal/connectors/certifications/` supersede the legacy
+> report/cassette material described below for the question “is this connector
+> certified?”. `go run ./cmd/connectorgen certification-matrix --check` reads
+> and validates committed proof first, then checks its capability, workflow,
+> warehouse-facing sync-mode, and source/destination flow matrices against
+> code. A passing legacy `pm connectors certify` report cannot change the
+> generated status. `pm connectors inspect <name>` renders only the binary
+> status derived from those artifacts: `CERTIFIED`, or `COMMUNITY BUILD,
+> UNCERTIFIED`; reachability is never gated.
+>
+> Accepted evidence embeds a publishable transcript with repository-salted HMAC
+> fingerprints substituted before persistence. Its schema-v2 credential scope is
+> explicit: a completed, verified full-parity run may claim `full_parity` with
+> `full_parity_stage` proof; every other completed run may claim only
+> `observed_operations` with `protocol_exchanges` proof. Neither form contains
+> raw or encrypted credentials, and each records every
+> false flow-delivery guarantee with a named limitation. See
+> `data/cli-live-certification-matrix-r1/report.md` for the concrete schema and
+> first baseline. The historical harness remains useful test infrastructure but
+> is not a certification source until it writes this accepted record shape.
+
+## Generated certification baseline
+
+`go run ./cmd/connectorgen certification-matrix` produces the authoritative,
+reviewable capability baseline at
+`internal/connectors/certifications/capability-matrix.json`. It must be
+regenerated from a source checkout; `--check` and the
+`connectorgen-certification-matrix` Make target fail on any byte drift.
+
+The generator derives its function-kind inventory from the capability contracts
+and engine operation-kind switch, then records one cell per connector and
+function kind. An applicable cell is complete only when its declaration, real
+implementation path, recorded fixture proof, and a passed live-evidence record
+are all present. It follows the registered concrete method to reject direct
+`ErrUnsupportedOperation` stubs; reachability or a command resolving is never
+evidence of correctness. A connector which exposes a stubbed method without
+declaring that capability remains an applicable `declared=false`,
+`implemented=false` row rather than being hidden as not applicable.
+
+Live evidence is accepted only from
+`internal/connectors/certifications/evidence/*.json`. A passed record embeds
+its sanitized proof rather than a pass claim or a local reference. Existing
+definition-owned `certification.json` contracts and fixture/schema files are
+preserved but explicitly inventoried as legacy non-evidence: neither their
+presence nor their filename can certify a connector. Every non-applicable cell
+has a specific machine-readable code and explanation; generic `n/a` and
+`blocked` labels are invalid.
+
+The generator is developer tooling, but its generated status projection is
+embedded in `pm connectors inspect`, which is the point-of-use user warning.
+Capability completion by itself is not a certification claim.
+
+### Generated parity projection, cell identity, and safe publication
+
+`certification-sweep.json` is the generated, exhaustive schedulable-declaration
+inventory for one connector. It retains `declared_commands` for the CLI count
+and `declared_rows` for the total: CLI commands plus stable capability,
+changefeed, and source/destination transport rows. Every row carries
+`operation_kind` and `op_class`, derived from the bundle's `operations.json`,
+CLI intent and references, capabilities, changefeed, or `sync_transport.json`
+descriptor. The closed operation-kind
+vocabulary is `rest_read`, `rest_write`, `etl`, `reverse_etl`,
+`binary_download`, `file_upload`, `cdc`, and `changefeed`; the closed parity
+classes are `direct_read`, `direct_write`, `etl`, `reverse_etl`, and `binary`.
+These are generated scheduler fields, never `certification.json` authoring.
+Only a nonschedulable CLI namespace/config declaration can have null projection
+fields; every schedulable declaration row has a valid projection or is a
+generated `product_defect`, never a silent `n/a`. Classified
+write rows retain their declared `write_action_kind`, including `delete`, so a
+delete is selectable within its existing write family rather than becoming a
+sixth parity class.
+
+The unit of scheduled work is a `(connector × op_class)` cell, with the exact
+operation kind retained for subordinate contracts such as CDC and changefeed.
+Cells may run independently only when their complete mutable-resource key sets
+are disjoint: provider account/fixture namespace, provider rate-limit scope,
+source watermark or CDC slot, warehouse `(workspace, connector, connection,
+table)` target, run/project root and state, write ledger, report/history path,
+database runtime slot, and connector-owned matrix shard. The global status and
+allowlist are final-reducer resources and are never owned by an individual
+cell. The per-connection warehouse layout is therefore isolation, not a
+convention; do not collapse it to a flat path.
+
+Accepted evidence is immutable and published only after its entire record (or
+batch) validates in memory. Each record is staged and fsynced on the evidence
+directory's filesystem, then hard-linked to its final unique name so the link
+is no-replace and matrix readers see either no record or complete JSON. A
+connector's cell drafts fan in to one connector reducer, which imports the
+validated evidence, regenerates that connector's shard, and runs the scoped
+shard check. Only after all connector reducers finish may a single final owner
+run `certification-matrix --all` and the global check; a per-connector runner
+must never publish evidence, run the global check, and delete that evidence on
+global drift.
 
 ## Load-bearing facts (verified in code)
 
@@ -18,9 +119,9 @@ Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-lo
 5. **Gotchas**: `directConnector` (`cli.go:591`) builds RuntimeConfig from `--config` only — `pm
    etl check/read --connector` never resolves credential Secrets. Live check must go through `pm
    credentials test` (vault-resolved secrets), and `--credential` is added to `etl check/read` as a
-   prerequisite fix. `pm reverse plan --json` deliberately strips the approval token — the harness
-   parses the token from text output and separately asserts the JSON path keeps hiding it
-   (redaction gate).
+   prerequisite fix. `pm reverse plan --json` deliberately omits the approval token — the harness
+   parses the token from text output and separately asserts the JSON path omits it
+   (token-omission gate).
 6. Crontab entries carry a `# pm-schedule-<name>` sentinel (`internal/schedule/crontab.go:88,100`)
    — a verifiable roundtrip marker. `runScheduleRemove` ignores backend removal errors — certify
    verifies independently.
@@ -65,6 +166,7 @@ pm connectors certify <connector>
     [--limit N]                  # per-read record cap (default 50)
     [--modes m1,m2,...]          # default: all 5
     [--skip write,flow,schedule]
+    [--full]                     # include API-surface inventory and provenance evidence
     [--rate-limit RPS] [--budget N]
     [--record | --replay]        # Tier-1 capture / replay
     [--live-all-modes] [--allow-production-writes]
@@ -93,7 +195,7 @@ below run-1 checkpoint; in --record mode assert outbound request carried the cur
 etl_incremental_append_deduped (capture) · 11 query_contract.
 
 Write stages: 12 write_plan_preview (text yields plan id + token; `--json` contains NO token) · 13
-write_create (`reverse run --approve`: succeeded=1, failed=0) · 14 write_verify (live read-back
+write_create (`reverse run --approval-token-stdin`: succeeded=1, failed=0) · 14 write_verify (live read-back
 finds tag; else `unverified` warning) · 15 write_cleanup · 16 cleanup_verify (entity gone —
 failure ⇒ `leaked_resource`) · 17 approval_idempotency (consumed plan+token re-run must fail).
 
@@ -120,11 +222,31 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   "passed": true,
   "leaks": [],
   "budget": {"calls_used": 143, "calls_budget": 500, "rate_limit_rps": 2},
+  "rate_limit_events": [
+    {"type": "attempt", "stage": "catalog_live", "method": "GET"},
+    {"type": "reset", "stage": "catalog_live", "method": "GET", "status_code": 200,
+     "reset_at": "2026-08-14T12:00:00Z"},
+    {"type": "not_sent", "stage": "etl_full_refresh_append", "method": "POST",
+     "reason": "deadline_cutoff"}
+  ],
   "fixture": { "...embedded conformance report...": true },
   "capabilities": {
     "check":   {"live": "pass"},
     "catalog": {"live": "pass", "streams": 21},
     "read":    {"live": "pass", "stream": "issues", "records": 50},
+    "surface": {
+      "result": "pass",
+      "endpoints": 509,
+      "covered": 440,
+      "blocked": 69,
+      "provenance": {
+        "status": "complete",
+        "ledger_version": 2,
+        "artifact_count": 1,
+        "endpoint_count": 509,
+        "cited_endpoints": 509
+      }
+    },
     "sync_modes": {
       "full_refresh_append":            {"result": "pass", "data_source": "live"},
       "full_refresh_overwrite":         {"result": "pass", "data_source": "capture"},
@@ -149,7 +271,40 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
 }
 ```
 
+`rate_limit_events` is optional structured execution evidence. It records only the
+stage, HTTP method, outcome, and safe timing/status fields needed to explain
+admission; it never contains a credential, a rendered request, or a rate-scope
+subject. A `not_sent` event proves admission stopped the physical provider
+request. Certification bounds each individual rate-admission wait so a depleted
+shared provider budget becomes an explicit deadline cutoff rather than an
+unbounded run.
+
+### Certification runbook secret rule
+
+Certification runbooks must contain only a secret-store reference, an approved
+environment-variable name, or a protected key path — never the secret value.
+If a raw credential appears in a terminal, report it without repeating the
+value, stop using it, and have the credential owner revoke or rotate it before
+any future use. Evidence, fixtures, status lines, commits, and PR bodies must
+retain only fingerprints or non-secret references.
+
+An `untestable` capability may include `untestable_reason`, an optional serialized
+[`failures.Classification`](../../internal/failures/classification.go). It carries only a safe
+`domain`, `code`, and `message`, plus optional RFC 6901 `field_path`, system-only
+`dispatch_kind`, and identifier `references`; its internal diagnostic cause never serializes.
+`configuration` and `system` classifications are non-retryable, while `transient` is retryable.
+The existing `reason` field remains available for generic explanations.
+
 History appends to `.polymetrics/certifications/history/<connector>/<timestamp>.json`.
+
+With `--full`, `capabilities.surface.provenance` is evidence separate from endpoint coverage and
+capability claims. Version-1/pre-ledger surfaces report `legacy_unverified` so the staged migration
+does not orphan existing bundles. Version-2 surfaces require each endpoint citation to resolve to a
+provider artifact with a retrieval date; invalid evidence fails the `surface_inventory` stage. The
+provenance block never changes `covered_by` or enables a command.
+
+`api_surface.json` is intentionally excluded from shipping binaries, so this full inventory runs
+from a source checkout (or a directory below one); otherwise the stage is reported as skipped.
 
 ### Enablement (replacing the manual flip)
 
@@ -220,7 +375,7 @@ actions are never executed live** (`skipped: no cleanup pairing`) unless a conne
 supplies a safe pairing with read-back fields.
 
 **Mechanics per pair** (all via public CLI): write tagged record to local JSONL → file→warehouse
-ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approve` →
+ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approval-token-stdin` →
 verify → cleanup plan → verify again.
 
 **Write-ahead leak ledger**: before any live write, append `{action, tag, connector, entity_hint,

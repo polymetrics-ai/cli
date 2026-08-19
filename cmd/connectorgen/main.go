@@ -7,8 +7,27 @@
 //	boundary [repo] [--json] [--base <ref>]
 //	                           scans shared Go for connector-specific policy
 //	                           outside definition-owned locations
+//	ownership [repo] [--json] [--base <ref>] [--scope-file <path>]
+//	                           validates changed paths for exactly one target connector
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
+//	surface-sync [dir] [--check]
+//	                           derives operation-backed command metadata
+//	                           (api_surface, output_policy, flag maps_to,
+//	                           rest.max_bytes) and the compact runtime
+//	                           direct-read endpoint ledger from bundle sources
+//	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
+//	                           derives direct-read api_surface coverage and
+//	                           blocked reasons from runtime preflight
+//	batch plan --ledger <path> --out <path>
+//	                           turns provider-artifact ledger evidence into a
+//	                           deterministic, reviewable connector batch
+//	batch materialize --manifest <path> --source-defs-root <path> ...
+//	                           copies a reviewed source bundle and derives its
+//	                           cited provider-artifact inventory and CLI surface
+//	batch gate --manifest <path> --report <path>
+//	                           records independent candidate validation and
+//	                           runtime-preflight results
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
@@ -40,8 +59,26 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runValidate(args, stdout, stderr)
 	case "boundary":
 		return runBoundary(args, stdout, stderr)
+	case "ownership":
+		return runOwnership(args, stdout, stderr)
 	case "gen":
 		return runGen(args, stdout, stderr)
+	case "surface-sync":
+		return runSurfaceSync(args, stdout, stderr)
+	case "params-import":
+		return runParamsImport(args, stdout, stderr)
+	case "surface-reconcile":
+		return runSurfaceReconcile(args, stdout, stderr)
+	case "certification-matrix":
+		return runCertificationMatrix(args, stdout, stderr)
+	case "certification-sweep":
+		return runCertificationSweep(args, stdout, stderr)
+	case "certification-candidates":
+		return runCertificationCandidates(args, stdout, stderr)
+	case "certification-evidence":
+		return runCertificationEvidence(args, stdout, stderr)
+	case "batch":
+		return runBatch(args, stdout, stderr)
 	case "new":
 		return runNew(args, stdout, stderr)
 	case "-h", "--help", "help":
@@ -71,7 +108,19 @@ func usage() string {
 	return `usage:
   connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
-  connectorgen gen
+  connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
+	connectorgen gen
+	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
+	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)
+	connectorgen certification-sweep [repo-root] --connector <name> [--check]
+	connectorgen certification-candidates [repo-root] --connector <name> [--check]
+	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
+	connectorgen certification-evidence report --connector <name> --report <path> --external-proof <path> --record-prefix <id> [--repo-root <path>]
+	connectorgen certification-evidence draft --draft <.tmp/live-certification/drafts/record.json> [--repo-root <path>]
+	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
+  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
+  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
   connectorgen new <name>`
 }
 
@@ -101,8 +150,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -123,6 +171,28 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+// validatePath validates either a defs root containing connector bundle
+// directories or a single connector bundle directory. The latter keeps
+// connector-local gates easy to run without accidentally treating schemas/ and
+// fixtures/ as sibling connector bundles.
+func validatePath(dir string) (Report, error) {
+	cleanDir := filepath.Clean(dir)
+	if isBundleDir(cleanDir) {
+		absDir, err := filepath.Abs(cleanDir)
+		if err != nil {
+			return Report{}, fmt.Errorf("validate: resolve bundle dir: %w", err)
+		}
+		findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(absDir)), filepath.Base(absDir))
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	}
+	return validateDir(os.DirFS(cleanDir))
+}
+
+func isBundleDir(dir string) bool {
+	info, err := os.Stat(filepath.Join(dir, "metadata.json"))
+	return err == nil && !info.IsDir()
 }
 
 // renderText renders a Report as human-readable lines: one finding per line

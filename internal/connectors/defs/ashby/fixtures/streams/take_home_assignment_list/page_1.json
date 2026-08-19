@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/takeHomeAssignment.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "take_home_assignment_list_id_fixture_56",
+          "applicationId": "take_home_assignment_list_applicationid_fixture_56",
+          "candidateId": "take_home_assignment_list_candidateid_fixture_56",
+          "interviewStageId": "take_home_assignment_list_interviewstageid_fixture_56",
+          "interviewId": "take_home_assignment_list_interviewid_fixture_56",
+          "interview": {
+            "id": "take_home_assignment_list_id_fixture_56",
+            "title": "Title fixture 56",
+            "externalTitle": "Externaltitle fixture 56",
+            "type": "Assessment",
+            "isArchived": false,
+            "isDebrief": false,
+            "isFeedbackRequired": false,
+            "isFeedbackRequested": false,
+            "instructionsHtml": "<p>Instructionshtml fixture 56</p>",
+            "instructionsPlain": "take_home_assignment_list_instructionsplain_fixture_56",
+            "jobId": "take_home_assignment_list_jobid_fixture_56",
+            "feedbackFormDefinitionId": "take_home_assignment_list_feedbackformdefinitionid_fixture_56"
+          },
+          "status": "WaitingOnSubmission",
+          "createdAt": "2026-01-28T06:00:00Z",
+          "updatedAt": "2026-02-28T08:00:00Z",
+          "submission": {
+            "id": "take_home_assignment_list_id_fixture_56",
+            "submittedAt": "2026-01-28T06:00:00Z",
+            "notesHtml": "<p>Noteshtml fixture 56</p>",
+            "notesPlain": "take_home_assignment_list_notesplain_fixture_56",
+            "fileHandles": [
+              {
+                "id": "take_home_assignment_list_id_fixture_56",
+                "name": "Take Home Assignment List Name Fixture 56",
+                "handle": "take_home_assignment_list_handle_fixture_56"
+              }
+            ]
+          },
+          "feedbackFormDefinitionId": "take_home_assignment_list_feedbackformdefinitionid_fixture_56",
+          "reviewers": [
+            {
+              "userId": "take_home_assignment_list_userid_fixture_56",
+              "interviewEventId": "take_home_assignment_list_intervieweventid_fixture_56",
+              "feedbackLink": "https://example.invalid/ashby/take_home_assignment_list/feedbacklink/56",
+              "hasSubmittedFeedback": false,
+              "feedbackSubmittedAt": "2026-01-28T06:00:00Z"
+            }
+          ]
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

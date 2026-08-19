@@ -13,6 +13,7 @@ DESCRIPTION
   Reads orders, products, customers, warehouses, suppliers, purchase orders, sales channels, delivery methods, and tags from the Veeqo API, and writes orders, products, customers, suppliers, warehouses, delivery methods, tags, sales channels, product properties, payments, and shipments.
 
 ICON
+  id: veeqo
   asset: icons/veeqo.svg
   source: official
   review_status: official_verified
@@ -28,37 +29,37 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   orders:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), number(), status()
+    fields: created_at(string), id(string), number(string), status(string)
   products:
     primary key: id
-    fields: created_at(), id(), notes(), title(), updated_at()
+    fields: created_at(string), id(string), notes(string), title(string), updated_at(string)
   customers:
     primary key: id
-    fields: email(), id(), notes(), phone()
+    fields: email(string), id(string), notes(string), phone(string)
   warehouses:
     primary key: id
-    fields: city(), country(), id(), name(), post_code()
+    fields: city(string), country(string), id(string), name(string), post_code(string)
   suppliers:
     primary key: id
-    fields: created_at(), currency_code(), id(), name(), updated_at()
+    fields: created_at(string), currency_code(string), id(string), name(string), updated_at(string)
   purchase_orders:
     primary key: id
-    fields: completed_at(), created_at(), destination_warehouse_id(), id()
+    fields: completed_at(string), created_at(string), destination_warehouse_id(integer), id(string)
   channels:
     primary key: id
-    fields: id(), name(), state(), type_code()
+    fields: id(string), name(string), state(string), type_code(string)
   delivery_methods:
     primary key: id
-    fields: cost(), created_at(), id(), name()
+    fields: cost(string), created_at(string), id(string), name(string)
   tags:
     primary key: id
-    fields: colour(), id(), name(), taggings_count()
+    fields: colour(string), id(string), name(string), taggings_count(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -66,6 +67,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_supplier:
     endpoint: POST /suppliers
+    required fields: name
     risk: external mutation; approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.id }}
@@ -77,6 +79,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_warehouse:
     endpoint: POST /warehouses
+    required fields: name
     risk: external mutation; approval required
   update_warehouse:
     endpoint: PUT /warehouses/{{ record.id }}
@@ -84,6 +87,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_delivery_method:
     endpoint: POST /delivery_methods
+    required fields: name
     risk: external mutation; approval required
   update_delivery_method:
     endpoint: PUT /delivery_methods/{{ record.id }}
@@ -95,6 +99,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name
     risk: external mutation; approval required
   delete_tag:
     endpoint: DELETE /tags/{{ record.id }}
@@ -102,6 +107,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_channel:
     endpoint: POST /channels
+    required fields: name, type_code
     risk: external mutation; approval required
   update_channel:
     endpoint: PUT /channels/{{ record.id }}
@@ -113,20 +119,23 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_product_property:
     endpoint: POST /product_properties
+    required fields: name
     risk: external mutation; approval required
   create_customer:
     endpoint: POST /customers
+    required fields: customer
     risk: external mutation; approval required
   update_customer:
     endpoint: PUT /customers/{{ record.id }}
-    required fields: id
+    required fields: id, customer
     risk: external mutation; approval required
   create_product:
     endpoint: POST /products
+    required fields: product
     risk: external mutation; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}
-    required fields: id
+    required fields: id, product
     risk: external mutation; approval required
   delete_product:
     endpoint: DELETE /products/{{ record.id }}
@@ -134,10 +143,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_order:
     endpoint: POST /orders
+    required fields: order
     risk: external mutation; approval required
   update_order:
     endpoint: PUT /orders/{{ record.id }}
-    required fields: id
+    required fields: id, order
     risk: external mutation; approval required
   cancel_order:
     endpoint: PUT /orders/{{ record.id }}/cancel
@@ -145,9 +155,11 @@ REVERSE ETL ACTIONS
     risk: external mutation (cancels an order); approval required
   create_payment:
     endpoint: POST /payments
+    required fields: amount, payment_attributes
     risk: external mutation; approval required
   create_shipment:
     endpoint: POST /shipments
+    required fields: carrier_id, notify_customer, update_remote_order, allocation_id, order_id
     risk: external mutation; approval required
 
 SECURITY

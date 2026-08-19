@@ -1,0 +1,23 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "three_d_secure_action_result_token_id": "fixture_three_d_secure_action_result_token_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/fixture_invoice_id/collect",
+    "body": {
+      "three_d_secure_action_result_token_id": "fixture_three_d_secure_action_result_token_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "open",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

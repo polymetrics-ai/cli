@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Wikimedia pageview metrics for articles and top-article reports through the public Wikimedia REST API.
 
 ICON
+  id: wikipedia-pageviews
   asset: icons/wikipedia-pageviews.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,26 +27,26 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  access
-  agent
-  article
+  access (required)
+  agent (required)
+  article (required)
   base_url
   country
   day
-  end
+  end (required)
   month
-  project
-  start
+  project (required)
+  start (required)
   year
 
 ETL STREAMS
   pageviews:
     primary key: id
     cursor: timestamp
-    fields: access(), agent(), article(), granularity(), id(), project(), timestamp(), views()
+    fields: access(string), agent(string), article(string), granularity(string), id(string), project(string), timestamp(string), views(integer)
   top_articles:
     primary key: id
-    fields: access(), articles(), country(), day(), id(), month(), project(), year()
+    fields: access(string), articles(array), country(string), day(string), id(string), month(string), project(string), year(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

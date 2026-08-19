@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, and customers through the Katana REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-katana
+  asset: icons/simple-icons/katana.svg
+  title: Katana
+  simple_icon_slug: katana
+  simple_icon_hex: 000000
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Katana
+  match: exact-name-or-slug
+  matched_by: katana
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,29 +35,29 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   products:
     primary key: id
     cursor: updated_at
-    fields: additional_info(), category_name(), created_at(), default_supplier_id(), id(), is_producible(), is_purchasable(), is_sellable(), name(), uom(), updated_at()
+    fields: additional_info(string), category_name(string), created_at(string), default_supplier_id(integer), id(integer), is_producible(boolean), is_purchasable(boolean), is_sellable(boolean), name(string), uom(string), updated_at(string)
   materials:
     primary key: id
     cursor: updated_at
-    fields: additional_info(), category_name(), created_at(), default_supplier_id(), id(), is_sellable(), name(), uom(), updated_at()
+    fields: additional_info(string), category_name(string), created_at(string), default_supplier_id(integer), id(integer), is_sellable(boolean), name(string), uom(string), updated_at(string)
   variants:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), material_id(), product_id(), purchase_price(), sales_price(), sku(), type(), updated_at()
+    fields: created_at(string), id(integer), material_id(integer), product_id(integer), purchase_price(number), sales_price(number), sku(string), type(string), updated_at(string)
   sales_orders:
     primary key: id
     cursor: updated_at
-    fields: created_at(), currency(), customer_id(), delivery_date(), id(), order_created_date(), order_no(), status(), total(), total_in_base_currency(), updated_at()
+    fields: created_at(string), currency(string), customer_id(integer), delivery_date(string), id(integer), order_created_date(string), order_no(string), status(string), total(number), total_in_base_currency(number), updated_at(string)
   customers:
     primary key: id
     cursor: updated_at
-    fields: category(), created_at(), currency(), email(), id(), name(), phone(), reference_id(), updated_at()
+    fields: category(string), created_at(string), currency(string), email(string), id(integer), name(string), phone(string), reference_id(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

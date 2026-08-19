@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Paystack customers, transactions, subscriptions, invoices, and disputes through the Paystack REST API.
 
 ICON
+  id: paystack
   asset: icons/paystack.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -31,29 +32,29 @@ CONFIGURATION
   mode
   page_size
   start_date
-  secret_key (secret)
+  secret_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), customer_code(), domain(), email(), first_name(), id(), last_name(), phone(), risk_action(), updatedAt()
+    fields: createdAt(string), customer_code(string), domain(string), email(string), first_name(string), id(integer), last_name(string), phone(string), risk_action(string), updatedAt(string)
   transactions:
     primary key: id
     cursor: createdAt
-    fields: amount(), channel(), createdAt(), currency(), domain(), gateway_response(), id(), paid_at(), reference(), status()
+    fields: amount(integer), channel(string), createdAt(string), currency(string), domain(string), gateway_response(string), id(integer), paid_at(string), reference(string), status(string)
   subscriptions:
     primary key: id
     cursor: createdAt
-    fields: amount(), createdAt(), domain(), email_token(), id(), next_payment_date(), status(), subscription_code(), updatedAt()
+    fields: amount(integer), createdAt(string), domain(string), email_token(string), id(integer), next_payment_date(string), status(string), subscription_code(string), updatedAt(string)
   invoices:
     primary key: id
     cursor: createdAt
-    fields: amount(), createdAt(), currency(), domain(), due_date(), id(), paid(), request_code(), status(), updatedAt()
+    fields: amount(integer), createdAt(string), currency(string), domain(string), due_date(string), id(integer), paid(boolean), request_code(string), status(string), updatedAt(string)
   disputes:
     primary key: id
     cursor: createdAt
-    fields: category(), createdAt(), currency(), domain(), due_at(), id(), refund_amount(), resolution(), status(), updatedAt()
+    fields: category(string), createdAt(string), currency(string), domain(string), due_at(string), id(integer), refund_amount(integer), resolution(string), status(string), updatedAt(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

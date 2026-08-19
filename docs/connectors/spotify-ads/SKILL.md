@@ -11,9 +11,11 @@ Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-sco
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,33 +31,33 @@ Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-sco
 - ad_account_id
 - base_url
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - ad_accounts:
   - primary key: id
-  - fields: country(), id(), name()
+  - fields: country(string), id(string), name(string)
 - campaigns:
   - primary key: id
-  - fields: id(), name(), objective(), status()
+  - fields: id(string), name(string), objective(string), status(string)
 - ad_sets:
   - primary key: id
-  - fields: id(), name(), objective(), status()
+  - fields: id(string), name(string), objective(string), status(string)
 - ads:
   - primary key: id
-  - fields: id(), name(), objective(), status()
+  - fields: id(string), name(string), objective(string), status(string)
 - businesses:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(string), name(string), updated_at(string)
 - business_ad_accounts:
   - primary key: id
-  - fields: business_id(), country_code(), created_at(), currency_code(), id(), name(), status(), updated_at()
+  - fields: business_id(string), country_code(string), created_at(string), currency_code(string), id(string), name(string), status(string), updated_at(string)
 - assets:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_type(), created_at(), id(), name(), status(), updated_at()
+  - fields: asset_type(string), created_at(string), id(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

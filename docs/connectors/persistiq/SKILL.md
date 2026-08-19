@@ -11,6 +11,7 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 ## Icon
 
+- id: persistiq
 - asset: icons/persistiq.svg
 - source: official
 - review_status: official_verified
@@ -29,55 +30,55 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - leads:
   - primary key: id
-  - fields: email(), id(), name(), status(), updated_at()
+  - fields: email(string), id(string), name(string), status(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - campaigns:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - mailboxes:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - activities:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - accounts:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - dnc_domains:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - events:
   - primary key: id
-  - fields: created_at(), data(), event_type(), id()
+  - fields: created_at(string), data(object), event_type(string), id(string)
 - lead_fields:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - lead_statuses:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - tags:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - webhook_plugin:
-  - fields: post_email_opened(), post_email_opened_url(), post_email_reply(), post_email_reply_url(), post_new_prospect(), post_new_prospect_url(), post_updated_prospect(), post_updated_prospect_url(), raw_events(), raw_events_url()
+  - fields: post_email_opened(boolean), post_email_opened_url(string), post_email_reply(boolean), post_email_reply_url(string), post_new_prospect(boolean), post_new_prospect_url(string), post_updated_prospect(boolean), post_updated_prospect_url(string), raw_events(boolean), raw_events_url(string)
 - campaign_leads:
   - primary key: id
-  - fields: campaign_id(), id(), lead(), mailbox_id()
+  - fields: campaign_id(string), id(string), lead(object), mailbox_id(string)
 - campaign_replies:
   - primary key: id
-  - fields: body(), campaign_id(), cc_emails(), from_email(), id(), kind(), lead_id(), preview(), sent_at(), sentiment(), step_message_id(), subject(), to_emails()
+  - fields: body(string), campaign_id(string), cc_emails(array), from_email(string), id(string), kind(string), lead_id(string), preview(string), sent_at(string), sentiment(string), step_message_id(string), subject(string), to_emails(array)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
@@ -87,9 +88,11 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
   - risk: external mutation of an existing PersistIQ lead's fields; changing status/status_id/owner_id can move a lead into or out of active outbound-sequence automation depending on the target account's own campaign rules; approval required
 - create_campaign:
   - endpoint: POST /v1/campaigns
+  - required fields: campaign_name, owner_id
   - risk: creates a new outbound-email campaign in the target PersistIQ account; approval required
 - duplicate_campaign:
   - endpoint: POST /v1/campaigns/duplicate
+  - required fields: campaign_id, owner_id
   - risk: duplicates an existing campaign (including its steps/sequence) into a new campaign in the target account; approval required
 - add_lead_to_campaign:
   - endpoint: POST /v1/campaigns/{{ record.campaign_id }}/leads
@@ -101,10 +104,11 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
   - risk: removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required
 - reply_to_campaign_message:
   - endpoint: POST /v1/campaigns/{{ record.campaign_id }}/replies
-  - required fields: campaign_id
+  - required fields: campaign_id, inbox_message_id, body
   - risk: sends a real outbound email reply on behalf of the campaign's mailbox owner; irreversible once delivered; approval required
 - add_dnc_domain:
   - endpoint: POST /v1/dnc_domains
+  - required fields: name
   - risk: adds a domain to the account's Do-Not-Contact list; blocks future outreach to that domain account-wide; approval required
 
 ## Security

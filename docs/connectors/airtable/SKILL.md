@@ -11,6 +11,7 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
 
 ## Icon
 
+- id: airtable
 - asset: icons/airtable.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -38,32 +39,33 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
 
 - bases:
   - primary key: id
-  - fields: id(), name(), permissionLevel()
+  - fields: id(string), name(string), permissionLevel(string)
 - tables:
   - primary key: id
-  - fields: description(), fields(), id(), name(), primaryFieldId(), views()
+  - fields: description(string), fields(array), id(string), name(string), primaryFieldId(string), views(array)
 - records:
   - primary key: id
-  - fields: createdTime(), fields(), id()
+  - fields: createdTime(string), fields(object), id(string)
 - webhooks:
   - primary key: id
-  - fields: areNotificationsEnabled(), cursorForNextPayload(), expirationTime(), id(), isHookEnabled(), lastSuccessfulNotificationTime(), notificationUrl(), specification()
+  - fields: areNotificationsEnabled(boolean), cursorForNextPayload(integer), expirationTime(string), id(string), isHookEnabled(boolean), lastSuccessfulNotificationTime(string), notificationUrl(string), specification(object)
 - comments:
   - primary key: id
-  - fields: author(), createdTime(), id(), lastUpdatedTime(), parentCommentId(), record_id(), text()
+  - fields: author(object), createdTime(string), id(string), lastUpdatedTime(string), parentCommentId(string), record_id(string), text(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_record:
   - endpoint: POST /{{ config.base_id }}/{{ config.table_id }}
+  - required fields: fields
   - risk: creates a new record in the configured base/table; low-risk external mutation, no approval required
 - update_record:
   - endpoint: PATCH /{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
-  - required fields: id
+  - required fields: id, fields
   - risk: mutates only the field values included in the request (non-destructive PATCH); unincluded cell values are left unchanged
 - delete_record:
   - endpoint: DELETE /{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
@@ -71,6 +73,7 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
   - risk: permanently removes a record from the base/table; irreversible
 - create_table:
   - endpoint: POST /meta/bases/{{ config.base_id }}/tables
+  - required fields: name, fields
   - risk: creates a new table (schema mutation) in the configured base; low-risk but changes the base's structure, visible to every collaborator
 - update_table:
   - endpoint: PATCH /meta/bases/{{ config.base_id }}/tables/{{ record.id }}
@@ -78,7 +81,7 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
   - risk: renames or redescribes an existing table; a visible schema change for every collaborator on the base
 - create_field:
   - endpoint: POST /meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields
-  - required fields: table_id
+  - required fields: table_id, name, type
   - risk: creates a new column (schema mutation) in the target table; low-risk but changes the table's structure, visible to every collaborator
 - update_field:
   - endpoint: PATCH /meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.id }}
@@ -86,11 +89,11 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
   - risk: renames or redescribes an existing column; a visible schema change for every collaborator on the base
 - create_comment:
   - endpoint: POST /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments
-  - required fields: record_id
+  - required fields: record_id, text
   - risk: adds a visible comment to a record; every base collaborator with record access can see it, no external side effect
 - update_comment:
   - endpoint: PATCH /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}
-  - required fields: record_id, id
+  - required fields: record_id, id, text
   - risk: edits the text of an existing comment; visible to every base collaborator with record access
 - delete_comment:
   - endpoint: DELETE /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}
@@ -98,6 +101,7 @@ Reads Airtable bases, tables, records, webhooks, and record comments, and writes
   - risk: permanently removes a comment from a record; irreversible
 - create_webhook:
   - endpoint: POST /bases/{{ config.base_id }}/webhooks
+  - required fields: notificationUrl, specification
   - risk: registers a new outbound webhook that will POST live base-change notifications to an external URL of the caller's choosing; verify the target endpoint before enabling
 - delete_webhook:
   - endpoint: DELETE /bases/{{ config.base_id }}/webhooks/{{ record.id }}

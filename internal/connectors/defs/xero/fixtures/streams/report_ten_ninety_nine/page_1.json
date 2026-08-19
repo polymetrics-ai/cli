@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Reports/TenNinetyNine"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Reports": [
+        {
+          "ReportName": "report_name_fixture_1",
+          "ReportType": "STANDARD",
+          "ReportTitle": "report_title_fixture",
+          "ReportDate": "2026-01-01T00:00:00Z",
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "Contacts": [
+            "contact_fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

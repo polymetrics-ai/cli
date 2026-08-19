@@ -11,9 +11,11 @@ Reads Easypromos promotions, organizing brands, stages, users, participations, a
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,32 +31,32 @@ Reads Easypromos promotions, organizing brands, stages, users, participations, a
 - base_url
 - mode
 - promotion_id
-- bearer_token (secret)
+- bearer_token (secret) (required)
 
 ## ETL Streams
 
 - promotions:
   - primary key: id
-  - fields: created(), default_language(), description(), end_date(), id(), organizing_brand_id(), organizing_brand_name(), promotion_type(), start_date(), status(), timezone(), title(), url()
+  - fields: created(string), default_language(string), description(string), end_date(string), id(string), organizing_brand_id(string), organizing_brand_name(string), promotion_type(string), start_date(string), status(string), timezone(string), title(string), url(string)
 - organizing_brands:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - stages:
   - primary key: id
-  - fields: end_date(), id(), name(), start_date(), type(), visible()
+  - fields: end_date(string), id(string), name(string), start_date(string), type(string), visible(boolean)
 - users:
   - primary key: id
-  - fields: country(), created(), email(), external_id(), first_name(), id(), language(), last_name(), login_type(), nickname(), promotion_id(), status()
+  - fields: country(string), created(string), email(string), external_id(string), first_name(string), id(string), language(string), last_name(string), login_type(string), nickname(string), promotion_id(string), status(string)
 - participations:
   - primary key: id
-  - fields: created(), id(), ip(), promotion_id(), stage_id(), user_agent(), user_id()
+  - fields: created(string), id(string), ip(string), promotion_id(string), stage_id(string), user_agent(string), user_id(string)
 - prizes:
   - primary key: id
-  - fields: code(), created(), download_url(), id(), participation_id(), prize_type_id(), prize_type_name(), redeem_url(), stage_id()
+  - fields: code(string), created(string), download_url(string), id(string), participation_id(string), prize_type_id(string), prize_type_name(string), redeem_url(string), stage_id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

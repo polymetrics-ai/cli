@@ -11,6 +11,7 @@ Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocu
 
 ## Icon
 
+- id: coinmarketcap
 - asset: icons/coinmarketcap.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -39,41 +40,41 @@ Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocu
 - price_conversion_amount
 - price_conversion_id
 - price_conversion_symbol
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - global_metrics:
   - primary key: active_cryptocurrencies
-  - fields: active_cryptocurrencies(), active_exchanges(), active_market_pairs(), btc_dominance(), eth_dominance(), last_updated(), quote(), total_cryptocurrencies(), total_exchanges()
+  - fields: active_cryptocurrencies(integer), active_exchanges(integer), active_market_pairs(integer), btc_dominance(number), eth_dominance(number), last_updated(string), quote(object), total_cryptocurrencies(integer), total_exchanges(integer)
 - global_metrics_quotes_historical:
   - primary key: timestamp
-  - fields: active_cryptocurrencies(), active_exchanges(), active_market_pairs(), btc_dominance(), eth_dominance(), quote(), timestamp()
+  - fields: active_cryptocurrencies(integer), active_exchanges(integer), active_market_pairs(integer), btc_dominance(number), eth_dominance(number), quote(object), timestamp(string)
 - cryptocurrency_info:
   - primary key: cmc_id
-  - fields: category(), cmc_id(), date_added(), date_launched(), description(), id(), logo(), name(), notice(), platform(), slug(), subreddit(), symbol(), tags(), urls()
+  - fields: category(string), cmc_id(string), date_added(string), date_launched(string), description(string), id(integer), logo(string), name(string), notice(string), platform(object), slug(string), subreddit(string), symbol(string), tags(array), urls(object)
 - cryptocurrency_quotes_latest:
   - primary key: cmc_id
-  - fields: circulating_supply(), cmc_id(), cmc_rank(), id(), last_updated(), max_supply(), name(), quote(), slug(), symbol(), total_supply()
+  - fields: circulating_supply(number), cmc_id(string), cmc_rank(integer), id(integer), last_updated(string), max_supply(number), name(string), quote(object), slug(string), symbol(string), total_supply(number)
 - price_conversion:
   - primary key: id
-  - fields: amount(), id(), last_updated(), name(), quote(), symbol()
+  - fields: amount(number), id(integer), last_updated(string), name(string), quote(object), symbol(string)
 - fear_and_greed_latest:
   - primary key: update_time
-  - fields: update_time(), value(), value_classification()
+  - fields: update_time(string), value(integer), value_classification(string)
 - altcoin_season_index_latest:
   - primary key: snapshot_time
-  - fields: altcoin_index(), altcoin_marketcap(), snapshot_time()
+  - fields: altcoin_index(integer), altcoin_marketcap(number), snapshot_time(string)
 - altcoin_season_index_historical:
   - primary key: timestamp
-  - fields: altcoin_index(), altcoin_marketcap(), timestamp()
+  - fields: altcoin_index(integer), altcoin_marketcap(number), timestamp(string)
 - key_info:
   - primary key: plan
-  - fields: plan(), usage()
+  - fields: plan(object), usage(object)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

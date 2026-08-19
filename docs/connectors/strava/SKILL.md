@@ -11,6 +11,7 @@ Reads the authenticated Strava athlete's profile, activities, lifetime stats, an
 
 ## Icon
 
+- id: strava
 - asset: icons/strava.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,26 +30,26 @@ Reads the authenticated Strava athlete's profile, activities, lifetime stats, an
 
 - athlete_id
 - base_url
-- client_id
+- client_id (required)
 - token_url
-- client_secret (secret)
-- refresh_token (secret)
+- client_secret (secret) (required)
+- refresh_token (secret) (required)
 
 ## ETL Streams
 
 - activities:
   - primary key: id
   - cursor: start_date
-  - fields: achievement_count(), average_speed(), distance(), elapsed_time(), id(), kudos_count(), max_speed(), moving_time(), name(), sport_type(), start_date(), start_date_local(), timezone(), total_elevation_gain(), type()
+  - fields: achievement_count(integer), average_speed(number), distance(number), elapsed_time(integer), id(integer), kudos_count(integer), max_speed(number), moving_time(integer), name(string), sport_type(string), start_date(string), start_date_local(string), timezone(string), total_elevation_gain(number), type(string)
 - athlete:
   - primary key: id
-  - fields: city(), country(), created_at(), firstname(), id(), lastname(), sex(), state(), updated_at(), username(), weight()
+  - fields: city(string), country(string), created_at(string), firstname(string), id(integer), lastname(string), sex(string), state(string), updated_at(string), username(string), weight(number)
 - athlete_stats:
   - primary key: id
-  - fields: all_ride_totals(), all_run_totals(), all_swim_totals(), biggest_climb_elevation_gain(), biggest_ride_distance(), id(), recent_ride_totals(), recent_run_totals(), recent_swim_totals(), ytd_ride_totals(), ytd_run_totals(), ytd_swim_totals()
+  - fields: all_ride_totals(object), all_run_totals(object), all_swim_totals(object), biggest_climb_elevation_gain(number), biggest_ride_distance(number), id(integer), recent_ride_totals(object), recent_run_totals(object), recent_swim_totals(object), ytd_ride_totals(object), ytd_run_totals(object), ytd_swim_totals(object)
 - clubs:
   - primary key: id
-  - fields: city(), country(), id(), member_count(), membership(), name(), private(), sport_type(), state(), url()
+  - fields: city(string), country(string), id(integer), member_count(integer), membership(string), name(string), private(boolean), sport_type(string), state(string), url(string)
 
 ## Sync Modes
 

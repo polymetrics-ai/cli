@@ -1,0 +1,27 @@
+# #4069 strict RED evidence
+
+Production head before implementation: `f30dfcefc`
+
+Command:
+
+```text
+go test -timeout 20m ./internal/cli -run '^TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity$' -count=1 -v
+```
+
+Result: expected RED, exit 1.
+
+- Real Parquet selected reads passed: `acme/records` returned
+  `acme-case-unique`; `globex/RECORDS` returned `globex-case-unique`.
+- The unrelated generic `SELECT 1` failed before SQL execution while
+  registering the duplicate canonical view:
+
+  ```text
+  register view "records": Catalog Error: View with name "records" already exists!
+  ```
+
+- Omitted flow queries using unquoted `records` and quoted `RECORDS` both
+  failed their `errors.As(..., *warehouse.AmbiguousTableError)` assertions:
+  the raw duplicate-view catalog error reached the flow boundary instead.
+
+The fixture uses only test-owned local Parquet/DuckDB warehouse state; no
+credential, provider call, reverse-ETL, transport, or write dispatch occurred.

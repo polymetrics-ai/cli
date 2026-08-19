@@ -41,7 +41,7 @@ same command surface.
 | SQL | Query extracted data locally with an embedded DuckDB engine. |
 | Reverse ETL | Write results back through approval-gated destination actions. |
 | Agents | Use `--json`, stable exit codes, and no silent mutation paths. |
-| Catalog | Track a 646-connector catalog with active native Go ports. |
+| Catalog | Inspect declared and runtime-enabled connector capabilities from definition bundles. |
 | Runtime | Keep credentials in an encrypted local vault. No server required. |
 
 ## Quickstart
@@ -81,7 +81,7 @@ Release binaries are published on GitHub:
 gh release download --repo polymetrics-ai/cli --pattern 'pm_*_darwin_arm64.tar.gz'
 ```
 
-Windows signing and installer distribution are being prepared for a future release. See the [code signing policy](docs/security/code-signing-policy.md) for the planned SignPath Foundation route, publisher display implications, and no-unsigned-fallback release rules.
+Windows is not a release target. The published release matrix is Linux and macOS; Windows can return only with a customer ask and the complete build, verification, and release path restored together.
 
 ## Why It Exists
 
@@ -114,6 +114,12 @@ The contract is intentionally boring:
 - Exit codes separate usage, validation, auth, connector, runtime, policy, and
   internal failures.
 - Reverse ETL is split into `plan`, `preview`, `approve`, and `run`.
+- A reverse approval token travels only through the bare
+  `--approval-token-stdin` marker and one bounded line on standard input; it
+  is never accepted in argv, environment, or project files.
+- All project-state mutations share the established `state.json.lock` boundary,
+  so a consumed approval remains consumed during concurrent mixed-version use
+  and a replay is refused before dispatch.
 - Secrets are referenced by field name and never printed.
 
 ## Connectors
@@ -128,9 +134,18 @@ pm connectors inspect github --json
 pm connectors port-plan --all --json
 ```
 
-The repository tracks a 646-connector catalog. Enabled connector support is
-expanding through native Go ports built on shared SDK primitives for auth,
-pagination, retries, schema inference, read streams, and write actions.
+The catalog contains declared and runtime-enabled connector entries. Enabled
+support is definition-bundle first, interpreted by the declarative engine, with
+typed hooks or native implementations only where the documented contract needs
+them. Runtime-visible support comes from `pm connectors inspect`, not a catalog
+filename or a generated manual.
+
+Every connector flow is mediated by the local warehouse: API → warehouse → API,
+API → warehouse → database, database → warehouse → API, or database →
+warehouse → database. There are currently zero accepted live certifications;
+fixtures, endpoint ledgers, and `certification.json` files are not live proof.
+See [the connector delivery canon](docs/connector-canon/INDEX.md) before
+implementing or certifying a connector.
 
 ## Architecture
 
@@ -172,9 +187,10 @@ Canonical topics:
 
 ## Contributing
 
-Connector PRs are the best first contribution. Start with `CONTRIBUTING.md` and
-`docs/migration/conventions.md`, add focused tests, and run verification before
-opening a PR.
+Connector PRs are the best first contribution. Start with
+`docs/connector-canon/IMPLEMENTATION-PROCEDURE.md` and
+`docs/migration/conventions.md`, complete the Foundation Check, add focused
+tests, and run verification before opening a PR.
 
 ```bash
 make verify
@@ -195,7 +211,7 @@ Use Conventional Commits:
 - [x] ETL, query, and approval-gated reverse ETL
 - [x] Release binaries
 - [x] Website docs, connector catalog, blog, sitemap, and `llms.txt`
-- [ ] More native connector ports from the 646-connector catalog
+- [ ] More connector capability work after its typed foundations and live proof exist
 - [ ] Homebrew tap
 - [ ] Bundled MCP server
 - [ ] Hosted examples and reproducible benchmark datasets

@@ -11,6 +11,7 @@ Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serp
 
 ## Icon
 
+- id: serpstat
 - asset: icons/serpstat.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,23 +32,23 @@ Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serp
 - page_size
 - pages_to_fetch
 - region_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - domain_keywords:
   - primary key: keyword, url
-  - fields: keyword(), position(), updated_at(), url()
+  - fields: keyword(string), position(integer), updated_at(string), url(string)
 - domain_competitors:
   - primary key: domain
-  - fields: domain(), visibility()
+  - fields: domain(string), visibility(number)
 - domain_urls:
   - primary key: url
-  - fields: keywords(), url()
+  - fields: keywords(integer), url(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

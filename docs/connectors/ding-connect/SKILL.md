@@ -11,9 +11,11 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,49 +31,50 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 - base_url
 - mode
 - x_correlation_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - countries:
   - primary key: uuid
-  - fields: CountryIso(), CountryName(), InternationalDialingInformation(), RegionCodes(), uuid()
+  - fields: CountryIso(string), CountryName(string), InternationalDialingInformation(object), RegionCodes(array), uuid(string)
 - currencies:
   - primary key: uuid
-  - fields: CurrencyIso(), CurrencyName(), uuid()
+  - fields: CurrencyIso(string), CurrencyName(string), uuid(string)
 - regions:
   - primary key: uuid
-  - fields: CountryIso(), RegionCode(), RegionName(), uuid()
+  - fields: CountryIso(string), RegionCode(string), RegionName(string), uuid(string)
 - providers:
   - primary key: uuid
-  - fields: CountryIso(), CustomerCareNumber(), LogoUrl(), Name(), PaymentTypes(), ProviderCode(), RegionCodes(), ValidationRegex(), uuid()
+  - fields: CountryIso(string), CustomerCareNumber(string), LogoUrl(string), Name(string), PaymentTypes(array), ProviderCode(string), RegionCodes(array), ValidationRegex(string), uuid(string)
 - products:
   - primary key: uuid
-  - fields: Benefits(), CommissionRate(), DefaultDisplayText(), LocalizationKey(), Maximum(), Minimum(), PaymentTypes(), ProcessingMode(), ProviderCode(), RedemptionMechanism(), RegionCode(), SkuCode(), ValidityPeriodIso(), uuid()
+  - fields: Benefits(array), CommissionRate(number), DefaultDisplayText(string), LocalizationKey(string), Maximum(object), Minimum(object), PaymentTypes(array), ProcessingMode(string), ProviderCode(string), RedemptionMechanism(string), RegionCode(string), SkuCode(string), ValidityPeriodIso(string), uuid(string)
 - product_descriptions:
   - primary key: uuid
-  - fields: DescriptionMarkdown(), DisplayText(), LanguageCode(), LocalizationKey(), ReadMoreMarkdown(), uuid()
+  - fields: DescriptionMarkdown(string), DisplayText(string), LanguageCode(string), LocalizationKey(string), ReadMoreMarkdown(string), uuid(string)
 - promotions:
   - primary key: uuid
-  - fields: CurrencyIso(), EndUtc(), LocalizationKey(), MinimumSendAmount(), ProviderCode(), StartUtc(), ValidityPeriodIso(), uuid()
+  - fields: CurrencyIso(string), EndUtc(string), LocalizationKey(string), MinimumSendAmount(number), ProviderCode(string), StartUtc(string), ValidityPeriodIso(string), uuid(string)
 - provider_status:
   - primary key: uuid
-  - fields: IsProcessingTransfers(), Message(), ProviderCode(), uuid()
+  - fields: IsProcessingTransfers(boolean), Message(string), ProviderCode(string), uuid(string)
 - error_code_descriptions:
   - primary key: uuid
-  - fields: Code(), Message(), uuid()
+  - fields: Code(string), Message(string), uuid(string)
 - balance:
   - primary key: uuid
-  - fields: Balance(), CurrencyIso(), uuid()
+  - fields: Balance(number), CurrencyIso(string), uuid(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - send_transfer:
   - endpoint: POST /api/V1/SendTransfer
+  - required fields: SkuCode, SendValue, AccountNumber, DistributorRef
   - risk: external mutation; sends a real-money mobile top-up/airtime transfer to a live account and deducts the distributor's DingConnect balance unless ValidateOnly is set; approval required
 
 ## Security

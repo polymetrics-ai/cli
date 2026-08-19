@@ -11,6 +11,7 @@ Reads Facebook Page metadata and posts from the Graph API. Read-only.
 
 ## Icon
 
+- id: facebook
 - asset: icons/facebook.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,19 +29,19 @@ Reads Facebook Page metadata and posts from the Graph API. Read-only.
 ## Configuration
 
 - base_url
-- page_id
+- page_id (required)
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - page:
   - primary key: id
-  - fields: category(), fan_count(), id(), link(), name()
+  - fields: category(string), fan_count(integer), id(string), link(string), name(string)
 - posts:
   - primary key: id
   - cursor: updated_time
-  - fields: created_time(), id(), message(), permalink_url(), updated_time()
+  - fields: created_time(string), id(string), message(string), permalink_url(string), updated_time(string)
 
 ## Sync Modes
 

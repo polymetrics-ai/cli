@@ -13,9 +13,11 @@ DESCRIPTION
   Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites, licenses, notifications, and SSH tunnels, and writes job/notification/SSH-tunnel mutations and run-control actions (trigger/retry/cancel), through the dbt Cloud Administrative API v2.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -25,45 +27,45 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
+  account_id (required)
   base_url
   mode
-  api_key_2 (secret)
+  api_key_2 (secret) (required)
 
 ETL STREAMS
   projects:
     primary key: id
-    fields: account_id(), connection_id(), created_at(), dbt_project_subdirectory(), description(), id(), name(), repository_id(), state(), updated_at()
+    fields: account_id(integer), connection_id(integer), created_at(string), dbt_project_subdirectory(string), description(string), id(integer), name(string), repository_id(integer), state(integer), updated_at(string)
   runs:
     primary key: id
-    fields: account_id(), created_at(), environment_id(), finished_at(), id(), is_cancelled(), is_complete(), is_error(), job_definition_id(), project_id(), started_at(), status(), status_humanized(), updated_at()
+    fields: account_id(integer), created_at(string), environment_id(integer), finished_at(string), id(integer), is_cancelled(boolean), is_complete(boolean), is_error(boolean), job_definition_id(integer), project_id(integer), started_at(string), status(integer), status_humanized(string), updated_at(string)
   repositories:
     primary key: id
-    fields: account_id(), created_at(), git_clone_strategy(), id(), project_id(), remote_backend(), remote_url(), state(), updated_at()
+    fields: account_id(integer), created_at(string), git_clone_strategy(string), id(integer), project_id(integer), remote_backend(string), remote_url(string), state(integer), updated_at(string)
   users:
     primary key: id
-    fields: account_id(), created_at(), email(), first_name(), fullname(), id(), is_active(), last_name()
+    fields: account_id(integer), created_at(string), email(string), first_name(string), fullname(string), id(integer), is_active(boolean), last_name(string)
   environments:
     primary key: id
-    fields: account_id(), created_at(), custom_branch(), dbt_version(), id(), name(), project_id(), state(), type(), updated_at(), use_custom_branch()
+    fields: account_id(integer), created_at(string), custom_branch(string), dbt_version(string), id(integer), name(string), project_id(integer), state(integer), type(string), updated_at(string), use_custom_branch(boolean)
   jobs:
     primary key: id
     cursor: updated_at
-    fields: account_id(), created_at(), dbt_version(), description(), environment_id(), execute_steps(), generate_docs(), id(), job_type(), name(), project_id(), run_generate_sources(), state(), triggers_on_draft_pr(), updated_at()
+    fields: account_id(integer), created_at(string), dbt_version(string), description(string), environment_id(integer), execute_steps(array), generate_docs(boolean), id(integer), job_type(string), name(string), project_id(integer), run_generate_sources(boolean), state(integer), triggers_on_draft_pr(boolean), updated_at(string)
   invites:
     primary key: id
     cursor: created_at
-    fields: account_id(), created_at(), email_address(), group_ids(), id(), license_type(), redeemed_at(), status(), type()
+    fields: account_id(integer), created_at(string), email_address(string), group_ids(array), id(integer), license_type(string), redeemed_at(string), status(integer), type(string)
   licenses:
     primary key: account_id
-    fields: account_id(), analyst(), developer(), explorer(), it(), read_only()
+    fields: account_id(integer), analyst(object), developer(object), explorer(object), it(object), read_only(object)
   notifications:
     primary key: id
     cursor: updated_at
-    fields: account_id(), created_at(), external_email(), id(), on_cancel(), on_failure(), on_success(), on_warning(), slack_channel_id(), slack_channel_name(), state(), updated_at(), user_id()
+    fields: account_id(integer), created_at(string), external_email(string), id(integer), on_cancel(array), on_failure(array), on_success(array), on_warning(array), slack_channel_id(string), slack_channel_name(string), state(integer), updated_at(string), user_id(integer)
   ssh_tunnels:
     primary key: id
-    fields: account_id(), connection_id(), hostname(), id(), port(), public_key(), state(), username()
+    fields: account_id(integer), connection_id(integer), hostname(string), id(integer), port(integer), public_key(string), state(integer), username(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -71,6 +73,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_job:
     endpoint: POST /accounts/{{ config.account_id }}/jobs/
+    required fields: project_id, environment_id, name, execute_steps
     risk: creates a new scheduled/triggerable dbt Cloud job definition; low-risk until triggered, no approval required
   update_job:
     endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.id }}/
@@ -82,7 +85,7 @@ REVERSE ETL ACTIONS
     risk: irreversible removal of a job definition (its schedule/trigger and run history reference); approval required
   trigger_job_run:
     endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/run/
-    required fields: job_id
+    required fields: job_id, cause
     risk: kicks off a real dbt Cloud job run against the configured warehouse connection (builds/materializes models, can run arbitrary project SQL); external mutation with warehouse side effects, approval required
   retry_failed_job:
     endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/rerun/
@@ -98,6 +101,7 @@ REVERSE ETL ACTIONS
     risk: retries a specific failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required
   create_notification:
     endpoint: POST /accounts/{{ config.account_id }}/notifications/
+    required fields: user_id, on_cancel, on_failure, on_success, on_warning, state
     risk: registers an outbound job-status notification (email or Slack channel of the caller's choosing); low-risk external mutation, no approval required
   update_notification:
     endpoint: POST /accounts/{{ config.account_id }}/notifications/{{ record.id }}/
@@ -109,6 +113,7 @@ REVERSE ETL ACTIONS
     risk: removes an existing job-status notification configuration; approval required
   create_ssh_tunnel:
     endpoint: POST /accounts/{{ config.account_id }}/encryptions/
+    required fields: connection_id, username, port, hostname, state
     risk: creates an SSH tunnel encrypting traffic for a warehouse connection; may carry a private key in the request body, external mutation, approval required
   update_ssh_tunnel:
     endpoint: POST /accounts/{{ config.account_id }}/encryptions/{{ record.id }}/

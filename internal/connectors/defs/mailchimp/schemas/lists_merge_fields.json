@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_merge_fields",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "merge_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "tag": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "required": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "default_value": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "public": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "display_order": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "help_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_items": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_field_limit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

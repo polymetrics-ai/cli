@@ -1,0 +1,48 @@
+{
+  "phase": "cli-sweep-seven-connector-extract-r1",
+  "status": "reviewed_ready_to_commit",
+  "source_commit": "c28bc75a3",
+  "execution_mode": "inline_manual_gsd",
+  "red_failure": "focused source acceptance tests exited 1 against current-main bundle inputs; ledger versions and documented operation/disposition counts are absent",
+  "green_evidence": "focused plural-write validator tests pass; seven bundle inputs exactly match c28bc75a3; connectorgen validate checked 551 connectors with 0 findings; surface-sync is clean; real binary reached 1,984/1,984 implemented commands; full internal/cli passes after generated golden refresh",
+  "foundation": {
+    "status": "validated",
+    "reason": "Jira and Workday require multiple named write contracts over one documented provider endpoint",
+    "paths": [
+      "internal/connectors/engine/bundle.go",
+      "internal/connectors/engine/schema/api_surface.schema.json",
+      "cmd/connectorgen/validate.go",
+      "cmd/connectorgen/validate_surface_test.go"
+    ],
+    "commit": "e9eb8aad2",
+    "scope_guard": "No github or zendesk-support tests; retain current-main unrelated engine behavior."
+  },
+  "scope": [
+    "workday-rest",
+    "jira",
+    "help-scout",
+    "greenhouse",
+    "chatwoot",
+    "gmail",
+    "lever-hiring"
+  ],
+  "excluded": ["github", "zendesk-support"],
+  "generated_artifacts": {
+    "surface_sync": "runtime endpoint ledger updated; post-generation check clean",
+    "docs": "connector manuals and catalog regenerated",
+    "website": "website connector data regenerated",
+    "golden_transcripts": "regenerated with POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1"
+  },
+  "real_binary_reachability": {
+    "implemented_commands": 1984,
+    "result": "1984/1984 reached own NAME line"
+  },
+  "final_scope_audit": "162 staged branch-delta paths; 0 unexpected; 0 github/zendesk-support",
+  "gsd": {
+    "execute_phase": "prompt generated; inline/manual execution recorded",
+    "verify_work": "prompt generated; UAT.md records all acceptance checks as passed",
+    "code_review": "prompt generated; REVIEW.md records no actionable inline findings"
+  },
+  "live_credentials_used": false,
+  "certification_claim": "implemented_not_certified_never_live_tested"
+}

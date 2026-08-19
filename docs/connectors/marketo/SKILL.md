@@ -11,6 +11,7 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 
 ## Icon
 
+- id: marketo
 - asset: icons/marketo.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,7 +29,7 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 ## Configuration
 
 - activity_type_ids
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
@@ -38,17 +39,17 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 
 - leads:
   - primary key: id
-  - fields: createdAt(), email(), id(), updatedAt()
+  - fields: createdAt(string), email(string), id(integer), updatedAt(string)
 - programs:
   - primary key: id
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
 - activities:
   - primary key: id
-  - fields: activityDate(), activityTypeId(), id(), leadId()
+  - fields: activityDate(string), activityTypeId(integer), id(integer), leadId(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

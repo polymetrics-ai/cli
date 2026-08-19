@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Stigg products, plans, customers, and subscriptions through the Stigg GraphQL-over-HTTP API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,24 +28,24 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   products:
     primary key: id
-    fields: displayName(), id(), refId(), status()
+    fields: displayName(string), id(string), refId(string), status(string)
   plans:
     primary key: id
-    fields: displayName(), id(), refId(), status()
+    fields: displayName(string), id(string), refId(string), status(string)
   customers:
     primary key: id
-    fields: displayName(), id(), refId(), status()
+    fields: displayName(string), id(string), refId(string), status(string)
   subscriptions:
     primary key: id
-    fields: customerId(), id(), refId(), status()
+    fields: customerId(string), id(string), refId(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Stigg GraphQL API read of product/plan/customer/subscription entitlement metadata

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Productboard features, notes, components, and products through the public API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,24 +29,24 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   features:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   notes:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   components:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   products:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Productboard API read of feature, note, component, and product data

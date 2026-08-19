@@ -11,9 +11,17 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-circleci
+- asset: icons/simple-icons/circleci.svg
+- title: CircleCI
+- simple_icon_slug: circleci
+- simple_icon_hex: 343434
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=CircleCI
+- match: exact-name-or-slug
+- matched_by: circleci
 
 ## Capabilities
 
@@ -33,41 +41,41 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 - repo
 - vcs_type
 - workflow_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
-  - fields: default_branch(), id(), name(), organization_id(), organization_name(), organization_slug(), slug(), vcs_url()
+  - fields: default_branch(string), id(string), name(string), organization_id(string), organization_name(string), organization_slug(string), slug(string), vcs_url(string)
 - pipelines:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), number(), project_slug(), state(), updated_at()
+  - fields: created_at(string), id(string), number(integer), project_slug(string), state(string), updated_at(string)
 - workflows:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), pipeline_id(), pipeline_number(), project_slug(), status(), stopped_at()
+  - fields: created_at(string), id(string), name(string), pipeline_id(string), pipeline_number(integer), project_slug(string), status(string), stopped_at(string)
 - jobs:
   - primary key: id
   - cursor: started_at
-  - fields: id(), job_number(), name(), project_slug(), started_at(), status(), stopped_at(), type()
+  - fields: id(string), job_number(integer), name(string), project_slug(string), started_at(string), status(string), stopped_at(string), type(string)
 - contexts:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - schedules:
   - primary key: id
   - cursor: updated-at
-  - fields: actor(), created-at(), description(), id(), name(), parameters(), project-slug(), timetable(), updated-at()
+  - fields: actor(object), created-at(string), description(string), id(string), name(string), parameters(object), project-slug(string), timetable(object), updated-at(string)
 - checkout_keys:
   - primary key: fingerprint
-  - fields: created-at(), fingerprint(), preferred(), public-key(), type()
+  - fields: created-at(string), fingerprint(string), preferred(boolean), public-key(string), type(string)
 - environment_variables:
   - primary key: name
-  - fields: created-at(), name(), value()
+  - fields: created-at(string), name(string), value(string)
 - insights_workflow_summary:
   - primary key: name
-  - fields: metrics(), name(), project_id(), window_end(), window_start()
+  - fields: metrics(object), name(string), project_id(string), window_end(string), window_start(string)
 
 ## Sync Modes
 
@@ -77,6 +85,7 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 
 - create_schedule:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule
+  - required fields: name, timetable, attribution-actor, parameters
   - risk: external mutation; creates a new scheduled-pipeline trigger for this project
 - update_schedule:
   - endpoint: PATCH /schedule/{{ record.id }}
@@ -88,6 +97,7 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
   - risk: irreversible external deletion of a scheduled-pipeline trigger; approval required
 - create_environment_variable:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar
+  - required fields: name, value
   - risk: external mutation; creates or overwrites a project environment variable used by every future CI run
 - delete_environment_variable:
   - endpoint: DELETE /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}
@@ -95,6 +105,7 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
   - risk: irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required
 - create_checkout_key:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key
+  - required fields: type
   - risk: external mutation; creates a new deploy/checkout SSH key with repository access
 - delete_checkout_key:
   - endpoint: DELETE /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}

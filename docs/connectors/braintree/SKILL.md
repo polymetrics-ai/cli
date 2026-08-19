@@ -11,6 +11,7 @@ Reads Braintree transactions, customers, subscriptions, reference data, payment 
 
 ## Icon
 
+- id: braintree
 - asset: icons/braintree.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,48 +29,48 @@ Reads Braintree transactions, customers, subscriptions, reference data, payment 
 ## Configuration
 
 - base_url
-- merchant_id
+- merchant_id (required)
 - mode
 - page_size
-- private_key (secret)
-- public_key (secret)
+- private_key (secret) (required)
+- public_key (secret) (required)
 
 ## ETL Streams
 
 - transactions:
   - primary key: id
-  - fields: amount(), id(), status()
+  - fields: amount(string), id(string), status(string)
 - customers:
   - primary key: id
-  - fields: amount(), id(), status()
+  - fields: amount(string), id(string), status(string)
 - subscriptions:
   - primary key: id
-  - fields: amount(), id(), status()
+  - fields: amount(string), id(string), status(string)
 - add_ons:
   - primary key: id
-  - fields: amount(), id(), kind(), name()
+  - fields: amount(string), id(string), kind(string), name(string)
 - discounts:
   - primary key: id
-  - fields: amount(), id(), kind(), name()
+  - fields: amount(string), id(string), kind(string), name(string)
 - plans:
   - primary key: id
-  - fields: billing_frequency(), currency_iso_code(), id(), name(), price()
+  - fields: billing_frequency(integer), currency_iso_code(string), id(string), name(string), price(string)
 - merchant_accounts:
   - primary key: id
-  - fields: currency_iso_code(), default(), id(), status()
+  - fields: currency_iso_code(string), default(boolean), id(string), status(string)
 - payment_methods:
   - primary key: token
-  - fields: customer_id(), default(), payment_instrument_type(), token()
+  - fields: customer_id(string), default(boolean), payment_instrument_type(string), token(string)
 - disputes:
   - primary key: id
-  - fields: amount(), id(), reason(), status()
+  - fields: amount(string), id(string), reason(string), status(string)
 - apple_pay_domains:
   - primary key: domain
-  - fields: domain(), status()
+  - fields: domain(string), status(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

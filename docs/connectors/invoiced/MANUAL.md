@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes the documented Invoiced REST API surface for billing, payments, subscriptions, events, and related resources.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -45,132 +47,132 @@ CONFIGURATION
   subscription_id
   task_id
   tax_rate_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
     cursor: updated_at
-    fields: balance(), country(), created_at(), currency(), email(), id(), name(), number(), object(), phone(), type(), updated_at()
+    fields: balance(number), country(string), created_at(integer), currency(string), email(string), id(integer), name(string), number(string), object(string), phone(string), type(string), updated_at(integer)
   invoices:
     primary key: id
     cursor: updated_at
-    fields: balance(), closed(), created_at(), currency(), customer(), due_date(), id(), number(), object(), paid(), status(), total(), updated_at()
+    fields: balance(number), closed(boolean), created_at(integer), currency(string), customer(integer), due_date(integer), id(integer), number(string), object(string), paid(boolean), status(string), total(number), updated_at(integer)
   payments:
     primary key: id
     cursor: updated_at
-    fields: amount(), created_at(), currency(), customer(), date(), id(), invoice(), method(), object(), status(), updated_at()
+    fields: amount(number), created_at(integer), currency(string), customer(integer), date(integer), id(integer), invoice(integer), method(string), object(string), status(string), updated_at(integer)
   subscriptions:
     primary key: id
     cursor: updated_at
-    fields: canceled_at(), created_at(), customer(), id(), object(), period_end(), period_start(), plan(), quantity(), start_date(), status(), updated_at()
+    fields: canceled_at(integer), created_at(integer), customer(integer), id(integer), object(string), period_end(integer), period_start(integer), plan(string), quantity(integer), start_date(integer), status(string), updated_at(integer)
   estimates:
     primary key: id
     cursor: updated_at
-    fields: approved(), closed(), created_at(), currency(), customer(), expiration_date(), id(), number(), object(), status(), total(), updated_at()
+    fields: approved(boolean), closed(boolean), created_at(integer), currency(string), customer(integer), expiration_date(integer), id(integer), number(string), object(string), status(string), total(number), updated_at(integer)
   customer_contacts:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_contact:
     primary key: id
-    fields: id()
+    fields: id(integer)
   coupons:
     primary key: id
-    fields: id()
+    fields: id(integer)
   coupon:
     primary key: id
-    fields: id()
+    fields: id(integer)
   credit_balance_adjustments:
     primary key: id
-    fields: id()
+    fields: id(integer)
   credit_balance_adjustment:
     primary key: id
-    fields: id()
+    fields: id(integer)
   credit_notes:
     primary key: id
-    fields: id()
+    fields: id(integer)
   credit_note:
     primary key: id
-    fields: id()
+    fields: id(integer)
   credit_note_attachments:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_balance:
   estimate:
     primary key: id
-    fields: id()
+    fields: id(integer)
   estimate_attachments:
     primary key: id
-    fields: id()
+    fields: id(integer)
   events:
     primary key: id
-    fields: id()
+    fields: id(integer)
   event:
     primary key: id
-    fields: id()
+    fields: id(integer)
   file:
     primary key: id
-    fields: id()
+    fields: id(integer)
   invoice:
     primary key: id
-    fields: id()
+    fields: id(integer)
   invoice_attachments:
     primary key: id
-    fields: id()
+    fields: id(integer)
   items:
     primary key: id
-    fields: id()
+    fields: id(integer)
   item:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_line_items:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_line_item:
     primary key: id
-    fields: id()
+    fields: id(integer)
   notes:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_notes:
     primary key: id
-    fields: id()
+    fields: id(integer)
   invoice_notes:
     primary key: id
-    fields: id()
+    fields: id(integer)
   invoice_payment_plan:
     primary key: id
-    fields: id()
+    fields: id(integer)
   customer_payment_sources:
     primary key: id
-    fields: id()
+    fields: id(integer)
   payment:
     primary key: id
-    fields: id()
+    fields: id(integer)
   plans:
     primary key: id
-    fields: id()
+    fields: id(integer)
   plan:
     primary key: id
-    fields: id()
+    fields: id(integer)
   subscription:
     primary key: id
-    fields: id()
+    fields: id(integer)
   tasks:
     primary key: id
-    fields: id()
+    fields: id(integer)
   task:
     primary key: id
-    fields: id()
+    fields: id(integer)
   tax_rates:
     primary key: id
-    fields: id()
+    fields: id(integer)
   tax_rate:
     primary key: id
-    fields: id()
+    fields: id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

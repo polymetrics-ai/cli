@@ -11,6 +11,7 @@ Reads public API directory entries and categories from the api.publicapis.org di
 
 ## Icon
 
+- id: public-apis
 - asset: icons/public-apis.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -34,11 +35,11 @@ Reads public API directory entries and categories from the api.publicapis.org di
 
 - entries:
   - primary key: id
-  - fields: api(), auth(), category(), cors(), description(), https(), id(), link()
+  - fields: api(string), auth(string), category(string), cors(string), description(string), https(boolean), id(string), link(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

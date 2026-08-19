@@ -2,29 +2,75 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": ""
+      }
+    ],
     "headers": {
       "Accept": "application/vnd.recurly.v2021-02-25"
     },
-    "auth": [
-      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
-    ],
     "pagination": {
       "type": "link_header",
       "page_size": 200
     },
-    "check": { "method": "GET", "path": "/accounts", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/accounts",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "recurly api_key is missing or invalid; re-run pm credentials add recurly" },
-      { "status": 403, "hint": "recurly account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "recurly rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "recurly api_key is missing or invalid; re-run pm credentials add recurly using a secret source"
+      },
+      {
+        "status": 403,
+        "hint": "recurly API key lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "recurly rate limit exceeded; retry after the provider reset window"
+      }
     ]
   },
   "streams": [
     {
+      "name": "list_sites",
+      "path": "/sites",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_sites.json"
+    },
+    {
+      "name": "get_site",
+      "path": "/sites/{{ config.site_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_site.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
       "name": "accounts",
       "path": "/accounts",
-      "query": { "limit": "200" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "code": "{{ record.code }}",
@@ -36,10 +82,706 @@
       "schema": "schemas/accounts.json"
     },
     {
+      "name": "get_account",
+      "path": "/accounts/{{ config.account_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_account_acquisition",
+      "path": "/accounts/{{ config.account_id }}/acquisition",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_account_acquisition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_account_balance",
+      "path": "/accounts/{{ config.account_id }}/balance",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_account_balance.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "account_id": "{{ record.account.id }}"
+      }
+    },
+    {
+      "name": "get_billing_info",
+      "path": "/accounts/{{ config.account_id }}/billing_info",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_billing_info.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_billing_infos",
+      "path": "/accounts/{{ config.account_id }}/billing_infos",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_billing_infos.json"
+    },
+    {
+      "name": "get_a_billing_info",
+      "path": "/accounts/{{ config.account_id }}/billing_infos/{{ config.billing_info_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_a_billing_info.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_account_coupon_redemptions",
+      "path": "/accounts/{{ config.account_id }}/coupon_redemptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_coupon_redemptions.json"
+    },
+    {
+      "name": "list_active_coupon_redemptions",
+      "path": "/accounts/{{ config.account_id }}/coupon_redemptions/active",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_active_coupon_redemptions.json"
+    },
+    {
+      "name": "get_coupon_redemption",
+      "path": "/accounts/{{ config.account_id }}/coupon_redemptions/{{ config.coupon_redemption_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_coupon_redemption.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_account_credit_payments",
+      "path": "/accounts/{{ config.account_id }}/credit_payments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_credit_payments.json"
+    },
+    {
+      "name": "list_account_external_account",
+      "path": "/accounts/{{ config.account_id }}/external_accounts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_external_account.json"
+    },
+    {
+      "name": "get_account_external_account",
+      "path": "/accounts/{{ config.account_id }}/external_accounts/{{ config.external_account_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_account_external_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_account_external_invoices",
+      "path": "/accounts/{{ config.account_id }}/external_invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_external_invoices.json"
+    },
+    {
+      "name": "list_account_invoices",
+      "path": "/accounts/{{ config.account_id }}/invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_invoices.json"
+    },
+    {
+      "name": "list_account_line_items",
+      "path": "/accounts/{{ config.account_id }}/line_items",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_line_items.json"
+    },
+    {
+      "name": "list_account_notes",
+      "path": "/accounts/{{ config.account_id }}/notes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_notes.json"
+    },
+    {
+      "name": "get_account_note",
+      "path": "/accounts/{{ config.account_id }}/notes/{{ config.account_note_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_account_note.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_shipping_addresses",
+      "path": "/accounts/{{ config.account_id }}/shipping_addresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_shipping_addresses.json"
+    },
+    {
+      "name": "get_shipping_address",
+      "path": "/accounts/{{ config.account_id }}/shipping_addresses/{{ config.shipping_address_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_shipping_address.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_account_subscriptions",
+      "path": "/accounts/{{ config.account_id }}/subscriptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_subscriptions.json"
+    },
+    {
+      "name": "list_account_transactions",
+      "path": "/accounts/{{ config.account_id }}/transactions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_transactions.json"
+    },
+    {
+      "name": "list_child_accounts",
+      "path": "/accounts/{{ config.account_id }}/accounts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_child_accounts.json"
+    },
+    {
+      "name": "list_account_acquisition",
+      "path": "/acquisitions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_acquisition.json"
+    },
+    {
+      "name": "list_coupons",
+      "path": "/coupons",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_coupons.json"
+    },
+    {
+      "name": "get_coupon",
+      "path": "/coupons/{{ config.coupon_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_coupon.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_unique_coupon_codes",
+      "path": "/coupons/{{ config.coupon_id }}/unique_coupon_codes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_unique_coupon_codes.json"
+    },
+    {
+      "name": "list_credit_payments",
+      "path": "/credit_payments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_credit_payments.json"
+    },
+    {
+      "name": "get_credit_payment",
+      "path": "/credit_payments/{{ config.credit_payment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_credit_payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_custom_field_definitions",
+      "path": "/custom_field_definitions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_custom_field_definitions.json"
+    },
+    {
+      "name": "get_custom_field_definition",
+      "path": "/custom_field_definitions/{{ config.custom_field_definition_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_custom_field_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_general_ledger_accounts",
+      "path": "/general_ledger_accounts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_general_ledger_accounts.json"
+    },
+    {
+      "name": "get_general_ledger_account",
+      "path": "/general_ledger_accounts/{{ config.general_ledger_account_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_general_ledger_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_performance_obligation",
+      "path": "/performance_obligations/{{ config.performance_obligation_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_performance_obligation.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_performance_obligations",
+      "path": "/performance_obligations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/get_performance_obligations.json"
+    },
+    {
+      "name": "list_invoice_template_accounts",
+      "path": "/invoice_templates/{{ config.invoice_template_id }}/accounts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_invoice_template_accounts.json"
+    },
+    {
+      "name": "list_items",
+      "path": "/items",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_items.json"
+    },
+    {
+      "name": "get_item",
+      "path": "/items/{{ config.item_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_item.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_measured_unit",
+      "path": "/measured_units",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_measured_unit.json"
+    },
+    {
+      "name": "get_measured_unit",
+      "path": "/measured_units/{{ config.measured_unit_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_measured_unit.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_products",
+      "path": "/external_products",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_products.json"
+    },
+    {
+      "name": "get_external_product",
+      "path": "/external_products/{{ config.external_product_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_external_product.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_product_external_product_references",
+      "path": "/external_products/{{ config.external_product_id }}/external_product_references",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_product_external_product_references.json"
+    },
+    {
+      "name": "get_external_product_external_product_reference",
+      "path": "/external_products/{{ config.external_product_id }}/external_product_references/{{ config.external_product_reference_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_external_product_external_product_reference.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_subscriptions",
+      "path": "/external_subscriptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_subscriptions.json"
+    },
+    {
+      "name": "get_external_subscription",
+      "path": "/external_subscriptions/{{ config.external_subscription_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_external_subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_subscription_external_invoices",
+      "path": "/external_subscriptions/{{ config.external_subscription_id }}/external_invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_subscription_external_invoices.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "state": "{{ record.state }}",
+        "total": "{{ record.total }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "get_invoice",
+      "path": "/invoices/{{ config.invoice_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_invoice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_invoice_line_items",
+      "path": "/invoices/{{ config.invoice_id }}/line_items",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_invoice_line_items.json"
+    },
+    {
+      "name": "list_invoice_coupon_redemptions",
+      "path": "/invoices/{{ config.invoice_id }}/coupon_redemptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_invoice_coupon_redemptions.json"
+    },
+    {
+      "name": "list_related_invoices",
+      "path": "/invoices/{{ config.invoice_id }}/related_invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_related_invoices.json"
+    },
+    {
+      "name": "list_line_items",
+      "path": "/line_items",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_line_items.json"
+    },
+    {
+      "name": "get_line_item",
+      "path": "/line_items/{{ config.line_item_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_line_item.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "plans",
+      "path": "/plans",
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "code": "{{ record.code }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.state }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/plans.json"
+    },
+    {
+      "name": "get_plan",
+      "path": "/plans/{{ config.plan_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_plan.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_plan_add_ons",
+      "path": "/plans/{{ config.plan_id }}/add_ons",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_plan_add_ons.json"
+    },
+    {
+      "name": "get_plan_add_on",
+      "path": "/plans/{{ config.plan_id }}/add_ons/{{ config.add_on_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_plan_add_on.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_price_segments",
+      "path": "/price_segments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_price_segments.json"
+    },
+    {
+      "name": "get_price_segment",
+      "path": "/price_segments/{{ config.price_segment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_price_segment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_add_ons",
+      "path": "/add_ons",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_add_ons.json"
+    },
+    {
+      "name": "get_add_on",
+      "path": "/add_ons/{{ config.add_on_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_add_on.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_shipping_methods",
+      "path": "/shipping_methods",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_shipping_methods.json"
+    },
+    {
+      "name": "get_shipping_method",
+      "path": "/shipping_methods/{{ config.shipping_method_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_shipping_method.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
       "name": "subscriptions",
       "path": "/subscriptions",
-      "query": { "limit": "200" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "account_id": "{{ record.account.id }}",
@@ -51,24 +793,102 @@
       "schema": "schemas/subscriptions.json"
     },
     {
-      "name": "invoices",
-      "path": "/invoices",
-      "query": { "limit": "200" },
-      "records": { "path": "data" },
-      "computed_fields": {
-        "id": "{{ record.id }}",
-        "account_id": "{{ record.account.id }}",
-        "state": "{{ record.state }}",
-        "total": "{{ record.total }}",
-        "created_at": "{{ record.created_at }}"
+      "name": "get_subscription",
+      "path": "/subscriptions/{{ config.subscription_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
       },
-      "schema": "schemas/invoices.json"
+      "projection": "schema",
+      "schema": "schemas/get_subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_subscription_change",
+      "path": "/subscriptions/{{ config.subscription_id }}/change",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_subscription_change.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_subscription_invoices",
+      "path": "/subscriptions/{{ config.subscription_id }}/invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_subscription_invoices.json"
+    },
+    {
+      "name": "list_subscription_line_items",
+      "path": "/subscriptions/{{ config.subscription_id }}/line_items",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_subscription_line_items.json"
+    },
+    {
+      "name": "list_subscription_coupon_redemptions",
+      "path": "/subscriptions/{{ config.subscription_id }}/coupon_redemptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_subscription_coupon_redemptions.json"
+    },
+    {
+      "name": "get_subscription_coupon_redemption",
+      "path": "/subscriptions/{{ config.subscription_id }}/coupon_redemptions/{{ config.coupon_redemption_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_subscription_coupon_redemption.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_usage",
+      "path": "/subscriptions/{{ config.subscription_id }}/add_ons/{{ config.add_on_id }}/usage",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_usage.json"
+    },
+    {
+      "name": "get_usage",
+      "path": "/usage/{{ config.usage_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_usage.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
       "name": "transactions",
       "path": "/transactions",
-      "query": { "limit": "200" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "account_id": "{{ record.account.id }}",
@@ -79,18 +899,192 @@
       "schema": "schemas/transactions.json"
     },
     {
-      "name": "plans",
-      "path": "/plans",
-      "query": { "limit": "200" },
-      "records": { "path": "data" },
-      "computed_fields": {
-        "id": "{{ record.id }}",
-        "code": "{{ record.code }}",
-        "name": "{{ record.name }}",
-        "state": "{{ record.state }}",
-        "updated_at": "{{ record.updated_at }}"
+      "name": "get_transaction",
+      "path": "/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
       },
-      "schema": "schemas/plans.json"
+      "projection": "schema",
+      "schema": "schemas/get_transaction.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_unique_coupon_code",
+      "path": "/unique_coupon_codes/{{ config.unique_coupon_code_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_unique_coupon_code.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_dunning_campaigns",
+      "path": "/dunning_campaigns",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_dunning_campaigns.json"
+    },
+    {
+      "name": "get_dunning_campaign",
+      "path": "/dunning_campaigns/{{ config.dunning_campaign_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_dunning_campaign.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_invoice_templates",
+      "path": "/invoice_templates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_invoice_templates.json"
+    },
+    {
+      "name": "get_invoice_template",
+      "path": "/invoice_templates/{{ config.invoice_template_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_invoice_template.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_invoices",
+      "path": "/external_invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_invoices.json"
+    },
+    {
+      "name": "show_external_invoice",
+      "path": "/external_invoices/{{ config.external_invoice_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/show_external_invoice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_subscription_external_payment_phases",
+      "path": "/external_subscriptions/{{ config.external_subscription_id }}/external_payment_phases",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_external_subscription_external_payment_phases.json"
+    },
+    {
+      "name": "get_external_subscription_external_payment_phase",
+      "path": "/external_subscriptions/{{ config.external_subscription_id }}/external_payment_phases/{{ config.external_payment_phase_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_external_subscription_external_payment_phase.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_entitlements",
+      "path": "/accounts/{{ config.account_id }}/entitlements",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_entitlements.json",
+      "computed_fields": {
+        "customer_permission_id": "{{ record.customer_permission.id }}"
+      }
+    },
+    {
+      "name": "list_account_external_subscriptions",
+      "path": "/accounts/{{ config.account_id }}/external_subscriptions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_account_external_subscriptions.json"
+    },
+    {
+      "name": "get_business_entity",
+      "path": "/business_entities/{{ config.business_entity_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_business_entity.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_business_entities",
+      "path": "/business_entities",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_business_entities.json"
+    },
+    {
+      "name": "list_gift_cards",
+      "path": "/gift_cards",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_gift_cards.json"
+    },
+    {
+      "name": "get_gift_card",
+      "path": "/gift_cards/{{ config.gift_card_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "schema",
+      "schema": "schemas/get_gift_card.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_business_entity_invoices",
+      "path": "/business_entities/{{ config.business_entity_id }}/invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "schema",
+      "schema": "schemas/list_business_entity_invoices.json"
     }
   ]
 }

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/url"
@@ -10,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // Vars is the variable environment available to templates: config values,
@@ -393,6 +396,32 @@ func stringify(v any) string {
 		return t
 	case bool:
 		return strconv.FormatBool(t)
+	case json.Number:
+		return t.String()
+	case float64:
+		return strconv.FormatFloat(t, 'f', -1, 64)
+	case float32:
+		return strconv.FormatFloat(float64(t), 'f', -1, 32)
+	case int:
+		return strconv.Itoa(t)
+	case int8:
+		return strconv.FormatInt(int64(t), 10)
+	case int16:
+		return strconv.FormatInt(int64(t), 10)
+	case int32:
+		return strconv.FormatInt(int64(t), 10)
+	case int64:
+		return strconv.FormatInt(t, 10)
+	case uint:
+		return strconv.FormatUint(uint64(t), 10)
+	case uint8:
+		return strconv.FormatUint(uint64(t), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(t), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(t), 10)
+	case uint64:
+		return strconv.FormatUint(t, 10)
 	default:
 		return fmt.Sprint(t)
 	}
@@ -832,6 +861,36 @@ func ResolveCheck(template string, specKeys map[string]bool) error {
 	return nil
 }
 
+// literalPlaceholderPattern matches a bare single-brace placeholder such as
+// {conversationId}. It is applied only AFTER every {{ }} expression has been
+// removed, so a real template never matches.
+var literalPlaceholderPattern = regexp.MustCompile(`\{[A-Za-z_][A-Za-z0-9_.\-]*\}`)
+
+// ResolveCheckRequestPath is ResolveCheck plus the declarative-read invariant
+// that a request path may not carry an UNBOUND single-brace placeholder.
+//
+// It exists because ResolveCheck iterates templatePattern, i.e. {{ }} only, so
+// a path like "/conversations/{conversationId}/threads" produces zero matches
+// and validates clean while the engine sends those braces to the wire
+// verbatim. Twelve help-scout streams shipped exactly that way.
+//
+// This is deliberately scoped to the DECLARATIVE READ paths — StreamSpec.Path,
+// HTTPBase.URL, HTTPBase.Check.Path and FanOutSpec.IDsFrom.Request.Path —
+// because none of those types has a member that could ever bind a literal
+// brace. writes.json is excluded on purpose: WriteAction.PathFields binds
+// {owner}/{repo}-style placeholders from the record, and 165 shipped write
+// paths rely on it.
+func ResolveCheckRequestPath(what, template string, specKeys map[string]bool) error {
+	if err := ResolveCheck(template, specKeys); err != nil {
+		return err
+	}
+	bare := templatePattern.ReplaceAllString(template, "")
+	if found := literalPlaceholderPattern.FindString(bare); found != "" {
+		return fmt.Errorf("resolve check: %s %q contains unbound placeholder %s; a read path binds values only through {{ config.x }}/{{ secrets.x }}/{{ fanout.id }} interpolation", what, template, found)
+	}
+	return nil
+}
+
 // ResolveCheckAuthSpec statically validates EVERY templated field of an
 // AuthSpec against specKeys (F9, REVIEW.md: cmd/connectorgen/validate.go's
 // checkInterpolations only checked Token/Value/When, leaving username/
@@ -856,6 +915,7 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		{"client_id", spec.ClientID},
 		{"client_secret", spec.ClientSecret},
 		{"scopes", spec.Scopes},
+		{"refresh_token", spec.RefreshToken},
 	}
 	for _, f := range fields {
 		if f.tmpl == "" {
@@ -877,6 +937,16 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 	for _, k := range extraKeys {
 		if err := ResolveCheck(spec.ExtraParams[k], specKeys); err != nil {
 			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "extra_params."+k, err)
+		}
+	}
+	// refresh_token_store_key is NOT a template — it is a literal secret key
+	// name — so it gets an identifier check rather than a ResolveCheck. It is
+	// validated here as well as at build time so a malformed key fails
+	// `connectorgen validate` rather than only on a connector's first real
+	// sync, which is the whole point of static auth-spec validation (F9).
+	if spec.RefreshTokenStoreKey != "" {
+		if err := safety.ValidateIdentifier(spec.RefreshTokenStoreKey, "refresh_token_store_key"); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "refresh_token_store_key", err)
 		}
 	}
 	if spec.When != "" {

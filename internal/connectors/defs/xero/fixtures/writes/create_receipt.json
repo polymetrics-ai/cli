@@ -1,0 +1,22 @@
+{
+  "record": {
+    "Receipts": [
+      "receipt_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/Receipts",
+    "body": {
+      "Receipts": [
+        "receipt_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

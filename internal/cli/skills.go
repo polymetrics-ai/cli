@@ -34,7 +34,7 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "SkillGeneration", "dir": dir, "skills": generated})
 	}
-	fmt.Fprintf(stdout, "Generated skills in %s\n", dir)
+	_, _ = fmt.Fprintf(stdout, "Generated skills in %s\n", dir)
 	return nil
 }
 
@@ -89,7 +89,8 @@ func baseSkillDocs(manifests []connectors.Manifest) []skillDoc {
 				"Use `pm etl run --connection <name> --stream <stream> --json`.",
 				"Use `--batch-size` for large streams when the caller requests bounded memory behavior.",
 				"Supported sync modes are `full_refresh_append`, `full_refresh_overwrite`, `full_refresh_overwrite_deduped`, `incremental_append`, and `incremental_append_deduped`.",
-				"Incremental modes require a cursor. Deduped modes require a primary key.",
+				"For the closed managed-PostgreSQL route, run `pm etl transport postgres-managed-target plan --connection <name> --stream <stream>`, preview the plan, then send its one-time token through `pm etl run ... --approval-token-stdin --confirm destructive`; PostgreSQL and declared API sources use sealed catalogs, and callers never supply raw SQL or target identifiers.",
+				"Incremental modes and deduped compatibility names require a cursor. Deduped modes require a primary key; static manifests advertise the full deduped compatibility name only with both fields and incremental modes only with a declared incremental executor. The deduped compatibility names refuse before source I/O until a matching transport is admitted.",
 				"Inspect `batch_count` and `checkpoint` in JSON output after runs.",
 			}),
 		},
@@ -99,7 +100,8 @@ func baseSkillDocs(manifests []connectors.Manifest) []skillDoc {
 			Body: skillBody("pm-reverse-etl", "Plan, preview, approve, and execute reverse ETL.", []string{
 				"Run `pm reverse plan` before any write.",
 				"Run `pm reverse preview <plan-id> --json` before approval.",
-				"Run `pm reverse run <plan-id> --approve <token>` only after explicit approval.",
+				"For destructive plans, obtain the approval token only after preview and pass the closed `--confirm destructive` value.",
+				"Pipe the approval token as one line into `pm reverse run <plan-id> --approval-token-stdin` only after explicit approval.",
 			}),
 		},
 		{
@@ -114,7 +116,7 @@ func baseSkillDocs(manifests []connectors.Manifest) []skillDoc {
 			Name:        "recipe-github-prs-to-warehouse",
 			Description: "Sync GitHub pull requests into the local warehouse.",
 			Body: skillBody("recipe-github-prs-to-warehouse", "Sync GitHub pull requests into the local warehouse.", []string{
-				"Create a GitHub credential with config `owner`, `repo`, and `auth_type`, plus optional token from environment.",
+				"Create a GitHub credential with required config `owner` and `repo`, optional `auth_type`, and a token from the environment unless you explicitly opt into public reads.",
 				"Create a warehouse credential with a local path.",
 				"Create a connection with stream `pull_requests` and table `github_pull_requests`.",
 				"Run `pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 100 --json`.",

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads sitemap, scraping job, account, and problematic-URL metadata, and writes sitemap/scraping-job create/update/delete mutations, through the Web Scraper Cloud API.
 
 ICON
+  id: web-scraper
   asset: icons/web-scraper.svg
   source: official
   review_status: official_verified
@@ -30,39 +31,39 @@ CONFIGURATION
   mode
   scraping_job_ids
   sitemap_id_filter
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   sitemaps:
     primary key: id
-    fields: id(), name(), url()
+    fields: id(integer), name(string), url(string)
   jobs:
     primary key: id
-    fields: id(), sitemap_id(), status()
+    fields: id(integer), sitemap_id(integer), status(string)
   sitemaps_list:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   scraping_jobs_list:
     primary key: id
-    fields: custom_id(), driver(), id(), jobs_empty(), jobs_executed(), jobs_failed(), jobs_scheduled(), page_load_delay(), request_interval(), scheduled(), sitemap_id(), sitemap_name(), status(), stored_record_count(), test_run(), time_created()
+    fields: custom_id(string), driver(string), id(integer), jobs_empty(integer), jobs_executed(integer), jobs_failed(integer), jobs_scheduled(integer), page_load_delay(integer), request_interval(integer), scheduled(integer), sitemap_id(integer), sitemap_name(string), status(string), stored_record_count(integer), test_run(integer), time_created(string)
   account:
     primary key: email
-    fields: email(), firstname(), lastname(), page_credits()
+    fields: email(string), firstname(string), lastname(string), page_credits(integer)
   problematic_urls:
     primary key: scraping_job_id, url
-    fields: scraping_job_id(), type(), url()
+    fields: scraping_job_id(string), type(string), url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_sitemap:
     endpoint: POST /sitemap
+    required fields: _id, startUrl, selectors
     risk: creates a new sitemap (scraper configuration) in the caller's Web Scraper Cloud account; low-risk, does not itself start scraping any site
   update_sitemap:
     endpoint: PUT /sitemap/{{ record.id }}
-    required fields: id
-    optional fields: _id, startUrl, selectors
+    required fields: id, _id, startUrl, selectors
     risk: overwrites an existing sitemap's start URLs and selector configuration; any scraping job created from this sitemap after the update uses the new configuration
   delete_sitemap:
     endpoint: DELETE /sitemap/{{ record.id }}
@@ -70,6 +71,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited
   create_scraping_job:
     endpoint: POST /scraping-job
+    required fields: sitemap_id
     risk: starts a real scraping run against the sitemap's (or start_urls override's) target site(s); consumes page credits from the caller's Web Scraper Cloud account for every page scraped
   delete_scraping_job:
     endpoint: DELETE /scraping-job/{{ record.id }}

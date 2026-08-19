@@ -11,9 +11,11 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,33 +31,33 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
 - base_url
 - page_size
 - status
-- basic_auth_header (secret)
+- basic_auth_header (secret) (required)
 
 ## ETL Streams
 
 - accounts:
   - primary key: id
-  - fields: id(), name(), traits()
+  - fields: id(string), name(string), traits(object)
 - users:
   - primary key: id
   - cursor: updatedAt
-  - fields: accounts(), avatar(), createdAt(), deactivatedAt(), email(), externalId(), firstKnown(), id(), lastInboundMessageTimestamp(), lastOutboundMessageTimestamp(), lastSeenTimestamp(), name(), npsLastFeedback(), npsLastRespondedAt(), npsLastScore(), organizations(), segments(), traits(), unsubscribedFromConversations(), unsubscribedFromConversationsAt(), updatedAt()
+  - fields: accounts(array), avatar(string), createdAt(string), deactivatedAt(string), email(string), externalId(string), firstKnown(string), id(string), lastInboundMessageTimestamp(string), lastOutboundMessageTimestamp(string), lastSeenTimestamp(string), name(string), npsLastFeedback(string), npsLastRespondedAt(string), npsLastScore(integer), organizations(array), segments(array), traits(object), unsubscribedFromConversations(boolean), unsubscribedFromConversationsAt(string), updatedAt(string)
 - notes:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), archived_at(), author_id(), category_id(), created_at(), external_id(), id(), note(), note_date(), organization_id(), source(), subject(), tags(), traits(), updated_at()
+  - fields: account_id(string), archived_at(string), author_id(string), category_id(string), created_at(string), external_id(string), id(string), note(string), note_date(string), organization_id(string), source(string), subject(string), tags(array), traits(object), updated_at(string)
 - conversations:
   - primary key: id
   - cursor: updated_at
-  - fields: accounts(), admins(), created_at(), external_id(), id(), rating(), source(), status(), subject(), traits(), updated_at(), users()
+  - fields: accounts(array), admins(array), created_at(string), external_id(string), id(string), rating(string), source(string), status(string), subject(string), traits(object), updated_at(string), users(array)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), archived_at(), assigned_to_id(), category_id(), completed_at(), completed_by_id(), created_at(), description(), due_date(), external_id(), id(), meeting_id(), name(), organization_id(), source(), tags(), traits(), updated_at()
+  - fields: account_id(string), archived_at(string), assigned_to_id(string), category_id(string), completed_at(string), completed_by_id(string), created_at(string), description(string), due_date(string), external_id(string), id(string), meeting_id(string), name(string), organization_id(string), source(string), tags(array), traits(object), updated_at(string)
 - nps_responses:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), external_id(), feedback(), id(), responded_at(), score(), updated_at(), user_id()
+  - fields: created_at(string), external_id(string), feedback(string), id(string), responded_at(string), score(integer), updated_at(string), user_id(string)
 
 ## Sync Modes
 
@@ -65,6 +67,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
 
 - create_account:
   - endpoint: POST /resources/accounts
+  - required fields: externalId, name
   - risk: creates a new customer-success account visible to the vendor's CS team; external mutation, approval required
 - update_account:
   - endpoint: PUT /resources/accounts/{{ record.id }}
@@ -72,6 +75,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
   - risk: updates an existing customer-success account's fields/traits, visible to the vendor's CS team; external mutation, approval required
 - create_user:
   - endpoint: POST /resources/users
+  - required fields: externalId
   - risk: creates a new user record visible to the vendor's CS team; external mutation, approval required
 - update_user:
   - endpoint: PUT /resources/users/{{ record.id }}
@@ -79,6 +83,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
   - risk: updates an existing user's fields/traits, visible to the vendor's CS team; external mutation, approval required
 - create_note:
   - endpoint: POST /resources/notes
+  - required fields: note, noteDate
   - risk: creates a customer-success note visible to the vendor's CS team; external mutation, approval required
 - update_note:
   - endpoint: PUT /resources/notes/{{ record.id }}
@@ -90,6 +95,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
   - risk: archives/deletes a customer-success note; external mutation, approval required
 - create_conversation:
   - endpoint: POST /resources/conversations
+  - required fields: subject, messages
   - risk: creates a historical conversation record visible to the vendor's CS team; does not send outbound messages to real participants (Vitally's own documented behavior); external mutation, approval required
 - update_conversation:
   - endpoint: PUT /resources/conversations/{{ record.id }}
@@ -101,6 +107,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
   - risk: permanently deletes a conversation and all its messages; external mutation, approval required
 - create_task:
   - endpoint: POST /resources/tasks
+  - required fields: name, accountId
   - risk: creates a customer-success task visible to the vendor's CS team; external mutation, approval required
 - update_task:
   - endpoint: PUT /resources/tasks/{{ record.id }}
@@ -108,6 +115,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
   - risk: updates an existing customer-success task visible to the vendor's CS team; external mutation, approval required
 - create_nps_response:
   - endpoint: POST /resources/npsResponses
+  - required fields: userId, respondedAt, score
   - risk: creates (or, if externalId already exists, upserts -- Vitally's own documented behavior) an NPS response visible to the vendor's CS team; external mutation, approval required
 - update_nps_response:
   - endpoint: PUT /resources/npsResponses/{{ record.id }}

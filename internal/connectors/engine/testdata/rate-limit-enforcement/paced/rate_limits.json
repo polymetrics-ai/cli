@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "policies": [{
+    "id": "widgets-points",
+    "source": {"url": "https://docs.example.test/rate-limits", "retrieved_at": "2026-08-06"},
+    "selector": {"endpoints": [{"method": "GET", "path": "/widgets"}], "tiers": ["pro"], "auth_types": ["oauth"]},
+    "scope": {"subject_kind": "account", "subject_config": "account_id"},
+    "budgets": [
+      {"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 2, "window_seconds": 60, "cost": {"default_cost": 1, "response_header": "X-Actual-Cost"}},
+      {"model": "token_bucket", "dimension": "burst", "unit": "points", "capacity": 2, "restore_per_second": 1, "cost": {"default_cost": 1, "response_header": "X-Actual-Cost"}}
+    ]
+  }]
+}

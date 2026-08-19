@@ -13,6 +13,7 @@ DESCRIPTION
   Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.
 
 ICON
+  id: activecampaign
   asset: icons/activecampaign.svg
   source: official
   review_status: official_verified
@@ -26,54 +27,54 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: id
     cursor: udate
-    fields: cdate(), deleted(), email(), firstName(), id(), lastName(), orgid(), phone(), udate()
+    fields: cdate(string), deleted(string), email(string), firstName(string), id(string), lastName(string), orgid(string), phone(string), udate(string)
   lists:
     primary key: id
     cursor: cdate
-    fields: cdate(), id(), name(), sender_url(), stringid(), subscriber_count(), userid()
+    fields: cdate(string), id(string), name(string), sender_url(string), stringid(string), subscriber_count(string), userid(string)
   deals:
     primary key: id
     cursor: mdate
-    fields: cdate(), contact(), currency(), id(), mdate(), owner(), stage(), status(), title(), value()
+    fields: cdate(string), contact(string), currency(string), id(string), mdate(string), owner(string), stage(string), status(string), title(string), value(string)
   campaigns:
     primary key: id
     cursor: cdate
-    fields: cdate(), id(), linkclicks(), mdate(), name(), opens(), send_amt(), status(), subject(), type(), uniqueopens()
+    fields: cdate(string), id(string), linkclicks(string), mdate(string), name(string), opens(string), send_amt(string), status(string), subject(string), type(string), uniqueopens(string)
   tags:
     primary key: id
     cursor: cdate
-    fields: cdate(), description(), id(), subscriber_count(), tag(), tagType()
+    fields: cdate(string), description(string), id(string), subscriber_count(string), tag(string), tagType(string)
   automations:
     primary key: id
     cursor: mdate
-    fields: cdate(), entered(), exited(), hidden(), id(), mdate(), name(), status(), userid()
+    fields: cdate(string), entered(string), exited(string), hidden(string), id(string), mdate(string), name(string), status(string), userid(string)
   fields:
     primary key: id
     cursor: udate
-    fields: cdate(), descript(), id(), isrequired(), perstag(), title(), type(), udate(), visible()
+    fields: cdate(string), descript(string), id(string), isrequired(string), perstag(string), title(string), type(string), udate(string), visible(string)
   accounts:
     primary key: id
     cursor: updatedTimestamp
-    fields: accountUrl(), contactCount(), createdTimestamp(), dealCount(), id(), name(), updatedTimestamp()
+    fields: accountUrl(string), contactCount(string), createdTimestamp(string), dealCount(string), id(string), name(string), updatedTimestamp(string)
   users:
     primary key: id
-    fields: email(), firstName(), id(), lastName(), phone(), username()
+    fields: email(string), firstName(string), id(string), lastName(string), phone(string), username(string)
   deal_stages:
     primary key: id
     cursor: udate
-    fields: cdate(), color(), group(), id(), order(), title(), udate()
+    fields: cdate(string), color(string), group(string), id(string), order(string), title(string), udate(string)
   deal_tasks:
     primary key: id
     cursor: udate
-    fields: cdate(), duedate(), id(), note(), relid(), reltype(), status(), title(), udate()
+    fields: cdate(string), duedate(string), id(string), note(string), relid(string), reltype(string), status(integer), title(string), udate(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

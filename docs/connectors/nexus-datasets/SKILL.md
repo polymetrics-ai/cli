@@ -11,6 +11,7 @@ Reads records from a configured Infor Nexus export dataset through the Infor Nex
 
 ## Icon
 
+- id: nexus-datasets
 - asset: icons/nexus-datasets.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -26,21 +27,21 @@ Reads records from a configured Infor Nexus export dataset through the Infor Nex
 
 ## Configuration
 
-- base_url
-- dataset_name
+- base_url (required)
+- dataset_name (required)
 - mode
 - start_date
-- access_key_id (secret)
-- api_key (secret)
-- secret_key (secret)
-- user_id (secret)
+- access_key_id (secret) (required)
+- api_key (secret) (required)
+- secret_key (secret) (required)
+- user_id (secret) (required)
 
 ## ETL Streams
 
 - datasets:
   - primary key: id
   - cursor: updated_at
-  - fields: dataset_name(), id(), raw_data(), raw_data_string(), updated_at()
+  - fields: dataset_name(string), id(string), raw_data(object), raw_data_string(string), updated_at(string)
 
 ## Sync Modes
 

@@ -11,6 +11,7 @@ Reads MailerSend email activity, analytics, domains, messages, recipients, templ
 
 ## Icon
 
+- id: mailersend
 - asset: icons/mailersend.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -33,65 +34,65 @@ Reads MailerSend email activity, analytics, domains, messages, recipients, templ
 - domain_id
 - mode
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - activity:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), id(), type(), updated_at()
+  - fields: created_at(string), email(object), id(string), type(string), updated_at(string)
 - domains:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), dkim(), id(), is_dns_active(), is_verified(), name(), spf(), tracking(), updated_at()
+  - fields: created_at(string), dkim(boolean), id(string), is_dns_active(boolean), is_verified(boolean), name(string), spf(boolean), tracking(boolean), updated_at(string)
 - messages:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), updated_at()
+  - fields: created_at(string), id(string), updated_at(string)
 - recipients:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), deleted_at(), email(), id(), updated_at()
+  - fields: created_at(string), deleted_at(string), email(string), id(string), updated_at(string)
 - templates:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), image_path(), name(), tags(), type(), updated_at(), variables()
+  - fields: created_at(string), description(string), id(string), image_path(string), name(string), tags(array), type(string), updated_at(string), variables(object)
 - scheduled_messages:
   - primary key: message_id
   - cursor: created_at
-  - fields: created_at(), domain(), message(), message_id(), send_at(), status(), status_message(), subject()
+  - fields: created_at(string), domain(object), message(object), message_id(string), send_at(string), status(string), status_message(string), subject(string)
 - sender_identities:
   - primary key: id
-  - fields: add_note(), domain(), email(), id(), is_verified(), name(), personal_note(), reply_to_email(), reply_to_name(), resends()
+  - fields: add_note(boolean), domain(object), email(string), id(string), is_verified(boolean), name(string), personal_note(string), reply_to_email(string), reply_to_name(string), resends(integer)
 - inbound_routes:
   - primary key: id
-  - fields: address(), dns_checked_at(), domain(), enabled(), filters(), forwards(), id(), mxValues(), name(), priority()
+  - fields: address(string), dns_checked_at(string), domain(string), enabled(boolean), filters(array), forwards(array), id(string), mxValues(object), name(string), priority(integer)
 - account_users:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), permissions(), role(), status(), updated_at()
+  - fields: created_at(string), email(string), id(string), name(string), permissions(array), role(string), status(string), updated_at(string)
 - invites:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), data(), email(), id(), permissions(), requires_periodic_password_change(), role(), updated_at()
+  - fields: created_at(string), data(object), email(string), id(string), permissions(array), requires_periodic_password_change(boolean), role(string), updated_at(string)
 - tokens:
   - primary key: id
-  - fields: created_at(), id(), name(), scopes(), status()
+  - fields: created_at(string), id(string), name(string), scopes(array), status(string)
 - webhooks:
   - primary key: id
-  - fields: created_at(), domain(), enabled(), events(), id(), name(), updated_at(), url()
+  - fields: created_at(string), domain(object), enabled(boolean), events(array), id(string), name(string), updated_at(string), url(string)
 - analytics_by_date:
   - primary key: date
-  - fields: clicked(), clicked_unique(), date(), delivered(), hard_bounced(), opened(), opened_unique(), queued(), sent(), soft_bounced(), spam_complaints(), survey_opened(), survey_submitted(), unsubscribed()
+  - fields: clicked(integer), clicked_unique(integer), date(string), delivered(integer), hard_bounced(integer), opened(integer), opened_unique(integer), queued(integer), sent(integer), soft_bounced(integer), spam_complaints(integer), survey_opened(integer), survey_submitted(integer), unsubscribed(integer)
 - analytics_country:
   - primary key: name
-  - fields: count(), name()
+  - fields: count(integer), name(string)
 - analytics_user_agents:
   - primary key: name
-  - fields: count(), name()
+  - fields: count(integer), name(string)
 - analytics_reading_environment:
   - primary key: name
-  - fields: count(), name()
+  - fields: count(integer), name(string)
 
 ## Sync Modes
 

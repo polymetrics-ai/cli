@@ -130,6 +130,45 @@ const neutralLiteral = "githubClient"
 	}
 }
 
+func TestScanDistinguishesAgentProjectionLookupFromHarnessProviderPolicy(t *testing.T) {
+	tests := []struct {
+		name        string
+		method      string
+		wantFinding bool
+	}{
+		{
+			name:        "legacy harness policy lookup trips provider policy rule",
+			method:      "HarnessPolicyFor",
+			wantFinding: true,
+		},
+		{
+			name:   "neutral projection lookup stays outside connector policy",
+			method: "ProjectionFor",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := newFixtureRepo(t, map[string]string{
+				"internal/connectors/defs/harness/metadata.json": `{"name":"harness","display_name":"Harness"}`,
+				"internal/agentcontract/contract.go":             "package agentcontract\n\ntype Contract struct{}\n\nfunc (contract *Contract) " + test.method + "(harness string) {}\n",
+			})
+
+			report, err := Scan(root, Options{Now: fixedNow})
+			if err != nil {
+				t.Fatalf("Scan: %v", err)
+			}
+			if test.wantFinding {
+				requireFinding(t, report, RuleProviderPolicy, "harness", "internal/agentcontract/contract.go", test.method)
+				return
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("neutral projection lookup triggered connector policy findings: %+v", report.Findings)
+			}
+		})
+	}
+}
+
 func TestScanDetectsCLISurfaceCommandAliases(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/defs/github/cli_surface.json": `{"source_cli":{"name":"gh"}}`,

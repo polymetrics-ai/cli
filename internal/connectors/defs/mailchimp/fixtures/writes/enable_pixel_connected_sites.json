@@ -1,0 +1,15 @@
+{
+  "record": {
+    "connected_site_id": "fixture_connected_site_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/connected-sites/fixture_connected_site_id/actions/enable-pixel"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_enable_pixel_connected_sites"
+    }
+  }
+}

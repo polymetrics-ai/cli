@@ -11,9 +11,11 @@ Reads signNow documents, templates, and users through the signNow REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,22 +30,22 @@ Reads signNow documents, templates, and users through the signNow REST API.
 
 - base_url
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - documents:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 
 ## Sync Modes
 

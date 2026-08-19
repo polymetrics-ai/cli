@@ -11,6 +11,7 @@ Reads Orb customers, subscriptions, plans, and invoices.
 
 ## Icon
 
+- id: orb
 - asset: icons/orb.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,26 +33,26 @@ Reads Orb customers, subscriptions, plans, and invoices.
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - subscriptions:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - plans:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - invoices:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 
 ## Sync Modes
 

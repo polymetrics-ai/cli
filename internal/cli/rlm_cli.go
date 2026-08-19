@@ -84,7 +84,7 @@ func runRLMRun(ctx context.Context, cfg config.Config, root string, args []strin
 		return usageErrorf("rlm run: unknown mode %q (want deterministic|fixture|model|agent)", mode)
 	}
 	if closer != nil {
-		defer closer()
+		defer func() { _ = closer() }()
 	}
 
 	result, err := analyzer.Run(ctx, req)
@@ -97,7 +97,7 @@ func runRLMRun(ctx context.Context, cfg config.Config, root string, args []strin
 		return enc.Encode(result)
 	}
 
-	fmt.Fprintf(stdout, "mode=%s in=%s out=%s records_read=%d records_scored=%d dry_run=%v duration=%s\n",
+	_, _ = fmt.Fprintf(stdout, "mode=%s in=%s out=%s records_read=%d records_scored=%d dry_run=%v duration=%s\n",
 		result.Mode, result.InTable, result.OutTable,
 		result.RecordsRead, result.RecordsScored, result.DryRun, result.Duration)
 	return nil

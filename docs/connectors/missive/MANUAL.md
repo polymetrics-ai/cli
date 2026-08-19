@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,27 +29,27 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   kind
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: id
-    fields: first_name(), id(), last_name(), modified_at()
+    fields: first_name(string), id(string), last_name(string), modified_at(integer)
   contact_groups:
     primary key: id
-    fields: id(), kind(), name()
+    fields: id(string), kind(string), name(string)
   users:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(string), name(string)
   teams:
     primary key: id
-    fields: id(), name(), organization()
+    fields: id(string), name(string), organization(string)
   shared_labels:
     primary key: id
-    fields: color(), id(), name(), name_with_parent_names()
+    fields: color(string), id(string), name(string), name_with_parent_names(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Missive API read of contact, user, team, and label data

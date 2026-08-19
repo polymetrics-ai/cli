@@ -1,0 +1,9 @@
+{
+  "record": {
+    "user": "user_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/user_fixture_1/reactivate"
+  }
+}

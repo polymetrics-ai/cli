@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Secoda catalog metadata (tables, documents, collections, questions) through the Secoda API.
 
 ICON
+  id: secoda
   asset: icons/secoda.svg
   source: official
   review_status: official_verified
@@ -27,24 +28,24 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tables:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   documents:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   collections:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   questions:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Secoda API read of data-catalog metadata

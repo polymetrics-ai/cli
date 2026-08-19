@@ -23,12 +23,15 @@ package certify
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/app"
 )
 
 const (
@@ -41,6 +44,11 @@ type writeContext struct {
 	pairing WritePairing
 	tag     string
 	runID8  string
+	// resourceID is the stable, credential-free ownership handle checkpointed
+	// before mutation and carried through read-back/cleanup. The current
+	// pairing protocol uses the tag-addressable entity shape; richer scenarios
+	// may replace it with a provider-assigned handle after their first read.
+	resourceID string
 
 	planID        string
 	approvalToken string
@@ -79,6 +87,12 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 	pairings := PairingsFor(rc.opts.Connector)
 	if len(pairings) > 0 {
 		wc.pairing = pairings[0]
+	} else if certificationProfileFor(rc.opts.Connector).spec != nil {
+		// A profile can declare a source/managed-target transport without a
+		// direct writes.json action. Do not substitute the outbox self-test:
+		// it would be unrelated to that connector's declared write surface.
+		skipWriteStages(rc, rep, "skipped: connector has no declared direct write pairing; declared transport writes are certified separately")
+		return nil
 	} else {
 		wc.selfTest = true
 		wc.pairing = WritePairing{
@@ -90,8 +104,13 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 		}
 	}
 	wc.tag = NewTag(rc.opts.Connector, wc.runID8)
+	wc.resourceID = wc.pairing.VerifyStream + ":" + wc.tag
 
-	ledger, err := NewLedger(rc.root)
+	ledgerRoot := rc.opts.LedgerRoot
+	if ledgerRoot == "" {
+		ledgerRoot = rc.root
+	}
+	ledger, err := NewLedger(ledgerRoot)
 	if err != nil {
 		recordStage(rc, rep, "write_plan_preview", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_plan_preview: create ledger: %v", err)
@@ -112,15 +131,25 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 // stageWritePlanPreviewSelfTest drives the plan/preview half of the
 // sample/outbox self-test path: register the outbox destination credential,
 // create a reverse plan mapping sample_customers rows tagged with wc.tag
-// into the outbox, then assert the redaction gate on `reverse preview
+// into the outbox, then assert the token-omission gate on `reverse preview
 // --json`.
 func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext) {
 	recordStage(rc, rep, "write_outbox_credentials_add", 1, func() (bool, CLIStageInfo, string) {
 		outboxDir := filepath.Join(rc.root, ".polymetrics", "outbox")
-		res := rc.run("credentials", "add", writeOutboxCredentialName, "--connector", "outbox",
-			"--config", "path="+outboxDir, "--json")
-		passed, errMsg := assertKind(rc, "write_outbox_credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
+		}
+		if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+			Name:      writeOutboxCredentialName,
+			Connector: "outbox",
+			Config:    map[string]string{"path": outboxDir},
+		}); err != nil {
+			return false, CLIStageInfo{}, fmt.Sprintf("register outbox credential: %v", err)
+		}
+		if !rc.ephemeralCredentials.HasCredential(writeOutboxCredentialName) {
+			return false, CLIStageInfo{}, "outbox credential was not retained in the ephemeral session"
+		}
+		return true, ephemeralCredentialStageInfo(writeOutboxCredentialName), ""
 	})
 
 	seedTable := "cert_write_seed_" + rc.opts.Connector
@@ -249,7 +278,7 @@ func fieldNames(m map[string]any) []string {
 	return names
 }
 
-// checkPlanPreviewRedaction is the stage-12 redaction gate itself (design §A
+// checkPlanPreviewRedaction is the stage-12 JSON token-omission gate (design §A
 // "assert --json output has NO approval token"): the parsed envelope's
 // plan.approval_token field must be absent/empty, AND — belt and suspenders
 // — the raw JSON text must not contain the actual token value verbatim,
@@ -302,9 +331,11 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 	}
 	if err := wc.ledger.RecordPlanned(LedgerEntry{
 		Action:     wc.pairing.Create,
+		Scenario:   "write_pairing/" + wc.pairing.Create,
 		Tag:        wc.tag,
 		Connector:  rc.opts.Connector,
 		EntityHint: entityHint,
+		ResourceID: wc.resourceID,
 	}); err != nil {
 		recordStage(rc, rep, "write_create", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_create: write-ahead ledger record: %v", err)
@@ -313,7 +344,7 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 	}
 
 	stage := recordStage(rc, rep, "write_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("reverse", "run", wc.planID, "--approve", wc.approvalToken, "--json")
+		res := rc.runWithStdin(wc.approvalToken+"\n", "reverse", "run", wc.planID, "--approval-token-stdin", "--json")
 		passed, errMsg := assertKind(rc, "write_create", res, "ReverseRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -330,6 +361,13 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 		return true, cliInfoFrom(res), ""
 	})
 	wc.createPassed = stage.Passed
+	if stage.Passed {
+		if err := wc.ledger.RecordMutated(wc.tag, wc.resourceID); err != nil {
+			recordStage(rc, rep, "write_create_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+				return false, CLIStageInfo{}, fmt.Sprintf("write_create: record mutation in ledger: %v", err)
+			})
+		}
+	}
 
 	result := "pass"
 	reason := ""
@@ -367,12 +405,10 @@ func stageWriteVerify(rc *runContext, rep *Report) error {
 				return false, CLIStageInfo{}, fmt.Sprintf("write_verify: read outbox records: %v", err)
 			}
 			if !found {
-				// design §A stage 14: "else unverified warning" — a
-				// missing read-back is a warning, not a hard stage
-				// failure, since some connectors/backends have no
-				// reliable read-your-write guarantee.
-				markWriteActionUnverified(rep, wc.pairing.Create, "write_verify: tag not found in outbox read-back")
-				return true, CLIStageInfo{}, ""
+				return false, CLIStageInfo{}, "write_verify: tag not found in outbox read-back"
+			}
+			if err := wc.ledger.RecordReadBack(wc.tag, wc.resourceID); err != nil {
+				return false, CLIStageInfo{}, fmt.Sprintf("write_verify: record read-back in ledger: %v", err)
 			}
 			return true, CLIStageInfo{}, ""
 		})
@@ -403,23 +439,14 @@ func stageWriteVerify(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(res), fmt.Sprintf("write_verify: %v", ferr)
 		}
 		if !found {
-			markWriteActionUnverified(rep, wc.pairing.Create, "write_verify: tag not found in live read-back of "+wc.pairing.VerifyStream)
+			return false, cliInfoFrom(res), "write_verify: tag not found in live read-back of " + wc.pairing.VerifyStream
+		}
+		if err := wc.ledger.RecordReadBack(wc.tag, wc.resourceID); err != nil {
+			return false, cliInfoFrom(res), fmt.Sprintf("write_verify: record read-back in ledger: %v", err)
 		}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
-}
-
-func markWriteActionUnverified(rep *Report, action, reason string) {
-	if rep.Capabilities.WriteActions == nil {
-		return
-	}
-	entry := rep.Capabilities.WriteActions[action]
-	entry.Verify = "unverified"
-	if entry.Reason == "" {
-		entry.Reason = reason
-	}
-	rep.Capabilities.WriteActions[action] = entry
 }
 
 // outboxRecordTagPresent reads the outbox table stageWritePlanPreviewSelfTest
@@ -488,9 +515,18 @@ func seedGeneratedSourceTable(rc *runContext, table, primaryKey string, record m
 		return fmt.Errorf("write seed file: %w", err)
 	}
 	credName := "cert-write-seed-file-" + table
-	credRes := rc.run("credentials", "add", credName, "--connector", "file", "--config", "path="+seedPath, "--json")
-	if credRes.ExitCode != 0 {
-		return fmt.Errorf("seed credentials add: exit=%d stderr=%s", credRes.ExitCode, credRes.Stderr)
+	if rc.ephemeralCredentials == nil {
+		return fmt.Errorf("seed credentials: certification ephemeral credentials are unavailable")
+	}
+	if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+		Name:      credName,
+		Connector: "file",
+		Config:    map[string]string{"path": seedPath},
+	}); err != nil {
+		return fmt.Errorf("register seed credential: %w", err)
+	}
+	if !rc.ephemeralCredentials.HasCredential(credName) {
+		return errors.New("seed credential was not retained in the ephemeral session")
 	}
 	streamName := strings.TrimSuffix(filepath.Base(seedPath), filepath.Ext(seedPath))
 	connName := "cert_write_seed_conn_" + table
@@ -605,22 +641,18 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_cleanup: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
+		if planID == "" {
+			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
+		token, previewRes, previewErr := previewReversePlanApproval(rc, planID)
+		if previewErr != "" {
+			return false, cliInfoFrom(previewRes), previewErr
+		}
+		runRes := rc.runWithStdin(token+"\n", cleanupReverseRunArgs(wc, planID)...)
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 1, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -666,23 +698,42 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_cleanup: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
+		if planID == "" {
+			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
+		token, previewRes, previewErr := previewReversePlanApproval(rc, planID)
+		if previewErr != "" {
+			return false, cliInfoFrom(previewRes), previewErr
+		}
+		runRes := rc.runWithStdin(token+"\n", cleanupReverseRunArgs(wc, planID)...)
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 2, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
+}
+
+// previewReversePlanApproval completes the mandatory preview boundary for a
+// cleanup plan and returns its single-use approval through process memory
+// only. Destructive plans deliberately do not issue a token at plan time.
+func previewReversePlanApproval(rc *runContext, planID string) (string, CLIResult, string) {
+	previewRes := rc.run("reverse", "preview", planID)
+	if previewRes.ExitCode != 0 {
+		return "", previewRes, fmt.Sprintf("write_cleanup: reverse preview exit=%d stderr=%s", previewRes.ExitCode, previewRes.Stderr)
+	}
+	token := firstMatch(approvalTokenLinePattern, previewRes.Stdout)
+	if token == "" {
+		return "", previewRes, "write_cleanup: could not parse approval token after preview"
+	}
+	return token, previewRes, ""
+}
+
+func cleanupReverseRunArgs(wc *writeContext, planID string) []string {
+	args := []string{"reverse", "run", planID, "--approval-token-stdin"}
+	if wc.pairing.CleanupKind == "delete" {
+		args = append(args, "--confirm", "destructive")
+	}
+	return append(args, "--json")
 }
 
 // --- stage 16: cleanup_verify ---
@@ -714,6 +765,12 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 		recordLeak(rep, wc, "cleanup_verify: entity still present after cleanup")
 		return nil
 	}
+	if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
+		recordStage(rc, rep, "cleanup_verify_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("cleanup_verify: record cleaned in ledger: %v", err)
+		})
+		return nil
+	}
 
 	if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
 		entry.Result = "pass"
@@ -721,6 +778,15 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 			entry.Verify = "read_back"
 		}
 		rep.Capabilities.WriteActions[wc.pairing.Create] = entry
+	}
+	if rep.Capabilities.WriteActions == nil {
+		rep.Capabilities.WriteActions = map[string]WriteActionResult{}
+	}
+	rep.Capabilities.WriteActions[wc.pairing.Cleanup] = WriteActionResult{
+		Result: "pass",
+		Verify: "read_back",
+		Tag:    wc.tag,
+		Reason: "cleanup mutation independently verified the tagged resource is absent",
 	}
 	return nil
 }
@@ -797,7 +863,7 @@ func stageApprovalIdempotency(rc *runContext, rep *Report) error {
 	}
 
 	recordStage(rc, rep, "approval_idempotency", tierFor(wc), func() (bool, CLIStageInfo, string) {
-		res := rc.run("reverse", "run", wc.planID, "--approve", wc.approvalToken, "--json")
+		res := rc.runWithStdin(wc.approvalToken+"\n", "reverse", "run", wc.planID, "--approval-token-stdin", "--json")
 		if res.ExitCode == 0 {
 			return false, cliInfoFrom(res), "approval_idempotency: replaying a consumed plan+token succeeded, want rejection"
 		}
@@ -824,5 +890,15 @@ func skipWriteStages(rc *runContext, rep *Report, reason string) {
 func skipStage(rc *runContext, rep *Report, name, reason string) {
 	recordStage(rc, rep, name, 2, func() (bool, CLIStageInfo, string) {
 		return false, CLIStageInfo{}, reason
+	})
+}
+
+// unexecutableStage records an applicable capability the harness has no
+// executable adapter for. Unlike skipStage, it must make the certificate
+// terminally fail: a connector is not certified when its declared transport
+// cannot be exercised.
+func unexecutableStage(rc *runContext, rep *Report, name, reason string) {
+	recordStage(rc, rep, name, 2, func() (bool, CLIStageInfo, string) {
+		return false, CLIStageInfo{}, "unexecutable: " + reason
 	})
 }

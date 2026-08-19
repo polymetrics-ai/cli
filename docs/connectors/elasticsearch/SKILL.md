@@ -11,10 +11,11 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 ## Icon
 
+- id: elasticsearch
 - asset: icons/elasticsearch.svg
-- source: upstream_registry
-- review_status: upstream_seeded
-- review_url: https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
+- source: official
+- review_status: official_verified
+- review_url: https://www.elastic.co/docs/reference/elasticsearch
 
 ## Capabilities
 
@@ -27,7 +28,7 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 ## Configuration
 
-- endpoint
+- endpoint (required)
 - index
 - max_pages
 - mode
@@ -41,14 +42,14 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 - indices:
   - primary key: index
-  - fields: docs.count(), index()
+  - fields: docs.count(string), index(string)
 - documents:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

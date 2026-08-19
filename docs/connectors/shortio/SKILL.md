@@ -11,6 +11,7 @@ Reads Short.io links and domains through the Short.io REST API.
 
 ## Icon
 
+- id: shortio
 - asset: icons/shortio.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -36,11 +37,11 @@ Reads Short.io links and domains through the Short.io REST API.
 - links:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), path(), title(), updated_at()
+  - fields: id(string), name(string), path(string), title(string), updated_at(string)
 - domains:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), path(), title(), updated_at()
+  - fields: id(string), name(string), path(string), title(string), updated_at(string)
 
 ## Sync Modes
 

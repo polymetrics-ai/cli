@@ -11,6 +11,7 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
 
 ## Icon
 
+- id: toggl
 - asset: icons/toggl.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,40 +33,41 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
 - organization_id
 - start_date
 - workspace_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - time_entries:
   - primary key: id
-  - fields: at(), billable(), created_with(), description(), duration(), duronly(), id(), pid(), project_id(), server_deleted_at(), start(), stop(), tag_ids(), tags(), task_id(), tid(), uid(), user_id(), wid(), workspace_id()
+  - fields: at(string), billable(boolean), created_with(string), description(string), duration(integer), duronly(boolean), id(integer), pid(integer), project_id(integer), server_deleted_at(string), start(string), stop(string), tag_ids(array), tags(array), task_id(integer), tid(integer), uid(integer), user_id(integer), wid(integer), workspace_id(integer)
 - projects:
   - primary key: id
-  - fields: active(), actual_hours(), at(), auto_estimates(), billable(), cid(), client_id(), color(), created_at(), currency(), estimated_hours(), fixed_fee(), id(), is_private(), name(), rate(), rate_last_updated(), recurring(), recurring_parameters(), server_deleted_at(), template(), wid(), workspace_id()
+  - fields: active(boolean), actual_hours(integer), at(string), auto_estimates(boolean), billable(boolean), cid(integer), client_id(integer), color(string), created_at(string), currency(string), estimated_hours(integer), fixed_fee(number), id(integer), is_private(boolean), name(string), rate(number), rate_last_updated(string), recurring(boolean), recurring_parameters(object), server_deleted_at(string), template(boolean), wid(integer), workspace_id(integer)
 - clients:
   - primary key: id
-  - fields: archived(), at(), id(), name(), server_deleted_at(), wid(), workspace_id()
+  - fields: archived(boolean), at(string), id(integer), name(string), server_deleted_at(string), wid(integer), workspace_id(integer)
 - workspace_users:
   - primary key: id
-  - fields: active(), admin(), at(), avatar_file_name(), email(), group_ids(), id(), inactive(), invitation_code(), invite_url(), is_direct(), labour_cost(), name(), organization_admin(), rate(), rate_last_updated(), timezone(), user_id(), workspace_admin(), workspace_id()
+  - fields: active(boolean), admin(boolean), at(string), avatar_file_name(string), email(string), group_ids(array), id(integer), inactive(boolean), invitation_code(string), invite_url(string), is_direct(boolean), labour_cost(number), name(string), organization_admin(boolean), rate(number), rate_last_updated(string), timezone(string), user_id(integer), workspace_admin(boolean), workspace_id(integer)
 - organization_users:
   - primary key: id
-  - fields: admin(), avatar_url(), can_edit_email(), email(), groups(), id(), inactive(), invitation_code(), joined(), name(), owner(), user_id(), workspaces()
+  - fields: admin(boolean), avatar_url(string), can_edit_email(boolean), email(string), groups(array), id(integer), inactive(boolean), invitation_code(string), joined(boolean), name(string), owner(boolean), user_id(integer), workspaces(array)
 - tags:
   - primary key: id
-  - fields: at(), creator_id(), deleted_at(), id(), name(), workspace_id()
+  - fields: at(string), creator_id(integer), deleted_at(string), id(integer), name(string), workspace_id(integer)
 - tasks:
   - primary key: id
-  - fields: active(), at(), client_id(), client_name(), estimated_seconds(), external_reference(), id(), name(), project_billable(), project_color(), project_id(), project_is_private(), project_name(), rate(), rate_last_updated(), recurring(), tracked_seconds(), user_id(), user_name(), workspace_id()
+  - fields: active(boolean), at(string), client_id(integer), client_name(string), estimated_seconds(integer), external_reference(string), id(integer), name(string), project_billable(boolean), project_color(string), project_id(integer), project_is_private(boolean), project_name(string), rate(number), rate_last_updated(string), recurring(boolean), tracked_seconds(integer), user_id(integer), user_name(string), workspace_id(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_time_entry:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/time_entries
+  - required fields: start, duration, created_with
   - risk: creates a new time entry on the caller's account; external mutation, no approval required
 - update_time_entry:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}
@@ -82,6 +84,7 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a time entry; irreversible
 - create_project:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/projects
+  - required fields: name
   - risk: creates a new project in the target workspace; external mutation, no approval required
 - update_project:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/projects/{{ record.id }}
@@ -94,6 +97,7 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a project; also removes its association from any time entries that referenced it
 - create_client:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/clients
+  - required fields: name
   - risk: creates a new client in the target workspace; external mutation, no approval required
 - update_client:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/clients/{{ record.id }}
@@ -106,11 +110,11 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a client; projects previously associated with it lose that association
 - create_tag:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/tags
+  - required fields: name
   - risk: creates a new tag in the target workspace; external mutation, no approval required
 - update_tag:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
-  - required fields: id
-  - optional fields: name
+  - required fields: id, name
   - risk: renames an existing tag; the new name applies retroactively everywhere the tag is shown
 - delete_tag:
   - endpoint: DELETE /workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
@@ -118,8 +122,8 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a tag; it is removed from every time entry that referenced it
 - create_task:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks
-  - required fields: project_id
-  - optional fields: name, active, estimated_seconds, user_id, external_reference
+  - required fields: project_id, name
+  - optional fields: active, estimated_seconds, user_id, external_reference
   - risk: creates a new task under the given project; external mutation, no approval required
 - update_task:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks/{{ record.id }}

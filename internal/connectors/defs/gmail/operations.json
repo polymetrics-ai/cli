@@ -1,0 +1,21 @@
+{
+  "operations": [
+    {
+      "id": "gmail.messages.attachment_download",
+      "kind": "binary_download",
+      "summary": "Download a message attachment with a bounded file-transfer policy.",
+      "description": "Gmail returns base64url attachment data; the engine streams it to a bounded destination.",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+      "risk": "medium",
+      "approval": "filesystem writes require an explicit destination policy",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
+        "max_bytes": 26214400,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    }
+  ]
+}

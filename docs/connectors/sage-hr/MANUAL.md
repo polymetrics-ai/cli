@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboarding data, and writes employee/leave/task lifecycle mutations, through the Sage HR API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,58 +28,59 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   employees:
     primary key: id
-    fields: first_name(), id(), last_name()
+    fields: first_name(string), id(integer), last_name(string)
   teams:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   timeoff_requests:
     primary key: id
-    fields: id()
+    fields: id(integer)
   terminated_employees:
     primary key: id
-    fields: email(), employee_number(), employment_start_date(), first_name(), id(), last_name(), position(), termination_date()
+    fields: email(string), employee_number(string), employment_start_date(string), first_name(string), id(integer), last_name(string), position(string), termination_date(string)
   positions:
     primary key: id
-    fields: code(), description(), id(), title()
+    fields: code(string), description(string), id(integer), title(string)
   termination_reasons:
     primary key: id
-    fields: code(), id(), name(), type()
+    fields: code(string), id(integer), name(string), type(string)
   leave_policies:
     primary key: id
-    fields: accrue_type(), color(), default_allowance(), do_not_accrue(), id(), max_carryover(), name(), unit()
+    fields: accrue_type(string), color(string), default_allowance(string), do_not_accrue(boolean), id(integer), max_carryover(string), name(string), unit(string)
   out_of_office_today:
     primary key: id
-    fields: details(), employee_id(), end_date(), hours(), id(), policy_id(), start_date()
+    fields: details(string), employee_id(integer), end_date(string), hours(number), id(integer), policy_id(integer), start_date(string)
   individual_allowances:
     primary key: id
-    fields: eligibilities(), full_name(), id()
+    fields: eligibilities(array), full_name(string), id(integer)
   recruitment_positions:
     primary key: id
-    fields: applicants_count(), applicants_required(), created_at(), employment_type(), group(), group_id(), id(), location(), location_id(), status(), team(), title(), visibility()
+    fields: applicants_count(integer), applicants_required(integer), created_at(string), employment_type(string), group(string), group_id(integer), id(integer), location(string), location_id(integer), status(string), team(string), title(string), visibility(string)
   recruitment_applicants:
     primary key: id
-    fields: created_at(), disqualified_date(), email(), first_name(), full_name(), hired_date(), id(), last_name(), position_id(), source(), stage()
+    fields: created_at(string), disqualified_date(string), email(string), first_name(string), full_name(string), hired_date(string), id(integer), last_name(string), position_id(string), source(string), stage(object)
   onboarding_categories:
     primary key: id
-    fields: id(), title()
+    fields: id(integer), title(string)
   offboarding_categories:
     primary key: id
-    fields: id(), title()
+    fields: id(integer), title(string)
   document_categories:
     primary key: id
-    fields: documents_count(), id(), name()
+    fields: documents_count(integer), id(integer), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_employee:
     endpoint: POST /employees
+    required fields: email, first_name, last_name
     risk: creates a new employee record and may email the new hire (send_email); external mutation, approval required
   update_employee:
     endpoint: PUT /employees/{{ record.id }}
@@ -85,31 +88,35 @@ REVERSE ETL ACTIONS
     risk: external mutation updating an employee record (org placement, leave types, reporting line); approval required
   update_employee_custom_field:
     endpoint: PUT /employees/{{ record.employee_id }}/custom-fields/{{ record.custom_field_id }}
-    required fields: employee_id, custom_field_id
+    required fields: employee_id, custom_field_id, value
     risk: external mutation of an employee custom field; approval required
   terminate_employee:
     endpoint: POST /employees/{{ record.employee_id }}/terminations
-    required fields: employee_id
+    required fields: employee_id, date, termination_reason_id
     risk: destructive/irreversible: terminates an employee's record in Sage HR; external mutation, approval required
   create_timeoff_request:
     endpoint: POST /leave-management/requests
+    required fields: employee_id, time_off_policy_id, type, part_of_day
     risk: creates a new time off request against an employee's leave balance; external mutation, approval required
   create_kit_day:
     endpoint: POST /leave-management/kit-days
+    required fields: employee_id, policy_id
     risk: creates a Keeping-In-Touch day entry against an employee's leave policy; external mutation, approval required
   update_kit_day_status:
     endpoint: PATCH /leave-management/kit-days/{{ record.id }}
-    required fields: id
+    required fields: id, status
     risk: approves, declines, or cancels a KIT day request; external mutation, approval required
   update_leave_policy_kit_days:
     endpoint: PATCH /leave-management/policies/{{ record.id }}
-    required fields: id
+    required fields: id, kit_days_enabled, kit_days_quantity
     risk: changes a company-wide leave policy's KIT-day configuration; external mutation, approval required
   create_onboarding_task:
     endpoint: POST /onboarding/tasks
+    required fields: title, boarding_task_template_category_id, due_in
     risk: creates a new onboarding task template; external mutation, approval required
   create_offboarding_task:
     endpoint: POST /offboarding/tasks
+    required fields: title, boarding_task_template_category_id, due_in
     risk: creates a new offboarding task template; external mutation, approval required
 
 SECURITY

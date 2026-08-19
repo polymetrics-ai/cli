@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "automations_emails_queue",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflow_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_send": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "workflow_email_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

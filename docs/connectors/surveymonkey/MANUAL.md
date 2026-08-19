@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the documented API surface.
 
 ICON
+  id: surveymonkey
   asset: icons/surveymonkey.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -51,258 +52,258 @@ CONFIGURATION
   user_id
   webhook_id
   workgroup_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   surveys:
     primary key: id
-    fields: date_created(), date_modified(), id(), title()
+    fields: date_created(string), date_modified(string), id(string), title(string)
   survey_search:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_details:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_share_list:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_categories:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_templates:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   team_survey_templates:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_languages_catalog:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collectors:
     primary key: id
-    fields: date_created(), date_modified(), id(), name()
+    fields: date_created(string), date_modified(string), id(string), name(string)
   survey_pages:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_page:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_questions:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_question:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   question_benchmark:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   question_rollups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   question_trends:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   page_rollups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   page_trends:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_response_summaries:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_response:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_response_details:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_responses:
     primary key: id
-    fields: analyze_url(), date_created(), date_modified(), id()
+    fields: analyze_url(string), date_created(string), date_modified(string), id(string)
   survey_rollups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_trends:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_languages:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_language:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   question_bank_questions:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_folders:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   users_me:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   user_workgroups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   user_shared:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   groups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   group:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   group_activities:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   group_activities_by_action:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   group_members:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   group_member:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroups:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroup:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroup_shares:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroup_share:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroup_members:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   workgroup_member:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_lists:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_list:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_list_contacts:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_list_contacts_bulk:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contacts:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contacts_bulk:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_fields:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   contact_field:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_messages:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_message:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_message_recipients:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_recipients:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_collector_recipient:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   survey_collector_message_stats:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_responses:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_response:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_response_details:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_bulk_responses:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   collector_stats:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   webhooks:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   webhook:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   benchmark_bundles:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   benchmark_bundle:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   benchmark_bundle_analysis:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   organizations:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   organization:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   roles:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   errors:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   error:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_users:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_user:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_schemas:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_schema:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_resource_types:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_resource_type:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
   scim_service_provider_config:
     primary key: id
-    fields: collector_id(), created_at(), data(), date_created(), date_modified(), email(), externalId(), first_name(), group_id(), href(), id(), last_name(), links(), meta(), name(), page_id(), schemas(), status(), subtype(), survey_id(), title(), total(), type(), updated_at(), userName(), username(), workgroup_id()
+    fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   update_collector:

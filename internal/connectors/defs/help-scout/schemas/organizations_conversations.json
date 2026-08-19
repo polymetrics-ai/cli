@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations_conversations",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "threads": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "folderId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "preview": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mailboxId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignee": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closedBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closedByUser": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "userUpdatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tags": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bcc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "primaryCustomer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customFields": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organizationId": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

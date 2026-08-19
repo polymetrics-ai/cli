@@ -1,0 +1,24 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "product_id": "fixture_product_id",
+    "id": "fixture_id",
+    "title": "fixture_title",
+    "handle": "fixture_handle"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ecommerce/stores/fixture_store_id/products/fixture_product_id",
+    "body": {
+      "id": "fixture_id",
+      "title": "fixture_title",
+      "handle": "fixture_handle"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_put_ecommerce_stores_products"
+    }
+  }
+}

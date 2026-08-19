@@ -11,9 +11,11 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -54,180 +56,180 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
 - images:
   - primary key: id
   - cursor: updated_at
-  - fields: description(), id(), media_type(), updated_at()
+  - fields: description(string), id(string), media_type(string), updated_at(string)
 - videos:
   - primary key: id
   - cursor: updated_at
-  - fields: description(), id(), media_type(), updated_at()
+  - fields: description(string), id(string), media_type(string), updated_at(string)
 - audio:
   - primary key: id
   - cursor: updated_at
-  - fields: description(), id(), media_type(), updated_at()
+  - fields: description(string), id(string), media_type(string), updated_at(string)
 - list_similar_images:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_recommendations:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_updated_images:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_collection_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_collection:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_image_collection_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - find_similar_videos:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_updated_videos:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video_collection_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video_collection:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_video_collection_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track_collection_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track_collection:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_track_collection_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - search_sfx:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_sfx:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_sfx_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_sfx_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - search_editorial_images:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_updated_editorial_images:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image_livefeeds:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image_livefeed:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_image_livefeed_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_livefeeds:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_livefeed:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_livefeed_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - search_editorial:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_updated_editorial:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - search_editorial_videos:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_video:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_video_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_editorial_video_license_list:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_similar_cv_images:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_similar_cv_videos:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - search_catalog:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_collections:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_contributors:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_contributor:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_contributor_collections:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_contributor_collection:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_contributor_collection_items:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 - get_user_subscriptions:
   - primary key: id
-  - fields: asset_type(), collection_id(), contributor_id(), created_at(), created_time(), description(), id(), items(), license_id(), media_type(), name(), subscription_id(), updated_at(), updated_time()
+  - fields: asset_type(string), collection_id(string), contributor_id(string), created_at(string), created_time(string), description(string), id(string), items(array), license_id(string), media_type(string), name(string), subscription_id(string), updated_at(string), updated_time(string)
 
 ## Sync Modes
 
@@ -237,10 +239,11 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
 
 - create_image_collection:
   - endpoint: POST /v2/images/collections
+  - required fields: name
   - risk: external Shutterstock POST /v2/images/collections; approval required
 - rename_image_collection:
   - endpoint: POST /v2/images/collections/{{ record.image_collection_id }}
-  - required fields: image_collection_id
+  - required fields: image_collection_id, name
   - risk: external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}; approval required
 - delete_image_collection:
   - endpoint: DELETE /v2/images/collections/{{ record.image_collection_id }}
@@ -248,14 +251,15 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
   - risk: destructive external Shutterstock DELETE /v2/images/collections/{{ record.image_collection_id }}; approval required
 - add_image_collection_items:
   - endpoint: POST /v2/images/collections/{{ record.image_collection_id }}/items
-  - required fields: image_collection_id
+  - required fields: image_collection_id, items
   - risk: external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}/items; approval required
 - create_video_collection:
   - endpoint: POST /v2/videos/collections
+  - required fields: name
   - risk: external Shutterstock POST /v2/videos/collections; approval required
 - rename_video_collection:
   - endpoint: POST /v2/videos/collections/{{ record.video_collection_id }}
-  - required fields: video_collection_id
+  - required fields: video_collection_id, name
   - risk: external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}; approval required
 - delete_video_collection:
   - endpoint: DELETE /v2/videos/collections/{{ record.video_collection_id }}
@@ -263,14 +267,15 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
   - risk: destructive external Shutterstock DELETE /v2/videos/collections/{{ record.video_collection_id }}; approval required
 - add_video_collection_items:
   - endpoint: POST /v2/videos/collections/{{ record.video_collection_id }}/items
-  - required fields: video_collection_id
+  - required fields: video_collection_id, items
   - risk: external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}/items; approval required
 - create_audio_collection:
   - endpoint: POST /v2/audio/collections
+  - required fields: name
   - risk: external Shutterstock POST /v2/audio/collections; approval required
 - rename_audio_collection:
   - endpoint: POST /v2/audio/collections/{{ record.audio_collection_id }}
-  - required fields: audio_collection_id
+  - required fields: audio_collection_id, name
   - risk: external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}; approval required
 - delete_audio_collection:
   - endpoint: DELETE /v2/audio/collections/{{ record.audio_collection_id }}
@@ -278,10 +283,11 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
   - risk: destructive external Shutterstock DELETE /v2/audio/collections/{{ record.audio_collection_id }}; approval required
 - add_audio_collection_items:
   - endpoint: POST /v2/audio/collections/{{ record.audio_collection_id }}/items
-  - required fields: audio_collection_id
+  - required fields: audio_collection_id, items
   - risk: external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}/items; approval required
 - create_catalog_collection:
   - endpoint: POST /v2/catalog/collections
+  - required fields: name
   - risk: external Shutterstock POST /v2/catalog/collections; approval required
 - update_catalog_collection:
   - endpoint: PATCH /v2/catalog/collections/{{ record.catalog_collection_id }}
@@ -293,7 +299,7 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
   - risk: destructive external Shutterstock DELETE /v2/catalog/collections/{{ record.catalog_collection_id }}; approval required
 - add_catalog_collection_items:
   - endpoint: POST /v2/catalog/collections/{{ record.catalog_collection_id }}/items
-  - required fields: catalog_collection_id
+  - required fields: catalog_collection_id, items
   - risk: external Shutterstock POST /v2/catalog/collections/{{ record.catalog_collection_id }}/items; approval required
 
 ## Security

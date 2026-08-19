@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "batches",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_operations": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "finished_operations": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "errored_operations": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "submitted_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "completed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "response_body_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

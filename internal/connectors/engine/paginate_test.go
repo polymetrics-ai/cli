@@ -1072,3 +1072,258 @@ func TestNewPaginatorMalformedSpecTable(t *testing.T) {
 		})
 	}
 }
+
+// --- start_index (SCIM RFC 7644 §3.4.2.4) ---
+//
+// SCIM list responses are 1-based and carry their own total:
+//
+//	{"totalResults":N,"itemsPerPage":M,"startIndex":S,"Resources":[...]}
+//
+// There is no next-page token, so "cursor" cannot express it; "offset_limit" is
+// 0-based with no total to stop against. Airtable's ledger blocks GET
+// /scim/v2/Groups and GET /scim/v2/Users on exactly this.
+
+func scimPage(startIndex, itemsPerPage, totalResults int, ids ...int) string {
+	resources := make([]map[string]any, 0, len(ids))
+	for _, id := range ids {
+		resources = append(resources, map[string]any{"id": id})
+	}
+	raw, err := json.Marshal(map[string]any{
+		"totalResults": totalResults,
+		"itemsPerPage": itemsPerPage,
+		"startIndex":   startIndex,
+		"Resources":    resources,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return string(raw)
+}
+
+func TestNewPaginatorStartIndexDefaultsToSCIMNames(t *testing.T) {
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	first := p.Start()
+	if first == nil {
+		t.Fatal("Start() = nil, want first page")
+	}
+	if got := first.Query.Get("startIndex"); got != "1" {
+		t.Fatalf("startIndex = %q, want 1 (SCIM is 1-based)", got)
+	}
+	if got := first.Query.Get("count"); got != "2" {
+		t.Fatalf("count = %q, want 2", got)
+	}
+}
+
+func TestStartIndexPaginatorWalksEveryPageOnce(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.RawQuery
+		if hits.record(key) > 1 {
+			t.Fatalf("page fetched more than once: %s", key)
+		}
+		switch r.URL.Query().Get("startIndex") {
+		case "1":
+			_, _ = w.Write([]byte(scimPage(1, 2, 5, 1, 2)))
+		case "3":
+			_, _ = w.Write([]byte(scimPage(3, 2, 5, 3, 4)))
+		case "5":
+			_, _ = w.Write([]byte(scimPage(5, 2, 5, 5)))
+		default:
+			t.Fatalf("unexpected startIndex: %s", r.URL.RawQuery)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "Resources")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 5 {
+		t.Fatalf("got %d records, want 5", len(records))
+	}
+}
+
+func TestStartIndexPaginatorStopsAtTotalResults(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if requests > 2 {
+			t.Fatalf("walked past totalResults: %s", r.URL.RawQuery)
+		}
+		switch r.URL.Query().Get("startIndex") {
+		case "1":
+			_, _ = w.Write([]byte(scimPage(1, 2, 4, 1, 2)))
+		case "3":
+			_, _ = w.Write([]byte(scimPage(3, 2, 4, 3, 4)))
+		default:
+			t.Fatalf("unexpected startIndex: %s", r.URL.RawQuery)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "Resources")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 4 {
+		t.Fatalf("got %d records, want 4", len(records))
+	}
+	if requests != 2 {
+		t.Fatalf("issued %d requests, want 2 (must not request past the total)", requests)
+	}
+}
+
+func TestStartIndexPaginatorStopsOnEmptyPage(t *testing.T) {
+	// totalResults over-reports; the empty page is authoritative. Without this
+	// stop the walk would loop against a server that never runs out.
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Query().Get("startIndex") {
+		case "1":
+			_, _ = w.Write([]byte(scimPage(1, 2, 99, 1, 2)))
+		case "3":
+			_, _ = w.Write([]byte(scimPage(3, 0, 99)))
+		default:
+			t.Fatalf("walked past the empty page: %s", r.URL.RawQuery)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "Resources")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2", len(records))
+	}
+}
+
+func TestStartIndexPaginatorIgnoresLyingItemsPerPage(t *testing.T) {
+	// The advance is derived from the records actually extracted, never from a
+	// claimed itemsPerPage. A server that claims 100 while returning 2 must not
+	// be able to make the walk skip records.
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Query().Get("startIndex") {
+		case "1":
+			_, _ = w.Write([]byte(scimPage(1, 100, 4, 1, 2)))
+		case "3":
+			_, _ = w.Write([]byte(scimPage(3, 100, 4, 3, 4)))
+		default:
+			t.Fatalf("advance followed the lying itemsPerPage: %s", r.URL.RawQuery)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "Resources")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 4 {
+		t.Fatalf("got %d records, want 4", len(records))
+	}
+}
+
+func TestStartIndexPaginatorNonAdvancingIndexIsStickyError(t *testing.T) {
+	// A server that always echoes startIndex 1 would loop forever. Mirrors the
+	// loop guards on tokenPathCursor/nextURL: stop, and report via Err().
+	p, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	p.Start()
+	resp := &connsdk.Response{Body: []byte(`{"totalResults":99,"itemsPerPage":0,"startIndex":1,"Resources":[{"id":1},{"id":2}]}`)}
+	if next := p.Next(resp, 0); next != nil {
+		t.Fatal("zero extracted records must stop pagination")
+	}
+
+	p2, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: 2, StartIndexBase: intPtr(5)}, 2, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	p2.Start()
+	// Body claims the page started at 1 although it was requested at 5, and
+	// only one record came back: 1+1 = 2, which does not advance past 5.
+	stuck := &connsdk.Response{Body: []byte(`{"totalResults":99,"itemsPerPage":1,"startIndex":1,"Resources":[{"id":1}]}`)}
+	if next := p2.Next(stuck, 1); next != nil {
+		t.Fatal("non-advancing index must stop pagination")
+	}
+	errer, ok := p2.(interface{ Err() error })
+	if !ok {
+		t.Fatal("start_index paginator must expose Err() like the other guarded paginators")
+	}
+	if errer.Err() == nil {
+		t.Fatal("non-advancing index must be reported as a sticky error, not a benign stop")
+	}
+}
+
+func TestStartIndexPaginatorHonorsDeclaredParamNames(t *testing.T) {
+	p, err := newPaginator(PaginationSpec{
+		Type:            "start_index",
+		StartIndexParam: "offsetOneBased",
+		CountParam:      "limit",
+		StartIndexBase:  intPtr(0),
+		TotalPath:       "meta.total",
+		StartIndexPath:  "meta.start",
+		PageSize:        3,
+	}, 3, "items")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	first := p.Start()
+	if got := first.Query.Get("offsetOneBased"); got != "0" {
+		t.Fatalf("offsetOneBased = %q, want 0 (an explicit base of 0 must be honored)", got)
+	}
+	if got := first.Query.Get("limit"); got != "3" {
+		t.Fatalf("limit = %q, want 3", got)
+	}
+	next := p.Next(&connsdk.Response{Body: []byte(`{"meta":{"total":10,"start":0,"per_page":3},"items":[{"id":1},{"id":2},{"id":3}]}`)}, 3)
+	if next == nil {
+		t.Fatal("Next() = nil, want another page")
+	}
+	if got := next.Query.Get("offsetOneBased"); got != "3" {
+		t.Fatalf("next offsetOneBased = %q, want 3", got)
+	}
+}
+
+func TestNewPaginatorStartIndexRejectsNegativeBase(t *testing.T) {
+	if _, err := newPaginator(PaginationSpec{Type: "start_index", StartIndexBase: intPtr(-1), PageSize: 2}, 2, "Resources"); err == nil {
+		t.Fatal("negative start_index_base: want error, got nil")
+	}
+	if _, err := newPaginator(PaginationSpec{Type: "start_index", PageSize: -5}, -5, "Resources"); err == nil {
+		t.Fatal("negative page_size: want error, got nil")
+	}
+}
+
+func TestStartIndexPaginatorWithoutPageSizeIssuesOnePage(t *testing.T) {
+	// No window means a second request would repeat the first verbatim. Stop
+	// rather than loop — matching pageNumberPaginator's pageSize <= 0 behaviour.
+	p, err := newPaginator(PaginationSpec{Type: "start_index"}, 0, "Resources")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	first := p.Start()
+	if first.Query.Has("count") {
+		t.Fatalf("count must be omitted when no page size is declared, got %v", first.Query)
+	}
+	if next := p.Next(&connsdk.Response{Body: []byte(scimPage(1, 2, 99, 1, 2))}, 2); next != nil {
+		t.Fatal("no page size: want a single page, got another")
+	}
+}

@@ -1,0 +1,912 @@
+{
+  "actions": [
+    {
+      "name": "update_feedback",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/opportunities/{{ record.opportunity }}/feedback/{{ record.feedback }}",
+      "path_fields": [
+        "opportunity",
+        "feedback"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "opportunity",
+          "feedback"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "opportunity": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "feedback": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "completedAt": {
+            "type": [
+              "integer",
+              "number",
+              "null"
+            ]
+          },
+          "fieldValues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "value"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "integer",
+                    "boolean",
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "number",
+                      "integer",
+                      "boolean",
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "score": {
+                        "type": [
+                          "integer",
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "comment": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "text": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minProperties": 3
+      },
+      "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "delete_feedback",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunities/{{ record.opportunity }}/feedback/{{ record.feedback }}",
+      "path_fields": [
+        "opportunity",
+        "feedback"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "opportunity",
+          "feedback"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "opportunity": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "feedback": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_feedback_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feedback_templates",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "text",
+          "fields"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "update_feedback_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/feedback_templates/{{ record.feedback_template }}",
+      "path_fields": [
+        "feedback_template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "feedback_template"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "feedback_template": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "delete_feedback_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feedback_templates/{{ record.feedback_template }}",
+      "path_fields": [
+        "feedback_template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "feedback_template"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "feedback_template": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_form_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/form_templates",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "text",
+          "fields"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "secretByDefault": {
+            "type": "boolean"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "update_form_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/form_templates/{{ record.form_template }}",
+      "path_fields": [
+        "form_template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "form_template"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "form_template": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "secretByDefault": {
+            "type": "boolean"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "delete_form_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/form_templates/{{ record.form_template }}",
+      "path_fields": [
+        "form_template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "form_template"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "form_template": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunities/{{ record.opportunity }}/notes/{{ record.noteId }}",
+      "path_fields": [
+        "opportunity",
+        "noteId"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "opportunity",
+          "noteId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "opportunity": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "noteId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_requisition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requisitions/{{ record.requisition }}",
+      "path_fields": [
+        "requisition"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "requisition"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "requisition": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_requisition_field_options",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requisition_fields/{{ record.requisition_field }}/options",
+      "path_fields": [
+        "requisition_field"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "requisition_field"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "requisition_field": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_requisition_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requisition_fields/{{ record.requisition_field }}",
+      "path_fields": [
+        "requisition_field"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "requisition_field"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "requisition_field": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deactivate_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.user }}/deactivate",
+      "path_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "reactivate_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.user }}/reactivate",
+      "path_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        }
+      },
+      "risk": "Reactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute."
+    }
+  ]
+}

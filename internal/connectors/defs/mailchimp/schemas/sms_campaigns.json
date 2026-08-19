@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms_campaigns",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "channel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "recipient_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "create_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "send_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expire_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_send_now": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "folder_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "segments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "excluded_segments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "create_time"
+}

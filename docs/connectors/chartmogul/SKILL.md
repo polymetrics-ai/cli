@@ -11,6 +11,7 @@ Reads and writes ChartMogul customers, contacts, subscription activities, plans,
 
 ## Icon
 
+- id: chartmogul
 - asset: icons/chartmogul.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,38 +30,38 @@ Reads and writes ChartMogul customers, contacts, subscription activities, plans,
 
 - base_url
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: uuid
   - cursor: customer-since
-  - fields: arr(), billing-system-type(), city(), company(), country(), currency(), customer-since(), email(), external_id(), mrr(), name(), status(), uuid()
+  - fields: arr(integer), billing-system-type(string), city(string), company(string), country(string), currency(string), customer-since(string), email(string), external_id(string), mrr(integer), name(string), status(string), uuid(string)
 - activities:
   - primary key: uuid
   - cursor: date
-  - fields: activity-arr(), activity-mrr(), activity-mrr-movement(), currency(), customer-external-id(), customer-name(), customer-uuid(), date(), description(), plan-external-id(), subscription-external-id(), type(), uuid()
+  - fields: activity-arr(integer), activity-mrr(integer), activity-mrr-movement(integer), currency(string), customer-external-id(string), customer-name(string), customer-uuid(string), date(string), description(string), plan-external-id(string), subscription-external-id(string), type(string), uuid(string)
 - customer_count:
   - primary key: date
   - cursor: date
-  - fields: customers(), date(), percentage-change()
+  - fields: customers(integer), date(string), percentage-change(number)
 - account:
   - primary key: uuid
-  - fields: currency(), name(), time_zone(), uuid(), week_start_on()
+  - fields: currency(string), name(string), time_zone(string), uuid(string), week_start_on(string)
 - plans:
   - primary key: uuid
-  - fields: data_source_uuid(), external_id(), interval_count(), interval_unit(), name(), uuid()
+  - fields: data_source_uuid(string), external_id(string), interval_count(integer), interval_unit(string), name(string), uuid(string)
 - contacts:
   - primary key: uuid
-  - fields: customer_external_id(), customer_uuid(), data_source_uuid(), email(), external_id(), first_name(), last_name(), last_seen(), phone(), title(), uuid()
+  - fields: customer_external_id(string), customer_uuid(string), data_source_uuid(string), email(string), external_id(string), first_name(string), last_name(string), last_seen(string), phone(string), title(string), uuid(string)
 - tasks:
   - primary key: task_uuid
   - cursor: updated_at
-  - fields: assignee(), completed_at(), created_at(), customer_uuid(), due_date(), task_details(), task_uuid(), updated_at()
+  - fields: assignee(string), completed_at(string), created_at(string), customer_uuid(string), due_date(string), task_details(string), task_uuid(string), updated_at(string)
 - invoices:
   - primary key: uuid
-  - fields: currency(), customer_uuid(), date(), due_date(), external_id(), uuid()
+  - fields: currency(string), customer_uuid(string), date(string), due_date(string), external_id(string), uuid(string)
 
 ## Sync Modes
 
@@ -70,6 +71,7 @@ Reads and writes ChartMogul customers, contacts, subscription activities, plans,
 
 - create_customer:
   - endpoint: POST /customers
+  - required fields: data_source_uuid, external_id
   - risk: external mutation; approval required
 - update_customer:
   - endpoint: PUT /customers/{{ record.uuid }}

@@ -11,9 +11,11 @@ Reads Akeneo PIM products, categories, families, attributes, channels, product m
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,9 +28,9 @@ Reads Akeneo PIM products, categories, families, attributes, channels, product m
 
 ## Configuration
 
-- api_username
-- base_url
-- client_id
+- api_username (required)
+- base_url (required)
+- client_id (required)
 - page_size
 - password (secret)
 - secret (secret)
@@ -37,44 +39,44 @@ Reads Akeneo PIM products, categories, families, attributes, channels, product m
 
 - products:
   - primary key: id
-  - fields: categories(), created(), enabled(), family(), groups(), id(), parent(), updated(), uuid(), values()
+  - fields: categories(array), created(string), enabled(boolean), family(string), groups(array), id(string), parent(string), updated(string), uuid(string), values(object)
 - categories:
   - primary key: id
-  - fields: id(), labels(), parent(), updated()
+  - fields: id(string), labels(object), parent(string), updated(string)
 - families:
   - primary key: id
-  - fields: attribute_as_image(), attribute_as_label(), attributes(), id(), labels()
+  - fields: attribute_as_image(string), attribute_as_label(string), attributes(array), id(string), labels(object)
 - attributes:
   - primary key: id
-  - fields: group(), id(), labels(), localizable(), scopable(), type()
+  - fields: group(string), id(string), labels(object), localizable(boolean), scopable(boolean), type(string)
 - channels:
   - primary key: id
-  - fields: category_tree(), currencies(), id(), labels(), locales()
+  - fields: category_tree(string), currencies(array), id(string), labels(object), locales(array)
 - product_models:
   - primary key: id
-  - fields: categories(), created(), family_variant(), id(), parent(), updated(), values()
+  - fields: categories(array), created(string), family_variant(string), id(string), parent(string), updated(string), values(object)
 - family_variants:
   - primary key: id
-  - fields: attributes(), id(), labels(), variant_attribute_sets()
+  - fields: attributes(array), id(string), labels(object), variant_attribute_sets(array)
 - attribute_groups:
   - primary key: id
-  - fields: attributes(), id(), labels(), sort_order()
+  - fields: attributes(array), id(string), labels(object), sort_order(integer)
 - association_types:
   - primary key: id
-  - fields: id(), is_two_way(), labels()
+  - fields: id(string), is_two_way(boolean), labels(object)
 - locales:
   - primary key: id
-  - fields: enabled(), id()
+  - fields: enabled(boolean), id(string)
 - currencies:
   - primary key: id
-  - fields: enabled(), id()
+  - fields: enabled(boolean), id(string)
 - measure_families:
   - primary key: id
-  - fields: id(), standard_unit_code(), units()
+  - fields: id(string), standard_unit_code(string), units(object)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

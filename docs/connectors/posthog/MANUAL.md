@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PostHog events and persons for a project via the PostHog REST API. Read-only.
 
 ICON
+  id: posthog
   asset: icons/posthog.svg
   source: official
   review_status: official_verified
@@ -29,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   page_size
-  project_id
+  project_id (required)
   start_date
   api_key (secret)
 
@@ -37,10 +38,10 @@ ETL STREAMS
   events:
     primary key: id
     cursor: timestamp
-    fields: distinct_id(), event(), id(), properties(), timestamp()
+    fields: distinct_id(string), event(string), id(string), properties(object), timestamp(string)
   persons:
     primary key: id
-    fields: created_at(), distinct_id(), id(), properties()
+    fields: created_at(string), distinct_id(string), id(string), properties(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

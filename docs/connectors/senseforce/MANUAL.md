@@ -13,6 +13,7 @@ DESCRIPTION
   Reads records from a configured Senseforce dataset through the Senseforce API.
 
 ICON
+  id: senseforce
   asset: icons/senseforce.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -25,17 +26,17 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  backend_url
-  dataset_id
-  access_token (secret)
+  backend_url (required)
+  dataset_id (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   records:
     primary key: id
-    fields: Timestamp(), id(), value()
+    fields: Timestamp(string), id(string), value(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Senseforce API read of a configured dataset's rows

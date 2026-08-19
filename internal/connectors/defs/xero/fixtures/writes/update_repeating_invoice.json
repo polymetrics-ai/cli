@@ -1,0 +1,23 @@
+{
+  "record": {
+    "repeating_invoice_id": "repeating_invoice_id_fixture_1",
+    "RepeatingInvoices": [
+      "repeating_invoice_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/RepeatingInvoices/repeating_invoice_id_fixture_1",
+    "body": {
+      "RepeatingInvoices": [
+        "repeating_invoice_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

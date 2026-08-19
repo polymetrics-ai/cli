@@ -1,0 +1,298 @@
+{
+  "operations": [
+    {
+      "id": "hubplanner.billing_rates_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner billing rate by id.",
+      "description": "Get a Hubplanner billing rate by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/billingRate/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.booking_categories_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner booking category by id.",
+      "description": "Get a Hubplanner booking category by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.bookings_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner booking by id.",
+      "description": "Get a Hubplanner booking by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/booking/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.clients_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner client by id.",
+      "description": "Get a Hubplanner client by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/client/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.events_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner event by id.",
+      "description": "Get a Hubplanner event by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/event/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.project_groups_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner project group by id.",
+      "description": "Get a Hubplanner project group by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projectgroup/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.holidays_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner holiday by id.",
+      "description": "Get a Hubplanner holiday by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/holiday/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.milestones_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner milestone by id.",
+      "description": "Get a Hubplanner milestone by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/milestones.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/milestone/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.cost_categories_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner project cost category by id.",
+      "description": "Get a Hubplanner project cost category by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/costCategories/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.projects_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner project by id.",
+      "description": "Get a Hubplanner project by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.resources_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner resource by id.",
+      "description": "Get a Hubplanner resource by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/resource/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.time_entries_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner time entry by id.",
+      "description": "Get a Hubplanner time entry by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeentry/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.unassigned_work_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner unassigned-work record by id.",
+      "description": "Get a Hubplanner unassigned-work record by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/unassigned-work/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.vacations_get",
+      "kind": "rest_read",
+      "summary": "Get a Hubplanner vacation by id.",
+      "description": "Get a Hubplanner vacation by id. Fixed endpoint, id path parameter, bounded JSON output, and redaction policy; no raw method/path/body escape hatch.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/vacation/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "hubplanner.resource_custom_field_template_search",
+      "kind": "rest_read",
+      "summary": "Search Hubplanner resource custom field templates.",
+      "description": "Search Hubplanner resource custom field templates. Closed body schema allows documented type, label, and required-field filters only.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/resource/customField/template/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "isRequired": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "hubplanner.project_custom_field_template_search",
+      "kind": "rest_read",
+      "summary": "Search Hubplanner project custom field templates.",
+      "description": "Search Hubplanner project custom field templates. Closed body schema allows documented type, label, and required-field filters only.",
+      "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/project/customField/template/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "isRequired": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

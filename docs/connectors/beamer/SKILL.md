@@ -11,9 +11,11 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,37 +31,37 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 - base_url
 - mode
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - nps:
   - primary key: id
   - cursor: date
-  - fields: browser(), city(), country(), date(), feedback(), filter(), id(), language(), origin(), os(), refUrl(), score(), url(), userEmail(), userFirstName(), userId(), userLastName()
+  - fields: browser(string), city(string), country(string), date(string), feedback(string), filter(string), id(string), language(string), origin(string), os(string), refUrl(string), score(number), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 - posts:
   - primary key: id
   - cursor: date
-  - fields: category(), clicks(), content(), date(), feedbackEnabled(), id(), published(), reactionsEnabled(), title(), url(), views()
+  - fields: category(string), clicks(integer), content(string), date(string), feedbackEnabled(boolean), id(string), published(boolean), reactionsEnabled(boolean), title(string), url(string), views(integer)
 - feature_requests:
   - primary key: id
   - cursor: date
-  - fields: commentsCount(), content(), date(), id(), status(), title(), url(), userEmail(), userId(), votesCount()
+  - fields: commentsCount(integer), content(string), date(string), id(string), status(string), title(string), url(string), userEmail(string), userId(string), votesCount(integer)
 - comments:
   - primary key: id
   - cursor: date
-  - fields: content(), date(), featureRequestId(), id(), postId(), userEmail(), userFirstName(), userId(), userLastName()
+  - fields: content(string), date(string), featureRequestId(string), id(string), postId(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 - post_reactions:
   - primary key: id
   - cursor: date
-  - fields: date(), id(), postTitle(), post_id(), reaction(), url(), userEmail(), userFirstName(), userId(), userLastName()
+  - fields: date(string), id(string), postTitle(string), post_id(string), reaction(string), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 - feature_request_votes:
   - primary key: id
   - cursor: date
-  - fields: date(), featureRequestTitle(), feature_request_id(), id(), url(), userEmail(), userFirstName(), userId(), userLastName()
+  - fields: date(string), featureRequestTitle(string), feature_request_id(string), id(string), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 - users:
   - primary key: beamerId
-  - fields: beamerId(), browser(), city(), country(), filter(), firstSeen(), ip(), language(), lastSeen(), latitude(), longitude(), os(), userEmail(), userFirstName(), userId(), userLastName()
+  - fields: beamerId(string), browser(string), city(string), country(string), filter(string), firstSeen(string), ip(string), language(string), lastSeen(string), latitude(string), longitude(string), os(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 
 ## Sync Modes
 
@@ -69,6 +71,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 
 - create_post:
   - endpoint: POST /posts
+  - required fields: title, content
   - risk: external mutation; creates a new Beamer announcement post, optionally published immediately (visible to end users); approval required
 - update_post:
   - endpoint: PUT /posts/{{ record.id }}
@@ -80,7 +83,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes an announcement post; irreversible; approval required
 - create_post_comment:
   - endpoint: POST /posts/{{ record.post_id }}/comments
-  - required fields: post_id
+  - required fields: post_id, text
   - risk: external mutation; adds a comment to a live announcement post on behalf of a user; approval required
 - delete_post_comment:
   - endpoint: DELETE /posts/{{ record.post_id }}/comments/{{ record.id }}
@@ -88,6 +91,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a comment from a post; irreversible; approval required
 - create_feature_request:
   - endpoint: POST /feature-requests
+  - required fields: title, content
   - risk: external mutation; creates a new feature request, optionally visible immediately to end users; approval required
 - update_feature_request:
   - endpoint: PUT /feature-requests/{{ record.id }}
@@ -99,7 +103,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a feature request; irreversible; approval required
 - create_feature_request_comment:
   - endpoint: POST /feature-requests/{{ record.feature_request_id }}/comments
-  - required fields: feature_request_id
+  - required fields: feature_request_id, text
   - risk: external mutation; adds a comment to a feature request on behalf of a user; approval required
 - delete_feature_request_comment:
   - endpoint: DELETE /feature-requests/{{ record.feature_request_id }}/comments/{{ record.id }}
@@ -107,7 +111,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a comment from a feature request; irreversible; approval required
 - create_post_reaction:
   - endpoint: POST /posts/{{ record.post_id }}/reactions
-  - required fields: post_id
+  - required fields: post_id, reaction
   - risk: external mutation; records a reaction to a post on behalf of a user; approval required
 - delete_post_reaction:
   - endpoint: DELETE /posts/{{ record.post_id }}/reactions/{{ record.id }}

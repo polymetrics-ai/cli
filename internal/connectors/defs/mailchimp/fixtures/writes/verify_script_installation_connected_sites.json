@@ -1,0 +1,15 @@
+{
+  "record": {
+    "connected_site_id": "fixture_connected_site_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/connected-sites/fixture_connected_site_id/actions/verify-script-installation"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_verify_script_installation_connected_sites"
+    }
+  }
+}

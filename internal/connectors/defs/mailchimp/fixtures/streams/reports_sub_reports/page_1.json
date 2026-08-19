@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/sub-reports",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "reports": [
+        {
+          "id": "fixture_id",
+          "campaign_id": "fixture_campaign_id",
+          "send_time": "2026-01-01T00:00:00Z",
+          "campaign_title": "fixture_campaign_title",
+          "type": "fixture_type",
+          "list_id": "fixture_list_id",
+          "list_is_active": true,
+          "list_name": "fixture_list_name"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/jobPosting.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "job_posting_list_id_fixture_21",
+          "title": "Title fixture 21",
+          "jobId": "job_posting_list_jobid_fixture_21",
+          "status": "Draft",
+          "departmentName": "Job Posting List Departmentname Fixture 21",
+          "teamName": "Job Posting List Teamname Fixture 21",
+          "locationName": "Job Posting List Locationname Fixture 21",
+          "locationIds": {
+            "primaryLocationId": "job_posting_list_primarylocationid_fixture_21",
+            "secondaryLocationIds": [
+              "job_posting_list_secondarylocationid_fixture_21"
+            ]
+          },
+          "workplaceType": "OnSite",
+          "employmentType": "fixture",
+          "isListed": true,
+          "publishedDate": "2026-01-21",
+          "applicationDeadline": "job_posting_list_applicationdeadline_fixture_21",
+          "externalLink": "https://example.invalid/ashby/job_posting_list/externallink/21",
+          "applyLink": "https://example.invalid/ashby/job_posting_list/applylink/21",
+          "compensationTierSummary": "job_posting_list_compensationtiersummary_fixture_21",
+          "shouldDisplayCompensationOnJobBoard": true,
+          "updatedAt": "2026-02-21T21:00:00Z"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

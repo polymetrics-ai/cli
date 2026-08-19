@@ -1,6 +1,6 @@
 ---
 title: GitHub CLI Surface
-description: GitHub connector command parity, safety labels, and the staged path from gh-inspired metadata to executable pm commands.
+description: GitHub connector command parity, safety labels, and executable fixed REST and GraphQL operations.
 ---
 
 The GitHub connector now has a JSON-first command surface contract at
@@ -11,38 +11,62 @@ The GitHub connector now has a JSON-first command surface contract at
 [GitHub GraphQL docs](https://docs.github.com/en/graphql) as source material.
 
 This is metadata plus a guarded runtime path. It tells `pm` and docs renderers which GitHub commands
-are ETL reads, which can create approval-gated reverse ETL write plans, which require GraphQL or new
-API coverage, and which are local workflow features that should not become connector API commands.
+are ETL reads, which create approval-gated write plans through fixed REST or GraphQL operations, and
+which local workflow features stay outside connector API dispatch.
+
+The generated counts below are current source-inventory evidence, not connector certification. The
+historical GitHub gap-map counts are archived as actively wrong because they were measured on the
+wrong branch; see the [connector delivery canon](connector-delivery).
 
 ## Current surface
 
+{/* generated:current-surface — regenerate with `pnpm run gen:website-data`; do not hand-edit */}
+
 | Metric | Value |
 |---|---:|
-| Declared command entries | 128 |
-| Implemented command entries | 39 |
-| Partial command entries | 11 |
-| Planned command entries | 18 |
-| Unsupported API entries | 27 |
+| Declared command entries | 1571 |
+| Implemented command entries | 1546 |
+| Partial command entries | 0 |
+| Planned command entries | 0 |
+| Unsupported API entries | 4 |
 | Unsupported local workflow entries | 21 |
-| Unsafe or disallowed entries | 12 |
-| GitHub read streams | 33 |
-| GitHub write actions | 67 |
-| Tracked REST endpoints | 503 |
-| Covered REST endpoints | 101 |
-| Excluded REST endpoints | 402 |
+| Unsafe or disallowed entries | 0 |
+| GitHub read streams | 37 |
+| GitHub write actions | 606 |
+| Pinned REST operations | 1220 |
+| Pinned GraphQL Query roots | 31 |
+| Pinned GraphQL Mutation roots | 274 |
+| Pinned source operations | 1525 |
+| Source inventory classification | 1525/1525 (100%) |
+| Executable implementation | 1454/1525 (95.34%) |
+| Current-head live proof | 0/1525 (0%) |
+| Tracked REST endpoints | 1220 |
+| Covered REST endpoints | 1219 |
+| Blocked REST endpoints | 1 |
+| Fixed GraphQL transport endpoints | 1 |
+| Fixed GraphQL root-operation bindings | 305 |
+| Supplemental fixed GraphQL bindings | 1 |
+| Legacy GraphQL compatibility bindings | 4 |
+
+{/* /generated:current-surface */}
 
 ## Execution model
 
+{/* generated:execution-model — regenerate with `pnpm run gen:website-data`; do not hand-edit */}
+
 | Intent | Current count | Runtime rule |
 |---|---:|---|
-| `etl` | 16 | Reads map to existing streams or planned stream/direct-read coverage. |
-| `reverse_etl` | 34 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
-| `direct_read` | 32 | Candidates for constrained read commands that do not naturally fit streams. |
-| `direct_write` | 25 | Blocked unless a safe reverse-ETL execution model is designed. |
-| `local_workflow` | 14 | Browser, git, shell, extension, completion, or local config behavior. |
+| `etl` | 15 | Reads map to existing streams or planned stream/direct-read coverage. |
+| `reverse_etl` | 582 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
+| `direct_read` | 654 | Constrained read commands that do not naturally fit streams. |
+| `binary_download` | 14 | Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered. |
+| `direct_write` | 287 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
+| `local_workflow` | 12 | Browser, git, shell, extension, completion, or local config behavior. |
 | `auth` | 3 | Credential lifecycle commands; never print token material. |
 | `config` | 3 | Local config behavior, not connector data extraction. |
 | `raw_api` | 1 | Must remain constrained and approval-gated before any implementation. |
+
+{/* /generated:execution-model */}
 
 <Callout type="warn">
   The command surface does not expose a generic shell, unrestricted HTTP write, unrestricted SQL
@@ -51,58 +75,47 @@ API coverage, and which are local workflow features that should not become conne
   move beyond metadata.
 </Callout>
 
-## Connector Capabilities Behind Modeled Commands
+## Interpreting the generated surface
 
-| Family | Backing capability |
+The table above is generated from the connector bundle and source lock; it owns counts and current
+availability. Inspect a path with `pm github <path> --help` before use—the command's declared
+contract, not its family name, determines what the binary can dispatch.
+
+| Family | Runtime boundary |
 |---|---|
-| `issue` | Issues stream plus issue create, edit, close, comment, lock, unlock, labels, and assignees writes. |
-| `pr` | Pull request stream plus create, edit, close, merge, review, reviewer, update-branch, lock, and unlock writes. |
-| `repo` | Repository, branches, commits, tags, deploy keys, autolinks, languages, collaborators, forks, and rulesets streams or writes. |
-| `release` | Release stream plus create, edit, delete, asset update, and asset delete writes. |
-| `workflow` and `run` | Workflow and run streams plus dispatch, rerun, cancel, and delete actions. |
-| `label` | Label stream plus create, edit, and delete writes. |
-| Related connector data | Milestones and security alerts are available as streams or writes, but they are not modeled as first-class gh command entries in this slice. |
-
-## Known gaps
-
-| Gap | Reason |
-|---|---|
-| Projects v2 | GitHub CLI uses GraphQL-heavy project operations; the current connector bundle is REST-first. |
-| Discussions, gists, codespaces, org-wide views | Useful API-backed surfaces, but not yet modeled by this repository-scoped connector bundle. |
-| Search and status | Require query-shaped direct reads and often combine REST with GraphQL. |
-| Secrets and variables | Sensitive writes need explicit encryption, redaction, scope, and approval semantics. |
-| Local workflow commands | `clone`, `checkout`, `browse`, `alias`, `extension`, `completion`, and local config should stay outside connector API dispatch. |
-| Raw API and GraphQL | Must be constrained before use; an unrestricted `gh api` clone would violate connector safety rules. |
+| Stream and direct reads | Typed reads use declared stream or operation contracts and connector-scoped authentication. |
+| Reverse ETL and direct writes | Fixed writes create plans and follow preview, approval, and execution gates. |
+| Typed GraphQL | Query and mutation operations use the fixed GitHub GraphQL transport; no generic GraphQL escape hatch is exposed. |
+| Unsupported entries | API and local-workflow entries remain declared for discoverability but are not executable. |
 
 ## Runtime write flow
 
 Mapped command writes never mutate GitHub directly from a plain invocation. A provider-style command
-creates a stored reverse plan and returns an approval token in text output; JSON output redacts the
-token and the raw command payload.
+creates a stored reverse plan. Non-destructive plans return an approval token in text output;
+destructive plans return it only after their no-network preview succeeds and additionally require
+`--confirm destructive`. JSON output omits the approval token. See the
+[Reverse ETL security model](/docs/reverse-etl) for the authoritative lifecycle and
+connector-command record handling.
 
 ```bash
 pm github issue close --issue-number 101 --credential github-token
 pm github issue close --plan <plan-id> --preview --json
-pm github issue close --plan <plan-id> --approve <approval-token> --json
+pm github issue close --plan <plan-id> --approval-token-stdin --json
 ```
 
-Commands without explicit `record.*` flag mappings remain blocked until their input model is
-declared. Secret and variable writes remain out of runtime dispatch.
+Each command needs its own declared input contract; there is no generic raw-input fallback. Sensitive
+writes are available only where their declaration supplies the required input, redaction, scope, and
+approval controls.
 
-## Roadmap
+## Deliberate limits
 
-1. Validate optional `cli_surface.json` metadata and reject broken stream, write, endpoint, or
-   secret-looking references.
-2. Render connector help from the metadata and expose safe stream/direct-read command dispatch.
-3. Expand reverse ETL command input mappings across issue, pull request, label, release, workflow,
-   and ruleset write families.
-4. Add thin aliases such as `pm github issue list` only through the generic command surface.
-5. Add GraphQL and operation foundations for Projects v2, discussions, search, status, and other
-   gh parity gaps.
+The connector does not expose generic shell, unrestricted HTTP write, unrestricted SQL write, raw
+GraphQL mutation, or `gh api`-style escape hatches. Any future command must remain connector-scoped,
+typed, and subject to the same authentication, validation, approval, and redaction boundaries as the
+generated entries.
 
 ## Agent notes
 
-Agents should treat the issue as the implementation prompt, read the shared contract in
-`.agents/agentic-delivery/`, plan with the GSD programming loop before production edits, and record
-red-green-refactor evidence for every slice. Claude review is the post-implementation gate; each
-review item needs a reasoned disposition before the PR is ready for human approval.
+Contributors should follow the repository's issue-first delivery lifecycle and record red/green
+evidence for every slice. Automated review is input before human approval; each actionable item needs
+a reasoned disposition.

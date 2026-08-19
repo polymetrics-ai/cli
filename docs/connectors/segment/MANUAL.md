@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Segment workspace, source, and destination metadata through the Segment Public API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,21 +28,21 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   workspaces:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
   sources:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
   destinations:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Segment Public API read of workspace, source, and destination metadata

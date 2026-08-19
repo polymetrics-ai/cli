@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Guardian content search results through the Guardian Open Platform Content API.
 
 ICON
+  id: theguardian
   asset: icons/theguardian.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,25 +30,25 @@ CONFIGURATION
   base_url
   content_id
   query
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   search:
     primary key: id
     cursor: published_at
-    fields: id(), published_at(), title()
+    fields: id(string), published_at(string), title(string)
   tags:
     primary key: id
-    fields: apiUrl(), id(), sectionId(), sectionName(), type(), webTitle(), webUrl()
+    fields: apiUrl(string), id(string), sectionId(string), sectionName(string), type(string), webTitle(string), webUrl(string)
   sections:
     primary key: id
-    fields: apiUrl(), editions(), id(), webTitle(), webUrl()
+    fields: apiUrl(string), editions(array), id(string), webTitle(string), webUrl(string)
   editions:
     primary key: id
-    fields: apiUrl(), edition(), id(), path(), webTitle(), webUrl()
+    fields: apiUrl(string), edition(string), id(string), path(string), webTitle(string), webUrl(string)
   content:
     primary key: id
-    fields: apiUrl(), id(), isHosted(), pillarId(), pillarName(), published_at(), sectionId(), sectionName(), title(), type(), webUrl()
+    fields: apiUrl(string), id(string), isHosted(boolean), pillarId(string), pillarName(string), published_at(string), sectionId(string), sectionName(string), title(string), type(string), webUrl(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

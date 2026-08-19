@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rate_limits.json",
+  "type": "object",
+  "required": ["schema_version", "state"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "integer" },
+    "state": {
+      "type": "string",
+      "enum": ["declared", "unknown", "not_applicable"]
+    },
+    "reason": { "type": "string" },
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "selector", "scope", "budgets"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "source": {
+            "type": "object",
+            "required": ["url", "retrieved_at"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string" },
+              "retrieved_at": { "type": "string" },
+              "version": { "type": "string" }
+            }
+          },
+          "selector": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "all": { "type": "boolean" },
+              "endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["method", "path"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "method": { "type": "string" },
+                    "path": { "type": "string" }
+                  }
+                }
+              },
+              "exclude_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["method", "path"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "method": { "type": "string" },
+                    "path": { "type": "string" }
+                  }
+                }
+              },
+              "tiers": { "type": "array", "items": { "type": "string" } },
+              "auth_types": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "scope": {
+            "type": "object",
+            "required": ["subject_kind", "subject_config"],
+            "additionalProperties": false,
+            "properties": {
+              "subject_kind": {
+                "type": "string",
+                  "enum": ["account", "installation", "application", "endpoint", "ip"]
+              },
+              "subject_config": { "type": "string" }
+            }
+          },
+          "coordination": {
+            "type": "string",
+            "enum": ["require_shared"]
+          },
+          "budgets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["model", "dimension", "unit"],
+              "additionalProperties": false,
+              "properties": {
+                "model": {
+                  "type": "string",
+                  "enum": ["fixed_window", "sliding_window", "token_bucket", "leaky_bucket"]
+                },
+                "dimension": { "type": "string", "enum": ["burst", "sustained"] },
+                "unit": { "type": "string", "enum": ["requests", "points"] },
+                "limit": { "type": "integer" },
+                "window_seconds": { "type": "integer" },
+                "capacity": { "type": "integer" },
+                "restore_per_second": { "type": "number" },
+                "cost": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "default_cost": { "type": "number" },
+                    "response_header": { "type": "string" },
+                    "response_body": { "type": "string", "enum": ["graphql_rate_limit"] }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

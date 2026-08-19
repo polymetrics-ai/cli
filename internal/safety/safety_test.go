@@ -58,3 +58,28 @@ func TestRedactErrorTextRemovesHTTPURLQueryAndBodySecrets(t *testing.T) {
 		t.Fatalf("RedactErrorText removed useful URL context: %q", got)
 	}
 }
+
+func TestRedactErrorTextPreservesQuotedHTTPTransportURLDelimiter(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{
+			name:  "without query",
+			input: `send request: Post "https://api.example.test/v1/items": EOF`,
+			want:  `send request: Post "https://api.example.test/v1/items": EOF`,
+		},
+		{
+			name:  "with query",
+			input: `send request: Post "https://api.example.test/v1/items?access_token=secret": EOF`,
+			want:  `send request: Post "https://api.example.test/v1/items": EOF`,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := safety.RedactErrorText(tt.input); got != tt.want {
+				t.Fatalf("RedactErrorText() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.
 
 ICON
+  id: criteo
   asset: icons/criteo.svg
   source: official
   review_status: official_verified
@@ -31,38 +32,38 @@ CONFIGURATION
   end_date
   start_date
   token_url
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   ad_sets:
     primary key: id
-    fields: advertiserId(), campaignId(), datasetId(), destinationEnvironment(), id(), mediaType(), name(), objective(), status(), type()
+    fields: advertiserId(string), campaignId(string), datasetId(string), destinationEnvironment(string), id(string), mediaType(string), name(string), objective(string), status(string), type(string)
   advertisers:
     primary key: id
-    fields: country(), currency(), id(), name(), timezone(), type()
+    fields: country(string), currency(string), id(string), name(string), timezone(string), type(string)
   campaigns:
     primary key: id
-    fields: advertiserId(), goal(), id(), name(), objective(), spendLimit(), type()
+    fields: advertiserId(string), goal(string), id(string), name(string), objective(string), spendLimit(object), type(string)
   audiences:
     primary key: id
-    fields: advertiserId(), description(), id(), name(), nbActiveUsers(), type()
+    fields: advertiserId(string), description(string), id(string), name(string), nbActiveUsers(integer), type(string)
   statistics:
     primary key: AdvertiserId, CampaignId, Day
     cursor: Day
-    fields: AdvertiserId(), CampaignId(), Clicks(), Currency(), Day(), Displays(), Spend()
+    fields: AdvertiserId(string), CampaignId(string), Clicks(integer), Currency(string), Day(string), Displays(integer), Spend(number)
   mpo_advertisers:
     primary key: id
-    fields: advertiserName(), currencyName(), id(), timeZoneId()
+    fields: advertiserName(string), currencyName(string), id(integer), timeZoneId(string)
   mpo_sellers:
     primary key: id
-    fields: id(), sellerName()
+    fields: id(string), sellerName(string)
   mpo_budgets:
     primary key: id
-    fields: amount(), budgetType(), campaignIds(), endDate(), id(), isSuspended(), sellerId(), spend(), startDate(), status()
+    fields: amount(number), budgetType(string), campaignIds(array), endDate(string), id(string), isSuspended(boolean), sellerId(string), spend(number), startDate(string), status(string)
   mpo_seller_campaigns:
     primary key: id
-    fields: bid(), campaignId(), id(), sellerId(), suspendedSince(), suspensionReasons()
+    fields: bid(number), campaignId(integer), id(string), sellerId(string), suspendedSince(string), suspensionReasons(array)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

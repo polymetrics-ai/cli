@@ -1,0 +1,9 @@
+{
+  "record": {
+    "feedback_template": "feedback_template_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/feedback_templates/feedback_template_fixture_1"
+  }
+}

@@ -11,6 +11,7 @@ Reads Harvest clients, contacts, company settings, projects, tasks, task assignm
 
 ## Icon
 
+- id: harvest
 - asset: icons/harvest.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,74 +28,74 @@ Reads Harvest clients, contacts, company settings, projects, tasks, task assignm
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
 - page_size
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - clients:
   - primary key: id
   - cursor: updated_at
-  - fields: address(), created_at(), currency(), id(), is_active(), name(), statement_key(), updated_at()
+  - fields: address(string), created_at(string), currency(string), id(integer), is_active(boolean), name(string), statement_key(string), updated_at(string)
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: budget(), client_id(), client_name(), code(), created_at(), id(), is_active(), is_billable(), name(), updated_at()
+  - fields: budget(number), client_id(integer), client_name(string), code(string), created_at(string), id(integer), is_active(boolean), is_billable(boolean), name(string), updated_at(string)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: billable_by_default(), created_at(), default_hourly_rate(), id(), is_active(), is_default(), name(), updated_at()
+  - fields: billable_by_default(boolean), created_at(string), default_hourly_rate(number), id(integer), is_active(boolean), is_default(boolean), name(string), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), first_name(), id(), is_active(), is_admin(), last_name(), timezone(), updated_at()
+  - fields: created_at(string), email(string), first_name(string), id(integer), is_active(boolean), is_admin(boolean), last_name(string), timezone(string), updated_at(string)
 - time_entries:
   - primary key: id
   - cursor: updated_at
-  - fields: billable(), client_id(), created_at(), hours(), id(), is_billed(), is_running(), notes(), project_id(), spent_date(), task_id(), updated_at(), user_id()
+  - fields: billable(boolean), client_id(integer), created_at(string), hours(number), id(integer), is_billed(boolean), is_running(boolean), notes(string), project_id(integer), spent_date(string), task_id(integer), updated_at(string), user_id(integer)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: client(), client_id(), client_name(), created_at(), email(), fax(), first_name(), id(), invoice_recipient_status(), last_name(), phone_mobile(), phone_office(), title(), updated_at()
+  - fields: client(object), client_id(integer), client_name(string), created_at(string), email(string), fax(string), first_name(string), id(integer), invoice_recipient_status(string), last_name(string), phone_mobile(string), phone_office(string), title(string), updated_at(string)
 - company:
   - primary key: full_domain
-  - fields: approval_feature(), base_uri(), clock(), color_scheme(), currency_code_display(), currency_symbol_display(), date_format(), decimal_symbol(), estimate_feature(), expense_feature(), full_domain(), invoice_feature(), is_active(), name(), plan_type(), thousands_separator(), time_format(), wants_timestamp_timers(), week_start_day(), weekly_capacity()
+  - fields: approval_feature(boolean), base_uri(string), clock(string), color_scheme(string), currency_code_display(string), currency_symbol_display(string), date_format(string), decimal_symbol(string), estimate_feature(boolean), expense_feature(boolean), full_domain(string), invoice_feature(boolean), is_active(boolean), name(string), plan_type(string), thousands_separator(string), time_format(string), wants_timestamp_timers(boolean), week_start_day(string), weekly_capacity(integer)
 - invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: amount(), client(), client_id(), client_key(), client_name(), closed_at(), created_at(), creator(), creator_id(), creator_name(), currency(), discount(), discount_amount(), due_amount(), due_date(), id(), issue_date(), line_items(), notes(), number(), paid_at(), paid_date(), payment_options(), payment_term(), period_end(), period_start(), purchase_order(), recurring_invoice_id(), sent_at(), state(), subject(), tax(), tax2(), tax2_amount(), tax_amount(), updated_at()
+  - fields: amount(number), client(object), client_id(integer), client_key(string), client_name(string), closed_at(string), created_at(string), creator(object), creator_id(integer), creator_name(string), currency(string), discount(number), discount_amount(number), due_amount(number), due_date(string), id(integer), issue_date(string), line_items(array), notes(string), number(string), paid_at(string), paid_date(string), payment_options(array), payment_term(string), period_end(string), period_start(string), purchase_order(string), recurring_invoice_id(integer), sent_at(string), state(string), subject(string), tax(number), tax2(number), tax2_amount(number), tax_amount(number), updated_at(string)
 - estimates:
   - primary key: id
   - cursor: updated_at
-  - fields: accepted_at(), amount(), client(), client_id(), client_key(), client_name(), created_at(), creator(), creator_id(), creator_name(), currency(), declined_at(), discount(), discount_amount(), id(), issue_date(), line_items(), notes(), number(), purchase_order(), sent_at(), state(), subject(), tax(), tax2(), tax2_amount(), tax_amount(), updated_at()
+  - fields: accepted_at(string), amount(number), client(object), client_id(integer), client_key(string), client_name(string), created_at(string), creator(object), creator_id(integer), creator_name(string), currency(string), declined_at(string), discount(number), discount_amount(number), id(integer), issue_date(string), line_items(array), notes(string), number(string), purchase_order(string), sent_at(string), state(string), subject(string), tax(number), tax2(number), tax2_amount(number), tax_amount(number), updated_at(string)
 - expenses:
   - primary key: id
   - cursor: updated_at
-  - fields: approval_status(), billable(), client(), client_id(), created_at(), expense_category(), expense_category_id(), id(), invoice(), invoice_id(), is_billed(), is_closed(), is_locked(), locked_reason(), notes(), project(), project_id(), receipt(), spent_date(), total_cost(), units(), updated_at(), user(), user_id()
+  - fields: approval_status(string), billable(boolean), client(object), client_id(integer), created_at(string), expense_category(object), expense_category_id(integer), id(integer), invoice(object), invoice_id(integer), is_billed(boolean), is_closed(boolean), is_locked(boolean), locked_reason(string), notes(string), project(object), project_id(integer), receipt(object), spent_date(string), total_cost(number), units(number), updated_at(string), user(object), user_id(integer)
 - invoice_item_categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at(), use_as_expense(), use_as_service()
+  - fields: created_at(string), id(integer), name(string), updated_at(string), use_as_expense(boolean), use_as_service(boolean)
 - estimate_item_categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - expense_categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_active(), name(), unit_name(), unit_price(), updated_at()
+  - fields: created_at(string), id(integer), is_active(boolean), name(string), unit_name(string), unit_price(number), updated_at(string)
 - roles:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at(), user_ids()
+  - fields: created_at(string), id(integer), name(string), updated_at(string), user_ids(array)
 - task_assignments:
   - primary key: id
   - cursor: updated_at
-  - fields: billable(), budget(), created_at(), hourly_rate(), id(), is_active(), project(), project_id(), task(), task_id(), updated_at()
+  - fields: billable(boolean), budget(number), created_at(string), hourly_rate(number), id(integer), is_active(boolean), project(object), project_id(integer), task(object), task_id(integer), updated_at(string)
 
 ## Sync Modes
 

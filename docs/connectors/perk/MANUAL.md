@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Perk/TravelPerk trips and invoices through read-only REST list endpoints.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,27 +32,27 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   trips:
     primary key: id
     cursor: modified
-    fields: id(), modified(), status(), trip_name()
+    fields: id(string), modified(string), status(string), trip_name(string)
   invoices:
     primary key: serial_number
     cursor: issuing_date
-    fields: issuing_date(), serial_number(), status(), total()
+    fields: issuing_date(string), serial_number(string), status(string), total(string)
   invoice_lines:
     primary key: id
     cursor: issuing_date
-    fields: currency(), description(), due_date(), expense_date(), id(), invoice_mode(), invoice_serial_number(), invoice_status(), issuing_date(), metadata(), profile_id(), profile_name(), quantity(), tax_amount(), tax_percentage(), tax_regime(), total_amount(), unit_price()
+    fields: currency(string), description(string), due_date(string), expense_date(string), id(string), invoice_mode(string), invoice_serial_number(string), invoice_status(string), issuing_date(string), metadata(object), profile_id(string), profile_name(string), quantity(integer), tax_amount(string), tax_percentage(string), tax_regime(string), total_amount(string), unit_price(string)
   invoice_profiles:
     primary key: id
-    fields: billing_information(), billing_period(), currency(), id(), name(), payment_method_type()
+    fields: billing_information(object), billing_period(string), currency(string), id(string), name(string), payment_method_type(string)
   trip_custom_fields:
     primary key: trip_id
-    fields: created_date(), custom_fields(), trip_id()
+    fields: created_date(string), custom_fields(array), trip_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

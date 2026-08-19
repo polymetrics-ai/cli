@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account-exports",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "exports": [
+        {
+          "id": 1,
+          "export_id": 1,
+          "started": "fixture_started",
+          "finished": "fixture_finished",
+          "size_in_bytes": 1,
+          "download_url": "https://example.invalid/mailchimp-fixture",
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

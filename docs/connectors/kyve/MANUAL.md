@@ -13,9 +13,11 @@ DESCRIPTION
   Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYVE network's public REST query endpoints. Read-only; no credentials required.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -33,19 +35,19 @@ CONFIGURATION
 ETL STREAMS
   pools:
     primary key: id
-    fields: id(), name(), runtime()
+    fields: id(string), name(string), runtime(string)
   stakers:
     primary key: address
-    fields: address(), amount()
+    fields: address(string), amount(string)
   funders:
     primary key: address
-    fields: address(), amount()
+    fields: address(string), amount(string)
   validators:
     primary key: operator_address
-    fields: moniker(), operator_address(), status()
+    fields: moniker(string), operator_address(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external read of public KYVE network pool/staker/funder/validator data

@@ -1,0 +1,30 @@
+{
+  "record": {
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "ManualJournals": [
+      "manual_journal_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ManualJournals",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "ManualJournals": [
+        "manual_journal_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

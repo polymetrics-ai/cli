@@ -1,0 +1,62 @@
+---
+title: Connector Delivery Canon
+description: The required path from connector discovery to executable warehouse flows and honest live certification.
+---
+
+Use this guide before claiming a connector, command, flow, or certification is
+done. The repository's detailed procedure and source-pinned evidence live in
+the [connector delivery canon](https://github.com/polymetrics-ai/cli/tree/main/docs/connector-canon).
+
+## The rule that shapes every flow
+
+The warehouse is always the mediator. There is no direct source-to-destination
+hop:
+
+```text
+API      -> warehouse -> API
+API      -> warehouse -> database
+database -> warehouse -> API
+database -> warehouse -> database
+```
+
+This includes API-to-API delivery through the same connector. Reverse delivery
+still uses plan, preview, approval, and execution; a flow or schedule does not
+bypass that gate.
+
+## Foundation Check
+
+Before marking an operation or connector complete, prove the needed foundation
+exists and executes:
+
+1. Derive the command surface from the provider specification; do not hand-add
+   opaque cursors or endpoints.
+2. Run the real runtime preflight for every operation declared `implemented`.
+3. Prove bounded warehouse materialization and the relevant approved target
+   flow.
+4. For database and CDC work, use the typed database/CDC contract rather than
+   generic SQL or a cursor fallback.
+5. If any foundation is missing, create its own issue and keep the capability
+   truthfully non-implemented. Do not work around it.
+
+The repository checks the declaration/runtime boundary with:
+
+```bash
+make connector-runtime-preflight
+make connector-canon-check
+```
+
+The first command invokes the real command runner's preflight rather than a
+copy of its rules. The second verifies that the binding reports, archive
+markers, and current procedure are present in a clean checkout.
+
+## Certification status
+
+There are currently **zero accepted live certifications**. A fixture, catalog
+entry, generated manual, endpoint ledger, or `certification.json` is useful
+implementation evidence, but none is live proof. Live certification needs an
+approved environment, scoped credential handling, bounded test data,
+receipt/idempotency evidence, cleanup, and an accepted artifact.
+
+The [remote reproducibility guide](https://github.com/polymetrics-ai/cli/blob/main/docs/connector-canon/REMOTE-REPRODUCIBILITY.md)
+lists what a clean environment can verify without provider access and the gaps
+that prevent it from proving live certification.

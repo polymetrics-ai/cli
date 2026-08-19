@@ -43,7 +43,7 @@
           "name": { "type": "string" },
           "type": {
             "type": "string",
-            "enum": ["boolean", "string", "integer", "enum", "string_array"]
+            "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
           },
           "summary": { "type": "string" },
           "values": {
@@ -55,7 +55,12 @@
             "type": "string",
             "enum": ["date-time"]
           },
-          "allow_empty": { "type": "boolean" }
+          "allow_empty": { "type": "boolean" },
+          "minimum": { "type": "number" },
+          "required": { "type": "boolean" },
+          "env_only": { "type": "boolean" },
+          "max_items": { "type": "integer" },
+          "min_items": { "type": "integer" }
         }
       }
     },
@@ -75,6 +80,9 @@
               "reverse_etl",
               "direct_read",
               "direct_write",
+              "binary_download",
+              "text_export",
+              "status_check",
               "local_workflow",
               "auth",
               "config",
@@ -110,7 +118,7 @@
                 "name": { "type": "string" },
                 "type": {
                   "type": "string",
-                  "enum": ["boolean", "string", "integer", "enum", "string_array"]
+                  "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
                 },
                 "summary": { "type": "string" },
                 "values": {
@@ -122,7 +130,12 @@
                   "type": "string",
                   "enum": ["date-time"]
                 },
-                "allow_empty": { "type": "boolean" }
+                "allow_empty": { "type": "boolean" },
+                "minimum": { "type": "number" },
+                "required": { "type": "boolean" },
+                "env_only": { "type": "boolean" },
+                "max_items": { "type": "integer" },
+                "min_items": { "type": "integer" }
               }
             }
           },
@@ -171,7 +184,7 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted"]
+            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "text", "binary_file_bounded", "none", "json", "write_result_redacted", "gong_bounded_input_redacted", "secret_stored", "status"]
           },
           "redact_fields": {
             "type": "array",

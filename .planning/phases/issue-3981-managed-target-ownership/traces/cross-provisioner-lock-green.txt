@@ -1,0 +1,15 @@
+# GREEN — #4038 cross-provisioner lock contract
+
+`ManagedTargetProvisioningDriver` now supplies a typed target-scoped lock. The
+provisioner takes it before every observation and releases it only after the
+final assertion. The fake records that every create happened while that lock
+was held, and the concurrent table row alternates between two provisioner
+instances sharing the fake.
+
+```text
+go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'
+ok  polymetrics.ai/internal/connectors/database
+
+go test -race -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'
+ok  polymetrics.ai/internal/connectors/database
+```

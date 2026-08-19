@@ -11,6 +11,7 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
 
 ## Icon
 
+- id: microsoft-sharepoint
 - asset: icons/microsoft-sharepoint.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,22 +31,22 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
 - list_id
 - login_base_url
 - mode
-- site_id
-- tenant_id
+- site_id (required)
+- tenant_id (required)
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - lists:
   - primary key: id
   - cursor: lastModifiedDateTime
-  - fields: displayName(), id(), lastModifiedDateTime(), name()
+  - fields: displayName(string), id(string), lastModifiedDateTime(string), name(string)
 - list_items:
   - primary key: id
   - cursor: lastModifiedDateTime
-  - fields: fields(), id(), lastModifiedDateTime()
+  - fields: fields(object), id(string), lastModifiedDateTime(string)
 
 ## Sync Modes
 
@@ -55,6 +56,7 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
 
 - create_list:
   - endpoint: POST /sites/{{ config.site_id }}/lists
+  - required fields: displayName
   - risk: creates a new SharePoint list (and any custom columns/template declared in the request) on the configured site; low-risk external mutation, no approval required
 - update_list:
   - endpoint: PATCH /sites/{{ config.site_id }}/lists/{{ record.id }}
@@ -62,6 +64,7 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
   - risk: mutates an existing list's display name/description by id; low-risk external mutation, no approval required
 - create_list_item:
   - endpoint: POST /sites/{{ config.site_id }}/lists/{{ config.list_id }}/items
+  - required fields: fields
   - risk: creates a new item (row) in the configured list, with the submitted column values; low-risk external mutation, no approval required
 - update_list_item:
   - endpoint: PATCH /sites/{{ config.site_id }}/lists/{{ config.list_id }}/items/{{ record.id }}/fields

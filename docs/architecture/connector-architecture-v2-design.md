@@ -1,6 +1,12 @@
 # Polymetrics Connector Architecture v2 — Design Document
 
-Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
+Status: architecture design (2026-07-02). Current delivery rules are in the
+[connector canon](../connector-canon/INDEX.md); the former program PRD is archived.
+
+> **Historical measurement warning:** counts and rollout completion statements in this design were
+> captured in 2026-07. They are architecture context, not current parity, capability, quarantine,
+> or certification evidence. The canon's source-pinned reports and Foundation Check control those
+> claims.
 Validated against `connectors.go`, `defs/*`, `engine/*`, `connsdk/*`, `hooks/*`, `native/*`,
 `conformance/*`, `internal/app/sync_modes.go`, and `internal/app/types.go`.
 
@@ -36,22 +42,28 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` only by conformance, `certification.json` only by the certification
-harness). One deviation from Ruby: request/pagination/cursor config is **not** code — it is
-`streams.json`, interpreted by the engine.
+time, `api_surface.json` for authoring validation, conformance, full certification, disk-backed
+direct-write endpoint cross-checks, and the generated direct-read endpoint ledger,
+`certification.json` only by the certification harness). One
+deviation from Ruby: request/pagination/cursor config is **not** code — it is `streams.json`,
+interpreted by the engine.
 
 ### Layout
 
 ```
 internal/connectors/defs/
   defs.go                     // package defs; //go:embed runtime bundle files
+  operation_endpoint_ledger.json // generated compact direct-read runtime ledger
   github/
-    metadata.json             // identity, capabilities, rate limits, risk
+    metadata.json             // identity, capabilities, informational rate-limit metadata, risk
+    changefeed.json           // optional evidence-backed changefeed declaration
+    polling_watermark.json    // optional native-database polling preflight declaration
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
-    api_surface.json          // API coverage manifest (conformance input)
+    api_surface.json          // API coverage/provenance manifest (authoring validation, conformance, certification, direct-write cross-checks)
     certification.json        // optional certify defaults, candidates, pairings
+    rate_limits.json          // optional provider-cited HTTP pacing policy
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
       pull_requests.json
@@ -61,7 +73,7 @@ internal/connectors/defs/
     docs.md                   // human/agent guide
 ```
 
-`defs/defs.go` is the only Go file:
+`defs/defs.go` owns the runtime embed:
 
 ```go
 // Package defs embeds every connector definition bundle.
@@ -69,14 +81,29 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
-(`writes.json`, `operations.json`, `cli_surface.json`, and `certification.json` are optional per
-connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay on disk for
-authoring/conformance validation and are not embedded in the production `defs.FS`.
+(`changefeed.json`, `polling_watermark.json`, `writes.json`, `operations.json`, `cli_surface.json`,
+and `certification.json` are optional per connector; the loader tolerates absence. No engine
+bundle declares `polling_watermark.json` yet, so its embed pattern is added with the first
+engine-owned declaration rather than as an unmatched `go:embed` glob. `api_surface.json` and `fixtures/` stay
+on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
+tens of megabytes of inert replay JSON out of every shipped binary. The generated root
+`operation_endpoint_ledger.json` is the narrow exception for operation-backed direct reads: it embeds only
+method, path, operation kind, and response cap so runtime preflight can prove the API-surface binding without
+embedding provider prose, citations, or blocked reasons. A connector whose `spec.json`
+publishes a fixture-replay `mode` as a documented connection-spec property is the one exception: it
+adds its own `defs/<name>/fixtures_embed.go` embedding only that connector's `fixtures/` tree, so
+the documented mode also resolves from an installed binary rather than only from a source checkout
+(`defs/ashby/fixtures_embed.go`). `defs.FS` itself never grows a `fixtures/**` pattern.
 Directory name = connector name = the one true identifier: `github`, not `source-github`.)
+
+`rate_limits.json` is also optional. Its `go:embed` pattern is added only with the first production
+declaration, because an unmatched optional pattern fails compilation; disk-backed bundle validation
+can load it before then. Its exact authoring contract lives in the
+[migration conventions](../migration/conventions.md#3-the-engine-dialect-reference).
 
 ### `metadata.json` (github example)
 
@@ -90,7 +117,6 @@ Directory name = connector name = the one true identifier: `github`, not `source
   "release_stage": "ga",
   "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
   "batch": { "read_page_size": 100, "write_batch_size": 1 },
-  "rate_limit": { "strategy": "retry_after_header", "requests_per_hour": 5000 },
   "risk": {
     "read": "read-only REST calls against the configured repository",
     "write": "creates and mutates issues, PRs, labels, milestones, releases, files, workflow runs",
@@ -126,6 +152,9 @@ schemas dir). Sync modes are **not** listed here; they are derived per stream (�
 `x-secret: true` is the single source of truth for the config/secret split (replaces
 `ConfigField`/`SecretField` Go structs and the catalog's `secret_fields`). The loader partitions
 properties into config vs secrets from this flag.
+
+`metadata.json.rate_limit.requests_per_minute`, when present, is informational only. Provider-cited
+policy declarations belong in the optional `rate_limits.json` file above.
 
 ### `schemas/issues.json` — per-stream record schema
 
@@ -205,9 +234,10 @@ projection**: by default the engine emits only declared properties (today's hand
 }
 ```
 
-Pagination types (all four already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
+Pagination types (all five already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
 `offset_limit`, `cursor` (body token), plus `next_url` (aircall's `meta.next_page_link`, a cursor
-variant where the token is a full URL) and `none`.
+variant where the token is a full URL), `start_index` (SCIM 2.0 RFC 7644 §3.4.2.4 1-based index
+pagination that carries its own total), and `none`.
 
 ### `writes.json` (github, abridged)
 
@@ -255,7 +285,7 @@ variant where the token is a full URL) and `none`.
       "record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
       "delete": { "idempotent": true, "missing_ok_status": [404] },
       "risk": "permanently deletes a label",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     },
     {
       "name": "merge_pull_request",
@@ -272,7 +302,7 @@ variant where the token is a full URL) and `none`.
         }
       },
       "risk": "merges a pull request into its base branch",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     }
   ]
 }
@@ -289,8 +319,27 @@ Write semantics baked into the format:
   This replaces github's hand-written validate/payload functions (~700 lines) for the ~90% of
   actions that are plain payload mapping. Multi-request compound actions (github's
   `create_pull_request` + reviewer follow-up) use a **write hook** (§B.7).
-- **`confirm: "destructive"`** feeds the existing plan → preview → approve flow with per-action
-  risk tiering.
+- **`confirmation: {"kind":"destructive"}`** is the closed declaration for new write actions and
+  operation metadata. Existing `confirm: "destructive"` bundles remain compatible, but the runtime
+  normalizes them into the same typed policy. HTTP `DELETE`, a delete/destructive mutation class,
+  and any unknown non-empty legacy `confirm` value fail closed even if the typed declaration is
+  absent or malformed.
+- **`batchable: false`** gates an action out of SourceTable-driven bulk reverse ETL. It defaults to
+  `true`, so an action that omits it is unaffected. `PlanReverseETL` refuses a declared
+  non-batchable action before it stores a plan or mints an approval token, and `RunReverseETL`
+  re-checks the live manifest before executing a stored bulk plan, so a hand-edited `state.json`
+  cannot launder one through. The action stays fully executable as its own
+  `pm <connector> <command>` — that single-record path is what the declaration exists to preserve.
+
+  Use it for operations that must never be fanned out over N records under one approval:
+  moderation actions, irreversible sends, rate-sensitive endpoints, and anything governed by a
+  provider rule about human intent (for example an API that permits proxying a human's action
+  one-for-one but forbids a bot amplifying it).
+
+  `batchable` and `confirmation` are **orthogonal**. `confirmation` asks how severe one call is;
+  `batchable` asks whether the action may be fanned out at all. A vote is non-batchable but not
+  destructive; a bulk delete is destructive but legitimately batchable. An action may declare
+  either, both, or neither.
 
 ## B. The declarative runtime engine
 
@@ -299,7 +348,7 @@ Write semantics baked into the format:
 ```
 internal/connectors/
   connectors.go          // core interfaces, Registry (heavily slimmed)
-  connsdk/               // UNCHANGED low-level toolkit: Requester, Authenticator, Paginator, extract, state
+  connsdk/               // low-level toolkit: requester admission/observations, auth, pagination, extract, state
   engine/                // NEW: interprets defs bundles
     bundle.go            // Bundle types + loader + validation
     interpolate.go       // {{ ... }} resolver
@@ -309,6 +358,7 @@ internal/connectors/
     auth.go              // AuthSpec -> connsdk.Authenticator selection
     hooks.go             // hook interfaces + hook registry
     schema.go            // draft-07 compiler (minimal internal impl; no new deps) + x- extensions
+    rate_limits.go       // optional provider-cited declaration loader + semantic validation
     errors.go            // error_map application, typed engine errors
   defs/                  // NEW: embedded JSON bundles (556 dirs)
   hooks/                 // NEW: per-connector Go hooks, only where needed (~15 dirs)
@@ -330,12 +380,15 @@ DoJSON` with retry/Retry-After, four paginators, `RecordsAt`/`StringAt`, `Cursor
 type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
+    Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
+    PollingWatermark *connectors.PollingWatermarkDescriptor // optional polling_watermark.json
+    RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
     Streams  []StreamSpec      // streams.json "streams"
     Writes   []WriteAction     // writes.json (nil if absent)
     Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-    Surface  *APISurface       // api_surface.json (conformance only)
+    Surface  *APISurface       // api_surface.json (authoring validation, conformance, certification, disk-backed endpoint cross-check)
     Docs     string            // docs.md
     Fixtures fs.FS             // fixtures/ subtree
 }
@@ -352,11 +405,14 @@ type HTTPBase struct {
 }
 
 type AuthSpec struct {
-    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
     Token  string `json:"token,omitempty"`
     Username, Password string     // basic
     Header, Prefix, Param, Value string // api_key_*
-    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials
+    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials + oauth2_refresh_token
+    ExtraParams map[string]string `json:"extra_params,omitempty"` // extra token-request form params
+    RefreshToken string `json:"refresh_token,omitempty"`                    // oauth2_refresh_token
+    RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`  // oauth2_refresh_token: where a rotated grant is persisted
     Hook   string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
     When   string `json:"when,omitempty"` // condition over config values
 }
@@ -389,22 +445,12 @@ type IncrementalSpec struct {
     StartConfigKey string `json:"start_config_key,omitempty"`
     ClientFiltered bool   `json:"client_filtered,omitempty"` // API has no filter; engine drops old records
 }
-
-type WriteAction struct {
-    Name         string          `json:"name"`
-    Kind         string          `json:"kind"` // create|update|upsert|delete|custom
-    Method, Path string
-    PathFields   []string        `json:"path_fields,omitempty"`
-    RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from write previews/errors
-    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
-    BodyFields   []string        `json:"body_fields,omitempty"`
-    RecordSchema json.RawMessage `json:"record_schema"`
-    Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status
-    Risk         string          `json:"risk"`
-    Confirm      string          `json:"confirm,omitempty"` // "" | "destructive"
-    Hook         string          `json:"hook,omitempty"`    // custom executor
-}
 ```
+
+`WriteAction` is intentionally not copied into this design snapshot. Its authoritative Go
+definition is `internal/connectors/engine/bundle.go`, and its authoritative JSON contract is
+`internal/connectors/engine/schema/writes.schema.json`; the authoring recipe lives in
+`docs/migration/conventions.md`.
 
 ### B.3 Interpolation — deliberately tiny
 
@@ -431,19 +477,58 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 4. On completion the app layer persists the advanced cursor exactly as today (`internal/app`
    streaming ETL unchanged; `StatefulReader.InitialState` implemented generically by the engine).
 
-Rate limiting: `RateLimitSpec{requests_per_minute}` adds a token-bucket wait inside the requester
-loop; Retry-After handling already exists in connsdk.
+Rate limiting: `streams.json`'s `RateLimitSpec{requests_per_minute}` remains the explicit legacy
+page-loop wait, while `metadata.json.rate_limit` is informational. A matching cited
+`rate_limits.json` policy resolves to an opaque credential-binding/policy/subject scope and admits
+every engine requester path before its logical send; its fixed/sliding-window and token/leaky-bucket
+budgets are enforced together. The requester invokes its context-aware `RateLimitAdmission` for
+every logical send and permitted redirect hop, emits safe typed observations through
+`RateLimitObserver`, honors a valid `Retry-After` reset exactly (even above `MaxBackoff`), and uses
+bounded full jitter only for unhinted fallback retries. A terminal 429 is a
+`*connsdk.RateLimitError` that unwraps the existing `*HTTPError`. #3755 owns the remaining
+operator-visible output layer.
 
 ### B.5 Write path (engine/write.go)
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
-record index, matching current behavior). `DryRunWrite` = validation + fully-resolved request
-preview (`WritePreview.Warnings` includes resolved method/path with secrets and action
-`redact_fields` redacted). `Write` = per-record execution; returned write errors redact the same
-action fields while preserving typed wrapping. `kind: delete` honors `missing_ok_status` (a 404 on
-an idempotent delete counts as written, not failed). Batch semantics stay one-request-per-record
-(matches github/stripe today); `metadata.json.batch.write_batch_size` reserved for future bulk
-endpoints.
+record index, matching current behavior). Reverse-plan creation persists action `redact_fields` and
+masks matching source-table sample fields. `DryRunWrite` validates and prepares every request
+without network access; `WritePreview.Warnings` shows the first fully resolved method/path that
+execution will send, without substitute redactions for secret or `redact_fields` values, while the
+preview digest binds the complete request set, connector/action target, credential and configuration
+identity, batchability, definition, and hook identity. Destructive execution
+re-prepares and compares that digest, then consumes authenticated single-use approval evidence
+through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
+`kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as unchanged, not
+written or failed, so command execution cannot claim a provider mutation). Batch semantics stay
+one-request-per-record (matches github/stripe today);
+`metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
+
+### B.5.1 Declared multipart operation writes (engine/direct_write.go)
+
+`operations.json` can opt a `kind: "rest_write"` into the same typed multipart transport with a
+closed `rest.multipart` declaration. This is not a second upload runner and is not a generic HTTP
+write: the bundle fixes the mutating method, connector-relative path, literal
+`multipart/form-data` content type, closed typed body schema, response cap, aggregate/file caps,
+and all form/file-part names. The operation's `source_url` keeps the connector author's provider
+evidence reviewable. In a disk-backed bundle, its fixed method and path also cross-check an
+`api_surface.json` operation entry. Production endpoint validation is instead derived only from
+the shipped `rest_write` declarations because `api_surface.json` remains outside `defs.FS`; that
+proves internal declaration consistency, not provider documented-surface provenance. #3773 owns
+the separate per-operation `api_surface` provenance foundation. A caller can only supply declared
+`body.*` fields; a file source is a required string path, never inline bytes or a caller-selected
+request shape.
+
+`PreviewOperationDirectWrite` serializes the existing canonical multipart representation, so its
+digest binds the request target/query, fixed declaration, typed fields, source-path identities, and
+plan-approved SHA-256 of every file without a network call. Execution re-prepares and checks that
+same identity before the shared approval gate, then reuses the established root-confined multipart
+snapshot/regular-file/cap/digest/media validation and bounded requester. Direct multipart writes
+remain single-attempt and refuse redirect replay; bounded provider response and error content is
+returned without a new masking path. Existing `writes.json` multipart reverse-ETL actions remain
+their own proven path; legacy `file_upload` operation rows remain non-executable until migrated by
+a connector adoption lane. This shared capability does not itself create a command, manual, or
+website claim.
 
 ### B.6 Sync modes — derived, never declared
 
@@ -495,8 +580,14 @@ non-REST protocols — postgres/mysql/snowflake/bigquery (SQL + CDC), amazon-sqs
 file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` directly with the
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
-bundle** (metadata.json, spec.json, schemas/) so identity, catalog, and docs stay uniform; they
-embed `engine.Base` which serves `Definition()`/`Catalog()` from the bundle.
+bundle** (metadata.json, spec.json, schemas/, `database.json` when it is a native database driver,
+and optional `polling_watermark.json` under the migration conventions) so identity, catalog, and
+docs stay uniform; they embed `engine.Base`, which supplies
+bundle-derived identity and the base `Definition()`. Native operations remain package-owned. The
+database and polling declaration authoring contracts live in the
+[migration conventions](../migration/conventions.md).
+PostgreSQL can extend that definition with its registered bounded snapshot source; generic App
+composition must not infer or assemble it from broad capabilities.
 
 ## C. Interface, registry, and catalog changes
 
@@ -518,7 +609,8 @@ type Writer interface {
     Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error)
 }
 
-// Unchanged optional interfaces: Querier, CDCReader, StatefulReader, LiveConformanceProvider.
+// Optional interfaces: Querier, CDCReader, ChangefeedDescriptorProvider/ChangefeedExecutor,
+// StatefulReader, LiveConformanceProvider. CDCReader alone never advertises public CDC.
 // Deleted: ManifestProvider, SchemaMapper (unused).
 ```
 
@@ -534,6 +626,8 @@ type Definition struct {
     DocsURL         string            `json:"docs_url"`
     ReleaseStage    string            `json:"release_stage"`
     Capabilities    Capabilities      `json:"capabilities"`
+    Changefeed      *ChangefeedDescriptor `json:"changefeed,omitempty"`
+    PollingWatermark *PollingWatermarkDescriptor `json:"polling_watermark,omitempty"`
     Spec            json.RawMessage   `json:"spec"`
     Streams         []StreamSummary   `json:"streams"`
     WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
@@ -541,6 +635,15 @@ type Definition struct {
     Icon            *ConnectorIcon    `json:"icon,omitempty"`
 }
 ```
+
+`Changefeed` is optional evidence metadata. Its authoring rules live in the
+[connector migration conventions](../migration/conventions.md#2-authoring-rules); its presence
+does not independently advertise `cdc`. Public CDC remains false until an implemented declaration
+matches the registered `ChangefeedExecutor`.
+
+`PollingWatermark` is a distinct native-database admission declaration. It is not a CDC capability
+or REST command: mode eligibility is derived from `engine.PollingPreflight` and exact registered
+source/apply executors, rather than from its presence in a definition.
 
 ### C.2 Registry
 
@@ -574,7 +677,9 @@ process-global `RegisterFactory` path is gone.
     for `hooks/*`, ~15 lines) and `native/nativeset/nativeset_gen.go` (~10 lines).
   - `new <name>` — scaffolds a defs bundle from templates.
 - `cmd/pm-cataloggen` (Airbyte importer) — **deleted**.
-- `cmd/iconregistrygen` — unchanged; keys become bare names.
+- `cmd/iconregistrygen` — emits bare connector keys, scopes rows to implemented defs plus runtime
+  builtins, and treats the existing registry as curated authored state. See
+  `docs/migration/icon-registry-single-source.md` for the registry contract.
 
 ### C.4 Catalog: generated from connectors, and the 646 vs 556 divergence
 
@@ -619,30 +724,71 @@ write actions.
   "api": "GitHub REST API v3",
   "docs": "https://docs.github.com/en/rest",
   "reviewed_at": "2026-07-01",
+  "operation_ledger_version": 1,
   "scope": "repository-scoped endpoints; org- and enterprise-admin endpoints out of scope",
   "endpoints": [
     { "method": "GET",    "path": "/repos/{owner}/{repo}/issues",           "covered_by": { "stream": "issues" } },
     { "method": "POST",   "path": "/repos/{owner}/{repo}/issues",           "covered_by": { "write": "create_issue" } },
     { "method": "PATCH",  "path": "/repos/{owner}/{repo}/issues/{number}",  "covered_by": { "write": "update_issue" } },
     { "method": "GET",    "path": "/repos/{owner}/{repo}/traffic/views",
-      "excluded": { "category": "requires_elevated_scope", "reason": "push-access-only traffic API; niche analytics" } },
+      "operation": { "model": "direct_read", "status": "blocked", "risk": "medium", "blocked_by_default": true,
+        "reason": "requires a bounded direct-read command, schema-gated query flags, and redaction policy" } },
     { "method": "DELETE", "path": "/repos/{owner}/{repo}",
-      "excluded": { "category": "destructive_admin", "reason": "repository deletion is never a reverse-ETL action" } }
+      "operation": { "model": "destructive_action", "status": "blocked", "risk": "critical", "blocked_by_default": true,
+        "reason": "repository deletion is not exposed without an explicit destructive reverse-ETL action and evidence" } }
   ]
 }
 ```
 
 Rules (enforced by `connectorgen validate` + conformance):
 
-1. Every endpoint entry has exactly one of `covered_by` or `excluded`.
-2. `covered_by.stream`/`covered_by.write` must resolve to a declared stream/action — and vice
-   versa: every stream and write action must appear in the surface.
-3. `excluded.category` from the closed vocabulary: `destructive_admin`,
-   `requires_elevated_scope`, `binary_payload`, `deprecated`, `non_data_endpoint`,
-   `duplicate_of`, `out_of_scope` (with `scope` prose justifying it).
+1. Every endpoint entry has exactly one classifier: executable `covered_by`, blocked
+   `operation` (when an `operation_ledger_version` is set), or legacy `excluded`.
+2. `covered_by.stream`/`covered_by.write`/`covered_by.direct_read` must resolve to a declared
+   stream, write action, or implemented direct-read command — and vice versa: every declared
+   stream and write action must appear in the surface.
+3. `operation` rows use closed `model`, `status`, and `risk` vocabularies; legacy
+   `excluded.category` rows use the closed vocabulary in `docs/migration/conventions.md`.
 4. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
-   non-excluded POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
+   executable POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
 5. Freshness: `reviewed_at` older than 12 months → warning (not failure).
+
+#### Version 2 provider-artifact provenance
+
+`operation_ledger_version: 2` adds evidence metadata alongside the existing endpoint classifier:
+
+```json
+{
+  "operation_ledger_version": 2,
+  "artifacts": [{
+    "id": "github-rest-openapi-2026-08-06",
+    "url": "https://docs.github.com/rest/openapi-description/openapi.github.json",
+    "retrieved_at": "2026-08-06",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }],
+  "endpoints": [{
+    "method": "GET",
+    "path": "/repos/{owner}/{repo}/issues",
+    "provenance": {
+      "artifact": "github-rest-openapi-2026-08-06",
+      "source_url": "https://docs.github.com/en/rest/issues/issues#list-repository-issues"
+    },
+    "covered_by": { "stream": "issues" }
+  }]
+}
+```
+
+Every v2 endpoint must cite an HTTPS `provenance.source_url` and an artifact ID that resolves to
+exactly one `artifacts[]` row. Each artifact has an HTTPS URL and an ISO-8601 full-date
+`retrieved_at`; preserve a provider-published immutable SHA-256 digest when it is available. The
+artifact/provenance pair is evidence only. It never supplies `covered_by`, never changes a
+capability, and never makes an endpoint executable. `covered_by` continues to resolve only to a
+declared stream, write action, or implemented direct-read command. `operation.source_url` remains
+the v1 citation field; v2 uses endpoint-local `provenance.source_url` uniformly.
+
+Version 1 (and pre-ledger) inventories remain valid and certify as `legacy_unverified` during the
+staged provider-artifact migration. The migration sweep upgrades individual bundles; the v2
+contract itself does not rewrite the existing fleet or infer evidence from a bare source URL.
 
 ### E.2 Conformance v2 (`internal/connectors/conformance/`)
 
@@ -652,15 +798,15 @@ Static (per bundle): `spec_schema_valid`, `stream_schemas_valid`, `pk_fields_exi
 
 Dynamic (per bundle, fixture-backed): an `httptest.Server` replays
 `fixtures/streams/<stream>/page_N.json` (recorded real API pages, keyed by expected request
-path+query); the **real engine** runs against it:
+path+query); the **real engine** runs against it. Canonical fixture shapes and matching semantics
+live in the [connector authoring conventions](../migration/conventions.md#4-fixture-rules):
 - `check_fixture`, `read_fixture_nonempty` per stream with fixtures (first stream mandatory),
 - `pagination_terminates` (multi-page fixture consumed exactly once, no infinite loop),
 - `records_match_schema` (every emitted record validates against the stream schema),
 - `cursor_advances` (incremental: cursor after read == max cursor in fixtures; re-read with that
   cursor sends the right `request_param`),
-- `write_validate` + `write_request_shape` per action: `fixtures/writes/<action>.json` =
-  `{"record": {...}, "expect": {"method","path","body"}}`; engine dry-run must produce the
-  expected request; invalid-record cases must fail validation,
+- `write_validate` + `write_request_shape` per action; engine dry-run must satisfy the canonical
+  fixture contract, and invalid-record cases must fail validation,
 - `delete_semantics` for `kind:delete` actions (404 handling per `missing_ok_status`).
 
 Live (opt-in): `LiveConformanceProvider` supplies real credentials for a nightly job.

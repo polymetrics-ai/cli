@@ -1,0 +1,21 @@
+{
+  "record": {
+    "goal_gid": "fixture-goal-gid",
+    "data": {
+      "text": "fixture-text",
+      "html_text": "fixture-html-text",
+      "is_pinned": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/goals/fixture-goal-gid/stories",
+    "body": {
+      "data": {
+        "text": "fixture-text",
+        "html_text": "fixture-html-text",
+        "is_pinned": true
+      }
+    }
+  }
+}

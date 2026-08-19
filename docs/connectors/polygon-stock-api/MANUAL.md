@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
 
 ICON
+  id: polygon
   asset: icons/polygon.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -38,20 +39,20 @@ CONFIGURATION
   sort
   ticker
   type
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tickers:
     primary key: ticker
-    fields: active(), currency_name(), locale(), market(), name(), primary_exchange(), ticker()
+    fields: active(boolean), currency_name(string), locale(string), market(string), name(string), primary_exchange(string), ticker(string)
   dividends:
     primary key: id
     cursor: ex_dividend_date
-    fields: cash_amount(), currency(), ex_dividend_date(), id(), ticker()
+    fields: cash_amount(number), currency(string), ex_dividend_date(string), id(string), ticker(string)
   splits:
     primary key: id
     cursor: execution_date
-    fields: execution_date(), id(), split_from(), split_to(), ticker()
+    fields: execution_date(string), id(string), split_from(number), split_to(number), ticker(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

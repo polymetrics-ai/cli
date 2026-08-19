@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/form_templates",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "form_templates_fixture_1",
+          "text": "Fixture form templates",
+          "name": "Fixture form templates",
+          "createdAt": 1767225601000,
+          "updatedAt": 1767225602000
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

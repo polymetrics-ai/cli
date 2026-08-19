@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Plausible Analytics sites and stats reports through the Stats API.
 
 ICON
+  id: plausible
   asset: icons/plausible.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -35,24 +36,24 @@ CONFIGURATION
   period
   property
   site_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   sites:
     primary key: site_id
-    fields: domain(), site_id()
+    fields: domain(string), site_id(string)
   aggregate:
     primary key: site_id
-    fields: bounce_rate(), events(), pageviews(), site_id(), visit_duration(), visitors(), visits()
+    fields: bounce_rate(number), events(integer), pageviews(integer), site_id(string), visit_duration(number), visitors(integer), visits(integer)
   timeseries:
     primary key: date
-    fields: bounce_rate(), date(), events(), pageviews(), site_id(), visit_duration(), visitors(), visits()
+    fields: bounce_rate(number), date(string), events(integer), pageviews(integer), site_id(string), visit_duration(number), visitors(integer), visits(integer)
   breakdown:
     primary key: property_value
-    fields: bounce_rate(), events(), pageviews(), property_value(), site_id(), visit_duration(), visitors(), visits()
+    fields: bounce_rate(number), events(integer), pageviews(integer), property_value(string), site_id(string), visit_duration(number), visitors(integer), visits(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Plausible Analytics API read of site analytics data

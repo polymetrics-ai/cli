@@ -9,112 +9,186 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/warehouse"
 )
 
-// TestWriteStagesSelfTestAgainstOutbox drives certify.Runner.Run end-to-end
-// against the built-in "sample" source connector with Options.Write enabled,
-// proving the create-then-cleanup write protocol (design §C, stages 12-17)
-// using the sample/outbox reverse-ETL path the Makefile "smoke" target
-// already exercises (no live credentials required, per the design's
-// documented self-test escape hatch: "if no live creds, the stage self-test
-// uses the sample/outbox reverse-ETL path").
-func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
+func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
+	root := t.TempDir()
+	h := certify.NewHarness(root)
+	mustHarnessKind(t, h, "InitResult", "init", "--json")
+
+	tag := "pm-cert-sample-real-write"
+	// Seeded through the real Parquet writer rather than hand-written: a
+	// hand-written JSONL table is a format the binary under test refuses, and
+	// it would drift the moment the format changes again.
+	seedPath := filepath.Join(root, ".polymetrics", "warehouse", "cert_write_seed_sample"+warehouse.TableFileExt)
+	if err := warehouse.WriteTable(context.Background(), seedPath, []warehouse.Row{{"id": tag, "tag": tag}}); err != nil {
+		t.Fatalf("write seed record: %v", err)
+	}
+
+	mustHarnessKind(t, h, "Credential", "credentials", "add", "cert-outbox", "--connector", "outbox",
+		"--config", "path="+filepath.Join(root, ".polymetrics", "outbox"), "--json")
+
+	createPlan, createApproval := planOutboxLifecycle(t, h, "create")
+	preview := mustHarnessKind(t, h, "ReversePlanPreview", "reverse", "preview", createPlan, "--json")
+	if hits := certify.ScanForSecrets(preview.Stdout, []string{createApproval}); len(hits) != 0 {
+		t.Fatalf("reverse preview leaked approval token: %v", hits)
+	}
+	if plan, _ := preview.Envelope["plan"].(map[string]any); plan != nil {
+		if approval, _ := plan["approval_token"].(string); approval != "" {
+			t.Fatalf("reverse preview approval_token = %q, want redacted", approval)
+		}
+	}
+
+	create := mustHarnessKindWithStdin(t, h, createApproval+"\n", "ReverseRun", "reverse", "run", createPlan, "--approval-token-stdin", "--json")
+	if run, _ := create.Envelope["run"].(map[string]any); run == nil || run["records_succeeded"] != float64(1) {
+		t.Fatalf("create run = %+v, want one successful record", run)
+	}
+	if got := outboxActionForTag(t, root, tag); got != "create" {
+		t.Fatalf("outbox action after create = %q, want create", got)
+	}
+
+	cleanupPlan, cleanupApproval := planOutboxLifecycle(t, h, "delete")
+	mustHarnessKindWithStdin(t, h, cleanupApproval+"\n", "ReverseRun", "reverse", "run", cleanupPlan, "--approval-token-stdin", "--json")
+	if got := outboxActionForTag(t, root, tag); got != "delete" {
+		t.Fatalf("outbox action after cleanup = %q, want delete", got)
+	}
+
+	replay := h.RunWithStdin(createApproval+"\n", "reverse", "run", createPlan, "--approval-token-stdin", "--json")
+	if replay.ExitCode == 0 || replay.Kind != "Error" {
+		t.Fatalf("replayed approval = exit %d kind %q, want rejected Error", replay.ExitCode, replay.Kind)
+	}
+}
+
+func mustHarnessKind(t *testing.T, h *certify.Harness, kind string, args ...string) certify.CLIResult {
+	t.Helper()
+	res := h.Run(args...)
+	if err := h.MustKind(res, kind, 0); err != nil {
+		t.Fatalf("%s: stdout=%s stderr=%s", err, res.Stdout, res.Stderr)
+	}
+	return res
+}
+
+func mustHarnessKindWithStdin(t *testing.T, h *certify.Harness, stdin, kind string, args ...string) certify.CLIResult {
+	t.Helper()
+	res := h.RunWithStdin(stdin, args...)
+	if err := h.MustKind(res, kind, 0); err != nil {
+		t.Fatalf("%s: stdout=%s stderr=%s", err, res.Stdout, res.Stderr)
+	}
+	return res
+}
+
+func planOutboxLifecycle(t *testing.T, h *certify.Harness, action string) (string, string) {
+	t.Helper()
+	res := h.Run("reverse", "plan", "cert_write_selftest",
+		"--source-table", "cert_write_seed_sample",
+		"--destination", "outbox:cert-outbox",
+		"--map", "id:external_id",
+		"--map", "tag:tag",
+		"--action", action)
+	if res.ExitCode != 0 {
+		t.Fatalf("reverse plan %s: exit %d stdout=%s stderr=%s", action, res.ExitCode, res.Stdout, res.Stderr)
+	}
+	return reversePlanField(t, res.Stdout, "Created reverse plan "), reversePlanField(t, res.Stdout, "Approval token: ")
+}
+
+func reversePlanField(t *testing.T, stdout, prefix string) string {
+	t.Helper()
+	for _, line := range strings.Split(stdout, "\n") {
+		if value, ok := strings.CutPrefix(line, prefix); ok && strings.TrimSpace(value) != "" {
+			return strings.Fields(value)[0]
+		}
+	}
+	t.Fatalf("reverse plan output missing %q: %s", prefix, stdout)
+	return ""
+}
+
+func outboxActionForTag(t *testing.T, root, tag string) string {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join(root, ".polymetrics", "outbox", "cert_write_selftest.jsonl"))
+	if err != nil {
+		t.Fatalf("read outbox records: %v", err)
+	}
+	last := ""
+	for _, line := range strings.Split(strings.TrimSpace(string(raw)), "\n") {
+		var row map[string]any
+		if err := json.Unmarshal([]byte(line), &row); err != nil {
+			t.Fatalf("decode outbox record %q: %v", line, err)
+		}
+		if rowTag, _ := row["tag"].(string); rowTag == tag {
+			last, _ = row["_outbox_action"].(string)
+		}
+	}
+	return last
+}
+
+func TestWriteStagesRunnerReportAndApprovalTransition(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
 		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
 		Write:     true,
 	})
-
 	rep, err := r.Run(context.Background())
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
 
-	// --- stage 12: write_plan_preview (redaction gate) ---
-	planPreview := mustStage(t, rep, "write_plan_preview")
-	if !planPreview.Passed {
-		t.Fatalf("write_plan_preview stage failed: %+v", planPreview)
+	for _, name := range []string{
+		"write_plan_preview",
+		"write_create",
+		"write_verify",
+		"write_cleanup",
+		"cleanup_verify",
+		"approval_idempotency",
+	} {
+		if stage := mustStage(t, rep, name); !stage.Passed {
+			t.Errorf("%s stage failed: %+v", name, stage)
+		}
 	}
-
-	// --- stage 13: write_create ---
-	create := mustStage(t, rep, "write_create")
-	if !create.Passed {
-		t.Fatalf("write_create stage failed: %+v", create)
-	}
-	if create.CLI.Kind != "ReverseRun" {
+	if create := mustStage(t, rep, "write_create"); create.CLI.Kind != "ReverseRun" {
 		t.Errorf("write_create stage CLI.Kind = %q, want ReverseRun", create.CLI.Kind)
 	}
 
-	// --- stage 14: write_verify (read-back) ---
-	verify := mustStage(t, rep, "write_verify")
-	if !verify.Passed {
-		t.Errorf("write_verify stage failed: %+v", verify)
+	write, ok := rep.Capabilities.WriteActions["create"]
+	if !ok {
+		t.Fatalf("Capabilities.WriteActions = %+v, want create entry", rep.Capabilities.WriteActions)
 	}
-
-	// --- stage 15: write_cleanup ---
-	cleanup := mustStage(t, rep, "write_cleanup")
-	if !cleanup.Passed {
-		t.Fatalf("write_cleanup stage failed: %+v", cleanup)
+	if write.Result != "pass" {
+		t.Errorf("create write result = %q, want pass", write.Result)
 	}
-
-	// --- stage 16: cleanup_verify ---
-	cleanupVerify := mustStage(t, rep, "cleanup_verify")
-	if !cleanupVerify.Passed {
-		t.Errorf("cleanup_verify stage failed: %+v", cleanupVerify)
+	if write.Cleanup != "delete" {
+		t.Errorf("create write cleanup = %q, want delete", write.Cleanup)
 	}
-
-	// --- stage 17: approval_idempotency ---
-	idem := mustStage(t, rep, "approval_idempotency")
-	if !idem.Passed {
-		t.Errorf("approval_idempotency stage failed: %+v", idem)
+	if write.Verify != "read_back" {
+		t.Errorf("create write verify = %q, want read_back", write.Verify)
 	}
-
-	if rep.Capabilities.WriteActions == nil {
-		t.Fatalf("Capabilities.WriteActions is nil, want populated after write stages")
+	if !strings.HasPrefix(write.Tag, "pm-cert-sample-") {
+		t.Errorf("create write tag = %q, want pm-cert-sample-*", write.Tag)
 	}
-	found := false
-	for _, wa := range rep.Capabilities.WriteActions {
-		if wa.Result == "pass" {
-			found = true
-		}
+	if write.Reason != "" {
+		t.Errorf("create write reason = %q, want empty", write.Reason)
 	}
-	if !found {
-		t.Errorf("Capabilities.WriteActions has no passing entry: %+v", rep.Capabilities.WriteActions)
-	}
-
-	// No leaked resources: the design's top-level leaks[] must be empty on a
-	// clean pass.
 	if len(rep.Leaks) != 0 {
 		t.Errorf("Report.Leaks = %+v, want empty on a clean run", rep.Leaks)
 	}
-
-	// The tag must never leak the raw secret value, and must follow the
-	// pm-cert-<slug>-<runid8>-<ts> convention (design §C).
-	for _, wa := range rep.Capabilities.WriteActions {
-		if wa.Tag == "" {
-			continue
-		}
-		if !strings.HasPrefix(wa.Tag, "pm-cert-sample-") {
-			t.Errorf("write action tag %q does not match pm-cert-sample-<runid8>-<ts> convention", wa.Tag)
-		}
-	}
 }
 
-// TestWritePlanPreviewJSONHasNoApprovalToken is the redaction-gate assertion
+// TestWritePlanPreviewJSONHasNoApprovalToken is the JSON token-omission assertion
 // (design §A stage 12 "assert --json output has NO approval token"): the
 // harness's own write_plan_preview stage must positively assert this on
 // every run with Write enabled, not merely happen to pass.
 func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -125,6 +199,7 @@ func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	stage := mustStage(t, rep, "write_plan_preview")
 	if !stage.Passed {
 		t.Fatalf("write_plan_preview failed: %+v", stage)
@@ -139,7 +214,7 @@ func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -150,6 +225,7 @@ func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false with Write disabled, want true; stages=%+v", rep.Stages)
 	}
@@ -168,7 +244,7 @@ func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 func TestWriteCreateFailureRecordsNoLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -201,7 +277,7 @@ func TestWriteCreateFailureRecordsNoLeak(t *testing.T) {
 func TestWriteCleanupFailureRecordsLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -235,7 +311,7 @@ func TestWriteCleanupFailureRecordsLeak(t *testing.T) {
 func TestCleanupVerifyFailureRecordsLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -266,7 +342,7 @@ func TestCleanupVerifyFailureRecordsLeak(t *testing.T) {
 func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -277,6 +353,7 @@ func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	stage := mustStage(t, rep, "approval_idempotency")
 	if !stage.Passed {
 		t.Fatalf("approval_idempotency stage failed: %+v", stage)
@@ -295,7 +372,7 @@ func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -307,6 +384,7 @@ func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	workdir := certify.LastWorkdir(r)
 	defer func() { _ = os.RemoveAll(workdir) }()
 
@@ -340,5 +418,40 @@ func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 	}
 	if !sawCleaned {
 		t.Errorf("ledger file %s has no cleaned_at entry after a clean run", ledgerPath)
+	}
+}
+
+func TestWriteStagesLedgerPersistsAtConfiguredLedgerRoot(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	ledgerRoot := filepath.Join(t.TempDir(), "durable-ledger")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector:  "sample",
+		Stream:     "customers",
+		Limit:      50,
+		SecretEnv:  map[string]string{"token": "PM_SAMPLE_TOKEN"},
+		Write:      true,
+		LedgerRoot: ledgerRoot,
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
+	if !rep.Passed {
+		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
+	}
+
+	entries, err := certify.LoadLedger(ledgerRoot)
+	if err != nil {
+		t.Fatalf("LoadLedger(%s): %v", ledgerRoot, err)
+	}
+	if len(entries.All()) == 0 {
+		t.Fatalf("durable ledger %s has no entries", ledgerRoot)
+	}
+	for _, status := range entries.All() {
+		if !status.Cleaned || !status.ReadBack || status.State != "cleaned" {
+			t.Fatalf("durable ledger status = %+v, want read-back and cleaned lifecycle", status)
+		}
 	}
 }

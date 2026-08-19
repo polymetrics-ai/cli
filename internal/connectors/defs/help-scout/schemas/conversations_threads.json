@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations_threads",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignedTo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "savedReplyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bcc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "openedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rating": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scheduled": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conversationId": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

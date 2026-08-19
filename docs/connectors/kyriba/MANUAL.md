@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Kyriba bank accounts, transactions, statements, and payments through tenant REST API collection endpoints. Read-only.
 
 ICON
+  id: kyriba
   asset: icons/kyriba.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,25 +30,25 @@ CONFIGURATION
   base_url
   scope
   token_url
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   bank_accounts:
     primary key: id
-    fields: account_number(), currency(), id(), status()
+    fields: account_number(string), currency(string), id(string), status(string)
   transactions:
     primary key: id
-    fields: account_number(), amount(), currency(), id(), status()
+    fields: account_number(string), amount(number), currency(string), id(string), status(string)
   statements:
     primary key: id
-    fields: account_number(), currency(), id(), status()
+    fields: account_number(string), currency(string), id(string), status(string)
   payments:
     primary key: id
-    fields: amount(), currency(), id(), status()
+    fields: amount(number), currency(string), id(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Kyriba tenant REST API read of bank accounts/transactions/statements/payments

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/project.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "project_info_id_fixture_38",
+        "createdAt": "2026-02-10T14:00:00Z",
+        "title": "Title fixture 38",
+        "isArchived": false,
+        "authorId": "project_info_authorid_fixture_38",
+        "description": "Description fixture 38",
+        "confidential": false,
+        "customFieldEntries": [
+          {
+            "id": "project_info_id_fixture_38",
+            "isPrivate": false,
+            "title": "Title fixture 38",
+            "value": {
+              "value": 38.0,
+              "currencyCode": "project_info_currencycode_fixture_38"
+            },
+            "valueLabel": "project_info_valuelabel_fixture_38"
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "projectId": "projectid_fixture"
+  }
+}

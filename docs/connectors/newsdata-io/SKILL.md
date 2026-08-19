@@ -11,9 +11,11 @@ Reads latest, crypto, and archived news articles plus available news sources fro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -36,25 +38,25 @@ Reads latest, crypto, and archived news articles plus available news sources fro
 - page_size
 - search_query
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - latest:
   - primary key: article_id
   - cursor: pubDate
-  - fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+  - fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
 - crypto:
   - primary key: article_id
   - cursor: pubDate
-  - fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+  - fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
 - archive:
   - primary key: article_id
   - cursor: pubDate
-  - fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+  - fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
 - sources:
   - primary key: id
-  - fields: category(), country(), description(), icon(), id(), language(), name(), priority(), url()
+  - fields: category(array), country(array), description(string), icon(string), id(string), language(array), name(string), priority(integer), url(string)
 
 ## Sync Modes
 

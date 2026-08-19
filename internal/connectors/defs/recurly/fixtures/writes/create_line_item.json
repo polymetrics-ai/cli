@@ -1,0 +1,27 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "currency": "USD",
+    "unit_amount": 12.34,
+    "type": "charge"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/line_items",
+    "body": {
+      "currency": "USD",
+      "unit_amount": 12.34,
+      "type": "charge"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "invoiced",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

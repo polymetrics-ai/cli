@@ -11,6 +11,7 @@ Reads Square payments, refunds, customers, and locations through the Square Conn
 
 ## Icon
 
+- id: square
 - asset: icons/square.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,25 +33,25 @@ Reads Square payments, refunds, customers, and locations through the Square Conn
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - payments:
   - primary key: id
   - cursor: updated_at
-  - fields: amount_money(), created_at(), id(), location_id(), order_id(), processing_fee(), receipt_number(), source_type(), status(), total_money(), updated_at()
+  - fields: amount_money(object), created_at(string), id(string), location_id(string), order_id(string), processing_fee(array), receipt_number(string), source_type(string), status(string), total_money(object), updated_at(string)
 - refunds:
   - primary key: id
   - cursor: updated_at
-  - fields: amount_money(), created_at(), id(), location_id(), order_id(), payment_id(), processing_fee(), reason(), status(), updated_at()
+  - fields: amount_money(object), created_at(string), id(string), location_id(string), order_id(string), payment_id(string), processing_fee(array), reason(string), status(string), updated_at(string)
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: company_name(), created_at(), creation_source(), email_address(), family_name(), given_name(), id(), phone_number(), reference_id(), updated_at()
+  - fields: company_name(string), created_at(string), creation_source(string), email_address(string), family_name(string), given_name(string), id(string), phone_number(string), reference_id(string), updated_at(string)
 - locations:
   - primary key: id
-  - fields: country(), created_at(), currency(), id(), merchant_id(), name(), status(), timezone(), type()
+  - fields: country(string), created_at(string), currency(string), id(string), merchant_id(string), name(string), status(string), timezone(string), type(string)
 
 ## Sync Modes
 

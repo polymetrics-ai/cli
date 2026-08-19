@@ -13,6 +13,7 @@ DESCRIPTION
   Reads customers, suppliers, products, invoices, orders, quotes, departments, payment terms, units, and accounts from the Visma e-conomic REST API, and writes customers, suppliers, products, units, and payment terms.
 
 ICON
+  id: visma-economic
   asset: icons/visma-economic.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,69 +29,69 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  agreement_grant_token (secret)
-  app_secret_token (secret)
+  agreement_grant_token (secret) (required)
+  app_secret_token (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
-    fields: currency(), id(), name()
+    fields: currency(string), id(string), name(string)
   suppliers:
     primary key: id
     cursor: lastUpdated
-    fields: address(), balance(), city(), corporateIdentificationNumber(), country(), currency(), ean(), email(), id(), lastUpdated(), name(), telephoneAndFaxNumber(), vatNumber(), zip()
+    fields: address(string), balance(number), city(string), corporateIdentificationNumber(string), country(string), currency(string), ean(string), email(string), id(integer), lastUpdated(string), name(string), telephoneAndFaxNumber(string), vatNumber(string), zip(string)
   products:
     primary key: id
     cursor: lastUpdated
-    fields: barred(), costPrice(), description(), id(), lastUpdated(), name(), salesPrice()
+    fields: barred(boolean), costPrice(number), description(string), id(string), lastUpdated(string), name(string), salesPrice(number)
   invoices_booked:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), dueDate(), grossAmount(), id(), lastUpdated(), netAmount(), paymentTerms(), vatAmount()
+    fields: currency(string), date(string), dueDate(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), paymentTerms(object), vatAmount(number)
   invoices_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), dueDate(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), paymentTerms(), references(), vatAmount()
+    fields: currency(string), date(string), dueDate(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), paymentTerms(object), references(object), vatAmount(number)
   orders_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   orders_sent:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   quotes_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   quotes_sent:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   payment_terms:
     primary key: id
-    fields: duration(), id(), name(), paymentTermsType()
+    fields: duration(integer), id(integer), name(string), paymentTermsType(string)
   units:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   vat_types:
     primary key: id
-    fields: accountingApplication(), id(), name(), vatPercentage()
+    fields: accountingApplication(string), id(integer), name(string), vatPercentage(number)
   vat_zones:
     primary key: id
-    fields: enabledForCustomer(), enabledForSupplier(), id(), name()
+    fields: enabledForCustomer(boolean), enabledForSupplier(boolean), id(integer), name(string)
   accounts:
     primary key: id
-    fields: accountType(), balance(), blocked(), id(), name()
+    fields: accountType(string), balance(number), blocked(boolean), id(integer), name(string)
   customer_groups:
     primary key: id
-    fields: accountNumber(), id(), name()
+    fields: accountNumber(integer), id(integer), name(string)
   product_groups:
     primary key: id
-    fields: id(), name(), salesAccount()
+    fields: id(integer), name(string), salesAccount(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -98,10 +99,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers
+    required fields: name, currency, paymentTerms, customerGroup, vatZone
     risk: external mutation; approval required
   update_customer:
     endpoint: PUT /customers/{{ record.id }}
-    required fields: id
+    required fields: id, name, currency, paymentTerms, customerGroup, vatZone
     risk: external mutation; approval required
   delete_customer:
     endpoint: DELETE /customers/{{ record.id }}
@@ -109,10 +111,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation (deletes a customer permanently); approval required
   create_supplier:
     endpoint: POST /suppliers
+    required fields: name, currency, paymentTerms, group, vatZone
     risk: external mutation; approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.id }}
-    required fields: id
+    required fields: id, name, currency, paymentTerms, group, vatZone
     risk: external mutation; approval required
   delete_supplier:
     endpoint: DELETE /suppliers/{{ record.id }}
@@ -120,10 +123,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation (deletes a supplier permanently); approval required
   create_product:
     endpoint: POST /products
+    required fields: productNumber, name, salesPrice, productGroup
     risk: external mutation; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}
-    required fields: id
+    required fields: id, name, salesPrice, productGroup
     risk: external mutation; approval required
   delete_product:
     endpoint: DELETE /products/{{ record.id }}
@@ -131,10 +135,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation (deletes a product permanently); approval required
   create_unit:
     endpoint: POST /units
+    required fields: name
     risk: external mutation; approval required
   update_unit:
     endpoint: PUT /units/{{ record.id }}
-    required fields: id
+    required fields: id, name
     risk: external mutation; approval required
   delete_unit:
     endpoint: DELETE /units/{{ record.id }}
@@ -142,10 +147,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation (deletes a unit permanently); approval required
   create_payment_term:
     endpoint: POST /payment-terms
+    required fields: name, paymentTermsType
     risk: external mutation; approval required
   update_payment_term:
     endpoint: PUT /payment-terms/{{ record.id }}
-    required fields: id
+    required fields: id, name, paymentTermsType
     risk: external mutation; approval required
   delete_payment_term:
     endpoint: DELETE /payment-terms/{{ record.id }}

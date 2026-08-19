@@ -13,9 +13,11 @@ DESCRIPTION
   Reads inFlow Inventory products, customers, vendors, sales orders, and categories through the inFlow cloud REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,28 +28,28 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  companyid
+  companyid (required)
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   products:
     primary key: productId
     cursor: lastModifiedDateTime
-    fields: categoryId(), description(), isActive(), isManufacturable(), itemType(), lastModifiedDateTime(), name(), productId(), sku(), timestamp(), trackSerials()
+    fields: categoryId(string), description(string), isActive(boolean), isManufacturable(boolean), itemType(string), lastModifiedDateTime(string), name(string), productId(string), sku(string), timestamp(string), trackSerials(boolean)
   customers:
     primary key: customerId
-    fields: contactName(), customerId(), email(), fax(), isActive(), name(), phone(), pricingSchemeId(), remarks(), taxingSchemeId(), timestamp()
+    fields: contactName(string), customerId(string), email(string), fax(string), isActive(boolean), name(string), phone(string), pricingSchemeId(string), remarks(string), taxingSchemeId(string), timestamp(string)
   vendors:
     primary key: vendorId
-    fields: contactName(), currencyId(), email(), fax(), isActive(), leadTimeDays(), name(), phone(), taxingSchemeId(), timestamp(), vendorId()
+    fields: contactName(string), currencyId(string), email(string), fax(string), isActive(boolean), leadTimeDays(integer), name(string), phone(string), taxingSchemeId(string), timestamp(string), vendorId(string)
   sales_orders:
     primary key: salesOrderId
-    fields: amountPaid(), balance(), contactName(), currencyId(), customerId(), dueDate(), email(), inventoryStatus(), invoicedDate(), isCancelled(), isCompleted(), isInvoiced(), isQuote(), salesOrderId()
+    fields: amountPaid(string), balance(string), contactName(string), currencyId(string), customerId(string), dueDate(string), email(string), inventoryStatus(string), invoicedDate(string), isCancelled(boolean), isCompleted(boolean), isInvoiced(boolean), isQuote(boolean), salesOrderId(string)
   categories:
     primary key: categoryId
-    fields: categoryId(), isDefault(), name(), parentCategoryId(), timestamp()
+    fields: categoryId(string), isDefault(boolean), name(string), parentCategoryId(string), timestamp(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

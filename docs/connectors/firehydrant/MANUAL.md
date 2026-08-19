@@ -13,9 +13,11 @@ DESCRIPTION
   Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireHydrant mutations through declarative write actions.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -88,29 +90,29 @@ CONFIGURATION
   type
   user_id
   webhook_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   incidents:
     primary key: id
     cursor: updated_at
-    fields: created_at(), current_milestone(), description(), id(), name(), number(), priority(), resolved_at(), severity(), started_at(), summary(), updated_at()
+    fields: created_at(string), current_milestone(string), description(string), id(string), name(string), number(integer), priority(string), resolved_at(string), severity(string), started_at(string), summary(string), updated_at(string)
   services:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), service_tier(), slug(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), service_tier(integer), slug(string), updated_at(string)
   teams:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), slug(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), slug(string), updated_at(string)
   environments:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), updated_at(string)
   functionalities:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), slug(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), slug(string), updated_at(string)
   append_form_data_on_selected_value_get:
   get_ai_incident_summary_vote_status:
   get_ai_preferences:

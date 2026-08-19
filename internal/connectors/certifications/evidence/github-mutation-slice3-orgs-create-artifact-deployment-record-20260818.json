@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:orgs_create_artifact_deployment_record",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:40:50Z",
+  "run_id": "github-mutation-slice3-orgs-create-artifact-deployment-record-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "b2af457377be74e2c7b86f6b09ee460b78304a2468815ff009ac1c1bac22ba84",
+    "pm_command_fingerprint": "{{pmcertfp:v1:aad012ef9ac8ccec792290ad06e2dc7b74fbb9df7a138e4c541dd972435526f6}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:baa4cc0033fe7a0fff95bc3611f968da2192e52001a15620b5bc724becd14f42}}"],
+    "http_exchanges": [
+      {
+        "operation": "orgs_artifact_deployment_agent_derived_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:c1b0fc9a5984079786f34e411fae30c2497f2c822b8dd9dbe2f14ae8b2c22daa}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"assertion_source": "{{pmcertfp:v1:c90e9daa2b2f412cca488245fa7845cb95f1cec462ea89522f07f0282c8b711a}}", "matched": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}", "wrong_answer_rejected": "{{pmcertfp:v1:1909fc0cff4f7b43f70450f68c7dda8dda3f15ed6ce071034612b89c8c0a85f4}}", "logical_environment": "{{pmcertfp:v1:c3cc39b913d7c8340c624d51c4713eaf4a3034c2e34087876ea0d2b409f4649c}}", "cluster": "{{pmcertfp:v1:6b0714f4aa5b590e44157f637147b03df73d6b114002aec0a30d20648dbb7099}}", "deployment_name": "{{pmcertfp:v1:5beb21c047e3bb4f9cca20dbdf93a1927532a4ad2a04ce453914edf76998722d}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_artifact_deployment_provider_terminal_disposal",
+        "request": {"method": "POST", "target": "{{pmcertfp:v1:6022bb84cbe9b67d6914da8a35963eaeac9f4f966d5662768eff30925ba64ab5}}", "query": [], "headers": [], "body": {"encoding": "json", "value": {"status": "{{pmcertfp:v1:785ac22d82eb676ebbb4c2c654de57c28e2b81b3496943fbc16422a5fefa6bdb}}"}, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"terminal_disposal": "{{pmcertfp:v1:7e31cdf637f5f8d5be4791e8ef51ce55db58849be05295aaffc9f1e1ad228a81}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_artifact_deployment_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:c1b0fc9a5984079786f34e411fae30c2497f2c822b8dd9dbe2f14ae8b2c22daa}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"cleanup": "{{pmcertfp:v1:7e31cdf637f5f8d5be4791e8ef51ce55db58849be05295aaffc9f1e1ad228a81}}", "updated_after_created": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}"}, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

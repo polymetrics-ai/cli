@@ -11,6 +11,7 @@ Reads ShipStation orders, shipments, products, and customers through the ShipSta
 
 ## Icon
 
+- id: shipstation
 - asset: icons/shipstation.svg
 - source: official
 - review_status: official_verified
@@ -28,27 +29,27 @@ Reads ShipStation orders, shipments, products, and customers through the ShipSta
 ## Configuration
 
 - base_url
-- api_key (secret)
-- api_secret (secret)
+- api_key (secret) (required)
+- api_secret (secret) (required)
 
 ## ETL Streams
 
 - orders:
   - primary key: id
   - cursor: modified_at
-  - fields: id(), modified_at(), order_number(), status()
+  - fields: id(integer), modified_at(string), order_number(string), status(string)
 - shipments:
   - primary key: id
   - cursor: modified_at
-  - fields: id(), modified_at(), order_number(), status()
+  - fields: id(integer), modified_at(string), order_number(string), status(string)
 - products:
   - primary key: id
   - cursor: modified_at
-  - fields: id(), modified_at(), name(), sku()
+  - fields: id(integer), modified_at(string), name(string), sku(string)
 - customers:
   - primary key: id
   - cursor: modified_at
-  - fields: email(), id(), modified_at(), name()
+  - fields: email(string), id(integer), modified_at(string), name(string)
 
 ## Sync Modes
 

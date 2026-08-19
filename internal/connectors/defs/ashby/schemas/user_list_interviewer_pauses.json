@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user_list_interviewer_pauses",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique id of the interviewer pause."
+    },
+    "userId": {
+      "type": "string",
+      "description": "The id of the user who is paused."
+    },
+    "startsAt": {
+      "type": "string",
+      "description": "The start date and time of the pause period.",
+      "format": "date-time"
+    },
+    "endsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The date and time when the pause was created.",
+      "format": "date-time"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

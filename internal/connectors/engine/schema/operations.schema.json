@@ -21,12 +21,15 @@
             "enum": [
               "stream_etl",
               "rest_read",
+              "rest_status",
               "rest_write",
+              "provider_search",
               "graphql_query",
               "graphql_mutation",
               "xml_export",
               "xml_import",
               "binary_download",
+              "text_export",
               "file_upload",
               "local_git",
               "local_file",
@@ -52,6 +55,15 @@
             "enum": ["none", "create", "update", "delete", "admin", "destructive", "secret"]
           },
           "destructive": { "type": "boolean" },
+          "batchable": { "type": "boolean" },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
           "secret_sensitive": { "type": "boolean" },
           "sensitive_policy": {
             "type": "object",
@@ -73,7 +85,9 @@
               "approval_mode": {
                 "type": "string",
                 "enum": ["none", "typed_confirmation"]
-              }
+              },
+              "response_secret_field": { "type": "string" },
+              "response_secret_store_key": { "type": "string" }
             }
           },
           "audit_event": { "type": "string" },
@@ -86,15 +100,117 @@
               "path": { "type": "string" },
               "content_type": { "type": "string" },
               "max_bytes": { "type": "integer" },
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "type": { "type": "string" },
+                  "size_param": { "type": "string" },
+                  "page_param": { "type": "string" },
+                  "start_page": { "type": "integer" },
+                  "limit_param": { "type": "string" },
+                  "offset_param": { "type": "string" },
+                  "cursor_param": { "type": "string" },
+                  "token_path": { "type": "string" },
+                  "last_record_field": { "type": "string" },
+                  "stop_path": { "type": "string" },
+                  "next_url_path": { "type": "string" },
+                  "start_index_param": { "type": "string" },
+                  "count_param": { "type": "string" },
+                  "total_path": { "type": "string" },
+                  "start_index_path": { "type": "string" },
+                  "start_index_base": { "type": "integer" },
+                  "page_size": { "type": "integer" },
+                  "max_pages": { "type": "integer" },
+                  "allow_cross_host": { "type": "boolean" }
+                }
+              },
+              "pagination_parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "in"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "in": { "type": "string", "enum": ["query"] },
+                    "type": { "type": "string" },
+                    "required": { "type": "boolean" },
+                    "values": { "type": "array", "items": { "type": "string" } },
+                    "summary": { "type": "string" }
+                  }
+                }
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "in"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "in": { "type": "string", "enum": ["query", "path"] },
+                    "type": { "type": "string" },
+                    "required": { "type": "boolean" },
+                    "values": { "type": "array", "items": { "type": "string" } },
+                    "summary": { "type": "string" }
+                  }
+                }
+              },
               "query": {
                 "type": "object",
                 "additionalProperties": true
+              },
+              "required_query": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["any_of"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "any_of": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
               },
               "body": {
                 "type": "object",
                 "additionalProperties": true
               },
-              "body_schema": { "type": "object" }
+              "body_schema": { "type": "object" },
+              "multipart": {
+                "type": "object",
+                "required": ["max_bytes", "parts"],
+                "additionalProperties": false,
+                "properties": {
+                  "max_bytes": { "type": "integer" },
+                  "parts": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": ["name", "type", "field"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": { "type": "string" },
+                        "type": { "type": "string", "enum": ["field", "file"] },
+                        "field": { "type": "string" },
+                        "content_type": { "type": "string" },
+                        "allowed_media_types": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": { "type": "string" }
+                        },
+                        "required": { "type": "boolean" },
+                        "max_bytes": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "graphql": {
@@ -104,8 +220,20 @@
             "properties": {
               "document": { "type": "string" },
               "operation_name": { "type": "string" },
+              "path": { "type": "string" },
+              "max_bytes": { "type": "integer" },
+              "variables_schema": { "type": "object" },
               "variables_path": { "type": "string" },
-              "pagination": { "type": "object" }
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "connection_path": { "type": "string" },
+                  "cursor_variable": { "type": "string" },
+                  "page_size_variable": { "type": "string" },
+                  "max_page_size": { "type": "integer" }
+                }
+              }
             }
           },
           "xml": {
@@ -129,8 +257,13 @@
               "method": { "type": "string" },
               "path": { "type": "string" },
               "max_bytes": { "type": "integer" },
+			  "accept": { "type": "string" },
               "allow_overwrite": { "type": "boolean" },
-              "extract_archives": { "type": "boolean" }
+              "extract_archives": { "type": "boolean" },
+              "allow_cross_host": { "type": "boolean" },
+              "allowed_hosts": { "type": "array", "items": { "type": "string" } },
+              "content_types": { "type": "array", "items": { "type": "string" } },
+              "stall_timeout_seconds": { "type": "integer" }
             }
           },
           "file": {

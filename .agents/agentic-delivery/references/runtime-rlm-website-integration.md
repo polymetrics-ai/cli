@@ -114,16 +114,9 @@ Website stack:
 - Radix UI, Lucide icons, Tailwind CSS v4 tooling.
 - Generated docs/data scripts in `website/package.json`.
 
-Website commands:
-
-```bash
-cd website
-npm run gen:website-data
-npm run typecheck
-npm run test:unit
-npm run test:e2e
-npm run build
-```
+Website commands: use the check list in `CONTRIBUTING.md` ("Website checks"), which is the
+authoritative copy and stays in step with `website/package.json` and
+`.github/workflows/website.yml`.
 
 Use only the relevant checks for a change. Do not add frontend dependencies without human approval.
 

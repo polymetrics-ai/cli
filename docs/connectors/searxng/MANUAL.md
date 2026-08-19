@@ -13,6 +13,7 @@ DESCRIPTION
   Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.
 
 ICON
+  id: searxng
   asset: icons/searxng.svg
   source: official_site
   review_status: manual_override
@@ -26,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   query
   api_key (secret)
 
@@ -34,11 +35,11 @@ ETL STREAMS
   search:
     primary key: url
     cursor: published_date
-    fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+    fields: category(string), content(string), engine(string), engines(string), published_date(string), score(number), stream(string), thumbnail(string), title(string), url(string)
   reddit:
     primary key: url
     cursor: published_date
-    fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+    fields: category(string), content(string), engine(string), engines(string), published_date(string), score(number), stream(string), thumbnail(string), title(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

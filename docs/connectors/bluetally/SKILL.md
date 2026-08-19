@@ -11,9 +11,11 @@ Reads BlueTally IT asset management data (assets, employees, licenses, maintenan
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,81 +30,81 @@ Reads BlueTally IT asset management data (assets, employees, licenses, maintenan
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - assets:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_id(), asset_name(), asset_serial(), category_id(), category_name(), created_at(), currency(), department_id(), id(), location_id(), notes(), product_id(), product_name(), purchase_cost(), purchase_date(), status_id(), supplier_id(), updated_at(), warranty_expiration_date()
+  - fields: asset_id(string), asset_name(string), asset_serial(string), category_id(integer), category_name(string), created_at(string), currency(string), department_id(integer), id(integer), location_id(integer), notes(string), product_id(integer), product_name(string), purchase_cost(number), purchase_date(string), status_id(integer), supplier_id(integer), updated_at(string), warranty_expiration_date(string)
 - employees:
   - primary key: id
   - cursor: updated_at
-  - fields: archived(), created_at(), department_id(), email(), id(), location_id(), manager_id(), name(), notes(), number_of_accessories(), number_of_assets(), number_of_consumables(), number_of_licenses(), title(), updated_at()
+  - fields: archived(boolean), created_at(string), department_id(integer), email(string), id(integer), location_id(integer), manager_id(integer), name(string), notes(string), number_of_accessories(integer), number_of_assets(integer), number_of_consumables(integer), number_of_licenses(integer), title(string), updated_at(string)
 - licenses:
   - primary key: id
   - cursor: updated_at
-  - fields: available(), category_id(), created_at(), currency(), department_id(), expiration_date(), id(), license_type(), licensed_to_email(), licensed_to_name(), location_id(), manufacturer_id(), minimum_seats(), name(), notes(), number_of_seats(), order_number(), purchase_cost(), purchase_date(), supplier_id(), termination_date(), unit_cost(), updated_at()
+  - fields: available(integer), category_id(integer), created_at(string), currency(string), department_id(integer), expiration_date(string), id(integer), license_type(string), licensed_to_email(string), licensed_to_name(string), location_id(integer), manufacturer_id(integer), minimum_seats(integer), name(string), notes(string), number_of_seats(integer), order_number(string), purchase_cost(number), purchase_date(string), supplier_id(integer), termination_date(string), unit_cost(number), updated_at(string)
 - maintenances:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_id(), cost(), created_at(), end_date(), id(), name(), notes(), start_date(), supplier_id(), type(), updated_at()
+  - fields: asset_id(integer), cost(number), created_at(string), end_date(string), id(integer), name(string), notes(string), start_date(string), supplier_id(integer), type(string), updated_at(string)
 - accessories:
   - primary key: id
   - cursor: updated_at
-  - fields: available(), category_id(), created_at(), currency(), department_id(), id(), location_id(), manufacturer_id(), model_number(), name(), notes(), purchase_cost(), purchase_date(), quantity(), supplier_id(), updated_at()
+  - fields: available(integer), category_id(integer), created_at(string), currency(string), department_id(integer), id(integer), location_id(integer), manufacturer_id(integer), model_number(string), name(string), notes(string), purchase_cost(number), purchase_date(string), quantity(integer), supplier_id(integer), updated_at(string)
 - components:
   - primary key: id
   - cursor: updated_at
-  - fields: available(), category_id(), checked_out_to(), created_at(), currency(), custom_fields(), department_id(), id(), location_id(), logo(), manufacturer_id(), minimum_quantity(), model_number(), name(), notes(), order_number(), purchase_cost(), purchase_date(), quantity(), supplier_id(), unit_cost(), updated_at()
+  - fields: available(integer), category_id(integer), checked_out_to(array), created_at(string), currency(string), custom_fields(array), department_id(integer), id(integer), location_id(integer), logo(string), manufacturer_id(integer), minimum_quantity(integer), model_number(string), name(string), notes(string), order_number(string), purchase_cost(number), purchase_date(string), quantity(integer), supplier_id(integer), unit_cost(number), updated_at(string)
 - consumables:
   - primary key: id
   - cursor: updated_at
-  - fields: available(), category_id(), checked_out_to_employees(), checked_out_to_locations(), created_at(), currency(), custom_fields(), department_id(), id(), location_id(), logo(), manufacturer_id(), minimum_quantity(), model_number(), name(), notes(), order_number(), purchase_cost(), purchase_date(), supplier_id(), unit_cost(), updated_at()
+  - fields: available(integer), category_id(integer), checked_out_to_employees(array), checked_out_to_locations(array), created_at(string), currency(string), custom_fields(array), department_id(integer), id(integer), location_id(integer), logo(string), manufacturer_id(integer), minimum_quantity(integer), model_number(string), name(string), notes(string), order_number(string), purchase_cost(number), purchase_date(string), supplier_id(integer), unit_cost(number), updated_at(string)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: accessories(), assets(), components(), consumables(), created_at(), eula(), id(), licenses(), logo(), minimum_quantity(), name(), number_of_accessories(), number_of_assets(), number_of_components(), number_of_consumables(), number_of_deployable_assets(), number_of_licenses(), number_of_products(), products(), skip_checkout_emails(), type(), updated_at()
+  - fields: accessories(array), assets(array), components(array), consumables(array), created_at(string), eula(string), id(integer), licenses(array), logo(string), minimum_quantity(integer), name(string), number_of_accessories(integer), number_of_assets(integer), number_of_components(integer), number_of_consumables(integer), number_of_deployable_assets(integer), number_of_licenses(integer), number_of_products(integer), products(array), skip_checkout_emails(boolean), type(string), updated_at(string)
 - departments:
   - primary key: id
   - cursor: updated_at
-  - fields: accessories(), assets(), components(), consumables(), created_at(), email(), employees(), id(), licenses(), name(), number_of_accessories(), number_of_assets(), number_of_components(), number_of_consumables(), number_of_employees(), number_of_licenses(), phone(), updated_at()
+  - fields: accessories(array), assets(array), components(array), consumables(array), created_at(string), email(string), employees(array), id(integer), licenses(array), name(string), number_of_accessories(integer), number_of_assets(integer), number_of_components(integer), number_of_consumables(integer), number_of_employees(integer), number_of_licenses(integer), phone(string), updated_at(string)
 - depreciations:
   - primary key: id
   - cursor: updated_at
-  - fields: assets(), created_at(), id(), licenses(), minimum_value(), months(), name(), number_of_assets(), number_of_licenses(), number_of_products(), products(), updated_at()
+  - fields: assets(array), created_at(string), id(integer), licenses(array), minimum_value(number), months(integer), name(string), number_of_assets(integer), number_of_licenses(integer), number_of_products(integer), products(array), updated_at(string)
 - locations:
   - primary key: id
   - cursor: updated_at
-  - fields: accessories(), address_line_1(), address_line_2(), assets(), checked_out_assets(), city(), components(), consumables(), country(), created_at(), currency(), custom_fields(), email(), employees(), id(), licenses(), logo(), name(), number_of_accessories(), number_of_assets(), number_of_checked_out_assets(), number_of_components(), number_of_consumables(), number_of_employees(), number_of_licenses(), phone(), state(), updated_at(), zip()
+  - fields: accessories(array), address_line_1(string), address_line_2(string), assets(array), checked_out_assets(array), city(string), components(array), consumables(array), country(string), created_at(string), currency(string), custom_fields(array), email(string), employees(array), id(integer), licenses(array), logo(string), name(string), number_of_accessories(integer), number_of_assets(integer), number_of_checked_out_assets(integer), number_of_components(integer), number_of_consumables(integer), number_of_employees(integer), number_of_licenses(integer), phone(string), state(string), updated_at(string), zip(string)
 - manufacturers:
   - primary key: id
   - cursor: updated_at
-  - fields: accessories(), assets(), components(), consumables(), created_at(), id(), licenses(), logo(), name(), notes(), number_of_accessories(), number_of_assets(), number_of_components(), number_of_consumables(), number_of_licenses(), number_of_products(), products(), support_email(), support_phone(), support_url(), updated_at(), url()
+  - fields: accessories(array), assets(array), components(array), consumables(array), created_at(string), id(integer), licenses(array), logo(string), name(string), notes(string), number_of_accessories(integer), number_of_assets(integer), number_of_components(integer), number_of_consumables(integer), number_of_licenses(integer), number_of_products(integer), products(array), support_email(string), support_phone(string), support_url(string), updated_at(string), url(string)
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: archived(), assets(), category_id(), created_at(), custom_fields(), default_purchase_cost(), depreciation_id(), end_of_life_date(), end_of_life_months(), end_of_life_type(), id(), logo(), manufacturer_id(), minimum_quantity(), model_number(), name(), notes(), number_of_assets(), number_of_deployable_assets(), updated_at()
+  - fields: archived(boolean), assets(array), category_id(integer), created_at(string), custom_fields(array), default_purchase_cost(number), depreciation_id(integer), end_of_life_date(string), end_of_life_months(integer), end_of_life_type(string), id(integer), logo(string), manufacturer_id(integer), minimum_quantity(integer), model_number(string), name(string), notes(string), number_of_assets(integer), number_of_deployable_assets(integer), updated_at(string)
 - statuses:
   - primary key: id
   - cursor: updated_at
-  - fields: assets(), created_at(), id(), name(), notes(), number_of_assets(), show_in_nav(), type(), updated_at()
+  - fields: assets(array), created_at(string), id(integer), name(string), notes(string), number_of_assets(integer), show_in_nav(boolean), type(string), updated_at(string)
 - suppliers:
   - primary key: id
   - cursor: updated_at
-  - fields: accessories(), address_line_1(), address_line_2(), assets(), city(), components(), consumables(), contact_name(), country(), created_at(), email(), fax(), id(), licenses(), logo(), maintenances(), name(), notes(), number_of_accessories(), number_of_assets(), number_of_components(), number_of_consumables(), number_of_licenses(), number_of_maintenances(), phone(), state(), updated_at(), url(), zip()
+  - fields: accessories(array), address_line_1(string), address_line_2(string), assets(array), city(string), components(array), consumables(array), contact_name(string), country(string), created_at(string), email(string), fax(string), id(integer), licenses(array), logo(string), maintenances(array), name(string), notes(string), number_of_accessories(integer), number_of_assets(integer), number_of_components(integer), number_of_consumables(integer), number_of_licenses(integer), number_of_maintenances(integer), phone(string), state(string), updated_at(string), url(string), zip(string)
 - audits:
   - primary key: id
   - cursor: updated_at
-  - fields: asset_id(), audit_date(), audit_failed_reason(), audit_status(), completed(), created_at(), id(), location_id(), next_audit_date(), notes(), scheduled(), updated_at(), user_id()
+  - fields: asset_id(integer), audit_date(string), audit_failed_reason(string), audit_status(string), completed(boolean), created_at(string), id(integer), location_id(integer), next_audit_date(string), notes(string), scheduled(boolean), updated_at(string), user_id(integer)
 - activity:
   - primary key: timestamp, item_id, event
   - cursor: timestamp
-  - fields: checked_out_to_from_email(), checked_out_to_from_id(), checked_out_to_from_name(), checked_out_to_from_type(), event(), item_id(), item_name(), notes(), timestamp(), type(), user_email(), user_id(), user_name()
+  - fields: checked_out_to_from_email(string), checked_out_to_from_id(integer), checked_out_to_from_name(string), checked_out_to_from_type(string), event(string), item_id(integer), item_name(string), notes(string), timestamp(string), type(string), user_email(string), user_id(integer), user_name(string)
 - tenants:
   - primary key: tenant_id
-  - fields: tenant_id(), tenant_name()
+  - fields: tenant_id(integer), tenant_name(string)
 
 ## Sync Modes
 

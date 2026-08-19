@@ -1,35 +1,37 @@
 {
   "request": {
     "method": "GET",
-    "path": "/Invoices",
-    "query": {
-      "page": "2"
-    }
+    "path": "/Invoices"
   },
   "response": {
     "status": 200,
     "body": {
-      "Id": "fixture-2",
+      "Id": "fixture-response",
       "Status": "OK",
       "Invoices": [
         {
-          "InvoiceID": "inv_fixture_101",
-          "InvoiceNumber": "INV-0101",
-          "Type": "ACCREC",
-          "Status": "PAID",
-          "LineAmountTypes": "Exclusive",
-          "SubTotal": 45.0,
-          "TotalTax": 5.0,
-          "Total": 50.0,
-          "AmountDue": 0.0,
-          "AmountPaid": 50.0,
-          "CurrencyCode": "USD",
-          "Date": "2026-01-02T00:00:00",
-          "DueDate": "2026-02-02T00:00:00",
+          "id": "id_fixture_101",
+          "InvoiceID": "invoice_id_fixture_101",
+          "InvoiceNumber": "invoice_number_fixture",
+          "Type": "STANDARD",
+          "type": "STANDARD",
+          "Status": "ACTIVE",
+          "status": "ACTIVE",
+          "LineAmountTypes": "STANDARD",
+          "SubTotal": 12.34,
+          "TotalTax": 12.34,
+          "Total": 12.34,
+          "AmountDue": 12.34,
+          "AmountPaid": 12.34,
+          "CurrencyCode": "FIXTURE",
+          "Date": "2026-01-01T00:00:00Z",
+          "DueDate": "2026-01-01T00:00:00Z",
+          "ContactID": "contact_id_fixture_101",
+          "UpdatedDateUTC": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z",
           "Contact": {
-            "ContactID": "contact_fixture_2"
-          },
-          "UpdatedDateUTC": "2026-01-02T00:00:00Z"
+            "ContactID": "contact_id_fixture_1"
+          }
         }
       ]
     }

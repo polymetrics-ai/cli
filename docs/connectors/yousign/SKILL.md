@@ -11,9 +11,11 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,36 +31,36 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 - base_url
 - limit
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - signature_requests:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - documents:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - webhooks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), enabled(), endpoint(), id(), name(), subscribed_events(), updated_at()
+  - fields: created_at(string), enabled(boolean), endpoint(string), id(string), name(string), subscribed_events(array), updated_at(string)
 - templates:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), workspace_id()
+  - fields: created_at(string), description(string), id(string), name(string), status(string), workspace_id(string)
 - users:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), id(), is_active(), name(), role(), status()
+  - fields: created_at(string), email(string), id(string), is_active(boolean), name(string), role(string), status(string)
 - workflow_sessions:
   - primary key: id
-  - fields: created_at(), id(), status(), workflow_template_id()
+  - fields: created_at(string), id(string), status(string), workflow_template_id(string)
 
 ## Sync Modes
 
@@ -68,6 +70,7 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 
 - create_signature_request:
   - endpoint: POST /signature_requests
+  - required fields: name, delivery_mode
   - risk: creates a new draft signature request (no documents/signers attached yet); external mutation, approval required
 - activate_signature_request:
   - endpoint: POST /signature_requests/{{ record.id }}/activate
@@ -75,10 +78,11 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
   - risk: activates a draft signature request, taking it out of draft status; if delivery_mode is not none this immediately notifies approvers/signers/followers by email; external mutation, approval required
 - cancel_signature_request:
   - endpoint: POST /signature_requests/{{ record.id }}/cancel
-  - required fields: id
+  - required fields: id, reason
   - risk: irreversibly cancels a signature request in approval or ongoing status; external mutation, approval required
 - create_contact:
   - endpoint: POST /contacts
+  - required fields: first_name, last_name, email, locale
   - risk: creates a new saved contact profile; external mutation, approval required
 - update_contact:
   - endpoint: PATCH /contacts/{{ record.id }}
@@ -90,6 +94,7 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
   - risk: irreversibly deletes a saved contact profile; external mutation, approval required
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: endpoint, subscribed_events, scopes, sandbox, auto_retry, enabled
   - risk: registers a new webhook subscription that will receive real-time event notifications at an external endpoint; external mutation, approval required
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}

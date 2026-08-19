@@ -1,0 +1,8 @@
+{
+  "issue": null,
+  "parent": null,
+  "subissues": [],
+  "state": "top50_size_tier_plan_and_batch001_regate_verified",
+  "execution": "inline_manual_no_spawn",
+  "next": "review the staged diff, commit the verified pipeline, authored batch, and Top-50 plan"
+}

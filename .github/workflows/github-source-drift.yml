@@ -1,0 +1,31 @@
+name: GitHub Source Drift
+
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: Detect official REST and GraphQL source drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+
+      # This is intentionally scheduled-only. Ordinary PR CI remains
+      # hermetic and verifies the checked-in source lock and generated ledger;
+      # this job reads public source artifacts and fails with only sanitized
+      # hashes, totals, and operation-ID deltas when upstream changes.
+      - name: Compare official GitHub source inventories
+        run: node scripts/github-source-drift.mjs

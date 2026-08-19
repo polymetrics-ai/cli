@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Klaus (Zendesk QA) users and rating categories through the Klaus public REST API. The reviews stream is not yet migrated (ENGINE_GAP, see docs.md).
 
 ICON
+  id: klaus-api
   asset: icons/klaus-api.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,22 +27,22 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account
+  account (required)
   base_url
   mode
   workspace
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   users:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(string), name(string)
   categories:
     primary key: id
-    fields: archived(), critical(), description(), groupId(), groupName(), groupPosition(), id(), maxRating(), name(), position(), rootCauses(), scorecards(), weight()
+    fields: archived(boolean), critical(boolean), description(string), groupId(string), groupName(string), groupPosition(integer), id(string), maxRating(integer), name(string), position(integer), rootCauses(array), scorecards(array), weight(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Klaus API read of user and quality-review configuration data

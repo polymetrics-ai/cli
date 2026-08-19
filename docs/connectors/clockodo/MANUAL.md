@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Clockodo customers, projects, services, users, time entries, absences, teams, surcharges, lump-sum services, nonbusiness groups/days, holiday/overtime carryovers, target hours, and current-user settings, and writes customers/projects/services/teams/lump-sum services through the Clockodo REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -27,69 +29,70 @@ AUTHENTICATION
 CONFIGURATION
   absences_year
   base_url
-  email_address
+  email_address (required)
   entries_time_since
   entries_time_until
-  external_application
+  external_application (required)
   language
   nonbusinessdays_year
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
-    fields: active(), billable_default(), color(), id(), name(), note(), number()
+    fields: active(boolean), billable_default(boolean), color(integer), id(integer), name(string), note(string), number(string)
   projects:
     primary key: id
-    fields: active(), billable_default(), budget_is_hours(), budget_money(), completed(), customers_id(), deadline(), id(), name(), note(), number()
+    fields: active(boolean), billable_default(boolean), budget_is_hours(boolean), budget_money(number), completed(boolean), customers_id(integer), deadline(string), id(integer), name(string), note(string), number(string)
   services:
     primary key: id
-    fields: active(), id(), name(), note(), number()
+    fields: active(boolean), id(integer), name(string), note(string), number(string)
   users:
     primary key: id
-    fields: active(), email(), id(), language(), name(), number(), role(), teams_id(), timezone()
+    fields: active(boolean), email(string), id(integer), language(string), name(string), number(string), role(string), teams_id(integer), timezone(string)
   current_user_settings:
-    fields: company(), user(), workTimeRegulation()
+    fields: company(object), user(object), workTimeRegulation(object)
   teams:
     primary key: id
-    fields: id(), leader(), name()
+    fields: id(integer), leader(integer), name(string)
   surcharges:
     primary key: id
-    fields: accumulation(), id(), name(), night(), night_increased(), nonbusiness(), nonbusiness_special(), saturday(), sunday()
+    fields: accumulation(string), id(integer), name(string), night(number), night_increased(number), nonbusiness(number), nonbusiness_special(number), saturday(number), sunday(number)
   lumpsum_services:
     primary key: id
-    fields: active(), id(), name(), note(), number(), price(), unit()
+    fields: active(boolean), id(integer), name(string), note(string), number(string), price(number), unit(string)
   nonbusiness_groups:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   nonbusiness_days:
     primary key: id, date
-    fields: date(), half_day(), id(), name(), nonbusinessgroups_id()
+    fields: date(string), half_day(integer), id(integer), name(string), nonbusinessgroups_id(integer)
   holidays_carry:
     primary key: users_id, year
-    fields: count(), note(), users_id(), year()
+    fields: count(number), note(string), users_id(integer), year(integer)
   holidays_quota:
     primary key: id
-    fields: count(), id(), users_id(), year_since(), year_until()
+    fields: count(number), id(integer), users_id(integer), year_since(integer), year_until(integer)
   overtime_carry:
     primary key: users_id, year
-    fields: hours(), note(), users_id(), year()
+    fields: hours(number), note(string), users_id(integer), year(integer)
   target_hours:
     primary key: id
-    fields: absence_fixed_credit(), compensation_daily(), compensation_monthly(), date_since(), date_until(), friday(), id(), monday(), monthly_target(), saturday(), sunday(), thursday(), tuesday(), type(), users_id(), wednesday()
+    fields: absence_fixed_credit(boolean), compensation_daily(number), compensation_monthly(number), date_since(string), date_until(string), friday(number), id(integer), monday(number), monthly_target(number), saturday(number), sunday(number), thursday(number), tuesday(number), type(string), users_id(integer), wednesday(number)
   absences:
     primary key: id
-    fields: approved_by(), count_days(), count_hours(), date_approved(), date_enquired(), date_since(), date_until(), id(), note(), sick_note(), status(), type(), users_id()
+    fields: approved_by(integer), count_days(number), count_hours(number), date_approved(string), date_enquired(string), date_since(string), date_until(string), id(integer), note(string), sick_note(boolean), status(integer), type(integer), users_id(integer)
   entries:
     primary key: id
-    fields: billable(), clocked(), clocked_offline(), customers_id(), duration(), hourly_rate(), id(), lumpsum(), lumpsum_services_amount(), lumpsum_services_id(), lumpsum_services_price(), offset(), projects_id(), services_id(), texts_id(), time_clocked_since(), time_insert(), time_last_change(), time_last_change_worktime(), time_since(), time_until(), type(), users_id()
+    fields: billable(integer), clocked(boolean), clocked_offline(boolean), customers_id(integer), duration(integer), hourly_rate(number), id(integer), lumpsum(number), lumpsum_services_amount(number), lumpsum_services_id(integer), lumpsum_services_price(number), offset(integer), projects_id(integer), services_id(integer), texts_id(integer), time_clocked_since(string), time_insert(string), time_last_change(string), time_last_change_worktime(string), time_since(string), time_until(string), type(integer), users_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /v2/customers
+    required fields: name
     risk: external mutation; creates a live Clockodo customer; approval required
   update_customer:
     endpoint: PUT /v2/customers/{{ record.id }}
@@ -101,6 +104,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo customer; approval required
   create_project:
     endpoint: POST /v2/projects
+    required fields: name, customers_id
     risk: external mutation; creates a live Clockodo project; approval required
   update_project:
     endpoint: PUT /v2/projects/{{ record.id }}
@@ -112,6 +116,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly removes a live Clockodo project; approval required
   create_service:
     endpoint: POST /v2/services
+    required fields: name
     risk: external mutation; creates a live Clockodo service; approval required
   update_service:
     endpoint: PUT /v2/services/{{ record.id }}
@@ -123,6 +128,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo service; approval required
   create_team:
     endpoint: POST /v2/teams
+    required fields: name
     risk: external mutation; creates a live Clockodo team; approval required
   update_team:
     endpoint: PUT /v2/teams/{{ record.id }}
@@ -134,6 +140,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo team; approval required
   create_lumpsum_service:
     endpoint: POST /v2/lumpsumservices
+    required fields: name, price
     risk: external mutation; creates a live Clockodo lump-sum service; approval required
   update_lumpsum_service:
     endpoint: PUT /v2/lumpsumservices/{{ record.id }}

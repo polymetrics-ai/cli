@@ -11,6 +11,7 @@ Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selec
 
 ## Icon
 
+- id: mixpanel
 - asset: icons/mixpanel.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -49,37 +50,37 @@ Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selec
 
 - cohorts:
   - primary key: id
-  - fields: count(), id(), name()
+  - fields: count(integer), id(integer), name(string)
 - annotations:
   - primary key: id
-  - fields: date(), description(), id()
+  - fields: date(string), description(string), id(integer)
 - engage:
   - primary key: distinct_id
-  - fields: created(), distinct_id(), email()
+  - fields: created(string), distinct_id(string), email(string)
 - saved_funnels:
   - primary key: funnel_id
-  - fields: funnel_id(), name()
+  - fields: funnel_id(integer), name(string)
 - activity_stream:
-  - fields: event(), properties()
+  - fields: event(string), properties(object)
 - top_events:
   - primary key: event
-  - fields: amount(), event(), percent_change()
+  - fields: amount(integer), event(string), percent_change(number)
 - event_property_names:
   - primary key: name
-  - fields: count(), name()
+  - fields: count(integer), name(string)
 - project_annotations:
   - primary key: id
-  - fields: date(), description(), id(), tags(), user()
+  - fields: date(string), description(string), id(integer), tags(array), user(object)
 - project_annotation:
   - primary key: id
-  - fields: date(), description(), id(), tags(), user()
+  - fields: date(string), description(string), id(integer), tags(array), user(object)
 - annotation_tags:
   - primary key: id
-  - fields: has_annotations(), id(), name(), project_id()
+  - fields: has_annotations(boolean), id(integer), name(string), project_id(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

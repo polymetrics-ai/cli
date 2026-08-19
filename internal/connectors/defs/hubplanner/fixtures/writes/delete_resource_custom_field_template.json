@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "resource_custom_field_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/resource/customField/template/resource_custom_field_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "resource_custom_field_fixture_1"
+    }
+  }
+}

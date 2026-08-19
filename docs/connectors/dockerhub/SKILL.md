@@ -7,10 +7,11 @@ description: Docker Hub connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.
+Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.
 
 ## Icon
 
+- id: dockerhub
 - asset: icons/dockerhub.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,7 +29,7 @@ Reads public Docker Hub repositories, image tags, and namespace profiles for a c
 ## Configuration
 
 - base_url
-- docker_username
+- docker_username (required)
 - page_size
 - repository
 - tag
@@ -38,20 +39,17 @@ Reads public Docker Hub repositories, image tags, and namespace profiles for a c
 - repositories:
   - primary key: name
   - cursor: last_updated
-  - fields: date_registered(), description(), is_private(), last_modified(), last_updated(), name(), namespace(), pull_count(), repository_type(), star_count(), status(), status_description(), storage_size()
+  - fields: date_registered(string), description(string), is_private(boolean), last_modified(string), last_updated(string), name(string), namespace(string), pull_count(integer), repository_type(string), star_count(integer), status(integer), status_description(string), storage_size(integer)
 - tags:
   - primary key: id
   - cursor: last_updated
-  - fields: content_type(), digest(), full_size(), id(), last_pushed(), last_updated(), last_updater_username(), media_type(), name(), repository(), tag_status()
-- namespace:
-  - primary key: id
-  - fields: badge(), company(), date_joined(), full_name(), id(), is_active(), location(), orgname(), type(), uuid()
+  - fields: content_type(string), digest(string), full_size(integer), id(integer), last_pushed(string), last_updated(string), last_updater_username(string), media_type(string), name(string), repository(integer), tag_status(string)
 - repository_detail:
   - primary key: name
-  - fields: collaborator_count(), date_registered(), description(), full_description(), has_starred(), hub_user(), is_automated(), is_private(), last_updated(), name(), namespace(), pull_count(), repository_type(), star_count(), status(), status_description(), storage_size()
+  - fields: collaborator_count(integer), date_registered(string), description(string), full_description(string), has_starred(boolean), hub_user(string), is_automated(boolean), is_private(boolean), last_updated(string), name(string), namespace(string), pull_count(integer), repository_type(string), star_count(integer), status(integer), status_description(string), storage_size(integer)
 - tag_detail:
   - primary key: id
-  - fields: creator(), full_size(), id(), last_updated(), last_updater(), last_updater_username(), name(), repository(), status(), tag_last_pulled(), tag_last_pushed(), v2()
+  - fields: creator(integer), full_size(integer), id(integer), last_updated(string), last_updater(integer), last_updater_username(string), name(string), repository(integer), status(string), tag_last_pulled(string), tag_last_pushed(string), v2(string)
 
 ## Sync Modes
 
@@ -59,9 +57,20 @@ Reads public Docker Hub repositories, image tags, and namespace profiles for a c
 
 ## Security
 
-- read risk: external Docker Hub API read of public repository, tag, and namespace data
+- read risk: external Docker Hub API read of public repository and tag data
 - approval: none; read-only, no obviously-safe reverse-ETL writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Run Docker Hub's declared streams and reverse-ETL actions.
+- Usage: pm dockerhub <command> [flags]
+- Read streams
+- Other Commands
+  - repositories list - Run the repositories ETL stream [intent=etl availability=implemented stream=repositories]
+  - repository detail list - Run the repository detail ETL stream [intent=etl availability=implemented stream=repository_detail]
+  - tag detail list - Run the tag detail ETL stream [intent=etl availability=implemented stream=tag_detail]
+  - tags list - Run the tags ETL stream [intent=etl availability=implemented stream=tags]
 
 ## Commands
 

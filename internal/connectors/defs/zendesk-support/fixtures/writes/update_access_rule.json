@@ -1,0 +1,20 @@
+{
+  "record": {
+    "custom_object_key": "fixture-custom-object-key",
+    "id": "fixture-id",
+    "access_rule": {
+      "title": "fixture-title",
+      "description": "fixture-description"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/custom_objects/fixture-custom-object-key/access_rules/fixture-id",
+    "body": {
+      "access_rule": {
+        "title": "fixture-title",
+        "description": "fixture-description"
+      }
+    }
+  }
+}

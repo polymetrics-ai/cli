@@ -11,9 +11,11 @@ Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, coll
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -51,123 +53,123 @@ Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, coll
 - team_id
 - teammate_id
 - variant_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), id(), last_contacted_at(), last_seen_at(), name(), phone(), session_count(), signed_up_at(), type(), unsubscribed_from_emails(), updated_at(), user_id()
+  - fields: created_at(integer), email(string), id(integer), last_contacted_at(integer), last_seen_at(integer), name(string), phone(string), session_count(integer), signed_up_at(integer), type(string), unsubscribed_from_emails(boolean), updated_at(integer), user_id(string)
 - contact_details:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), id(), last_contacted_at(), last_seen_at(), name(), phone(), session_count(), signed_up_at(), type(), unsubscribed_from_emails(), updated_at(), user_id()
+  - fields: created_at(integer), email(string), id(integer), last_contacted_at(integer), last_seen_at(integer), name(string), phone(string), session_count(integer), signed_up_at(integer), type(string), unsubscribed_from_emails(boolean), updated_at(integer), user_id(string)
 - contact_batch_status:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - articles:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - article_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - article_search:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - article_settings:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - collections:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - collection_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - events:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - tags:
   - primary key: id
-  - fields: id(), name(), type()
+  - fields: id(integer), name(string), type(string)
 - segments:
   - primary key: id
-  - fields: count(), created_at(), id(), name(), person_type(), type(), updated_at()
+  - fields: count(integer), created_at(integer), id(integer), name(string), person_type(string), type(string), updated_at(integer)
 - segment_details:
   - primary key: id
-  - fields: count(), created_at(), id(), name(), person_type(), type(), updated_at()
+  - fields: count(integer), created_at(integer), id(integer), name(string), person_type(string), type(string), updated_at(integer)
 - forms:
   - primary key: id
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(integer), id(integer), name(string), type(string), updated_at(integer)
 - form_details:
   - primary key: id
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(integer), id(integer), name(string), type(string), updated_at(integer)
 - form_submissions:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), subject(), type(), updated_at()
+  - fields: created_at(integer), id(integer), name(string), status(string), subject(string), type(string), updated_at(integer)
 - campaign_details:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), subject(), type(), updated_at()
+  - fields: created_at(integer), id(integer), name(string), status(string), subject(string), type(string), updated_at(integer)
 - subscription_types:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - subscription_type_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - conversations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - conversation_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - conversation_messages:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - conversation_global_counts:
   - primary key: scope
-  - fields: closed(), count(), id(), open(), scope(), team_id(), teammate_id()
+  - fields: closed(integer), count(integer), id(integer), open(integer), scope(string), team_id(integer), teammate_id(integer)
 - conversation_team_counts:
   - primary key: scope
-  - fields: closed(), count(), id(), open(), scope(), team_id(), teammate_id()
+  - fields: closed(integer), count(integer), id(integer), open(integer), scope(string), team_id(integer), teammate_id(integer)
 - conversation_teammate_counts:
   - primary key: scope
-  - fields: closed(), count(), id(), open(), scope(), team_id(), teammate_id()
+  - fields: closed(integer), count(integer), id(integer), open(integer), scope(string), team_id(integer), teammate_id(integer)
 - teams:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - team_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - teammates:
   - primary key: id
-  - fields: email(), id(), name(), type()
+  - fields: email(string), id(integer), name(string), type(string)
 - teammate_details:
   - primary key: id
-  - fields: email(), id(), name(), type()
+  - fields: email(string), id(integer), name(string), type(string)
 - token_info:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_stores:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_store_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(integer), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_customer_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_product_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_product_variant_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 - ecommerce_product_category_details:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), title(), type(), updated_at()
+  - fields: created_at(integer), description(string), id(string), name(string), status(string), title(string), type(string), updated_at(integer)
 
 ## Sync Modes
 

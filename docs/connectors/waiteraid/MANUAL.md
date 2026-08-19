@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes WaiterAid restaurant reservations, meals, guests, and queue entries.
 
 ICON
+  id: waiteraid
   asset: icons/waiteraid.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,21 +28,21 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  restid
+  restid (required)
   start_date
-  auth_hash (secret)
+  auth_hash (secret) (required)
 
 ETL STREAMS
   reservations:
     primary key: id
     cursor: date
-    fields: date(), guest_name(), id(), status()
+    fields: date(string), guest_name(string), id(string), status(string)
   meals:
     primary key: id
-    fields: id(), max_end(), min_start(), name()
+    fields: id(string), max_end(string), min_start(string), name(string)
   queue:
     primary key: queue_id
-    fields: added_date(), amount(), comment(), cust_id(), firstname(), lastname(), mobile(), queue_id()
+    fields: added_date(string), amount(string), comment(string), cust_id(string), firstname(string), lastname(string), mobile(string), queue_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -49,20 +50,23 @@ SYNC MODES
 REVERSE ETL ACTIONS
   add_booking:
     endpoint: POST /wa-api/addBooking?restid={{ config.restid }}&start_time={{ record.start_time }}&amount={{ record.amount }}&date={{ record.date }}&mealid={{ record.mealid }}
+    required fields: start_time, amount, date, mealid
     risk: creates a new restaurant reservation, visible to restaurant staff and the guest; external mutation, approval required
   set_booking_status:
     endpoint: POST /wa-api/setBookingStatus?restid={{ config.restid }}&bookingId={{ record.id }}&status={{ record.status }}
-    required fields: id
+    required fields: id, status
     risk: changes a reservation's status (including marking it deleted); external mutation, approval required
   edit_booking:
     endpoint: POST /wa-api/editBooking?restid={{ config.restid }}&bookingId={{ record.id }}&start_time={{ record.start_time }}
-    required fields: id
+    required fields: id, start_time
     risk: edits an existing reservation's start time; external mutation, approval required
   add_guest:
     endpoint: POST /wa-api/addGuest?restid={{ config.restid }}&firstname={{ record.firstname }}&lastname={{ record.lastname }}
+    required fields: firstname, lastname
     risk: creates a new guest record; external mutation, approval required
   add_to_queue:
     endpoint: POST /wa-api/queue/add?restid={{ config.restid }}&name={{ record.name }}&amount={{ record.amount }}
+    required fields: name, amount
     risk: adds a guest to the restaurant's walk-in queue; external mutation, approval required
   delete_from_queue:
     endpoint: POST /wa-api/queue/delete?restid={{ config.restid }}&queue_id={{ record.queue_id }}

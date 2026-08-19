@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,26 +29,26 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  space_id
-  password (secret)
-  username (secret)
+  space_id (required)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
   contacts:
     primary key: id
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
   opportunities:
     primary key: id
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
   leads:
     primary key: id
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Pipeliner CRM API read of account, contact, opportunity, and lead data

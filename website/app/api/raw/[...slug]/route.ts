@@ -70,7 +70,9 @@ function connectorMarkdown(slug: string): string | null {
         ? `stream:${command.stream}`
         : command.write
           ? `write:${command.write}`
-          : '-';
+          : command.operation
+            ? `operation:${command.operation}`
+            : '-';
       lines.push(`| \`${command.path}\` | ${command.intent || '-'} | ${command.availability || '-'} | ${mapping} |`);
     }
     lines.push('');

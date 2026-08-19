@@ -216,7 +216,9 @@ func writeTestSpec(t *testing.T) string {
 	if _, err := f.WriteString(spec); err != nil {
 		t.Fatalf("write spec: %v", err)
 	}
-	f.Close()
+	if err := f.Close(); err != nil {
+		t.Fatalf("close spec: %v", err)
+	}
 	return f.Name()
 }
 

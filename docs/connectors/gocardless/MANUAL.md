@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes documented GoCardless REST API resources through the declarative connector engine.
 
 ICON
+  id: gocardless
   asset: icons/gocardless.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,7 +31,7 @@ CONFIGURATION
   bank_account_detail_id
   bank_account_holder_verification_id
   bank_authorisation_id
-  base_url
+  base_url (required)
   billing_request_id
   billing_request_institutions_country_code
   billing_request_template_id
@@ -66,192 +67,192 @@ CONFIGURATION
   transferred_mandate_id
   verification_details_creditor_id
   webhook_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   payments:
     primary key: id
     cursor: created_at
-    fields: amount(), amount_refunded(), charge_date(), created_at(), currency(), description(), id(), mandate(), payout(), reference(), status()
+    fields: amount(integer), amount_refunded(integer), charge_date(string), created_at(string), currency(string), description(string), id(string), mandate(string), payout(string), reference(string), status(string)
   mandates:
     primary key: id
     cursor: created_at
-    fields: created_at(), creditor(), customer_bank_account(), id(), next_possible_charge_date(), payments_require_approval(), reference(), scheme(), status()
+    fields: created_at(string), creditor(string), customer_bank_account(string), id(string), next_possible_charge_date(string), payments_require_approval(boolean), reference(string), scheme(string), status(string)
   payouts:
     primary key: id
     cursor: created_at
-    fields: amount(), arrival_date(), created_at(), creditor(), creditor_bank_account(), currency(), deducted_fees(), id(), payout_type(), reference(), status()
+    fields: amount(integer), arrival_date(string), created_at(string), creditor(string), creditor_bank_account(string), currency(string), deducted_fees(integer), id(string), payout_type(string), reference(string), status(string)
   refunds:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), id(), mandate(), payment(), reference()
+    fields: amount(integer), created_at(string), currency(string), id(string), mandate(string), payment(string), reference(string)
   bank_authorisation:
     primary key: id
-    fields: id()
+    fields: id(string)
   billing_requests:
     primary key: id
-    fields: id()
+    fields: id(string)
   billing_request:
     primary key: id
-    fields: id()
+    fields: id(string)
   billing_request_templates:
     primary key: id
-    fields: id()
+    fields: id(string)
   billing_request_template:
     primary key: id
-    fields: id()
+    fields: id(string)
   institutions:
     primary key: id
-    fields: id()
+    fields: id(string)
   billing_request_institutions:
     primary key: id
-    fields: id()
+    fields: id(string)
   balances:
   bank_account_detail:
     primary key: id
-    fields: id()
+    fields: id(string)
   bank_account_holder_verification:
     primary key: id
-    fields: id()
+    fields: id(string)
   block:
     primary key: id
-    fields: id()
+    fields: id(string)
   blocks:
     primary key: id
-    fields: id()
+    fields: id(string)
   creditors:
     primary key: id
-    fields: id()
+    fields: id(string)
   creditor:
     primary key: id
-    fields: id()
+    fields: id(string)
   creditor_bank_accounts:
     primary key: id
-    fields: id()
+    fields: id(string)
   creditor_bank_account:
     primary key: id
-    fields: id()
+    fields: id(string)
   currency_exchange_rates:
   customers:
     primary key: id
-    fields: id()
+    fields: id(string)
   customer:
     primary key: id
-    fields: id()
+    fields: id(string)
   customer_bank_accounts:
     primary key: id
-    fields: id()
+    fields: id(string)
   customer_bank_account:
     primary key: id
-    fields: id()
+    fields: id(string)
   events:
     primary key: id
-    fields: id()
+    fields: id(string)
   event:
     primary key: id
-    fields: id()
+    fields: id(string)
   export:
     primary key: id
-    fields: id()
+    fields: id(string)
   exports:
     primary key: id
-    fields: id()
+    fields: id(string)
   funds_availability:
   instalment_schedules:
     primary key: id
-    fields: id()
+    fields: id(string)
   instalment_schedule:
     primary key: id
-    fields: id()
+    fields: id(string)
   mandate:
     primary key: id
-    fields: id()
+    fields: id(string)
   mandate_import:
     primary key: id
-    fields: id()
+    fields: id(string)
   mandate_import_entries:
     primary key: id
-    fields: id()
+    fields: id(string)
   negative_balance_limits:
     primary key: id
-    fields: id()
+    fields: id(string)
   outbound_payment:
     primary key: id
-    fields: id()
+    fields: id(string)
   outbound_payments:
     primary key: id
-    fields: id()
+    fields: id(string)
   outbound_payment_stats:
   outbound_payment_import:
     primary key: id
-    fields: id()
+    fields: id(string)
   outbound_payment_imports:
     primary key: id
-    fields: id()
+    fields: id(string)
   outbound_payment_import_entries:
     primary key: id
-    fields: id()
+    fields: id(string)
   payer_authorisation:
     primary key: id
-    fields: id()
+    fields: id(string)
   payment:
     primary key: id
-    fields: id()
+    fields: id(string)
   payment_account:
     primary key: id
-    fields: id()
+    fields: id(string)
   payment_accounts:
     primary key: id
-    fields: id()
+    fields: id(string)
   payment_account_transaction:
     primary key: id
-    fields: id()
+    fields: id(string)
   payment_account_transactions_by_payment_account:
     primary key: id
-    fields: id()
+    fields: id(string)
   payout:
     primary key: id
-    fields: id()
+    fields: id(string)
   payout_items:
   redirect_flow:
     primary key: id
-    fields: id()
+    fields: id(string)
   refund:
     primary key: id
-    fields: id()
+    fields: id(string)
   scheme_identifiers:
     primary key: id
-    fields: id()
+    fields: id(string)
   scheme_identifier:
     primary key: id
-    fields: id()
+    fields: id(string)
   subscriptions:
     primary key: id
-    fields: id()
+    fields: id(string)
   subscription:
     primary key: id
-    fields: id()
+    fields: id(string)
   tax_rates:
     primary key: id
-    fields: id()
+    fields: id(string)
   tax_rate:
     primary key: id
-    fields: id()
+    fields: id(string)
   transferred_mandate:
     primary key: id
-    fields: id()
+    fields: id(string)
   verification_details:
     primary key: id
-    fields: id()
+    fields: id(string)
   webhooks:
     primary key: id
-    fields: id()
+    fields: id(string)
   webhook:
     primary key: id
-    fields: id()
+    fields: id(string)
   customer_bank_account_token:
     primary key: id
-    fields: id()
+    fields: id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

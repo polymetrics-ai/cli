@@ -11,9 +11,17 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-campaignmonitor
+- asset: icons/simple-icons/campaignmonitor.svg
+- title: Campaign Monitor
+- simple_icon_slug: campaignmonitor
+- simple_icon_hex: 111324
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Campaign%20Monitor
+- match: exact-name-or-slug
+- matched_by: campaign-monitor
 
 ## Capabilities
 
@@ -28,52 +36,52 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 
 - base_url
 - client_id
-- username
+- username (required)
 - password (secret)
 
 ## ETL Streams
 
 - clients:
   - primary key: ClientID
-  - fields: ClientID(), Name()
+  - fields: ClientID(string), Name(string)
 - campaigns:
   - primary key: CampaignID
   - cursor: SentDate
-  - fields: CampaignID(), FromEmail(), FromName(), Name(), ReplyTo(), SentDate(), Subject(), TotalRecipients(), WebVersionTextURL(), WebVersionURL()
+  - fields: CampaignID(string), FromEmail(string), FromName(string), Name(string), ReplyTo(string), SentDate(string), Subject(string), TotalRecipients(integer), WebVersionTextURL(string), WebVersionURL(string)
 - lists:
   - primary key: ListID
-  - fields: ListID(), Name()
+  - fields: ListID(string), Name(string)
 - suppressionlist:
   - primary key: EmailAddress
   - cursor: Date
-  - fields: Date(), EmailAddress(), State(), SuppressionType()
+  - fields: Date(string), EmailAddress(string), State(string), SuppressionType(string)
 - segments:
   - primary key: SegmentID
-  - fields: ListID(), OwningClientID(), SegmentID(), Title()
+  - fields: ListID(string), OwningClientID(string), SegmentID(string), Title(string)
 - templates:
   - primary key: TemplateID
-  - fields: Name(), OwningClientID(), PreviewURL(), ScreenshotURL(), TemplateID()
+  - fields: Name(string), OwningClientID(string), PreviewURL(string), ScreenshotURL(string), TemplateID(string)
 - list_custom_fields:
   - primary key: ListID, Key
-  - fields: DataType(), FieldName(), FieldOptions(), Key(), ListID(), VisibleInPreferenceCenter()
+  - fields: DataType(string), FieldName(string), FieldOptions(array), Key(string), ListID(string), VisibleInPreferenceCenter(boolean)
 - list_webhooks:
   - primary key: WebhookID
-  - fields: Events(), ListID(), PayloadFormat(), Status(), Url(), WebhookID()
+  - fields: Events(array), ListID(string), PayloadFormat(string), Status(string), Url(string), WebhookID(string)
 - active_subscribers:
   - primary key: ListID, EmailAddress
-  - fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+  - fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 - unconfirmed_subscribers:
   - primary key: ListID, EmailAddress
-  - fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+  - fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 - unsubscribed_subscribers:
   - primary key: ListID, EmailAddress
-  - fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+  - fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 - bounced_subscribers:
   - primary key: ListID, EmailAddress
-  - fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+  - fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 - deleted_subscribers:
   - primary key: ListID, EmailAddress
-  - fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+  - fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 
 ## Sync Modes
 
@@ -83,6 +91,7 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 
 - create_list:
   - endpoint: POST /lists/{{ config.client_id }}.json
+  - required fields: Title
   - risk: creates a new subscriber list under the configured client; low-risk external mutation, no approval required
 - update_list:
   - endpoint: PUT /lists/{{ record.ListID }}.json
@@ -94,15 +103,15 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
   - risk: permanently removes a subscriber list and all of its subscribers/segments; irreversible, approval required
 - add_subscriber:
   - endpoint: POST /subscribers/{{ record.ListID }}.json
-  - required fields: ListID
+  - required fields: ListID, EmailAddress
   - risk: adds a new subscriber to a list; low-risk external mutation, no approval required
 - update_subscriber:
   - endpoint: PUT /subscribers/{{ record.ListID }}.json?email={{ record.CurrentEmailAddress | urlencode }}
-  - required fields: ListID, CurrentEmailAddress
+  - required fields: ListID, CurrentEmailAddress, EmailAddress
   - risk: updates an existing subscriber's profile/consent fields on a list, identified by their current email (CurrentEmailAddress, kept out of the body via path_fields since the API takes it as a query param, not a body field); low-risk external mutation, no approval required
 - unsubscribe_subscriber:
   - endpoint: POST /subscribers/{{ record.ListID }}/unsubscribe.json
-  - required fields: ListID
+  - required fields: ListID, EmailAddress
   - risk: unsubscribes a contact from a list; low-risk external mutation, no approval required
 - delete_subscriber:
   - endpoint: DELETE /subscribers/{{ record.ListID }}.json?email={{ record.EmailAddress | urlencode }}
@@ -110,11 +119,11 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
   - risk: permanently removes a subscriber's record from a list (distinct from unsubscribing — this deletes the record entirely); irreversible, approval recommended
 - create_segment:
   - endpoint: POST /segments/{{ record.ListID }}.json
-  - required fields: ListID
+  - required fields: ListID, Title, RuleGroups
   - risk: creates a new subscriber segment (a saved rule-based filter) on a list; low-risk external mutation, no approval required
 - update_segment:
   - endpoint: PUT /segments/{{ record.SegmentID }}.json
-  - required fields: SegmentID
+  - required fields: SegmentID, Title, RuleGroups
   - risk: replaces a segment's name and full rule set; low-risk external mutation, no approval required
 - delete_segment:
   - endpoint: DELETE /segments/{{ record.SegmentID }}.json
@@ -122,10 +131,11 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
   - risk: permanently removes a segment; any campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval required
 - create_campaign:
   - endpoint: POST /campaigns/{{ config.client_id }}.json
+  - required fields: Name, Subject, FromName, FromEmail, ReplyTo, HtmlUrl, ListIDs
   - risk: creates a new DRAFT campaign under the configured client; drafts are not sent until send_campaign is separately invoked, so this alone has no delivery side effect; low-risk, no approval required
 - send_campaign:
   - endpoint: POST /campaigns/{{ record.CampaignID }}/send.json
-  - required fields: CampaignID
+  - required fields: CampaignID, ConfirmationEmail, SendDate
   - risk: delivers a real email campaign to every subscriber on its targeted lists/segments; irreversible once sent, approval required
 - unschedule_campaign:
   - endpoint: POST /campaigns/{{ record.CampaignID }}/unschedule.json

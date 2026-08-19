@@ -12,7 +12,7 @@
     "is_pending": { "type": ["boolean", "null"] },
     "is_sitemaps_index": { "type": ["boolean", "null"] },
     "type": { "type": ["string", "null"] },
-    "warnings": { "type": ["string", "null"] },
-    "errors": { "type": ["string", "null"] }
+    "warnings": { "type": ["string", "integer", "null"] },
+    "errors": { "type": ["string", "integer", "null"] }
   }
 }

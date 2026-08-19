@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Chift consumers, connections, syncs, integrations, datastores, and webhook event definitions through the Chift REST API using a session-token (client credentials) exchange.
 
 ICON
+  id: chift
   asset: icons/chift.svg
   source: official
   review_status: official_verified
@@ -29,36 +30,37 @@ CONFIGURATION
   base_url
   mode
   page_size
-  account_id (secret)
-  client_id (secret)
-  client_secret (secret)
+  account_id (secret) (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   consumers:
     primary key: consumerid
-    fields: active(), consumerid(), created_on(), email(), name(), phone(), redirect_url()
+    fields: active(boolean), consumerid(string), created_on(string), email(string), name(string), phone(string), redirect_url(string)
   connections:
     primary key: connectionid
-    fields: api(), connectionid(), consumerid(), created_on(), name(), status()
+    fields: api(string), connectionid(string), consumerid(string), created_on(string), name(string), status(string)
   syncs:
     primary key: syncid
-    fields: consumerid(), created_on(), name(), status(), syncid(), updated_on()
+    fields: consumerid(string), created_on(string), name(string), status(string), syncid(string), updated_on(string)
   integrations:
     primary key: integrationid
-    fields: api(), description(), icon_url(), integrationid(), local_agent(), logo_url(), name(), status()
+    fields: api(string), description(string), icon_url(string), integrationid(integer), local_agent(boolean), logo_url(string), name(string), status(string)
   datastores:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   webhook_definitions:
     primary key: event, api
-    fields: api(), event()
+    fields: api(string), event(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_consumer:
     endpoint: POST /consumers
+    required fields: name
     risk: external mutation; approval required
   update_consumer:
     endpoint: PATCH /consumers/{{ record.consumerid }}

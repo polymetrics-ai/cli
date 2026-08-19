@@ -13,9 +13,11 @@ DESCRIPTION
   Reads pretix organizers, events, items, and orders through the pretix REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -28,24 +30,24 @@ CONFIGURATION
   base_url
   event
   organizer
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   organizers:
     primary key: id
-    fields: id(), name(), slug()
+    fields: id(string), name(object), slug(string)
   events:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(object), slug(string), updated_at(string)
   items:
     primary key: id
-    fields: code(), id(), name(), slug()
+    fields: code(string), id(integer), name(object), slug(string)
   orders:
     primary key: id
-    fields: code(), id(), name()
+    fields: code(string), id(string), name(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external pretix API read of organizer, event, item, and order data

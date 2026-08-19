@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mailtrap account-management REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-mailtrap
+  asset: icons/simple-icons/mailtrap.svg
+  title: Mailtrap
+  simple_icon_slug: mailtrap
+  simple_icon_hex: 22D172
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Mailtrap
+  match: exact-name-or-slug
+  matched_by: mailtrap
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,24 +35,24 @@ AUTHENTICATION
 CONFIGURATION
   account_id
   base_url
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
-    fields: access_levels(), id(), name()
+    fields: access_levels(array), id(integer), name(string)
   inboxes:
     primary key: id
-    fields: account_id(), domain(), email_username(), emails_count(), id(), max_size(), name(), status(), used_size()
+    fields: account_id(string), domain(string), email_username(string), emails_count(integer), id(integer), max_size(integer), name(string), status(string), used_size(integer)
   projects:
     primary key: id
-    fields: account_id(), id(), name()
+    fields: account_id(string), id(integer), name(string)
   sending_domains:
     primary key: id
-    fields: account_id(), demo(), domain_name(), id(), status()
+    fields: account_id(string), demo(boolean), domain_name(string), id(integer), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Mailtrap API read of account-management data

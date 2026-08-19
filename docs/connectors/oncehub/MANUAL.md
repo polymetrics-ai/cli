@@ -13,9 +13,11 @@ DESCRIPTION
   Reads OnceHub bookings, contacts, booking pages, users, and event types through the OnceHub REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,26 +32,26 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   bookings:
     primary key: id
     cursor: last_updated_time
-    fields: booking_page(), contact(), creation_time(), customer_timezone(), duration_minutes(), event_type(), id(), in_trash(), last_updated_time(), location_description(), object(), owner(), starting_time(), status(), subject(), tracking_id()
+    fields: booking_page(string), contact(string), creation_time(string), customer_timezone(string), duration_minutes(number), event_type(string), id(string), in_trash(boolean), last_updated_time(string), location_description(string), object(string), owner(string), starting_time(string), status(string), subject(string), tracking_id(string)
   contacts:
     primary key: id
     cursor: last_updated_time
-    fields: creation_time(), email(), first_name(), id(), last_updated_time(), mobile_phone(), object(), owner(), timezone()
+    fields: creation_time(string), email(string), first_name(string), id(string), last_updated_time(string), mobile_phone(string), object(string), owner(string), timezone(string)
   booking_pages:
     primary key: id
-    fields: active(), id(), label(), name(), object(), timezone(), url()
+    fields: active(boolean), id(string), label(string), name(string), object(string), timezone(string), url(string)
   users:
     primary key: id
-    fields: email(), first_name(), id(), last_name(), object(), role_name(), status()
+    fields: email(string), first_name(string), id(string), last_name(string), object(string), role_name(string), status(string)
   event_types:
     primary key: id
-    fields: id(), label(), name(), object()
+    fields: id(string), label(string), name(string), object(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

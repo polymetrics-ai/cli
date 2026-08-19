@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Gridly views, per-view records (with flattened column cells), and per-view branches through the Gridly REST API.
 
 ICON
+  id: gridly
   asset: icons/gridly.svg
   source: official
   review_status: official_verified
@@ -31,21 +32,21 @@ CONFIGURATION
   mode
   page_size
   view_ids
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   views:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   records:
     primary key: view_id, id
-    fields: cells(), id(), path(), view_id()
+    fields: cells(array), id(string), path(string), view_id(string)
   branches:
     primary key: view_id, id
-    fields: id(), name(), view_id()
+    fields: id(string), name(string), view_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Gridly API read of view/grid content

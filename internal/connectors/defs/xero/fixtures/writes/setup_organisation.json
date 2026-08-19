@@ -1,0 +1,30 @@
+{
+  "record": {
+    "ConversionDate": {},
+    "ConversionBalances": [
+      "conversion_balance_fixture"
+    ],
+    "Accounts": [
+      "account_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Setup",
+    "body": {
+      "ConversionDate": {},
+      "ConversionBalances": [
+        "conversion_balance_fixture"
+      ],
+      "Accounts": [
+        "account_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

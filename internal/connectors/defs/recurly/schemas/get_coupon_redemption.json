@@ -1,0 +1,510 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_coupon_redemption record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Coupon Redemption ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type",
+      "description": "Will always be `coupon`."
+    },
+    "uuid": {
+      "type": "string",
+      "title": "Recurly UUID",
+      "description": "The UUID is useful for matching data with the CSV exports and building URLs into Recurly's UI."
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "description": "The unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address used for communicating with this customer."
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "title": "Dunning Campaign ID",
+          "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Account mini details"
+    },
+    "subscription_id": {
+      "type": "string",
+      "title": "Subscription ID"
+    },
+    "coupon": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Coupon ID"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "title": "Coupon code",
+          "description": "The code the customer enters to redeem the coupon."
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "The internal name for the coupon."
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "expired",
+            "maxed_out",
+            "redeemable"
+          ],
+          "title": "State",
+          "description": "Indicates if the coupon is redeemable, and if it is not, why."
+        },
+        "max_redemptions": {
+          "type": "integer",
+          "title": "Max redemptions",
+          "description": "A maximum number of redemptions for the coupon. The coupon will expire when it hits its maximum redemptions."
+        },
+        "max_redemptions_per_account": {
+          "type": "integer",
+          "title": "Max redemptions per account",
+          "description": "Redemptions per account is the number of times a specific account can redeem the coupon. Set redemptions per account to `1` if you want to keep customers from gaming the system and getting more than one discount from the coupon campaign."
+        },
+        "unique_coupon_codes_count": {
+          "type": "integer",
+          "title": "Unique coupon codes count",
+          "description": "When this number reaches `max_redemptions` the coupon will no longer be redeemable."
+        },
+        "unique_code_template": {
+          "type": "string",
+          "title": "Unique code template",
+          "description": "On a bulk coupon, the template from which unique coupon codes are generated."
+        },
+        "unique_coupon_code": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "title": "Unique Coupon Code ID"
+            },
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "code": {
+              "type": "string",
+              "title": "Coupon code",
+              "description": "The code the customer enters to redeem the coupon."
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "expired",
+                "inactive",
+                "maxed_out",
+                "redeemable"
+              ],
+              "title": "State",
+              "description": "Indicates if the unique coupon code is redeemable or why not."
+            },
+            "bulk_coupon_id": {
+              "type": "string",
+              "title": "Bulk Coupon ID",
+              "description": "The Coupon ID of the parent Bulk Coupon"
+            },
+            "bulk_coupon_code": {
+              "type": "string",
+              "title": "Bulk Coupon code",
+              "description": "The Coupon code of the parent Bulk Coupon"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Created at"
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Updated at"
+            },
+            "redeemed_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Redeemed at",
+              "description": "The date and time the unique coupon code was redeemed."
+            },
+            "expired_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Expired at",
+              "description": "The date and time the coupon was expired early or reached its `max_redemptions`."
+            }
+          },
+          "additionalProperties": false,
+          "description": "A unique coupon code for a bulk coupon."
+        },
+        "duration": {
+          "type": "string",
+          "enum": [
+            "forever",
+            "single_use",
+            "temporal",
+            "billing_periods"
+          ],
+          "title": "Duration",
+          "description": "- \"single_use\" coupons applies to the first invoice only.\n- \"temporal\" coupons will apply to invoices for the duration determined by the `temporal_unit` and `temporal_amount` attributes.\n"
+        },
+        "temporal_amount": {
+          "type": "integer",
+          "title": "Temporal amount",
+          "description": "If `duration` is \"temporal\" than `temporal_amount` is an integer which is multiplied by `temporal_unit` to define the duration that the coupon will be applied to invoices for. When `temporal_unit` is \"billing_period\", this is the number of complete billing cycles."
+        },
+        "temporal_unit": {
+          "type": "string",
+          "enum": [
+            "day",
+            "month",
+            "week",
+            "year",
+            "billing_period"
+          ],
+          "title": "Temporal unit",
+          "description": "The temporal unit for the coupon's duration. Used with temporal_amount to define how long the coupon applies. When temporal_unit is billing_period, the coupon applies for temporal_amount complete billing cycles rather than a fixed calendar duration. billing_period requires redemption_resource=subscription."
+        },
+        "free_trial_unit": {
+          "type": "string",
+          "enum": [
+            "day",
+            "month",
+            "week",
+            "billing_period"
+          ],
+          "title": "Free trial unit",
+          "description": "Description of the unit of time the coupon is for. Used with `free_trial_amount` to determine the duration of time the coupon is for."
+        },
+        "free_trial_amount": {
+          "type": "integer",
+          "title": "Free trial amount",
+          "description": "Sets the duration of time the `free_trial_unit` is for."
+        },
+        "applies_to_all_plans": {
+          "type": "boolean",
+          "default": true,
+          "title": "Applies to all plans?",
+          "description": "The coupon is valid for all plans if true. If false then `plans` will list the applicable plans."
+        },
+        "applies_to_all_items": {
+          "type": "boolean",
+          "default": false,
+          "title": "Applies to all items?",
+          "description": "The coupon is valid for all items if true. If false then `items`\nwill list the applicable items.\n"
+        },
+        "applies_to_non_plan_charges": {
+          "type": "boolean",
+          "default": false,
+          "title": "Applied to all non-plan charges?",
+          "description": "The coupon is valid for one-time, non-plan charges if true."
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "Plan ID"
+              },
+              "object": {
+                "type": "string",
+                "title": "Object type"
+              },
+              "code": {
+                "type": "string",
+                "title": "Plan code",
+                "description": "Unique code to identify the plan. This is used in Hosted Payment Page URLs and in the invoice exports.",
+                "pattern": "^[a-z0-9_+-]+$"
+              },
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "This name describes your plan and will appear on the Hosted Payment Page and the subscriber's invoice."
+              }
+            },
+            "additionalProperties": false,
+            "title": "Plan mini details",
+            "description": "Just the important parts."
+          },
+          "title": "Plans",
+          "description": "A list of plans for which this coupon applies. This will be `null` if `applies_to_all_plans=true`."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "Item ID"
+              },
+              "object": {
+                "type": "string",
+                "title": "Object type"
+              },
+              "code": {
+                "type": "string",
+                "title": "Item code",
+                "description": "Unique code to identify the item.",
+                "pattern": "^[a-z0-9_+-]+$"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "inactive"
+                ],
+                "title": "State",
+                "description": "The current state of the item."
+              },
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "This name describes your item and will appear on the invoice when it's purchased on a one time basis."
+              },
+              "description": {
+                "type": "string",
+                "title": "Description",
+                "description": "Optional, description."
+              }
+            },
+            "additionalProperties": false,
+            "title": "Item mini details",
+            "description": "Just the important parts."
+          },
+          "title": "Items",
+          "description": "A list of items for which this coupon applies. This will be\n`null` if `applies_to_all_items=true`.\n"
+        },
+        "redemption_resource": {
+          "type": "string",
+          "enum": [
+            "account",
+            "subscription"
+          ],
+          "default": "account",
+          "title": "Redemption resource",
+          "description": "Whether the discount is for all eligible charges on the account, or only a specific subscription."
+        },
+        "discount": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "free_trial",
+                "percent"
+              ]
+            },
+            "percent": {
+              "type": "integer",
+              "description": "This is only present when `type=percent`."
+            },
+            "currencies": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "title": "Currency",
+                    "description": "3-letter ISO 4217 currency code."
+                  },
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "title": "Discount Amount",
+                    "description": "Value of the fixed discount that this coupon applies."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "This is only present when `type=fixed`."
+            },
+            "trial": {
+              "type": "object",
+              "properties": {
+                "unit": {
+                  "type": "string",
+                  "enum": [
+                    "day",
+                    "month",
+                    "week",
+                    "billing_period"
+                  ],
+                  "title": "Trial unit",
+                  "description": "Temporal unit of the free trial. When `billing_period`, `length` represents the number of billing cycles."
+                },
+                "length": {
+                  "type": "integer",
+                  "title": "Trial length",
+                  "description": "Trial length measured in the units specified by the sibling `unit` property"
+                }
+              },
+              "additionalProperties": false,
+              "description": "This is only present when `type=free_trial`."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Details of the discount a coupon applies. Will contain a `type`\nproperty and one of the following properties: `percent`, `fixed`, `trial`.\n"
+        },
+        "coupon_type": {
+          "type": "string",
+          "enum": [
+            "bulk",
+            "single_code"
+          ],
+          "title": "Coupon type (TODO: implement coupon generation)",
+          "description": "Whether the coupon is \"single_code\" or \"bulk\". Bulk coupons will require a `unique_code_template` and will generate unique codes through the `/generate` endpoint."
+        },
+        "hosted_page_description": {
+          "type": "string",
+          "title": "Hosted Payment Pages description",
+          "description": "This description will show up when a customer redeems a coupon on your Hosted Payment Pages, or if you choose to show the description on your own checkout page."
+        },
+        "invoice_description": {
+          "type": "string",
+          "title": "Invoice description",
+          "description": "Description of the coupon on the invoice."
+        },
+        "redeem_by": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Redeem by",
+          "description": "The date and time the coupon will expire and can no longer be redeemed. Time is always 11:59:59, the end-of-day Pacific time."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Created at"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last updated at"
+        },
+        "expired_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Expired at",
+          "description": "The date and time the coupon was expired early or reached its `max_redemptions`."
+        }
+      },
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active",
+      "title": "Coupon Redemption state"
+    },
+    "remaining_duration": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "forever",
+            "single_use",
+            "temporal",
+            "billing_periods"
+          ],
+          "title": "Duration Type",
+          "description": "The coupon's duration type. `temporal` includes an `expires_at` timestamp. `billing_periods` includes a `redemptions_remaining` count of billing cycles. `forever` and `single_use` have no additional fields."
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Expires at",
+          "description": "Present when `type` is `temporal`. The datetime after which this redemption will no longer apply."
+        },
+        "redemptions_remaining": {
+          "type": "integer",
+          "title": "Redemptions Remaining",
+          "description": "The number of redemption periods remaining for which this coupon will still apply."
+        }
+      },
+      "additionalProperties": false
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "description": "3-letter ISO 4217 currency code."
+    },
+    "discounted": {
+      "type": "number",
+      "format": "float",
+      "title": "Amount Discounted",
+      "description": "The amount that was discounted upon the application of the coupon, formatted with the currency."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    },
+    "removed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Removed at",
+      "description": "The date and time the redemption was removed from the account (un-redeemed)."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

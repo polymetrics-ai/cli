@@ -11,6 +11,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
 
 ## Icon
 
+- id: twilio
 - asset: icons/twilio.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -48,325 +49,325 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
 - reference_sid
 - resource_sid
 - sid
-- account_sid (secret)
-- auth_token (secret)
+- account_sid (secret) (required)
+- auth_token (secret) (required)
 
 ## ETL Streams
 
 - messages:
   - primary key: sid
   - cursor: date_sent
-  - fields: account_sid(), body(), date_created(), date_sent(), date_updated(), direction(), error_code(), error_message(), from(), messaging_service_sid(), num_media(), num_segments(), price(), price_unit(), sid(), status(), to()
+  - fields: account_sid(string), body(string), date_created(string), date_sent(string), date_updated(string), direction(string), error_code(string), error_message(string), from(string), messaging_service_sid(string), num_media(string), num_segments(string), price(string), price_unit(string), sid(string), status(string), to(string)
 - calls:
   - primary key: sid
   - cursor: start_time
-  - fields: account_sid(), date_created(), date_updated(), direction(), duration(), end_time(), from(), price(), price_unit(), sid(), start_time(), status(), to()
+  - fields: account_sid(string), date_created(string), date_updated(string), direction(string), duration(string), end_time(string), from(string), price(string), price_unit(string), sid(string), start_time(string), status(string), to(string)
 - recordings:
   - primary key: sid
   - cursor: date_created
-  - fields: account_sid(), call_sid(), channels(), date_created(), date_updated(), duration(), price(), price_unit(), sid(), source(), start_time(), status()
+  - fields: account_sid(string), call_sid(string), channels(integer), date_created(string), date_updated(string), duration(string), price(string), price_unit(string), sid(string), source(string), start_time(string), status(string)
 - conferences:
   - primary key: sid
   - cursor: date_created
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), region(), sid(), status()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), region(string), sid(string), status(string)
 - usage_records:
   - primary key: category
   - cursor: start_date
-  - fields: account_sid(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), usage(), usage_unit()
+  - fields: account_sid(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(string), price_unit(string), start_date(string), usage(string), usage_unit(string)
 - account:
   - primary key: sid
-  - fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+  - fields: auth_token(string), date_created(string), date_updated(string), friendly_name(string), owner_account_sid(string), sid(string), status(string), subresource_uris(object), type(string), uri(string)
 - accounts:
   - primary key: sid
-  - fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+  - fields: auth_token(string), date_created(string), date_updated(string), friendly_name(string), owner_account_sid(string), sid(string), status(string), subresource_uris(object), type(string), uri(string)
 - address:
   - primary key: sid
-  - fields: account_sid(), city(), customer_name(), date_created(), date_updated(), emergency_enabled(), friendly_name(), iso_country(), postal_code(), region(), sid(), street(), street_secondary(), uri(), validated(), verified()
+  - fields: account_sid(string), city(string), customer_name(string), date_created(string), date_updated(string), emergency_enabled(boolean), friendly_name(string), iso_country(string), postal_code(string), region(string), sid(string), street(string), street_secondary(string), uri(string), validated(boolean), verified(boolean)
 - address_2:
   - primary key: sid
-  - fields: account_sid(), city(), customer_name(), date_created(), date_updated(), emergency_enabled(), friendly_name(), iso_country(), postal_code(), region(), sid(), street(), street_secondary(), uri(), validated(), verified()
+  - fields: account_sid(string), city(string), customer_name(string), date_created(string), date_updated(string), emergency_enabled(boolean), friendly_name(string), iso_country(string), postal_code(string), region(string), sid(string), street(string), street_secondary(string), uri(string), validated(boolean), verified(boolean)
 - application:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), message_status_callback(), public_application_connect_enabled(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_status_callback(), sms_url(), status_callback(), status_callback_method(), uri(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), friendly_name(string), message_status_callback(string), public_application_connect_enabled(boolean), sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_status_callback(string), sms_url(string), status_callback(string), status_callback_method(string), uri(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_url(string)
 - applications:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), message_status_callback(), public_application_connect_enabled(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_status_callback(), sms_url(), status_callback(), status_callback_method(), uri(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), friendly_name(string), message_status_callback(string), public_application_connect_enabled(boolean), sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_status_callback(string), sms_url(string), status_callback(string), status_callback_method(string), uri(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_url(string)
 - authorized_connect_app:
   - primary key: account_sid
-  - fields: account_sid(), connect_app_company_name(), connect_app_description(), connect_app_friendly_name(), connect_app_homepage_url(), connect_app_sid(), permissions(), uri()
+  - fields: account_sid(string), connect_app_company_name(string), connect_app_description(string), connect_app_friendly_name(string), connect_app_homepage_url(string), connect_app_sid(string), permissions(array), uri(string)
 - authorized_connect_apps:
   - primary key: account_sid
-  - fields: account_sid(), connect_app_company_name(), connect_app_description(), connect_app_friendly_name(), connect_app_homepage_url(), connect_app_sid(), permissions(), uri()
+  - fields: account_sid(string), connect_app_company_name(string), connect_app_description(string), connect_app_friendly_name(string), connect_app_homepage_url(string), connect_app_sid(string), permissions(array), uri(string)
 - available_phone_number_countries:
   - primary key: country_code
-  - fields: beta(), country(), country_code(), subresource_uris(), uri()
+  - fields: beta(boolean), country(string), country_code(string), subresource_uris(object), uri(string)
 - available_phone_number_country:
   - primary key: country_code
-  - fields: beta(), country(), country_code(), subresource_uris(), uri()
+  - fields: beta(boolean), country(string), country_code(string), subresource_uris(object), uri(string)
 - available_phone_number_locals:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_machine_to_machines:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_mobiles:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_nationals:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_shared_costs:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_toll_frees:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - available_phone_number_voips:
   - primary key: phone_number
-  - fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  - fields: address_requirements(string), beta(boolean), capabilities(object), country_code(string), friendly_name(string), iso_country(string), lata(string), latitude(number), locality(string), longitude(number), phone_number(string), postal_code(string), rate_center(string), region(string)
 - balance:
   - primary key: account_sid
-  - fields: account_sid(), balance(), currency()
+  - fields: account_sid(string), balance(string), currency(string)
 - call:
   - primary key: sid
-  - fields: account_sid(), answered_by(), api_version(), caller_name(), date_created(), date_updated(), direction(), duration(), end_time(), forwarded_from(), from(), from_formatted(), group_sid(), parent_call_sid(), phone_number_sid(), price(), price_unit(), queue_time(), sid(), start_time(), status(), subresource_uris(), to(), to_formatted(), trunk_sid(), uri()
+  - fields: account_sid(string), answered_by(string), api_version(string), caller_name(string), date_created(string), date_updated(string), direction(string), duration(string), end_time(string), forwarded_from(string), from(string), from_formatted(string), group_sid(string), parent_call_sid(string), phone_number_sid(string), price(string), price_unit(string), queue_time(string), sid(string), start_time(string), status(string), subresource_uris(object), to(string), to_formatted(string), trunk_sid(string), uri(string)
 - call_events:
   - primary key: call_sid
-  - fields: call_sid(), request(), response()
+  - fields: call_sid(string), request(string), response(string)
 - call_notification:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), request_variables(), response_body(), response_headers(), sid(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), date_created(string), date_updated(string), error_code(string), log(string), message_date(string), message_text(string), more_info(string), request_method(string), request_url(string), request_variables(string), response_body(string), response_headers(string), sid(string), uri(string)
 - call_notifications:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), sid(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), date_created(string), date_updated(string), error_code(string), log(string), message_date(string), message_text(string), more_info(string), request_method(string), request_url(string), sid(string), uri(string)
 - call_recording:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), track(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), channels(integer), conference_sid(string), date_created(string), date_updated(string), duration(string), encryption_details(string), error_code(integer), price(number), price_unit(string), sid(string), source(string), start_time(string), status(string), track(string), uri(string)
 - call_recordings:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), track(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), channels(integer), conference_sid(string), date_created(string), date_updated(string), duration(string), encryption_details(string), error_code(integer), price(number), price_unit(string), sid(string), source(string), start_time(string), status(string), track(string), uri(string)
 - conference:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid_ending_conference(), date_created(), date_updated(), friendly_name(), reason_conference_ended(), region(), sid(), status(), subresource_uris(), uri()
+  - fields: account_sid(string), api_version(string), call_sid_ending_conference(string), date_created(string), date_updated(string), friendly_name(string), reason_conference_ended(string), region(string), sid(string), status(string), subresource_uris(object), uri(string)
 - conference_recording:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), channels(integer), conference_sid(string), date_created(string), date_updated(string), duration(string), encryption_details(string), error_code(integer), price(string), price_unit(string), sid(string), source(string), start_time(string), status(string), uri(string)
 - conference_recordings:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), channels(integer), conference_sid(string), date_created(string), date_updated(string), duration(string), encryption_details(string), error_code(integer), price(string), price_unit(string), sid(string), source(string), start_time(string), status(string), uri(string)
 - connect_app:
   - primary key: sid
-  - fields: account_sid(), authorize_redirect_url(), company_name(), deauthorize_callback_method(), deauthorize_callback_url(), description(), friendly_name(), homepage_url(), permissions(), sid(), uri()
+  - fields: account_sid(string), authorize_redirect_url(string), company_name(string), deauthorize_callback_method(string), deauthorize_callback_url(string), description(string), friendly_name(string), homepage_url(string), permissions(array), sid(string), uri(string)
 - connect_apps:
   - primary key: sid
-  - fields: account_sid(), authorize_redirect_url(), company_name(), deauthorize_callback_method(), deauthorize_callback_url(), description(), friendly_name(), homepage_url(), permissions(), sid(), uri()
+  - fields: account_sid(string), authorize_redirect_url(string), company_name(string), deauthorize_callback_method(string), deauthorize_callback_url(string), description(string), friendly_name(string), homepage_url(string), permissions(array), sid(string), uri(string)
 - dependent_phone_numbers:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_status(), friendly_name(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), capabilities(string), date_created(string), date_updated(string), emergency_address_sid(string), emergency_status(string), friendly_name(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status_callback(string), status_callback_method(string), trunk_sid(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_url(string)
 - incoming_phone_number:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), type(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), beta(boolean), bundle_sid(string), capabilities(object), date_created(string), date_updated(string), emergency_address_sid(string), emergency_address_status(string), emergency_status(string), friendly_name(string), identity_sid(string), origin(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status(string), status_callback(string), status_callback_method(string), trunk_sid(string), type(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_receive_mode(string), voice_url(string)
 - incoming_phone_number_assigned_add_on:
   - primary key: sid
-  - fields: account_sid(), configuration(), date_created(), date_updated(), description(), friendly_name(), resource_sid(), sid(), subresource_uris(), unique_name(), uri()
+  - fields: account_sid(string), configuration(string), date_created(string), date_updated(string), description(string), friendly_name(string), resource_sid(string), sid(string), subresource_uris(object), unique_name(string), uri(string)
 - incoming_phone_number_assigned_add_on_extension:
   - primary key: sid
-  - fields: account_sid(), assigned_add_on_sid(), enabled(), friendly_name(), product_name(), resource_sid(), sid(), unique_name(), uri()
+  - fields: account_sid(string), assigned_add_on_sid(string), enabled(boolean), friendly_name(string), product_name(string), resource_sid(string), sid(string), unique_name(string), uri(string)
 - incoming_phone_number_assigned_add_on_extensions:
   - primary key: sid
-  - fields: account_sid(), assigned_add_on_sid(), enabled(), friendly_name(), product_name(), resource_sid(), sid(), unique_name(), uri()
+  - fields: account_sid(string), assigned_add_on_sid(string), enabled(boolean), friendly_name(string), product_name(string), resource_sid(string), sid(string), unique_name(string), uri(string)
 - incoming_phone_number_assigned_add_ons:
   - primary key: sid
-  - fields: account_sid(), configuration(), date_created(), date_updated(), description(), friendly_name(), resource_sid(), sid(), subresource_uris(), unique_name(), uri()
+  - fields: account_sid(string), configuration(string), date_created(string), date_updated(string), description(string), friendly_name(string), resource_sid(string), sid(string), subresource_uris(object), unique_name(string), uri(string)
 - incoming_phone_number_locals:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), beta(boolean), bundle_sid(string), capabilities(object), date_created(string), date_updated(string), emergency_address_sid(string), emergency_address_status(string), emergency_status(string), friendly_name(string), identity_sid(string), origin(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status(string), status_callback(string), status_callback_method(string), trunk_sid(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_receive_mode(string), voice_url(string)
 - incoming_phone_number_mobiles:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), beta(boolean), bundle_sid(string), capabilities(object), date_created(string), date_updated(string), emergency_address_sid(string), emergency_address_status(string), emergency_status(string), friendly_name(string), identity_sid(string), origin(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status(string), status_callback(string), status_callback_method(string), trunk_sid(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_receive_mode(string), voice_url(string)
 - incoming_phone_number_toll_frees:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), beta(boolean), bundle_sid(string), capabilities(object), date_created(string), date_updated(string), emergency_address_sid(string), emergency_address_status(string), emergency_status(string), friendly_name(string), identity_sid(string), origin(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status(string), status_callback(string), status_callback_method(string), trunk_sid(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_receive_mode(string), voice_url(string)
 - incoming_phone_numbers:
   - primary key: sid
-  - fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), type(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  - fields: account_sid(string), address_requirements(string), address_sid(string), api_version(string), beta(boolean), bundle_sid(string), capabilities(object), date_created(string), date_updated(string), emergency_address_sid(string), emergency_address_status(string), emergency_status(string), friendly_name(string), identity_sid(string), origin(string), phone_number(string), sid(string), sms_application_sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), status(string), status_callback(string), status_callback_method(string), trunk_sid(string), type(string), uri(string), voice_application_sid(string), voice_caller_id_lookup(boolean), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_receive_mode(string), voice_url(string)
 - key:
   - primary key: sid
-  - fields: date_created(), date_updated(), friendly_name(), sid()
+  - fields: date_created(string), date_updated(string), friendly_name(string), sid(string)
 - keys:
   - primary key: sid
-  - fields: date_created(), date_updated(), friendly_name(), sid()
+  - fields: date_created(string), date_updated(string), friendly_name(string), sid(string)
 - media:
   - primary key: sid
-  - fields: account_sid(), content_type(), date_created(), date_updated(), message_sid(), parent_sid(), sid(), uri()
+  - fields: account_sid(string), content_type(string), date_created(string), date_updated(string), message_sid(string), parent_sid(string), sid(string), uri(string)
 - medias:
   - primary key: sid
-  - fields: account_sid(), content_type(), date_created(), date_updated(), message_sid(), parent_sid(), sid(), uri()
+  - fields: account_sid(string), content_type(string), date_created(string), date_updated(string), message_sid(string), parent_sid(string), sid(string), uri(string)
 - member:
   - primary key: call_sid
-  - fields: call_sid(), date_enqueued(), position(), queue_sid(), uri(), wait_time()
+  - fields: call_sid(string), date_enqueued(string), position(integer), queue_sid(string), uri(string), wait_time(integer)
 - members:
   - primary key: call_sid
-  - fields: call_sid(), date_enqueued(), position(), queue_sid(), uri(), wait_time()
+  - fields: call_sid(string), date_enqueued(string), position(integer), queue_sid(string), uri(string), wait_time(integer)
 - message:
   - primary key: sid
-  - fields: account_sid(), api_version(), body(), date_created(), date_sent(), date_updated(), direction(), error_code(), error_message(), from(), messaging_service_sid(), num_media(), num_segments(), price(), price_unit(), sid(), status(), subresource_uris(), to(), uri()
+  - fields: account_sid(string), api_version(string), body(string), date_created(string), date_sent(string), date_updated(string), direction(string), error_code(integer), error_message(string), from(string), messaging_service_sid(string), num_media(string), num_segments(string), price(string), price_unit(string), sid(string), status(string), subresource_uris(object), to(string), uri(string)
 - notification:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), request_variables(), response_body(), response_headers(), sid(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), date_created(string), date_updated(string), error_code(string), log(string), message_date(string), message_text(string), more_info(string), request_method(string), request_url(string), request_variables(string), response_body(string), response_headers(string), sid(string), uri(string)
 - notifications:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), sid(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), date_created(string), date_updated(string), error_code(string), log(string), message_date(string), message_text(string), more_info(string), request_method(string), request_url(string), sid(string), uri(string)
 - outgoing_caller_id:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), phone_number(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), phone_number(string), sid(string), uri(string)
 - outgoing_caller_ids:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), phone_number(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), phone_number(string), sid(string), uri(string)
 - participant:
   - primary key: account_sid
-  - fields: account_sid(), call_sid(), call_sid_to_coach(), coaching(), conference_sid(), date_created(), date_updated(), end_conference_on_exit(), hold(), label(), muted(), queue_time(), start_conference_on_enter(), status(), uri()
+  - fields: account_sid(string), call_sid(string), call_sid_to_coach(string), coaching(boolean), conference_sid(string), date_created(string), date_updated(string), end_conference_on_exit(boolean), hold(boolean), label(string), muted(boolean), queue_time(string), start_conference_on_enter(boolean), status(string), uri(string)
 - participants:
   - primary key: account_sid
-  - fields: account_sid(), call_sid(), call_sid_to_coach(), coaching(), conference_sid(), date_created(), date_updated(), end_conference_on_exit(), hold(), label(), muted(), queue_time(), start_conference_on_enter(), status(), uri()
+  - fields: account_sid(string), call_sid(string), call_sid_to_coach(string), coaching(boolean), conference_sid(string), date_created(string), date_updated(string), end_conference_on_exit(boolean), hold(boolean), label(string), muted(boolean), queue_time(string), start_conference_on_enter(boolean), status(string), uri(string)
 - queue:
   - primary key: sid
-  - fields: account_sid(), average_wait_time(), current_size(), date_created(), date_updated(), friendly_name(), max_size(), sid(), uri()
+  - fields: account_sid(string), average_wait_time(integer), current_size(integer), date_created(string), date_updated(string), friendly_name(string), max_size(integer), sid(string), uri(string)
 - queues:
   - primary key: sid
-  - fields: account_sid(), average_wait_time(), current_size(), date_created(), date_updated(), friendly_name(), max_size(), sid(), uri()
+  - fields: account_sid(string), average_wait_time(integer), current_size(integer), date_created(string), date_updated(string), friendly_name(string), max_size(integer), sid(string), uri(string)
 - recording:
   - primary key: sid
-  - fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), media_url(), price(), price_unit(), sid(), source(), start_time(), status(), subresource_uris(), uri()
+  - fields: account_sid(string), api_version(string), call_sid(string), channels(integer), conference_sid(string), date_created(string), date_updated(string), duration(string), encryption_details(string), error_code(integer), media_url(string), price(string), price_unit(string), sid(string), source(string), start_time(string), status(string), subresource_uris(object), uri(string)
 - recording_add_on_result:
   - primary key: sid
-  - fields: account_sid(), add_on_configuration_sid(), add_on_sid(), date_completed(), date_created(), date_updated(), reference_sid(), sid(), status(), subresource_uris()
+  - fields: account_sid(string), add_on_configuration_sid(string), add_on_sid(string), date_completed(string), date_created(string), date_updated(string), reference_sid(string), sid(string), status(string), subresource_uris(object)
 - recording_add_on_result_payload:
   - primary key: sid
-  - fields: account_sid(), add_on_configuration_sid(), add_on_result_sid(), add_on_sid(), content_type(), date_created(), date_updated(), label(), reference_sid(), sid(), subresource_uris()
+  - fields: account_sid(string), add_on_configuration_sid(string), add_on_result_sid(string), add_on_sid(string), content_type(string), date_created(string), date_updated(string), label(string), reference_sid(string), sid(string), subresource_uris(object)
 - recording_add_on_result_payload_data:
   - primary key: reference_sid
-  - fields: add_on_result_sid(), payload_sid(), reference_sid()
+  - fields: add_on_result_sid(string), payload_sid(string), reference_sid(string)
 - recording_add_on_result_payloads:
   - primary key: sid
-  - fields: account_sid(), add_on_configuration_sid(), add_on_result_sid(), add_on_sid(), content_type(), date_created(), date_updated(), label(), reference_sid(), sid(), subresource_uris()
+  - fields: account_sid(string), add_on_configuration_sid(string), add_on_result_sid(string), add_on_sid(string), content_type(string), date_created(string), date_updated(string), label(string), reference_sid(string), sid(string), subresource_uris(object)
 - recording_add_on_results:
   - primary key: sid
-  - fields: account_sid(), add_on_configuration_sid(), add_on_sid(), date_completed(), date_created(), date_updated(), reference_sid(), sid(), status(), subresource_uris()
+  - fields: account_sid(string), add_on_configuration_sid(string), add_on_sid(string), date_completed(string), date_created(string), date_updated(string), reference_sid(string), sid(string), status(string), subresource_uris(object)
 - recording_transcription:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), duration(string), price(number), price_unit(string), recording_sid(string), sid(string), status(string), transcription_text(string), type(string), uri(string)
 - recording_transcriptions:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), duration(string), price(number), price_unit(string), recording_sid(string), sid(string), status(string), transcription_text(string), type(string), uri(string)
 - short_code:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), short_code(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), friendly_name(string), short_code(string), sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), uri(string)
 - short_codes:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), short_code(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), friendly_name(string), short_code(string), sid(string), sms_fallback_method(string), sms_fallback_url(string), sms_method(string), sms_url(string), uri(string)
 - signing_key:
   - primary key: sid
-  - fields: date_created(), date_updated(), friendly_name(), sid()
+  - fields: date_created(string), date_updated(string), friendly_name(string), sid(string)
 - signing_keys:
   - primary key: sid
-  - fields: date_created(), date_updated(), friendly_name(), sid()
+  - fields: date_created(string), date_updated(string), friendly_name(string), sid(string)
 - sip_auth_calls_credential_list_mapping:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_auth_calls_credential_list_mappings:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_auth_calls_ip_access_control_list_mapping:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_auth_calls_ip_access_control_list_mappings:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_auth_registrations_credential_list_mapping:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_auth_registrations_credential_list_mappings:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string)
 - sip_credential:
   - primary key: sid
-  - fields: account_sid(), credential_list_sid(), date_created(), date_updated(), sid(), uri(), username()
+  - fields: account_sid(string), credential_list_sid(string), date_created(string), date_updated(string), sid(string), uri(string), username(string)
 - sip_credential_list:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), sid(string), subresource_uris(object), uri(string)
 - sip_credential_list_mapping:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string), uri(string)
 - sip_credential_list_mappings:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string), uri(string)
 - sip_credential_lists:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), sid(string), subresource_uris(object), uri(string)
 - sip_credentials:
   - primary key: sid
-  - fields: account_sid(), credential_list_sid(), date_created(), date_updated(), sid(), uri(), username()
+  - fields: account_sid(string), credential_list_sid(string), date_created(string), date_updated(string), sid(string), uri(string), username(string)
 - sip_domain:
   - primary key: sid
-  - fields: account_sid(), api_version(), auth_type(), byoc_trunk_sid(), date_created(), date_updated(), domain_name(), emergency_caller_sid(), emergency_calling_enabled(), friendly_name(), secure(), sid(), sip_registration(), subresource_uris(), uri(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_status_callback_method(), voice_status_callback_url(), voice_url()
+  - fields: account_sid(string), api_version(string), auth_type(string), byoc_trunk_sid(string), date_created(string), date_updated(string), domain_name(string), emergency_caller_sid(string), emergency_calling_enabled(boolean), friendly_name(string), secure(boolean), sid(string), sip_registration(boolean), subresource_uris(object), uri(string), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_status_callback_method(string), voice_status_callback_url(string), voice_url(string)
 - sip_domains:
   - primary key: sid
-  - fields: account_sid(), api_version(), auth_type(), byoc_trunk_sid(), date_created(), date_updated(), domain_name(), emergency_caller_sid(), emergency_calling_enabled(), friendly_name(), secure(), sid(), sip_registration(), subresource_uris(), uri(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_status_callback_method(), voice_status_callback_url(), voice_url()
+  - fields: account_sid(string), api_version(string), auth_type(string), byoc_trunk_sid(string), date_created(string), date_updated(string), domain_name(string), emergency_caller_sid(string), emergency_calling_enabled(boolean), friendly_name(string), secure(boolean), sid(string), sip_registration(boolean), subresource_uris(object), uri(string), voice_fallback_method(string), voice_fallback_url(string), voice_method(string), voice_status_callback_method(string), voice_status_callback_url(string), voice_url(string)
 - sip_ip_access_control_list:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), sid(string), subresource_uris(object), uri(string)
 - sip_ip_access_control_list_mapping:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string), uri(string)
 - sip_ip_access_control_list_mappings:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), domain_sid(string), friendly_name(string), sid(string), uri(string)
 - sip_ip_access_control_lists:
   - primary key: sid
-  - fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  - fields: account_sid(string), date_created(string), date_updated(string), friendly_name(string), sid(string), subresource_uris(object), uri(string)
 - sip_ip_address:
   - primary key: sid
-  - fields: account_sid(), cidr_prefix_length(), date_created(), date_updated(), friendly_name(), ip_access_control_list_sid(), ip_address(), sid(), uri()
+  - fields: account_sid(string), cidr_prefix_length(integer), date_created(string), date_updated(string), friendly_name(string), ip_access_control_list_sid(string), ip_address(string), sid(string), uri(string)
 - sip_ip_address_2:
   - primary key: sid
-  - fields: account_sid(), cidr_prefix_length(), date_created(), date_updated(), friendly_name(), ip_access_control_list_sid(), ip_address(), sid(), uri()
+  - fields: account_sid(string), cidr_prefix_length(integer), date_created(string), date_updated(string), friendly_name(string), ip_access_control_list_sid(string), ip_address(string), sid(string), uri(string)
 - transcription:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), duration(string), price(number), price_unit(string), recording_sid(string), sid(string), status(string), transcription_text(string), type(string), uri(string)
 - transcriptions:
   - primary key: sid
-  - fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  - fields: account_sid(string), api_version(string), date_created(string), date_updated(string), duration(string), price(number), price_unit(string), recording_sid(string), sid(string), status(string), transcription_text(string), type(string), uri(string)
 - usage_record_all_times:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_dailies:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_last_months:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_monthlies:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_this_months:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_todays:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_yearlies:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_record_yesterdays:
   - primary key: account_sid
-  - fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  - fields: account_sid(string), api_version(string), as_of(string), category(string), count(string), count_unit(string), description(string), end_date(string), price(number), price_unit(string), start_date(string), subresource_uris(object), uri(string), usage(string), usage_unit(string)
 - usage_trigger:
   - primary key: sid
-  - fields: account_sid(), api_version(), callback_method(), callback_url(), current_value(), date_created(), date_fired(), date_updated(), friendly_name(), recurring(), sid(), trigger_by(), trigger_value(), uri(), usage_category(), usage_record_uri()
+  - fields: account_sid(string), api_version(string), callback_method(string), callback_url(string), current_value(string), date_created(string), date_fired(string), date_updated(string), friendly_name(string), recurring(string), sid(string), trigger_by(string), trigger_value(string), uri(string), usage_category(string), usage_record_uri(string)
 - usage_triggers:
   - primary key: sid
-  - fields: account_sid(), api_version(), callback_method(), callback_url(), current_value(), date_created(), date_fired(), date_updated(), friendly_name(), recurring(), sid(), trigger_by(), trigger_value(), uri(), usage_category(), usage_record_uri()
+  - fields: account_sid(string), api_version(string), callback_method(string), callback_url(string), current_value(string), date_created(string), date_fired(string), date_updated(string), friendly_name(string), recurring(string), sid(string), trigger_by(string), trigger_value(string), uri(string), usage_category(string), usage_record_uri(string)
 
 ## Sync Modes
 
@@ -379,6 +380,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: creates Twilio account resources in the connected account; approval required
 - create_address:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Addresses.json
+  - required fields: CustomerName, Street, City, Region, PostalCode, IsoCountry
   - risk: creates Twilio address resources in the connected account; approval required
 - delete_address:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json
@@ -401,14 +403,15 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio application resources in the connected account; approval required
 - create_call:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls.json
+  - required fields: To, From
   - risk: creates Twilio call resources in the connected account; approval required
 - create_payments:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments.json
-  - required fields: call_sid
+  - required fields: call_sid, IdempotencyKey, StatusCallback
   - risk: creates Twilio payments resources in the connected account; approval required
 - update_payments:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments/{{ record.sid }}.json
-  - required fields: call_sid, sid
+  - required fields: call_sid, sid, IdempotencyKey, StatusCallback
   - risk: mutates Twilio payments resources in the connected account; approval required
 - create_call_recording:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings.json
@@ -420,7 +423,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio call recording resources in the connected account; approval required
 - update_call_recording:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json
-  - required fields: call_sid, sid
+  - required fields: call_sid, sid, Status
   - risk: mutates Twilio call recording resources in the connected account; approval required
 - create_siprec:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec.json
@@ -428,15 +431,15 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: creates Twilio siprec resources in the connected account; approval required
 - update_siprec:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec/{{ record.sid }}.json
-  - required fields: call_sid, sid
+  - required fields: call_sid, sid, Status
   - risk: mutates Twilio siprec resources in the connected account; approval required
 - create_stream:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams.json
-  - required fields: call_sid
+  - required fields: call_sid, Url
   - risk: creates Twilio stream resources in the connected account; approval required
 - update_stream:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams/{{ record.sid }}.json
-  - required fields: call_sid, sid
+  - required fields: call_sid, sid, Status
   - risk: mutates Twilio stream resources in the connected account; approval required
 - create_realtime_transcription:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions.json
@@ -444,15 +447,15 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: creates Twilio realtime transcription resources in the connected account; approval required
 - update_realtime_transcription:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions/{{ record.sid }}.json
-  - required fields: call_sid, sid
+  - required fields: call_sid, sid, Status
   - risk: mutates Twilio realtime transcription resources in the connected account; approval required
 - create_user_defined_message:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessages.json
-  - required fields: call_sid
+  - required fields: call_sid, Content
   - risk: creates Twilio user defined message resources in the connected account; approval required
 - create_user_defined_message_subscription:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions.json
-  - required fields: call_sid
+  - required fields: call_sid, Callback
   - risk: creates Twilio user defined message subscription resources in the connected account; approval required
 - delete_user_defined_message_subscription:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions/{{ record.sid }}.json
@@ -468,7 +471,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio call resources in the connected account; approval required
 - create_participant:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants.json
-  - required fields: conference_sid
+  - required fields: conference_sid, From, To
   - risk: creates Twilio participant resources in the connected account; approval required
 - delete_participant:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json
@@ -484,7 +487,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio conference recording resources in the connected account; approval required
 - update_conference_recording:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json
-  - required fields: conference_sid, sid
+  - required fields: conference_sid, sid, Status
   - risk: mutates Twilio conference recording resources in the connected account; approval required
 - update_conference:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.sid }}.json
@@ -503,7 +506,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: creates Twilio incoming phone number resources in the connected account; approval required
 - create_incoming_phone_number_assigned_add_on:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns.json
-  - required fields: resource_sid
+  - required fields: resource_sid, InstalledAddOnSid
   - risk: creates Twilio incoming phone number assigned add on resources in the connected account; approval required
 - delete_incoming_phone_number_assigned_add_on:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns/{{ record.sid }}.json
@@ -519,12 +522,15 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio incoming phone number resources in the connected account; approval required
 - create_incoming_phone_number_local:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Local.json
+  - required fields: PhoneNumber
   - risk: creates Twilio incoming phone number local resources in the connected account; approval required
 - create_incoming_phone_number_mobile:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Mobile.json
+  - required fields: PhoneNumber
   - risk: creates Twilio incoming phone number mobile resources in the connected account; approval required
 - create_incoming_phone_number_toll_free:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/TollFree.json
+  - required fields: PhoneNumber
   - risk: creates Twilio incoming phone number toll free resources in the connected account; approval required
 - create_key:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Keys.json
@@ -539,6 +545,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio key resources in the connected account; approval required
 - create_message:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages.json
+  - required fields: To
   - risk: creates Twilio message resources in the connected account; approval required
 - create_message_feedback:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Feedback.json
@@ -558,6 +565,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio message resources in the connected account; approval required
 - create_outgoing_caller_id_validation_request:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds.json
+  - required fields: PhoneNumber
   - risk: creates Twilio validation request resources in the connected account; approval required
 - delete_outgoing_caller_id:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json
@@ -569,10 +577,11 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio outgoing caller id resources in the connected account; approval required
 - create_queue:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues.json
+  - required fields: FriendlyName
   - risk: creates Twilio queue resources in the connected account; approval required
 - update_member:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues/{{ record.queue_sid }}/Members/{{ record.call_sid }}.json
-  - required fields: queue_sid, call_sid
+  - required fields: queue_sid, call_sid, Url
   - risk: mutates Twilio member resources in the connected account; approval required
 - delete_queue:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json
@@ -611,10 +620,11 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio signing key resources in the connected account; approval required
 - create_sip_credential_list:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists.json
+  - required fields: FriendlyName
   - risk: creates Twilio sip credential list resources in the connected account; approval required
 - create_sip_credential:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials.json
-  - required fields: credential_list_sid
+  - required fields: credential_list_sid, Username, Password
   - risk: creates Twilio sip credential resources in the connected account; approval required
 - delete_sip_credential:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json
@@ -630,14 +640,15 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip credential list resources in the connected account; approval required
 - update_sip_credential_list:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json
-  - required fields: sid
+  - required fields: sid, FriendlyName
   - risk: mutates Twilio sip credential list resources in the connected account; approval required
 - create_sip_domain:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains.json
+  - required fields: DomainName
   - risk: creates Twilio sip domain resources in the connected account; approval required
 - create_sip_auth_calls_credential_list_mapping:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings.json
-  - required fields: domain_sid
+  - required fields: domain_sid, CredentialListSid
   - risk: creates Twilio sip auth calls credential list mapping resources in the connected account; approval required
 - delete_sip_auth_calls_credential_list_mapping:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings/{{ record.sid }}.json
@@ -645,7 +656,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip auth calls credential list mapping resources in the connected account; approval required
 - create_sip_auth_calls_ip_access_control_list_mapping:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings.json
-  - required fields: domain_sid
+  - required fields: domain_sid, IpAccessControlListSid
   - risk: creates Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
 - delete_sip_auth_calls_ip_access_control_list_mapping:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings/{{ record.sid }}.json
@@ -653,7 +664,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
 - create_sip_auth_registrations_credential_list_mapping:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings.json
-  - required fields: domain_sid
+  - required fields: domain_sid, CredentialListSid
   - risk: creates Twilio sip auth registrations credential list mapping resources in the connected account; approval required
 - delete_sip_auth_registrations_credential_list_mapping:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings/{{ record.sid }}.json
@@ -661,7 +672,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip auth registrations credential list mapping resources in the connected account; approval required
 - create_sip_credential_list_mapping:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings.json
-  - required fields: domain_sid
+  - required fields: domain_sid, CredentialListSid
   - risk: creates Twilio sip credential list mapping resources in the connected account; approval required
 - delete_sip_credential_list_mapping:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings/{{ record.sid }}.json
@@ -669,7 +680,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip credential list mapping resources in the connected account; approval required
 - create_sip_ip_access_control_list_mapping:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings.json
-  - required fields: domain_sid
+  - required fields: domain_sid, IpAccessControlListSid
   - risk: creates Twilio sip ip access control list mapping resources in the connected account; approval required
 - delete_sip_ip_access_control_list_mapping:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings/{{ record.sid }}.json
@@ -685,10 +696,11 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: mutates Twilio sip domain resources in the connected account; approval required
 - create_sip_ip_access_control_list:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists.json
+  - required fields: FriendlyName
   - risk: creates Twilio sip ip access control list resources in the connected account; approval required
 - create_sip_ip_address:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses.json
-  - required fields: ip_access_control_list_sid
+  - required fields: ip_access_control_list_sid, FriendlyName, IpAddress
   - risk: creates Twilio sip ip address resources in the connected account; approval required
 - delete_sip_ip_address:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json
@@ -704,7 +716,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio sip ip access control list resources in the connected account; approval required
 - update_sip_ip_access_control_list:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json
-  - required fields: sid
+  - required fields: sid, FriendlyName
   - risk: mutates Twilio sip ip access control list resources in the connected account; approval required
 - update_short_code:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/SMS/ShortCodes/{{ record.sid }}.json
@@ -719,6 +731,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
   - risk: deletes Twilio transcription resources in the connected account; approval required
 - create_usage_trigger:
   - endpoint: POST /Accounts/{{ secrets.account_sid }}/Usage/Triggers.json
+  - required fields: CallbackUrl, TriggerValue, UsageCategory
   - risk: creates Twilio usage trigger resources in the connected account; approval required
 - delete_usage_trigger:
   - endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json

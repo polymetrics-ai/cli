@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Orb customers, subscriptions, plans, and invoices.
 
 ICON
+  id: orb
   asset: icons/orb.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -31,25 +32,25 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
   subscriptions:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
   plans:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
   invoices:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

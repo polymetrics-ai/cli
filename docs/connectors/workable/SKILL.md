@@ -11,6 +11,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 
 ## Icon
 
+- id: workable
 - asset: icons/workable.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,7 +29,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 ## Configuration
 
 - account_subdomain
-- base_url
+- base_url (required)
 - candidate_id
 - employee_id
 - event_id
@@ -38,152 +39,154 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 - review_template_id
 - start_date
 - timeoff_from_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - jobs:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - candidates:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - members:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - accounts:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - account:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - collaboration_permissions:
   - primary key: _pm_id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - departments:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - disqualification_reasons:
   - primary key: _pm_id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - legal_entities:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - permission_sets:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - recruiters:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - stages:
   - primary key: slug
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - subscriptions:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - employee_fields:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - employees_orgchart:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - employees:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - employee:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - employee_documents:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - review_templates:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - review_template:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - time_entries:
   - primary key: uuid
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - timeoff_balances:
   - primary key: category_id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - timeoff_categories:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - timeoff_requests:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - work_schedules:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - candidate_activities:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - candidate_files:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - candidate_offer:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - custom_attributes:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - events:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - event:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_activities:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_custom_attributes:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_members:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_questions:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_stages:
   - primary key: slug
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_application_form:
   - primary key: _pm_id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - job_recruiters:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - requisitions:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - requisition:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 - offer:
   - primary key: id
-  - fields: _pm_id(), balances(), candidate_id(), categories(), category_id(), code(), created_at(), email(), employee_id(), files(), from_date(), id(), job(), key(), name(), permissions(), questions(), shortcode(), slug(), starts_at(), state(), title(), type(), updated_at(), uuid()
+  - fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_department:
   - endpoint: POST /departments
+  - required fields: name
   - risk: POST /departments mutates Workable data; approval required
 - update_department:
   - endpoint: PUT /departments
+  - required fields: id
   - risk: PUT /departments mutates Workable data; approval required
 - merge_department:
   - endpoint: POST /departments/{{ record.department_id }}/merge
-  - required fields: department_id
+  - required fields: department_id, target_department_id
   - risk: POST /departments/{{ record.department_id }}/merge mutates Workable data; approval required
 - delete_department:
   - endpoint: DELETE /departments/{{ record.department_id }}?force={{ record.force }}
@@ -191,9 +194,11 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: DELETE /departments/{{ record.department_id }}?force={{ record.force }} mutates Workable data; approval required
 - invite_member:
   - endpoint: POST /members/invite
+  - required fields: email
   - risk: POST /members/invite mutates Workable data; approval required
 - update_member:
   - endpoint: PUT /members
+  - required fields: id
   - risk: PUT /members mutates Workable data; approval required
 - deactivate_member:
   - endpoint: DELETE /members/{{ record.member_id }}
@@ -205,6 +210,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /members/{{ record.member_id }}/enable mutates Workable data; approval required
 - create_subscription:
   - endpoint: POST /subscriptions
+  - required fields: target, event
   - risk: POST /subscriptions mutates Workable data; approval required
 - delete_subscription:
   - endpoint: DELETE /subscriptions/{{ record.subscription_id }}
@@ -219,9 +225,11 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: PATCH /employees/{{ record.employee_id }} mutates Workable data; approval required
 - create_review_template:
   - endpoint: POST /review-cycles/templates
+  - required fields: name
   - risk: POST /review-cycles/templates mutates Workable data; approval required
 - bulk_create_time_entries:
   - endpoint: POST /time-tracking/time-entries
+  - required fields: time_entries
   - risk: POST /time-tracking/time-entries mutates Workable data; approval required
 - create_time_entry:
   - endpoint: POST /time-tracking/employees/{{ record.employee_id }}/time-entries
@@ -237,22 +245,23 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: DELETE /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required
 - decide_timeoff_approval:
   - endpoint: PATCH /timeoff/approvals/{{ record.approval_key }}
-  - required fields: approval_key
+  - required fields: approval_key, state
   - risk: PATCH /timeoff/approvals/{{ record.approval_key }} mutates Workable data; approval required
 - create_timeoff_request:
   - endpoint: POST /timeoff/requests
+  - required fields: from_date
   - risk: POST /timeoff/requests mutates Workable data; approval required
 - update_candidate_custom_attribute:
   - endpoint: PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value
-  - required fields: candidate_id
+  - required fields: candidate_id, custom_attribute_id, value
   - risk: PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value mutates Workable data; approval required
 - comment_on_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/comments
-  - required fields: candidate_id
+  - required fields: candidate_id, comment
   - risk: POST /candidates/{{ record.candidate_id }}/comments mutates Workable data; approval required
 - copy_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/copy
-  - required fields: candidate_id
+  - required fields: candidate_id, member_id, target_job_shortcode, target_stage
   - risk: POST /candidates/{{ record.candidate_id }}/copy mutates Workable data; approval required
 - disqualify_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/disqualify
@@ -260,15 +269,15 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /candidates/{{ record.candidate_id }}/disqualify mutates Workable data; approval required
 - create_job_candidate:
   - endpoint: POST /jobs/{{ record.job_shortcode }}/candidates
-  - required fields: job_shortcode
+  - required fields: job_shortcode, name
   - risk: POST /jobs/{{ record.job_shortcode }}/candidates mutates Workable data; approval required
 - move_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/move
-  - required fields: candidate_id
+  - required fields: candidate_id, target_stage
   - risk: POST /candidates/{{ record.candidate_id }}/move mutates Workable data; approval required
 - relocate_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/relocate
-  - required fields: candidate_id
+  - required fields: candidate_id, target_job_shortcode
   - risk: POST /candidates/{{ record.candidate_id }}/relocate mutates Workable data; approval required
 - revert_candidate_disqualification:
   - endpoint: POST /candidates/{{ record.candidate_id }}/revert
@@ -276,15 +285,15 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /candidates/{{ record.candidate_id }}/revert mutates Workable data; approval required
 - update_candidate_tags:
   - endpoint: PUT /candidates/{{ record.candidate_id }}/tags
-  - required fields: candidate_id
+  - required fields: candidate_id, tags
   - risk: PUT /candidates/{{ record.candidate_id }}/tags mutates Workable data; approval required
 - rate_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/ratings
-  - required fields: candidate_id
+  - required fields: candidate_id, rating
   - risk: POST /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required
 - update_candidate_rating:
   - endpoint: PUT /candidates/{{ record.candidate_id }}/ratings
-  - required fields: candidate_id
+  - required fields: candidate_id, rating
   - risk: PUT /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required
 - update_candidate:
   - endpoint: PATCH /candidates/{{ record.candidate_id }}
@@ -315,7 +324,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: PATCH /requisitions/{{ record.requisition_code }}/reject mutates Workable data; approval required
 - create_talent_pool_candidate:
   - endpoint: POST /talent_pool/{{ record.stage }}/candidates
-  - required fields: stage
+  - required fields: stage, name
   - risk: POST /talent_pool/{{ record.stage }}/candidates mutates Workable data; approval required
 
 ## Security

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Bugsnag organizations, projects, collaborators, errors, events, and releases through the Bugsnag Data Access API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -29,30 +31,30 @@ CONFIGURATION
   organization_id
   page_size
   project_id
-  auth_token (secret)
+  auth_token (secret) (required)
 
 ETL STREAMS
   organizations:
     primary key: id
-    fields: api_key(), auto_upgrade(), collaborators_url(), created_at(), id(), name(), projects_url(), slug(), updated_at()
+    fields: api_key(string), auto_upgrade(boolean), collaborators_url(string), created_at(string), id(string), name(string), projects_url(string), slug(string), updated_at(string)
   projects:
     primary key: id
-    fields: api_key(), collaborators_count(), created_at(), errors_url(), events_url(), for_review_error_count(), html_url(), id(), language(), name(), open_error_count(), organization_id(), slug(), type(), updated_at()
+    fields: api_key(string), collaborators_count(integer), created_at(string), errors_url(string), events_url(string), for_review_error_count(integer), html_url(string), id(string), language(string), name(string), open_error_count(integer), organization_id(string), slug(string), type(string), updated_at(string)
   collaborators:
     primary key: id
-    fields: created_at(), email(), id(), is_admin(), last_request_at(), name(), pending_invitation(), two_factor_enabled()
+    fields: created_at(string), email(string), id(string), is_admin(boolean), last_request_at(string), name(string), pending_invitation(boolean), two_factor_enabled(boolean)
   errors:
     primary key: id
     cursor: last_seen
-    fields: comment_count(), context(), error_class(), events_count(), first_seen(), id(), last_seen(), message(), original_severity(), project_id(), severity(), status(), url()
+    fields: comment_count(integer), context(string), error_class(string), events_count(integer), first_seen(string), id(string), last_seen(string), message(string), original_severity(string), project_id(string), severity(string), status(string), url(string)
   events:
     primary key: id
     cursor: received_at
-    fields: context(), error_id(), id(), is_full_report(), project_id(), received_at(), severity(), unhandled(), url()
+    fields: context(string), error_id(string), id(string), is_full_report(boolean), project_id(string), received_at(string), severity(string), unhandled(boolean), url(string)
   releases:
     primary key: id
     cursor: release_time
-    fields: app_bundle_version(), app_version(), app_version_code(), build_label(), errors_introduced_count(), errors_seen_count(), id(), project_id(), release_group_id(), release_source(), release_stage(), release_time()
+    fields: app_bundle_version(string), app_version(string), app_version_code(string), build_label(string), errors_introduced_count(integer), errors_seen_count(integer), id(string), project_id(string), release_group_id(string), release_source(string), release_stage(string), release_time(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

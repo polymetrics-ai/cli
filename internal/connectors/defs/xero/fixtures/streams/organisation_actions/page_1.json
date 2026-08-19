@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Organisation/Actions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Actions": [
+        {
+          "Name": "name_fixture_1",
+          "Status": "ACTIVE"
+        }
+      ]
+    }
+  }
+}

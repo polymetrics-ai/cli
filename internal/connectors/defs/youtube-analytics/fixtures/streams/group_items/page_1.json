@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/groupItems",
+    "query": {
+      "groupId": "group_fixture_1"
+    }
+  },
+  "read_query": {
+    "groupId": "group_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "youtube#groupItemListResponse",
+      "etag": "etag-group-items-fixture",
+      "items": [
+        {
+          "kind": "youtube#groupItem",
+          "etag": "etag-group-item-fixture-1",
+          "id": "group_item_fixture_1",
+          "groupId": "group_fixture_1",
+          "resource": {
+            "kind": "youtube#video",
+            "id": "video_fixture_1"
+          }
+        }
+      ]
+    }
+  }
+}

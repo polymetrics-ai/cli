@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "phase": "github-certification-candidate-generation-perishable-r1",
+  "status": "complete",
+  "execution_mode": "inline_manual_gsd",
+  "target_connector": "github",
+  "excluded_concurrent_path": "cmd/connectorgen/certificationevidence.go",
+  "scope": {
+    "generated_direct_reads": 97,
+    "deferred_trial_reverse_etl": 95,
+    "declared_trial_total": 192
+  }
+}

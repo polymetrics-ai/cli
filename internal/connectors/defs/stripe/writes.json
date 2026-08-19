@@ -11,11 +11,24 @@
         "type": "object",
         "minProperties": 1,
         "properties": {
-          "email": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "phone": { "type": "string" }
-        }
+          "email": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "description": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          }
+        },
+        "additionalProperties": false
       },
       "risk": "external mutation; approval required"
     },
@@ -24,21 +37,79 @@
       "kind": "update",
       "method": "POST",
       "path": "/customers/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "email": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "phone": { "type": "string" }
-        }
+          "id": {
+            "type": "string",
+            "pattern": "^cus_[A-Za-z0-9_]+$",
+            "description": "Stripe customer ID (cus_...) to update or delete."
+          },
+          "email": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "description": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^[\\s\\S]+$"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 2
       },
       "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stripe customer ID (cus_...) to update or delete.",
+            "pattern": "^cus_[A-Za-z0-9_]+$"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "destructive external mutation; deletes a Stripe customer; reverse ETL approval and typed destructive confirmation required",
+      "confirm": "destructive"
     }
   ]
 }

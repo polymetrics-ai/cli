@@ -1,0 +1,345 @@
+{
+  "operations": [
+    {
+      "id": "notion.retrieve_async_task",
+      "kind": "rest_read",
+      "summary": "Retrieve an async task",
+      "description": "Bounded Notion read for GET /v1/async_tasks/{task_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-async-task",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/async_tasks/{task_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_block",
+      "kind": "rest_read",
+      "summary": "Retrieve a block",
+      "description": "Bounded Notion read for GET /v1/blocks/{block_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-a-block",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_block_children",
+      "kind": "rest_read",
+      "summary": "Retrieve block children",
+      "description": "Bounded Notion read for GET /v1/blocks/{block_id}/children.",
+      "source_url": "https://developers.notion.com/reference/get-block-children",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}/children",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.list_comments",
+      "kind": "rest_read",
+      "summary": "List comments",
+      "description": "Bounded Notion read for GET /v1/comments.",
+      "source_url": "https://developers.notion.com/reference/list-comments",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_comment",
+      "kind": "rest_read",
+      "summary": "Retrieve a comment",
+      "description": "Bounded Notion read for GET /v1/comments/{comment_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-comment",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/comments/{comment_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_data_source",
+      "kind": "rest_read",
+      "summary": "Retrieve a data source",
+      "description": "Bounded Notion read for GET /v1/data_sources/{data_source_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-a-data-source",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.list_data_source_templates",
+      "kind": "rest_read",
+      "summary": "List templates in a data source",
+      "description": "Bounded Notion read for GET /v1/data_sources/{data_source_id}/templates.",
+      "source_url": "https://developers.notion.com/reference/list-data-source-templates",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}/templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_database",
+      "kind": "rest_read",
+      "summary": "Retrieve a database",
+      "description": "Bounded Notion read for GET /v1/databases/{database_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-database",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/databases/{database_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_file_upload",
+      "kind": "rest_read",
+      "summary": "Retrieve a file upload",
+      "description": "Bounded Notion read for GET /v1/file_uploads/{file_upload_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-file-upload",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/file_uploads/{file_upload_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_page",
+      "kind": "rest_read",
+      "summary": "Retrieve a page",
+      "description": "Bounded Notion read for GET /v1/pages/{page_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-a-page",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_page_markdown",
+      "kind": "rest_read",
+      "summary": "Retrieve a page as markdown",
+      "description": "Bounded Notion read for GET /v1/pages/{page_id}/markdown.",
+      "source_url": "https://developers.notion.com/reference/retrieve-page-markdown",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/markdown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_page_property",
+      "kind": "rest_read",
+      "summary": "Retrieve a page property item",
+      "description": "Bounded Notion read for GET /v1/pages/{page_id}/properties/{property_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-a-page-property",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/properties/{property_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_bot_user",
+      "kind": "rest_read",
+      "summary": "Retrieve your token's bot user",
+      "description": "Bounded Notion read for GET /v1/users/me.",
+      "source_url": "https://developers.notion.com/reference/get-self",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/me",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_user",
+      "kind": "rest_read",
+      "summary": "Retrieve a user",
+      "description": "Bounded Notion read for GET /v1/users/{user_id}.",
+      "source_url": "https://developers.notion.com/reference/get-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/{user_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_view",
+      "kind": "rest_read",
+      "summary": "Retrieve a view",
+      "description": "Bounded Notion read for GET /v1/views/{view_id}.",
+      "source_url": "https://developers.notion.com/reference/retrieve-a-view",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/views/{view_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.retrieve_view_query_results",
+      "kind": "rest_read",
+      "summary": "Get view query results",
+      "description": "Bounded Notion read for GET /v1/views/{view_id}/queries/{query_id}.",
+      "source_url": "https://developers.notion.com/reference/get-view-query-results",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/views/{view_id}/queries/{query_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "notion.query_data_source",
+      "kind": "rest_read",
+      "summary": "Query a data source",
+      "description": "Bounded Notion read for POST /v1/data_sources/{data_source_id}/query.",
+      "source_url": "https://developers.notion.com/reference/post-database-query",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/data_sources/{data_source_id}/query",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "sorts": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "filter": {
+              "type": "object"
+            },
+            "start_cursor": {
+              "type": "string"
+            },
+            "page_size": {
+              "type": "number"
+            },
+            "is_archived": {
+              "type": "boolean",
+              "description": "Whether to return archived pages. When omitted or false, returns non-archived pages. When true, returns archived pages."
+            },
+            "result_type": {
+              "type": "string",
+              "description": "Optionally filter the results to only include pages or data sources. Regular, non-wiki databases only support page children. The default behavior is no result type filtering, in other words, returning both pages and data sources for wikis.",
+              "enum": [
+                "page",
+                "data_source"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "notion.query_meeting_notes",
+      "kind": "rest_read",
+      "summary": "Query meeting notes",
+      "description": "Bounded Notion read for POST /v1/blocks/meeting_notes/query.",
+      "source_url": "https://developers.notion.com/reference/query-meeting-notes",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes/query",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "object",
+              "description": "Optional filter for querying meeting notes. Supports combinator (and/or) and property filters on title, attendees, created_time, created_by, last_edited_time, last_edited_by."
+            },
+            "sort": {
+              "type": "array",
+              "description": "Optional sort order for the results. Each entry specifies a property name and direction.",
+              "items": {
+                "type": "object"
+              }
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of results to return. Defaults to 50."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "notion.send_file_upload",
+      "kind": "file_upload",
+      "summary": "Upload a file",
+      "description": "Bounded Notion multipart upload for POST /v1/file_uploads/{file_upload_id}/send. Execution is blocked until the shared file upload runner can bind provider paths to approved payload digests.",
+      "source_url": "https://developers.notion.com/reference/upload-file",
+      "risk": "high",
+      "approval": "file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "output_policy": "file_manifest",
+      "mutation_class": "create",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 20971520
+      }
+    }
+  ]
+}

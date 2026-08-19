@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/line_items/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "invoiced",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

@@ -11,6 +11,7 @@ import (
 	"polymetrics.ai/internal/app"
 	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type CompareRequest struct {
@@ -65,7 +66,7 @@ func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 	comparison := Comparison{
 		DependencyFree: free,
 		Explanation: map[string]string{
-			"dependency_free": "Uses local JSON state, AES-GCM file vault, JSONL warehouse/outbox, and in-process ETL/reverse ETL. It has no database, cache, or workflow server requirement.",
+			"dependency_free": "Uses local JSON state, AES-GCM file vault, an embedded DuckDB engine over Parquet warehouse tables, a JSONL outbox, and in-process ETL/reverse ETL. It has no database, cache, or workflow server requirement.",
 			"runtime_backed":  "Uses the same local ETL path plus external runtime checks, Dragonfly lease coordination, and PostgreSQL run-ledger writes. Temporal is health-checked as the durable workflow target.",
 		},
 	}
@@ -94,23 +95,16 @@ func CompareSyncModes(ctx context.Context, req SyncModeBenchmarkRequest) (SyncMo
 	if req.Records <= 0 {
 		req.Records = 1000
 	}
-	modes := []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"incremental_append",
-		"incremental_append_deduped",
-	}
+	modes := synccontract.MaterializingPublicModeNames()
 	results := make([]SyncModeBenchmarkResult, 0, len(modes))
 	for _, mode := range modes {
 		result := runSyncModeBenchmark(ctx, mode, req.Records)
 		results = append(results, result)
 	}
 	return SyncModeBenchmark{
-		Records: req.Records,
-		Results: results,
-		Explanation: "Synthetic dependency-free benchmark using local JSONL file source and local JSONL warehouse destination. " +
-			"Deduped modes include raw history and final materialization cost.",
+		Records:     req.Records,
+		Results:     results,
+		Explanation: "Synthetic dependency-free benchmark using a local JSONL file source and the local Parquet warehouse destination for modes that materialize without a closed transport.",
 	}, nil
 }
 
@@ -172,7 +166,7 @@ func runFileToWarehouse(ctx context.Context, root, mode string, records int) (in
 	return run.RecordsLoaded, nil
 }
 
-func writeSyntheticSource(path string, records int) error {
+func writeSyntheticSource(path string, records int) (returnErr error) {
 	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}
@@ -180,7 +174,11 @@ func writeSyntheticSource(path string, records int) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil && returnErr == nil {
+			returnErr = fmt.Errorf("close synthetic source: %w", err)
+		}
+	}()
 	encoder := json.NewEncoder(file)
 	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	for i := 0; i < records; i++ {
@@ -207,11 +205,15 @@ func runDependencyFree(ctx context.Context, iterations int) (Result, error) {
 	return summarize("dependency-free", iterations, records, duration), nil
 }
 
-func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Config) (Result, error) {
+func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Config) (result Result, returnErr error) {
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-perf-runtime-%d", time.Now().UnixNano()))
 	start := time.Now()
 	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
-	defer dragonfly.Close()
+	defer func() {
+		if err := dragonfly.Close(); err != nil && returnErr == nil {
+			returnErr = fmt.Errorf("close dragonfly lease store: %w", err)
+		}
+	}()
 	if err := dragonfly.Ping(ctx); err != nil {
 		return Result{Mode: "runtime-backed", Iterations: iterations}, err
 	}
@@ -228,7 +230,7 @@ func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Conf
 		return Result{Mode: "runtime-backed", Iterations: iterations}, err
 	}
 	duration := time.Since(start)
-	result := summarize("runtime-backed", iterations, records, duration)
+	result = summarize("runtime-backed", iterations, records, duration)
 	module := pmruntime.Module{Leases: dragonfly, Ledger: pg}
 	if err := module.RecordRunWithLease(ctx, pmruntime.LeaseRequest{Key: fmt.Sprintf("polymetrics:perf:%d", time.Now().UnixNano()), Value: "running", TTL: 30 * time.Second}, pmruntime.RunRecord{
 		ID:             fmt.Sprintf("perf_%d", time.Now().UnixNano()),

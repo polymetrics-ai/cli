@@ -1,0 +1,29 @@
+{
+  "record": {
+    "goal_relationship_gid": "fixture-goal-relationship-gid",
+    "data": {
+      "contribution_weight": 1,
+      "supported_goal": {
+        "name": "fixture-name"
+      },
+      "supporting_resource": {
+        "name": "fixture-name"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/goal_relationships/fixture-goal-relationship-gid",
+    "body": {
+      "data": {
+        "contribution_weight": 1,
+        "supported_goal": {
+          "name": "fixture-name"
+        },
+        "supporting_resource": {
+          "name": "fixture-name"
+        }
+      }
+    }
+  }
+}

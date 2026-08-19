@@ -36,6 +36,15 @@ type GuideProvider interface {
 	Guide() ConnectorGuide
 }
 
+// DynamicPollingWatermarkProvider marks a native connector whose effective
+// polling declaration is bound from a live catalog. Its static bundle may
+// remain planned when it cannot truthfully name a fixed cursor or tie-breaker;
+// inspection must not then claim that no polling behavior exists at all.
+// Runtime execution still goes through PollingPreflight for every stream.
+type DynamicPollingWatermarkProvider interface {
+	HasDynamicPollingWatermark() bool
+}
+
 func GuideOf(c Connector) ConnectorGuide {
 	manifest := ManifestOf(c)
 	var guide ConnectorGuide
@@ -47,6 +56,8 @@ func GuideOf(c Connector) ConnectorGuide {
 	if provider, ok := c.(CommandSurfaceProvider); ok {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
+	guide = guideWithSyncTransport(guide, c)
+	guide = guideWithPollingWatermark(guide, c)
 	return guideWithIcon(guide, manifest)
 }
 
@@ -70,6 +81,69 @@ func guideWithCommandSurface(guide ConnectorGuide, surface *CommandSurface) Conn
 		}
 	}
 	guide.Sections = append(guide.Sections, commandSurfaceSection(surface))
+	return guide
+}
+
+// guideWithSyncTransport projects only an authored closed transport descriptor.
+// A missing descriptor stays absent from the human manual; JSON inspection
+// still reports both roles as unsupported. This avoids representing ordinary
+// read/write capabilities as a transport declaration.
+func guideWithSyncTransport(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	if _, declared := SyncTransportDescriptorOf(connector); !declared {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "sync transport") {
+			return guide
+		}
+	}
+	eligibility := SyncTransportEligibilityOf(connector)
+	lines := []string{
+		"Source transport: " + eligibility.Source.Status,
+		"Destination transport: " + eligibility.Destination.Status,
+		"A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.",
+	}
+	if eligibility.Source.Executor != nil {
+		lines = append(lines, "Source executor: "+string(eligibility.Source.Executor.Family)+"/"+eligibility.Source.Executor.ID)
+	}
+	if eligibility.Destination.Executor != nil {
+		lines = append(lines, "Destination executor: "+string(eligibility.Destination.Executor.Family)+"/"+eligibility.Destination.Executor.ID)
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Sync Transport", Lines: lines})
+	return guide
+}
+
+// guideWithPollingWatermark exposes only declaration status. Mode execution is
+// intentionally not inferred here: the real preflight also needs the selected
+// catalog object and destination binding, neither of which inspection reads.
+func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	definition, ok := DefinitionOf(connector)
+	if !ok || definition.PollingWatermark == nil {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "polling watermark") {
+			return guide
+		}
+	}
+	declaration := definition.PollingWatermark
+	lines := []string{
+		"Static declaration status: " + string(declaration.Status),
+		"Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.",
+	}
+	dynamic, _ := connector.(DynamicPollingWatermarkProvider)
+	if dynamic != nil && dynamic.HasDynamicPollingWatermark() {
+		lines = append(lines, "Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and immutable conformance evidence.")
+	} else {
+		lines = append(lines, "Runtime eligibility: a static declaration alone does not implement a polling mode. Every requested mode requires runtime preflight for its selected catalog object, destination binding, registered native executors, and immutable conformance evidence.")
+	}
+	if declaration.Reason != "" {
+		lines = append(lines, "Reason: "+declaration.Reason)
+	}
+	if declaration.Status != PollingWatermarkStatusImplemented && (dynamic == nil || !dynamic.HasDynamicPollingWatermark()) {
+		lines = append(lines, "No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.")
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Polling Watermark", Lines: lines})
 	return guide
 }
 
@@ -162,6 +236,35 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	return strings.Join(parts, ": ")
 }
 
+// commandSurfaceRenderedFlags returns the flags a command actually accepts.
+//
+// A binary_download command also accepts the runtime's destination flags, one
+// of which is required. They are declared in no bundle, so a renderer showing
+// only the bundle's own flags documents a command that cannot be run as
+// written. A flag the bundle already declares is never repeated.
+func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag {
+	var runtimeFlags []CommandSurfaceFlag
+	switch cmd.Intent {
+	case "binary_download":
+		runtimeFlags = BinaryDownloadFlags()
+	case "direct_read":
+		runtimeFlags = DirectReadPageFlags()
+	default:
+		return cmd.Flags
+	}
+	declared := make(map[string]bool, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		declared[flag.Name] = true
+	}
+	rendered := append([]CommandSurfaceFlag(nil), cmd.Flags...)
+	for _, flag := range runtimeFlags {
+		if !declared[flag.Name] {
+			rendered = append(rendered, flag)
+		}
+	}
+	return rendered
+}
+
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	line := cmd.Path
 	if cmd.Summary != "" {
@@ -180,6 +283,9 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Write != "" {
 		meta = append(meta, "write="+cmd.Write)
 	}
+	if cmd.Operation != "" {
+		meta = append(meta, "operation="+cmd.Operation)
+	}
 	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
 		meta = append(meta, "unsupported local workflow")
 	}
@@ -195,10 +301,15 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Notes != "" {
 		line += "; notes: " + cmd.Notes
 	}
-	if len(cmd.Flags) > 0 {
-		flags := make([]string, 0, len(cmd.Flags))
-		for _, flag := range cmd.Flags {
-			flags = append(flags, "--"+strings.TrimLeft(flag.Name, "-"))
+	rendered := commandSurfaceRenderedFlags(cmd)
+	if len(rendered) > 0 {
+		flags := make([]string, 0, len(rendered))
+		for _, flag := range rendered {
+			name := "--" + strings.TrimLeft(flag.Name, "-")
+			if flag.Required {
+				name += " (required)"
+			}
+			flags = append(flags, name)
 		}
 		line += "; flags: " + strings.Join(flags, ", ")
 	}
@@ -269,11 +380,11 @@ func ValidateConnectorGuide(c Connector) error {
 func RenderGuideManual(guide ConnectorGuide) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName)
 	b.WriteString("SYNOPSIS\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s --json\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s --json\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name)
 	b.WriteString("DESCRIPTION\n")
 	for _, line := range splitParagraphs(guide.Summary) {
 		b.WriteString("  " + line + "\n")
@@ -319,7 +430,7 @@ func RenderGuideManual(guide ConnectorGuide) string {
 	if len(guide.Links) > 0 {
 		b.WriteString("SEE ALSO\n")
 		for _, link := range guide.Links {
-			b.WriteString(fmt.Sprintf("  %s: %s\n", link.Label, link.URL))
+			_, _ = fmt.Fprintf(&b, "  %s: %s\n", link.Label, link.URL)
 		}
 		b.WriteString("\n")
 	}
@@ -419,12 +530,34 @@ func iconSection(manifest Manifest) GuideSection {
 		return GuideSection{Title: "Icon", Lines: []string{"No icon metadata is registered for this connector."}}
 	}
 	lines := []string{
+		"id: " + icon.ID,
 		"asset: " + icon.Path,
-		"source: " + icon.Source,
-		"review_status: " + icon.ReviewStatus,
 	}
+	if icon.Title != "" {
+		lines = append(lines, "title: "+icon.Title)
+	}
+	if icon.SimpleIconSlug != "" {
+		lines = append(lines, "simple_icon_slug: "+icon.SimpleIconSlug)
+	}
+	if icon.SimpleIconHex != "" {
+		lines = append(lines, "simple_icon_hex: "+icon.SimpleIconHex)
+	}
+	lines = append(lines, "source: "+icon.Source)
+	if icon.License != "" {
+		lines = append(lines, "license: "+icon.License)
+	}
+	if icon.Attribution != "" {
+		lines = append(lines, "attribution: "+icon.Attribution)
+	}
+	lines = append(lines, "review_status: "+icon.ReviewStatus)
 	if icon.ReviewURL != "" {
 		lines = append(lines, "review_url: "+icon.ReviewURL)
+	}
+	if icon.Match != "" {
+		lines = append(lines, "match: "+icon.Match)
+	}
+	if icon.MatchedBy != "" {
+		lines = append(lines, "matched_by: "+icon.MatchedBy)
 	}
 	return GuideSection{Title: "Icon", Lines: lines}
 }
@@ -469,6 +602,8 @@ func configSection(manifest Manifest) GuideSection {
 		line := field.Name + " (secret)"
 		if field.Required {
 			line += " (required)"
+		} else if field.RequiredWhen != "" {
+			line += " (required when " + field.RequiredWhen + ")"
 		}
 		if field.Description != "" {
 			line += ": " + field.Description
@@ -530,6 +665,12 @@ func syncModeSection(manifest Manifest) GuideSection {
 	return GuideSection{Title: "Sync Modes", Lines: lines}
 }
 
+// writeActionSection renders one line per required/optional field set,
+// including the either/or constraint ("A, or B together with C") that
+// Manifest.RequiredFields cannot express on its own. That shape is carried by
+// RequiredAnyFields — amazon-sqs set_queue_attributes and tag_queue are the
+// connectors that declare it — so `pm docs generate --dir docs/cli` reproduces
+// their committed MANUAL.md/SKILL.md and stays idempotent.
 func writeActionSection(manifest Manifest) GuideSection {
 	if len(manifest.WriteActions) == 0 {
 		return GuideSection{}
@@ -540,8 +681,8 @@ func writeActionSection(manifest Manifest) GuideSection {
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}
-		if len(action.RequiredFields) > 0 {
-			lines = append(lines, "  required fields: "+strings.Join(action.RequiredFields, ", "))
+		if required := requiredFieldsLine(action); required != "" {
+			lines = append(lines, "  required fields: "+required)
 		}
 		if len(action.OptionalFields) > 0 {
 			lines = append(lines, "  optional fields: "+strings.Join(action.OptionalFields, ", "))
@@ -549,8 +690,27 @@ func writeActionSection(manifest Manifest) GuideSection {
 		if action.Risk != "" {
 			lines = append(lines, "  risk: "+action.Risk)
 		}
+		// Only non-batchable actions render a line, so connectors that never
+		// declare the field keep byte-identical help and generated docs.
+		if !action.IsBatchable() {
+			lines = append(lines, "  bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)")
+		}
 	}
 	return GuideSection{Title: "Reverse ETL Actions", Lines: lines}
+}
+
+// requiredFieldsLine renders the full required-field contract: the always-required
+// names first, then each either/or group as "a + b", joined by " or ".
+func requiredFieldsLine(action WriteActionSpec) string {
+	parts := append([]string(nil), action.RequiredFields...)
+	if len(action.RequiredAnyFields) > 0 {
+		groups := make([]string, 0, len(action.RequiredAnyFields))
+		for _, group := range action.RequiredAnyFields {
+			groups = append(groups, strings.Join(group, " + "))
+		}
+		parts = append(parts, strings.Join(groups, " or "))
+	}
+	return strings.Join(parts, ", ")
 }
 
 func paginationSection(manifest Manifest) GuideSection {
@@ -604,11 +764,11 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 		)
 	case "github":
 		examples = append(examples,
-			GuideExample{Title: "Public repository credential", Command: "pm credentials add github-public --connector github --config repository=octocat/Hello-World"},
-			GuideExample{Title: "Token credential", Command: "export GITHUB_TOKEN=...\npm credentials add github-token --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN"},
-			GuideExample{Title: "GitHub App credential", Command: "pm credentials add github-app --connector github --config repository=OWNER/REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem"},
+			GuideExample{Title: "Public repository credential", Command: "pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config public_access=true"},
+			GuideExample{Title: "Token credential", Command: "export GITHUB_TOKEN=...\npm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN"},
+			GuideExample{Title: "GitHub App credential", Command: "pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem"},
 			GuideExample{Title: "Pull request ETL", Command: "pm connections create github_prs_to_warehouse --source github:github-token --destination warehouse:warehouse-local --stream pull_requests --primary-key node_id --cursor updated_at --table github_pull_requests\npm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-size 100 --json"},
-			GuideExample{Title: "Approved pull request creation", Command: "pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers\npm reverse preview <plan-id> --json\npm reverse run <plan-id> --approve <approval-token> --json"},
+			GuideExample{Title: "Approved pull request creation", Command: "pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers\npm reverse preview <plan-id> --json\npm reverse run <plan-id> --approval-token-stdin --json"},
 		)
 	case "sample":
 		examples = append(examples, GuideExample{Title: "Sample ETL", Command: "pm credentials add sample-local --connector sample\npm connections create sample_to_warehouse --source sample:sample-local --destination warehouse:warehouse-local --stream customers --primary-key id --cursor updated_at --table sample_customers\npm etl run --connection sample_to_warehouse --stream customers --json"})
@@ -617,7 +777,7 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 	case "warehouse":
 		examples = append(examples, GuideExample{Title: "Warehouse credential", Command: "pm credentials add warehouse-local --connector warehouse --config path=$ROOT/.polymetrics/warehouse\npm query run --table sample_customers --limit 5 --json"})
 	case "outbox":
-		examples = append(examples, GuideExample{Title: "Outbox reverse ETL", Command: "pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox\npm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email\npm reverse run <plan-id> --approve <approval-token> --json"})
+		examples = append(examples, GuideExample{Title: "Outbox reverse ETL", Command: "pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox\npm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email\npm reverse run <plan-id> --approval-token-stdin --json"})
 	}
 	return examples
 }

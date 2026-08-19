@@ -11,6 +11,7 @@ Reads tweets and their authors matching a search query from the Twitter (X) API 
 
 ## Icon
 
+- id: twitter
 - asset: icons/twitter.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,7 +33,7 @@ Reads tweets and their authors matching a search query from the Twitter (X) API 
 - max_pages
 - mode
 - page_size
-- query
+- query (required)
 - start_date
 - api_key (secret)
 
@@ -41,10 +42,10 @@ Reads tweets and their authors matching a search query from the Twitter (X) API 
 - tweets:
   - primary key: id
   - cursor: created_at
-  - fields: author_id(), conversation_id(), created_at(), id(), in_reply_to_user_id(), lang(), possibly_sensitive(), public_metrics(), source(), text()
+  - fields: author_id(string), conversation_id(string), created_at(string), id(string), in_reply_to_user_id(string), lang(string), possibly_sensitive(boolean), public_metrics(object), source(string), text(string)
 - authors:
   - primary key: id
-  - fields: created_at(), description(), id(), location(), name(), protected(), public_metrics(), url(), username(), verified()
+  - fields: created_at(string), description(string), id(string), location(string), name(string), protected(boolean), public_metrics(object), url(string), username(string), verified(boolean)
 
 ## Sync Modes
 

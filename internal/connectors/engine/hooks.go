@@ -2,6 +2,8 @@ package engine
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"sync"
 
 	"polymetrics.ai/internal/connectors"
@@ -15,9 +17,12 @@ import (
 // fields below are the minimal shape those fakes and future wave callers
 // need.
 type Runtime struct {
-	Requester *connsdk.Requester
-	Bundle    *Bundle
-	Config    connectors.RuntimeConfig
+	Requester     *connsdk.Requester
+	baseRequester *connsdk.Requester
+	Bundle        *Bundle
+	Config        connectors.RuntimeConfig
+	rateLimits    *rateLimitResolver
+	budget        connsdk.BudgetCoordinator
 }
 
 // Hooks is the base interface every hook set implements. A concrete hook set
@@ -33,6 +38,132 @@ type Hooks interface {
 // "custom" (e.g. GitHub App JWT->installation-token exchange, AWS SigV4).
 type AuthHook interface {
 	Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec) (connsdk.Authenticator, error)
+}
+
+// DeclaredRouteRequest describes the one JSON request an AuthHook needs to
+// make through the engine. DeclaredPath is the connector declaration; Path is
+// the hook's already-interpolated provider path. It deliberately has no
+// coordinator, URL, query, raw transport, or generic request-writer escape
+// hatch.
+type DeclaredRouteRequest struct {
+	Method       string
+	DeclaredPath string
+	Path         string
+	Headers      map[string]string
+	Body         any
+}
+
+// DeclaredRouteRequester permits a custom AuthHook to make one
+// declaration-aware JSON request. The engine owns its implementation so every
+// request enters the same admission and observation lifecycle as declarative
+// traffic.
+type DeclaredRouteRequester interface {
+	DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error)
+}
+
+// DeclaredRouteAuthHook is the optional custom-auth extension for hooks that
+// need a provider request during authenticator construction. AuthHook remains
+// compatible for hooks that derive an authenticator locally.
+type DeclaredRouteAuthHook interface {
+	AuthHook
+	AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, requester DeclaredRouteRequester) (connsdk.Authenticator, error)
+}
+
+// RateLimitAuthProfileHook reports the declared non-secret rate-limit profile
+// for a matched authentication spec. The engine asks before constructing the
+// authenticator, so network-capable custom auth is admitted before its own
+// request.
+type RateLimitAuthProfileHook interface {
+	RateLimitAuthProfile(cfg connectors.RuntimeConfig, spec AuthSpec) (string, bool)
+}
+
+type declaredRouteRequester struct {
+	runtime *Runtime
+}
+
+// DoJSON resolves a declaration before materializing the physical request.
+// Header values are copied into a requester clone and never retained by the
+// runtime, resolver, or coordinator. The actual path is intentionally passed
+// to connsdk.Requester.Do: endpoint policy admission happens at that physical
+// send boundary, including after the #3754 resolved-path change. Automatic
+// retries are disabled so a token exchange does not repeat a quota call.
+func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error) {
+	if r.runtime == nil {
+		return nil, fmt.Errorf("auth declared route requester is unavailable")
+	}
+	method := strings.ToUpper(strings.TrimSpace(request.Method))
+	declaredPath := strings.TrimSpace(request.DeclaredPath)
+	path := strings.TrimSpace(request.Path)
+	if method == "" || !strings.HasPrefix(declaredPath, "/") {
+		return nil, fmt.Errorf("auth declared route request requires a method and declaration path")
+	}
+	if !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {
+		return nil, fmt.Errorf("auth declared route request requires a relative absolute path")
+	}
+	requester, err := r.runtime.RequesterFor(method, declaredPath)
+	if err != nil {
+		return nil, err
+	}
+	clone := *requester
+	headers := make(map[string]string, len(requester.DefaultHeaders)+len(request.Headers))
+	for key, value := range requester.DefaultHeaders {
+		headers[key] = value
+	}
+	for key, value := range request.Headers {
+		headers[key] = value
+	}
+	clone.DefaultHeaders = headers
+	clone.DisableRetries = true
+
+	lease, err := r.runtime.reserveDeclaredRouteBudget(ctx, method, path)
+	if err != nil {
+		return nil, err
+	}
+	response, requestErr := clone.Do(ctx, method, path, nil, request.Body)
+	if lease == "" {
+		return response, requestErr
+	}
+	// A provider attempt may complete at the same moment its caller cancels.
+	// Completion must still reach the lease owner so an admitted token request
+	// cannot strand an in-flight reservation. The observation is deliberately
+	// limited to the safe requester's vocabulary and contains no provider body,
+	// headers, route, or auth material.
+	finishErr := r.runtime.budget.Finish(context.WithoutCancel(ctx), lease, connsdk.CompletionObservation{Attempted: true})
+	if requestErr != nil {
+		return nil, requestErr
+	}
+	if finishErr != nil {
+		return nil, fmt.Errorf("auth declared route budget completion: %w", finishErr)
+	}
+	return response, nil
+}
+
+// reserveDeclaredRouteBudget derives an opaque batch only after the auth hook
+// has named its own declared request. It owns the one Decide call for an
+// eventual physical auth send; a non-grant has no lease and therefore no
+// Finish call.
+func (rt *Runtime) reserveDeclaredRouteBudget(ctx context.Context, method, path string) (connsdk.RateBudgetLease, error) {
+	if rt == nil || rt.budget == nil || rt.rateLimits == nil {
+		return "", nil
+	}
+	batch, err := rt.rateLimits.reservationBatch(ctx, method, path)
+	if err != nil {
+		return "", err
+	}
+	if len(batch.Policies) == 0 {
+		return "", nil
+	}
+	decision, err := rt.budget.Decide(ctx, batch)
+	if err != nil {
+		return "", fmt.Errorf("auth declared route budget decision: %w", err)
+	}
+	if !decision.Granted || decision.Lease == "" {
+		return "", &connsdk.RateBudgetRefusalError{
+			Code:   connsdk.RateBudgetRefusalReservationDenied,
+			Reason: "lifecycle coordinator did not grant a lease",
+		}
+	}
+	return decision.Lease, nil
 }
 
 // RecordHook post-processes a single record beyond the declarative
@@ -56,6 +187,24 @@ type StreamHook interface {
 // handled=false tells the engine to fall back to the declarative write path.
 type WriteHook interface {
 	ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (handled bool, err error)
+}
+
+type WriteHookClassifier interface {
+	HandlesWriteAction(action WriteAction) bool
+}
+
+// WriteRecordHook pins the body constants an action's own name implies onto the
+// record, before the declarative body is built. handled=false tells the engine
+// the action is untouched.
+//
+// It exists because a WriteHook that overrides execution cannot be destructive:
+// prepareDeclarativeWrite refuses to prepare a destructive hook-executed action,
+// since the preview an operator approves would not be the request that runs.
+// Mapping the record instead keeps the declarative path — preview and execution
+// build the same body from the same record — so an action that only needs a
+// fixed body field can still carry a typed confirmation.
+type WriteRecordHook interface {
+	MapWriteRecord(action WriteAction, rec connectors.Record) (connectors.Record, bool, error)
 }
 
 // CheckHook overrides the connector's Check(). handled=false tells the

@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"strings"
@@ -121,6 +122,28 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Fatalf("InterpolatePath(%q) = %q, want %q", tt.template, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInterpolatePathPreservesIntegerIDsWithoutScientificNotation(t *testing.T) {
+	tests := []struct {
+		name string
+		id   any
+		want string
+	}{
+		{name: "exact integer beyond float precision", id: json.Number("9007199254740993"), want: "/hooks/9007199254740993"},
+		{name: "legacy integral float", id: float64(667233046), want: "/hooks/667233046"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := InterpolatePath("/hooks/{{ record.id }}", Vars{Record: map[string]any{"id": tt.id}})
+			if err != nil {
+				t.Fatalf("InterpolatePath integer ID: %v", err)
+			}
+			if got != tt.want {
+				t.Fatalf("InterpolatePath integer ID = %q, want %q", got, tt.want)
 			}
 		})
 	}
@@ -651,6 +674,58 @@ func TestResolveCheckAcceptsFanoutIDReference(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "idx") {
 		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
+func TestResolveCheckRequestPathRejectsUnboundLiteralPlaceholder(t *testing.T) {
+	specKeys := map[string]bool{"base_url": true, "conversationid": true}
+
+	// The regression: ResolveCheck matches {{ }} only, so this validated
+	// clean and the engine then sent the braces to the wire verbatim.
+	if err := ResolveCheck("/conversations/{conversationId}/threads", specKeys); err != nil {
+		t.Fatalf("ResolveCheck unexpectedly rejected a bare placeholder: %v", err)
+	}
+	err := ResolveCheckRequestPath("stream \"threads\" path", "/conversations/{conversationId}/threads", specKeys)
+	if err == nil {
+		t.Fatal("ResolveCheckRequestPath accepted an unbound single-brace placeholder")
+	}
+	if !strings.Contains(err.Error(), "{conversationId}") {
+		t.Fatalf("error %q does not name the offending placeholder", err.Error())
+	}
+	if !strings.Contains(err.Error(), "stream \"threads\" path") {
+		t.Fatalf("error %q does not name the offending field", err.Error())
+	}
+}
+
+func TestResolveCheckRequestPathAcceptsInterpolatedPaths(t *testing.T) {
+	specKeys := map[string]bool{"base_url": true, "conversationid": true, "company_id": true}
+
+	cases := []string{
+		"/conversations/{{ config.conversationid }}/threads",
+		"/v2/company/{{ config.company_id }}/locations",
+		"/projects/{{ fanout.id }}/tasks",
+		"{{ config.base_url }}",
+		"/widgets",
+	}
+	for _, tc := range cases {
+		if err := ResolveCheckRequestPath("path", tc, specKeys); err != nil {
+			t.Errorf("ResolveCheckRequestPath(%q) = %v, want nil", tc, err)
+		}
+	}
+
+	// The rule must still surface an ordinary undeclared-key finding.
+	if err := ResolveCheckRequestPath("path", "/x/{{ config.nope }}", specKeys); err == nil {
+		t.Error("ResolveCheckRequestPath accepted an undeclared spec key")
+	}
+}
+
+// Write paths are deliberately OUT of scope: WriteAction.path_fields binds
+// single-brace placeholders from the record, and 165 shipped write paths rely
+// on it. Guard that ResolveCheck (what writes.json is checked with) still
+// accepts them.
+func TestResolveCheckStillAcceptsWritePathFieldPlaceholders(t *testing.T) {
+	if err := ResolveCheck("/repos/{owner}/{repo}/issues", map[string]bool{}); err != nil {
+		t.Fatalf("ResolveCheck rejected a path_fields-bound write path: %v", err)
 	}
 }
 

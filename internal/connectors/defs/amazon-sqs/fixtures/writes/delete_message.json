@@ -1,0 +1,9 @@
+{
+  "record": {
+    "receipt_handle": "fixture-receipt-handle"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.DeleteMessage"
+  }
+}

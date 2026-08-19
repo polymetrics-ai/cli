@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reporting_surveys_questions",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "survey_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "query": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_responses": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "is_required": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "has_other": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "other_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "average_rating": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "range_low_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "range_high_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "placeholder_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscribe_checkbox_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subscribe_checkbox_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "merge_field": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "options": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "contact_counts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

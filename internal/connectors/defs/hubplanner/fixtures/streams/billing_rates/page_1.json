@@ -1,18 +1,23 @@
 {
   "request": {
     "method": "GET",
-    "path": "/billingrate",
-    "query": { "page": "0", "limit": "200" }
+    "path": "/billingRate",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
   },
   "response": {
     "status": 200,
     "body": [
       {
-        "_id": "billingrate_fixture_1",
-        "name": "Fixture Rate 1",
-        "rate": 150,
-        "currency": "USD",
-        "default": true
+        "_id": "billing_rate_fixture_1",
+        "rate": 75,
+        "metadata": "",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": null,
+        "label": "Fixture Billing Rate",
+        "currency": "USD"
       }
     ]
   }

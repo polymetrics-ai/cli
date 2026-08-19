@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "resource_custom_field_fixture_1",
+    "label": "Updated Resource Field",
+    "type": "TEXT",
+    "status": "ACTIVE"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resource/customField/template/resource_custom_field_fixture_1",
+    "body": {
+      "label": "Updated Resource Field",
+      "type": "TEXT",
+      "status": "ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "resource_custom_field_fixture_1"
+    }
+  }
+}

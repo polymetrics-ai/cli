@@ -13,6 +13,7 @@ DESCRIPTION
   Reads commercetools customers, orders, and products through the HTTP API.
 
 ICON
+  id: commercetools
   asset: icons/commercetools.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,26 +27,26 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   mode
-  project_key
-  token_url
-  client_id (secret)
-  client_secret (secret)
+  project_key (required)
+  token_url (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
     cursor: createdAt
-    fields: addresses(), authenticationMode(), createdAt(), customerNumber(), email(), firstName(), id(), isEmailVerified(), lastModifiedAt(), lastName(), version()
+    fields: addresses(array), authenticationMode(string), createdAt(string), customerNumber(string), email(string), firstName(string), id(string), isEmailVerified(boolean), lastModifiedAt(string), lastName(string), version(integer)
   orders:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), customerId(), id(), lastModifiedAt(), lineItems(), orderNumber(), orderState(), totalPrice(), version()
+    fields: createdAt(string), customerId(string), id(string), lastModifiedAt(string), lineItems(array), orderNumber(string), orderState(string), totalPrice(object), version(integer)
   products:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), id(), lastModifiedAt(), masterData(), productType(), version()
+    fields: createdAt(string), id(string), lastModifiedAt(string), masterData(object), productType(object), version(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

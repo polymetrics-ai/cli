@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).
 
 ICON
+  id: workramp
   asset: icons/workramp.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,27 +31,27 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   users:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), id(), isAdmin(), isDeleted(), isPermanentlyDeleted(), name(), updatedAt()
+    fields: createdAt(number), email(string), id(integer), isAdmin(boolean), isDeleted(boolean), isPermanentlyDeleted(boolean), name(string), updatedAt(number)
   groups:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), description(), enterpriseId(), id(), name(), updatedAt()
+    fields: createdAt(number), description(string), enterpriseId(integer), id(integer), name(string), updatedAt(number)
   courses:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), num_total_tasks(), num_total_test_questions(), tags(), title(), updated_at()
+    fields: created_at(number), id(string), num_total_tasks(integer), num_total_test_questions(integer), tags(array), title(string), updated_at(number)
   resources:
     primary key: id
-    fields: createdAt(), description(), id(), name(), updatedAt()
+    fields: createdAt(number), description(string), id(string), name(string), updatedAt(number)
   scorm_courses:
     primary key: id
-    fields: created_at(), id(), time_estimate(), title()
+    fields: created_at(number), id(string), time_estimate(integer), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -58,6 +59,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /api/v1/users
+    required fields: email
     risk: creates a WorkRamp user account; approval required
   update_user:
     endpoint: POST /api/v1/users/{{ record.id }}
@@ -69,6 +71,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a WorkRamp user account; approval required
   create_group:
     endpoint: POST /api/v1/groups
+    required fields: name
     risk: creates a WorkRamp group; approval required
   update_group:
     endpoint: POST /api/v1/groups/{{ record.id }}

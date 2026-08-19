@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Adjust report-service report rows for configured dimensions and metrics. Read-only.
 
 ICON
+  id: adjust
   asset: icons/adjust.svg
   source: official
   review_status: official_verified
@@ -33,11 +34,11 @@ CONFIGURATION
   metrics
   mode
   start_date
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   reports:
-    fields: app(), clicks(), cost(), country(), date(), installs()
+    fields: app(string), clicks(number), cost(number), country(string), date(string), installs(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite

@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports_click_details_urls_clicked",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_clicks": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "click_percentage": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "unique_clicks": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unique_click_percentage": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "last_click": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ab_split": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

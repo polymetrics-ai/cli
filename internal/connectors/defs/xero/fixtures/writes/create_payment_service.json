@@ -1,0 +1,22 @@
+{
+  "record": {
+    "PaymentServices": [
+      "payment_service_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/PaymentServices",
+    "body": {
+      "PaymentServices": [
+        "payment_service_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

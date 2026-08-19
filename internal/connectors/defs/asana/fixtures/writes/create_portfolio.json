@@ -1,0 +1,20 @@
+{
+  "record": {
+    "data": {
+      "name": "fixture-name",
+      "archived": true,
+      "color": "fixture-color"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portfolios",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "archived": true,
+        "color": "fixture-color"
+      }
+    }
+  }
+}

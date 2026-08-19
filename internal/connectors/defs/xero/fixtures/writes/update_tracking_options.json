@@ -1,0 +1,26 @@
+{
+  "record": {
+    "tracking_category_id": "tracking_category_id_fixture_1",
+    "tracking_option_id": "tracking_option_id_fixture_1",
+    "TrackingOptionID": "tracking_option_id_fixture_1",
+    "Name": "name_fixture",
+    "Status": "ACTIVE",
+    "TrackingCategoryID": "tracking_category_id_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/TrackingCategories/tracking_category_id_fixture_1/Options/tracking_option_id_fixture_1",
+    "body": {
+      "TrackingOptionID": "tracking_option_id_fixture_1",
+      "Name": "name_fixture",
+      "Status": "ACTIVE",
+      "TrackingCategoryID": "tracking_category_id_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

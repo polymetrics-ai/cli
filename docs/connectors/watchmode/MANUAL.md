@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Watchmode title search results, streaming sources, regions, networks, genres, list-titles, releases, per-title details/sources/seasons/episodes/cast-crew, and person details. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -34,51 +36,51 @@ CONFIGURATION
   start_date
   title_ids
   types
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   search:
     primary key: id
-    fields: id(), name(), type(), year()
+    fields: id(integer), name(string), type(string), year(integer)
   sources:
     primary key: id
-    fields: id(), name(), region(), type()
+    fields: id(integer), name(string), region(string), type(string)
   regions:
     primary key: country
-    fields: country(), data_tier(), flag(), name(), plan_enabled()
+    fields: country(string), data_tier(integer), flag(string), name(string), plan_enabled(boolean)
   networks:
     primary key: id
-    fields: id(), name(), origin_country(), tmdb_id()
+    fields: id(integer), name(string), origin_country(string), tmdb_id(integer)
   genres:
     primary key: id
-    fields: id(), name(), tmdb_id()
+    fields: id(integer), name(string), tmdb_id(integer)
   titles:
     primary key: id
-    fields: id(), imdb_id(), title(), tmdb_id(), tmdb_type(), type(), year()
+    fields: id(integer), imdb_id(string), title(string), tmdb_id(integer), tmdb_type(string), type(string), year(integer)
   releases:
     primary key: id, source_id, source_release_date
-    fields: id(), imdb_id(), is_original(), poster_url(), season_number(), source_id(), source_name(), source_release_date(), title(), tmdb_id(), tmdb_type(), type()
+    fields: id(integer), imdb_id(string), is_original(integer), poster_url(string), season_number(integer), source_id(integer), source_name(string), source_release_date(string), title(string), tmdb_id(integer), tmdb_type(string), type(string)
   title_details:
     primary key: id
-    fields: backdrop(), critic_score(), end_year(), genre_names(), id(), imdb_id(), original_title(), plot_overview(), poster(), release_date(), runtime_minutes(), title(), tmdb_id(), tmdb_type(), type(), us_rating(), user_rating(), watchmode_title_id(), year()
+    fields: backdrop(string), critic_score(number), end_year(integer), genre_names(array), id(integer), imdb_id(string), original_title(string), plot_overview(string), poster(string), release_date(string), runtime_minutes(integer), title(string), tmdb_id(integer), tmdb_type(string), type(string), us_rating(string), user_rating(number), watchmode_title_id(string), year(integer)
   title_sources:
     primary key: watchmode_title_id, source_id, region, type
-    fields: episodes(), format(), name(), price(), region(), seasons(), source_id(), type(), watchmode_title_id(), web_url()
+    fields: episodes(integer), format(string), name(string), price(number), region(string), seasons(integer), source_id(integer), type(string), watchmode_title_id(string), web_url(string)
   title_seasons:
     primary key: id
-    fields: air_date(), episode_count(), id(), name(), number(), overview(), poster_url(), watchmode_title_id()
+    fields: air_date(string), episode_count(integer), id(integer), name(string), number(integer), overview(string), poster_url(string), watchmode_title_id(string)
   title_episodes:
     primary key: id
-    fields: episode_number(), id(), imdb_id(), name(), overview(), release_date(), runtime_minutes(), season_id(), season_number(), sources(), tmdb_id(), watchmode_title_id()
+    fields: episode_number(integer), id(integer), imdb_id(string), name(string), overview(string), release_date(string), runtime_minutes(integer), season_id(integer), season_number(integer), sources(array), tmdb_id(integer), watchmode_title_id(string)
   title_cast_crew:
     primary key: watchmode_title_id, person_id, type, role
-    fields: episode_count(), full_name(), order(), person_id(), role(), type(), watchmode_title_id()
+    fields: episode_count(integer), full_name(string), order(integer), person_id(integer), role(string), type(string), watchmode_title_id(string)
   person_details:
     primary key: id
-    fields: date_of_birth(), date_of_death(), first_name(), full_name(), gender(), id(), imdb_id(), known_for(), last_name(), main_profession(), place_of_birth(), relevance_percentile(), tmdb_id(), watchmode_person_id()
+    fields: date_of_birth(string), date_of_death(string), first_name(string), full_name(string), gender(string), id(integer), imdb_id(string), known_for(array), last_name(string), main_profession(string), place_of_birth(string), relevance_percentile(number), tmdb_id(integer), watchmode_person_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Watchmode API read of public title/streaming-source/person media metadata

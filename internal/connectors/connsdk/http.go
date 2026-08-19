@@ -6,8 +6,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"math/rand/v2"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
@@ -15,23 +18,25 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/safety"
 )
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
 const defaultMaxResponseBody = 64 << 20
+const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
-	Status     int
-	Header     http.Header
-	Body       []byte
-	requestURL string
+	Status         int
+	Header         http.Header
+	Body           []byte
+	requestURL     string
+	rateLimitRoute RateLimitRoute
 }
 
 // HTTPError is returned when a request completes with a 4xx/5xx status after
@@ -54,6 +59,16 @@ func (e *HTTPError) Error() string {
 	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg))
 }
 
+// CredentialRejectedError is the safe identity of a provider-verified
+// authentication rejection. It carries neither the provider URL nor response
+// body, either of which may contain credential material. Response formatters
+// may preserve this type without exposing the raw HTTPError that proved it.
+type CredentialRejectedError struct{}
+
+func (*CredentialRejectedError) Error() string {
+	return "provider rejected the credential"
+}
+
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.
@@ -64,12 +79,64 @@ type MultipartForm struct {
 }
 
 type MultipartFile struct {
-	FieldName      string
-	Path           string
-	FileName       string
-	ContentType    string
-	MaxBytes       int64
-	ExpectedSHA256 string
+	FieldName string
+	Path      string
+	// Root, when set, confines every access to this file beneath it, and
+	// RelPath is the root-relative path opened through it. Containment lives at
+	// the open rather than in a check performed once beforehand: Root is
+	// consulted on every Stat and Open, so a path swapped for an escaping
+	// symlink after validation is refused instead of followed. Path is then
+	// only a display value and is never opened.
+	Root    *os.Root
+	RelPath string
+
+	FileName string
+	// ContentType is the part header the bundle declares. When AllowedMediaTypes
+	// bounds the part, the sent header is replaced by the type the bytes actually
+	// sniffed as, so ContentType is then the authoring intent rather than the
+	// wire value.
+	ContentType string
+	// AllowedMediaTypes, when non-empty, bounds what the file's own bytes may
+	// sniff as, and is the only restriction on the part's type — a single-entry
+	// list is how a bundle demands exactly one type. It is enforced before any
+	// request is made, and the sniffed type it admits becomes the header we send,
+	// so the claim made to the provider is one we have verified rather than one
+	// we merely declared.
+	AllowedMediaTypes []string
+	MaxBytes          int64
+	ExpectedSHA256    string
+}
+
+// sourceName is the path used in messages and as the default upload filename.
+func (f MultipartFile) sourceName() string {
+	if f.Root != nil {
+		return f.RelPath
+	}
+	return f.Path
+}
+
+// stat resolves the file's metadata under Root when one is set.
+func (f MultipartFile) stat() (os.FileInfo, error) {
+	if f.Root != nil {
+		return f.Root.Stat(f.RelPath)
+	}
+	return os.Stat(f.Path)
+}
+
+// open opens the file under Root when one is set. os.Root refuses any path that
+// escapes the root, including via a symlink swapped in after an earlier check.
+func (f MultipartFile) open() (*os.File, error) {
+	if f.Root != nil {
+		return f.Root.Open(f.RelPath)
+	}
+	return os.Open(f.Path)
+}
+
+// needsSnapshot reports whether the file must be copied to a bounded temp file
+// before it is sent: either its content is bound to an approved digest, or its
+// media type is bounded and has to be checked against the actual bytes.
+func (f MultipartFile) needsSnapshot() bool {
+	return f.ExpectedSHA256 != "" || len(f.AllowedMediaTypes) > 0
 }
 
 type requestBody struct {
@@ -94,6 +161,12 @@ type Requester struct {
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
+	// DisableRetries disables Requester-managed transient-status, transport-error,
+	// and 401 reauthentication retries. Strict non-idempotent writes set it. With
+	// the standard net/http transport, those writes use a one-use HTTP/1
+	// connection so the transport cannot replay them after a reused-connection
+	// failure. Safe replayable reads can still be replayed inside net/http.
+	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration
 	MaxBackoff  time.Duration
@@ -102,6 +175,37 @@ type Requester struct {
 	RetryStatuses map[int]bool
 	// Sleep waits for d or until ctx is cancelled. Injectable for tests.
 	Sleep func(ctx context.Context, d time.Duration) error
+	// Now supplies the clock used to interpret provider reset headers.
+	// Injectable tests can therefore prove the exact reset timestamp.
+	Now func() time.Time
+	// Jitter supplies full jitter for fallback exponential retries. It is never
+	// called for a valid provider Retry-After reset. Returned values are clamped
+	// to the fallback cap so an implementation cannot lengthen a retry.
+	Jitter func(cap time.Duration) time.Duration
+	// Admission runs immediately before each logical Requester send and permitted
+	// redirect hop. It must honor the request context; an error prevents that
+	// attempt from reaching the provider. A safe replayable read can be replayed
+	// inside net/http without another admission. The engine attaches a
+	// declaration-aware implementation where a policy matches.
+	Admission RateLimitAdmission
+	// Observer receives parsed response rate-limit facts synchronously. It is
+	// deliberately not an output hook; #3755 owns operator-visible events.
+	Observer RateLimitObserver
+	// RateLimitCostHeader is the one provider header named by the selected
+	// declaration that reports a request's actual point cost. It is an HTTP
+	// field name validated by the bundle loader, never a caller-provided value.
+	// The parsed scalar is delivered through RateLimitObservation; raw headers
+	// are never retained.
+	RateLimitCostHeader string
+	RouteRateLimits     RateLimitRouteResolver
+	// RateLimitEvents records bounded admission/observation transitions for a
+	// caller that needs an audit trail (for example, certification). It never
+	// receives raw provider data and cannot influence request control flow.
+	RateLimitEvents RateLimitEventSink
+	// RateLimitAdmissionTimeout bounds one admission wait without shortening
+	// the surrounding request or certification run. A deadline failure is
+	// emitted as a not_sent event and the provider is never contacted.
+	RateLimitAdmissionTimeout time.Duration
 }
 
 func (r *Requester) client() *http.Client {
@@ -111,7 +215,50 @@ func (r *Requester) client() *http.Client {
 	return &http.Client{Timeout: 60 * time.Second}
 }
 
+func (r *Requester) clientFor(ctx context.Context) *http.Client {
+	return transportpolicy.HTTPClient(ctx, r.client())
+}
+
+func isSafeReplayableRead(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case http.MethodGet, http.MethodHead, http.MethodOptions, http.MethodTrace:
+		return true
+	default:
+		return false
+	}
+}
+
+func noReplayClient(client *http.Client) *http.Client {
+	clone := *client
+	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return transportpolicy.ErrRedirectRefused
+	}
+	transport, ok := client.Transport.(*http.Transport)
+	if client.Transport == nil {
+		transport, ok = http.DefaultTransport.(*http.Transport)
+	}
+	if !ok {
+		return &clone
+	}
+	strictTransport := transport.Clone()
+	strictTransport.DisableKeepAlives = true
+	clone.Transport = strictTransport
+	return &clone
+}
+
+func disableTransportReplay(req *http.Request, strictWrite bool) {
+	req.GetBody = nil
+	req.Header.Del("Idempotency-Key")
+	req.Header.Del("X-Idempotency-Key")
+	if strictWrite {
+		req.Close = true
+	}
+}
+
 func (r *Requester) maxRetries() int {
+	if r.DisableRetries {
+		return 0
+	}
 	if r.MaxRetries > 0 {
 		return r.MaxRetries
 	}
@@ -153,6 +300,205 @@ func (r *Requester) sleep(ctx context.Context, d time.Duration) error {
 		return r.Sleep(ctx, d)
 	}
 	return ctxSleep(ctx, d)
+}
+
+func (r *Requester) now() time.Time {
+	if r.Now != nil {
+		return r.Now()
+	}
+	return time.Now()
+}
+
+func (r *Requester) admit(ctx context.Context, route RateLimitRoute) (string, error) {
+	costHeader := r.RateLimitCostHeader
+	if r.Admission != nil {
+		if err := r.Admission.Admit(ctx, RateLimitRequest{Method: route.Method, Attempt: route.Attempt}); err != nil {
+			return "", err
+		}
+	}
+	if r.RouteRateLimits == nil {
+		return costHeader, nil
+	}
+	routeCostHeader, err := r.RouteRateLimits.AdmitRoute(ctx, route)
+	if err != nil {
+		return "", err
+	}
+	if routeCostHeader != "" {
+		if costHeader != "" && !strings.EqualFold(costHeader, routeCostHeader) {
+			return "", fmt.Errorf("matching rate-limit policies use different actual-cost headers")
+		}
+		costHeader = routeCostHeader
+	}
+	return costHeader, nil
+}
+
+func (r *Requester) observeRateLimit(ctx context.Context, route RateLimitRoute, status int, header http.Header, costHeader string) RateLimitObservation {
+	observation, ok := rateLimitObservation(status, header, route.Attempt, r.now(), costHeader)
+	if ok {
+		r.emitRateLimitReset(route.Method, observation)
+		if r.Observer != nil {
+			r.Observer.Observe(ctx, observation)
+		}
+		if r.RouteRateLimits != nil {
+			r.RouteRateLimits.ObserveRoute(ctx, route, observation)
+		}
+	}
+	return observation
+}
+
+// ObserveRateLimit records a bounded, declaration-approved response fact
+// discovered after the requester's standard header observation. It preserves
+// the actual admitted route and attempt from Response, so a caller cannot
+// attach an observation to an unsent request or invent a different route.
+//
+// This seam is intentionally narrow: fixed GraphQL operation parsing may pass
+// its rateLimit selection, but arbitrary response-body extraction remains
+// unavailable to connector callers.
+func (r *Requester) ObserveRateLimit(ctx context.Context, response *Response, observation RateLimitObservation) {
+	if r == nil || response == nil || response.rateLimitRoute.Attempt <= 0 {
+		return
+	}
+	observation.Status = response.Status
+	observation.Attempt = response.rateLimitRoute.Attempt
+	observation.Attempted = true
+	if observation.ObservedAt.IsZero() {
+		observation.ObservedAt = r.now()
+	}
+	r.emitRateLimitReset(response.rateLimitRoute.Method, observation)
+	if r.Observer != nil {
+		r.Observer.Observe(ctx, observation)
+	}
+	if r.RouteRateLimits != nil {
+		r.RouteRateLimits.ObserveRoute(ctx, response.rateLimitRoute, observation)
+	}
+}
+
+func (r *Requester) emitRateLimitEvent(event RateLimitEvent) {
+	if r == nil || r.RateLimitEvents == nil {
+		return
+	}
+	r.RateLimitEvents.RecordRateLimitEvent(event)
+}
+
+func (r *Requester) emitRateLimitReset(method string, observation RateLimitObservation) {
+	if !observation.HasReset {
+		return
+	}
+	r.emitRateLimitEvent(RateLimitEvent{
+		Type:    RateLimitEventReset,
+		Method:  method,
+		Attempt: observation.Attempt,
+		ResetAt: observation.ResetAt,
+	})
+}
+
+type rateLimitAdmissionError struct {
+	err error
+}
+
+func (e *rateLimitAdmissionError) Error() string {
+	return fmt.Sprintf("rate-limit admission: %v", e.err)
+}
+
+func (e *rateLimitAdmissionError) Unwrap() error {
+	return e.err
+}
+
+const minimumObservableRateLimitWait = time.Millisecond
+
+func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
+	nextAttempt := *requesterAttempt + 1
+	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
+	admissionCtx, cancelAdmission := r.rateLimitAdmissionContext(ctx)
+	defer cancelAdmission()
+	started := time.Now()
+	header, err := r.admit(admissionCtx, nextRoute)
+	if elapsed := time.Since(started); elapsed >= minimumObservableRateLimitWait {
+		r.emitRateLimitEvent(RateLimitEvent{
+			Type:       RateLimitEventWait,
+			Method:     nextRoute.Method,
+			Attempt:    nextRoute.Attempt,
+			DurationMS: elapsed.Milliseconds(),
+		})
+	}
+	if err != nil {
+		reason := "admission_refused"
+		if errors.Is(err, context.DeadlineExceeded) {
+			reason = "deadline_cutoff"
+		}
+		r.emitRateLimitEvent(RateLimitEvent{
+			Type:    RateLimitEventNotSent,
+			Method:  nextRoute.Method,
+			Attempt: nextRoute.Attempt,
+			Reason:  reason,
+		})
+		return &rateLimitAdmissionError{err: err}
+	}
+	*requesterAttempt = nextAttempt
+	*route = nextRoute
+	*costHeader = header
+	r.emitRateLimitEvent(RateLimitEvent{
+		Type:    RateLimitEventAttempt,
+		Method:  nextRoute.Method,
+		Attempt: nextRoute.Attempt,
+	})
+	return nil
+}
+
+func (r *Requester) rateLimitAdmissionContext(ctx context.Context) (context.Context, context.CancelFunc) {
+	if r == nil || r.RateLimitAdmissionTimeout <= 0 {
+		return ctx, func() {}
+	}
+	return context.WithTimeout(ctx, r.RateLimitAdmissionTimeout)
+}
+
+func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
+	if requestURL == nil {
+		return ""
+	}
+	path := requestURL.EscapedPath()
+	if path == "" {
+		path = "/"
+	}
+	base, err := url.Parse(r.BaseURL)
+	if err != nil {
+		return path
+	}
+	basePath := strings.TrimRight(base.EscapedPath(), "/")
+	if basePath == "" {
+		return path
+	}
+	if path == basePath {
+		return "/"
+	}
+	if strings.HasPrefix(path, basePath+"/") {
+		return strings.TrimPrefix(path, basePath)
+	}
+	return path
+}
+
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
+	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil && r.RateLimitEvents == nil {
+		return client
+	}
+	clone := *client
+	checkRedirect := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if checkRedirect != nil {
+			if err := checkRedirect(req, via); err != nil {
+				return err
+			}
+		} else if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+		}
+		return r.admitRequesterSend(req.Context(), req, requesterAttempt, route, costHeader)
+	}
+	return &clone
+}
+
+func isRateLimitAdmissionError(err error) bool {
+	var admissionErr *rateLimitAdmissionError
+	return errors.As(err, &admissionErr)
 }
 
 // ctxSleep waits for d or returns early if ctx is cancelled.
@@ -213,6 +559,13 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 // maxBodyBytes+1. Callers can reject len(resp.Body) > maxBodyBytes without ever
 // buffering the default 64 MiB response cap.
 func (r *Requester) DoLimited(ctx context.Context, method, path string, query url.Values, body any, maxBodyBytes int) (*Response, error) {
+	return r.DoJSONLimited(ctx, method, path, query, body, "application/json", maxBodyBytes)
+}
+
+// DoJSONLimited is the narrow JSON-family counterpart to DoLimited. The
+// operation engine admits its media type from a closed declaration set; this
+// method does not expose arbitrary raw request media types to callers.
+func (r *Requester) DoJSONLimited(ctx context.Context, method, path string, query url.Values, body any, contentType string, maxBodyBytes int) (*Response, error) {
 	var payload []byte
 	if body != nil {
 		var err error
@@ -221,7 +574,16 @@ func (r *Requester) DoLimited(ctx context.Context, method, path string, query ur
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json", maxBodyBytes+1)
+	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
+}
+
+// DoTextLimited performs a bounded request with one literal text/plain body.
+// It deliberately has no caller-selected media type: operation executors use
+// it only after admitting an explicit text/plain declaration, and it shares
+// DoLimited's request core (including auth, retry, admission, and observation)
+// rather than offering a generic raw HTTP escape hatch.
+func (r *Requester) DoTextLimited(ctx context.Context, method, path string, query url.Values, body string, maxBodyBytes int) (*Response, error) {
+	return r.do(ctx, method, path, query, []byte(body), "text/plain", maxBodyBytes+1)
 }
 
 // DoForm performs an HTTP request with an application/x-www-form-urlencoded body,
@@ -238,10 +600,37 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
 }
 
+// DoFormLimited performs DoForm while bounding the captured successful
+// response body to maxBodyBytes+1. It is the form counterpart to DoLimited so
+// a declared form write does not trade typed request shaping for an unbounded
+// response buffer.
+func (r *Requester) DoFormLimited(ctx context.Context, method, path string, query, form url.Values, maxBodyBytes int) (*Response, error) {
+	var payload []byte
+	contentType := ""
+	if len(form) > 0 {
+		payload = []byte(form.Encode())
+		contentType = "application/x-www-form-urlencoded"
+	}
+	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
+}
+
 // DoMultipart performs an HTTP request with a multipart/form-data body. File
 // parts are opened for each retry attempt, so callers may use it with the same
 // retry policy as JSON/form requests without reusing a consumed reader.
 func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, defaultMaxResponseBody)
+}
+
+// DoMultipartLimited performs DoMultipart while bounding a successful response
+// to maxBodyBytes+1. It is the multipart counterpart to DoLimited and
+// DoFormLimited: operation-level rest.max_bytes constrains capture itself,
+// rather than allowing a multipart response to fill the default 64 MiB buffer
+// before the caller can reject it.
+func (r *Requester) DoMultipartLimited(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxBodyBytes int) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, maxBodyBytes+1)
+}
+
+func (r *Requester) doMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxResponseBytes int) (*Response, error) {
 	if err := validateMultipartForm(form); err != nil {
 		return nil, err
 	}
@@ -250,7 +639,7 @@ func (r *Requester) DoMultipart(ctx context.Context, method, path string, query 
 		return nil, err
 	}
 	defer cleanup()
-	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
+	return r.doWithBody(ctx, method, path, query, maxResponseBytes, func() (*requestBody, error) {
 		return multipartBody(prepared)
 	})
 }
@@ -261,7 +650,7 @@ func validateMultipartForm(form MultipartForm) error {
 		if strings.TrimSpace(file.FieldName) == "" {
 			return fmt.Errorf("multipart file %d field name is required", i)
 		}
-		if strings.TrimSpace(file.Path) == "" {
+		if strings.TrimSpace(file.sourceName()) == "" {
 			return fmt.Errorf("multipart file %q path is required", file.FieldName)
 		}
 		if file.ExpectedSHA256 != "" {
@@ -270,7 +659,12 @@ func validateMultipartForm(form MultipartForm) error {
 				return fmt.Errorf("multipart file %q expected SHA-256 is invalid", file.FieldName)
 			}
 		}
-		info, err := os.Stat(file.Path)
+		for _, allowed := range file.AllowedMediaTypes {
+			if _, _, err := mime.ParseMediaType(allowed); err != nil {
+				return fmt.Errorf("multipart file %q allowed media type %q is invalid: %w", file.FieldName, allowed, err)
+			}
+		}
+		info, err := file.stat()
 		if err != nil {
 			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
 		}
@@ -299,8 +693,8 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 	}
 	var total int64
 	for i, file := range form.Files {
-		if file.ExpectedSHA256 == "" {
-			info, err := os.Stat(file.Path)
+		if !file.needsSnapshot() {
+			info, err := file.stat()
 			if err != nil {
 				cleanup()
 				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
@@ -322,35 +716,91 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 				limit = remaining
 			}
 		}
-		tempPath, size, digest, err := snapshotMultipartFile(ctx, file, limit)
+		tempPath, size, digest, sniffed, err := snapshotMultipartFile(ctx, file, limit)
 		if err != nil {
 			cleanup()
 			return MultipartForm{}, func() {}, err
 		}
 		tempPaths = append(tempPaths, tempPath)
-		expected, _ := hex.DecodeString(file.ExpectedSHA256)
-		if !bytes.Equal(digest, expected) {
+		if file.ExpectedSHA256 != "" {
+			expected, _ := hex.DecodeString(file.ExpectedSHA256)
+			if !bytes.Equal(digest, expected) {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+			}
+		}
+		if err := checkAllowedMediaType(file, sniffed); err != nil {
 			cleanup()
-			return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+			return MultipartForm{}, func() {}, err
 		}
 		if prepared.Files[i].FileName == "" {
-			prepared.Files[i].FileName = filepath.Base(file.Path)
+			prepared.Files[i].FileName = filepath.Base(file.sourceName())
 		}
+		// The snapshot lives outside the root by design, so the root handle is
+		// dropped: subsequent opens must target the verified copy, which is what
+		// makes the digest and media-type checks binding.
 		prepared.Files[i].Path = tempPath
+		prepared.Files[i].Root = nil
+		prepared.Files[i].RelPath = ""
+		// The part header now describes the bytes we actually send, not the type
+		// the bundle hoped for. checkAllowedMediaType has already confirmed the
+		// sniffed type is one the bundle declared acceptable, so this is both
+		// truthful and within the declared bound. Only set when an allowlist made
+		// it binding: without one the sniff is unverified against any declaration,
+		// and http.DetectContentType is coarse enough (every CSV is text/plain)
+		// that overriding a deliberate content_type would lose information.
+		if len(file.AllowedMediaTypes) > 0 {
+			prepared.Files[i].ContentType = sniffed
+		}
 		total += size
 	}
 	return prepared, cleanup, nil
 }
 
-func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, error) {
-	source, err := os.Open(file.Path)
-	if err != nil {
-		return "", 0, nil, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+// checkAllowedMediaType rejects a file whose actual bytes do not sniff as one of
+// the media types the bundle declared. Upload fails closed here, deliberately
+// unlike the download direction: on download the provider makes the Content-Type
+// claim and providers misreport it, so a mismatch is recorded and surfaced; on
+// upload we are the party making the claim to the provider, so an unsatisfiable
+// claim is our bug and must not reach the wire.
+func checkAllowedMediaType(file MultipartFile, sniffed string) error {
+	if len(file.AllowedMediaTypes) == 0 {
+		return nil
 	}
-	defer source.Close()
+	got, _, err := mime.ParseMediaType(sniffed)
+	if err != nil {
+		return fmt.Errorf("multipart file %q content type %q is not a valid media type: %w", file.FieldName, sniffed, err)
+	}
+	for _, allowed := range file.AllowedMediaTypes {
+		want, _, err := mime.ParseMediaType(allowed)
+		if err != nil {
+			return fmt.Errorf("multipart file %q allowed media type %q is invalid: %w", file.FieldName, allowed, err)
+		}
+		if strings.EqualFold(got, want) {
+			return nil
+		}
+	}
+	if got == "application/octet-stream" {
+		return fmt.Errorf("multipart file %q content could not be classified (sniffed %s); allowed media types are %s", file.FieldName, got, strings.Join(file.AllowedMediaTypes, ", "))
+	}
+	return fmt.Errorf("multipart file %q content sniffed as %s, which is not among the allowed media types %s", file.FieldName, got, strings.Join(file.AllowedMediaTypes, ", "))
+}
+
+// sniffLimit is the number of leading bytes http.DetectContentType inspects.
+const sniffLimit = 512
+
+// snapshotMultipartFile copies the source into a bounded temp file, computing
+// the SHA-256 and sniffing the media type in the same pass, so neither costs an
+// extra read and neither can race a separate one.
+func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, string, error) {
+	source, err := file.open()
+	if err != nil {
+		return "", 0, nil, "", fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+	}
+	defer func() { _ = source.Close() }()
 	temp, err := os.CreateTemp("", "polymetrics-upload-*")
 	if err != nil {
-		return "", 0, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", 0, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	tempPath := temp.Name()
 	removeTemp := true
@@ -362,29 +812,47 @@ func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int
 	}()
 
 	hash := sha256.New()
+	prefix := &prefixWriter{limit: sniffLimit}
 	reader := io.Reader(&contextReader{ctx: ctx, reader: source})
 	if maxBytes >= 0 {
 		reader = io.LimitReader(reader, maxBytes)
 	}
-	written, err := io.Copy(io.MultiWriter(temp, hash), reader)
+	written, err := io.Copy(io.MultiWriter(temp, hash, prefix), reader)
 	if err != nil {
-		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	if maxBytes >= 0 && written == maxBytes {
 		var extra [1]byte
 		n, readErr := (&contextReader{ctx: ctx, reader: source}).Read(extra[:])
 		if n > 0 {
-			return "", written, nil, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+			return "", written, nil, "", fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
 		}
 		if readErr != nil && readErr != io.EOF {
-			return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
+			return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
 		}
 	}
 	if err := temp.Close(); err != nil {
-		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	removeTemp = false
-	return tempPath, written, hash.Sum(nil), nil
+	return tempPath, written, hash.Sum(nil), http.DetectContentType(prefix.head), nil
+}
+
+// prefixWriter retains the first limit bytes written through it and discards the
+// rest, so the sniff sample rides the snapshot copy instead of a second read.
+type prefixWriter struct {
+	head  []byte
+	limit int
+}
+
+func (w *prefixWriter) Write(p []byte) (int, error) {
+	if remaining := w.limit - len(w.head); remaining > 0 {
+		if len(p) < remaining {
+			remaining = len(p)
+		}
+		w.head = append(w.head, p[:remaining]...)
+	}
+	return len(p), nil
 }
 
 type contextReader struct {
@@ -422,7 +890,15 @@ func multipartBody(form MultipartForm) (*requestBody, error) {
 		ContentType: mw.FormDataContentType(),
 		Cleanup: func() error {
 			_ = pr.Close()
-			return <-done
+			err := <-done
+			// A server can send a final response before it consumes the
+			// complete streamed upload. Closing the reader then unblocks the
+			// producer with io.ErrClosedPipe; that expected cleanup result must
+			// not hide the provider response.
+			if errors.Is(err, io.ErrClosedPipe) {
+				return nil
+			}
+			return err
 		},
 	}, nil
 }
@@ -462,7 +938,7 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
 	name := file.FileName
 	if strings.TrimSpace(name) == "" {
-		name = filepath.Base(file.Path)
+		name = filepath.Base(file.sourceName())
 	}
 	header := make(textproto.MIMEHeader)
 	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
@@ -473,11 +949,11 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 	if err != nil {
 		return 0, err
 	}
-	f, err := os.Open(file.Path)
+	f, err := file.open()
 	if err != nil {
 		return 0, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	if maxBytes < 0 {
 		written, err := io.Copy(part, f)
 		return written, err
@@ -522,7 +998,23 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	}
 
 	attempts := r.maxRetries() + 1
+	if r.DisableRetries {
+		attempts = 1
+	}
 	var lastErr error
+	// reauthAttempted bounds the 401-refresh path to ONCE per request. It is
+	// set before the refresh is attempted (see below), so a provider that keeps
+	// returning 401 terminates with that 401 instead of being hammered.
+	reauthAttempted := false
+	requesterAttempt := 0
+	route := RateLimitRoute{}
+	costHeader := ""
+	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	baseClient := r.clientFor(ctx)
+	if strictWrite {
+		baseClient = noReplayClient(baseClient)
+	}
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -540,53 +1032,95 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, reader)
 		if err != nil {
-			cleanupRequestBody(body)
+			_ = cleanupRequestBody(body)
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, body != nil, contentType)
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
-				cleanupRequestBody(body)
+				_ = cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
+		if r.DisableRetries {
+			disableTransportReplay(req, strictWrite)
+		}
+		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
+			_ = cleanupRequestBody(body)
+			return nil, err
+		}
 
-		resp, err := r.client().Do(req)
-		bodyErr := cleanupRequestBody(body)
+		resp, err := client.Do(req)
 		if err != nil {
+			bodyErr := cleanupRequestBody(body)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
 			}
+			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				return nil, lastErr
+			}
+			if isRateLimitAdmissionError(err) {
+				return nil, lastErr
+			}
 			if attempt < attempts-1 {
-				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
+				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
 					return nil, werr
 				}
 				continue
 			}
 			return nil, lastErr
 		}
+		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
+		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-		resp.Body.Close()
+		_ = resp.Body.Close()
 
-		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+		// A 401 can mean the credential was invalidated out of band (revoked
+		// grant, password change, scope change) rather than that it was never
+		// valid — something an expiry clock cannot see. An Authenticator that
+		// knows how to renew itself gets exactly one chance to do so.
+		//
+		// Authenticators that do not implement AuthRefresher — every mode that
+		// predates the refresh-token grant — never enter this branch, so their
+		// 401 behaviour is byte-for-byte unchanged.
+		if !r.DisableRetries && resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
+			if refresher, ok := r.Auth.(AuthRefresher); ok {
+				// Set before the attempt: a refresh that itself errors must not
+				// buy a second one.
+				reauthAttempted = true
+				if err := refresher.RefreshAuth(ctx, req); err == nil {
+					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+					// The reauth retry does not spend the transient-failure
+					// budget, so a MaxRetries:0 requester still gets its one
+					// post-refresh attempt. Bounded by reauthAttempted, which
+					// is now true, so this can decrement at most once.
+					attempt--
+					continue
+				}
+				// The refresh failed; fall through and report the 401 itself,
+				// which is the more useful of the two errors.
+			}
+		}
+
+		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
 			continue
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 		}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
+		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
@@ -640,44 +1174,72 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 	}
 }
 
-// backoff computes the wait before the next attempt. A Retry-After header (delay
-// seconds or HTTP date) takes precedence, otherwise exponential backoff capped at
-// MaxBackoff is used.
-func (r *Requester) backoff(attempt int, retryAfter string) time.Duration {
-	if d, ok := parseRetryAfter(retryAfter); ok {
-		if d > r.maxBackoff() {
-			return r.maxBackoff()
+// backoff computes the wait before the next attempt. A valid provider
+// Retry-After is deterministic and is honored exactly, even when it exceeds
+// MaxBackoff. Only unhinted fallback retries use bounded full jitter.
+func (r *Requester) backoff(attempt int, observation RateLimitObservation) time.Duration {
+	if observation.HasRetryAfter {
+		if observation.HasReset {
+			remaining := observation.ResetAt.Sub(r.now())
+			if remaining <= 0 {
+				return 0
+			}
+			return remaining
 		}
-		return d
+		return observation.RetryAfter
 	}
-	d := r.baseBackoff() << attempt
-	if d <= 0 || d > r.maxBackoff() {
-		return r.maxBackoff()
-	}
-	return d
+	return r.fullJitter(r.fallbackBackoff(attempt))
 }
 
-// parseRetryAfter parses a Retry-After header value as either delay-seconds or an
-// HTTP date relative to now.
-func parseRetryAfter(value string) (time.Duration, bool) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return 0, false
+func (r *Requester) fallbackBackoff(attempt int) time.Duration {
+	delay := r.baseBackoff()
+	maximum := r.maxBackoff()
+	if delay >= maximum {
+		return maximum
 	}
-	if secs, err := strconv.Atoi(value); err == nil {
-		if secs < 0 {
-			return 0, false
+	for i := 0; i < attempt; i++ {
+		if delay > maximum/2 {
+			return maximum
 		}
-		return time.Duration(secs) * time.Second, true
+		delay *= 2
 	}
-	if t, err := http.ParseTime(value); err == nil {
-		d := time.Until(t)
-		if d < 0 {
-			return 0, true
-		}
-		return d, true
+	if delay > maximum {
+		return maximum
 	}
-	return 0, false
+	return delay
+}
+
+func (r *Requester) fullJitter(cap time.Duration) time.Duration {
+	if cap <= 0 {
+		return 0
+	}
+	if r.Jitter == nil {
+		return time.Duration(rand.Int64N(int64(cap)))
+	}
+	delay := r.Jitter(cap)
+	if delay < 0 {
+		return 0
+	}
+	if delay > cap {
+		return cap
+	}
+	return delay
+}
+
+func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
+	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+	if status != http.StatusTooManyRequests {
+		return httpErr
+	}
+	return &RateLimitError{
+		HTTPError:       httpErr,
+		Source:          observation.Source,
+		RetryAfter:      observation.RetryAfter,
+		HasRetryAfter:   observation.HasRetryAfter,
+		ResetAt:         observation.ResetAt,
+		HasReset:        observation.HasReset,
+		ResetAtAbsolute: observation.ResetAtAbsolute,
+	}
 }
 
 func truncate(body []byte) string {

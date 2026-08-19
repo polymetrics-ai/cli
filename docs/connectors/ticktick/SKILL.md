@@ -11,9 +11,17 @@ Reads projects and project tasks, and writes task create/complete/delete actions
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-ticktick
+- asset: icons/simple-icons/ticktick.svg
+- title: TickTick
+- simple_icon_slug: ticktick
+- simple_icon_hex: 4772FA
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=TickTick
+- match: exact-name-or-slug
+- matched_by: ticktick
 
 ## Capabilities
 
@@ -36,19 +44,20 @@ Reads projects and project tasks, and writes task create/complete/delete actions
 
 - projects:
   - primary key: id
-  - fields: closed(), color(), groupId(), id(), kind(), name(), permission(), sortOrder(), viewMode()
+  - fields: closed(string), color(string), groupId(string), id(string), kind(string), name(string), permission(string), sortOrder(integer), viewMode(string)
 - tasks:
   - primary key: id
-  - fields: completedTime(), content(), desc(), dueDate(), id(), isAllDay(), modifiedTime(), priority(), projectId(), reminders(), repeatFlag(), sortOrder(), startDate(), status(), timeZone(), title()
+  - fields: completedTime(string), content(string), desc(string), dueDate(string), id(string), isAllDay(string), modifiedTime(string), priority(integer), projectId(string), reminders(array), repeatFlag(string), sortOrder(integer), startDate(string), status(integer), timeZone(string), title(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_task:
   - endpoint: POST /task
+  - required fields: title
   - risk: creates a new task in the caller's TickTick account (in the given projectId, or the default Inbox if omitted); low-risk external mutation, no approval required
 - complete_task:
   - endpoint: POST /project/{{ record.projectId }}/task/{{ record.id }}/complete

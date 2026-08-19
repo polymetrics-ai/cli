@@ -53,7 +53,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 		// explicitly via --sql. Always validated by the query engine.
 		sql := valueOr(flags.first("sql"), decision.SuggestedSQL)
 		if sql != "" {
-			rows, err := a.QuerySQL(ctx, sql, limit)
+			rows, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Limit: limit})
 			if err != nil {
 				return fmt.Errorf("extract: query: %w", err)
 			}
@@ -74,7 +74,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 				env["note"] = fmt.Sprintf("rlm_analysis route; agent backend unavailable: %v", err)
 			} else {
 				if closer != nil {
-					defer closer()
+					defer func() { _ = closer() }()
 				}
 				rlmReq := rlm.RunRequest{
 					Spec:         &rlm.Spec{Name: valueOr(flags.first("spec-name"), "extract")},
@@ -97,7 +97,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 		return writeJSON(stdout, env)
 	}
 	b, _ := json.MarshalIndent(env, "", "  ")
-	fmt.Fprintln(stdout, string(b))
+	_, _ = fmt.Fprintln(stdout, string(b))
 	return nil
 }
 

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "fixture": {
+    "name": "pm-cert-user-space-1786998123",
+    "space_number": 1,
+    "create": {
+      "plan_id": "rplan_491dac03733e59e3",
+      "exit_code": "0",
+      "records_succeeded": 1,
+      "records_failed": 0
+    },
+    "read": {
+      "exit_code": "0"
+    },
+    "direct_cleanup": {
+      "delete_exit_code": "0",
+      "readback_exit_code": "1",
+      "verified_absent": true
+    }
+  },
+  "updated_at": "2026-08-17T20:22:27.393Z"
+}

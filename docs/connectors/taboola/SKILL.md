@@ -11,9 +11,11 @@ Reads Taboola campaigns through the Backstage API. Read-only.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,20 +28,20 @@ Reads Taboola campaigns through the Backstage API. Read-only.
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - max_pages
 - mode
 - page_size
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - campaigns:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 
 ## Sync Modes
 

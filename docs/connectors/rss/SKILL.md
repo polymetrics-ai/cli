@@ -11,6 +11,7 @@ Reads RSS channel metadata and feed items from any RSS 2.0 feed URL. Read-only a
 
 ## Icon
 
+- id: rss
 - asset: icons/rss.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -33,10 +34,10 @@ Reads RSS channel metadata and feed items from any RSS 2.0 feed URL. Read-only a
 - items:
   - primary key: id
   - cursor: published_at
-  - fields: description(), id(), link(), published_at(), title()
+  - fields: description(string), id(string), link(string), published_at(string), title(string)
 - channel:
   - primary key: id
-  - fields: description(), id(), link(), title(), updated_at()
+  - fields: description(string), id(string), link(string), title(string), updated_at(string)
 
 ## Sync Modes
 

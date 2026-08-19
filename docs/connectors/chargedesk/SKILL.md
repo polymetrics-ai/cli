@@ -11,9 +11,11 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,35 +31,35 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
 - base_url
 - mode
 - username
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 
 - charges:
   - primary key: charge_id
   - cursor: occurred
-  - fields: amount(), amount_refunded(), charge_id(), currency(), customer_email(), customer_id(), customer_name(), description(), object(), occurred(), payment_method(), product_id(), status(), subscription_id(), transaction_id()
+  - fields: amount(string), amount_refunded(string), charge_id(string), currency(string), customer_email(string), customer_id(string), customer_name(string), description(string), object(string), occurred(integer), payment_method(string), product_id(string), status(string), subscription_id(string), transaction_id(string)
 - customers:
   - primary key: customer_id
   - cursor: occurred
-  - fields: country(), currency(), customer_id(), delinquent(), email(), name(), object(), occurred(), phone(), tax_number()
+  - fields: country(string), currency(string), customer_id(string), delinquent(boolean), email(string), name(string), object(string), occurred(integer), phone(string), tax_number(string)
 - subscriptions:
   - primary key: subscription_id
   - cursor: occurred
-  - fields: amount(), currency(), current_period_end(), current_period_start(), customer_id(), interval(), object(), occurred(), product_id(), status(), subscription_id()
+  - fields: amount(string), currency(string), current_period_end(integer), current_period_start(integer), customer_id(string), interval(string), object(string), occurred(integer), product_id(string), status(string), subscription_id(string)
 - products:
   - primary key: product_id
   - cursor: occurred
-  - fields: amount(), currency(), interval(), name(), object(), occurred(), product_id(), status()
+  - fields: amount(string), currency(string), interval(string), name(string), object(string), occurred(integer), product_id(string), status(string)
 - log_activity:
   - cursor: occurred
-  - fields: action_params(), action_reason(), action_type(), company(), context(), description(), event(), ip(), object_id(), object_type(), occurred(), params(), source(), sub_description()
+  - fields: action_params(boolean), action_reason(string), action_type(string), company(string), context(string), description(string), event(string), ip(string), object_id(string), object_type(string), occurred(integer), params(string), source(string), sub_description(string)
 - log_cancellations:
   - cursor: occurred
-  - fields: action(), customer_id(), email(), ip(), method(), occurred(), reason(), subscription_id()
+  - fields: action(string), customer_id(string), email(string), ip(string), method(string), occurred(integer), reason(string), subscription_id(string)
 - webhook_notifications:
   - primary key: notification
-  - fields: description(), name(), notification(), object()
+  - fields: description(string), name(string), notification(string), object(string)
 
 ## Sync Modes
 
@@ -102,6 +104,7 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
   - risk: gateway method; irreversibly cancels future recurring charges for a subscription on the originating payment gateway as well as ChargeDesk; approval required
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: url
   - risk: external mutation creating a new outbound webhook subscription that will POST ChargeDesk event data to a third-party URL; approval required
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.webhook_id }}
@@ -109,6 +112,7 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
   - risk: irreversible removal of an outbound webhook subscription; approval required
 - create_agent:
   - endpoint: POST /agents
+  - required fields: name, email, role
   - risk: external mutation inviting a new support agent (or updating an existing agent's role) with account access to ChargeDesk; approval required
 - delete_agent:
   - endpoint: DELETE /agents/{{ record.email }}

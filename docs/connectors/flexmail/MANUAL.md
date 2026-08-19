@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Flexmail contacts, custom fields, interests, segments, and sources through the Flexmail REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -25,36 +27,47 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
+  account_id (required)
   base_url
   mode
   page_size
-  personal_access_token (secret)
+  personal_access_token (secret) (required)
 
 ETL STREAMS
   contacts:
     primary key: id
-    fields: custom_fields(), email(), first_name(), id(), language(), name()
+    fields: custom_fields(object), email(string), first_name(string), id(integer), language(string), name(string)
   custom_fields:
     primary key: id
-    fields: id(), name(), placeholder(), type()
+    fields: id(string), name(string), placeholder(string), type(string)
   interests:
     primary key: id
-    fields: description(), id(), label(), name(), visibility()
+    fields: description(string), id(string), label(string), name(string), visibility(string)
   segments:
     primary key: id
-    fields: id(), name(), number_of_contacts()
+    fields: id(string), name(string), number_of_contacts(integer)
   sources:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Flexmail API read of contact and marketing-list data
   approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Run Flexmail's declared streams and reverse-ETL actions.
+  Usage: pm flexmail <command> [flags]
+  Read streams
+  Other Commands
+    contacts list - Run the contacts ETL stream [intent=etl availability=implemented stream=contacts]
+    custom fields list - Run the custom fields ETL stream [intent=etl availability=implemented stream=custom_fields]
+    interests list - Run the interests ETL stream [intent=etl availability=implemented stream=interests]
+    segments list - Run the segments ETL stream [intent=etl availability=implemented stream=segments]
+    sources list - Run the sources ETL stream [intent=etl availability=implemented stream=sources]
 
 EXAMPLES
   # Inspect as a manual

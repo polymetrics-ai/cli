@@ -1,0 +1,1701 @@
+{
+  "tagline": "Work with Notion pages, databases, data sources, blocks, comments, views and file uploads from the command line.",
+  "usage": "pm notion <command> [flags]",
+  "source_cli": {
+    "name": "Notion API",
+    "docs": "https://developers.notion.com/reference/intro",
+    "reference": "https://developers.notion.com/openapi.json",
+    "source": "official OpenAPI 3.1.0 document, retrieved 2026-08-07"
+  },
+  "groups": [
+    {
+      "id": "databases",
+      "title": "Databases",
+      "commands": [
+        "databases list"
+      ]
+    },
+    {
+      "id": "pages",
+      "title": "Pages",
+      "commands": [
+        "pages list"
+      ]
+    },
+    {
+      "id": "users",
+      "title": "Users",
+      "commands": [
+        "users list"
+      ]
+    },
+    {
+      "id": "custom_emojis",
+      "title": "Custom Emojis",
+      "commands": [
+        "custom-emojis list"
+      ]
+    },
+    {
+      "id": "file_uploads",
+      "title": "File Uploads",
+      "commands": [
+        "file-uploads list"
+      ]
+    },
+    {
+      "id": "views",
+      "title": "Views",
+      "commands": [
+        "views list"
+      ]
+    },
+    {
+      "id": "async-task",
+      "title": "Async Task",
+      "commands": [
+        "async-task get"
+      ]
+    },
+    {
+      "id": "block",
+      "title": "Block",
+      "commands": [
+        "block get",
+        "block children list",
+        "block update",
+        "block delete",
+        "block children append"
+      ]
+    },
+    {
+      "id": "comment",
+      "title": "Comment",
+      "commands": [
+        "comment list",
+        "comment get",
+        "comment create",
+        "comment update",
+        "comment update-markdown",
+        "comment delete"
+      ]
+    },
+    {
+      "id": "data-source",
+      "title": "Data Source",
+      "commands": [
+        "data-source get",
+        "data-source templates list",
+        "data-source query",
+        "data-source create",
+        "data-source update"
+      ]
+    },
+    {
+      "id": "database",
+      "title": "Database",
+      "commands": [
+        "database get",
+        "database create",
+        "database update"
+      ]
+    },
+    {
+      "id": "file-upload",
+      "title": "File Upload",
+      "commands": [
+        "file-upload get",
+        "file-upload create",
+        "file-upload complete",
+        "file-upload send"
+      ]
+    },
+    {
+      "id": "page",
+      "title": "Page",
+      "commands": [
+        "page get",
+        "page markdown get",
+        "page property get",
+        "page create",
+        "page update",
+        "page markdown update",
+        "page move",
+        "page move-to-data-source"
+      ]
+    },
+    {
+      "id": "user",
+      "title": "User",
+      "commands": [
+        "user me get",
+        "user get"
+      ]
+    },
+    {
+      "id": "view",
+      "title": "View",
+      "commands": [
+        "view get",
+        "view query results get",
+        "view create",
+        "view update",
+        "view delete",
+        "view query create",
+        "view query delete"
+      ]
+    },
+    {
+      "id": "meeting-note",
+      "title": "Meeting Note",
+      "commands": [
+        "meeting-note query",
+        "meeting-note create"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "databases list",
+      "summary": "List Notion databases as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "databases",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/search (object=database)"
+        }
+      ],
+      "examples": [
+        "pm notion databases list --json"
+      ]
+    },
+    {
+      "path": "pages list",
+      "summary": "List Notion pages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/search (object=page)"
+        }
+      ],
+      "examples": [
+        "pm notion pages list --json"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List Notion users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users"
+        }
+      ],
+      "examples": [
+        "pm notion users list --json"
+      ]
+    },
+    {
+      "path": "custom-emojis list",
+      "summary": "List Notion custom emojis as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_emojis",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_emojis"
+        }
+      ],
+      "examples": [
+        "pm notion custom-emojis list --json"
+      ]
+    },
+    {
+      "path": "file-uploads list",
+      "summary": "List Notion file uploads as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "file_uploads",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/file_uploads"
+        }
+      ],
+      "examples": [
+        "pm notion file-uploads list --json"
+      ]
+    },
+    {
+      "path": "views list",
+      "summary": "List Notion views as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "views",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views"
+        }
+      ],
+      "examples": [
+        "pm notion views list --json"
+      ]
+    },
+    {
+      "path": "async-task get",
+      "summary": "Retrieve an async task",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_async_task",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Path parameter `task_id`.",
+          "maps_to": "path.task_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-async-task",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/async_tasks/{task_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion async-task get --task-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "block get",
+      "summary": "Retrieve a block",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_block",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Path parameter `block_id`.",
+          "maps_to": "path.block_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-a-block",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion block get --block-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "block children list",
+      "summary": "Retrieve block children",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_block_children",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Path parameter `block_id`.",
+          "maps_to": "path.block_id",
+          "required": true
+        },
+        {
+          "name": "page-size",
+          "type": "number",
+          "summary": "Query parameter `page_size`.",
+          "maps_to": "query.page_size"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/get-block-children",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}/children"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion block children list --block-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "comment list",
+      "summary": "List comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.list_comments",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Identifier for a Notion block or page.",
+          "maps_to": "query.block_id",
+          "required": true
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "The number of items from the full list desired in the response. Maximum: 100",
+          "maps_to": "query.page_size"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/list-comments",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/comments"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion comment list --block-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "comment get",
+      "summary": "Retrieve a comment",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_comment",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "summary": "Path parameter `comment_id`.",
+          "maps_to": "path.comment_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-comment",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion comment get --comment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "data-source get",
+      "summary": "Retrieve a data source",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_data_source",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "summary": "Path parameter `data_source_id`.",
+          "maps_to": "path.data_source_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-a-data-source",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion data-source get --data-source-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "data-source templates list",
+      "summary": "List templates in a data source",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.list_data_source_templates",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "summary": "Path parameter `data_source_id`.",
+          "maps_to": "path.data_source_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Filter templates by name (case-insensitive substring match).",
+          "maps_to": "query.name"
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "The number of items from the full list desired in the response. Maximum: 100",
+          "maps_to": "query.page_size"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/list-data-source-templates",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}/templates"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion data-source templates list --data-source-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "database get",
+      "summary": "Retrieve a database",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_database",
+      "flags": [
+        {
+          "name": "database-id",
+          "type": "string",
+          "summary": "Path parameter `database_id`.",
+          "maps_to": "path.database_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-database",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/databases/{database_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion database get --database-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "file-upload get",
+      "summary": "Retrieve a file upload",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_file_upload",
+      "flags": [
+        {
+          "name": "file-upload-id",
+          "type": "string",
+          "summary": "Path parameter `file_upload_id`.",
+          "maps_to": "path.file_upload_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-file-upload",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/file_uploads/{file_upload_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion file-upload get --file-upload-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page get",
+      "summary": "Retrieve a page",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_page",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "path.page_id",
+          "required": true
+        },
+        {
+          "name": "filter-properties",
+          "type": "string",
+          "summary": "Supply a list of property IDs to filter properties in the response. Note that if a page doesn't have a property, it won't be included in the filtered response.",
+          "maps_to": "query.filter_properties"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-a-page",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion page get --page-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page markdown get",
+      "summary": "Retrieve a page as markdown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_page_markdown",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "path.page_id",
+          "required": true
+        },
+        {
+          "name": "include-transcript",
+          "type": "boolean",
+          "summary": "Whether to include meeting note transcripts. Defaults to false. When true, full transcripts are included; when false, a placeholder with the meeting note URL is shown instead.",
+          "maps_to": "query.include_transcript"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-page-markdown",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/markdown"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion page markdown get --page-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page property get",
+      "summary": "Retrieve a page property item",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_page_property",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "path.page_id",
+          "required": true
+        },
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "Path parameter `property_id`.",
+          "maps_to": "path.property_id",
+          "required": true
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "Query parameter `page_size`.",
+          "maps_to": "query.page_size"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-a-page-property",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/properties/{property_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion page property get --page-id \"<value>\" --property-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "user me get",
+      "summary": "Retrieve your token's bot user",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_bot_user",
+      "flags": [],
+      "source_url": "https://developers.notion.com/reference/get-self",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/me"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion user me get --json"
+      ]
+    },
+    {
+      "path": "user get",
+      "summary": "Retrieve a user",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_user",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Path parameter `user_id`.",
+          "maps_to": "path.user_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/get-user",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion user get --user-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view get",
+      "summary": "Retrieve a view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_view",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "path.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/retrieve-a-view",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion view get --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view query results get",
+      "summary": "Get view query results",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.retrieve_view_query_results",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "path.view_id",
+          "required": true
+        },
+        {
+          "name": "query-id",
+          "type": "string",
+          "summary": "Path parameter `query_id`.",
+          "maps_to": "path.query_id",
+          "required": true
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "The number of results to return per page. Maximum: 100",
+          "maps_to": "query.page_size"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/get-view-query-results",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/views/{view_id}/queries/{query_id}"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion view query results get --view-id \"<value>\" --query-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "data-source query",
+      "summary": "Query a data source",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.query_data_source",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "summary": "Path parameter `data_source_id`.",
+          "maps_to": "path.data_source_id",
+          "required": true
+        },
+        {
+          "name": "filter-properties",
+          "type": "string",
+          "summary": "Query parameter `filter_properties`.",
+          "maps_to": "query.filter_properties"
+        },
+        {
+          "name": "page-size",
+          "type": "number",
+          "summary": "Body field `page_size`.",
+          "maps_to": "body.page_size"
+        },
+        {
+          "name": "is-archived",
+          "type": "boolean",
+          "summary": "Whether to return archived pages. When omitted or false, returns non-archived pages. When true, returns archived pages.",
+          "maps_to": "body.is_archived"
+        },
+        {
+          "name": "result-type",
+          "type": "string",
+          "summary": "Optionally filter the results to only include pages or data sources. Regular, non-wiki databases only support page children. The default behavior is no result type filtering, in other words, returning",
+          "maps_to": "body.result_type"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/post-database-query",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_sources/{data_source_id}/query"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion data-source query --data-source-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "meeting-note query",
+      "summary": "Query meeting notes",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "notion.query_meeting_notes",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum number of results to return. Defaults to 50.",
+          "maps_to": "body.limit"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/query-meeting-notes",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes/query"
+        }
+      ],
+      "notes": "Bounded Notion read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm notion meeting-note query --json"
+      ]
+    },
+    {
+      "path": "meeting-note create",
+      "summary": "Create a meeting note",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_meeting_note",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Language hint for transcription. Defaults to automatic detection.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Title for the meeting note.",
+          "maps_to": "record.title"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-meeting-note",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes"
+        }
+      ],
+      "examples": [
+        "pm notion meeting-note create --json"
+      ]
+    },
+    {
+      "path": "block update",
+      "summary": "Update a block",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_block",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Path parameter `block_id`.",
+          "maps_to": "record.block_id",
+          "required": true
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "summary": "Record field `in_trash`.",
+          "maps_to": "record.in_trash"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-a-block",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "examples": [
+        "pm notion block update --block-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "block delete",
+      "summary": "Delete a block",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_block",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Path parameter `block_id`.",
+          "maps_to": "record.block_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/delete-a-block",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/blocks/{block_id}"
+        }
+      ],
+      "examples": [
+        "pm notion block delete --block-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "block children append",
+      "summary": "Append block children",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "append_block_children",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "block-id",
+          "type": "string",
+          "summary": "Path parameter `block_id`.",
+          "maps_to": "record.block_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/patch-block-children",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}/children"
+        }
+      ],
+      "examples": [
+        "pm notion block children append --block-id \"<value>\" --json"
+      ],
+      "notes": "Reverse ETL from a source record is the supported path: children is an array over Notion's 31-arm block-type union; no typed scalar leaf exists for a flag contract"
+    },
+    {
+      "path": "comment create",
+      "summary": "Create a comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_comment",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [],
+      "source_url": "https://developers.notion.com/reference/create-a-comment",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/comments"
+        }
+      ],
+      "examples": [
+        "pm notion comment create --json"
+      ]
+    },
+    {
+      "path": "comment update",
+      "summary": "Update a comment",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_comment",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "summary": "Path parameter `comment_id`.",
+          "maps_to": "record.comment_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-a-comment",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "examples": [
+        "pm notion comment update --comment-id \"<value>\" --json"
+      ],
+      "notes": "Reverse ETL from a source record is the supported path: rich_text is an array of rich-text objects with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "comment update-markdown",
+      "summary": "Update a comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_comment_markdown",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "summary": "Path parameter `comment_id`.",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "markdown",
+          "type": "string",
+          "summary": "The updated content of the comment as a Markdown string. Comment Markdown supports inline formatting only (bold, italic, strikethrough, code, links), inline equations ($expression$), and mentions. Blo",
+          "maps_to": "record.markdown",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-a-comment",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/comments/{comment_id} (body=markdown)"
+        }
+      ],
+      "examples": [
+        "pm notion comment update-markdown --comment-id \"<value>\" --markdown \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "comment delete",
+      "summary": "Delete a comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_comment",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "string",
+          "summary": "Path parameter `comment_id`.",
+          "maps_to": "record.comment_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/delete-a-comment",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/comments/{comment_id}"
+        }
+      ],
+      "examples": [
+        "pm notion comment delete --comment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "data-source create",
+      "summary": "Create a data source",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_data_source",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "parent-database-id",
+          "type": "string",
+          "summary": "The ID of the parent database (with or without dashes), for example, 195de9221179449fab8075a27c979105",
+          "maps_to": "record.parent.database_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-a-database",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_sources"
+        }
+      ],
+      "examples": [
+        "pm notion data-source create --parent-database-id \"<value>\" --json"
+      ],
+      "notes": "Reverse ETL from a source record is the supported path: properties is a free-form map of property definitions with no declared required scalar leaf"
+    },
+    {
+      "path": "data-source update",
+      "summary": "Update a data source",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_source",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "summary": "Path parameter `data_source_id`.",
+          "maps_to": "record.data_source_id",
+          "required": true
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "summary": "Whether the data source should be moved to or from the trash. If not provided, the trash status will not be updated.",
+          "maps_to": "record.in_trash"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-a-data-source",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/data_sources/{data_source_id}"
+        }
+      ],
+      "examples": [
+        "pm notion data-source update --data-source-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "database create",
+      "summary": "Create a database",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_database",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "is-inline",
+          "type": "boolean",
+          "summary": "Whether the database should be displayed inline in the parent page. Defaults to false.",
+          "maps_to": "record.is_inline"
+        },
+        {
+          "name": "parent",
+          "type": "string",
+          "summary": "The parent page or workspace where the database will be created.",
+          "maps_to": "record.parent",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-database",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/databases"
+        }
+      ],
+      "examples": [
+        "pm notion database create --parent \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "database update",
+      "summary": "Update a database",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_database",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "database-id",
+          "type": "string",
+          "summary": "Path parameter `database_id`.",
+          "maps_to": "record.database_id",
+          "required": true
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "summary": "Whether the database should be moved to or from the trash. If not provided, the trash status will not be updated.",
+          "maps_to": "record.in_trash"
+        },
+        {
+          "name": "is-inline",
+          "type": "boolean",
+          "summary": "Whether the database should be displayed inline in the parent page. If not provided, the inline status will not be updated.",
+          "maps_to": "record.is_inline"
+        },
+        {
+          "name": "is-locked",
+          "type": "boolean",
+          "summary": "Whether the database should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
+          "maps_to": "record.is_locked"
+        },
+        {
+          "name": "parent",
+          "type": "string",
+          "summary": "The parent page or workspace to move the database to. If not provided, the database will not be moved.",
+          "maps_to": "record.parent"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-database",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/databases/{database_id}"
+        }
+      ],
+      "examples": [
+        "pm notion database update --database-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page create",
+      "summary": "Create a page",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_page",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "allow-async",
+          "type": "boolean",
+          "summary": "Set to true to receive an async_task response for markdown page creation. Only supported when markdown is provided.",
+          "maps_to": "record.allow_async"
+        },
+        {
+          "name": "markdown",
+          "type": "string",
+          "summary": "Page content as Notion-flavored Markdown. Mutually exclusive with content/children.",
+          "maps_to": "record.markdown"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/post-page",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages"
+        }
+      ],
+      "examples": [
+        "pm notion page create --json"
+      ]
+    },
+    {
+      "path": "page update",
+      "summary": "Update page",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_page",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "erase-content",
+          "type": "boolean",
+          "summary": "Whether to erase all existing content from the page. When used with a template, the template content replaces the existing content. When used without a template, simply clears the page content.",
+          "maps_to": "record.erase_content"
+        },
+        {
+          "name": "in-trash",
+          "type": "boolean",
+          "summary": "Record field `in_trash`.",
+          "maps_to": "record.in_trash"
+        },
+        {
+          "name": "is-archived",
+          "type": "boolean",
+          "summary": "Record field `is_archived`.",
+          "maps_to": "record.is_archived"
+        },
+        {
+          "name": "is-locked",
+          "type": "boolean",
+          "summary": "Whether the page should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
+          "maps_to": "record.is_locked"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "record.page_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/patch-page",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}"
+        }
+      ],
+      "examples": [
+        "pm notion page update --page-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page markdown update",
+      "summary": "Update a page's content as markdown",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_page_markdown",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "allow-async",
+          "type": "boolean",
+          "summary": "Set to true to opt into receiving an async_task result when this update operation is accepted for background execution. If omitted or false, the endpoint keeps the existing synchronous response shape.",
+          "maps_to": "record.allow_async"
+        },
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "record.page_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-page-markdown",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}/markdown"
+        }
+      ],
+      "examples": [
+        "pm notion page markdown update --page-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page move",
+      "summary": "Move a page",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_page",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "record.page_id",
+          "required": true
+        },
+        {
+          "name": "parent-page-id",
+          "type": "string",
+          "summary": "The ID of the parent page (with or without dashes), for example, 195de9221179449fab8075a27c979105",
+          "maps_to": "record.parent.page_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/move-page",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages/{page_id}/move"
+        }
+      ],
+      "examples": [
+        "pm notion page move --page-id \"<value>\" --parent-page-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "page move-to-data-source",
+      "summary": "Move a page",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_page_to_data_source",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "page-id",
+          "type": "string",
+          "summary": "Path parameter `page_id`.",
+          "maps_to": "record.page_id",
+          "required": true
+        },
+        {
+          "name": "parent-data-source-id",
+          "type": "string",
+          "summary": "The ID of the parent data source (collection), with or without dashes. For example, f336d0bc-b841-465b-8045-024475c079dd",
+          "maps_to": "record.parent.data_source_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/move-page",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/pages/{page_id}/move (parent=data_source_id)"
+        }
+      ],
+      "examples": [
+        "pm notion page move-to-data-source --page-id \"<value>\" --parent-data-source-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view create",
+      "summary": "Create a view",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_view",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "data-source-id",
+          "type": "string",
+          "summary": "The ID of the data source this view should be scoped to.",
+          "maps_to": "record.data_source_id",
+          "required": true
+        },
+        {
+          "name": "database-id",
+          "type": "string",
+          "summary": "The ID of the database to create a view in. Mutually exclusive with view_id and create_database.",
+          "maps_to": "record.database_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the view.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of view to create.",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "The ID of a dashboard view to add this view to as a widget. Mutually exclusive with database_id and create_database.",
+          "maps_to": "record.view_id"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-view",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/views"
+        }
+      ],
+      "examples": [
+        "pm notion view create --data-source-id \"<value>\" --name \"<value>\" --type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view update",
+      "summary": "Update a view",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_view",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "New name for the view.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "record.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/update-a-view",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "examples": [
+        "pm notion view update --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view delete",
+      "summary": "Delete a view",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_view",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "record.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/delete-view",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}"
+        }
+      ],
+      "examples": [
+        "pm notion view delete --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view query create",
+      "summary": "Create a view query",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_view_query",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "The number of results to return per page. Maximum: 100",
+          "maps_to": "record.page_size"
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "record.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-view-query",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/views/{view_id}/queries"
+        }
+      ],
+      "examples": [
+        "pm notion view query create --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "view query delete",
+      "summary": "Delete a view query",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_view_query",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "query-id",
+          "type": "string",
+          "summary": "Path parameter `query_id`.",
+          "maps_to": "record.query_id",
+          "required": true
+        },
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "record.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/delete-view-query",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}/queries/{query_id}"
+        }
+      ],
+      "examples": [
+        "pm notion view query delete --query-id \"<value>\" --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "file-upload create",
+      "summary": "Create a file upload",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_file_upload",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "content-type",
+          "type": "string",
+          "summary": "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any.",
+          "maps_to": "record.content_type"
+        },
+        {
+          "name": "external-url",
+          "type": "string",
+          "summary": "When `mode` is `external_url`, provide the HTTPS URL of a publicly accessible file to import into your workspace.",
+          "maps_to": "record.external_url"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "summary": "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` par",
+          "maps_to": "record.filename"
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "summary": "How the file is being sent. Use `multi_part` for files larger than 20MB. Use `external_url` for files that are temporarily hosted publicly elsewhere. Default is `single_part`.",
+          "maps_to": "record.mode"
+        },
+        {
+          "name": "number-of-parts",
+          "type": "integer",
+          "summary": "When `mode` is `multi_part`, the number of parts you are uploading. This must match the number of parts as well as the final `part_number` you send.",
+          "maps_to": "record.number_of_parts"
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/create-file",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads"
+        }
+      ],
+      "examples": [
+        "pm notion file-upload create --json"
+      ]
+    },
+    {
+      "path": "file-upload complete",
+      "summary": "Complete a multi-part file upload",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "complete_file_upload",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "file-upload-id",
+          "type": "string",
+          "summary": "Path parameter `file_upload_id`.",
+          "maps_to": "record.file_upload_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.notion.com/reference/complete-file-upload",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/complete"
+        }
+      ],
+      "examples": [
+        "pm notion file-upload complete --file-upload-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "file-upload send",
+      "summary": "Upload a file",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "notion.send_file_upload",
+      "source_url": "https://developers.notion.com/reference/upload-file",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/send"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; promotion is blocked on the shared file upload runner that binds provider paths to approved payload digests. Named dependency, not a blank disposition."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "safety",
+      "summary": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation."
+    },
+    {
+      "name": "pagination",
+      "summary": "Notion paginates with start_cursor/next_cursor and has_more; ETL streams follow the cursor to exhaustion within the configured page bounds."
+    }
+  ]
+}

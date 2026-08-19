@@ -18,6 +18,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 )
 
 // widgetsSchema compiles a minimal record schema with a primary key and
@@ -124,6 +125,52 @@ func TestReadRequestQueryOverridesStaticQuery(t *testing.T) {
 	}
 	if got := gotQuery.Get("sort"); got != "asc" {
 		t.Fatalf("sort query = %q, want asc", got)
+	}
+}
+
+func TestReadRequestQueryResolvesStreamQueryTemplate(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{
+		"mine": {Template: "{{ query.mine }}"},
+	}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"mine": "true"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got := gotQuery.Get("mine"); got != "true" {
+		t.Fatalf("mine query = %q, want true", got)
+	}
+}
+
+func TestReadRequestQueryTemplateMissingFailsBeforeRequest(t *testing.T) {
+	requests := make(chan struct{}, 1)
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		requests <- struct{}{}
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{
+		"groupId": {Template: "{{ query.groupId }}"},
+	}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatal("Read: want unresolved query error")
+	}
+	if !strings.Contains(err.Error(), `unresolved key "groupId" in query`) {
+		t.Fatalf("Read error = %q, want unresolved groupId query key", err)
+	}
+	select {
+	case <-requests:
+		t.Fatal("request sent despite unresolved query template")
+	default:
 	}
 }
 
@@ -1925,6 +1972,47 @@ func TestReadRateLimitSleeperInvokedNMinus1Times(t *testing.T) {
 	// 3 requests total -> sleeper invoked between them: N-1 = 2 times.
 	if sleeps != 2 {
 		t.Fatalf("sleeps = %d, want 2 (N-1 for 3 requests)", sleeps)
+	}
+}
+
+func TestDeclaredRateLimitAddsToButDoesNotReplaceLegacyPageLimiter(t *testing.T) {
+	page := 0
+	srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+		page++
+		if page < 3 {
+			_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d","name":"a","updated_at":"2026-01-01T00:00:00Z"}], "has_more": true}`, page)
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[], "has_more": false}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type: "cursor", CursorParam: "starting_after", LastRecordField: "id", StopPath: "has_more",
+		},
+	})
+	b.HTTP.RateLimit = &RateLimitSpec{RequestsPerMinute: 600}
+	b = withAllRateLimit(b)
+	clock := &engineRateLimitClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+
+	legacyWaits := 0
+	recs, err := readAllWithSleeper(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: rateLimitTestConfig(t)}, nil, func(context.Context, time.Duration) error {
+		legacyWaits++
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 2 {
+		t.Fatalf("records = %+v, want 2", recs)
+	}
+	if legacyWaits != 2 {
+		t.Fatalf("legacy page waits = %d, want 2", legacyWaits)
+	}
+	if got, want := clock.waits, []time.Duration{time.Second, time.Second}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("declared requester waits = %v, want %v", got, want)
 	}
 }
 

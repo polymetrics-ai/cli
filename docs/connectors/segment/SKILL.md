@@ -11,9 +11,11 @@ Reads Segment workspace, source, and destination metadata through the Segment Pu
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,23 +29,23 @@ Reads Segment workspace, source, and destination metadata through the Segment Pu
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - workspaces:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 - sources:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 - destinations:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

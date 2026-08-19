@@ -11,6 +11,7 @@ Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through t
 
 ## Icon
 
+- id: zendesk-chat
 - asset: icons/zendesk-chat.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,7 +28,7 @@ Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through t
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - start_date
 - access_token (secret)
 
@@ -35,20 +36,20 @@ Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through t
 
 - agents:
   - primary key: id
-  - fields: create_date(), display_name(), email(), enabled(), first_name(), id(), last_login(), last_name(), role_id()
+  - fields: create_date(string), display_name(string), email(string), enabled(boolean), first_name(string), id(integer), last_login(string), last_name(string), role_id(integer)
 - chats:
   - primary key: id
   - cursor: timestamp
-  - fields: comment(), department_id(), duration(), id(), rating(), session(), timestamp(), type(), visitor()
+  - fields: comment(string), department_id(integer), duration(integer), id(string), rating(string), session(object), timestamp(string), type(string), visitor(object)
 - departments:
   - primary key: id
-  - fields: description(), enabled(), id(), members(), name(), settings()
+  - fields: description(string), enabled(boolean), id(integer), members(array), name(string), settings(object)
 - shortcuts:
   - primary key: id
-  - fields: id(), message(), name(), options(), scope(), tags()
+  - fields: id(integer), message(string), name(string), options(string), scope(string), tags(array)
 - triggers:
   - primary key: id
-  - fields: definition(), description(), enabled(), id(), name()
+  - fields: definition(object), description(string), enabled(boolean), id(integer), name(string)
 
 ## Sync Modes
 

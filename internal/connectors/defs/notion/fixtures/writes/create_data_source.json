@@ -1,0 +1,25 @@
+{
+  "record": {
+    "parent": {
+      "database_id": "fixture_database_id"
+    },
+    "properties": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/data_sources",
+    "body": {
+      "parent": {
+        "database_id": "fixture_database_id"
+      },
+      "properties": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

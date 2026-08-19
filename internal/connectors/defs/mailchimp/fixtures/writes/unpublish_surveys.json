@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "survey_id": "fixture_survey_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/surveys/fixture_survey_id/actions/unpublish"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_unpublish_surveys"
+    }
+  }
+}

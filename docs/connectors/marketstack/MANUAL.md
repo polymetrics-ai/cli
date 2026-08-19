@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends through the Marketstack REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -28,27 +30,27 @@ CONFIGURATION
   base_url
   start_date
   symbols
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   exchanges:
     primary key: mic
-    fields: acronym(), city(), country(), country_code(), currency_code(), currency_name(), currency_symbol(), mic(), name(), timezone(), timezone_abbr(), website()
+    fields: acronym(string), city(string), country(string), country_code(string), currency_code(string), currency_name(string), currency_symbol(string), mic(string), name(string), timezone(string), timezone_abbr(string), website(string)
   tickers:
     primary key: symbol
-    fields: has_eod(), has_intraday(), name(), stock_exchange_mic(), stock_exchange_name(), symbol()
+    fields: has_eod(boolean), has_intraday(boolean), name(string), stock_exchange_mic(string), stock_exchange_name(string), symbol(string)
   eod:
     primary key: symbol, date
     cursor: date
-    fields: adj_close(), adj_high(), adj_low(), adj_open(), adj_volume(), close(), date(), dividend(), exchange(), high(), low(), open(), split_factor(), symbol(), volume()
+    fields: adj_close(number), adj_high(number), adj_low(number), adj_open(number), adj_volume(number), close(number), date(string), dividend(number), exchange(string), high(number), low(number), open(number), split_factor(number), symbol(string), volume(number)
   splits:
     primary key: symbol, date
     cursor: date
-    fields: date(), split_factor(), symbol()
+    fields: date(string), split_factor(number), symbol(string)
   dividends:
     primary key: symbol, date
     cursor: date
-    fields: date(), dividend(), symbol()
+    fields: date(string), dividend(number), symbol(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

@@ -11,6 +11,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
@@ -27,55 +28,55 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 
 ## Configuration
 
-- appointment_date
-- base_url
-- lab_result_concepts
-- patient_query
-- patient_uuid
-- username
-- password (secret)
+- appointment_date (required)
+- base_url (required)
+- lab_result_concepts (required)
+- patient_query (required)
+- patient_uuid (required)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - patients:
   - primary key: uuid
-  - fields: display(), identifiers(), person(), uuid(), voided()
+  - fields: display(string), identifiers(array), person(object), uuid(string), voided(boolean)
 - encounters:
   - primary key: uuid
-  - fields: display(), encounterDatetime(), encounterType(), patient(), uuid(), visit()
+  - fields: display(string), encounterDatetime(string), encounterType(object), patient(object), uuid(string), visit(object)
 - observations:
   - primary key: uuid
-  - fields: concept(), display(), obsDatetime(), uuid(), value()
+  - fields: concept(object), display(string), obsDatetime(string), uuid(string), value(string)
 - visits:
   - primary key: uuid
-  - fields: display(), location(), startDatetime(), stopDatetime(), uuid(), visitType()
+  - fields: display(string), location(object), startDatetime(string), stopDatetime(string), uuid(string), visitType(object)
 - concepts:
   - primary key: uuid
-  - fields: conceptClass(), datatype(), display(), name(), uuid()
+  - fields: conceptClass(object), datatype(object), display(string), name(object), uuid(string)
 - locations:
   - primary key: uuid
-  - fields: description(), display(), name(), tags(), uuid()
+  - fields: description(string), display(string), name(string), tags(array), uuid(string)
 - providers:
   - primary key: uuid
-  - fields: attributes(), display(), identifier(), person(), uuid()
+  - fields: attributes(array), display(string), identifier(string), person(object), uuid(string)
 - drug_orders:
   - primary key: uuid
-  - fields: dateActivated(), display(), dose(), doseUnits(), drug(), uuid()
+  - fields: dateActivated(string), display(string), dose(number), doseUnits(object), drug(object), uuid(string)
 - lab_orders:
   - primary key: uuid
-  - fields: accessionNumber(), concept(), dateActivated(), display(), orderType(), uuid()
+  - fields: accessionNumber(string), concept(object), dateActivated(string), display(string), orderType(object), uuid(string)
 - lab_results:
   - primary key: uuid
-  - fields: concept(), display(), obsDatetime(), uuid(), value()
+  - fields: concept(object), display(string), obsDatetime(string), uuid(string), value(string)
 - appointments:
   - primary key: uuid
-  - fields: display(), endDateTime(), patient(), service(), startDateTime(), status(), uuid()
+  - fields: display(string), endDateTime(string), patient(object), service(object), startDateTime(string), status(string), uuid(string)
 - diagnoses:
-  - fields: certainty(), codedAnswer(), diagnosisDateTime(), display(), existingObs(), order()
+  - fields: certainty(string), codedAnswer(object), diagnosisDateTime(string), display(string), existingObs(string), order(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
@@ -145,7 +146,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
   - --max-bytes (integer): Maximum direct-read response bytes; typed operations declare their own lower cap.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - Clinical data
   - patients list - List Bahmni/OpenMRS patients as ETL records (requires a patient search term). [intent=etl availability=implemented stream=patients]
@@ -176,17 +177,17 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
   - appointments provider-response - Update an appointment provider response. [intent=reverse_etl availability=implemented write=update_appointment_provider_response]; approval: reverse ETL writes require plan, preview, approval, execute; risk: high; notes: Version-pinned supported write route; execute only through reverse ETL approval against disposable synthetic records unless explicitly approved.; flags: --appointment-uuid, --provider-detail-uuid, --response
   - appointments reschedule - Appointment reschedule is not exposed in this checkpoint; the local pinned Bahmni appointments lab rejected the singular-controller AppointmentRequest-shaped body. [intent=reverse_etl availability=unsupported_local unsupported local workflow]; approval: reverse ETL writes require plan, preview, approval, execute; risk: unsupported local appointment reschedule mutation; no live proof, not retained as an executable write; notes: Blocked until the singular reschedule route is live-proven or a concrete upstream-required field is identified. Diagnostic evidence: typed plan/preview reached execute with HTTP 400 safe field uuid; direct counterfactual to POST /ws/rest/v1/appointment/{uuid}/reschedule returned HTTP 400 with upstream code org.hibernate.exception.internal.SQLExceptionTypeDelegate:59. Pinned source: AppointmentController.rescheduleAppointment accepts AppointmentRequest and calls AppointmentsServiceImpl.reschedule, but current lab did not accept the generated contract-shaped body.
 - Direct reads
-  - patient get - Retrieve a single patient resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - encounter get - Retrieve a single encounter resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - visit get - Retrieve a single visit resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - concept get - Retrieve a single concept resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - provider get - Retrieve a single provider resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - location get - Retrieve a single location resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-  - fhir patient-read - Read a FHIR R4 Patient resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
-  - fhir observation-read - Read a FHIR R4 Observation resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
-  - fhir encounter-read - Read a FHIR R4 Encounter resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
-  - fhir condition-read - Read a FHIR R4 Condition resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
-  - bahmnicore patient-search - Search patients with the pinned bahmni-commons GET patient search route. [intent=direct_read availability=implemented]; approval: none: read-only GET query with allow-listed query parameters and bounded JSON output.; risk: bounded typed GET read-query; the response is size-capped, secret-shaped fields are redacted, and the operation direct-read engine redacts declared patient-search sensitive fields including identifier, addressFieldValue, display, givenName, middleName, familyName, birthDate, and deathDate. Remaining clinical PHI fields should still be treated as clinical data.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index
+  - patient get - Retrieve a single patient resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - encounter get - Retrieve a single encounter resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - visit get - Retrieve a single visit resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - concept get - Retrieve a single concept resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - provider get - Retrieve a single provider resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - location get - Retrieve a single location resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid, --page, --page-cursor
+  - fhir patient-read - Read a FHIR R4 Patient resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id, --page, --page-cursor
+  - fhir observation-read - Read a FHIR R4 Observation resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id, --page, --page-cursor
+  - fhir encounter-read - Read a FHIR R4 Encounter resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id, --page, --page-cursor
+  - fhir condition-read - Read a FHIR R4 Condition resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id, --page, --page-cursor
+  - bahmnicore patient-search - Search patients with the pinned bahmni-commons GET patient search route. [intent=direct_read availability=implemented operation=bahmni.patient_search]; approval: none: read-only GET query with allow-listed query parameters and bounded JSON output.; risk: bounded typed GET read-query; the response is size-capped, secret-shaped fields are redacted, and the operation direct-read engine redacts declared patient-search sensitive fields including identifier, addressFieldValue, display, givenName, middleName, familyName, birthDate, and deathDate. Remaining clinical PHI fields should still be treated as clinical data.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index, --page, --page-cursor
 - Documents
   - documents upload - Visit-document upload is not advertised until a file-backed bounded multipart/hash-gated typed surface is implemented and live-proven. [intent=reverse_etl availability=unsafe_or_disallowed]; approval: blocked: inline content upload is not a retained typed write surface; risk: critical; notes: Blocked for PR #533: current inline JSON content surface lacks the claimed file snapshot/SHA-256 approval binding; do not use as an advertised write.
 - Other Commands

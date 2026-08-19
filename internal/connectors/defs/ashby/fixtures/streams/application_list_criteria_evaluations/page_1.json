@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/application.listCriteriaEvaluations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "application_list_criteria_evaluations_id_fixture_10",
+          "criterion": {
+            "id": "application_list_criteria_evaluations_id_fixture_10",
+            "title": "Title fixture 10",
+            "type": "ResumePrompt",
+            "prompt": "application_list_criteria_evaluations_prompt_fixture_10",
+            "applicationFormDefinitionId": "application_list_criteria_evaluations_applicationformdefinitionid_fixture_10",
+            "applicationFormFieldPath": "application_list_criteria_evaluations_applicationformfieldpath_fixture_10"
+          },
+          "status": "Pending",
+          "outcome": "application_list_criteria_evaluations_outcome_fixture_10",
+          "reasoning": "Reasoning fixture 10",
+          "skipReason": "application_list_criteria_evaluations_skipreason_fixture_10",
+          "outcomeNumber": 10.0,
+          "evaluatedAt": "2026-02-10T10:00:00Z"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "applicationId": "applicationid_fixture"
+  }
+}

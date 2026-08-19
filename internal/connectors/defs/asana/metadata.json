@@ -1,7 +1,7 @@
 {
   "name": "asana",
   "display_name": "Asana",
-  "description": "Reads Asana workspaces, projects, tasks, sections, tags, stories, users, teams, custom fields, project statuses, and team/workspace memberships through the Asana v1 REST API. Writes task/project/section/tag create-update-delete and task comments.",
+  "description": "Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
   "integration_type": "api",
   "docs_url": "https://developers.asana.com/reference/rest-api-reference",
   "release_stage": "ga",
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Asana API read of workspace, project, task, and PM metadata",
-    "write": "external mutations: creates/updates/deletes tasks, projects, sections, and tags, and posts task comments",
-    "approval": "required for every write action; deletes are flagged destructive/irreversible in writes.json's per-action risk field"
+    "read": "external Asana API reads use fixed declared streams or blocked/planned fixed-target command metadata; no raw provider query/path passthrough",
+    "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
+    "approval": "all write execution follows plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
   }
 }

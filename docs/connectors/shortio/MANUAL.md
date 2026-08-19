@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Short.io links and domains through the Short.io REST API.
 
 ICON
+  id: shortio
   asset: icons/shortio.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -34,11 +35,11 @@ ETL STREAMS
   links:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), path(), title(), updated_at()
+    fields: id(string), name(string), path(string), title(string), updated_at(string)
   domains:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), path(), title(), updated_at()
+    fields: id(string), name(string), path(string), title(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

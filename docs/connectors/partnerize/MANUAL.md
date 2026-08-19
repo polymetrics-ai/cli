@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Partnerize conversions, campaigns, and publishers through the REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,22 +28,22 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  application_key (secret)
-  user_api_key (secret)
+  application_key (secret) (required)
+  user_api_key (secret) (required)
 
 ETL STREAMS
   conversions:
     primary key: id
     cursor: created_at
-    fields: created_at(), currency(), id(), status(), value()
+    fields: created_at(string), currency(string), id(string), status(string), value(number)
   campaigns:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
   publishers:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

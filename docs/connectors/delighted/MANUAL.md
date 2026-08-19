@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API; can create/update and delete people.
 
 ICON
+  id: delighted
   asset: icons/delighted.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,24 +30,24 @@ CONFIGURATION
   base_url
   mode
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   survey_responses:
     primary key: id
     cursor: updated_at
-    fields: comment(), created_at(), id(), notes(), permalink(), person(), person_properties(), score(), survey_type(), tags(), updated_at()
+    fields: comment(string), created_at(integer), id(string), notes(array), permalink(string), person(string), person_properties(object), score(integer), survey_type(string), tags(array), updated_at(integer)
   people:
     primary key: id
-    fields: created_at(), email(), id(), last_responded_at(), last_sent_at(), name(), next_survey_scheduled_at(), phone_number()
+    fields: created_at(integer), email(string), id(string), last_responded_at(integer), last_sent_at(integer), name(string), next_survey_scheduled_at(integer), phone_number(string)
   bounces:
     primary key: person_id
-    fields: bounced_at(), email(), name(), person_id()
+    fields: bounced_at(integer), email(string), name(string), person_id(string)
   unsubscribes:
     primary key: person_id
-    fields: email(), name(), person_id(), unsubscribed_at()
+    fields: email(string), name(string), person_id(string), unsubscribed_at(integer)
   metrics:
-    fields: detractor_count(), detractor_percent(), nps(), passive_count(), passive_percent(), promoter_count(), promoter_percent(), response_count()
+    fields: detractor_count(integer), detractor_percent(number), nps(integer), passive_count(integer), passive_percent(number), promoter_count(integer), promoter_percent(number), response_count(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -54,6 +55,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_person:
     endpoint: POST /people.json
+    required fields: email
     risk: creates or updates a Delighted person and may trigger survey workflow depending on account settings
   delete_person:
     endpoint: DELETE /people/{{ record.person_id }}.json

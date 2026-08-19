@@ -44,12 +44,24 @@
     },
     "auth_type": {
       "type": "string",
-      "description": "Legacy's auth_type string-enum surface (auth.go:81-82), restored ADDITIONALLY alongside public_access once engine.ResolveCheckWhen made the when-grammar's `in` operator statically validatable (S3 engine mini-wave item 2, ledger G14 R1 CONDITION). Only the 4 legacy PUBLIC synonyms are reproduced here — 'public', 'none', 'anonymous', or 'unauthenticated' (case-sensitive; legacy lowercases/normalizes before comparing, this bundle does not) arm the identical mode:none candidate public_access arms. Legacy's OTHER auth_type values (token/oauth/github_app/etc. synonyms, and auth_type=github_app's override-token-precedence behavior) are NOT reproduced — this key exists solely to close the public-enum migration gap, not to replicate legacy's full auth_type mode-selection semantics; any other auth_type value (or none at all) has zero effect on auth selection, which still resolves via the token/app_id-presence candidates ahead of it in the auth list."
+      "description": "Legacy's auth_type string-enum surface (auth.go:81-82), restored ADDITIONALLY alongside public_access once engine.ResolveCheckWhen made the when-grammar's `in` operator statically validatable (S3 engine mini-wave item 2, ledger G14 R1 CONDITION). Only the 4 legacy PUBLIC synonyms are reproduced here — 'public', 'none', 'anonymous', or 'unauthenticated' (case-sensitive; legacy lowercases/normalizes before comparing, this bundle does not) arm the identical mode:none candidate public_access arms. Legacy's OTHER auth_type values (token/oauth/github_app/etc. synonyms, and auth_type=github_app's override-token-precedence behavior) are NOT reproduced for auth selection — bearer/custom selection still follows token/app_id presence. Rate-limit policy honors an explicit non-secret auth_type selector: use 'token' (or 'oauth') for a personal/OAuth/user token, 'github_app' for an installation token, 'github_token' for the GitHub Actions GITHUB_TOKEN, or one of the public values for unauthenticated traffic. An App configuration identified by app_id is automatically normalized to the github_app App installation policy."
     },
     "since": {
       "type": "string",
       "format": "date-time",
       "description": "Lower-bound timestamp for issues, issue_comments, and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key value)."
+    },
+    "rate_limit_account": {
+      "type": "string",
+      "description": "Authenticated GitHub user login used only as the non-secret coordination subject for auth_type=token or oauth rate limits. It is not a token and need not match the target repository owner."
+    },
+    "rate_limit_ip": {
+      "type": "string",
+      "description": "Originating public IP address used only as the non-secret coordination subject for unauthenticated GitHub rate limits."
+    },
+    "rate_limit_repository": {
+      "type": "string",
+      "description": "Repository identity in owner/repo form used only as the non-secret coordination subject for auth_type=github_token GitHub Actions rate limits."
     },
     "token": {
       "type": "string",

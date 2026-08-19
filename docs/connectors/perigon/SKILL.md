@@ -11,9 +11,11 @@ Reads Perigon news articles, story clusters, journalists, sources, companies, pe
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -32,32 +34,32 @@ Reads Perigon news articles, story clusters, journalists, sources, companies, pe
 - page_size
 - query
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - articles:
   - primary key: article_id
   - cursor: pub_date
-  - fields: article_id(), pub_date(), source(), title(), url()
+  - fields: article_id(string), pub_date(string), source(object), title(string), url(string)
 - stories:
   - primary key: id
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), updatedAt(string)
 - journalists:
   - primary key: id
-  - fields: avgMonthlyPosts(), description(), facebookUrl(), fullName(), headline(), id(), imageUrl(), instagramUrl(), linkedinUrl(), locations(), name(), title(), topCategories(), topCountries(), topLabels(), topSources(), topTopics(), twitterBio(), twitterHandle(), updatedAt(), websiteUrl()
+  - fields: avgMonthlyPosts(integer), description(string), facebookUrl(string), fullName(string), headline(string), id(string), imageUrl(string), instagramUrl(string), linkedinUrl(string), locations(array), name(string), title(string), topCategories(array), topCountries(array), topLabels(array), topSources(array), topTopics(array), twitterBio(string), twitterHandle(string), updatedAt(string), websiteUrl(string)
 - sources:
   - primary key: id
-  - fields: adFontesBiasRating(), allSidesBiasRating(), altNames(), avgBiasRating(), avgMonthlyPosts(), description(), domain(), globalRank(), id(), location(), mbfcBiasRating(), monthlyVisits(), name(), paywall(), topCategories(), topCountries(), topLabels(), topTopics(), updatedAt()
+  - fields: adFontesBiasRating(string), allSidesBiasRating(string), altNames(array), avgBiasRating(string), avgMonthlyPosts(integer), description(string), domain(string), globalRank(integer), id(string), location(object), mbfcBiasRating(string), monthlyVisits(integer), name(string), paywall(boolean), topCategories(array), topCountries(array), topLabels(array), topTopics(array), updatedAt(string)
 - companies:
   - primary key: id
-  - fields: address(), altNames(), ceo(), city(), country(), description(), domains(), fullTimeEmployees(), globalRank(), id(), industry(), isActivelyTrading(), isAdr(), isEtf(), isFund(), monthlyVisits(), name(), revenue(), sector(), state(), symbols(), updatedAt(), webResources(), yearFounded(), zip()
+  - fields: address(string), altNames(array), ceo(string), city(string), country(string), description(string), domains(array), fullTimeEmployees(integer), globalRank(integer), id(string), industry(string), isActivelyTrading(boolean), isAdr(boolean), isEtf(boolean), isFund(boolean), monthlyVisits(integer), name(string), revenue(string), sector(string), state(string), symbols(array), updatedAt(string), webResources(object), yearFounded(integer), zip(string)
 - people:
   - primary key: wikidataId
-  - fields: abstract(), aliases(), createdAt(), dateOfBirth(), dateOfDeath(), description(), gender(), image(), name(), occupation(), politicalParty(), position(), updatedAt(), wikidataId()
+  - fields: abstract(string), aliases(array), createdAt(string), dateOfBirth(object), dateOfDeath(object), description(string), gender(object), image(object), name(string), occupation(array), politicalParty(array), position(array), updatedAt(string), wikidataId(string)
 - topics:
   - primary key: name
-  - fields: category(), labels(), name(), subcategory()
+  - fields: category(string), labels(object), name(string), subcategory(string)
 
 ## Sync Modes
 

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "value": "Fixture Project Tag"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project-tag",
+    "body": {
+      "value": "Fixture Project Tag"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_project_tag_fixture"
+    }
+  }
+}

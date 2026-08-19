@@ -1,0 +1,4 @@
+{
+  "record": {"calendar_id": "calendar_fixture_1", "new_data_owner": "owner@example.invalid", "use_admin_access": true},
+  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/transferOwnership"}
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "custom_field_gid": "fixture-custom-field-gid",
+    "data": {
+      "workspace": "fixture-workspace",
+      "currency_code": "fixture-currency-code",
+      "custom_label": "fixture-custom-label"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/custom_fields/fixture-custom-field-gid",
+    "body": {
+      "data": {
+        "workspace": "fixture-workspace",
+        "currency_code": "fixture-currency-code",
+        "custom_label": "fixture-custom-label"
+      }
+    }
+  }
+}

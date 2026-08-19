@@ -13,6 +13,7 @@ DESCRIPTION
   Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.
 
 ICON
+  id: ip2whois
   asset: icons/ip2whois.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,27 +28,27 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  domains
+  domains (required)
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   whois:
     primary key: domain
     cursor: update_date
-    fields: admin_email(), admin_name(), billing_email(), billing_name(), create_date(), domain(), domain_age(), domain_id(), expire_date(), nameservers(), registrant_country(), registrant_email(), registrant_name(), registrant_organization(), registrar_iana_id(), registrar_name(), registrar_url(), status(), tech_email(), tech_name(), update_date(), whois_server()
+    fields: admin_email(string), admin_name(string), billing_email(string), billing_name(string), create_date(string), domain(string), domain_age(integer), domain_id(string), expire_date(string), nameservers(string), registrant_country(string), registrant_email(string), registrant_name(string), registrant_organization(string), registrar_iana_id(string), registrar_name(string), registrar_url(string), status(string), tech_email(string), tech_name(string), update_date(string), whois_server(string)
   contacts_registrant:
     primary key: domain, role
-    fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+    fields: city(string), country(string), domain(string), email(string), fax(string), name(string), organization(string), phone(string), region(string), role(string), street_address(string), zip_code(string)
   contacts_admin:
     primary key: domain, role
-    fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+    fields: city(string), country(string), domain(string), email(string), fax(string), name(string), organization(string), phone(string), region(string), role(string), street_address(string), zip_code(string)
   contacts_tech:
     primary key: domain, role
-    fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+    fields: city(string), country(string), domain(string), email(string), fax(string), name(string), organization(string), phone(string), region(string), role(string), street_address(string), zip_code(string)
   contacts_billing:
     primary key: domain, role
-    fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+    fields: city(string), country(string), domain(string), email(string), fax(string), name(string), organization(string), phone(string), region(string), role(string), street_address(string), zip_code(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

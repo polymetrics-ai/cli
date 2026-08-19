@@ -11,6 +11,7 @@ Reads latest news, cryptocurrency news, and news sources from the NewsData.io RE
 
 ## Icon
 
+- id: source-newsdata
 - asset: icons/source-newsdata.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -35,21 +36,21 @@ Reads latest news, cryptocurrency news, and news sources from the NewsData.io RE
 - query
 - query_in_title
 - size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - latest:
   - primary key: article_id
   - cursor: pubDate
-  - fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+  - fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_priority(integer), title(string)
 - crypto:
   - primary key: article_id
   - cursor: pubDate
-  - fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+  - fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_priority(integer), title(string)
 - sources:
   - primary key: id
-  - fields: category(), country(), description(), icon(), id(), language(), name(), url()
+  - fields: category(array), country(array), description(string), icon(string), id(string), language(array), name(string), url(string)
 
 ## Sync Modes
 

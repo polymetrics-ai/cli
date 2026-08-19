@@ -11,9 +11,11 @@ Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onflee
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,29 +31,29 @@ Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onflee
 - base_url
 - max_pages
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - tasks:
   - primary key: id
   - cursor: timeLastModified
-  - fields: completed(), creator(), executor(), id(), merchant(), shortId(), state(), timeCreated(), timeLastModified(), trackingURL(), worker()
+  - fields: completed(boolean), creator(string), executor(string), id(string), merchant(string), shortId(string), state(integer), timeCreated(integer), timeLastModified(integer), trackingURL(string), worker(string)
 - workers:
   - primary key: id
   - cursor: timeLastModified
-  - fields: activeTask(), id(), name(), onDuty(), phone(), timeCreated(), timeLastModified(), timeLastSeen()
+  - fields: activeTask(string), id(string), name(string), onDuty(boolean), phone(string), timeCreated(integer), timeLastModified(integer), timeLastSeen(integer)
 - teams:
   - primary key: id
   - cursor: timeLastModified
-  - fields: hub(), id(), name(), timeCreated(), timeLastModified()
+  - fields: hub(string), id(string), name(string), timeCreated(integer), timeLastModified(integer)
 - hubs:
   - primary key: id
-  - fields: address(), id(), name()
+  - fields: address(string), id(string), name(string)
 - administrators:
   - primary key: id
   - cursor: timeLastModified
-  - fields: email(), id(), isActive(), name(), timeCreated(), timeLastModified(), type()
+  - fields: email(string), id(string), isActive(boolean), name(string), timeCreated(integer), timeLastModified(integer), type(string)
 
 ## Sync Modes
 

@@ -11,9 +11,11 @@ Reads Lob addresses, postcards, letters, checks, and bank accounts through the L
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -30,30 +32,30 @@ Reads Lob addresses, postcards, letters, checks, and bank accounts through the L
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - addresses:
   - primary key: id
   - cursor: date_created
-  - fields: address_city(), address_country(), address_line1(), address_line2(), address_state(), address_zip(), company(), date_created(), date_modified(), deleted(), description(), email(), id(), name(), object(), phone()
+  - fields: address_city(string), address_country(string), address_line1(string), address_line2(string), address_state(string), address_zip(string), company(string), date_created(string), date_modified(string), deleted(boolean), description(string), email(string), id(string), name(string), object(string), phone(string)
 - postcards:
   - primary key: id
   - cursor: date_created
-  - fields: carrier(), date_created(), date_modified(), deleted(), description(), expected_delivery_date(), id(), object(), send_date(), status(), url()
+  - fields: carrier(string), date_created(string), date_modified(string), deleted(boolean), description(string), expected_delivery_date(string), id(string), object(string), send_date(string), status(string), url(string)
 - letters:
   - primary key: id
   - cursor: date_created
-  - fields: carrier(), date_created(), date_modified(), deleted(), description(), expected_delivery_date(), id(), object(), send_date(), status(), url()
+  - fields: carrier(string), date_created(string), date_modified(string), deleted(boolean), description(string), expected_delivery_date(string), id(string), object(string), send_date(string), status(string), url(string)
 - checks:
   - primary key: id
   - cursor: date_created
-  - fields: carrier(), date_created(), date_modified(), deleted(), description(), expected_delivery_date(), id(), object(), send_date(), status(), url()
+  - fields: carrier(string), date_created(string), date_modified(string), deleted(boolean), description(string), expected_delivery_date(string), id(string), object(string), send_date(string), status(string), url(string)
 - bank_accounts:
   - primary key: id
   - cursor: date_created
-  - fields: account_number(), account_type(), bank_name(), date_created(), date_modified(), deleted(), description(), id(), object(), routing_number(), signatory(), verified()
+  - fields: account_number(string), account_type(string), bank_name(string), date_created(string), date_modified(string), deleted(boolean), description(string), id(string), object(string), routing_number(string), signatory(string), verified(boolean)
 
 ## Sync Modes
 

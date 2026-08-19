@@ -1,0 +1,21 @@
+{
+  "record": {
+    "status_id": "fixture-status-id",
+    "status": {
+      "name": "fixture-name",
+      "category": "fixture-category",
+      "description": "fixture-description"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/it_asset_management/statuses/fixture-status-id",
+    "body": {
+      "status": {
+        "name": "fixture-name",
+        "category": "fixture-category",
+        "description": "fixture-description"
+      }
+    }
+  }
+}

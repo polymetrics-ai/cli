@@ -1,0 +1,22 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "segment_id": "fixture_segment_id",
+    "members_to_add": [],
+    "members_to_remove": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/segments/fixture_segment_id",
+    "body": {
+      "members_to_add": [],
+      "members_to_remove": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_segments_2"
+    }
+  }
+}

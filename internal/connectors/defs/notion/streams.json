@@ -12,7 +12,13 @@
       }
     ],
     "pagination": {
-      "type": "none"
+      "type": "cursor",
+      "cursor_param": "start_cursor",
+      "token_path": "next_cursor",
+      "stop_path": "has_more",
+      "size_param": "page_size",
+      "page_size": 100,
+      "max_pages": 1000
     },
     "check": {
       "method": "GET",
@@ -76,6 +82,33 @@
         "skip_dynamic": true,
         "reason": "Routed through the same StreamHook as databases/pages for a single consistent dispatch path across the bundle, even though GET /users' query-param start_cursor pagination is independently declarative-expressible (docs.md Known limits); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_UsersQueryCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
       }
+    },
+    {
+      "name": "custom_emojis",
+      "path": "/v1/custom_emojis",
+      "records": {
+        "path": "results"
+      },
+      "projection": "schema",
+      "schema": "schemas/custom_emojis.json"
+    },
+    {
+      "name": "file_uploads",
+      "path": "/v1/file_uploads",
+      "records": {
+        "path": "results"
+      },
+      "projection": "schema",
+      "schema": "schemas/file_uploads.json"
+    },
+    {
+      "name": "views",
+      "path": "/v1/views",
+      "records": {
+        "path": "results"
+      },
+      "projection": "schema",
+      "schema": "schemas/views.json"
     }
   ]
 }

@@ -11,6 +11,7 @@ Reads public TVmaze broadcast and web schedules without credentials.
 
 ## Icon
 
+- id: tvmazeschedule
 - asset: icons/tvmazeschedule.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -36,11 +37,11 @@ Reads public TVmaze broadcast and web schedules without credentials.
 - schedule:
   - primary key: id
   - cursor: airdate
-  - fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+  - fields: airdate(string), airtime(string), id(integer), name(string), show_id(integer), show_name(string)
 - web_schedule:
   - primary key: id
   - cursor: airdate
-  - fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+  - fields: airdate(string), airtime(string), id(integer), name(string), show_id(integer), show_name(string)
 
 ## Sync Modes
 

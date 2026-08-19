@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/disposition_stages",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "disposition_stages_fixture_1",
+          "text": "Fixture disposition stages",
+          "name": "Fixture disposition stages",
+          "createdAt": 1767225601000,
+          "updatedAt": 1767225602000
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

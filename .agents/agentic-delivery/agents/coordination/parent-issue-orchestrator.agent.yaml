@@ -78,6 +78,7 @@ workflow:
 - create_or_confirm_parent_pr_to_main
 - seed_parent_pr_when_no_diff_exists
 - build_dependency_and_write_scope_queue
+- enforce_connector_target_scope_and_foundation_split_when_connector_lane
 - spawn_or_assign_independent_workers
 - receive_worker_handoffs
 - verify_sub_pr_scope_checks_and_review_route
@@ -115,6 +116,7 @@ guardrails:
   input:
   - parent PR must exist before sub-issue execution is considered ready
   - each worker must receive one issue, allowed paths, branch policy, and handoff template
+  - connector implementation workers must receive exactly one target connector, ownership guard evidence requirements, changed-path compliance requirements, and the foundation issue/PR path for shared work
   blocking_human_gates:
   - parent PR merge to main
   - project scope refresh
@@ -126,6 +128,7 @@ guardrails:
   - quality gate reductions
   output:
   - shared parent artifacts are orchestrator-owned
+  - connector PRs must not absorb generic shared runtime/tooling or unrelated connector changes; route those to separate foundation issues/PRs before connector implementation proceeds
   - no closing keywords in sub-PRs targeting parent branches
   - skipped Claude review status is not approval
   - Claude run failures or quota exhaustion are blockers unless a fallback route is recorded

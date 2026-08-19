@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "native_database",
+      "id": "postgres_polling_watermark"
+    },
+    "eligible_streams": ["*"],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_append",
+      "incremental_upsert",
+      "incremental_dedupe",
+      "incremental_dedupe_history"
+    ],
+    "ordered_pipeline": true,
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "postgres_polling_watermark",
+      "run_id": "shared_source_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "native_database",
+      "id": "postgres_managed_target"
+    },
+    "eligible_actions": [
+      "managed_full_overwrite",
+      "managed_full_append",
+      "managed_incremental_append",
+      "managed_incremental_upsert",
+      "managed_incremental_dedupe",
+      "managed_incremental_dedupe_history"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_append",
+      "incremental_upsert",
+      "incremental_dedupe",
+      "incremental_dedupe_history"
+    ],
+    "ordered_pipeline": true,
+    "copy_worker_maximum": 8,
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "tombstone"
+    },
+    "conformance": {
+      "suite": "postgres_managed_target",
+      "run_id": "warehouse_workset_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_overwrite", "strategy": "replace", "action": "managed_full_overwrite"},
+      {"mode": "full_append", "strategy": "append", "action": "managed_full_append"},
+      {"mode": "incremental_append", "strategy": "append", "action": "managed_incremental_append"},
+      {"mode": "incremental_upsert", "strategy": "merge", "action": "managed_incremental_upsert"},
+      {"mode": "incremental_dedupe", "strategy": "dedupe", "action": "managed_incremental_dedupe"},
+      {"mode": "incremental_dedupe_history", "strategy": "dedupe_history", "action": "managed_incremental_dedupe_history"}
+    ]
+  }
+}

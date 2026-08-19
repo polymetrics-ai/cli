@@ -11,9 +11,17 @@ Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billi
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-zoho-billing
+- asset: icons/simple-icons/zoho-billing.svg
+- title: Zoho
+- simple_icon_slug: zoho
+- simple_icon_hex: E42527
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
+- match: curated-alias
+- matched_by: zoho
 
 ## Capabilities
 
@@ -28,22 +36,22 @@ Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billi
 
 - base_url
 - organization_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), display_name(), id(), name(), status(), updated_at(), updated_time()
+  - fields: customer_id(string), display_name(string), id(string), name(string), status(string), updated_at(string), updated_time(string)
 - subscriptions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), subscription_id(), updated_at(), updated_time()
+  - fields: id(string), name(string), status(string), subscription_id(string), updated_at(string), updated_time(string)
 - invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), invoice_id(), invoice_number(), name(), status(), updated_at(), updated_time()
+  - fields: id(string), invoice_id(string), invoice_number(string), name(string), status(string), updated_at(string), updated_time(string)
 
 ## Sync Modes
 

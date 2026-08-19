@@ -1,0 +1,16 @@
+{
+  "record": {
+    "workflow_id": "fixture_workflow_id",
+    "workflow_email_id": "fixture_workflow_email_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/automations/fixture_workflow_id/emails/fixture_workflow_email_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_automations_emails"
+    }
+  }
+}

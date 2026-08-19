@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "project_group_fixture_1",
+    "name": "Updated Project Group",
+    "parentGroupId": "parent_group_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/projectgroup/project_group_fixture_1",
+    "body": {
+      "name": "Updated Project Group",
+      "parentGroupId": "parent_group_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "project_group_fixture_1"
+    }
+  }
+}

@@ -11,9 +11,11 @@ Reads FreshBooks clients, invoices, expenses, payments, and items through the Fr
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,35 +28,35 @@ Reads FreshBooks clients, invoices, expenses, payments, and items through the Fr
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - max_pages
 - mode
 - page_size
-- oauth_access_token (secret)
+- oauth_access_token (secret) (required)
 
 ## ETL Streams
 
 - clients:
   - primary key: id
   - cursor: updated
-  - fields: currency_code(), email(), fname(), id(), lname(), organization(), updated(), userid(), vis_state()
+  - fields: currency_code(string), email(string), fname(string), id(integer), lname(string), organization(string), updated(string), userid(integer), vis_state(integer)
 - invoices:
   - primary key: id
   - cursor: updated
-  - fields: amount(), create_date(), currency_code(), customerid(), id(), invoice_number(), invoiceid(), outstanding(), status(), updated()
+  - fields: amount(object), create_date(string), currency_code(string), customerid(integer), id(integer), invoice_number(string), invoiceid(integer), outstanding(object), status(integer), updated(string)
 - expenses:
   - primary key: id
   - cursor: updated
-  - fields: amount(), categoryid(), date(), expenseid(), id(), notes(), staffid(), updated(), vendor()
+  - fields: amount(object), categoryid(integer), date(string), expenseid(integer), id(integer), notes(string), staffid(integer), updated(string), vendor(string)
 - payments:
   - primary key: id
   - cursor: updated
-  - fields: amount(), date(), id(), invoiceid(), note(), type(), updated()
+  - fields: amount(object), date(string), id(integer), invoiceid(integer), note(string), type(string), updated(string)
 - items:
   - primary key: id
   - cursor: updated
-  - fields: description(), id(), inventory(), itemid(), name(), qty(), unit_cost(), updated()
+  - fields: description(string), id(integer), inventory(string), itemid(integer), name(string), qty(string), unit_cost(object), updated(string)
 
 ## Sync Modes
 

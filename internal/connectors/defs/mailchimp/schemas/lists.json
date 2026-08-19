@@ -2,17 +2,153 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "lists",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "date_created",
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "web_id": { "type": ["integer", "null"] },
-    "name": { "type": ["string", "null"] },
-    "date_created": { "type": ["string", "null"] },
-    "list_rating": { "type": ["integer", "null"] },
-    "email_type_option": { "type": ["boolean", "null"] },
-    "visibility": { "type": ["string", "null"] },
-    "subscribe_url_short": { "type": ["string", "null"] }
-  }
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "permission_reminder": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "use_archive_bar": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "campaign_defaults": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "notify_on_subscribe": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notify_on_unsubscribe": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_rating": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "email_type_option": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subscribe_url_short": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscribe_url_long": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "beamer_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "double_optin": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "has_welcome": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "marketing_permissions": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "modules": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "stats": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "date_created"
 }

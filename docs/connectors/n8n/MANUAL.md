@@ -13,6 +13,7 @@ DESCRIPTION
   Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.
 
 ICON
+  id: n8n
   asset: icons/n8n.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   credential_id
   credential_type_name
   data_table_column_id
@@ -55,87 +56,87 @@ CONFIGURATION
   workflow_name
   workflow_tags
   workflow_version_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   workflows:
     primary key: id
     cursor: updatedAt
-    fields: active(), createdAt(), id(), isArchived(), name(), triggerCount(), updatedAt(), versionId()
+    fields: active(boolean), createdAt(string), id(string), isArchived(boolean), name(string), triggerCount(integer), updatedAt(string), versionId(string)
   workflow:
     primary key: id
     cursor: updatedAt
-    fields: active(), connections(), createdAt(), description(), id(), isArchived(), name(), nodes(), settings(), shared(), tags(), triggerCount(), updatedAt(), versionId()
+    fields: active(boolean), connections(object), createdAt(string), description(string), id(string), isArchived(boolean), name(string), nodes(array), settings(object), shared(array), tags(array), triggerCount(integer), updatedAt(string), versionId(string)
   workflow_version:
     primary key: versionId
     cursor: updatedAt
-    fields: authors(), connections(), createdAt(), description(), name(), nodeGroups(), nodes(), updatedAt(), versionId(), workflowId()
+    fields: authors(string), connections(object), createdAt(string), description(string), name(string), nodeGroups(array), nodes(array), updatedAt(string), versionId(string), workflowId(string)
   workflow_tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   executions:
     primary key: id
     cursor: startedAt
-    fields: finished(), id(), mode(), retryOf(), startedAt(), status(), stoppedAt(), workflowId()
+    fields: finished(boolean), id(string), mode(string), retryOf(string), startedAt(string), status(string), stoppedAt(string), workflowId(string)
   execution:
     primary key: id
     cursor: startedAt
-    fields: customData(), data(), finished(), id(), mode(), retryOf(), retrySuccessId(), startedAt(), status(), stoppedAt(), waitTill(), workflowId()
+    fields: customData(object), data(object), finished(boolean), id(string), mode(string), retryOf(string), retrySuccessId(string), startedAt(string), status(string), stoppedAt(string), waitTill(string), workflowId(string)
   execution_tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   tag:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   users:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), isPending(), lastName(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), isPending(boolean), lastName(string), role(string), updatedAt(string)
   user:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), isPending(), lastName(), mfaEnabled(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), isPending(boolean), lastName(string), mfaEnabled(boolean), role(string), updatedAt(string)
   variables:
     primary key: id
-    fields: id(), key(), project(), projectId(), type(), value()
+    fields: id(string), key(string), project(object), projectId(string), type(string), value(string)
   projects:
     primary key: id
-    fields: id(), name(), type()
+    fields: id(string), name(string), type(string)
   project_members:
     primary key: id
-    fields: createdAt(), email(), firstName(), id(), lastName(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), lastName(string), role(string), updatedAt(string)
   credentials:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), isGlobal(), isManaged(), isResolvable(), name(), resolvableAllowFallback(), resolverId(), type(), updatedAt()
+    fields: createdAt(string), id(string), isGlobal(boolean), isManaged(boolean), isResolvable(boolean), name(string), resolvableAllowFallback(boolean), resolverId(string), type(string), updatedAt(string)
   credential:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), isGlobal(), isManaged(), isResolvable(), name(), resolvableAllowFallback(), resolverId(), type(), updatedAt()
+    fields: createdAt(string), id(string), isGlobal(boolean), isManaged(boolean), isResolvable(boolean), name(string), resolvableAllowFallback(boolean), resolverId(string), type(string), updatedAt(string)
   credential_schema:
-    fields: displayName(), documentationUrl(), name(), properties()
+    fields: displayName(string), documentationUrl(string), name(string), properties(array)
   data_tables:
     primary key: id
     cursor: updatedAt
-    fields: columns(), createdAt(), id(), name(), projectId(), updatedAt()
+    fields: columns(array), createdAt(string), id(string), name(string), projectId(string), updatedAt(string)
   data_table:
     primary key: id
     cursor: updatedAt
-    fields: columns(), createdAt(), id(), name(), projectId(), updatedAt()
+    fields: columns(array), createdAt(string), id(string), name(string), projectId(string), updatedAt(string)
   data_table_rows:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), updatedAt()
+    fields: createdAt(string), id(string), updatedAt(string)
   data_table_columns:
     primary key: id
-    fields: dataTableId(), id(), index(), name(), type()
+    fields: dataTableId(string), id(string), index(integer), name(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -143,10 +144,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_workflow:
     endpoint: POST /workflows
+    required fields: name, nodes, connections, settings
     risk: external mutation; approval required
   update_workflow:
     endpoint: PUT /workflows/{{ record.workflow_id }}
-    required fields: workflow_id
+    required fields: workflow_id, name, nodes, connections, settings
     risk: external mutation; approval required
   publish_workflow:
     endpoint: POST /workflows/{{ record.workflow_id }}/activate
@@ -166,7 +168,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   transfer_workflow:
     endpoint: PUT /workflows/{{ record.workflow_id }}/transfer
-    required fields: workflow_id
+    required fields: workflow_id, destinationProjectId
     risk: external mutation; approval required
   retry_execution:
     endpoint: POST /executions/{{ record.execution_id }}/retry
@@ -178,62 +180,67 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   stop_executions:
     endpoint: POST /executions/stop
+    required fields: status
     risk: external mutation; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name
     risk: external mutation; approval required
   update_tag:
     endpoint: PUT /tags/{{ record.tag_id }}
-    required fields: tag_id
+    required fields: tag_id, name
     risk: external mutation; approval required
   create_variable:
     endpoint: POST /variables
+    required fields: key, value
     risk: external mutation; approval required
   update_variable:
     endpoint: PUT /variables/{{ record.variable_id }}
-    required fields: variable_id
+    required fields: variable_id, key, value
     risk: external mutation; approval required
   create_project:
     endpoint: POST /projects
+    required fields: name
     risk: external mutation; approval required
   update_project:
     endpoint: PUT /projects/{{ record.project_id }}
-    required fields: project_id
+    required fields: project_id, name
     risk: external mutation; approval required
   add_project_users:
     endpoint: POST /projects/{{ record.project_id }}/users
-    required fields: project_id
+    required fields: project_id, relations
     risk: external mutation; approval required
   change_project_user_role:
     endpoint: PATCH /projects/{{ record.project_id }}/users/{{ record.project_user_id }}
-    required fields: project_id, project_user_id
+    required fields: project_id, project_user_id, role
     risk: external mutation; approval required
   create_data_table:
     endpoint: POST /data-tables
+    required fields: name, columns
     risk: external mutation; approval required
   update_data_table:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}
-    required fields: data_table_id
+    required fields: data_table_id, name
     risk: external mutation; approval required
   insert_data_table_rows:
     endpoint: POST /data-tables/{{ record.data_table_id }}/rows
-    required fields: data_table_id
+    required fields: data_table_id, data
     risk: external mutation; approval required
   update_data_table_rows:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}/rows/update
-    required fields: data_table_id
+    required fields: data_table_id, filter, data
     risk: external mutation; approval required
   upsert_data_table_row:
     endpoint: POST /data-tables/{{ record.data_table_id }}/rows/upsert
-    required fields: data_table_id
+    required fields: data_table_id, filter, data
     risk: external mutation; approval required
   add_data_table_column:
     endpoint: POST /data-tables/{{ record.data_table_id }}/columns
-    required fields: data_table_id
+    required fields: data_table_id, name, type
     risk: external mutation; approval required
   update_data_table_column:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}/columns/{{ record.data_table_column_id }}
-    required fields: data_table_id, data_table_column_id
+    required fields: data_table_id, data_table_column_id, name
     risk: external mutation; approval required
   test_credential:
     endpoint: POST /credentials/{{ record.credential_id }}/test
@@ -241,7 +248,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   transfer_credential:
     endpoint: PUT /credentials/{{ record.credential_id }}/transfer
-    required fields: credential_id
+    required fields: credential_id, destinationProjectId
     risk: external mutation; approval required
   pull_source_control:
     endpoint: POST /source-control/pull

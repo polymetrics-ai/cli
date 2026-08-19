@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Currencies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Currencies": [
+        {
+          "Code": "code_fixture_1",
+          "Description": "description_fixture"
+        }
+      ]
+    }
+  }
+}

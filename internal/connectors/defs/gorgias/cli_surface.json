@@ -1,0 +1,3933 @@
+{
+  "tagline": "Work with Gorgias tickets, customers, messages, users, teams, tags, views, macros, rules, widgets, integrations, jobs and files from the command line.",
+  "usage": "pm gorgias <command> [flags]",
+  "source_cli": {
+    "name": "Gorgias REST API",
+    "docs": "https://developers.gorgias.com/reference",
+    "reference": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+    "source": "official OpenAPI 3.1.0 document, retrieved 2026-08-07"
+  },
+  "groups": [
+    {
+      "id": "account",
+      "title": "Account",
+      "commands": [
+        "account get",
+        "account settings list",
+        "account settings create",
+        "account settings update"
+      ]
+    },
+    {
+      "id": "custom-fields",
+      "title": "Custom Fields",
+      "commands": [
+        "custom-fields list",
+        "custom-fields get",
+        "custom-fields create",
+        "custom-fields update",
+        "custom-fields bulk-update"
+      ]
+    },
+    {
+      "id": "customers",
+      "title": "Customers",
+      "commands": [
+        "customers list",
+        "customers custom-fields list",
+        "customers get",
+        "customers create",
+        "customers update",
+        "customers merge",
+        "customers custom-fields bulk-update",
+        "customers data update",
+        "customers delete",
+        "customers bulk-delete",
+        "customers custom-fields delete"
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Events",
+      "commands": [
+        "events list",
+        "events get"
+      ]
+    },
+    {
+      "id": "files",
+      "title": "Files",
+      "commands": [
+        "files download",
+        "files upload"
+      ]
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations",
+      "commands": [
+        "integrations list",
+        "integrations get",
+        "integrations create",
+        "integrations update",
+        "integrations delete"
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "Jobs",
+      "commands": [
+        "jobs list",
+        "jobs get",
+        "jobs create",
+        "jobs update",
+        "jobs cancel"
+      ]
+    },
+    {
+      "id": "macros",
+      "title": "Macros",
+      "commands": [
+        "macros list",
+        "macros get",
+        "macros create",
+        "macros update",
+        "macros delete",
+        "macros archive",
+        "macros unarchive"
+      ]
+    },
+    {
+      "id": "messages",
+      "title": "Messages",
+      "commands": [
+        "messages list"
+      ]
+    },
+    {
+      "id": "metric-cards",
+      "title": "Metric Cards",
+      "commands": [
+        "metric-cards list",
+        "metric-cards get",
+        "metric-cards feedback create"
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Rules",
+      "commands": [
+        "rules list",
+        "rules get",
+        "rules create",
+        "rules update",
+        "rules delete",
+        "rules priorities update"
+      ]
+    },
+    {
+      "id": "satisfaction-surveys",
+      "title": "Satisfaction Surveys",
+      "commands": [
+        "satisfaction-surveys get",
+        "satisfaction-surveys create",
+        "satisfaction-surveys update"
+      ]
+    },
+    {
+      "id": "satisfaction_surveys",
+      "title": "Satisfaction Surveys",
+      "commands": [
+        "satisfaction-surveys list"
+      ]
+    },
+    {
+      "id": "search",
+      "title": "Search",
+      "commands": [
+        "search"
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Stats",
+      "commands": [
+        "stats get"
+      ]
+    },
+    {
+      "id": "tags",
+      "title": "Tags",
+      "commands": [
+        "tags list",
+        "tags get",
+        "tags create",
+        "tags update",
+        "tags delete",
+        "tags bulk-delete",
+        "tags merge"
+      ]
+    },
+    {
+      "id": "teams",
+      "title": "Teams",
+      "commands": [
+        "teams list",
+        "teams get",
+        "teams create",
+        "teams update",
+        "teams delete"
+      ]
+    },
+    {
+      "id": "tickets",
+      "title": "Tickets",
+      "commands": [
+        "tickets list",
+        "tickets get",
+        "tickets custom-fields list",
+        "tickets messages get",
+        "tickets tags list",
+        "tickets create",
+        "tickets update",
+        "tickets delete",
+        "tickets custom-fields bulk-update",
+        "tickets custom-fields delete",
+        "tickets messages create",
+        "tickets messages update",
+        "tickets messages delete",
+        "tickets tags create",
+        "tickets tags update",
+        "tickets tags delete"
+      ]
+    },
+    {
+      "id": "users",
+      "title": "Users",
+      "commands": [
+        "users list",
+        "users get",
+        "users create",
+        "users update",
+        "users delete"
+      ]
+    },
+    {
+      "id": "views",
+      "title": "Views",
+      "commands": [
+        "views list",
+        "views get",
+        "views items list",
+        "views create",
+        "views update",
+        "views delete"
+      ]
+    },
+    {
+      "id": "voice-call-events",
+      "title": "Voice Call Events",
+      "commands": [
+        "voice-call-events list",
+        "voice-call-events get"
+      ]
+    },
+    {
+      "id": "voice-call-recordings",
+      "title": "Voice Call Recordings",
+      "commands": [
+        "voice-call-recordings list",
+        "voice-call-recordings get",
+        "voice-call-recordings delete"
+      ]
+    },
+    {
+      "id": "voice-calls",
+      "title": "Voice Calls",
+      "commands": [
+        "voice-calls list",
+        "voice-calls get"
+      ]
+    },
+    {
+      "id": "widgets",
+      "title": "Widgets",
+      "commands": [
+        "widgets list",
+        "widgets get",
+        "widgets create",
+        "widgets update",
+        "widgets delete"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "tickets list",
+      "summary": "List Gorgias tickets as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets list --json"
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "List Gorgias customers as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers list --json"
+      ]
+    },
+    {
+      "path": "messages list",
+      "summary": "List Gorgias messages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/messages"
+        }
+      ],
+      "examples": [
+        "pm gorgias messages list --json"
+      ]
+    },
+    {
+      "path": "satisfaction-surveys list",
+      "summary": "List Gorgias satisfaction surveys as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "satisfaction_surveys",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/satisfaction-surveys"
+        }
+      ],
+      "examples": [
+        "pm gorgias satisfaction-surveys list --json"
+      ]
+    },
+    {
+      "path": "account get",
+      "summary": "Retrieve your account",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_account",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/get-account",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/account"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias account get --json"
+      ]
+    },
+    {
+      "path": "account settings list",
+      "summary": "List settings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_account_settings",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Filter settings by type.",
+          "maps_to": "query.type",
+          "required": false
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/list-account-settings",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/account/settings"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias account settings list --json"
+      ]
+    },
+    {
+      "path": "custom-fields list",
+      "summary": "List custom fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_custom_fields",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-custom-fields",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/custom-fields"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias custom-fields list --json"
+      ]
+    },
+    {
+      "path": "custom-fields get",
+      "summary": "Retrieve a custom field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_custom_field",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-custom-field",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/custom-fields/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias custom-fields get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "customers custom-fields list",
+      "summary": "List customer field values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_customer_custom_field_values",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Path parameter `customer_id`.",
+          "maps_to": "path.customer_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers/{customer_id}/custom-fields"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias customers custom-fields list --customer-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "customers get",
+      "summary": "Retrieve a customer",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_customer",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-customer",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias customers get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "List events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_events",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-events",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/events"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias events list --json"
+      ]
+    },
+    {
+      "path": "events get",
+      "summary": "Retrieve an event",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_event",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-event",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/events/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias events get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "List integrations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_integrations",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-integrations",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/integrations"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias integrations list --json"
+      ]
+    },
+    {
+      "path": "integrations get",
+      "summary": "Retrieve an integration",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_integration",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-integration",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/integrations/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias integrations get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "List jobs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_jobs",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-jobs",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/jobs"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias jobs list --json"
+      ]
+    },
+    {
+      "path": "jobs get",
+      "summary": "Retrieve a job",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_job",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-job",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/jobs/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias jobs get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "macros list",
+      "summary": "List macros",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_macros",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-macros",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/macros"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias macros list --json"
+      ]
+    },
+    {
+      "path": "macros get",
+      "summary": "Retrieve a macro",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_macro",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-macro",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/macros/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias macros get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "metric-cards list",
+      "summary": "Search metric cards",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.search_metric_cards",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/search-metric-cards",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metric-cards"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias metric-cards list --json"
+      ]
+    },
+    {
+      "path": "metric-cards get",
+      "summary": "Retrieve a metric card by slug",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_metric_card",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Path parameter `slug`.",
+          "maps_to": "path.slug",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-metric-card",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metric-cards/{slug}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias metric-cards get --slug \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "voice-call-events list",
+      "summary": "List voice call events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_voice_call_events",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-call-events"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-call-events list --json"
+      ]
+    },
+    {
+      "path": "voice-call-events get",
+      "summary": "Retrieve a voice call event",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_voice_call_event",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-event",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-call-events/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-call-events get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "voice-call-recordings list",
+      "summary": "List voice call recordings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_voice_call_recordings",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-call-recordings"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-call-recordings list --json"
+      ]
+    },
+    {
+      "path": "voice-call-recordings get",
+      "summary": "Retrieve a voice call recording",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_voice_call_recording",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-call-recordings/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-call-recordings get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "voice-calls list",
+      "summary": "List voice calls",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_voice_calls",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-voice-calls",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-calls"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-calls list --json"
+      ]
+    },
+    {
+      "path": "voice-calls get",
+      "summary": "Retrieve a voice call",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_voice_call",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/phone/voice-calls/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias voice-calls get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "rules list",
+      "summary": "List rules",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_rules",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-rules",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/rules"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias rules list --json"
+      ]
+    },
+    {
+      "path": "rules get",
+      "summary": "Retrieve a rule",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_rule",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-rule",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/rules/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias rules get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "satisfaction-surveys get",
+      "summary": "Retrieve a survey",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_satisfaction_survey",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/satisfaction-surveys/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias satisfaction-surveys get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List tags",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_tags",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-tags",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tags"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tags list --json"
+      ]
+    },
+    {
+      "path": "tags get",
+      "summary": "Retrieve a tag",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_tag",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-tag",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tags/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tags get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "List teams",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_teams",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-teams",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/teams"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias teams list --json"
+      ]
+    },
+    {
+      "path": "teams get",
+      "summary": "Retrieve a team",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_team",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-team",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/teams/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias teams get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets get",
+      "summary": "Retrieve a ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_ticket",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-ticket",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tickets get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets custom-fields list",
+      "summary": "List ticket field values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_ticket_custom_fields",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "path.ticket_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets/{ticket_id}/custom-fields"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tickets custom-fields list --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets messages get",
+      "summary": "Retrieve a message",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_ticket_message",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "path.ticket_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-ticket-message",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tickets messages get --ticket-id \"<value>\" --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets tags list",
+      "summary": "List ticket tags",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_ticket_tags",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "path.ticket_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-tags",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/tickets/{ticket_id}/tags"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias tickets tags list --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List users",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_users",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-users",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias users list --json"
+      ]
+    },
+    {
+      "path": "users get",
+      "summary": "Retrieve a user",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_user",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-user",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias users get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "views list",
+      "summary": "List views",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_views",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-views",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/views"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias views list --json"
+      ]
+    },
+    {
+      "path": "views get",
+      "summary": "Retrieve a view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_view",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-view",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/views/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias views get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "views items list",
+      "summary": "List view's items",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_view_items",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter `view_id`.",
+          "maps_to": "path.view_id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/list-view-items",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/views/{view_id}/items"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias views items list --view-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "widgets list",
+      "summary": "List widgets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.list_widgets",
+      "flags": [],
+      "source_url": "https://developers.gorgias.com/reference/list-widgets",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/widgets"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias widgets list --json"
+      ]
+    },
+    {
+      "path": "widgets get",
+      "summary": "Retrieve a widget",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_widget",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "path.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-widget",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/widgets/{id}"
+        }
+      ],
+      "notes": "Bounded Gorgias read; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias widgets get --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "search",
+      "summary": "Search for resources",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.search",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The type of search.",
+          "maps_to": "body.type",
+          "required": true,
+          "values": [
+            "agent",
+            "customer",
+            "customer_profile",
+            "customer_channel",
+            "customer_channel_email",
+            "customer_channel_phone",
+            "customers_by_phone",
+            "integration",
+            "team",
+            "tag"
+          ]
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Text query used to search for resources.",
+          "maps_to": "body.query"
+        },
+        {
+          "name": "size",
+          "type": "integer",
+          "summary": "Maximum number of results returned (1-50).",
+          "maps_to": "body.size"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/search",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/search"
+        }
+      ],
+      "notes": "Bounded Gorgias read-query; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias search --type \"agent\" --json"
+      ]
+    },
+    {
+      "path": "stats get",
+      "summary": "Retrieve a statistic",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.get_legacy_statistic",
+      "flags": [
+        {
+          "name": "name",
+          "type": "enum",
+          "summary": "The name of the statistic to retrieve.",
+          "maps_to": "path.name",
+          "required": true,
+          "values": [
+            "overview",
+            "total-tickets-created",
+            "total-tickets-replied",
+            "total-tickets-closed",
+            "total-messages-sent",
+            "total-messages-received",
+            "median-first-response-time",
+            "median-resolution-time",
+            "total-one-touch-tickets",
+            "support-volume",
+            "resolution-time",
+            "first-response-time",
+            "tickets-created-per-hour-per-weekday",
+            "tickets-per-tag",
+            "tickets-created-per-channel",
+            "tickets-created-per-channel-per-day",
+            "tickets-closed-per-agent",
+            "tickets-closed-per-agent-per-day",
+            "messages-sent-per-macro",
+            "satisfaction-surveys",
+            "latest-satisfaction-surveys",
+            "intents-occurrence",
+            "intents-overview",
+            "intents-breakdown-per-day",
+            "revenue-overview",
+            "revenue-per-agent",
+            "revenue-per-day",
+            "revenue-per-ticket",
+            "self-service-volume-per-flow",
+            "self-service-article-recommendation-performance",
+            "self-service-top-reported-issues",
+            "self-service-products-with-most-issues-and-return-requests",
+            "self-service-workflows-performance"
+          ]
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic",
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/stats/{name}"
+        }
+      ],
+      "notes": "Bounded Gorgias read-query; fixed method and path with typed request fields.",
+      "examples": [
+        "pm gorgias stats get --name \"overview\" --json"
+      ]
+    },
+    {
+      "path": "files download",
+      "summary": "Download a file",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "operation": "gorgias.download_file",
+      "flags": [
+        {
+          "name": "file-type",
+          "type": "string",
+          "summary": "The type of file to download.",
+          "maps_to": "path.file_type",
+          "required": true
+        },
+        {
+          "name": "domain-hash",
+          "type": "string",
+          "summary": "The domain identifier of the account that owns the resource.",
+          "maps_to": "path.domain_hash",
+          "required": true
+        },
+        {
+          "name": "resource-name",
+          "type": "string",
+          "summary": "The resource identifier of the attachment you are trying to retrieve.",
+          "maps_to": "path.resource_name",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/download-file",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/{file_type}/download/{domain_hash}/{resource_name}"
+        }
+      ],
+      "notes": "Bounded Gorgias download; the provider responds with a 307 redirect to signed cross-host file storage, which this operation follows (allow_cross_host) without forwarding the Gorgias credential. The provider response is written only beneath an explicit --dest-root.",
+      "examples": [
+        "pm gorgias files download --file-type \"<value>\" --domain-hash \"<value>\" --resource-name \"<value>\" --dest-root ./downloads"
+      ]
+    },
+    {
+      "path": "account settings create",
+      "summary": "Create account setting.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account_setting",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of setting.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-account-setting",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/account/settings"
+        }
+      ],
+      "examples": [
+        "pm gorgias account settings create --type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "account settings update",
+      "summary": "Update account setting.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account_setting",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of setting.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-account-setting",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/account/settings/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias account settings update --id \"<value>\" --type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "custom-fields create",
+      "summary": "Create custom field.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_custom_field",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "object-type",
+          "type": "string",
+          "summary": "The object type the custom field applies to.",
+          "maps_to": "record.object_type",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "The label of the custom field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the custom field.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "The priority of the custom field.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "summary": "Whether the custom field is required.",
+          "maps_to": "record.required"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "An external identifier for the custom field.",
+          "maps_to": "record.external_id"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-custom-field",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-fields create --object-type \"<value>\" --label \"<value>\" --json"
+      ],
+      "notes": "definition is a discriminated union over the custom field's data type (text/dropdown/checkbox/etc.) with no typed scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "custom-fields update",
+      "summary": "Update custom field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_field",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "The label of the custom field.",
+          "maps_to": "record.label"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the custom field.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "The priority of the custom field.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "summary": "Whether the custom field is required.",
+          "maps_to": "record.required"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "An external identifier for the custom field.",
+          "maps_to": "record.external_id"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-custom-field",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/custom-fields/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-fields update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "custom-fields bulk-update",
+      "summary": "Update custom fields.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_custom_fields",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "custom-fields",
+          "type": "string",
+          "summary": "The list of custom fields to bulk update.",
+          "maps_to": "record.custom_fields",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-custom-fields",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-fields bulk-update --custom-fields \"<value>\" --json"
+      ],
+      "notes": "the entire request body is a bare JSON array of custom field objects, each itself carrying the same non-flaggable `definition` union; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "customers create",
+      "summary": "Create customer.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_customer",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "channels",
+          "type": "string",
+          "summary": "The customer's channels (email, phone, etc.).",
+          "maps_to": "record.channels",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "The customer's email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The customer's name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "An external identifier for the customer.",
+          "maps_to": "record.external_id"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "The customer's preferred language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "The customer's timezone.",
+          "maps_to": "record.timezone"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-customer",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/customers"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers create --channels \"<value>\" --json"
+      ],
+      "notes": "channels is a required array of channel objects with no typed scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "customers update",
+      "summary": "Update customer.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "The customer's email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The customer's name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "An external identifier for the customer.",
+          "maps_to": "record.external_id"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "The customer's preferred language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "The customer's timezone.",
+          "maps_to": "record.timezone"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-customer",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/customers/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "customers merge",
+      "summary": "Merge customers.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_customers",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "integer",
+          "summary": "The ID of the customer to merge (merged into the target).",
+          "maps_to": "record.source_id",
+          "required": true
+        },
+        {
+          "name": "target-id",
+          "type": "integer",
+          "summary": "The ID of the targeted customer.",
+          "maps_to": "record.target_id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "The customer's email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The customer's name.",
+          "maps_to": "record.name"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/merge-customers",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/customers/merge"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers merge --source-id \"1\" --target-id \"1\" --json"
+      ],
+      "notes": "source_id and target_id are query parameters, mapped to query.source_id/query.target_id"
+    },
+    {
+      "path": "customers custom-fields bulk-update",
+      "summary": "Update customer custom field values.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_customer_custom_field_values",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Path parameter `customer_id`.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "values",
+          "type": "string",
+          "summary": "The list of {id, value} custom field values to set.",
+          "maps_to": "record.values",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-values",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/customers/{customer_id}/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers custom-fields bulk-update --customer-id \"<value>\" --values \"<value>\" --json"
+      ],
+      "notes": "the entire request body is a bare JSON array of {id, value} objects; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "customers data update",
+      "summary": "Update customer data.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_customer_data",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Path parameter `customer_id`.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "Arbitrary customer data (free-form key/value document).",
+          "maps_to": "record.data",
+          "required": true
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "summary": "The date of the customer data being written.",
+          "maps_to": "record.version"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-customer-data",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/customers/{customer_id}/data"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers data update --customer-id \"<value>\" --data \"<value>\" --json"
+      ],
+      "notes": "data is an arbitrary free-form document with no typed scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "customers delete",
+      "summary": "Delete customer.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-customer",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/customers/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "customers bulk-delete",
+      "summary": "Delete customers.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_customers",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "The IDs of the customers to delete.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-customers",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/customers"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers bulk-delete --ids \"<value>\" --json"
+      ],
+      "notes": "ids is a required array of integer customer IDs with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "integrations create",
+      "summary": "Create integration.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_integration",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the integration.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of integration (e.g. `http`).",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the integration.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "managed",
+          "type": "boolean",
+          "summary": "Whether the integration is managed by Gorgias.",
+          "maps_to": "record.managed"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-integration",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/integrations"
+        }
+      ],
+      "examples": [
+        "pm gorgias integrations create --name \"<value>\" --type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "integrations update",
+      "summary": "Update integration.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_integration",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the integration.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the integration.",
+          "maps_to": "record.description"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-integration",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/integrations/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias integrations update --id \"<value>\" --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "integrations delete",
+      "summary": "Delete integration.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_integration",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-integration",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/integrations/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias integrations delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "jobs create",
+      "summary": "Create job.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_job",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The type of the job.",
+          "maps_to": "record.type",
+          "required": true,
+          "values": [
+            "applyMacro",
+            "deleteTicket",
+            "exportTicket",
+            "importMacro",
+            "exportMacro",
+            "updateTicket",
+            "exportTicketDrilldown",
+            "exportConvertCampaignSalesDrilldown"
+          ]
+        },
+        {
+          "name": "params",
+          "type": "string",
+          "summary": "Job-type-specific parameters.",
+          "maps_to": "record.params",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-job",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/jobs"
+        }
+      ],
+      "examples": [
+        "pm gorgias jobs create --type \"applyMacro\" --params \"<value>\" --json"
+      ],
+      "notes": "params is a job-type-specific object with no fixed shape or scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "jobs update",
+      "summary": "Update job.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_job",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "The new status of the job.",
+          "maps_to": "record.status"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-job",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/jobs/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias jobs update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "jobs cancel",
+      "summary": "Cancel job.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_job",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/cancel-job",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/jobs/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias jobs cancel --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "macros create",
+      "summary": "Create macro.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_macro",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the macro.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "An external identifier for the macro.",
+          "maps_to": "record.external_id"
+        },
+        {
+          "name": "intent",
+          "type": "string",
+          "summary": "The macro's intent.",
+          "maps_to": "record.intent"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "The macro's language.",
+          "maps_to": "record.language"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-macro",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/macros"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros create --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "macros update",
+      "summary": "Update macro.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_macro",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the macro.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "intent",
+          "type": "string",
+          "summary": "The macro's intent.",
+          "maps_to": "record.intent"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "The macro's language.",
+          "maps_to": "record.language"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-macro",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/macros/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "macros delete",
+      "summary": "Delete macro.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_macro",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-macro",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/macros/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "macros archive",
+      "summary": "Bulk archive macros.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "bulk_archive_macros",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "The IDs of the macros to archive.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/bulk-archive-macros",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/macros/archive"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros archive --ids \"<value>\" --json"
+      ],
+      "notes": "ids is a required array of integer macro IDs with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "macros unarchive",
+      "summary": "Bulk unarchive macros.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "bulk_unarchive_macros",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "The IDs of the macros to unarchive.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/bulk-unarchive-macros",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/macros/unarchive"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros unarchive --ids \"<value>\" --json"
+      ],
+      "notes": "ids is a required array of integer macro IDs with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "metric-cards feedback create",
+      "summary": "Create metric card feedback.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_metric_card_feedback",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Path parameter `slug`.",
+          "maps_to": "record.slug",
+          "required": true
+        },
+        {
+          "name": "disagreement-type",
+          "type": "string",
+          "summary": "The type of disagreement being reported.",
+          "maps_to": "record.disagreement_type",
+          "required": true
+        },
+        {
+          "name": "metric-category",
+          "type": "string",
+          "summary": "The metric category the feedback applies to.",
+          "maps_to": "record.metric_category",
+          "required": true
+        },
+        {
+          "name": "comment",
+          "type": "string",
+          "summary": "Free-text feedback comment.",
+          "maps_to": "record.comment"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-metric-card-feedback",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/metric-cards/{slug}/feedback"
+        }
+      ],
+      "examples": [
+        "pm gorgias metric-cards feedback create --slug \"<value>\" --disagreement-type \"<value>\" --metric-category \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "voice-call-recordings delete",
+      "summary": "Delete voice call recording.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_voice_call_recording",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/phone/voice-call-recordings/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call-recordings delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "rules create",
+      "summary": "Create rule.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_rule",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "The rule's logic, as Gorgias rule-language source.",
+          "maps_to": "record.code",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the rule.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the rule.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "The priority of the rule.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "event-types",
+          "type": "string",
+          "summary": "The event type(s) that trigger the rule.",
+          "maps_to": "record.event_types"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-rule",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/rules"
+        }
+      ],
+      "examples": [
+        "pm gorgias rules create --code \"<value>\" --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "rules update",
+      "summary": "Update rule.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_rule",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "The rule's logic, as Gorgias rule-language source.",
+          "maps_to": "record.code"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the rule.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the rule.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "The priority of the rule.",
+          "maps_to": "record.priority"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-rule",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/rules/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias rules update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "rules delete",
+      "summary": "Delete rule.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_rule",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-rule",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/rules/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias rules delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "rules priorities update",
+      "summary": "Update rules priorities.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_rules_priorities",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "priorities",
+          "type": "string",
+          "summary": "The ordered list of {id, priority} rule priorities.",
+          "maps_to": "record.priorities",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-rules-priorities",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/rules/priorities"
+        }
+      ],
+      "examples": [
+        "pm gorgias rules priorities update --priorities \"<value>\" --json"
+      ],
+      "notes": "priorities is a required array of {id, priority} objects with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "satisfaction-surveys create",
+      "summary": "Create satisfaction survey.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_satisfaction_survey",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "integer",
+          "summary": "The ID of the customer the survey is for.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "ticket-id",
+          "type": "integer",
+          "summary": "The ID of the ticket the survey is for.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "score",
+          "type": "integer",
+          "summary": "The satisfaction score.",
+          "maps_to": "record.score"
+        },
+        {
+          "name": "body-text",
+          "type": "string",
+          "summary": "The free-text body of the survey response.",
+          "maps_to": "record.body_text"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-satisfaction-survey",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/satisfaction-surveys"
+        }
+      ],
+      "examples": [
+        "pm gorgias satisfaction-surveys create --customer-id \"1\" --ticket-id \"1\" --json"
+      ]
+    },
+    {
+      "path": "satisfaction-surveys update",
+      "summary": "Update satisfaction survey.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_satisfaction_survey",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "score",
+          "type": "integer",
+          "summary": "The satisfaction score.",
+          "maps_to": "record.score"
+        },
+        {
+          "name": "body-text",
+          "type": "string",
+          "summary": "The free-text body of the survey response.",
+          "maps_to": "record.body_text"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-satisfaction-survey",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/satisfaction-surveys/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias satisfaction-surveys update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tags create",
+      "summary": "Create tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the tag.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the tag.",
+          "maps_to": "record.description"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-tag",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags create --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tags update",
+      "summary": "Update tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the tag.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the tag.",
+          "maps_to": "record.description"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-tag",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tags/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tags delete",
+      "summary": "Delete tag.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-tag",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tags/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tags bulk-delete",
+      "summary": "Delete tags.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_tags",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "The IDs of the tags to delete.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-tags",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags bulk-delete --ids \"<value>\" --json"
+      ],
+      "notes": "ids is a required array of integer tag IDs with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "tags merge",
+      "summary": "Merge tags.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "merge_tags",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "destination-tag-id",
+          "type": "string",
+          "summary": "Path parameter `destination_tag_id`.",
+          "maps_to": "record.destination_tag_id",
+          "required": true
+        },
+        {
+          "name": "source-tags-ids",
+          "type": "string",
+          "summary": "The IDs of the tags to merge into the destination tag.",
+          "maps_to": "record.source_tags_ids",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/merge-tags",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tags/{destination_tag_id}/merge"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags merge --destination-tag-id \"<value>\" --source-tags-ids \"<value>\" --json"
+      ],
+      "notes": "source_tags_ids is a required array of integer tag IDs with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "teams create",
+      "summary": "Create team.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the team.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the team.",
+          "maps_to": "record.description"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-team",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/teams"
+        }
+      ],
+      "examples": [
+        "pm gorgias teams create --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "teams update",
+      "summary": "Update team.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the team.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "The description of the team.",
+          "maps_to": "record.description"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-team",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/teams/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias teams update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "teams delete",
+      "summary": "Delete team.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-team",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/teams/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias teams delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets create",
+      "summary": "Create ticket.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_ticket",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "messages",
+          "type": "string",
+          "summary": "The ticket's initial messages.",
+          "maps_to": "record.messages",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "The subject of the ticket.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "The status of the ticket.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "priority",
+          "type": "string",
+          "summary": "The priority of the ticket.",
+          "maps_to": "record.priority"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-ticket",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/tickets"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets create --messages \"<value>\" --json"
+      ],
+      "notes": "messages is a required array of message objects (each with its own required, unioned `channel`) with no scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "tickets update",
+      "summary": "Update ticket.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_ticket",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "The subject of the ticket.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "The status of the ticket.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "priority",
+          "type": "string",
+          "summary": "The priority of the ticket.",
+          "maps_to": "record.priority"
+        },
+        {
+          "name": "is-unread",
+          "type": "boolean",
+          "summary": "Whether the ticket is unread.",
+          "maps_to": "record.is_unread"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-ticket",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tickets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets delete",
+      "summary": "Delete ticket.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tickets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets custom-fields bulk-update",
+      "summary": "Update ticket custom fields.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_ticket_custom_fields",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "values",
+          "type": "string",
+          "summary": "The list of {id, value} custom field values to set.",
+          "maps_to": "record.values",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-fields",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tickets/{ticket_id}/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets custom-fields bulk-update --ticket-id \"<value>\" --values \"<value>\" --json"
+      ],
+      "notes": "the entire request body is a bare JSON array of {id, value} objects; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "tickets custom-fields delete",
+      "summary": "Delete ticket custom field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_custom_field",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-custom-field",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tickets/{ticket_id}/custom-fields/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets custom-fields delete --ticket-id \"<value>\" --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets messages create",
+      "summary": "Create ticket message.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_ticket_message",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "channel",
+          "type": "string",
+          "summary": "The channel the message was sent through.",
+          "maps_to": "record.channel",
+          "required": true
+        },
+        {
+          "name": "from-agent",
+          "type": "boolean",
+          "summary": "Whether the message was sent by an agent.",
+          "maps_to": "record.from_agent",
+          "required": true
+        },
+        {
+          "name": "body-text",
+          "type": "string",
+          "summary": "The plain-text body of the message.",
+          "maps_to": "record.body_text"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "The subject of the message.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "public",
+          "type": "boolean",
+          "summary": "Whether the message is public.",
+          "maps_to": "record.public"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-message",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/tickets/{ticket_id}/messages"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets messages create --ticket-id \"<value>\" --channel \"<value>\" --from-agent \"true\" --json"
+      ],
+      "notes": "channel is documented as a discriminated union of channel-specific shapes; this bundle exposes it as a plain string flag (the channel name), which is the common, honest case"
+    },
+    {
+      "path": "tickets messages update",
+      "summary": "Update ticket message.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_ticket_message",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "channel",
+          "type": "string",
+          "summary": "The channel the message was sent through.",
+          "maps_to": "record.channel",
+          "required": true
+        },
+        {
+          "name": "from-agent",
+          "type": "boolean",
+          "summary": "Whether the message was sent by an agent.",
+          "maps_to": "record.from_agent",
+          "required": true
+        },
+        {
+          "name": "body-text",
+          "type": "string",
+          "summary": "The plain-text body of the message.",
+          "maps_to": "record.body_text"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "The subject of the message.",
+          "maps_to": "record.subject"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-message",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets messages update --ticket-id \"<value>\" --id \"<value>\" --channel \"<value>\" --from-agent \"true\" --json"
+      ]
+    },
+    {
+      "path": "tickets messages delete",
+      "summary": "Delete ticket message.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_message",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-message",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets messages delete --ticket-id \"<value>\" --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets tags create",
+      "summary": "Create ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_ticket_tags",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "names",
+          "type": "string_array",
+          "summary": "The names of the tags to add.",
+          "maps_to": "record.names"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-tags",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/tickets/{ticket_id}/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets tags create --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets tags update",
+      "summary": "Update ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_ticket_tags",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "names",
+          "type": "string_array",
+          "summary": "The names of the tags to set.",
+          "maps_to": "record.names"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-tags",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/tickets/{ticket_id}/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets tags update --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "tickets tags delete",
+      "summary": "Delete ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_tags",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter `ticket_id`.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        },
+        {
+          "name": "names",
+          "type": "string_array",
+          "summary": "The names of the tags to remove.",
+          "maps_to": "record.names"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-tags",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/tickets/{ticket_id}/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets tags delete --ticket-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "users create",
+      "summary": "Create user.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "The user's email address.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The user's name.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "The user's role.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "bio",
+          "type": "string",
+          "summary": "The user's bio.",
+          "maps_to": "record.bio"
+        },
+        {
+          "name": "country",
+          "type": "string",
+          "summary": "The user's country.",
+          "maps_to": "record.country"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "The user's preferred language.",
+          "maps_to": "record.language"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "The user's timezone.",
+          "maps_to": "record.timezone"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users"
+        }
+      ],
+      "examples": [
+        "pm gorgias users create --email \"<value>\" --name \"<value>\" --role \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "users update",
+      "summary": "Update user.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "The user's email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The user's name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "The user's role.",
+          "maps_to": "record.role"
+        },
+        {
+          "name": "bio",
+          "type": "string",
+          "summary": "The user's bio.",
+          "maps_to": "record.bio"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-user",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/users/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias users update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "users delete",
+      "summary": "Delete user.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-user",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/users/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias users delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "views create",
+      "summary": "Create view.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_view",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "The unique slug of the view.",
+          "maps_to": "record.slug",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the view.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of view.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "order-by",
+          "type": "string",
+          "summary": "The attribute used to order the view.",
+          "maps_to": "record.order_by"
+        },
+        {
+          "name": "order-dir",
+          "type": "string",
+          "summary": "The direction used to order the view.",
+          "maps_to": "record.order_dir"
+        },
+        {
+          "name": "visibility",
+          "type": "string",
+          "summary": "The visibility of the view.",
+          "maps_to": "record.visibility"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-view",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/views"
+        }
+      ],
+      "examples": [
+        "pm gorgias views create --slug \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "views update",
+      "summary": "Update view.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_view",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the view.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "order-by",
+          "type": "string",
+          "summary": "The attribute used to order the view.",
+          "maps_to": "record.order_by"
+        },
+        {
+          "name": "order-dir",
+          "type": "string",
+          "summary": "The direction used to order the view.",
+          "maps_to": "record.order_dir"
+        },
+        {
+          "name": "visibility",
+          "type": "string",
+          "summary": "The visibility of the view.",
+          "maps_to": "record.visibility"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-view",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/views/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias views update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "views delete",
+      "summary": "Delete view.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_view",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-view",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/views/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias views delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "widgets create",
+      "summary": "Create widget.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_widget",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "The type of widget.",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "template",
+          "type": "string",
+          "summary": "The widget's rendering template.",
+          "maps_to": "record.template",
+          "required": true
+        },
+        {
+          "name": "integration-id",
+          "type": "integer",
+          "summary": "The ID of the integration the widget belongs to.",
+          "maps_to": "record.integration_id"
+        },
+        {
+          "name": "order",
+          "type": "integer",
+          "summary": "The display order of the widget.",
+          "maps_to": "record.order"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/create-widget",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/widgets"
+        }
+      ],
+      "examples": [
+        "pm gorgias widgets create --type \"<value>\" --template \"<value>\" --json"
+      ],
+      "notes": "template is a widget-type-specific rendering object with no fixed shape or scalar leaf; supply it from a reverse-ETL source record"
+    },
+    {
+      "path": "widgets update",
+      "summary": "Update widget.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_widget",
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "order",
+          "type": "integer",
+          "summary": "The display order of the widget.",
+          "maps_to": "record.order"
+        },
+        {
+          "name": "integration-id",
+          "type": "integer",
+          "summary": "The ID of the integration the widget belongs to.",
+          "maps_to": "record.integration_id"
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/update-widget",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/widgets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias widgets update --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "widgets delete",
+      "summary": "Delete widget.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_widget",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-widget",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/widgets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias widgets delete --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "customers custom-fields delete",
+      "summary": "Delete customer custom field value.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer_custom_field_value",
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Path parameter `customer_id`.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter `id`.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "source_url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/customers/{customer_id}/custom-fields/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers custom-fields delete --customer-id \"<value>\" --id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "files upload",
+      "summary": "Upload a file to Gorgias file storage.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_file",
+      "risk": "high: uploads a local file's bytes to Gorgias file storage; file path/content are redacted in plans and require reverse ETL approval",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+      "flags": [
+        {
+          "name": "file-path",
+          "type": "string",
+          "summary": "Project-relative path to the file to upload.",
+          "maps_to": "record.file_path",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The type of file to upload.",
+          "maps_to": "record.type",
+          "values": [
+            "public_attachment",
+            "attachment",
+            "profile_picture",
+            "widget_picture"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/upload"
+        }
+      ],
+      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
+      "examples": [
+        "pm gorgias files upload --file-path \"./package-damaged.png\" --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "safety",
+      "summary": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation."
+    },
+    {
+      "name": "pagination",
+      "summary": "Gorgias paginates with cursor/limit and meta.next_cursor; ETL streams follow the cursor to exhaustion within the configured page bounds."
+    }
+  ]
+}

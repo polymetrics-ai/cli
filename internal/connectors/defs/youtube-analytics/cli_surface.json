@@ -1,0 +1,597 @@
+{
+  "tagline": "Read YouTube Reporting/Analytics metadata and safely plan documented job/group mutations.",
+  "usage": "pm youtube-analytics <command> [flags]",
+  "source_cli": {
+    "name": "YouTube Analytics and Reporting APIs",
+    "docs": "https://developers.google.com/youtube/analytics",
+    "reference": "Google Discovery: YouTube Analytics API v2 revision 20260803 and YouTube Reporting API v1 revision 20260803",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "reporting",
+      "title": "YouTube Reporting",
+      "commands": [
+        "jobs",
+        "report-types",
+        "reports"
+      ]
+    },
+    {
+      "id": "analytics-groups",
+      "title": "YouTube Analytics groups",
+      "commands": [
+        "groups",
+        "group-items"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the YouTube request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream commands."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "jobs list",
+      "summary": "Read YouTube Reporting jobs through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_cli_path": "GET /v1/jobs",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/list",
+      "flags": [
+        {
+          "name": "include-system-managed",
+          "type": "boolean",
+          "summary": "Include system-managed reporting jobs.",
+          "maps_to": "query.includeSystemManaged"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/jobs"
+        }
+      ],
+      "examples": [
+        "pm youtube-analytics jobs list --credential youtube-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "jobs get",
+      "summary": "Read one YouTube Reporting job by configured job_id.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job",
+      "source_cli_path": "GET /v1/jobs/{jobId}",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/get",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/jobs/{jobId}"
+        }
+      ],
+      "notes": "Pass --config job_id=<job id>; ETL command flags intentionally map only to query parameters, not connector config path variables.",
+      "examples": [
+        "pm youtube-analytics jobs get --credential youtube-prod --config job_id=job_fixture_1 --json"
+      ]
+    },
+    {
+      "path": "jobs create",
+      "summary": "Plan creation of a YouTube Reporting job.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_job",
+      "source_cli_path": "POST /v1/jobs",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/create",
+      "flags": [
+        {
+          "name": "report-type-id",
+          "type": "string",
+          "summary": "ReportType id the job should generate.",
+          "maps_to": "record.reportTypeId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Reporting job display name required by the provider.",
+          "maps_to": "record.name",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/jobs"
+        }
+      ],
+      "risk": "Creates a scheduled YouTube Reporting job; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm youtube-analytics jobs create --credential youtube-prod --report-type-id channel_basic_a3 --name 'Daily channel basics' --preview --json"
+      ]
+    },
+    {
+      "path": "jobs delete",
+      "summary": "Plan deletion of a YouTube Reporting job with typed destructive confirmation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_job",
+      "source_cli_path": "DELETE /v1/jobs/{jobId}",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/delete",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Reporting job ID to delete.",
+          "maps_to": "record.job_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "job_id"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/jobs/{jobId}"
+        }
+      ],
+      "risk": "Destructive job deletion stops future report generation; redacts job_id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+      "examples": [
+        "pm youtube-analytics jobs delete --credential youtube-prod --job-id job_fixture_delete --preview --json"
+      ]
+    },
+    {
+      "path": "report-types list",
+      "summary": "Read YouTube Reporting report types through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_types",
+      "source_cli_path": "GET /v1/reportTypes",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/reportTypes/list",
+      "flags": [
+        {
+          "name": "include-system-managed",
+          "type": "boolean",
+          "summary": "Include system-managed report types.",
+          "maps_to": "query.includeSystemManaged"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/reportTypes"
+        }
+      ],
+      "examples": [
+        "pm youtube-analytics report-types list --credential youtube-prod --limit 50 --json"
+      ]
+    },
+    {
+      "path": "reports list",
+      "summary": "Read generated report metadata for the configured YouTube Reporting job.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reports",
+      "source_cli_path": "GET /v1/jobs/{jobId}/reports",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/list",
+      "flags": [
+        {
+          "name": "created-after",
+          "type": "string",
+          "format": "date-time",
+          "summary": "createdAfter filter for reports.list.",
+          "maps_to": "query.createdAfter",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time-at-or-after",
+          "type": "string",
+          "format": "date-time",
+          "summary": "startTimeAtOrAfter filter for reports.list.",
+          "maps_to": "query.startTimeAtOrAfter",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time-before",
+          "type": "string",
+          "format": "date-time",
+          "summary": "startTimeBefore filter for reports.list.",
+          "maps_to": "query.startTimeBefore",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/jobs/{jobId}/reports"
+        }
+      ],
+      "notes": "Pass --config job_id=<job id>; downloaded report bytes are intentionally not emitted by this JSON metadata stream.",
+      "examples": [
+        "pm youtube-analytics reports list --credential youtube-prod --config job_id=job_fixture_1 --limit 25 --json"
+      ]
+    },
+    {
+      "path": "reports get",
+      "summary": "Read one generated report metadata resource for the configured job_id/report_id.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report",
+      "source_cli_path": "GET /v1/jobs/{jobId}/reports/{reportId}",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/get",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/jobs/{jobId}/reports/{reportId}"
+        }
+      ],
+      "notes": "Pass --config job_id=<job id> --config report_id=<report id>; use reports download with the documented resourceName to fetch report bytes.",
+      "examples": [
+        "pm youtube-analytics reports get --credential youtube-prod --config job_id=job_fixture_1 --config report_id=report_fixture_1 --json"
+      ]
+    },
+    {
+      "path": "reports query",
+      "summary": "Documented YouTube Analytics reports.query provider query operation planned for issue #2985.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "reports_query",
+      "source_cli_path": "GET /v2/reports",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports"
+        }
+      ],
+      "notes": "Planned solely until typed provider-query foundation issue #2985 supports bounded provider-owned query fields without raw query escape hatches."
+    },
+    {
+      "path": "reports download",
+      "summary": "Download generated YouTube Reporting report bytes to an explicit local destination.",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "operation": "download_report",
+      "source_cli_path": "GET /v1/media/{+resourceName}",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reports#step-6-download-the-report",
+      "flags": [
+        {
+          "name": "resource-name",
+          "type": "string",
+          "summary": "Provider resourceName identifying the generated report; may contain safe path segments.",
+          "maps_to": "path.path",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "notes": "The required --resource-name maps to the provider resourceName. Runtime download flags require --dest-root; --file-name is optional. The executor refuses path traversal, overwrites, archive extraction, and payloads over 100 MiB, and emits only file metadata with a SHA-256 receipt.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/media/{path}?alt=media"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Read YouTube Analytics groups through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "GET /v2/groups",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/list",
+      "flags": [
+        {
+          "name": "mine",
+          "type": "enum",
+          "values": [
+            "true"
+          ],
+          "summary": "Required closed groups.list selector; only the provider-valid mine=true mode is supported.",
+          "maps_to": "query.mine",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/groups"
+        }
+      ],
+      "examples": [
+        "pm youtube-analytics groups list --credential youtube-prod --mine true --limit 25 --json"
+      ]
+    },
+    {
+      "path": "groups create",
+      "summary": "Plan creation of a YouTube Analytics group.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_cli_path": "POST /v2/groups",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/insert",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Group title.",
+          "maps_to": "record.snippet.title",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "item-type",
+          "type": "enum",
+          "values": [
+            "youtube#channel",
+            "youtube#playlist",
+            "youtube#video",
+            "youtubePartner#asset"
+          ],
+          "summary": "Provider resource type the group will contain.",
+          "maps_to": "record.contentDetails.itemType",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/groups"
+        }
+      ],
+      "risk": "Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --item-type youtube#video --preview --json"
+      ]
+    },
+    {
+      "path": "groups update",
+      "summary": "Plan update of a YouTube Analytics group's title.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_group",
+      "source_cli_path": "PUT /v2/groups",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "YouTube Analytics group id to update.",
+          "maps_to": "record.id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Replacement group title.",
+          "maps_to": "record.snippet.title",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/groups"
+        }
+      ],
+      "risk": "Mutates YouTube Analytics group metadata; redacts group id from write errors; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm youtube-analytics groups update --credential youtube-prod --id group_fixture_1 --title 'Renamed fixture group' --preview --json"
+      ]
+    },
+    {
+      "path": "groups delete",
+      "summary": "Plan deletion of a YouTube Analytics group with typed destructive confirmation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group",
+      "source_cli_path": "DELETE /v2/groups?id={id}",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groups/delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "YouTube Analytics group id to delete.",
+          "maps_to": "record.id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/groups"
+        }
+      ],
+      "risk": "Destructive group deletion; redacts group id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+      "examples": [
+        "pm youtube-analytics groups delete --credential youtube-prod --id group_fixture_delete --preview --json"
+      ]
+    },
+    {
+      "path": "group-items list",
+      "summary": "Read items in a YouTube Analytics group through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_items",
+      "source_cli_path": "GET /v2/groupItems",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/list",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Group ID for the required groupItems.list groupId query value.",
+          "maps_to": "query.groupId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/groupItems"
+        }
+      ],
+      "examples": [
+        "pm youtube-analytics group-items list --credential youtube-prod --group-id group_fixture_1 --limit 100 --json"
+      ]
+    },
+    {
+      "path": "group-items create",
+      "summary": "Plan adding a channel, playlist, video, or asset to a YouTube Analytics group.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group_item",
+      "source_cli_path": "POST /v2/groupItems",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/insert",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Group ID to add the resource to.",
+          "maps_to": "record.groupId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "resource-kind",
+          "type": "enum",
+          "values": [
+            "youtube#channel",
+            "youtube#playlist",
+            "youtube#video",
+            "youtubePartner#asset"
+          ],
+          "summary": "Optional provider resource kind being added.",
+          "maps_to": "record.resource.kind"
+        },
+        {
+          "name": "resource-id",
+          "type": "string",
+          "summary": "Resource ID being added.",
+          "maps_to": "record.resource.id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "groupId",
+        "resource.id"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/groupItems"
+        }
+      ],
+      "risk": "Adds an item to a YouTube Analytics group; redacts group/resource identifiers from write errors; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm youtube-analytics group-items create --credential youtube-prod --group-id group_fixture_1 --resource-kind youtube#video --resource-id video_fixture_1 --preview --json"
+      ]
+    },
+    {
+      "path": "group-items delete",
+      "summary": "Plan removal of an item from a YouTube Analytics group with typed destructive confirmation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group_item",
+      "source_cli_path": "DELETE /v2/groupItems?id={id}",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Group item id to remove.",
+          "maps_to": "record.id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/groupItems"
+        }
+      ],
+      "risk": "Destructive removal of a group item; redacts group-item id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+      "examples": [
+        "pm youtube-analytics group-items delete --credential youtube-prod --id group_item_fixture_delete --preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "binary-downloads",
+      "summary": "Generated report metadata includes download_url; use reports download with the documented resourceName and an explicit destination root to fetch report bytes safely."
+    },
+    {
+      "name": "content-owner-writes",
+      "summary": "Read streams support onBehalfOfContentOwner from content_owner_id; declarative write actions omit that optional query until write-action query templates are available."
+    },
+    {
+      "name": "destructive-confirmation",
+      "summary": "YouTube Reporting job deletes and YouTube Analytics group/group-item deletes require reverse ETL plan, preview, explicit approval, and typed destructive confirmation."
+    }
+  ]
+}

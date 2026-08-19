@@ -1,0 +1,2143 @@
+{
+  "base": {
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "basic",
+        "password": "{{ secrets.app_password }}",
+        "username": "{{ config.username }}",
+        "when": "{{ secrets.app_password }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/repositories"
+    },
+    "error_map": [
+      {
+        "hint": "Bitbucket credentials are missing or expired; add an OAuth token or app password via credentials.",
+        "status": 401
+      },
+      {
+        "hint": "Bitbucket credentials lack access to the requested workspace, repository, or resource.",
+        "status": 403
+      },
+      {
+        "hint": "Bitbucket resource not found or not visible to the supplied credentials.",
+        "status": 404
+      }
+    ],
+    "headers": {
+      "Accept": "application/json"
+    },
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli"
+  },
+  "streams": [
+    {
+      "method": "GET",
+      "name": "repositories",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories.json"
+    },
+    {
+      "method": "GET",
+      "name": "hook_events",
+      "path": "/hook_events",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/hook_events.json"
+    },
+    {
+      "method": "GET",
+      "name": "hook_events_subject_type",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/hook_events/{{ config.subject_type }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/hook_events_subject_type.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_branch_restrictions",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_branch_restrictions.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_branch_restrictions_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions/{{ config.id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_branch_restrictions_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_branching_model",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branching-model",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_branching_model.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_branching_model_settings",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branching-model/settings",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_branching_model_settings.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_comments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/comments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_comments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/comments/{{ config.comment_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_comments_comment_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/properties/{{ config.app_key }}/{{ config.property_name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_pullrequests",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/pullrequests",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_pullrequests.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_reports",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/reports",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_reports.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/reports/{{ config.reportId }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_reports_reportid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/reports/{{ config.reportId }}/annotations",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/reports/{{ config.reportId }}/annotations/{{ config.annotationId }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_statuses",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/statuses",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_statuses.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commit/{{ config.commit }}/statuses/build/{{ config.key }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commit_commit_statuses_build_key.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commits",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commits",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commits.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_commits_revision",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commits/{{ config.revision }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_commits_revision.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_components",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/components",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_components.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_components_component_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/components/{{ config.component_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_components_component_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_default_reviewers",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/default-reviewers",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_default_reviewers.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_default_reviewers_target_username",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/default-reviewers/{{ config.target_username }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_default_reviewers_target_username.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_deploy_keys",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deploy-keys",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_deploy_keys.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_deploy_keys_key_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deploy-keys/{{ config.key_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_deploy_keys_key_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_deployments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_deployments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments_config/environments/{{ config.environment_uuid }}/variables",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_deployments_deployment_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments/{{ config.deployment_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_deployments_deployment_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_diffstat_spec",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/diffstat/{{ config.spec }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_diffstat_spec.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_effective_branching_model",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/effective-branching-model",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_effective_branching_model.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_effective_default_reviewers",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/effective-default-reviewers",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_effective_default_reviewers.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_environments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/environments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_environments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_environments_environment_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/environments/{{ config.environment_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_environments_environment_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_file_conflicts_spec",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/file-conflicts/{{ config.spec }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_file_conflicts_spec.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_filehistory_commit_path",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/filehistory/{{ config.commit }}/{{ config.path }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_filehistory_commit_path.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_forks",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/forks",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_forks.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_hooks",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_hooks.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_hooks_uid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks/{{ config.uid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_hooks_uid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_import",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/import",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_import.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id_attachments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}/attachments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id_attachments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id_changes",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}/changes",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id_changes.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id_changes_change_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}/changes/{{ config.change_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id_changes_change_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id_comments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}/comments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id_comments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ config.issue_id }}/comments/{{ config.comment_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_issues_issue_id_comments_comment_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_merge_base_revspec",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/merge-base/{{ config.revspec }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_merge_base_revspec.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_milestones",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/milestones",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_milestones.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_milestones_milestone_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/milestones/{{ config.milestone_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_milestones_milestone_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_override_settings",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/override-settings",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_override_settings.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_permissions_config_groups",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/groups",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_permissions_config_groups.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/groups/{{ config.group_slug }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_permissions_config_groups_group_slug.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_permissions_config_users",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/users",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_permissions_config_users.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/permissions-config/users/{{ config.selected_user_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_permissions_config_users_selected_user_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_caches",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/caches",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_caches.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/caches/{{ config.cache_uuid }}/content-uri",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_runners",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/runners",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_runners.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines-config/runners/{{ config.runner_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_schedules",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_schedules.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules/{{ config.schedule_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/schedules/{{ config.schedule_uuid }}/executions",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/key_pair",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_ssh_key_pair.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/known_hosts",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/known_hosts/{{ config.known_host_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_variables",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_variables.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables/{{ config.variable_uuid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines/{{ config.pipeline_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_pipeline_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines/{{ config.pipeline_uuid }}/steps",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines/{{ config.pipeline_uuid }}/steps/{{ config.step_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_properties_app_key_property_name",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/properties/{{ config.app_key }}/{{ config.property_name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_properties_app_key_property_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/comments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_comments.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/comments/{{ config.comment_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/statuses",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/tasks",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/tasks/{{ config.task_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pullrequest_id }}/properties/{{ config.app_key }}/{{ config.property_name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_refs",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_refs.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_refs_branches",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/branches",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_refs_branches.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_refs_branches_name",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/branches/{{ config.name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_refs_branches_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_refs_tags",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/tags",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_refs_tags.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_refs_tags_name",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/tags/{{ config.name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_refs_tags_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_src",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/src",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_src.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_versions",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/versions",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_versions.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_versions_version_id",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/versions/{{ config.version_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_versions_version_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_watchers",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/watchers",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_watchers.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/snippets",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/snippets/{{ config.workspace }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets_workspace.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id",
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/snippets_workspace_encoded_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_comments",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/comments",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_comments.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_comments_comment_id",
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/comments/{{ config.comment_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_comments_comment_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_commits",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/commits",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_commits.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_commits_revision",
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/commits/{{ config.revision }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_commits_revision.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_node_id",
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/{{ config.node_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_node_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "snippets_workspace_encoded_id_watchers",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/snippets/{{ config.workspace }}/{{ config.encoded_id }}/watchers",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets_workspace_encoded_id_watchers.json"
+    },
+    {
+      "method": "GET",
+      "name": "teams_username_pipelines_config_variables",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/teams/{{ config.username }}/pipelines_config/variables",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/teams_username_pipelines_config_variables.json"
+    },
+    {
+      "method": "GET",
+      "name": "teams_username_pipelines_config_variables_variable_uuid",
+      "path": "/teams/{{ config.username }}/pipelines_config/variables/{{ config.variable_uuid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/teams_username_pipelines_config_variables_variable_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "user",
+      "path": "/user",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/user.json"
+    },
+    {
+      "method": "GET",
+      "name": "user_permissions_repositories",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/user/permissions/repositories",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/user_permissions_repositories.json"
+    },
+    {
+      "method": "GET",
+      "name": "user_permissions_workspaces",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/user/permissions/workspaces",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/user_permissions_workspaces.json"
+    },
+    {
+      "method": "GET",
+      "name": "user_workspaces",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/user/workspaces",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/user_workspaces.json"
+    },
+    {
+      "method": "GET",
+      "name": "user_workspaces_workspace_permission",
+      "path": "/user/workspaces/{{ config.workspace }}/permission",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/user_workspaces_workspace_permission.json"
+    },
+    {
+      "method": "GET",
+      "name": "user_workspaces_workspace_permissions_repositories",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/user/workspaces/{{ config.workspace }}/permissions/repositories",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/user_workspaces_workspace_permissions_repositories.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user",
+      "path": "/users/{{ config.selected_user }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users_selected_user.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_gpg_keys",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/users/{{ config.selected_user }}/gpg-keys",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/users_selected_user_gpg_keys.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_gpg_keys_fingerprint",
+      "path": "/users/{{ config.selected_user }}/gpg-keys/{{ config.fingerprint }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users_selected_user_gpg_keys_fingerprint.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_pipelines_config_variables",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/users/{{ config.selected_user }}/pipelines_config/variables",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/users_selected_user_pipelines_config_variables.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_pipelines_config_variables_variable_uuid",
+      "path": "/users/{{ config.selected_user }}/pipelines_config/variables/{{ config.variable_uuid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users_selected_user_pipelines_config_variables_variable_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_properties_app_key_property_name",
+      "path": "/users/{{ config.selected_user }}/properties/{{ config.app_key }}/{{ config.property_name }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users_selected_user_properties_app_key_property_name.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_ssh_keys",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/users/{{ config.selected_user }}/ssh-keys",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/users_selected_user_ssh_keys.json"
+    },
+    {
+      "method": "GET",
+      "name": "users_selected_user_ssh_keys_key_id",
+      "path": "/users/{{ config.selected_user }}/ssh-keys/{{ config.key_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users_selected_user_ssh_keys_key_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace",
+      "path": "/workspaces/{{ config.workspace }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_hooks",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/hooks",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_hooks.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_hooks_uid",
+      "path": "/workspaces/{{ config.workspace }}/hooks/{{ config.uid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_hooks_uid.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_members",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/members",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_members.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_members_member",
+      "path": "/workspaces/{{ config.workspace }}/members/{{ config.member }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_members_member.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_permissions",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/permissions",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_permissions.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_permissions_repositories",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/permissions/repositories",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_permissions_repositories.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_permissions_repositories_repo_slug",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/permissions/repositories/{{ config.repo_slug }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_permissions_repositories_repo_slug.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_pipelines_config_runners",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/runners",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_pipelines_config_runners.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_pipelines_config_runners_runner_uuid",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/runners/{{ config.runner_uuid }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_pipelines_config_runners_runner_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_pipelines_config_variables",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables",
+      "projection": "schema",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_pipelines_config_variables.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
+      "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables/{{ config.variable_uuid }}",
+      "projection": "schema",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_pipelines_config_variables_variable_uuid.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/projects",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_projects.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_branching_model",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/branching-model",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_branching_model.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_branching_model_settings",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/branching-model/settings",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_branching_model_settings.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_default_reviewers",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/default-reviewers",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_default_reviewers.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/default-reviewers/{{ config.selected_user }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_default_reviewers_selected_user.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_deploy_keys",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/deploy-keys",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_deploy_keys.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_deploy_keys_key_id",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/deploy-keys/{{ config.key_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_deploy_keys_key_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_permissions_config_groups",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/permissions-config/groups",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_permissions_config_groups.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/permissions-config/groups/{{ config.group_slug }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_permissions_config_groups_group_slug.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_permissions_config_users",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/permissions-config/users",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_permissions_config_users.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "path": "/workspaces/{{ config.workspace }}/projects/{{ config.project_key }}/permissions-config/users/{{ config.selected_user_id }}",
+      "projection": "passthrough",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "workspaces_workspace_pullrequests_selected_user",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/workspaces/{{ config.workspace }}/pullrequests/{{ config.selected_user }}",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/workspaces_workspace_pullrequests_selected_user.json"
+    }
+  ]
+}

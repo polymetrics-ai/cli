@@ -86,8 +86,8 @@ func TestDefinitionJSONShape(t *testing.T) {
 			t.Fatalf("Definition JSON missing field %q; got keys %v", field, keysOf(decoded))
 		}
 	}
-	// write_actions/icon/description/docs_url are omitempty and unset here.
-	for _, field := range []string{"write_actions", "icon", "description", "docs_url"} {
+	// write_actions/changefeed/icon/description/docs_url are omitempty and unset here.
+	for _, field := range []string{"write_actions", "changefeed", "icon", "description", "docs_url"} {
 		if _, ok := decoded[field]; ok {
 			t.Fatalf("Definition JSON unexpectedly present unset omitempty field %q", field)
 		}

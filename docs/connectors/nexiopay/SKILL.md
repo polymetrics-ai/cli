@@ -11,9 +11,11 @@ Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, termi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,33 +30,33 @@ Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, termi
 
 - base_url
 - mode
-- api_key (secret)
-- username (secret)
+- api_key (secret) (required)
+- username (secret) (required)
 
 ## ETL Streams
 
 - card_tokens:
   - primary key: key
-  - fields: cardHolderName(), cardType(), createdDate(), currency(), expirationMonth(), expirationYear(), key(), lastFour()
+  - fields: cardHolderName(string), cardType(string), createdDate(string), currency(string), expirationMonth(string), expirationYear(string), key(string), lastFour(string)
 - recipients:
   - primary key: recipientId
-  - fields: createdDate(), currency(), email(), name(), recipientId(), status(), updatedDate()
+  - fields: createdDate(string), currency(string), email(string), name(string), recipientId(string), status(string), updatedDate(string)
 - spendbacks:
   - primary key: id
-  - fields: amount(), createdDate(), currency(), id(), recipientId(), status()
+  - fields: amount(number), createdDate(string), currency(string), id(string), recipientId(string), status(string)
 - payment_types:
   - primary key: id
-  - fields: displayName(), enabled(), id(), name()
+  - fields: displayName(string), enabled(boolean), id(string), name(string)
 - terminal_list:
   - primary key: terminalId
-  - fields: merchantId(), name(), status(), terminalId()
+  - fields: merchantId(string), name(string), status(string), terminalId(string)
 - user:
   - primary key: accountId
-  - fields: accountId(), email(), merchantId(), role(), username()
+  - fields: accountId(string), email(string), merchantId(string), role(string), username(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

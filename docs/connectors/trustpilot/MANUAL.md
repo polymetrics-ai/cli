@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Trustpilot business-unit reviews, invitations, and business-unit profile metadata.
 
 ICON
+  id: trustpilot
   asset: icons/trustpilot.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,23 +28,23 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  business_unit_id
-  api_key (secret)
+  business_unit_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   reviews:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), stars(), title()
+    fields: created_at(string), id(string), stars(integer), title(string)
   invitations:
     primary key: id
-    fields: created_at(), id(), status()
+    fields: created_at(string), id(string), status(string)
   business_units:
     primary key: id
-    fields: display_name(), id()
+    fields: display_name(string), id(string)
   categories:
     primary key: category_id
-    fields: category_id(), display_name(), is_primary(), name(), relevance(), source()
+    fields: category_id(string), display_name(string), is_primary(boolean), name(string), relevance(number), source(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

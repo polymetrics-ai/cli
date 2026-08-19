@@ -1,0 +1,12 @@
+{
+  "phase": "cli-required-flag-derivation-r1",
+  "status": "pr_open",
+  "delivery": "direct-pr",
+  "base": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-required-flag-derivation-r1",
+  "gsd_mode": "inline_manual_fallback",
+  "reason": "Canonical project contract forbids spawning GSD roles in this environment.",
+  "pull_request": "https://github.com/polymetrics-ai/cli/pull/4209",
+  "base_verified": "integration/4015-mvp-flat-r1",
+  "website_generated_data_gap": "2026-08-17: CI named gen:website-data; its two generated JSON artifacts contain exactly 104 required=true additions each and second-pass bytes are stable"
+}

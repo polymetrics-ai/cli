@@ -11,9 +11,11 @@ Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and wor
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,44 +30,45 @@ Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and wor
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - events:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - links:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - contacts:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - time_zones:
   - primary key: name
-  - fields: abbreviation(), display_name(), dst(), name(), utc_offset()
+  - fields: abbreviation(string), display_name(string), dst(boolean), name(string), utc_offset(integer)
 - webhooks:
   - primary key: id
-  - fields: events(), id(), inserted_at(), updated_at(), url()
+  - fields: events(array), id(string), inserted_at(string), updated_at(string), url(string)
 - workflows:
   - primary key: id
-  - fields: id(), inserted_at(), name(), scope_slug(), updated_at()
+  - fields: id(string), inserted_at(string), name(string), scope_slug(string), updated_at(string)
 - workflow_rules:
   - primary key: id
-  - fields: id(), position(), type(), workflow_id()
+  - fields: id(string), position(integer), type(string), workflow_id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_personal_link:
   - endpoint: POST /v1/links
+  - required fields: name
   - risk: creates a new scheduling link in the authenticated user's personal scope; external mutation, approval required
 - create_scope_link:
   - endpoint: POST /v1/scopes/{{ record.scope_slug }}/links
-  - required fields: scope_slug
+  - required fields: scope_slug, name
   - risk: creates a new scheduling link under a specific team or individual scope; external mutation, approval required
 - update_link:
   - endpoint: PATCH /v1/links/{{ record.id }}
@@ -89,6 +92,7 @@ Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and wor
   - risk: destructive/irreversible: cancels a scheduled event, notifying attendees; approval required
 - create_webhook:
   - endpoint: POST /v1/webhooks
+  - required fields: url
   - risk: creates a new webhook subscription that will POST event notifications to an external URL; approval required
 - delete_webhook:
   - endpoint: DELETE /v1/webhooks/{{ record.id }}

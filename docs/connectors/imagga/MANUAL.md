@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Imagga account API usage and per-image tags/categories via the Imagga REST API. Read-only. The colors and faces_detections detection streams are not yet ported — see docs.md Known limits.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,22 +29,22 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   image_urls
-  api_key (secret)
-  api_secret (secret)
+  api_key (secret) (required)
+  api_secret (secret) (required)
 
 ETL STREAMS
   usage:
     primary key: period
-    fields: daily_processed(), monthly_limit(), monthly_processed(), period(), requests()
+    fields: daily_processed(integer), monthly_limit(integer), monthly_processed(integer), period(string), requests(integer)
   tags:
     primary key: image_url, tag
-    fields: confidence(), image_url(), tag()
+    fields: confidence(number), image_url(string), tag(string)
   categories:
     primary key: image_url, category
-    fields: category(), confidence(), image_url()
+    fields: category(string), confidence(number), image_url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Imagga API read of account usage data and per-image tags/categories

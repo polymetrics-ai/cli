@@ -1,0 +1,16 @@
+{
+  "issue": 3982,
+  "phase": "issue-3982-postgres-write-driver-r1",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-3982-postgres-write-driver-r1",
+  "gsd_mode": "inline-manual-fallback-no-delegation",
+  "state": "mapped-write-driver-validated",
+  "decision_key": "postgres-write-input-contract",
+  "decision": "Resolved by firstmate: #4144 delivered the shared mapping/tombstone/receipt contract. This lane attaches that mapping to typed provisioning and implements PostgreSQL DDL plus the five phase-one write modes.",
+  "dependencies_confirmed": [
+    "internal/connectors/database/database_write_session.go",
+    "internal/connectors/database/managed_target_delivery_ledger.go",
+    "internal/connectors/database/mapping_contract.go",
+    "internal/connectors/database/database_write_input.go"
+  ]
+}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.
 
 ICON
+  id: iterable
   asset: icons/iterable.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,21 +29,21 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   lists:
     primary key: id
-    fields: createdAt(), id(), listType(), name(), updatedAt()
+    fields: createdAt(string), id(integer), listType(string), name(string), updatedAt(string)
   campaigns:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   templates:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Iterable API read of lists, campaigns, and templates

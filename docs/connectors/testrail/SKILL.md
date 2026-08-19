@@ -11,9 +11,17 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-testrail
+- asset: icons/simple-icons/testrail.svg
+- title: TestRail
+- simple_icon_slug: testrail
+- simple_icon_hex: 65C179
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=TestRail
+- match: exact-name-or-slug
+- matched_by: testrail
 
 ## Capabilities
 
@@ -27,51 +35,51 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
 ## Configuration
 
 - base_url
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
-  - fields: announcement(), id(), is_completed(), name()
+  - fields: announcement(string), id(integer), is_completed(boolean), name(string)
 - users:
   - primary key: id
-  - fields: email(), id(), is_active(), name(), role(), role_id()
+  - fields: email(string), id(integer), is_active(boolean), name(string), role(string), role_id(integer)
 - case_types:
   - primary key: id
-  - fields: id(), is_default(), name()
+  - fields: id(integer), is_default(boolean), name(string)
 - case_fields:
   - primary key: id
-  - fields: id(), is_active(), label(), name(), system_name(), type_id()
+  - fields: id(integer), is_active(boolean), label(string), name(string), system_name(string), type_id(integer)
 - priorities:
   - primary key: id
-  - fields: id(), is_default(), name(), priority(), short_name()
+  - fields: id(integer), is_default(boolean), name(string), priority(integer), short_name(string)
 - statuses:
   - primary key: id
-  - fields: id(), is_final(), is_system(), is_untested(), label(), name()
+  - fields: id(integer), is_final(boolean), is_system(boolean), is_untested(boolean), label(string), name(string)
 - result_fields:
   - primary key: id
-  - fields: id(), is_active(), label(), name(), system_name(), type_id()
+  - fields: id(integer), is_active(boolean), label(string), name(string), system_name(string), type_id(integer)
 - templates:
   - primary key: id, project_id
-  - fields: id(), is_default(), name(), project_id()
+  - fields: id(integer), is_default(boolean), name(string), project_id(string)
 - suites:
   - primary key: id
-  - fields: description(), id(), is_completed(), is_master(), name(), project_id(), url()
+  - fields: description(string), id(integer), is_completed(boolean), is_master(boolean), name(string), project_id(string), url(string)
 - milestones:
   - primary key: id
-  - fields: completed_on(), description(), due_on(), id(), is_completed(), is_started(), name(), parent_id(), project_id(), start_on(), started_on(), url()
+  - fields: completed_on(integer), description(string), due_on(integer), id(integer), is_completed(boolean), is_started(boolean), name(string), parent_id(integer), project_id(string), start_on(integer), started_on(integer), url(string)
 - cases:
   - primary key: id
   - cursor: updated_on
-  - fields: created_by(), created_on(), estimate(), id(), milestone_id(), priority_id(), project_id(), refs(), section_id(), suite_id(), template_id(), title(), type_id(), updated_by(), updated_on()
+  - fields: created_by(integer), created_on(integer), estimate(string), id(integer), milestone_id(integer), priority_id(integer), project_id(string), refs(string), section_id(integer), suite_id(integer), template_id(integer), title(string), type_id(integer), updated_by(integer), updated_on(integer)
 - plans:
   - primary key: id
-  - fields: assignedto_id(), completed_on(), created_by(), created_on(), description(), failed_count(), id(), is_completed(), milestone_id(), name(), passed_count(), project_id(), untested_count(), url()
+  - fields: assignedto_id(integer), completed_on(integer), created_by(integer), created_on(integer), description(string), failed_count(integer), id(integer), is_completed(boolean), milestone_id(integer), name(string), passed_count(integer), project_id(string), untested_count(integer), url(string)
 - runs:
   - primary key: id
-  - fields: assignedto_id(), completed_on(), created_by(), created_on(), description(), failed_count(), id(), is_completed(), milestone_id(), name(), passed_count(), plan_id(), project_id(), suite_id(), untested_count(), url()
+  - fields: assignedto_id(integer), completed_on(integer), created_by(integer), created_on(integer), description(string), failed_count(integer), id(integer), is_completed(boolean), milestone_id(integer), name(string), passed_count(integer), plan_id(integer), project_id(string), suite_id(integer), untested_count(integer), url(string)
 
 ## Sync Modes
 
@@ -81,18 +89,19 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
 
 - add_project:
   - endpoint: POST index.php?/api/v2/add_project
+  - required fields: name
   - risk: creates a new top-level TestRail project; low-risk external mutation, no approval required
 - add_milestone:
   - endpoint: POST index.php?/api/v2/add_milestone/{{ record.project_id }}
-  - required fields: project_id
+  - required fields: project_id, name
   - risk: creates a new milestone under the target project; low-risk external mutation, no approval required
 - add_suite:
   - endpoint: POST index.php?/api/v2/add_suite/{{ record.project_id }}
-  - required fields: project_id
+  - required fields: project_id, name
   - risk: creates a new test suite under the target project; low-risk external mutation, no approval required
 - add_case:
   - endpoint: POST index.php?/api/v2/add_case/{{ record.section_id }}
-  - required fields: section_id
+  - required fields: section_id, title
   - risk: creates a new test case in the target section; low-risk external mutation, no approval required
 - update_case:
   - endpoint: POST index.php?/api/v2/update_case/{{ record.id }}
@@ -100,11 +109,11 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
   - risk: mutates an existing test case's title, type, priority, milestone, estimate, or references
 - add_plan:
   - endpoint: POST index.php?/api/v2/add_plan/{{ record.project_id }}
-  - required fields: project_id
+  - required fields: project_id, name
   - risk: creates a new test plan under the target project; low-risk external mutation, no approval required
 - add_run:
   - endpoint: POST index.php?/api/v2/add_run/{{ record.project_id }}
-  - required fields: project_id
+  - required fields: project_id, name
   - risk: creates a new test run under the target project, selecting test cases into it for execution; low-risk external mutation, no approval required
 - close_run:
   - endpoint: POST index.php?/api/v2/close_run/{{ record.id }}

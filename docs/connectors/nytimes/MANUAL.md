@@ -13,6 +13,7 @@ DESCRIPTION
   Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.
 
 ICON
+  id: nytimes
   asset: icons/nytimes.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,21 +30,21 @@ CONFIGURATION
   base_url
   mode
   period
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   most_popular_viewed:
     primary key: id
     cursor: published_date
-    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+    fields: abstract(string), byline(string), id(integer), published_date(string), section(string), source(string), title(string), type(string), updated(string), uri(string), url(string)
   most_popular_emailed:
     primary key: id
     cursor: published_date
-    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+    fields: abstract(string), byline(string), id(integer), published_date(string), section(string), source(string), title(string), type(string), updated(string), uri(string), url(string)
   most_popular_shared:
     primary key: id
     cursor: published_date
-    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+    fields: abstract(string), byline(string), id(integer), published_date(string), section(string), source(string), title(string), type(string), updated(string), uri(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

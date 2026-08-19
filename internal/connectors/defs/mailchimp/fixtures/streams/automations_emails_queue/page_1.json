@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/automations/synthetic-conformance-value/emails/synthetic-conformance-value/queue",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "queue": [
+        {
+          "id": "fixture_id",
+          "workflow_id": "fixture_workflow_id",
+          "workflow_email_id": "fixture_workflow_email_id",
+          "email_id": "fixture@example.invalid",
+          "list_id": "fixture_list_id",
+          "email_address": "fixture@example.invalid",
+          "next_send": "fixture_next_send",
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

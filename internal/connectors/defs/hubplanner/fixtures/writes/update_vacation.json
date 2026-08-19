@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "vacation_fixture_1",
+    "resource": "resource_fixture_1",
+    "start": "2026-01-17T00:00:00Z",
+    "end": "2026-01-18T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/vacation/vacation_fixture_1",
+    "body": {
+      "resource": "resource_fixture_1",
+      "start": "2026-01-17T00:00:00Z",
+      "end": "2026-01-18T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "vacation_fixture_1"
+    }
+  }
+}

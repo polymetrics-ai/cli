@@ -1,21 +1,26 @@
 {
-  "request": { "method": "GET", "path": "/Items", "query": { "page": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/Items"
+  },
   "response": {
     "status": 200,
     "body": {
-      "Id": "fixture-1",
+      "Id": "fixture-response",
       "Status": "OK",
       "Items": [
         {
-          "ItemID": "item_fixture_1",
-          "Code": "FIX-1",
-          "Name": "Fixture Item",
-          "Description": "A fixture inventory item",
-          "IsSold": true,
-          "IsPurchased": true,
+          "id": "id_fixture_1",
+          "ItemID": "item_id_fixture_1",
+          "Code": "FIXTURE",
+          "Name": "name_fixture",
+          "Description": "description_fixture",
+          "IsSold": false,
+          "IsPurchased": false,
           "IsTrackedAsInventory": false,
-          "QuantityOnHand": 10.0,
-          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+          "QuantityOnHand": 12.34,
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
         }
       ]
     }

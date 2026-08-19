@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Granola meeting notes metadata and full note detail (summary, owner, attendees, calendar event) through the Granola public API (read-only).
 
 ICON
+  id: source-granola
   asset: icons/source-granola.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,17 +31,17 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   notes:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), object(), owner_email(), owner_name(), title(), updated_at()
+    fields: created_at(string), id(string), object(string), owner_email(string), owner_name(string), title(string), updated_at(string)
   detailed_notes:
     primary key: id
     cursor: created_at
-    fields: attendees(), calendar_event(), created_at(), folders(), id(), object(), owner_email(), owner_name(), summary(), title(), transcript(), updated_at()
+    fields: attendees(array), calendar_event(object), created_at(string), folders(array), id(string), object(string), owner_email(string), owner_name(string), summary(string), title(string), transcript(array), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

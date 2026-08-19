@@ -1,0 +1,14 @@
+Command:
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestPostgresManagedTargetIncrementalDedupeHistoryLive$' -v ./internal/connectors/native/postgres
+
+Result: FAIL
+
+=== RUN   TestPostgresManagedTargetIncrementalDedupeHistoryLive
+    managed_target_integration_test.go:204: PostgreSQL native polling apply for incremental_dedupe_history = (synccontract.DownstreamAcknowledgement{Sink:"", AcknowledgedAt:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), durable:false}, database polling target plan: database history route source and destination do not match the declared managed-target driver), want durable acknowledgement
+--- FAIL: TestPostgresManagedTargetIncrementalDedupeHistoryLive (7.20s)
+FAIL
+FAIL polymetrics.ai/internal/connectors/native/postgres 7.991s
+FAIL
+
+Observable red: the adapter returned a zero acknowledgement before the first
+history write, so it could not create the required target row or receipt.

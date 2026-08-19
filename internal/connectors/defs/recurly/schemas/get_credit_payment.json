@@ -1,0 +1,921 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_credit_payment record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Credit Payment ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "uuid": {
+      "type": "string",
+      "title": "Recurly UUID",
+      "description": "The UUID is useful for matching data with the CSV exports and building URLs into Recurly's UI."
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "payment",
+        "reduction",
+        "refund",
+        "write_off"
+      ],
+      "title": "Action",
+      "description": "The action for which the credit was created."
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "description": "The unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address used for communicating with this customer."
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "title": "Dunning Campaign ID",
+          "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Account mini details"
+    },
+    "applied_to_invoice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Invoice ID"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "number": {
+          "type": "string",
+          "title": "Invoice number"
+        },
+        "business_entity_id": {
+          "type": "string",
+          "title": "Business Entity ID",
+          "description": "Unique ID to identify the business entity assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "charge",
+            "credit",
+            "legacy"
+          ],
+          "title": "Invoice type"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "open",
+            "pending",
+            "processing",
+            "past_due",
+            "paid",
+            "closed",
+            "failed",
+            "voided"
+          ],
+          "default": "all",
+          "title": "Invoice state"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Invoice mini details"
+    },
+    "original_invoice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Invoice ID"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "number": {
+          "type": "string",
+          "title": "Invoice number"
+        },
+        "business_entity_id": {
+          "type": "string",
+          "title": "Business Entity ID",
+          "description": "Unique ID to identify the business entity assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "charge",
+            "credit",
+            "legacy"
+          ],
+          "title": "Invoice type"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "open",
+            "pending",
+            "processing",
+            "past_due",
+            "paid",
+            "closed",
+            "failed",
+            "voided"
+          ],
+          "default": "all",
+          "title": "Invoice state"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Invoice mini details"
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "description": "3-letter ISO 4217 currency code."
+    },
+    "amount": {
+      "type": "number",
+      "format": "float",
+      "title": "Amount",
+      "description": "Total credit payment amount applied to the charge invoice."
+    },
+    "original_credit_payment_id": {
+      "type": "string",
+      "title": "Original Credit Payment ID",
+      "description": "For credit payments with action `refund`, this is the credit payment that was refunded."
+    },
+    "refund_transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Transaction ID"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "uuid": {
+          "type": "string",
+          "title": "Recurly UUID",
+          "description": "The UUID is useful for matching data with the CSV exports and building URLs into Recurly's UI."
+        },
+        "original_transaction_id": {
+          "type": "string",
+          "title": "Original Transaction ID",
+          "description": "If this transaction is a refund (`type=refund`), this will be the ID of the original transaction on the invoice being refunded."
+        },
+        "account": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "code": {
+              "type": "string",
+              "description": "The unique identifier of the account."
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address used for communicating with this customer."
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "company": {
+              "type": "string"
+            },
+            "parent_account_id": {
+              "type": "string"
+            },
+            "bill_to": {
+              "type": "string"
+            },
+            "dunning_campaign_id": {
+              "type": "string",
+              "title": "Dunning Campaign ID",
+              "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+            }
+          },
+          "additionalProperties": false,
+          "title": "Account mini details"
+        },
+        "initiator": {
+          "type": "string",
+          "enum": [
+            "customer",
+            "merchant"
+          ],
+          "description": "Must be sent for one-time transactions in order to provide context on which entity is submitting the transaction to ensure proper fraud checks are observed, such as 3DS. If the customer is in session, send `customer`. If this is a merchant initiated one-time transaction, send `merchant`."
+        },
+        "invoice": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "title": "Invoice ID"
+            },
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "number": {
+              "type": "string",
+              "title": "Invoice number"
+            },
+            "business_entity_id": {
+              "type": "string",
+              "title": "Business Entity ID",
+              "description": "Unique ID to identify the business entity assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "charge",
+                "credit",
+                "legacy"
+              ],
+              "title": "Invoice type"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "processing",
+                "past_due",
+                "paid",
+                "closed",
+                "failed",
+                "voided"
+              ],
+              "default": "all",
+              "title": "Invoice state"
+            }
+          },
+          "additionalProperties": false,
+          "title": "Invoice mini details"
+        },
+        "merchant_reason_code": {
+          "type": "string",
+          "enum": [
+            "incremental",
+            "no_show",
+            "resubmission",
+            "service_extension",
+            "split_shipment",
+            "top_up"
+          ],
+          "default": "none",
+          "description": "This conditional parameter is useful for merchants in specific industries who need to submit one-time Merchant Initiated transactions in specific cases.\nNot all gateways support these methods, but will support a generic one-time Merchant Initiated transaction.\nOnly use this if the initiator value is \"merchant\". Otherwise, it will be ignored.\n  - Incremental: Send `incremental` with an additional purchase if the original authorization amount is not sufficient to cover the costs of your service or product. For example, if the customer adds goods or services or there are additional expenses.\n  - No Show: Send `no_show` if you charge customers a fee due to an agreed-upon cancellation policy in your industry.\n  - Resubmission: Send `resubmission` if you need to attempt collection on a declined transaction. You may also use the force collection behavior which has the same effect.\n  - Service Extension: Send `service_extension` if you are in a service industry and the customer has increased/extended their service in some way. For example: adding a day onto a car rental agreement.\n  - Split Shipment: Send `split_shipment` if you sell physical product and need to split up a shipment into multiple transactions when the customer is no longer in session.\n  - Top Up: Send `top_up` if you process one-time transactions based on a pre-arranged agreement with your customer where there is a pre-arranged account balance that needs maintaining. For example, if the customer has agreed to maintain an account balance of 30.00 and their current balance is 20.00, the MIT amount would be at least 10.00 to meet that 30.00 threshold.\n"
+        },
+        "voided_by_invoice": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "title": "Invoice ID"
+            },
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "number": {
+              "type": "string",
+              "title": "Invoice number"
+            },
+            "business_entity_id": {
+              "type": "string",
+              "title": "Business Entity ID",
+              "description": "Unique ID to identify the business entity assigned to the invoice. Available when the `Multiple Business Entities` feature is enabled."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "charge",
+                "credit",
+                "legacy"
+              ],
+              "title": "Invoice type"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "processing",
+                "past_due",
+                "paid",
+                "closed",
+                "failed",
+                "voided"
+              ],
+              "default": "all",
+              "title": "Invoice state"
+            }
+          },
+          "additionalProperties": false,
+          "title": "Invoice mini details"
+        },
+        "subscription_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "title": "Subscription ID"
+          },
+          "title": "Subscription IDs",
+          "description": "If the transaction is charging or refunding for one or more subscriptions, these are their IDs."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "authorization",
+            "capture",
+            "purchase",
+            "refund",
+            "verify"
+          ],
+          "title": "Transaction type",
+          "description": "- `authorization` – verifies billing information and places a hold on money in the customer's account.\n- `capture` – captures funds held by an authorization and completes a purchase.\n- `purchase` – combines the authorization and capture in one transaction.\n- `refund` – returns all or a portion of the money collected in a previous transaction to the customer.\n- `verify` – a $0 or $1 transaction used to verify billing information which is immediately voided.\n"
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "api",
+            "chargeback",
+            "external_recovery",
+            "force_collect",
+            "hpp",
+            "merchant",
+            "recurly_admin",
+            "recurlyjs",
+            "recurring",
+            "refunded_externally",
+            "transparent",
+            "token_api",
+            "api_force_collect",
+            "api_sub_change",
+            "api_verify_card",
+            "refund_balance",
+            "amazon_v2_ipn"
+          ],
+          "title": "Origin of transaction",
+          "description": "Describes how the transaction was triggered."
+        },
+        "currency": {
+          "type": "string",
+          "title": "Currency",
+          "description": "3-letter ISO 4217 currency code."
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "The description that gets sent to the gateway."
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "title": "Amount",
+          "description": "Total transaction amount sent to the payment gateway."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "chargeback",
+            "declined",
+            "error",
+            "pending",
+            "processing",
+            "scheduled",
+            "success",
+            "void"
+          ],
+          "title": "Transaction status",
+          "description": "The current transaction status. Note that the status may change, e.g. a `pending` transaction may become `declined` or `success` may later become `void`."
+        },
+        "success": {
+          "type": "boolean",
+          "title": "Success?",
+          "description": "Did this transaction complete successfully?"
+        },
+        "backup_payment_method_used": {
+          "type": "boolean",
+          "title": "Backup Payment Method Used?",
+          "description": "Indicates if the transaction was completed using a backup payment"
+        },
+        "refunded": {
+          "type": "boolean",
+          "title": "Refunded?",
+          "description": "Indicates if part or all of this transaction was refunded."
+        },
+        "billing_address": {
+          "type": "object",
+          "properties": {
+            "phone": {
+              "type": "string",
+              "title": "Phone number"
+            },
+            "street1": {
+              "type": "string",
+              "title": "Street 1"
+            },
+            "street2": {
+              "type": "string",
+              "title": "Street 2"
+            },
+            "city": {
+              "type": "string",
+              "title": "City"
+            },
+            "region": {
+              "type": "string",
+              "title": "State/Province",
+              "description": "State or province."
+            },
+            "postal_code": {
+              "type": "string",
+              "title": "Zip/Postal code",
+              "description": "Zip or postal code."
+            },
+            "country": {
+              "type": "string",
+              "title": "Country",
+              "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+            },
+            "geo_code": {
+              "type": "string",
+              "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+            },
+            "first_name": {
+              "type": "string",
+              "title": "First name"
+            },
+            "last_name": {
+              "type": "string",
+              "title": "Last name"
+            }
+          },
+          "additionalProperties": false
+        },
+        "collection_method": {
+          "type": "string",
+          "enum": [
+            "automatic",
+            "manual"
+          ],
+          "description": "The method by which the payment was collected."
+        },
+        "payment_method": {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string",
+              "enum": [
+                "bacs",
+                "amazon",
+                "amazon_billing_agreement",
+                "apple_pay",
+                "apple_pay_merchant_token",
+                "bank_account_info",
+                "braintree_apple_pay",
+                "check",
+                "credit_card",
+                "eft",
+                "gateway_token",
+                "google_pay",
+                "google_pay_device_pan",
+                "iban_bank_account",
+                "money_order",
+                "other",
+                "paypal",
+                "paypal_billing_agreement",
+                "roku",
+                "sepadirectdebit",
+                "venmo",
+                "wire_transfer",
+                "braintree_v_zero",
+                "boleto",
+                "cash_app",
+                "upi_autopay",
+                "pix_automatico",
+                "mercadopago",
+                "klarna",
+                "braintree_google_pay",
+                "stripe_link"
+              ]
+            },
+            "card_type": {
+              "type": "string",
+              "enum": [
+                "American Express",
+                "Dankort",
+                "Diners Club",
+                "Discover",
+                "ELO",
+                "Forbrugsforeningen",
+                "Hipercard",
+                "JCB",
+                "Laser",
+                "Maestro",
+                "MasterCard",
+                "Test Card",
+                "Union Pay",
+                "Unknown",
+                "Visa",
+                "Tarjeta Naranja"
+              ],
+              "description": "Visa, MasterCard, American Express, Discover, JCB, etc."
+            },
+            "first_six": {
+              "type": "string",
+              "description": "Credit card number's first six digits."
+            },
+            "last_four": {
+              "type": "string",
+              "description": "Credit card number's last four digits. Will refer to bank account if payment method is ACH."
+            },
+            "last_two": {
+              "type": "string",
+              "description": "The IBAN bank account's last two digits."
+            },
+            "exp_month": {
+              "type": "integer",
+              "description": "Expiration month."
+            },
+            "exp_year": {
+              "type": "integer",
+              "description": "Expiration year."
+            },
+            "gateway_token": {
+              "type": "string",
+              "description": "A token used in place of a credit card in order to perform transactions."
+            },
+            "cc_bin_country": {
+              "type": "string",
+              "description": "The 2-letter ISO 3166-1 alpha-2 country code associated with the card's issuer, if known."
+            },
+            "funding_source": {
+              "type": "string",
+              "enum": [
+                "credit",
+                "debit",
+                "charge",
+                "prepaid",
+                "deferred_debit"
+              ],
+              "description": "The funding source of the card, if known."
+            },
+            "gateway_code": {
+              "type": "string",
+              "description": "An identifier for a specific payment gateway."
+            },
+            "gateway_attributes": {
+              "type": "object",
+              "properties": {
+                "account_reference": {
+                  "type": "string",
+                  "description": "Used by Adyen and Braintree gateways. For Adyen the Shopper Reference value used when the external token was created. For Braintree the PayPal PayerID is populated in the response."
+                }
+              },
+              "additionalProperties": false,
+              "description": "Gateway specific attributes associated with this PaymentMethod"
+            },
+            "card_network_preference": {
+              "type": "string",
+              "enum": [
+                "Bancontact",
+                "CartesBancaires",
+                "Dankort",
+                "MasterCard",
+                "Visa"
+              ],
+              "description": "Represents the card network preference associated with the billing info for dual badged cards. Must be a supported card network."
+            },
+            "billing_agreement_id": {
+              "type": "string",
+              "description": "Billing Agreement identifier. Only present for Amazon or Paypal payment methods."
+            },
+            "name_on_account": {
+              "type": "string",
+              "description": "The name associated with the bank account."
+            },
+            "account_type": {
+              "type": "string",
+              "enum": [
+                "checking",
+                "savings"
+              ],
+              "description": "The bank account type. Only present for ACH payment methods."
+            },
+            "routing_number": {
+              "type": "string",
+              "description": "The bank account's routing number. Only present for ACH payment methods."
+            },
+            "routing_number_bank": {
+              "type": "string",
+              "description": "The bank name of this routing number."
+            },
+            "username": {
+              "type": "string",
+              "description": "Username of the associated payment method. Currently only associated with Venmo."
+            }
+          },
+          "additionalProperties": false
+        },
+        "ip_address_v4": {
+          "type": "string",
+          "title": "IP address",
+          "description": "IP address provided when the billing information was collected:\n\n- When the customer enters billing information into the Recurly.js or Hosted Payment Pages, Recurly records the IP address.\n- When the merchant enters billing information using the API, the merchant may provide an IP address.\n- When the merchant enters billing information using the UI, no IP address is recorded.\n"
+        },
+        "ip_address_country": {
+          "type": "string",
+          "title": "Origin IP address country, 2-letter ISO 3166-1 alpha-2 code, if known by Recurly."
+        },
+        "status_code": {
+          "type": "string",
+          "title": "Status code"
+        },
+        "status_message": {
+          "type": "string",
+          "title": "Status message",
+          "description": "For declined (`success=false`) transactions, the message displayed to the merchant."
+        },
+        "customer_message": {
+          "type": "string",
+          "title": "Customer message",
+          "description": "For declined (`success=false`) transactions, the message displayed to the customer."
+        },
+        "customer_message_locale": {
+          "type": "string",
+          "title": "Language code for the message"
+        },
+        "payment_gateway": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "type": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "gateway_message": {
+          "type": "string",
+          "title": "Gateway message",
+          "description": "Transaction message from the payment gateway."
+        },
+        "gateway_reference": {
+          "type": "string",
+          "title": "Gateway reference",
+          "description": "Transaction reference number from the payment gateway."
+        },
+        "gateway_approval_code": {
+          "type": "string",
+          "title": "Transaction approval code from the payment gateway."
+        },
+        "gateway_response_code": {
+          "type": "string",
+          "title": "For declined transactions (`success=false`), this field lists the gateway error code."
+        },
+        "gateway_response_time": {
+          "type": "number",
+          "format": "float",
+          "title": "Gateway response time",
+          "description": "Time, in seconds, for gateway to process the transaction."
+        },
+        "gateway_response_values": {
+          "type": "object",
+          "additionalProperties": true,
+          "title": "Gateway response values",
+          "description": "The values in this field will vary from gateway to gateway."
+        },
+        "cvv_check": {
+          "type": "string",
+          "enum": [
+            "D",
+            "I",
+            "M",
+            "N",
+            "P",
+            "S",
+            "U",
+            "X"
+          ],
+          "title": "CVV check",
+          "description": "When processed, result from checking the CVV/CVC value on the transaction."
+        },
+        "avs_check": {
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"
+          ],
+          "title": "AVS check",
+          "description": "When processed, result from checking the overall AVS on the transaction."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Created at"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Updated at"
+        },
+        "voided_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Voided at"
+        },
+        "collected_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Collected at, or if not collected yet, the time the transaction was created."
+        },
+        "action_result": {
+          "type": "object",
+          "additionalProperties": true,
+          "title": "Action result",
+          "description": "Action result params to be used in Recurly-JS to complete a payment when using asynchronous payment methods, e.g., Boleto, iDEAL and Sofort."
+        },
+        "vat_number": {
+          "type": "string",
+          "title": "VAT Number",
+          "description": "VAT number for the customer on this transaction. If the customer's Billing Info country is BR or AR, then this will be their Tax Identifier. For all other countries this will come from the VAT Number field in the Billing Info."
+        },
+        "fraud_info": {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string",
+              "title": "Object type"
+            },
+            "score": {
+              "type": "integer",
+              "title": "Kount score"
+            },
+            "decision": {
+              "type": "string",
+              "enum": [
+                "approve",
+                "decline",
+                "escalate",
+                "review"
+              ],
+              "title": "Kount decision"
+            },
+            "reference": {
+              "type": "string",
+              "title": "Kount transaction reference ID"
+            },
+            "risk_rules_triggered": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "title": "The Kount rule number."
+                  },
+                  "message": {
+                    "type": "string",
+                    "title": "Description of why the rule was triggered"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "title": "Risk Rules Triggered",
+              "description": "A list of fraud risk rules that were triggered for the transaction."
+            }
+          },
+          "additionalProperties": false,
+          "title": "Fraud information"
+        },
+        "next_action": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "qr_code"
+              ],
+              "title": "Next action type",
+              "description": "The type of next action required for the transaction."
+            },
+            "value": {
+              "type": "string",
+              "title": "Next action value",
+              "description": "The value associated with the next action type."
+            }
+          },
+          "additionalProperties": false,
+          "title": "Next action",
+          "description": "Next action values are used for any required customer follow-up action. Currently, this is supported for Ebanx when using Pix Automatico."
+        }
+      },
+      "additionalProperties": false
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    },
+    "voided_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Voided at"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

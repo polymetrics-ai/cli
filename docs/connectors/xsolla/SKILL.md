@@ -11,9 +11,11 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,43 +31,43 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 - base_url
 - datetime_from
 - datetime_to
-- merchant_id
+- merchant_id (required)
 - mode
 - project_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - orders:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), updated_at()
+  - fields: id(string), status(string), updated_at(string)
 - transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), updated_at()
+  - fields: id(string), status(string), updated_at(string)
 - transactions_search:
   - primary key: transaction_id
   - cursor: transaction_create_date
-  - fields: payment_details(), payment_system(), purchase(), transaction(), transaction_create_date(), transaction_id(), user()
+  - fields: payment_details(object), payment_system(object), purchase(object), transaction(object), transaction_create_date(string), transaction_id(integer), user(object)
 - transactions_registry:
   - primary key: transaction_id
   - cursor: transaction_transfer_date
-  - fields: purchase(), transaction(), transaction_id(), transaction_transfer_date(), user(), user_balance()
+  - fields: purchase(object), transaction(object), transaction_id(integer), transaction_transfer_date(string), user(object), user_balance(object)
 - payouts:
   - primary key: payout_id
   - cursor: payout_date
-  - fields: canceled(), payout(), payout_date(), payout_id(), rate(), transfer()
+  - fields: canceled(integer), payout(object), payout_date(string), payout_id(integer), rate(number), transfer(object)
 - payout_currency_breakdown:
   - primary key: IsoCurrency
-  - fields: DirectTaxesOfPayments(), IsoCurrency(), PaymentsAmount(), SumCommissionAgent(), SumCommissionUserTaxes(), SumItems(), SumNominalSum(), SumOutProject(), SumPayoutSum(), TaxesOfPayments()
+  - fields: DirectTaxesOfPayments(number), IsoCurrency(string), PaymentsAmount(number), SumCommissionAgent(number), SumCommissionUserTaxes(number), SumItems(number), SumNominalSum(number), SumOutProject(number), SumPayoutSum(number), TaxesOfPayments(number)
 - financial_reports:
   - primary key: report_id
-  - fields: agreement_document_id(), currency(), is_direct_payout(), is_draft_by_agreement(), month(), report_id(), year()
+  - fields: agreement_document_id(string), currency(string), is_direct_payout(boolean), is_draft_by_agreement(boolean), month(string), report_id(integer), year(integer)
 
 ## Sync Modes
 
@@ -75,11 +77,11 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 
 - request_refund:
   - endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/refund
-  - required fields: transaction_id
+  - required fields: transaction_id, description
   - risk: irreversible external mutation; issues a full refund to the user for the given transaction; approval required
 - request_partial_refund:
   - endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/partial_refund
-  - required fields: transaction_id
+  - required fields: transaction_id, description, refund_amount
   - risk: irreversible external mutation; issues a partial refund to the user for the given transaction; approval required
 
 ## Security

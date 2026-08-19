@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me/calendarList/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#calendarListEntry",
+      "etag": "etag-calendar",
+      "id": "synthetic-conformance-value",
+      "summary": "Fixture Calendar",
+      "description": "Fixture calendar only",
+      "location": "Remote",
+      "timeZone": "UTC",
+      "accessRole": "owner",
+      "primary": true,
+      "selected": true,
+      "backgroundColor": "#2952a3",
+      "foregroundColor": "#ffffff"
+    }
+  }
+}

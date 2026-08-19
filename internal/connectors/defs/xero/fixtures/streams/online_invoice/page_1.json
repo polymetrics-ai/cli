@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Invoices/synthetic-conformance-value/OnlineInvoice"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "OnlineInvoices": [
+        {
+          "OnlineInvoiceUrl": "online_invoice_url_fixture",
+          "invoice_id": "invoice_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

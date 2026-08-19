@@ -3,16 +3,16 @@
   "title": "settings",
   "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "value": {
+    "kind": {
       "type": "string"
     },
     "etag": {
       "type": "string"
     },
-    "kind": {
+    "id": {
+      "type": "string"
+    },
+    "value": {
       "type": "string"
     }
   },

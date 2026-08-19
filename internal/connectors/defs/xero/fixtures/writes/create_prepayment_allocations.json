@@ -1,0 +1,23 @@
+{
+  "record": {
+    "prepayment_id": "prepayment_id_fixture_1",
+    "Allocations": [
+      "allocation_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/Prepayments/prepayment_id_fixture_1/Allocations",
+    "body": {
+      "Allocations": [
+        "allocation_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

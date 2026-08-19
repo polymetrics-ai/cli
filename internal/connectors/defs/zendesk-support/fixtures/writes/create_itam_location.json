@@ -1,0 +1,18 @@
+{
+  "record": {
+    "location": {
+      "name": "fixture-name",
+      "external_id": "fixture-external-id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/it_asset_management/locations",
+    "body": {
+      "location": {
+        "name": "fixture-name",
+        "external_id": "fixture-external-id"
+      }
+    }
+  }
+}

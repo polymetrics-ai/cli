@@ -1,9 +1,9 @@
 {
   "api": "Gong API v2 (OpenAPI 3.0.1)",
   "docs": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-  "reviewed_at": "2026-07-30",
+  "reviewed_at": "2026-08-07",
   "operation_ledger_version": 1,
-  "scope": "Complete official Gong API v2 OpenAPI 3.0.1 operation inventory fetched unauthenticated from the Gong documentation spec on 2026-07-30. Every documented operation is covered by a stream, bounded direct read/provider query command, or typed reverse-ETL write action; DELETE/destructive operations are in scope through typed destructive confirmation and plan -> preview -> explicit approval -> execute.",
+  "scope": "Exact public Gong OpenAPI 3.0.1 surface: 59 paths / 69 operations. GET list/detail endpoints are covered by streams or bounded direct reads; JSON mutations are typed reverse-ETL write actions; POST read-query and multipart/array-body gaps are typed operation metadata blocked by executor shape, not by risk alone.",
   "endpoints": [
     {
       "method": "GET",

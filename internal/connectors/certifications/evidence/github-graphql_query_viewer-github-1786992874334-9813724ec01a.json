@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:graphql_query_viewer",
+  "provider": "github",
+  "executed_at": "2026-08-17T19:00:02.335Z",
+  "run_id": "github-1786992874334-9813724ec01a-graphql_query_viewer",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "3558077d962c8e6861d05b9b97666033d68ab77d9a81e744a94b31c2bf16d73c",
+    "pm_command_fingerprint": "{{pmcertfp:v1:efd576678c273a3e4347e6dd5e876e2495b63823d7471eff20a3fcf5c3e2172b}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:70f375b2a27949330aec3c2553a85898978c9edd930630921f77673b8cf92446}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_query_viewer",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:003d725864298188ac55579ed31a7013739fa022de875801b09102d852f7ef8d}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "rateLimit": {
+                "cost": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                "limit": "{{pmcertfp:v1:692270b1158b187558539316947afa2a91c4ad8d9b928eeb4a9dce48a192c82c}}",
+                "remaining": "{{pmcertfp:v1:b037b38938a9c32f651c21cdea2edf050a1aece99bd2a514d6b7b52ef379c474}}",
+                "resetAt": "{{pmcertfp:v1:b1b80a43e51f82cbbf8bae5196bb73d279081f1253efaead6821f1d368c3a234}}"
+              },
+              "viewer": {
+                "{{pmcertfp:v1:70bd760569c63c997bfa5415bdcb39ba9133a4636985201cd8a38fee4f019e49}}": "{{pmcertfp:v1:6b0a948b3659d96b93abfcb36ebb01785370059116d87bff4db7bf96b5401907}}"
+              }
+            },
+            "original_bytes": 118,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

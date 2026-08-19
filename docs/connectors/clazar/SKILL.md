@@ -11,6 +11,7 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
 
 ## Icon
 
+- id: clazar
 - asset: icons/clazar.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -30,40 +31,40 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
 - base_url
 - mode
 - start_date
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 
 - buyers:
   - primary key: id
   - cursor: last_modified_at
-  - fields: cloud(), cloud_account_id(), domain(), id(), last_modified_at(), latest_contract_id(), listing_id(), name(), status()
+  - fields: cloud(string), cloud_account_id(string), domain(string), id(string), last_modified_at(string), latest_contract_id(string), listing_id(string), name(string), status(string)
 - listings:
   - primary key: id
   - cursor: last_modified_at
-  - fields: cloud(), cloud_id(), cloud_url(), eula_type(), id(), last_modified_at(), long_description(), short_description(), status(), title()
+  - fields: cloud(string), cloud_id(string), cloud_url(string), eula_type(string), id(string), last_modified_at(string), long_description(string), short_description(string), status(string), title(string)
 - contracts:
   - primary key: id
   - cursor: last_modified_at
-  - fields: accepted_at(), auto_renew(), buyer_id(), cloud(), cloud_id(), duration(), end_at(), id(), last_modified_at(), latest_offer_id(), listing_id(), offer_type(), start_at(), status()
+  - fields: accepted_at(string), auto_renew(boolean), buyer_id(string), cloud(string), cloud_id(string), duration(string), end_at(string), id(string), last_modified_at(string), latest_offer_id(string), listing_id(string), offer_type(string), start_at(string), status(string)
 - opportunities:
   - primary key: id
   - cursor: last_modified_at
-  - fields: accept_by(), cloud(), cloud_id(), created_at(), customer_company(), customer_website(), id(), last_modified_at(), stage(), status(), target_close_date(), title()
+  - fields: accept_by(string), cloud(string), cloud_id(string), created_at(string), customer_company(string), customer_website(string), id(string), last_modified_at(string), stage(string), status(string), target_close_date(string), title(string)
 - private_offers:
   - primary key: id
   - cursor: last_modified_at
-  - fields: accepted_at(), archived(), cloud(), cloud_id(), duration(), eula_type(), expiration_at(), id(), last_modified_at(), listing_id(), name(), offer_type(), published_at(), status()
+  - fields: accepted_at(string), archived(string), cloud(string), cloud_id(string), duration(string), eula_type(string), expiration_at(string), id(string), last_modified_at(string), listing_id(string), name(string), offer_type(string), published_at(string), status(string)
 - reseller_offers:
   - primary key: id
-  - fields: accepted_at(), archived(), cloud(), cloud_id(), cloud_url(), eula_type(), expiration_at(), id(), listing_id(), name(), published_at(), status()
+  - fields: accepted_at(string), archived(boolean), cloud(string), cloud_id(string), cloud_url(string), eula_type(string), expiration_at(string), id(string), listing_id(string), name(string), published_at(string), status(string)
 - contacts:
   - primary key: id
-  - fields: created_at(), email(), full_name(), id(), is_editable(), phone_number(), updated_at(), uuid()
+  - fields: created_at(string), email(string), full_name(string), id(string), is_editable(boolean), phone_number(string), updated_at(string), uuid(string)
 - metering:
   - primary key: id
-  - fields: cloud(), contract_id(), custom_properties(), dimension(), end_time(), id(), quantity(), start_time(), status()
+  - fields: cloud(string), contract_id(string), custom_properties(object), dimension(string), end_time(string), id(string), quantity(string), start_time(string), status(string)
 
 ## Sync Modes
 
@@ -104,11 +105,11 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
   - risk: permanently deletes a Clazar contact record; approval required (destructive, irreversible)
 - update_metering_record:
   - endpoint: PATCH /metering/{{ record.id }}/
-  - required fields: id
+  - required fields: id, custom_properties
   - risk: updates only the custom_properties of a submitted metering record; low-risk
 - create_metering_records:
   - endpoint: POST /metering/
-  - optional fields: request
+  - required fields: request
   - risk: submits usage-based billing metering records that drive cloud marketplace invoicing for the buyer's contract; approval required (financial impact, effectively irreversible once billed)
 
 ## Security

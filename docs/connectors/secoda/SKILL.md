@@ -11,6 +11,7 @@ Reads Secoda catalog metadata (tables, documents, collections, questions) throug
 
 ## Icon
 
+- id: secoda
 - asset: icons/secoda.svg
 - source: official
 - review_status: official_verified
@@ -28,26 +29,26 @@ Reads Secoda catalog metadata (tables, documents, collections, questions) throug
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - tables:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - documents:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - collections:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - questions:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

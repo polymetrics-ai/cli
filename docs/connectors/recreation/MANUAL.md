@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and recreation areas through the RIDB REST API.
 
 ICON
+  id: recreation
   asset: icons/recreation.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,26 +27,26 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   facilities:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), type(), updated_at()
+    fields: id(string), name(string), type(string), updated_at(string)
   campsites:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), type(), updated_at()
+    fields: id(string), name(string), type(string), updated_at(string)
   activities:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   organizations:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   recareas:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -11,9 +11,11 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,22 +28,22 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
 - updated_since
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - jobs:
   - primary key: uuid
   - cursor: updated_at
-  - fields: budget(), clientContactUUID(), clientOrderNumber(), clientUUID(), completedDate(), description(), dueDate(), jobCategoryUUID(), jobNumber(), jobStatusUUID(), name(), priority(), startDate(), updated_at(), uuid()
+  - fields: budget(number), clientContactUUID(string), clientOrderNumber(string), clientUUID(string), completedDate(string), description(string), dueDate(string), jobCategoryUUID(string), jobNumber(string), jobStatusUUID(string), name(string), priority(string), startDate(string), updated_at(string), uuid(string)
 - clients:
   - primary key: uuid
   - cursor: updated_at
-  - fields: archived(), clientManagerUUID(), exportCode(), favorite(), jobManagerUUID(), name(), prospect(), referralSource(), updated_at(), uuid()
+  - fields: archived(boolean), clientManagerUUID(string), exportCode(string), favorite(boolean), jobManagerUUID(string), name(string), prospect(boolean), referralSource(string), updated_at(string), uuid(string)
 
 ## Sync Modes
 
@@ -62,6 +64,7 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
   - risk: permanently deletes a WorkflowMax client record; approval required
 - create_job:
   - endpoint: POST /v2/jobs
+  - required fields: clientUUID, jobName, statusUUID, startDate, dueDate, priority
   - risk: creates a WorkflowMax job; approval required
 - delete_job:
   - endpoint: DELETE /v2/jobs/{{ record.uuid }}
@@ -69,6 +72,7 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
   - risk: permanently deletes a WorkflowMax job; approval required
 - create_client_contact:
   - endpoint: POST /v2/clients/contacts
+  - required fields: firstName
   - risk: creates a WorkflowMax client-contact record (not attached to any client until linked); approval required
 - update_client_contact:
   - endpoint: PUT /v2/clients/contacts/{{ record.uuid }}

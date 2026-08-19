@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Star } from 'lucide-react';
-import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
+import { BLOG_POSTS, blogUrl, getBlogPost, sortBlogPostsByPublishedAt } from '@/lib/blog';
 import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
@@ -49,7 +49,9 @@ export default async function BlogPostPage({ params }: Props) {
   const post = getBlogPost(slug);
   if (!post) notFound();
 
-  const related = BLOG_POSTS.filter((item) => item.slug !== post.slug).slice(0, 2);
+  const related = sortBlogPostsByPublishedAt(BLOG_POSTS)
+    .filter((item) => item.slug !== post.slug)
+    .slice(0, 2);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

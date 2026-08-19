@@ -624,7 +624,7 @@
       "name": "update_meeting",
       "kind": "update",
       "method": "PUT",
-      "path": "/meetings/{{ record.meetingId }}",
+      "path": "/meetings/{meetingId}",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -683,7 +683,7 @@
       "name": "delete_meeting",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/meetings/{{ record.meetingId }}",
+      "path": "/meetings/{meetingId}",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -1177,10 +1177,7 @@
             }
           }
         },
-        "additionalProperties": true,
-        "required": [
-          "callAccessList"
-        ]
+        "additionalProperties": true
       },
       "risk": "medium: mutates Gong API state; requires reverse ETL approval"
     },
@@ -1202,10 +1199,7 @@
             }
           }
         },
-        "additionalProperties": true,
-        "required": [
-          "callAccessList"
-        ]
+        "additionalProperties": true
       },
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
       "confirm": "destructive",
@@ -1595,7 +1589,7 @@
       "name": "update_task",
       "kind": "update",
       "method": "PATCH",
-      "path": "/tasks/{{ record.taskId }}",
+      "path": "/tasks/{taskId}",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -1640,7 +1634,7 @@
       "name": "upload_call_media",
       "kind": "update",
       "method": "PUT",
-      "path": "/calls/{{ record.id }}/media",
+      "path": "/v2/calls/{{ record.id }}/media",
       "path_fields": [
         "id"
       ],
@@ -1681,7 +1675,7 @@
       "name": "upload_crm_entities",
       "kind": "create",
       "method": "POST",
-      "path": "/crm/entities",
+      "path": "/v2/crm/entities",
       "body_type": "multipart",
       "multipart": {
         "max_bytes": 209715200,
@@ -1715,7 +1709,7 @@
       "name": "upload_crm_entity_schema",
       "kind": "create",
       "method": "POST",
-      "path": "/crm/entity-schema?integrationId={{ record.integrationId }}&objectType={{ record.objectType }}",
+      "path": "/v2/crm/entity-schema",
       "body_type": "json_array",
       "body_field": "selected_fields",
       "body_schema": {
@@ -1728,26 +1722,9 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "integrationId",
-          "objectType",
           "selected_fields"
         ],
         "properties": {
-          "integrationId": {
-            "type": "string",
-            "pattern": "^[0-9]{1,20}$",
-            "description": "Integration ID generated when creating the Gong CRM integration."
-          },
-          "objectType": {
-            "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "CONTACT",
-              "DEAL",
-              "LEAD"
-            ],
-            "description": "CRM object type to set the schema for (case-sensitive)."
-          },
           "selected_fields": {
             "type": "array",
             "items": {
@@ -1759,32 +1736,33 @@
         "additionalProperties": false
       },
       "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
-      "confirm": "destructive",
-      "path_fields": [
-        "integrationId",
-        "objectType"
-      ]
+      "confirm": "destructive"
     },
     {
       "name": "upload_target_assignments",
-      "kind": "upsert",
+      "kind": "create",
       "method": "POST",
-      "path": "/targets/{{ record.targetId }}/assignments?workspaceId={{ record.workspaceId }}",
+      "path": "/v2/targets/{{ record.targetId }}/assignments",
       "path_fields": [
-        "targetId",
-        "workspaceId"
+        "targetId"
       ],
+      "query": {
+        "workspaceId": "{{ record.workspaceId }}",
+        "validateOnly": {
+          "template": "{{ record.validateOnly }}",
+          "omit_when_absent": true
+        }
+      },
       "body_type": "multipart",
       "multipart": {
-        "max_bytes": 52428800,
+        "max_bytes": 10485760,
         "parts": [
           {
             "name": "file",
             "type": "file",
             "field": "assignments_file_path",
-            "content_type": "text/csv",
             "required": true,
-            "max_bytes": 52428800
+            "max_bytes": 10485760
           }
         ]
       },
@@ -1798,22 +1776,24 @@
         "properties": {
           "targetId": {
             "type": "string",
-            "pattern": "^[0-9]{1,20}$",
-            "description": "Unique Gong target identifier from GET /v2/targets."
+            "description": "Unique identifier for the target (up to 20 digits)."
           },
           "workspaceId": {
             "type": "string",
-            "pattern": "^[0-9]{1,20}$",
-            "description": "Workspace identifier that owns the target."
+            "description": "The ID of the workspace the target belongs to."
+          },
+          "validateOnly": {
+            "type": "string",
+            "description": "When \"true\", the CSV file is fully validated but no data is uploaded."
           },
           "assignments_file_path": {
             "type": "string",
-            "description": "Project-relative CSV file path containing target assignments (maximum 10,000 data rows per Gong docs)."
+            "description": "Project-relative path to the Gong target assignments CSV file."
           }
         },
         "additionalProperties": false
       },
-      "risk": "high: uploads target assignment CSV data from a bounded project-local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+      "risk": "high: uploads target assignments from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
       "confirm": "destructive"
     }
   ]

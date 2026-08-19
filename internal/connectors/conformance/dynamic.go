@@ -7,6 +7,7 @@ import (
 
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io/fs"
@@ -153,14 +154,15 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 }
 
 // runtimeConfigForEngine builds a minimal connectors.RuntimeConfig for
-// dynamic checks: every spec-declared property gets a synthetic non-secret
-// value (so required-field / interpolation resolution doesn't fail for want
-// of a config value), and every x-secret property gets a synthetic secret
-// value. Values are deliberately synthetic/non-realistic (never derived
-// from real credentials) per THREAT-MODEL §4 — conformance never touches
-// live secrets.
+// dynamic checks. ProjectDir carries the reserved conformance-fixture sentinel
+// used by custom auth hooks to avoid token exchanges; every spec-declared
+// property gets a synthetic non-secret value (so required-field/interpolation
+// resolution does not fail for want of config), and every x-secret property
+// gets a synthetic secret value. Values are deliberately synthetic and never
+// derived from real credentials per THREAT-MODEL §4 — conformance never
+// touches live secrets or provider endpoints.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}
+	cfg := connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__", Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {
 		return cfg
 	}
@@ -191,6 +193,73 @@ func readRequestFor(streamName string, cfg connectors.RuntimeConfig, state map[s
 // writeRequestFor builds a connectors.WriteRequest for actionName using cfg.
 func writeRequestFor(actionName string, cfg connectors.RuntimeConfig) connectors.WriteRequest {
 	return connectors.WriteRequest{Action: actionName, Config: cfg}
+}
+
+// approvedFixtureWriteRequest carries synthetic, non-secret approval evidence
+// for the conformance replay server. It is intentionally derived from the
+// engine's real no-network preview so fixture execution exercises the same
+// gate as production without granting a bypass to arbitrary callers.
+func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionName string, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) (connectors.WriteRequest, error) {
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("conformance:"+b.Name, cfg.Secrets)
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("conformance:"+b.Name, cfg.Config)
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	cfg.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+	req := writeRequestFor(actionName, cfg)
+	preview, err := engine.DryRunWrite(ctx, b, req, records, hooks)
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	planPayload, err := json.Marshal(struct {
+		Connector string                   `json:"connector"`
+		Action    string                   `json:"action"`
+		Config    connectors.RuntimeConfig `json:"config"`
+		Records   []connectors.Record      `json:"records"`
+	}{Connector: b.Name, Action: actionName, Config: cfg, Records: records})
+	if err != nil {
+		return connectors.WriteRequest{}, fmt.Errorf("marshal conformance fixture plan: %w", err)
+	}
+	planHash := sha256.Sum256(planPayload)
+	// Only a target the engine gate will actually stop carries a confirmation,
+	// and a grant exists solely to satisfy that stop — IssueWriteGrant refuses
+	// to mint one for anything else. A safe action reaches the same dispatch
+	// seam with no evidence, so requesting a grant here would be asking the
+	// authority to authorize a write nothing is holding back.
+	if preview.ApprovalTarget.Confirmation.Kind == "" {
+		return req, nil
+	}
+	token := "conformance-fixture-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_conformance_fixture",
+		PlanHash:      fmt.Sprintf("%x", planHash),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: token,
+		Target:        grant.Target,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	return req, nil
 }
 
 // checkCheckFixture runs the bundle's declarative Check() against a replay
@@ -506,7 +575,13 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 
 		capture.Reset(fx.Response)
 		rb := withReplayURL(b, capture.URL)
-		if _, err := engine.Write(ctx, rb, writeRequestFor(action.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name)); err != nil {
+		hooks := engine.HooksFor(b.Name)
+		writeReq, err := approvedFixtureWriteRequest(ctx, rb, action.Name, cfg, []connectors.Record{record}, hooks)
+		if err != nil {
+			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.DryRunWrite against replay server failed: %v", err)})
+			continue
+		}
+		if _, err := engine.Write(ctx, rb, writeReq, []connectors.Record{record}, hooks); err != nil {
 			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
 			continue
 		}
@@ -527,7 +602,7 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 
 // checkDeleteSemantics exercises every kind:delete write action's
 // missing_ok_status handling: a status in that allow-list must be treated
-// as written, not failed. The real engine.Write is run against a server
+// as an expected no-op, not a completed write or a failure. The real engine.Write is run against a server
 // that always answers the FIRST allow-listed status, so this check would
 // fail (RecordsFailed>0 / an error) if that handling ever regressed. A
 // bundle with no such delete action, or no fixture for it, is Skipped.
@@ -569,12 +644,18 @@ func checkDeleteSemantics(b engine.Bundle) CheckResult {
 	rb := withReplayURL(b, srv.URL)
 	cfg := runtimeConfigForEngine(b)
 	record := connectors.Record(fx.Record)
-	result, err := engine.Write(context.Background(), rb, writeRequestFor(deleteAction.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name))
+	ctx := context.Background()
+	hooks := engine.HooksFor(b.Name)
+	writeReq, err := approvedFixtureWriteRequest(ctx, rb, deleteAction.Name, cfg, []connectors.Record{record}, hooks)
+	if err != nil {
+		return CheckResult{Name: name, Error: fmt.Sprintf("delete preview failed: %v", err)}
+	}
+	result, err := engine.Write(ctx, rb, writeReq, []connectors.Record{record}, hooks)
 	if err != nil {
 		return CheckResult{Name: name, Error: fmt.Sprintf("delete with missing_ok_status %d returned an error instead of being treated as written: %v", status, err)}
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		return CheckResult{Name: name, Error: fmt.Sprintf("delete result = %+v, want RecordsWritten=1 RecordsFailed=0 for an allow-listed missing_ok_status %d", result, status)}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 0 || result.RecordsUnchanged != 1 {
+		return CheckResult{Name: name, Error: fmt.Sprintf("delete result = %+v, want RecordsWritten=0 RecordsFailed=0 RecordsUnchanged=1 for an allow-listed missing_ok_status %d", result, status)}
 	}
 	return CheckResult{Name: name, Passed: true}
 }
@@ -794,8 +875,8 @@ func isAllDigitsForAssertion(s string) bool {
 
 // --- write fixture parsing -------------------------------------------------
 
-// writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
-// {"record": {...}, "expect": {"method","path","body"}}.
+// writeFixture is fixtures/writes/<action>.json's shape (migration conventions §4):
+// {"record": {...}, "expect": {"method","path","query"?,"body"?}}.
 type writeFixture struct {
 	Record   map[string]any   `json:"record"`
 	Expect   writeExpectation `json:"expect"`
@@ -803,9 +884,10 @@ type writeFixture struct {
 }
 
 type writeExpectation struct {
-	Method string         `json:"method"`
-	Path   string         `json:"path"`
-	Body   map[string]any `json:"body,omitempty"`
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+	Body   map[string]any    `json:"body,omitempty"`
 }
 
 // loadWriteFixture reads fixtures/writes/<action>.json.
@@ -848,6 +930,11 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	}
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
+	}
+	for key, wantValue := range want.Query {
+		if gotValue := got.Query.Get(key); gotValue != wantValue {
+			return fmt.Sprintf("query %q = %q, want %q", key, gotValue, wantValue)
+		}
 	}
 	for k, wantVal := range want.Body {
 		gotVal, ok := got.Body[k]

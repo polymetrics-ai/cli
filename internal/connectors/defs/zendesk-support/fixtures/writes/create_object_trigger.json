@@ -1,0 +1,29 @@
+{
+  "record": {
+    "custom_object_key": "fixture-custom-object-key",
+    "trigger": {
+      "title": "fixture-title",
+      "actions": [
+        {
+          "field": "fixture-field"
+        }
+      ],
+      "active": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/custom_objects/fixture-custom-object-key/triggers",
+    "body": {
+      "trigger": {
+        "title": "fixture-title",
+        "actions": [
+          {
+            "field": "fixture-field"
+          }
+        ],
+        "active": true
+      }
+    }
+  }
+}

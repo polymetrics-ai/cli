@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/webhooks",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "webhooks": [
+        {
+          "id": "fixture_id",
+          "list_id": "fixture_list_id",
+          "url": "https://example.invalid/mailchimp-fixture",
+          "events": {},
+          "sources": {},
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

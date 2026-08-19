@@ -13,7 +13,7 @@ Every operational `pm` command follows three guarantees agents can depend on:
 |---|---|
 | **Structured output for operations** | Add `--json` to command groups that produce machine output. Parse `kind` to dispatch. |
 | **Stable exit codes** | Branch on the exit code -- never parse stderr text. |
-| **Approval-gated writes** | `pm reverse run` requires `--approve <token>`. The agent cannot bypass this gate. |
+| **Approval-gated writes** | `pm reverse run` requires the bare `--approval-token-stdin` marker and one bounded token line on standard input. The agent cannot bypass this gate. |
 
 ## Read-only commands (agent-autonomous)
 
@@ -24,9 +24,9 @@ pm connectors list --json
 pm connectors inspect github --json
 pm connections list --json
 pm catalog show --connection my-github --json
-pm etl check --connector github --config repository=OWNER/REPO --json
-pm etl catalog --connector github --config repository=OWNER/REPO --json
-pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
+pm etl check --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl catalog --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl read --connector github --stream issues --limit 10 --config owner=OWNER --config repo=REPO --config public_access=true --json
 pm etl run --connection my-github --stream issues --json
 pm etl status <run-id> --json
 pm query run --table issues --json
@@ -52,7 +52,7 @@ pm reverse plan sync \
 pm reverse preview plan_abc123 --json
 
 # Agent must obtain an approval token before this step:
-pm reverse run plan_abc123 --approve <token> --json
+pm reverse run plan_abc123 --approval-token-stdin --json
 ```
 
 <Callout type="warn">
@@ -69,7 +69,7 @@ pm reverse run plan_abc123 --approve <token> --json
 | `4` | Auth error | Surface to a human to add or rotate credentials. |
 | `5` | Connector error | Inspect the error detail field; may be retryable with backoff. |
 | `6` | Runtime unavailable | Surface: the required runtime dependency is not reachable. |
-| `7` | Approval required | Obtain an approval token from `pm reverse plan`, then retry. |
+| `7` | Approval required | Obtain the token from human-readable plan output, or from preview output for a destructive plan, then retry. |
 | `1` | Internal error | Report as a bug. |
 
 ## JSON output envelopes
@@ -96,7 +96,7 @@ Common `kind` values:
 | `ReversePlan` | `pm reverse plan --json` |
 | `ReversePlanPreview` | `pm reverse preview --json` |
 | `ReverseRun` | `pm reverse run --json` |
-| `CommandManual` | any `pm <cmd> --help --json` |
+| `CommandManual` | a resolved `pm <cmd> --help --json` request |
 
 ## Connector discovery
 
@@ -114,6 +114,22 @@ pm connectors list --all --json
 ```
 
 For human-readable connector pages with per-connector guides, visit [/docs/connectors](/docs/connectors). Each page documents declared capabilities, ETL streams, write actions, and the generated bundle notes for that connector.
+
+## Connector transport eligibility
+
+`pm connectors inspect <slug> --json` includes `sync_transport.source` and
+`sync_transport.destination`. `unsupported` means that connector has not
+declared the corresponding closed transport role. `declared` is metadata only:
+the runtime must still pass its closed executor, mode, acknowledgement, and
+external-conformance preflight before any sync starts. Inspection does not read
+credentials and a declared role is not a certification claim. A structurally
+valid destination with `acknowledgement: "none"` remains `declared` in inspection
+so its policy is visible, but runtime preflight refuses it; only
+`durable_warehouse` may execute.
+
+GitHub currently declares both closed roles, so `pm connectors inspect github
+--json` reports `declared` for each role. This remains metadata-only and does
+not read credentials.
 
 ## Generating connector skills
 
@@ -204,7 +220,7 @@ pm reverse preview <plan-id> --json
 ### Execute with approval
 
 ```bash
-pm reverse run <plan-id> --approve <token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 # branch on exit code; on 7, re-request an approval token
 ```
 
@@ -220,4 +236,4 @@ pm reverse run <plan-id> --approve <token> --json
   <Card title="Reverse ETL" href="/docs/reverse-etl" description="The full plan-preview-approve-run security model." />
   <Card title="Connector catalog" href="/docs/connectors" description="Connector pages with per-connector setup, auth fields, and machine-readable metadata." />
 </Cards>
-Manual surfaces such as `pm help <topic>` are intentionally human-readable. Use `pm <command> --help --json` when an agent needs the embedded manual envelope.
+Manual surfaces such as `pm help <topic>` are intentionally human-readable. For a resolved command path, use `pm <command> --help --json` when an agent needs the embedded manual envelope.

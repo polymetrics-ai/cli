@@ -11,6 +11,7 @@ Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoW
 
 ## Icon
 
+- id: nasa
 - asset: icons/nasa.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -34,26 +35,26 @@ Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoW
 - sol
 - start_date
 - thumbs
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - apod:
   - primary key: date
   - cursor: date
-  - fields: copyright(), date(), explanation(), hdurl(), media_type(), service_version(), thumbnail_url(), title(), url()
+  - fields: copyright(string), date(string), explanation(string), hdurl(string), media_type(string), service_version(string), thumbnail_url(string), title(string), url(string)
 - neo_feed:
   - primary key: id
-  - fields: absolute_magnitude_h(), id(), is_potentially_hazardous_asteroid(), is_sentry_object(), name(), nasa_jpl_url(), neo_reference_id()
+  - fields: absolute_magnitude_h(number), id(string), is_potentially_hazardous_asteroid(boolean), is_sentry_object(boolean), name(string), nasa_jpl_url(string), neo_reference_id(string)
 - neo_browse:
   - primary key: id
-  - fields: absolute_magnitude_h(), id(), is_potentially_hazardous_asteroid(), is_sentry_object(), name(), nasa_jpl_url(), neo_reference_id()
+  - fields: absolute_magnitude_h(number), id(string), is_potentially_hazardous_asteroid(boolean), is_sentry_object(boolean), name(string), nasa_jpl_url(string), neo_reference_id(string)
 - epic:
   - primary key: identifier
-  - fields: caption(), date(), identifier(), image(), version()
+  - fields: caption(string), date(string), identifier(string), image(string), version(string)
 - mars_photos:
   - primary key: id
-  - fields: camera(), earth_date(), id(), img_src(), rover(), sol()
+  - fields: camera(string), earth_date(string), id(integer), img_src(string), rover(string), sol(integer)
 
 ## Sync Modes
 

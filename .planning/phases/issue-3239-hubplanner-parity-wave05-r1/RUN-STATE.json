@@ -1,0 +1,16 @@
+{
+  "phase": "issue-3239-hubplanner-parity-wave05-r1",
+  "state": "ready-to-commit",
+  "gsd": "manual fallback; scripts/gsd programming-loop unavailable",
+  "branch": "fm/cli-hubplanner-parity-wave05-r1",
+  "counts": {
+    "total": 107,
+    "implemented": 97,
+    "fixture_tested": 81,
+    "blocked": 10,
+    "excluded": 0,
+    "certified": 0
+  },
+  "issue_updates": "comments posted to #3239 and #3240-#3246",
+  "review": "reviewer subagent final pass: no critical findings, no warnings"
+}

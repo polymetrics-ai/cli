@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/application.listHistory",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "application_list_history_id_fixture_9",
+          "stageId": "application_list_history_stageid_fixture_9",
+          "title": "Title fixture 9",
+          "enteredStageAt": "2026-02-09T09:00:00Z",
+          "leftStageAt": "2026-01-09T09:00:00Z",
+          "stageNumber": 9,
+          "allowedActions": [
+            "none"
+          ],
+          "actorId": "application_list_history_actorid_fixture_9"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "applicationId": "applicationid_fixture"
+  }
+}

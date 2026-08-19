@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Clock, Rss } from 'lucide-react';
-import { BLOG_POSTS, blogUrl } from '@/lib/blog';
+import { BLOG_POSTS, blogUrl, sortBlogPostsByPublishedAt } from '@/lib/blog';
 import { HomeSidebar } from '@/components/home/home-sidebar';
 import { PageAside } from '@/components/home/page-aside';
 import { CornerBox } from '@/components/ui/corner-box';
@@ -22,8 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-const featured = BLOG_POSTS[0];
-const rest = BLOG_POSTS.slice(1);
+const orderedBlogPosts = sortBlogPostsByPublishedAt(BLOG_POSTS);
+const featured = orderedBlogPosts[0];
+const rest = orderedBlogPosts.slice(1);
 const blogTocItems = [
   { id: 'blog-overview', label: 'Overview' },
   { id: 'featured-article', label: 'Featured article' },
@@ -37,7 +38,7 @@ export default function BlogPage() {
     name: 'Polymetrics Blog',
     url: 'https://cli.polymetrics.ai/blog',
     description: metadata.description,
-    blogPost: BLOG_POSTS.map((post) => ({
+    blogPost: orderedBlogPosts.map((post) => ({
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.description,

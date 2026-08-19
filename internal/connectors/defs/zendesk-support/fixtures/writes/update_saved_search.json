@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "fixture-id",
+    "name": "fixture-name",
+    "query": "fixture-query",
+    "type": "fixture-type"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/saved_searches/fixture-id",
+    "body": {
+      "name": "fixture-name",
+      "query": "fixture-query",
+      "type": "fixture-type"
+    }
+  }
+}

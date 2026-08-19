@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Everhour projects, clients, team members, team time records, per-project tasks and sections, time-off types, time-off allocations, expenses, expense categories, and invoices, and writes client/project/task/section/time-record/expense mutations, through the Everhour REST API.
 
 ICON
+  id: everhour
   asset: icons/everhour.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,49 +29,50 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:
     primary key: id
-    fields: createdAt(), favorite(), foreign(), id(), name(), platform(), status(), type(), workspaceId(), workspaceName()
+    fields: createdAt(string), favorite(boolean), foreign(boolean), id(string), name(string), platform(string), status(string), type(string), workspaceId(string), workspaceName(string)
   clients:
     primary key: id
-    fields: createdAt(), email(), favorite(), id(), name(), status()
+    fields: createdAt(string), email(string), favorite(boolean), id(string), name(string), status(string)
   users:
     primary key: id
-    fields: capacity(), createdAt(), email(), headline(), id(), isEmailVerified(), name(), role(), status(), type()
+    fields: capacity(integer), createdAt(string), email(string), headline(string), id(string), isEmailVerified(boolean), name(string), role(string), status(string), type(string)
   time:
     primary key: id
-    fields: createdAt(), date(), id(), time(), user()
+    fields: createdAt(string), date(string), id(string), time(integer), user(integer)
   tasks:
     primary key: id
-    fields: completed(), createdAt(), id(), name(), project_id(), status(), type(), url()
+    fields: completed(boolean), createdAt(string), id(string), name(string), project_id(string), status(string), type(string), url(string)
   sections:
     primary key: id
-    fields: id(), name(), position(), project_id(), status()
+    fields: id(integer), name(string), position(integer), project_id(string), status(string)
   time_off_types:
     primary key: id
-    fields: color(), description(), id(), name(), paid()
+    fields: color(string), description(string), id(integer), name(string), paid(boolean)
   allocations:
     primary key: id
-    fields: accrualFrequency(), completed(), days(), endDate(), id(), notes(), restrictOverAllocation(), startDate(), timeOffType()
+    fields: accrualFrequency(string), completed(boolean), days(number), endDate(string), id(integer), notes(string), restrictOverAllocation(boolean), startDate(string), timeOffType(integer)
   expense_categories:
     primary key: id
-    fields: color(), id(), name(), unitBased(), unitName(), unitPrice()
+    fields: color(string), id(integer), name(string), unitBased(boolean), unitName(string), unitPrice(number)
   expenses:
     primary key: id
-    fields: amount(), billable(), category(), date(), details(), id(), project(), quantity(), user()
+    fields: amount(number), billable(boolean), category(integer), date(string), details(string), id(integer), project(string), quantity(number), user(integer)
   invoices:
     primary key: id
-    fields: clientId(), createdAt(), discount(), dueDate(), id(), issueDate(), publicId(), reference(), status(), tax()
+    fields: clientId(string), createdAt(string), discount(number), dueDate(string), id(integer), issueDate(string), publicId(string), reference(string), status(string), tax(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_client:
     endpoint: POST /clients
+    required fields: name
     risk: creates a new client record; low-risk external mutation, no approval required
   update_client:
     endpoint: PUT /clients/{{ record.id }}
@@ -82,6 +84,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a client and its association with any linked projects; irreversible, approval required
   create_project:
     endpoint: POST /projects
+    required fields: name, type
     risk: creates a new project; low-risk external mutation, no approval required
   update_project:
     endpoint: PUT /projects/{{ record.id }}
@@ -89,7 +92,7 @@ REVERSE ETL ACTIONS
     risk: renames or reconfigures an existing project; low-risk external mutation
   archive_project:
     endpoint: PATCH /projects/{{ record.id }}/archive
-    required fields: id
+    required fields: id, archived
     risk: archives or unarchives a project, hiding it from active project lists and blocking new time entries against it while archived; approval required for archiving a project still in active use
   delete_project:
     endpoint: DELETE /projects/{{ record.id }}
@@ -97,7 +100,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a project and its tasks/sections/time associations; irreversible, approval required
   create_task:
     endpoint: POST /projects/{{ record.project_id }}/tasks
-    required fields: project_id
+    required fields: project_id, name, section
     risk: creates a new task under an existing project section; low-risk external mutation, no approval required
   update_task:
     endpoint: PUT /tasks/{{ record.id }}
@@ -109,7 +112,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a task and its logged time association; irreversible, approval required
   create_section:
     endpoint: POST /projects/{{ record.project_id }}/sections
-    required fields: project_id
+    required fields: project_id, name
     risk: creates a new task section within a project; low-risk external mutation, no approval required
   delete_section:
     endpoint: DELETE /sections/{{ record.id }}
@@ -117,6 +120,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a task section; any tasks in it become unsectioned, approval required
   create_time_record:
     endpoint: POST /time
+    required fields: time, date
     risk: logs a new time entry against a task, which can feed directly into client billing/invoicing; low-risk external mutation, no approval required
   update_time_record:
     endpoint: PUT /time/{{ record.id }}
@@ -128,6 +132,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a logged time entry, which can affect billing/invoicing history; irreversible, approval required
   create_expense:
     endpoint: POST /expenses
+    required fields: category, date
     risk: logs a new billable/non-billable expense, which can feed directly into client invoicing; low-risk external mutation, no approval required
   delete_expense:
     endpoint: DELETE /expenses/{{ record.id }}

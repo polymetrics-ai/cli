@@ -1,0 +1,19 @@
+{
+  "record": {
+    "parent": "fixture_parent"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/databases",
+    "body": {
+      "parent": "fixture_parent"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

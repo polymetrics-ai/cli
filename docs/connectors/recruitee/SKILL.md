@@ -11,6 +11,7 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 
 ## Icon
 
+- id: recruitee
 - asset: icons/recruitee.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,28 +28,28 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 ## Configuration
 
 - base_url
-- company_id
-- api_key (secret)
+- company_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - offers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), status(), title(), updated_at()
+  - fields: created_at(string), id(integer), status(string), title(string), updated_at(string)
 - candidates:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), id(), name(), updated_at()
+  - fields: created_at(string), email(string), id(integer), name(string), updated_at(string)
 - departments:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - sources:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - tags:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 
 ## Sync Modes
 

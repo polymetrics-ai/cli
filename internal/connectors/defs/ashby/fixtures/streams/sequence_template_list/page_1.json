@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/sequenceTemplate.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "sequence_template_list_id_fixture_54",
+          "title": "Title fixture 54",
+          "isArchived": false,
+          "unsubscribeLinkActive": false,
+          "updatedAt": "2026-02-26T06:00:00Z",
+          "stages": [
+            {
+              "id": "sequence_template_list_id_fixture_54",
+              "type": "Email",
+              "sendAfter": {
+                "kind": "NoDelay"
+              }
+            }
+          ]
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

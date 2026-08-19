@@ -1,0 +1,1133 @@
+{
+  "actions": [
+    {
+      "name": "create_meeting_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_meeting_note",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title for the meeting note."
+          },
+          "language": {
+            "type": "string",
+            "description": "Language hint for transcription. Defaults to automatic detection.",
+            "enum": [
+              "auto",
+              "en",
+              "zh-CN",
+              "zh-TW",
+              "es",
+              "fr",
+              "de",
+              "ja",
+              "ko",
+              "pt",
+              "ru",
+              "th",
+              "vi",
+              "id",
+              "da",
+              "fi",
+              "no",
+              "nl",
+              "it",
+              "sv",
+              "ar",
+              "he",
+              "pl"
+            ]
+          },
+          "options": {
+            "type": "object",
+            "description": "Optional processing settings."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "language",
+        "options",
+        "title"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_block",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/blocks/{{ record.block_id }}",
+      "path_fields": [
+        "block_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_block",
+        "type": "object",
+        "properties": {
+          "in_trash": {
+            "type": "boolean"
+          },
+          "block_id": {
+            "type": "string",
+            "description": "Path parameter `block_id`."
+          }
+        },
+        "required": [
+          "block_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "in_trash"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_block",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/blocks/{{ record.block_id }}",
+      "path_fields": [
+        "block_id"
+      ],
+      "body_type": "none",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion delete_block",
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "type": "string",
+            "description": "Path parameter `block_id`."
+          }
+        },
+        "required": [
+          "block_id"
+        ],
+        "additionalProperties": false
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "append_block_children",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/blocks/{{ record.block_id }}/children",
+      "path_fields": [
+        "block_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion append_block_children",
+        "type": "object",
+        "properties": {
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "position": {
+            "type": "object"
+          },
+          "block_id": {
+            "type": "string",
+            "description": "Path parameter `block_id`."
+          }
+        },
+        "required": [
+          "block_id",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "children",
+        "position"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/comments",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_comment",
+        "type": "object",
+        "properties": {
+          "attachments": {
+            "type": "array",
+            "description": "An array of files to attach to the comment. Maximum of 3 allowed.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "display_name": {
+            "type": "object",
+            "description": "Display name for the comment."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "attachments",
+        "display_name"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "comment_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_comment",
+        "type": "object",
+        "properties": {
+          "rich_text": {
+            "type": "array",
+            "description": "An array of rich text objects that represent the updated content of the comment.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "comment_id": {
+            "type": "string",
+            "description": "Path parameter `comment_id`."
+          }
+        },
+        "required": [
+          "comment_id",
+          "rich_text"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "rich_text"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_comment_markdown",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "comment_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_comment_markdown",
+        "type": "object",
+        "properties": {
+          "markdown": {
+            "type": "string",
+            "description": "The updated content of the comment as a Markdown string. Comment Markdown supports inline formatting only (bold, italic, strikethrough, code, links), inline equations ($expression$), and mentions. Block-level Markdown such as fenced code blocks, headings, lists, tables, and blockquotes does not render as structured blocks in comments."
+          },
+          "comment_id": {
+            "type": "string",
+            "description": "Path parameter `comment_id`."
+          }
+        },
+        "required": [
+          "comment_id",
+          "markdown"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "markdown"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "comment_id"
+      ],
+      "body_type": "none",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion delete_comment",
+        "type": "object",
+        "properties": {
+          "comment_id": {
+            "type": "string",
+            "description": "Path parameter `comment_id`."
+          }
+        },
+        "required": [
+          "comment_id"
+        ],
+        "additionalProperties": false
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_data_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/data_sources",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_data_source",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "object",
+            "properties": {
+              "database_id": {
+                "type": "string",
+                "description": "The ID of the parent database (with or without dashes), for example, 195de9221179449fab8075a27c979105"
+              }
+            },
+            "required": [
+              "database_id"
+            ],
+            "description": "An object specifying the parent of the new data source to be created."
+          },
+          "properties": {
+            "type": "object",
+            "description": "Property schema of data source."
+          },
+          "title": {
+            "type": "array",
+            "description": "Title of data source as it appears in Notion.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "icon": {
+            "type": "object",
+            "description": "Page icon."
+          }
+        },
+        "required": [
+          "parent",
+          "properties"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "icon",
+        "parent",
+        "properties",
+        "title"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_data_source",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/data_sources/{{ record.data_source_id }}",
+      "path_fields": [
+        "data_source_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_data_source",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "array",
+            "description": "Title of data source as it appears in Notion.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "icon": {
+            "type": "object",
+            "description": "Data source icon."
+          },
+          "properties": {
+            "type": "object",
+            "description": "The property schema of the data source. The keys are property names or IDs, and the values are property configuration objects. Properties set to null will be removed."
+          },
+          "in_trash": {
+            "type": "boolean",
+            "description": "Whether the data source should be moved to or from the trash. If not provided, the trash status will not be updated."
+          },
+          "parent": {
+            "type": "object",
+            "description": "The parent of the data source, when moving it to a different database. If not provided, the parent will not be updated."
+          },
+          "data_source_id": {
+            "type": "string",
+            "description": "Path parameter `data_source_id`."
+          }
+        },
+        "required": [
+          "data_source_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "icon",
+        "in_trash",
+        "parent",
+        "properties",
+        "title"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "create_database",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/databases",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_database",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "The parent page or workspace where the database will be created."
+          },
+          "title": {
+            "type": "array",
+            "description": "The title of the database.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "description": {
+            "type": "array",
+            "description": "The description of the database.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "is_inline": {
+            "type": "boolean",
+            "description": "Whether the database should be displayed inline in the parent page. Defaults to false."
+          },
+          "initial_data_source": {
+            "type": "object",
+            "description": "Initial data source configuration for the database."
+          },
+          "icon": {
+            "type": "object",
+            "description": "The icon for the database."
+          },
+          "cover": {
+            "type": "object",
+            "description": "The cover image for the database."
+          }
+        },
+        "required": [
+          "parent"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "cover",
+        "description",
+        "icon",
+        "initial_data_source",
+        "is_inline",
+        "parent",
+        "title"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_database",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/databases/{{ record.database_id }}",
+      "path_fields": [
+        "database_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_database",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "The parent page or workspace to move the database to. If not provided, the database will not be moved."
+          },
+          "title": {
+            "type": "array",
+            "description": "The updated title of the database, if any. If not provided, the title will not be updated.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "description": {
+            "type": "array",
+            "description": "The updated description of the database, if any. If not provided, the description will not be updated.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "is_inline": {
+            "type": "boolean",
+            "description": "Whether the database should be displayed inline in the parent page. If not provided, the inline status will not be updated."
+          },
+          "icon": {
+            "type": "object",
+            "description": "The updated icon for the database, if any. If not provided, the icon will not be updated."
+          },
+          "cover": {
+            "type": "object",
+            "description": "The updated cover image for the database, if any. If not provided, the cover will not be updated."
+          },
+          "in_trash": {
+            "type": "boolean",
+            "description": "Whether the database should be moved to or from the trash. If not provided, the trash status will not be updated."
+          },
+          "is_locked": {
+            "type": "boolean",
+            "description": "Whether the database should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated."
+          },
+          "database_id": {
+            "type": "string",
+            "description": "Path parameter `database_id`."
+          }
+        },
+        "required": [
+          "database_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "cover",
+        "description",
+        "icon",
+        "in_trash",
+        "is_inline",
+        "is_locked",
+        "parent",
+        "title"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/pages",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_page",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "object"
+          },
+          "properties": {
+            "type": "object"
+          },
+          "icon": {
+            "type": "object"
+          },
+          "cover": {
+            "type": "object"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "markdown": {
+            "type": "string",
+            "description": "Page content as Notion-flavored Markdown. Mutually exclusive with content/children."
+          },
+          "allow_async": {
+            "type": "boolean",
+            "description": "Set to true to receive an async_task response for markdown page creation. Only supported when markdown is provided."
+          },
+          "template": {
+            "type": "object"
+          },
+          "position": {
+            "type": "object"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "allow_async",
+        "children",
+        "content",
+        "cover",
+        "icon",
+        "markdown",
+        "parent",
+        "position",
+        "properties",
+        "template"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/pages/{{ record.page_id }}",
+      "path_fields": [
+        "page_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_page",
+        "type": "object",
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "icon": {
+            "type": "object"
+          },
+          "cover": {
+            "type": "object"
+          },
+          "is_locked": {
+            "type": "boolean",
+            "description": "Whether the page should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated."
+          },
+          "template": {
+            "type": "object"
+          },
+          "erase_content": {
+            "type": "boolean",
+            "description": "Whether to erase all existing content from the page. When used with a template, the template content replaces the existing content. When used without a template, simply clears the page content."
+          },
+          "in_trash": {
+            "type": "boolean"
+          },
+          "is_archived": {
+            "type": "boolean"
+          },
+          "page_id": {
+            "type": "string",
+            "description": "Path parameter `page_id`."
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "cover",
+        "erase_content",
+        "icon",
+        "in_trash",
+        "is_archived",
+        "is_locked",
+        "properties",
+        "template"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_page_markdown",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/pages/{{ record.page_id }}/markdown",
+      "path_fields": [
+        "page_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_page_markdown",
+        "type": "object",
+        "properties": {
+          "allow_async": {
+            "type": "boolean",
+            "description": "Set to true to opt into receiving an async_task result when this update operation is accepted for background execution. If omitted or false, the endpoint keeps the existing synchronous response shape."
+          },
+          "page_id": {
+            "type": "string",
+            "description": "Path parameter `page_id`."
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "allow_async"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "move_page",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/pages/{{ record.page_id }}/move",
+      "path_fields": [
+        "page_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion move_page",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "object",
+            "properties": {
+              "page_id": {
+                "type": "string",
+                "description": "The ID of the parent page (with or without dashes), for example, 195de9221179449fab8075a27c979105"
+              }
+            },
+            "required": [
+              "page_id"
+            ],
+            "description": "The new parent of the page."
+          },
+          "page_id": {
+            "type": "string",
+            "description": "Path parameter `page_id`."
+          }
+        },
+        "required": [
+          "page_id",
+          "parent"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "parent"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "move_page_to_data_source",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/pages/{{ record.page_id }}/move",
+      "path_fields": [
+        "page_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion move_page_to_data_source",
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "object",
+            "properties": {
+              "data_source_id": {
+                "type": "string",
+                "description": "The ID of the parent data source (collection), with or without dashes. For example, f336d0bc-b841-465b-8045-024475c079dd"
+              }
+            },
+            "required": [
+              "data_source_id"
+            ],
+            "description": "The new parent of the page."
+          },
+          "page_id": {
+            "type": "string",
+            "description": "Path parameter `page_id`."
+          }
+        },
+        "required": [
+          "page_id",
+          "parent"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "parent"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "create_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/views",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_view",
+        "type": "object",
+        "properties": {
+          "data_source_id": {
+            "type": "string",
+            "description": "The ID of the data source this view should be scoped to."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the view."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of view to create.",
+            "enum": [
+              "table",
+              "board",
+              "list",
+              "calendar",
+              "timeline",
+              "gallery",
+              "form",
+              "chart",
+              "map",
+              "dashboard"
+            ]
+          },
+          "database_id": {
+            "type": "string",
+            "description": "The ID of the database to create a view in. Mutually exclusive with view_id and create_database."
+          },
+          "view_id": {
+            "type": "string",
+            "description": "The ID of a dashboard view to add this view to as a widget. Mutually exclusive with database_id and create_database."
+          },
+          "filter": {
+            "type": "object",
+            "description": "Filter to apply to the view. Uses the same format as the data source query filter."
+          },
+          "sorts": {
+            "type": "array",
+            "description": "Sorts to apply to the view. Uses the same format as the data source query sorts.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "quick_filters": {
+            "type": "object",
+            "description": "Quick filters to pin in the view's filter bar. Keys are property names or IDs. Values are filter conditions (same shape as a property filter but without the property field). Each quick filter appears as a clickable pill above the view, independent of the advanced filter."
+          },
+          "create_database": {
+            "type": "object",
+            "description": "Create a new linked database block on a page and add the view to it. Mutually exclusive with database_id and view_id."
+          },
+          "configuration": {
+            "type": "object",
+            "description": "View presentation configuration. The type field must match the view type."
+          },
+          "position": {
+            "type": "object",
+            "description": "Where to place the new view in the database's view tab bar. Only applicable when database_id is provided. Defaults to \"end\" (append)."
+          },
+          "placement": {
+            "type": "object",
+            "description": "Where to place the new widget in a dashboard view. Only applicable when view_id is provided. Defaults to creating a new row at the end."
+          }
+        },
+        "required": [
+          "data_source_id",
+          "name",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "configuration",
+        "create_database",
+        "data_source_id",
+        "database_id",
+        "filter",
+        "name",
+        "placement",
+        "position",
+        "quick_filters",
+        "sorts",
+        "type",
+        "view_id"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/views/{{ record.view_id }}",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion update_view",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "New name for the view."
+          },
+          "filter": {
+            "type": "object",
+            "description": "Filter to apply to the view. Uses the same format as the data source query filter. Pass null to clear the filter."
+          },
+          "sorts": {
+            "type": "object",
+            "description": "Property sorts to apply to the view. Only property-based sorts are supported. Pass null to clear the sorts."
+          },
+          "quick_filters": {
+            "type": "object",
+            "description": "Quick filters for the view's filter bar. Keys are property names or IDs. Set a key to a filter condition to add/update that quick filter. Set a key to null to remove it. Pass null for the entire field to clear all quick filters. Unmentioned quick filters are preserved."
+          },
+          "configuration": {
+            "type": "object",
+            "description": "View presentation configuration. The type field must match the view type. Individual nullable fields within the configuration can be set to null to clear them."
+          },
+          "view_id": {
+            "type": "string",
+            "description": "Path parameter `view_id`."
+          }
+        },
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "configuration",
+        "filter",
+        "name",
+        "quick_filters",
+        "sorts"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/views/{{ record.view_id }}",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "none",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion delete_view",
+        "type": "object",
+        "properties": {
+          "view_id": {
+            "type": "string",
+            "description": "Path parameter `view_id`."
+          }
+        },
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_view_query",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/views/{{ record.view_id }}/queries",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_view_query",
+        "type": "object",
+        "properties": {
+          "page_size": {
+            "type": "integer",
+            "description": "The number of results to return per page. Maximum: 100"
+          },
+          "view_id": {
+            "type": "string",
+            "description": "Path parameter `view_id`."
+          }
+        },
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "page_size"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_view_query",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/views/{{ record.view_id }}/queries/{{ record.query_id }}",
+      "path_fields": [
+        "view_id",
+        "query_id"
+      ],
+      "body_type": "none",
+      "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion delete_view_query",
+        "type": "object",
+        "properties": {
+          "view_id": {
+            "type": "string",
+            "description": "Path parameter `view_id`."
+          },
+          "query_id": {
+            "type": "string",
+            "description": "Path parameter `query_id`."
+          }
+        },
+        "required": [
+          "query_id",
+          "view_id"
+        ],
+        "additionalProperties": false
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_file_upload",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/file_uploads",
+      "path_fields": [],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion create_file_upload",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "How the file is being sent. Use `multi_part` for files larger than 20MB. Use `external_url` for files that are temporarily hosted publicly elsewhere. Default is `single_part`.",
+            "enum": [
+              "single_part",
+              "multi_part",
+              "external_url"
+            ]
+          },
+          "filename": {
+            "type": "string",
+            "description": "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` parameter."
+          },
+          "content_type": {
+            "type": "string",
+            "description": "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any."
+          },
+          "number_of_parts": {
+            "type": "integer",
+            "description": "When `mode` is `multi_part`, the number of parts you are uploading. This must match the number of parts as well as the final `part_number` you send."
+          },
+          "external_url": {
+            "type": "string",
+            "description": "When `mode` is `external_url`, provide the HTTPS URL of a publicly accessible file to import into your workspace."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "body_fields": [
+        "content_type",
+        "external_url",
+        "filename",
+        "mode",
+        "number_of_parts"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "complete_file_upload",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/file_uploads/{{ record.file_upload_id }}/complete",
+      "path_fields": [
+        "file_upload_id"
+      ],
+      "body_type": "json",
+      "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "notion complete_file_upload",
+        "type": "object",
+        "properties": {
+          "file_upload_id": {
+            "type": "string",
+            "description": "Path parameter `file_upload_id`."
+          }
+        },
+        "required": [
+          "file_upload_id"
+        ],
+        "additionalProperties": false
+      },
+      "body_fields": [],
+      "body_required": false
+    }
+  ]
+}

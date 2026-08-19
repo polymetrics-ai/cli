@@ -11,9 +11,11 @@ Reads SharePoint/Microsoft Lists, list items, columns, and content types from a 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -33,7 +35,7 @@ Reads SharePoint/Microsoft Lists, list items, columns, and content types from a 
 - mode
 - page_size
 - scope
-- site_id
+- site_id (required)
 - token_url
 - client_id (secret)
 - client_secret (secret)
@@ -44,17 +46,17 @@ Reads SharePoint/Microsoft Lists, list items, columns, and content types from a 
 - lists:
   - primary key: id
   - cursor: last_modified_date_time
-  - fields: created_date_time(), description(), display_name(), etag(), id(), last_modified_date_time(), list_template(), name(), web_url()
+  - fields: created_date_time(string), description(string), display_name(string), etag(string), id(string), last_modified_date_time(string), list_template(string), name(string), web_url(string)
 - list_items:
   - primary key: id
   - cursor: last_modified_date_time
-  - fields: content_type_id(), created_date_time(), etag(), fields(), id(), last_modified_date_time(), web_url()
+  - fields: content_type_id(string), created_date_time(string), etag(string), fields(object), id(string), last_modified_date_time(string), web_url(string)
 - columns:
   - primary key: id
-  - fields: column_group(), description(), display_name(), hidden(), id(), indexed(), name(), read_only(), required()
+  - fields: column_group(string), description(string), display_name(string), hidden(boolean), id(string), indexed(boolean), name(string), read_only(boolean), required(boolean)
 - content_types:
   - primary key: id
-  - fields: description(), group(), hidden(), id(), name(), read_only(), sealed()
+  - fields: description(string), group(string), hidden(boolean), id(string), name(string), read_only(boolean), sealed(boolean)
 
 ## Sync Modes
 

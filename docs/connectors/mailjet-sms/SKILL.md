@@ -11,6 +11,7 @@ Reads Mailjet SMS messages, message counts, and export job status; writes SMS se
 
 ## Icon
 
+- id: mailjetsms
 - asset: icons/mailjetsms.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -36,24 +37,24 @@ Reads Mailjet SMS messages, message counts, and export job status; writes SMS se
 - sms_ids
 - start_date
 - status_code
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 
 - sms:
   - primary key: ID
   - cursor: CreationTS
-  - fields: CreationTS(), From(), ID(), MessageId(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+  - fields: CreationTS(integer), From(string), ID(string), MessageId(string), SMSCount(integer), SentTS(integer), To(string), cost_currency(string), cost_value(number), status_code(integer), status_description(string), status_name(string)
 - sms_count:
-  - fields: Count()
+  - fields: Count(integer)
 - sms_message:
   - primary key: MessageID
   - cursor: CreationTS
-  - fields: CreationTS(), From(), MessageID(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+  - fields: CreationTS(integer), From(string), MessageID(string), SMSCount(integer), SentTS(integer), To(string), cost_currency(string), cost_value(number), status_code(integer), status_description(string), status_name(string)
 - sms_export:
   - primary key: ID
   - cursor: CreationTS
-  - fields: CreationTS(), ExpirationTS(), ID(), URL(), status_code(), status_description(), status_name()
+  - fields: CreationTS(integer), ExpirationTS(integer), ID(integer), URL(string), status_code(integer), status_description(string), status_name(string)
 
 ## Sync Modes
 
@@ -63,9 +64,11 @@ Reads Mailjet SMS messages, message counts, and export job status; writes SMS se
 
 - send_sms:
   - endpoint: POST /sms-send
+  - required fields: From, To, Text
   - risk: external mutation; sends an SMS message; approval required
 - request_sms_export:
   - endpoint: POST /sms/export
+  - required fields: FromTS, ToTS
   - risk: external mutation; creates an asynchronous SMS export job; approval required
 
 ## Security

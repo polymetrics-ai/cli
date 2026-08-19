@@ -1,0 +1,7 @@
+{
+  "streams": 79,
+  "writes": 148,
+  "direct_reads": 68,
+  "blocked": 3,
+  "endpoints": 298
+}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Circa events, contacts, companies, teams, custom fields, and event/company sub-resources through the Circa REST API.
 
 ICON
+  id: circa
   asset: icons/circa.svg
   source: official
   review_status: official_verified
@@ -29,39 +30,39 @@ CONFIGURATION
   base_url
   mode
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   events:
     primary key: id
     cursor: updated_at
-    fields: actual_total(), brief_url(), created_at(), id(), name(), paid_total(), planned_total(), status(), time_zone(), updated_at(), website()
+    fields: actual_total(number), brief_url(string), created_at(string), id(string), name(string), paid_total(number), planned_total(number), status(string), time_zone(string), updated_at(string), website(string)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: company(), created_at(), email(), first_name(), id(), last_name(), updated_at()
+    fields: company(object), created_at(string), email(string), first_name(string), id(string), last_name(string), updated_at(string)
   companies:
     primary key: id
     cursor: updated_at
-    fields: created_at(), created_method(), email_opt_in(), id(), name(), sync_status(), updated_at(), updated_method()
+    fields: created_at(string), created_method(string), email_opt_in(boolean), id(string), name(string), sync_status(object), updated_at(string), updated_method(string)
   teams:
     primary key: id
-    fields: created_at(), created_by(), id(), name()
+    fields: created_at(string), created_by(object), id(string), name(string)
   fields:
     primary key: id
-    fields: field_for(), field_name(), field_type(), id(), label(), options(), order(), required(), section()
+    fields: field_for(string), field_name(string), field_type(string), id(string), label(string), options(array), order(integer), required(boolean), section(string)
   event_contacts:
     primary key: event_id, id
-    fields: address(), check_in_status(), city(), company(), contact_type(), country(), created_at(), created_by(), created_method(), description(), email(), email_opt_in(), event_id(), first_name(), hot_lead(), id(), last_name(), linkedin(), mobile_phone(), office_phone(), owner(), postal_index(), registration_status(), state(), title(), twitter(), updated_at(), updated_by(), updated_method(), website()
+    fields: address(string), check_in_status(string), city(string), company(object), contact_type(string), country(string), created_at(string), created_by(object), created_method(string), description(string), email(string), email_opt_in(boolean), event_id(string), first_name(string), hot_lead(boolean), id(string), last_name(string), linkedin(string), mobile_phone(string), office_phone(string), owner(object), postal_index(string), registration_status(string), state(string), title(string), twitter(string), updated_at(string), updated_by(object), updated_method(string), website(string)
   event_staff:
     primary key: event_id, email
-    fields: based(), custom_fields(), email(), event_id(), first_name(), last_name()
+    fields: based(string), custom_fields(array), email(string), event_id(string), first_name(string), last_name(string)
   event_expenses:
     primary key: event_id, id
-    fields: actual_amount(), budget_category(), event_id(), id(), name(), note(), paid_amount(), team_allocations()
+    fields: actual_amount(number), budget_category(string), event_id(string), id(string), name(string), note(string), paid_amount(number), team_allocations(array)
   company_contacts:
     primary key: company_id, id
-    fields: address(), check_in_status(), city(), company(), company_id(), contact_type(), country(), created_at(), created_by(), created_method(), description(), email(), email_opt_in(), first_name(), hot_lead(), id(), last_name(), linkedin(), mobile_phone(), office_phone(), owner(), postal_index(), registration_status(), state(), title(), twitter(), updated_at(), updated_by(), updated_method(), website()
+    fields: address(string), check_in_status(string), city(string), company(object), company_id(string), contact_type(string), country(string), created_at(string), created_by(object), created_method(string), description(string), email(string), email_opt_in(boolean), first_name(string), hot_lead(boolean), id(string), last_name(string), linkedin(string), mobile_phone(string), office_phone(string), owner(object), postal_index(string), registration_status(string), state(string), title(string), twitter(string), updated_at(string), updated_by(object), updated_method(string), website(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -69,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
+    required fields: first_name, last_name
     risk: external mutation; creates a new CRM contact record
   update_contact:
     endpoint: PATCH /contacts/{{ record.id }}
@@ -80,6 +82,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a CRM contact; approval required
   create_event:
     endpoint: POST /events
+    required fields: name
     risk: external mutation; creates a new event record
   update_event:
     endpoint: PATCH /events/{{ record.id }}
@@ -91,6 +94,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of an event; approval required
   create_company:
     endpoint: POST /companies
+    required fields: name
     risk: external mutation; creates a new company record
   update_company:
     endpoint: PATCH /companies/{{ record.id }}
@@ -102,7 +106,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a company; approval required
   add_event_contact:
     endpoint: POST /events/{{ record.event_id }}/contacts
-    required fields: event_id
+    required fields: event_id, contact_id
     risk: external mutation; registers an existing contact onto an event
   update_event_contact:
     endpoint: PATCH /events/{{ record.event_id }}/contacts/{{ record.contact_id }}

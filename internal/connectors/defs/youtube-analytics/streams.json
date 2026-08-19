@@ -31,6 +31,7 @@
       "path": "/jobs",
       "query": {
         "pageSize": "{{ config.page_size }}",
+        "includeSystemManaged": { "template": "{{ config.include_system_managed }}", "omit_when_absent": true },
         "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
       },
       "records": { "path": "jobs" },
@@ -43,10 +44,27 @@
       "schema": "schemas/jobs.json"
     },
     {
+      "name": "job",
+      "path": "/jobs/{{ config.job_id }}",
+      "query": {
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "report_type_id": "{{ record.reportTypeId }}",
+        "create_time": "{{ record.createTime }}",
+        "expire_time": "{{ record.expireTime }}",
+        "system_managed": "{{ record.systemManaged }}"
+      },
+      "schema": "schemas/job.json"
+    },
+    {
       "name": "report_types",
       "path": "/reportTypes",
       "query": {
         "pageSize": "{{ config.page_size }}",
+        "includeSystemManaged": { "template": "{{ config.include_system_managed }}", "omit_when_absent": true },
         "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
       },
       "records": { "path": "reportTypes" },
@@ -61,6 +79,9 @@
       "path": "/jobs/{{ config.job_id }}/reports",
       "query": {
         "pageSize": "{{ config.page_size }}",
+        "createdAfter": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "startTimeAtOrAfter": { "template": "{{ config.start_time_at_or_after }}", "omit_when_absent": true },
+        "startTimeBefore": { "template": "{{ config.start_time_before }}", "omit_when_absent": true },
         "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
       },
       "records": { "path": "reports" },
@@ -73,6 +94,56 @@
         "download_url": "{{ record.downloadUrl }}"
       },
       "schema": "schemas/reports.json"
+    },
+    {
+      "name": "report",
+      "path": "/jobs/{{ config.job_id }}/reports/{{ config.report_id }}",
+      "query": {
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "job_id": "{{ record.jobId }}",
+        "start_time": "{{ record.startTime }}",
+        "end_time": "{{ record.endTime }}",
+        "create_time": "{{ record.createTime }}",
+        "job_expire_time": "{{ record.jobExpireTime }}",
+        "download_url": "{{ record.downloadUrl }}"
+      },
+      "schema": "schemas/report.json"
+    },
+    {
+      "name": "groups",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
+      "query": {
+        "mine": "{{ query.mine }}",
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}",
+        "published_at": "{{ record.snippet.publishedAt }}",
+        "item_count": "{{ record.contentDetails.itemCount }}",
+        "item_type": "{{ record.contentDetails.itemType }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "group_items",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems",
+      "query": {
+        "groupId": "{{ query.groupId }}",
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "group_id": "{{ record.groupId }}",
+        "resource_kind": "{{ record.resource.kind }}",
+        "resource_id": "{{ record.resource.id }}"
+      },
+      "schema": "schemas/group_items.json"
     }
   ]
 }

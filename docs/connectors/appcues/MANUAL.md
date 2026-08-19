@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, mobile experiences, launchpads, banners, checklists, embeds, NPS 2.0), audience data (segments, tags), operational resources (offline jobs, SDK authentication keys), and individual end-user/group profiles through the Appcues REST API v2.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -25,65 +27,65 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
+  account_id (required)
   base_url
   max_pages
   mode
   page_size
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   flows:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), createdBy(), id(), name(), published(), state(), updatedAt(), updatedBy()
+    fields: createdAt(string), createdBy(string), id(string), name(string), published(boolean), state(string), updatedAt(string), updatedBy(string)
   flows_v2:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), createdBy(), frequency(), id(), name(), published(), tag_ids(), updatedAt(), updatedBy()
+    fields: createdAt(string), createdBy(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), updatedAt(string), updatedBy(string)
   segments:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), description(), id(), name(), updatedAt()
+    fields: createdAt(string), description(string), id(string), name(string), updatedAt(string)
   tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   checklists:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), published(), state(), updatedAt()
+    fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
   banners:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), published(), state(), updatedAt()
+    fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
   pins:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), frequency(), id(), name(), published(), tag_ids(), type(), updatedAt()
+    fields: createdAt(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), type(string), updatedAt(string)
   mobile_experiences:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), frequency(), id(), name(), platform(), published(), updatedAt()
+    fields: createdAt(string), frequency(string), id(string), name(string), platform(string), published(boolean), updatedAt(string)
   launchpads:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), frequency(), id(), name(), published(), tag_ids(), type(), updatedAt()
+    fields: createdAt(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), type(string), updatedAt(string)
   embeds:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), published(), state(), updatedAt()
+    fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
   nps:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), published(), state(), updatedAt()
+    fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
   jobs:
     primary key: id
-    fields: id(), name(), started_at(), status(), url()
+    fields: id(string), name(string), started_at(string), status(string), url(string)
   sdk_keys:
     primary key: id
-    fields: created_at(), id(), name(), tag_field()
+    fields: created_at(string), id(string), name(string), tag_field(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -163,6 +165,7 @@ REVERSE ETL ACTIONS
     risk: unpublishes a live NPS 2.0 survey, immediately hiding it from end users
   create_segment:
     endpoint: POST /accounts/{{ config.account_id }}/segments
+    required fields: name
     risk: creates a new user segment used to target flows/banners/checklists
   update_segment:
     endpoint: PATCH /accounts/{{ config.account_id }}/segments/{{ record.id }}
@@ -174,13 +177,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a user segment; any flow/banner/checklist targeting rule referencing it stops matching
   add_segment_user_ids:
     endpoint: POST /accounts/{{ config.account_id }}/segments/{{ record.id }}/add_user_ids
-    required fields: id
-    optional fields: user_ids
+    required fields: id, user_ids
     risk: adds specific end users to a segment (async job), changing who any targeting rule referencing it matches
   remove_segment_user_ids:
     endpoint: POST /accounts/{{ config.account_id }}/segments/{{ record.id }}/remove_user_ids
-    required fields: id
-    optional fields: user_ids
+    required fields: id, user_ids
     risk: removes specific end users from a segment (async job), changing who any targeting rule referencing it matches
   update_user_profile:
     endpoint: PATCH /accounts/{{ config.account_id }}/users/{{ record.user_id }}/profile
@@ -192,7 +193,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an end user's profile, properties, and flow/banner completion history (async job)
   track_user_event:
     endpoint: POST /accounts/{{ config.account_id }}/users/{{ record.user_id }}/events
-    required fields: user_id
+    required fields: user_id, name
     risk: injects a synthetic behavioral event into an end user's timeline, which may trigger flow/banner targeting rules
   update_group_profile:
     endpoint: PATCH /accounts/{{ config.account_id }}/groups/{{ record.group_id }}/profile
@@ -200,15 +201,15 @@ REVERSE ETL ACTIONS
     risk: mutates a group's profile attributes, changing which flows/segments its members match
   associate_group_users:
     endpoint: PATCH /accounts/{{ config.account_id }}/groups/{{ record.group_id }}/users
-    required fields: group_id
-    optional fields: user_ids
+    required fields: group_id, user_ids
     risk: associates end users with a group, changing group-scoped targeting and analytics rollups
   create_sdk_key:
     endpoint: POST /accounts/{{ config.account_id }}/sdk_keys
+    required fields: name
     risk: creates a new SDK authentication key with production data-ingestion access
   update_sdk_key:
     endpoint: PATCH /accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}
-    required fields: id
+    required fields: id, tag_field
     risk: changes an SDK key's tag field, altering how future ingested data is tagged
   delete_sdk_key:
     endpoint: DELETE /accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}

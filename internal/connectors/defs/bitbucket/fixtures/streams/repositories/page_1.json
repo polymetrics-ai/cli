@@ -1,0 +1,1420 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories",
+    "query": {
+      "page": "1",
+      "pagelen": "100"
+    }
+  },
+  "response": {
+    "body": {
+      "page": 1,
+      "pagelen": 100,
+      "size": 101,
+      "values": [
+        {
+          "created_on": "2026-01-01T00:00:01Z",
+          "full_name": "fixture-workspace/fixture-repo-001",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-001"
+            }
+          },
+          "name": "Fixture Repository 001",
+          "slug": "fixture-repo-001",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:01Z",
+          "uuid": "{fixture-repo-001}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:02Z",
+          "full_name": "fixture-workspace/fixture-repo-002",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-002"
+            }
+          },
+          "name": "Fixture Repository 002",
+          "slug": "fixture-repo-002",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:02Z",
+          "uuid": "{fixture-repo-002}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:03Z",
+          "full_name": "fixture-workspace/fixture-repo-003",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-003"
+            }
+          },
+          "name": "Fixture Repository 003",
+          "slug": "fixture-repo-003",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:03Z",
+          "uuid": "{fixture-repo-003}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:04Z",
+          "full_name": "fixture-workspace/fixture-repo-004",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-004"
+            }
+          },
+          "name": "Fixture Repository 004",
+          "slug": "fixture-repo-004",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:04Z",
+          "uuid": "{fixture-repo-004}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:05Z",
+          "full_name": "fixture-workspace/fixture-repo-005",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-005"
+            }
+          },
+          "name": "Fixture Repository 005",
+          "slug": "fixture-repo-005",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:05Z",
+          "uuid": "{fixture-repo-005}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:06Z",
+          "full_name": "fixture-workspace/fixture-repo-006",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-006"
+            }
+          },
+          "name": "Fixture Repository 006",
+          "slug": "fixture-repo-006",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:06Z",
+          "uuid": "{fixture-repo-006}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:07Z",
+          "full_name": "fixture-workspace/fixture-repo-007",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-007"
+            }
+          },
+          "name": "Fixture Repository 007",
+          "slug": "fixture-repo-007",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:07Z",
+          "uuid": "{fixture-repo-007}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:08Z",
+          "full_name": "fixture-workspace/fixture-repo-008",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-008"
+            }
+          },
+          "name": "Fixture Repository 008",
+          "slug": "fixture-repo-008",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:08Z",
+          "uuid": "{fixture-repo-008}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:09Z",
+          "full_name": "fixture-workspace/fixture-repo-009",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-009"
+            }
+          },
+          "name": "Fixture Repository 009",
+          "slug": "fixture-repo-009",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:09Z",
+          "uuid": "{fixture-repo-009}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:10Z",
+          "full_name": "fixture-workspace/fixture-repo-010",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-010"
+            }
+          },
+          "name": "Fixture Repository 010",
+          "slug": "fixture-repo-010",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:10Z",
+          "uuid": "{fixture-repo-010}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:11Z",
+          "full_name": "fixture-workspace/fixture-repo-011",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-011"
+            }
+          },
+          "name": "Fixture Repository 011",
+          "slug": "fixture-repo-011",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:11Z",
+          "uuid": "{fixture-repo-011}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:12Z",
+          "full_name": "fixture-workspace/fixture-repo-012",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-012"
+            }
+          },
+          "name": "Fixture Repository 012",
+          "slug": "fixture-repo-012",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:12Z",
+          "uuid": "{fixture-repo-012}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:13Z",
+          "full_name": "fixture-workspace/fixture-repo-013",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-013"
+            }
+          },
+          "name": "Fixture Repository 013",
+          "slug": "fixture-repo-013",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:13Z",
+          "uuid": "{fixture-repo-013}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:14Z",
+          "full_name": "fixture-workspace/fixture-repo-014",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-014"
+            }
+          },
+          "name": "Fixture Repository 014",
+          "slug": "fixture-repo-014",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:14Z",
+          "uuid": "{fixture-repo-014}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:15Z",
+          "full_name": "fixture-workspace/fixture-repo-015",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-015"
+            }
+          },
+          "name": "Fixture Repository 015",
+          "slug": "fixture-repo-015",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:15Z",
+          "uuid": "{fixture-repo-015}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:16Z",
+          "full_name": "fixture-workspace/fixture-repo-016",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-016"
+            }
+          },
+          "name": "Fixture Repository 016",
+          "slug": "fixture-repo-016",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:16Z",
+          "uuid": "{fixture-repo-016}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:17Z",
+          "full_name": "fixture-workspace/fixture-repo-017",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-017"
+            }
+          },
+          "name": "Fixture Repository 017",
+          "slug": "fixture-repo-017",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:17Z",
+          "uuid": "{fixture-repo-017}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:18Z",
+          "full_name": "fixture-workspace/fixture-repo-018",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-018"
+            }
+          },
+          "name": "Fixture Repository 018",
+          "slug": "fixture-repo-018",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:18Z",
+          "uuid": "{fixture-repo-018}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:19Z",
+          "full_name": "fixture-workspace/fixture-repo-019",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-019"
+            }
+          },
+          "name": "Fixture Repository 019",
+          "slug": "fixture-repo-019",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:19Z",
+          "uuid": "{fixture-repo-019}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:20Z",
+          "full_name": "fixture-workspace/fixture-repo-020",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-020"
+            }
+          },
+          "name": "Fixture Repository 020",
+          "slug": "fixture-repo-020",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:20Z",
+          "uuid": "{fixture-repo-020}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:21Z",
+          "full_name": "fixture-workspace/fixture-repo-021",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-021"
+            }
+          },
+          "name": "Fixture Repository 021",
+          "slug": "fixture-repo-021",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:21Z",
+          "uuid": "{fixture-repo-021}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:22Z",
+          "full_name": "fixture-workspace/fixture-repo-022",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-022"
+            }
+          },
+          "name": "Fixture Repository 022",
+          "slug": "fixture-repo-022",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:22Z",
+          "uuid": "{fixture-repo-022}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:23Z",
+          "full_name": "fixture-workspace/fixture-repo-023",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-023"
+            }
+          },
+          "name": "Fixture Repository 023",
+          "slug": "fixture-repo-023",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:23Z",
+          "uuid": "{fixture-repo-023}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:24Z",
+          "full_name": "fixture-workspace/fixture-repo-024",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-024"
+            }
+          },
+          "name": "Fixture Repository 024",
+          "slug": "fixture-repo-024",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:24Z",
+          "uuid": "{fixture-repo-024}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:25Z",
+          "full_name": "fixture-workspace/fixture-repo-025",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-025"
+            }
+          },
+          "name": "Fixture Repository 025",
+          "slug": "fixture-repo-025",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:25Z",
+          "uuid": "{fixture-repo-025}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:26Z",
+          "full_name": "fixture-workspace/fixture-repo-026",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-026"
+            }
+          },
+          "name": "Fixture Repository 026",
+          "slug": "fixture-repo-026",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:26Z",
+          "uuid": "{fixture-repo-026}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:27Z",
+          "full_name": "fixture-workspace/fixture-repo-027",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-027"
+            }
+          },
+          "name": "Fixture Repository 027",
+          "slug": "fixture-repo-027",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:27Z",
+          "uuid": "{fixture-repo-027}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:28Z",
+          "full_name": "fixture-workspace/fixture-repo-028",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-028"
+            }
+          },
+          "name": "Fixture Repository 028",
+          "slug": "fixture-repo-028",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:28Z",
+          "uuid": "{fixture-repo-028}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:29Z",
+          "full_name": "fixture-workspace/fixture-repo-029",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-029"
+            }
+          },
+          "name": "Fixture Repository 029",
+          "slug": "fixture-repo-029",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:29Z",
+          "uuid": "{fixture-repo-029}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:30Z",
+          "full_name": "fixture-workspace/fixture-repo-030",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-030"
+            }
+          },
+          "name": "Fixture Repository 030",
+          "slug": "fixture-repo-030",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:30Z",
+          "uuid": "{fixture-repo-030}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:31Z",
+          "full_name": "fixture-workspace/fixture-repo-031",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-031"
+            }
+          },
+          "name": "Fixture Repository 031",
+          "slug": "fixture-repo-031",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:31Z",
+          "uuid": "{fixture-repo-031}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:32Z",
+          "full_name": "fixture-workspace/fixture-repo-032",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-032"
+            }
+          },
+          "name": "Fixture Repository 032",
+          "slug": "fixture-repo-032",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:32Z",
+          "uuid": "{fixture-repo-032}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:33Z",
+          "full_name": "fixture-workspace/fixture-repo-033",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-033"
+            }
+          },
+          "name": "Fixture Repository 033",
+          "slug": "fixture-repo-033",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:33Z",
+          "uuid": "{fixture-repo-033}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:34Z",
+          "full_name": "fixture-workspace/fixture-repo-034",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-034"
+            }
+          },
+          "name": "Fixture Repository 034",
+          "slug": "fixture-repo-034",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:34Z",
+          "uuid": "{fixture-repo-034}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:35Z",
+          "full_name": "fixture-workspace/fixture-repo-035",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-035"
+            }
+          },
+          "name": "Fixture Repository 035",
+          "slug": "fixture-repo-035",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:35Z",
+          "uuid": "{fixture-repo-035}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:36Z",
+          "full_name": "fixture-workspace/fixture-repo-036",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-036"
+            }
+          },
+          "name": "Fixture Repository 036",
+          "slug": "fixture-repo-036",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:36Z",
+          "uuid": "{fixture-repo-036}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:37Z",
+          "full_name": "fixture-workspace/fixture-repo-037",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-037"
+            }
+          },
+          "name": "Fixture Repository 037",
+          "slug": "fixture-repo-037",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:37Z",
+          "uuid": "{fixture-repo-037}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:38Z",
+          "full_name": "fixture-workspace/fixture-repo-038",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-038"
+            }
+          },
+          "name": "Fixture Repository 038",
+          "slug": "fixture-repo-038",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:38Z",
+          "uuid": "{fixture-repo-038}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:39Z",
+          "full_name": "fixture-workspace/fixture-repo-039",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-039"
+            }
+          },
+          "name": "Fixture Repository 039",
+          "slug": "fixture-repo-039",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:39Z",
+          "uuid": "{fixture-repo-039}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:40Z",
+          "full_name": "fixture-workspace/fixture-repo-040",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-040"
+            }
+          },
+          "name": "Fixture Repository 040",
+          "slug": "fixture-repo-040",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:40Z",
+          "uuid": "{fixture-repo-040}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:41Z",
+          "full_name": "fixture-workspace/fixture-repo-041",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-041"
+            }
+          },
+          "name": "Fixture Repository 041",
+          "slug": "fixture-repo-041",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:41Z",
+          "uuid": "{fixture-repo-041}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:42Z",
+          "full_name": "fixture-workspace/fixture-repo-042",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-042"
+            }
+          },
+          "name": "Fixture Repository 042",
+          "slug": "fixture-repo-042",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:42Z",
+          "uuid": "{fixture-repo-042}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:43Z",
+          "full_name": "fixture-workspace/fixture-repo-043",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-043"
+            }
+          },
+          "name": "Fixture Repository 043",
+          "slug": "fixture-repo-043",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:43Z",
+          "uuid": "{fixture-repo-043}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:44Z",
+          "full_name": "fixture-workspace/fixture-repo-044",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-044"
+            }
+          },
+          "name": "Fixture Repository 044",
+          "slug": "fixture-repo-044",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:44Z",
+          "uuid": "{fixture-repo-044}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:45Z",
+          "full_name": "fixture-workspace/fixture-repo-045",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-045"
+            }
+          },
+          "name": "Fixture Repository 045",
+          "slug": "fixture-repo-045",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:45Z",
+          "uuid": "{fixture-repo-045}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:46Z",
+          "full_name": "fixture-workspace/fixture-repo-046",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-046"
+            }
+          },
+          "name": "Fixture Repository 046",
+          "slug": "fixture-repo-046",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:46Z",
+          "uuid": "{fixture-repo-046}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:47Z",
+          "full_name": "fixture-workspace/fixture-repo-047",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-047"
+            }
+          },
+          "name": "Fixture Repository 047",
+          "slug": "fixture-repo-047",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:47Z",
+          "uuid": "{fixture-repo-047}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:48Z",
+          "full_name": "fixture-workspace/fixture-repo-048",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-048"
+            }
+          },
+          "name": "Fixture Repository 048",
+          "slug": "fixture-repo-048",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:48Z",
+          "uuid": "{fixture-repo-048}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:49Z",
+          "full_name": "fixture-workspace/fixture-repo-049",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-049"
+            }
+          },
+          "name": "Fixture Repository 049",
+          "slug": "fixture-repo-049",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:49Z",
+          "uuid": "{fixture-repo-049}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:50Z",
+          "full_name": "fixture-workspace/fixture-repo-050",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-050"
+            }
+          },
+          "name": "Fixture Repository 050",
+          "slug": "fixture-repo-050",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:50Z",
+          "uuid": "{fixture-repo-050}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:51Z",
+          "full_name": "fixture-workspace/fixture-repo-051",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-051"
+            }
+          },
+          "name": "Fixture Repository 051",
+          "slug": "fixture-repo-051",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:51Z",
+          "uuid": "{fixture-repo-051}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:52Z",
+          "full_name": "fixture-workspace/fixture-repo-052",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-052"
+            }
+          },
+          "name": "Fixture Repository 052",
+          "slug": "fixture-repo-052",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:52Z",
+          "uuid": "{fixture-repo-052}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:53Z",
+          "full_name": "fixture-workspace/fixture-repo-053",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-053"
+            }
+          },
+          "name": "Fixture Repository 053",
+          "slug": "fixture-repo-053",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:53Z",
+          "uuid": "{fixture-repo-053}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:54Z",
+          "full_name": "fixture-workspace/fixture-repo-054",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-054"
+            }
+          },
+          "name": "Fixture Repository 054",
+          "slug": "fixture-repo-054",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:54Z",
+          "uuid": "{fixture-repo-054}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:55Z",
+          "full_name": "fixture-workspace/fixture-repo-055",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-055"
+            }
+          },
+          "name": "Fixture Repository 055",
+          "slug": "fixture-repo-055",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:55Z",
+          "uuid": "{fixture-repo-055}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:56Z",
+          "full_name": "fixture-workspace/fixture-repo-056",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-056"
+            }
+          },
+          "name": "Fixture Repository 056",
+          "slug": "fixture-repo-056",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:56Z",
+          "uuid": "{fixture-repo-056}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:57Z",
+          "full_name": "fixture-workspace/fixture-repo-057",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-057"
+            }
+          },
+          "name": "Fixture Repository 057",
+          "slug": "fixture-repo-057",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:57Z",
+          "uuid": "{fixture-repo-057}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:58Z",
+          "full_name": "fixture-workspace/fixture-repo-058",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-058"
+            }
+          },
+          "name": "Fixture Repository 058",
+          "slug": "fixture-repo-058",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:58Z",
+          "uuid": "{fixture-repo-058}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:59Z",
+          "full_name": "fixture-workspace/fixture-repo-059",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-059"
+            }
+          },
+          "name": "Fixture Repository 059",
+          "slug": "fixture-repo-059",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:59Z",
+          "uuid": "{fixture-repo-059}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:00Z",
+          "full_name": "fixture-workspace/fixture-repo-060",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-060"
+            }
+          },
+          "name": "Fixture Repository 060",
+          "slug": "fixture-repo-060",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:00Z",
+          "uuid": "{fixture-repo-060}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:01Z",
+          "full_name": "fixture-workspace/fixture-repo-061",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-061"
+            }
+          },
+          "name": "Fixture Repository 061",
+          "slug": "fixture-repo-061",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:01Z",
+          "uuid": "{fixture-repo-061}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:02Z",
+          "full_name": "fixture-workspace/fixture-repo-062",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-062"
+            }
+          },
+          "name": "Fixture Repository 062",
+          "slug": "fixture-repo-062",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:02Z",
+          "uuid": "{fixture-repo-062}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:03Z",
+          "full_name": "fixture-workspace/fixture-repo-063",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-063"
+            }
+          },
+          "name": "Fixture Repository 063",
+          "slug": "fixture-repo-063",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:03Z",
+          "uuid": "{fixture-repo-063}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:04Z",
+          "full_name": "fixture-workspace/fixture-repo-064",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-064"
+            }
+          },
+          "name": "Fixture Repository 064",
+          "slug": "fixture-repo-064",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:04Z",
+          "uuid": "{fixture-repo-064}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:05Z",
+          "full_name": "fixture-workspace/fixture-repo-065",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-065"
+            }
+          },
+          "name": "Fixture Repository 065",
+          "slug": "fixture-repo-065",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:05Z",
+          "uuid": "{fixture-repo-065}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:06Z",
+          "full_name": "fixture-workspace/fixture-repo-066",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-066"
+            }
+          },
+          "name": "Fixture Repository 066",
+          "slug": "fixture-repo-066",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:06Z",
+          "uuid": "{fixture-repo-066}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:07Z",
+          "full_name": "fixture-workspace/fixture-repo-067",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-067"
+            }
+          },
+          "name": "Fixture Repository 067",
+          "slug": "fixture-repo-067",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:07Z",
+          "uuid": "{fixture-repo-067}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:08Z",
+          "full_name": "fixture-workspace/fixture-repo-068",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-068"
+            }
+          },
+          "name": "Fixture Repository 068",
+          "slug": "fixture-repo-068",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:08Z",
+          "uuid": "{fixture-repo-068}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:09Z",
+          "full_name": "fixture-workspace/fixture-repo-069",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-069"
+            }
+          },
+          "name": "Fixture Repository 069",
+          "slug": "fixture-repo-069",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:09Z",
+          "uuid": "{fixture-repo-069}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:10Z",
+          "full_name": "fixture-workspace/fixture-repo-070",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-070"
+            }
+          },
+          "name": "Fixture Repository 070",
+          "slug": "fixture-repo-070",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:10Z",
+          "uuid": "{fixture-repo-070}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:11Z",
+          "full_name": "fixture-workspace/fixture-repo-071",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-071"
+            }
+          },
+          "name": "Fixture Repository 071",
+          "slug": "fixture-repo-071",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:11Z",
+          "uuid": "{fixture-repo-071}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:12Z",
+          "full_name": "fixture-workspace/fixture-repo-072",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-072"
+            }
+          },
+          "name": "Fixture Repository 072",
+          "slug": "fixture-repo-072",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:12Z",
+          "uuid": "{fixture-repo-072}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:13Z",
+          "full_name": "fixture-workspace/fixture-repo-073",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-073"
+            }
+          },
+          "name": "Fixture Repository 073",
+          "slug": "fixture-repo-073",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:13Z",
+          "uuid": "{fixture-repo-073}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:14Z",
+          "full_name": "fixture-workspace/fixture-repo-074",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-074"
+            }
+          },
+          "name": "Fixture Repository 074",
+          "slug": "fixture-repo-074",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:14Z",
+          "uuid": "{fixture-repo-074}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:15Z",
+          "full_name": "fixture-workspace/fixture-repo-075",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-075"
+            }
+          },
+          "name": "Fixture Repository 075",
+          "slug": "fixture-repo-075",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:15Z",
+          "uuid": "{fixture-repo-075}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:16Z",
+          "full_name": "fixture-workspace/fixture-repo-076",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-076"
+            }
+          },
+          "name": "Fixture Repository 076",
+          "slug": "fixture-repo-076",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:16Z",
+          "uuid": "{fixture-repo-076}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:17Z",
+          "full_name": "fixture-workspace/fixture-repo-077",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-077"
+            }
+          },
+          "name": "Fixture Repository 077",
+          "slug": "fixture-repo-077",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:17Z",
+          "uuid": "{fixture-repo-077}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:18Z",
+          "full_name": "fixture-workspace/fixture-repo-078",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-078"
+            }
+          },
+          "name": "Fixture Repository 078",
+          "slug": "fixture-repo-078",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:18Z",
+          "uuid": "{fixture-repo-078}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:19Z",
+          "full_name": "fixture-workspace/fixture-repo-079",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-079"
+            }
+          },
+          "name": "Fixture Repository 079",
+          "slug": "fixture-repo-079",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:19Z",
+          "uuid": "{fixture-repo-079}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:20Z",
+          "full_name": "fixture-workspace/fixture-repo-080",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-080"
+            }
+          },
+          "name": "Fixture Repository 080",
+          "slug": "fixture-repo-080",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:20Z",
+          "uuid": "{fixture-repo-080}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:21Z",
+          "full_name": "fixture-workspace/fixture-repo-081",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-081"
+            }
+          },
+          "name": "Fixture Repository 081",
+          "slug": "fixture-repo-081",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:21Z",
+          "uuid": "{fixture-repo-081}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:22Z",
+          "full_name": "fixture-workspace/fixture-repo-082",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-082"
+            }
+          },
+          "name": "Fixture Repository 082",
+          "slug": "fixture-repo-082",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:22Z",
+          "uuid": "{fixture-repo-082}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:23Z",
+          "full_name": "fixture-workspace/fixture-repo-083",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-083"
+            }
+          },
+          "name": "Fixture Repository 083",
+          "slug": "fixture-repo-083",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:23Z",
+          "uuid": "{fixture-repo-083}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:24Z",
+          "full_name": "fixture-workspace/fixture-repo-084",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-084"
+            }
+          },
+          "name": "Fixture Repository 084",
+          "slug": "fixture-repo-084",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:24Z",
+          "uuid": "{fixture-repo-084}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:25Z",
+          "full_name": "fixture-workspace/fixture-repo-085",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-085"
+            }
+          },
+          "name": "Fixture Repository 085",
+          "slug": "fixture-repo-085",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:25Z",
+          "uuid": "{fixture-repo-085}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:26Z",
+          "full_name": "fixture-workspace/fixture-repo-086",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-086"
+            }
+          },
+          "name": "Fixture Repository 086",
+          "slug": "fixture-repo-086",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:26Z",
+          "uuid": "{fixture-repo-086}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:27Z",
+          "full_name": "fixture-workspace/fixture-repo-087",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-087"
+            }
+          },
+          "name": "Fixture Repository 087",
+          "slug": "fixture-repo-087",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:27Z",
+          "uuid": "{fixture-repo-087}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:28Z",
+          "full_name": "fixture-workspace/fixture-repo-088",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-088"
+            }
+          },
+          "name": "Fixture Repository 088",
+          "slug": "fixture-repo-088",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:28Z",
+          "uuid": "{fixture-repo-088}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:29Z",
+          "full_name": "fixture-workspace/fixture-repo-089",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-089"
+            }
+          },
+          "name": "Fixture Repository 089",
+          "slug": "fixture-repo-089",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:29Z",
+          "uuid": "{fixture-repo-089}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:30Z",
+          "full_name": "fixture-workspace/fixture-repo-090",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-090"
+            }
+          },
+          "name": "Fixture Repository 090",
+          "slug": "fixture-repo-090",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:30Z",
+          "uuid": "{fixture-repo-090}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:31Z",
+          "full_name": "fixture-workspace/fixture-repo-091",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-091"
+            }
+          },
+          "name": "Fixture Repository 091",
+          "slug": "fixture-repo-091",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:31Z",
+          "uuid": "{fixture-repo-091}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:32Z",
+          "full_name": "fixture-workspace/fixture-repo-092",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-092"
+            }
+          },
+          "name": "Fixture Repository 092",
+          "slug": "fixture-repo-092",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:32Z",
+          "uuid": "{fixture-repo-092}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:33Z",
+          "full_name": "fixture-workspace/fixture-repo-093",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-093"
+            }
+          },
+          "name": "Fixture Repository 093",
+          "slug": "fixture-repo-093",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:33Z",
+          "uuid": "{fixture-repo-093}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:34Z",
+          "full_name": "fixture-workspace/fixture-repo-094",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-094"
+            }
+          },
+          "name": "Fixture Repository 094",
+          "slug": "fixture-repo-094",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:34Z",
+          "uuid": "{fixture-repo-094}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:35Z",
+          "full_name": "fixture-workspace/fixture-repo-095",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-095"
+            }
+          },
+          "name": "Fixture Repository 095",
+          "slug": "fixture-repo-095",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:35Z",
+          "uuid": "{fixture-repo-095}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:36Z",
+          "full_name": "fixture-workspace/fixture-repo-096",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-096"
+            }
+          },
+          "name": "Fixture Repository 096",
+          "slug": "fixture-repo-096",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:36Z",
+          "uuid": "{fixture-repo-096}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:37Z",
+          "full_name": "fixture-workspace/fixture-repo-097",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-097"
+            }
+          },
+          "name": "Fixture Repository 097",
+          "slug": "fixture-repo-097",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:37Z",
+          "uuid": "{fixture-repo-097}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:38Z",
+          "full_name": "fixture-workspace/fixture-repo-098",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-098"
+            }
+          },
+          "name": "Fixture Repository 098",
+          "slug": "fixture-repo-098",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:38Z",
+          "uuid": "{fixture-repo-098}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:39Z",
+          "full_name": "fixture-workspace/fixture-repo-099",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-099"
+            }
+          },
+          "name": "Fixture Repository 099",
+          "slug": "fixture-repo-099",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:39Z",
+          "uuid": "{fixture-repo-099}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:40Z",
+          "full_name": "fixture-workspace/fixture-repo-100",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-100"
+            }
+          },
+          "name": "Fixture Repository 100",
+          "slug": "fixture-repo-100",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:00:40Z",
+          "uuid": "{fixture-repo-100}"
+        }
+      ]
+    },
+    "status": 200
+  }
+}

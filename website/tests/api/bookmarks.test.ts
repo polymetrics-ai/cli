@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import { BLOG_POSTS } from '@/lib/blog';
+import { getBlogPost } from '@/lib/blog';
 import { resetRateLimits } from '@/lib/annotations/rate-limit';
 import type { SessionUser } from '@/lib/auth-session';
 
@@ -15,7 +15,9 @@ import { ensureMigrated, getPool } from '@/lib/db';
 
 const mockSession = vi.mocked(getSessionUser);
 
-const post = BLOG_POSTS[0];
+const post = getBlogPost('human-harnesses') ?? (() => {
+  throw new Error('Expected human-harnesses bookmark fixture');
+})();
 const slug = post.slug;
 
 function validAnchor() {

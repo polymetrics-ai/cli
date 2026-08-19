@@ -11,9 +11,17 @@ Reads Google Forms metadata, form items, and submitted responses through the Goo
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-googleforms
+- asset: icons/simple-icons/googleforms.svg
+- title: Google Forms
+- simple_icon_slug: googleforms
+- simple_icon_hex: 7248B9
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Google%20Forms
+- match: exact-name-or-slug
+- matched_by: google-forms
 
 ## Capabilities
 
@@ -27,27 +35,27 @@ Reads Google Forms metadata, form items, and submitted responses through the Goo
 ## Configuration
 
 - base_url
-- form_id
+- form_id (required)
 - mode
 - page_size
 - start_date
 - token_url
-- client_id (secret)
-- client_refresh_token (secret)
+- client_id (secret) (required)
+- client_refresh_token (secret) (required)
 - client_secret (secret)
 
 ## ETL Streams
 
 - forms:
   - primary key: form_id
-  - fields: description(), document_title(), form_id(), item_count(), responder_uri(), revision_id(), title()
+  - fields: description(string), document_title(string), form_id(string), item_count(integer), responder_uri(string), revision_id(string), title(string)
 - form_items:
   - primary key: form_id, item_id
-  - fields: description(), form_id(), item_id(), question_id(), title()
+  - fields: description(string), form_id(string), item_id(string), question_id(string), title(string)
 - responses:
   - primary key: response_id
   - cursor: last_submitted_time
-  - fields: answers(), create_time(), form_id(), last_submitted_time(), respondent_email(), response_id(), total_score()
+  - fields: answers(object), create_time(string), form_id(string), last_submitted_time(string), respondent_email(string), response_id(string), total_score(number)
 
 ## Sync Modes
 

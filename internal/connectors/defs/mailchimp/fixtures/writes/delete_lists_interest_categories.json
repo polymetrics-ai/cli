@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "interest_category_id": "fixture_interest_category_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/fixture_list_id/interest-categories/fixture_interest_category_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_lists_interest_categories"
+    }
+  }
+}

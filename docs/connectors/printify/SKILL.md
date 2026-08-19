@@ -11,6 +11,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 
 ## Icon
 
+- id: printify
 - asset: icons/printify.svg
 - source: official
 - review_status: official_verified
@@ -38,79 +39,79 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 - shop_id
 - show_out_of_stock
 - webhook_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - shops:
   - primary key: id
-  - fields: id(), sales_channel(), title()
+  - fields: id(integer), sales_channel(string), title(string)
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), sales_channel(), status(), title(), updated_at(), visible()
+  - fields: created_at(string), id(string), sales_channel(string), status(string), title(string), updated_at(string), visible(boolean)
 - orders:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), sales_channel(), status(), title(), updated_at(), visible()
+  - fields: created_at(string), id(string), sales_channel(string), status(string), title(string), updated_at(string), visible(boolean)
 - blueprints:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(integer), title(string)
 - print_providers:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(integer), title(string)
 - blueprint_detail:
   - primary key: id
-  - fields: brand(), description(), id(), images(), model(), title()
+  - fields: brand(string), description(string), id(integer), images(array), model(string), title(string)
 - blueprint_print_providers:
   - primary key: id
-  - fields: decoration_methods(), id(), title()
+  - fields: decoration_methods(array), id(integer), title(string)
 - blueprint_variants:
   - primary key: id
-  - fields: blueprint_id(), decoration_methods(), id(), is_available(), options(), placeholders(), print_provider_id(), title()
+  - fields: blueprint_id(string), decoration_methods(array), id(integer), is_available(boolean), options(object), placeholders(array), print_provider_id(string), title(string)
 - shipping_profiles:
   - primary key: variant_ids
-  - fields: additional_items(), blueprint_id(), countries(), first_item(), handling_time(), print_provider_id(), variant_ids()
+  - fields: additional_items(object), blueprint_id(string), countries(array), first_item(object), handling_time(object), print_provider_id(string), variant_ids(array)
 - print_provider_detail:
   - primary key: id
-  - fields: blueprints(), id(), location(), title()
+  - fields: blueprints(array), id(integer), location(object), title(string)
 - product_detail:
   - primary key: id
   - cursor: updated_at
-  - fields: blueprint_id(), created_at(), description(), external(), id(), images(), is_locked(), options(), print_areas(), print_provider_id(), sales_channel(), shop_id(), tags(), title(), updated_at(), user_id(), variants(), visible()
+  - fields: blueprint_id(integer), created_at(string), description(string), external(object), id(string), images(array), is_locked(boolean), options(array), print_areas(array), print_provider_id(integer), sales_channel(string), shop_id(integer), tags(array), title(string), updated_at(string), user_id(integer), variants(array), visible(boolean)
 - product_gpsr:
   - primary key: title
-  - fields: text(), title()
+  - fields: text(string), title(string)
 - order_detail:
   - primary key: id
   - cursor: updated_at
-  - fields: address_to(), app_order_id(), created_at(), id(), line_items(), metadata(), shipping_method(), status(), updated_at()
+  - fields: address_to(object), app_order_id(string), created_at(string), id(string), line_items(array), metadata(object), shipping_method(integer), status(string), updated_at(string)
 - uploads:
   - primary key: id
   - cursor: upload_time
-  - fields: file_name(), height(), id(), mime_type(), preview_url(), size(), upload_time(), width()
+  - fields: file_name(string), height(integer), id(string), mime_type(string), preview_url(string), size(integer), upload_time(string), width(integer)
 - upload_detail:
   - primary key: id
   - cursor: upload_time
-  - fields: file_name(), height(), id(), mime_type(), preview_url(), size(), upload_time(), width()
+  - fields: file_name(string), height(integer), id(string), mime_type(string), preview_url(string), size(integer), upload_time(string), width(integer)
 - webhooks:
   - primary key: id
-  - fields: id(), shop_id(), topic(), url()
+  - fields: id(string), shop_id(string), topic(string), url(string)
 - v2_shipping_methods:
   - primary key: id
-  - fields: attributes(), blueprint_id(), id(), print_provider_id(), type()
+  - fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), type(string)
 - v2_shipping_standard:
   - primary key: id
-  - fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+  - fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
 - v2_shipping_priority:
   - primary key: id
-  - fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+  - fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
 - v2_shipping_express:
   - primary key: id
-  - fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+  - fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
 - v2_shipping_economy:
   - primary key: id
-  - fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+  - fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
 
 ## Sync Modes
 
@@ -123,6 +124,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: disconnects the configured shop from the Printify account
 - create_product:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products.json
+  - required fields: title, blueprint_id, print_provider_id
   - risk: creates a product in the configured shop
 - update_product:
   - endpoint: PUT /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}.json
@@ -138,11 +140,11 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: publishes a product to the connected sales channel
 - mark_product_publishing_succeeded:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_succeeded.json
-  - required fields: product_id
+  - required fields: product_id, external
   - risk: marks product publishing as succeeded and stores an external handle
 - mark_product_publishing_failed:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_failed.json
-  - required fields: product_id
+  - required fields: product_id, reason
   - risk: marks product publishing as failed
 - unpublish_product:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/unpublish.json
@@ -150,9 +152,11 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: notifies Printify that a product has been unpublished
 - submit_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders.json
+  - required fields: line_items, address_to
   - risk: submits an order to Printify
 - submit_express_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/express.json
+  - required fields: line_items, address_to
   - risk: submits a Printify Express order
 - send_order_to_production:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/send_to_production.json
@@ -160,6 +164,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: sends an existing order to production
 - calculate_order_shipping:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/shipping.json
+  - required fields: line_items, address_to
   - risk: calculates shipping costs for a prospective order without submitting it
 - cancel_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/cancel.json
@@ -167,6 +172,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: cancels an unpaid order
 - upload_image:
   - endpoint: POST /v1/uploads/images.json
+  - required fields: file_name
   - risk: uploads an image into the Printify media library
 - archive_uploaded_image:
   - endpoint: POST /v1/uploads/{{ record.image_id }}/archive.json
@@ -174,6 +180,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: archives an uploaded image
 - create_webhook:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/webhooks.json
+  - required fields: topic, url
   - risk: creates a webhook subscription for the configured shop
 - update_webhook:
   - endpoint: PUT /v1/shops/{{ config.shop_id }}/webhooks/{{ record.webhook_id }}.json

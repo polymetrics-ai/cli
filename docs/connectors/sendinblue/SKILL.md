@@ -11,6 +11,7 @@ Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo
 
 ## Icon
 
+- id: sendinblue
 - asset: icons/sendinblue.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,24 +29,24 @@ Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: id
   - cursor: modifiedAt
-  - fields: email(), id(), modifiedAt()
+  - fields: email(string), id(integer), modifiedAt(string)
 - email_campaigns:
   - primary key: id
   - cursor: modifiedAt
-  - fields: id(), modifiedAt(), name(), status()
+  - fields: id(integer), modifiedAt(string), name(string), status(string)
 - contacts_lists:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - senders:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: email(string), id(integer), name(string)
 
 ## Sync Modes
 

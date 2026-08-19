@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.
 
 ICON
+  id: googleworkpace
   asset: icons/googleworkpace.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -32,29 +33,29 @@ CONFIGURATION
   family
   pretty_print
   subset
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   webfonts:
     primary key: family
     cursor: lastModified
-    fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+    fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
   popular_fonts:
     primary key: family
     cursor: lastModified
-    fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+    fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
   trending_fonts:
     primary key: family
     cursor: lastModified
-    fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+    fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
   newest_fonts:
     primary key: family
     cursor: lastModified
-    fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+    fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
   alpha_fonts:
     primary key: family
     cursor: lastModified
-    fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+    fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

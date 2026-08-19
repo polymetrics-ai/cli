@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes Concord contract lifecycle management data: agreements (and their metadata/summary/comments/activities/members/versions/attachments sub-resources), organizations, folders, reports, tags, clauses, approvals, groups, members, events, subscription, branding, and automated templates through the Concord REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -37,106 +39,107 @@ CONFIGURATION
   organization_id
   page_size
   report_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   agreements:
     primary key: uid
-    fields: createdAt(), organizationId(), stage(), status(), title(), uid(), updatedAt()
+    fields: createdAt(string), organizationId(integer), stage(string), status(string), title(string), uid(string), updatedAt(string)
   user_organizations:
     primary key: id
-    fields: id(), name(), role(), type()
+    fields: id(integer), name(string), role(string), type(string)
   folders:
     primary key: id
-    fields: id(), name(), organizationId(), parentId()
+    fields: id(integer), name(string), organizationId(integer), parentId(integer)
   reports:
     primary key: id
-    fields: id(), name(), organizationId(), type()
+    fields: id(integer), name(string), organizationId(integer), type(string)
   tags:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
   organization:
     primary key: id
-    fields: aiEnabled(), allTagsVisible(), askForTags(), canCollaboratorSign(), createdAt(), deleted(), description(), emailDomains(), id(), logo(), name(), parent(), region(), subscription(), subsidiaries()
+    fields: aiEnabled(boolean), allTagsVisible(boolean), askForTags(boolean), canCollaboratorSign(boolean), createdAt(integer), deleted(boolean), description(string), emailDomains(array), id(integer), logo(string), name(string), parent(object), region(string), subscription(object), subsidiaries(array)
   folder:
     primary key: id
-    fields: access(), createdAt(), createdBy(), id(), isBookmarked(), modifiedAt(), name(), parentId()
+    fields: access(object), createdAt(integer), createdBy(object), id(integer), isBookmarked(boolean), modifiedAt(integer), name(string), parentId(integer)
   folder_agreements:
     primary key: uuid
-    fields: createdAt(), folderId(), modifiedAt(), organizationId(), status(), title(), uuid()
+    fields: createdAt(integer), folderId(integer), modifiedAt(integer), organizationId(integer), status(string), title(string), uuid(string)
   report:
     primary key: id
-    fields: description(), filters(), id(), lastUpdatedAt(), name()
+    fields: description(string), filters(object), id(string), lastUpdatedAt(integer), name(string)
   clauses:
     primary key: id
-    fields: createdAt(), description(), id(), numberOfTemplatesLinked(), presignedUrl(), title(), version()
+    fields: createdAt(integer), description(string), id(integer), numberOfTemplatesLinked(integer), presignedUrl(string), title(string), version(integer)
   clause:
     primary key: id
-    fields: createdAt(), description(), id(), numberOfTemplatesLinked(), presignedUrl(), title(), version()
+    fields: createdAt(integer), description(string), id(integer), numberOfTemplatesLinked(integer), presignedUrl(string), title(string), version(integer)
   approvals:
     primary key: id
-    fields: blockThirdPartySignature(), deletable(), description(), id(), rules(), title()
+    fields: blockThirdPartySignature(boolean), deletable(boolean), description(string), id(integer), rules(array), title(string)
   approval:
     primary key: id
-    fields: blockThirdPartySignature(), deletable(), description(), id(), rules(), title()
+    fields: blockThirdPartySignature(boolean), deletable(boolean), description(string), id(integer), rules(array), title(string)
   groups:
     primary key: id
-    fields: description(), id(), invitations(), name(), organization(), users()
+    fields: description(string), id(integer), invitations(array), name(string), organization(object), users(array)
   members:
     primary key: userOrganizationId
-    fields: createdAt(), groups(), invitation(), isActive(), job(), organization(), role(), type(), user(), userOrganizationId()
+    fields: createdAt(integer), groups(array), invitation(object), isActive(boolean), job(string), organization(object), role(object), type(string), user(object), userOrganizationId(integer)
   events:
     primary key: id
-    fields: actor(), createdAt(), event(), id(), type()
+    fields: actor(object), createdAt(integer), event(object), id(integer), type(string)
   subscription:
     primary key: subscriptionId
-    fields: customerId(), featureLevel(), seats(), status(), subscriptionId(), subscriptionName(), type()
+    fields: customerId(string), featureLevel(string), seats(array), status(string), subscriptionId(string), subscriptionName(string), type(string)
   branding:
     primary key: useForInternalEmails
-    fields: customAgreementView(), customEmailContent(), customEmailSender(), useForInternalEmails()
+    fields: customAgreementView(object), customEmailContent(object), customEmailSender(object), useForInternalEmails(boolean)
   automated_templates:
     primary key: id
-    fields: id(), name(), salesforceReady()
+    fields: id(string), name(string), salesforceReady(boolean)
   user_me:
     primary key: id
-    fields: createdAt(), currentOrganizationId(), email(), fullName(), hasAcceptedTerms(), hasPassword(), hasPicture(), id(), timezone()
+    fields: createdAt(integer), currentOrganizationId(integer), email(string), fullName(string), hasAcceptedTerms(boolean), hasPassword(boolean), hasPicture(boolean), id(integer), timezone(string)
   user_preferences:
     primary key: name
-    fields: dateFormat(), deadlinesNotificationDays(), deadlinesNotificationEnabled(), language(), mobile(), mobileCode(), name(), phone(), phoneCode()
+    fields: dateFormat(string), deadlinesNotificationDays(integer), deadlinesNotificationEnabled(boolean), language(string), mobile(string), mobileCode(string), name(string), phone(string), phoneCode(string)
   webhooks_integrations:
     primary key: id
-    fields: events(), id(), isActive(), url()
+    fields: events(array), id(string), isActive(boolean), url(string)
   agreement:
     primary key: uid
-    fields: creation(), folderId(), lastPublicVersion(), lock(), metadata(), permission(), uid()
+    fields: creation(object), folderId(integer), lastPublicVersion(object), lock(object), metadata(object), permission(string), uid(string)
   agreement_metadata:
     primary key: agreement_uid
-    fields: agreement_uid(), bookmarked(), description(), inboxed(), lastAccessAt(), organization(), read(), status(), tags(), title(), trashed()
+    fields: agreement_uid(string), bookmarked(boolean), description(string), inboxed(boolean), lastAccessAt(integer), organization(object), read(boolean), status(string), tags(array), title(string), trashed(boolean)
   agreement_summary:
     primary key: agreementUid
-    fields: agreementCategory(), agreementUid(), clauses(), description(), documentType(), endclauses(), lifecycle(), organizationId(), signedwithlabels(), totalAgreementValue()
+    fields: agreementCategory(string), agreementUid(string), clauses(array), description(string), documentType(string), endclauses(array), lifecycle(object), organizationId(integer), signedwithlabels(array), totalAgreementValue(number)
   agreement_comments:
     primary key: comment_uuid
-    fields: agreement_id(), comment_uuid(), commentedText(), createdAt(), createdBy(), reply(), resolved(), text(), uuid(), version(), visibility()
+    fields: agreement_id(string), comment_uuid(string), commentedText(string), createdAt(integer), createdBy(object), reply(array), resolved(boolean), text(string), uuid(string), version(integer), visibility(string)
   agreement_activities:
     primary key: id
-    fields: action(), agreement_id(), createdAt(), id(), organization(), params(), status(), userOrganization(), visibility()
+    fields: action(string), agreement_id(string), createdAt(integer), id(string), organization(object), params(object), status(string), userOrganization(object), visibility(string)
   agreement_members:
     primary key: agreement_id, member_id
-    fields: agreement_id(), lastAccessAt(), member_id(), permission(), relation(), status(), user(), userSignStatus()
+    fields: agreement_id(string), lastAccessAt(integer), member_id(integer), permission(string), relation(string), status(string), user(object), userSignStatus(string)
   agreement_versions:
     primary key: id
-    fields: agreement_id(), comment(), date(), displayVersion(), id(), organization(), type(), user(), version(), visibility()
+    fields: agreement_id(string), comment(string), date(integer), displayVersion(number), id(string), organization(object), type(string), user(object), version(integer), visibility(string)
   agreement_attachments:
     primary key: id
-    fields: agreement_id(), contentType(), id(), name(), size()
+    fields: agreement_id(string), contentType(string), id(string), name(string), size(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_folder:
     endpoint: POST /organizations/{{ config.organization_id }}/folders
+    required fields: name, parentId
     risk: creates a new Concord folder within the configured organization; low risk, no data destruction
   update_folder:
     endpoint: PUT /organizations/{{ config.organization_id }}/folders/{{ record.id }}
@@ -151,7 +154,7 @@ REVERSE ETL ACTIONS
     risk: creates a new saved Concord report within the configured organization; low risk
   update_report:
     endpoint: PUT /organizations/{{ config.organization_id }}/reports/{{ record.id }}
-    required fields: id
+    required fields: id, name, description, filters
     risk: replaces an existing Concord saved report's definition; may change what other users see when they run it
   delete_report:
     endpoint: DELETE /organizations/{{ config.organization_id }}/reports/{{ record.id }}
@@ -159,10 +162,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Concord saved report; destructive, external mutation; approval required
   create_clause:
     endpoint: POST /organizations/{{ config.organization_id }}/clauses
+    required fields: title, content
     risk: creates a new reusable Concord clause template within the configured organization; low risk
   update_clause:
     endpoint: PUT /organizations/{{ config.organization_id }}/clauses/{{ record.id }}
-    required fields: id
+    required fields: id, title, content
     risk: updates an existing Concord clause template; may affect future agreements linked to this clause
   delete_clause:
     endpoint: DELETE /organizations/{{ config.organization_id }}/clauses/{{ record.id }}
@@ -170,13 +174,15 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Concord clause template; destructive, external mutation; approval required
   create_group:
     endpoint: POST /organizations/{{ config.organization_id }}/groups
+    required fields: name
     risk: creates a new Concord user group within the configured organization; low risk
   create_approval:
     endpoint: POST /organizations/{{ config.organization_id }}/approvals
+    required fields: title, description, blockThirdPartySignature
     risk: creates a new Concord company approval workflow within the configured organization; affects future agreement signature routing
   update_approval:
     endpoint: POST /organizations/{{ config.organization_id }}/approvals/{{ record.id }}
-    required fields: id
+    required fields: id, title, description, blockThirdPartySignature
     risk: replaces an existing Concord company approval workflow; affects agreements already routed through it
   delete_approval:
     endpoint: DELETE /organizations/{{ config.organization_id }}/approvals/{{ record.id }}

@@ -73,7 +73,7 @@ func TestNoInitRegistration(t *testing.T) {
 // StatefulReader, DefinitionProvider. CDCReader is deliberately NOT
 // asserted: TallyPrime's Gateway Server is polled per Read with no
 // subscription/webhook mechanism, so there is no CDC path (unlike
-// postgres's documented pglogrepl stub).
+// postgres's retained fail-closed logical-replication foundation).
 func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	c := native.New()
 	var _ connectors.Connector = c

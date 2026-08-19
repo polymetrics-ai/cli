@@ -7,7 +7,7 @@ workflows, skills, and guardrails.
 ## Runtime
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
-- Project package: `npm:pi-sub-agent@0.1.5`
+- Project subagent extension: `.pi/extensions/pi-sub-agent/`, loaded by `.pi/settings.json`
 - Default Pi model: `openai-codex/gpt-5.5` with `xhigh` thinking
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
@@ -49,16 +49,20 @@ pi --provider openai-codex --model gpt-5.5
 
 ## Usage
 
-Start Pi from the repository root. The orchestration agents request read-only search tools
-(`grep`, `find`, `ls`) and the `subagent` extension tool, so enable them explicitly. Pi's default
-active tool set is only `read,bash,edit,write`; without the flag below, `pm-scout`/`pm-reviewer`
-cannot use `grep`/`find`/`ls`:
+Start Pi from the repository root. The project-local `subagent` extension defaults to
+`agentScope: "clean-project"`, which loads only the generated `pm-delivery-worker` and
+`pm-connector-worker` definitions. The canonical contract owns that roster and its bounded child
+tools; `.pi/extensions/pi-sub-agent/README.md` owns discovery, confirmation, and delegation-isolation
+details.
+
+Enable the extension and every built-in tool the generated workers may request:
 
 ```bash
 pi --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
-Useful prompt templates:
+Useful prompt templates (multi-worker entries are retained compatibility paths, not the canonical
+clean-project default):
 
 - `/pm-orchestrate`: active parent issue orchestration using project agents.
   Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
@@ -112,27 +116,29 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 `VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
 `claude` CLI to be logged in (`claude -p "ok"` should work).
 
-Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
-agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
-validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
-subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
-environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`
-connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied) before launching.
+Retained compatibility roles may carry per-agent model settings in their `.pi/agents/*.md`
+frontmatter. The generated canonical workers are contract projections and must never be edited by
+hand. For the Codex-only Shepherd compatibility profile, confirm the model IDs exposed by `/model`,
+then set legacy role models and driver settings (`ORCH_MODEL` / `VALIDATOR_ARGS`) only in their
+owning files. Connector research uses the repo's `searxng` connector through `pm` (audited path);
+export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 
-For automated runs, install the subagent tool once (`pi install npm:pi-sub-agent`) and launch with
-`--approve` so project-local files are trusted:
+For automated runs, `.pi/settings.json` loads the repository's local subagent extension. Launch
+with `--approve` so Pi trusts the project-local settings and extension:
 
 ```bash
 pi -p "Run the GSD verify cycle for phase github-projects-discussions" \
   --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
-Project agents under `.pi/agents/` are included by passing `agentScope: "project"` or `"both"` in
-the `subagent` tool call (with `confirmProjectAgents: false` for non-interactive runs) — these are
-tool parameters, not CLI flags; pi 0.80.x has no `--agentScope`/`--confirmProjectAgents` options.
-Only run non-interactively after reviewing and trusting the agents under `.pi/agents/`.
+The default `clean-project` scope admits only the two canonical generated workers. `user`,
+`project`, and `both` are explicit compatibility scopes. Pi project trust and the extension's
+per-call project-agent confirmation are separate gates: a trusted non-interactive caller must also
+set `confirmProjectAgents: false` in the `subagent` tool call. `agentScope` and
+`confirmProjectAgents` are tool parameters, not Pi CLI flags. Only bypass confirmation after
+reviewing and trusting the project and selected agents.
 
 ### Compaction and retry
 

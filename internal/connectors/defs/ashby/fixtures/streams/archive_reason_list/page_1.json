@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/archiveReason.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "archive_reason_list_id_fixture_42",
+          "text": "Text fixture 42",
+          "reasonType": "RejectedByCandidate",
+          "isArchived": false
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

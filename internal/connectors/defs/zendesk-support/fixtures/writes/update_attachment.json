@@ -1,0 +1,17 @@
+{
+  "record": {
+    "attachment_id": "fixture-attachment-id",
+    "attachment": {
+      "malware_access_override": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/attachments/fixture-attachment-id",
+    "body": {
+      "attachment": {
+        "malware_access_override": true
+      }
+    }
+  }
+}

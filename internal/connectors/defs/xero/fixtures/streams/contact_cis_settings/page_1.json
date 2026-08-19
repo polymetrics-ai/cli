@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Contacts/synthetic-conformance-value/CISSettings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "CISSettings": [
+        {
+          "CISEnabled": false,
+          "Rate": 12.34,
+          "contact_id": "contact_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

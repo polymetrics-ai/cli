@@ -11,9 +11,11 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -30,23 +32,23 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 - interval
 - output_size
 - symbol
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - time_series:
   - primary key: symbol, datetime
   - cursor: datetime
-  - fields: close(), datetime(), high(), low(), open(), symbol(), volume()
+  - fields: close(string), datetime(string), high(string), low(string), open(string), symbol(string), volume(string)
 - quote:
   - primary key: symbol
-  - fields: close(), currency(), name(), symbol()
+  - fields: close(string), currency(string), name(string), symbol(string)
 - stocks:
   - primary key: symbol
-  - fields: currency(), name(), symbol()
+  - fields: currency(string), name(string), symbol(string)
 - forex_pairs:
   - primary key: symbol
-  - fields: currency(), name(), symbol()
+  - fields: currency(string), name(string), symbol(string)
 
 ## Sync Modes
 

@@ -1,6 +1,247 @@
 {
   "actions": [
     {
+      "name": "add_inbox_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inbox_members",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ],
+        "properties": {
+          "inbox_id": {
+            "type": "integer",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: add a new agent via the Chatwoot Application API"
+    },
+    {
+      "name": "add_team_members",
+      "kind": "update",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/team_members",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "user_ids"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: add a new agent via the Chatwoot Application API"
+    },
+    {
+      "name": "assign_conversation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/assignments",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "assignee_id": {
+            "type": "number",
+            "description": "Id of the assignee user"
+          },
+          "team_id": {
+            "type": "number",
+            "description": "Id of the team. If the assignee_id is present, this param would be ignored"
+          }
+        }
+      },
+      "risk": "medium: assign conversation via the Chatwoot Application API"
+    },
+    {
+      "name": "create_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full Name of the agent"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the Agent"
+          },
+          "role": {
+            "type": "string",
+            "description": "Whether its administrator or agent"
+          },
+          "availability": {
+            "type": "string",
+            "description": "The configured availability of the agent."
+          },
+          "auto_offline": {
+            "type": "boolean",
+            "description": "Whether the agent is automatically marked offline when they are away."
+          }
+        }
+      },
+      "risk": "medium: add a new agent via the Chatwoot Application API"
+    },
+    {
+      "name": "create_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agent_bots",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          },
+          "bot_type": {
+            "type": "integer",
+            "description": "The type of the bot (0 for webhook)"
+          },
+          "bot_config": {
+            "type": "object",
+            "description": "The configuration for the bot"
+          }
+        }
+      },
+      "risk": "medium: create an agent bot via the Chatwoot Application API"
+    },
+    {
+      "name": "create_automation_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/automation_rules",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Rule name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description about the automation and actions"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "The event when you want to execute the automation actions"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Enable/disable automation rule"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Array of actions which you want to perform when condition matches, e.g add label support if message contains content help.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Array of conditions on which conversation filter would work, e.g message content contains text help.",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "medium: add a new automation rule via the Chatwoot Application API"
+    },
+    {
+      "name": "create_canned_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/canned_responses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Message content for canned response"
+          },
+          "short_code": {
+            "type": "string",
+            "description": "Short Code for quick access of the canned response"
+          }
+        }
+      },
+      "risk": "medium: add a new canned response via the Chatwoot Application API"
+    },
+    {
       "name": "create_contact",
       "kind": "create",
       "method": "POST",
@@ -9,45 +250,72 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["inbox_id"],
+        "required": [
+          "inbox_id"
+        ],
         "properties": {
-          "inbox_id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "inbox_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "creates a new Chatwoot contact record; low risk, no customer notification"
     },
     {
-      "name": "update_contact",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/contacts/{{ record.id }}",
-      "path_fields": ["id"],
+      "name": "create_contact_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.id }}/contact_inboxes",
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id",
+          "inbox_id"
+        ],
         "properties": {
-          "id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "id": {
+            "type": "integer"
+          },
+          "inbox_id": {
+            "type": "number",
+            "description": "The ID of the inbox"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Contact Inbox Source Id"
+          }
         }
       },
-      "risk": "updates an existing Chatwoot contact's profile fields; low risk, no customer notification"
+      "risk": "medium: create contact inbox via the Chatwoot Application API"
     },
     {
       "name": "create_conversation",
@@ -58,63 +326,150 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["source_id"],
+        "required": [
+          "source_id"
+        ],
         "properties": {
-          "source_id": { "type": "string" },
-          "inbox_id": { "type": "integer" },
-          "contact_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending"] },
-          "assignee_id": { "type": "integer" },
-          "team_id": { "type": "integer" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "source_id": {
+            "type": "string"
+          },
+          "inbox_id": {
+            "type": "integer"
+          },
+          "contact_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "pending"
+            ]
+          },
+          "assignee_id": {
+            "type": "integer"
+          },
+          "team_id": {
+            "type": "integer"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "creates a new conversation in the target inbox; customer-visible once the initial message is delivered through a live channel"
     },
     {
-      "name": "send_message",
+      "name": "create_custom_attribute_definition",
       "kind": "create",
       "method": "POST",
-      "path": "/conversations/{{ record.conversation_id }}/messages",
-      "path_fields": ["conversation_id"],
+      "path": "/custom_attribute_definitions",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "content"],
+        "required": [],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "content": { "type": "string" },
-          "message_type": { "type": "string", "enum": ["outgoing", "incoming"] },
-          "private": { "type": "boolean" },
-          "content_type": {
+          "attribute_display_name": {
             "type": "string",
-            "enum": ["text", "input_email", "cards", "input_select", "form", "article"]
+            "description": "Attribute display name"
           },
-          "content_attributes": { "type": "object" }
+          "attribute_display_type": {
+            "type": "integer",
+            "description": "Attribute display type (text- 0, number- 1, currency- 2, percent- 3, link- 4, date- 5, list- 6, checkbox- 7)"
+          },
+          "attribute_description": {
+            "type": "string",
+            "description": "Attribute description"
+          },
+          "attribute_key": {
+            "type": "string",
+            "description": "Attribute unique key value"
+          },
+          "attribute_values": {
+            "type": "array",
+            "description": "Attribute values",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer",
+            "description": "Attribute type(conversation_attribute- 0, contact_attribute- 1)"
+          },
+          "regex_pattern": {
+            "type": "string",
+            "description": "Regex pattern (Only applicable for type- text). The regex pattern is used to validate the attribute value(s)."
+          },
+          "regex_cue": {
+            "type": "string",
+            "description": "Regex cue message (Only applicable for type- text). The cue message is shown when the regex pattern is not matched."
+          }
         }
       },
-      "risk": "sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel"
+      "risk": "medium: add a new custom attribute via the Chatwoot Application API"
     },
     {
-      "name": "toggle_conversation_status",
-      "kind": "update",
+      "name": "create_custom_filter",
+      "kind": "create",
       "method": "POST",
-      "path": "/conversations/{{ record.conversation_id }}/toggle_status",
-      "path_fields": ["conversation_id"],
+      "path": "/custom_filters",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "status"],
+        "required": [],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending", "snoozed"] },
-          "snoozed_until": { "type": "integer" }
+          "name": {
+            "type": "string",
+            "description": "The name of the custom filter"
+          },
+          "type": {
+            "type": "string",
+            "description": "The description about the custom filter"
+          },
+          "query": {
+            "type": "object",
+            "description": "A query that needs to be saved as a custom filter"
+          }
         }
       },
-      "risk": "changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics"
+      "risk": "medium: create a custom filter via the Chatwoot Application API"
+    },
+    {
+      "name": "create_integration_hook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "app_id": {
+            "type": "integer",
+            "description": "The ID of app for which integration hook is being created"
+          },
+          "inbox_id": {
+            "type": "integer",
+            "description": "The inbox ID, if the hook is an inbox hook"
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the integration (0 for inactive, 1 for active)"
+          },
+          "settings": {
+            "type": "object",
+            "description": "The settings required by the integration"
+          }
+        }
+      },
+      "risk": "medium: create an integration hook via the Chatwoot Application API"
     },
     {
       "name": "create_label",
@@ -125,15 +480,1613 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "color": { "type": "string" },
-          "show_on_sidebar": { "type": "boolean" }
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "show_on_sidebar": {
+            "type": "boolean"
+          }
         }
       },
       "risk": "creates a new account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true"
+    },
+    {
+      "name": "create_portal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "color": {
+            "type": "string",
+            "description": "Header color for help-center in hex format"
+          },
+          "custom_domain": {
+            "type": "string",
+            "description": "Custom domain to display help center."
+          },
+          "header_text": {
+            "type": "string",
+            "description": "Help center header"
+          },
+          "homepage_link": {
+            "type": "string",
+            "description": "link to main dashboard"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the portal"
+          },
+          "page_title": {
+            "type": "string",
+            "description": "Page title for the portal"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug for the portal to display in link"
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Status to check if portal is live"
+          },
+          "config": {
+            "type": "object",
+            "description": "Configuration about supporting locales"
+          }
+        }
+      },
+      "risk": "medium: add a new portal via the Chatwoot Application API"
+    },
+    {
+      "name": "create_portal_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portals/{{ record.id }}/articles",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the article"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The slug of the article"
+          },
+          "position": {
+            "type": "integer",
+            "description": "article position in category"
+          },
+          "content": {
+            "type": "string",
+            "description": "The text content."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the article"
+          },
+          "category_id": {
+            "type": "integer",
+            "description": "The category id of the article"
+          },
+          "author_id": {
+            "type": "integer",
+            "description": "The author agent id of the article"
+          },
+          "associated_article_id": {
+            "type": "integer",
+            "description": "To associate similar articles to each other, e.g to provide the link for the reference."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the article. 0 for draft, 1 for published, 2 for archived"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the article"
+          },
+          "meta": {
+            "type": "object",
+            "description": "Use for search"
+          }
+        }
+      },
+      "risk": "medium: add a new article via the Chatwoot Application API"
+    },
+    {
+      "name": "create_portal_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portals/{{ record.id }}/categories",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the category"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description for the category"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Category position in the portal list to sort"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The category slug used in the URL"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the category"
+          },
+          "icon": {
+            "type": "string",
+            "description": "The icon of the category as a string (emoji)"
+          },
+          "parent_category_id": {
+            "type": "integer",
+            "description": "To define parent category, e.g product documentation has multiple level features in sales category or in engineering category."
+          },
+          "associated_category_id": {
+            "type": "integer",
+            "description": "To associate similar categories to each other, e.g same category of product documentation in different languages"
+          }
+        }
+      },
+      "risk": "medium: add a new category via the Chatwoot Application API"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the team"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team"
+          },
+          "allow_auto_assign": {
+            "type": "boolean",
+            "description": "If this setting is turned on, the system would automatically assign the conversation to an agent in the team while assigning the conversation to a team"
+          }
+        }
+      },
+      "risk": "medium: create a team via the Chatwoot Application API"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The url where the events should be sent"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "The events you want to subscribe to.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "medium: add a webhook via the Chatwoot Application API"
+    },
+    {
+      "name": "delete_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: remove an agent from account via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_agent_bot",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agent_bots/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete an agentbot via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_automation_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/automation_rules/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: remove a automation rule from account via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_canned_response",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/canned_responses/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: remove a canned response from account via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete contact via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_attribute_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_attribute_definitions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: remove a custom attribute from account via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_filters/{{ record.custom_filter_id }}",
+      "path_fields": [
+        "custom_filter_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_filter_id"
+        ],
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete a custom filter via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_integration_hook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/hooks/{{ record.hook_id }}",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "hook_id"
+        ],
+        "properties": {
+          "hook_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete an integration hook via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/labels/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete a label via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/messages/{{ record.message_id }}",
+      "path_fields": [
+        "conversation_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "message_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "message_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete a message via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete a team via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high: delete a webhook via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "destroy_conversation_custom_attributes",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/destroy_custom_attributes",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "custom_attributes"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "custom_attributes": {
+            "type": "array",
+            "description": "The list of custom attribute keys to remove from the conversation",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "medium: destroy custom attributes via the Chatwoot Application API"
+    },
+    {
+      "name": "merge_contacts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/actions/contact_merge",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "base_contact_id",
+          "mergee_contact_id"
+        ],
+        "properties": {
+          "base_contact_id": {
+            "type": "integer",
+            "description": "ID of the contact that will remain after the merge and receive all data"
+          },
+          "mergee_contact_id": {
+            "type": "integer",
+            "description": "ID of the contact that will be merged into the base contact and deleted"
+          }
+        }
+      },
+      "risk": "high: merge contacts via the Chatwoot Application API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_inbox_members",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/inbox_members",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ],
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be deleted from the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: remove an agent from inbox via the Chatwoot Application API"
+    },
+    {
+      "name": "remove_team_members",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/team_members",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "user_ids"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be deleted from the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: remove an agent from team via the Chatwoot Application API"
+    },
+    {
+      "name": "send_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/messages",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "content"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "message_type": {
+            "type": "string",
+            "enum": [
+              "outgoing",
+              "incoming"
+            ]
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "input_email",
+              "cards",
+              "input_select",
+              "form",
+              "article"
+            ]
+          },
+          "content_attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel"
+    },
+    {
+      "name": "set_inbox_agent_bot",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inboxes/{{ record.id }}/set_agent_bot",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "agent_bot"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "agent_bot": {
+            "type": "number",
+            "description": "Agent bot ID"
+          }
+        }
+      },
+      "risk": "medium: add or remove agent bot via the Chatwoot Application API"
+    },
+    {
+      "name": "set_inbox_members",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/inbox_members",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ],
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: update agents in inbox via the Chatwoot Application API"
+    },
+    {
+      "name": "set_team_members",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/team_members",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "user_ids"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "medium: update agents in team via the Chatwoot Application API"
+    },
+    {
+      "name": "toggle_conversation_priority",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/toggle_priority",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "priority"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the conversation"
+          }
+        }
+      },
+      "risk": "medium: toggle priority via the Chatwoot Application API"
+    },
+    {
+      "name": "toggle_conversation_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/toggle_status",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "status"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "pending",
+              "snoozed"
+            ]
+          },
+          "snoozed_until": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics"
+    },
+    {
+      "name": "toggle_conversation_typing_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/toggle_typing_status",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "typing_status"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "typing_status": {
+            "type": "string",
+            "description": "Typing status to set."
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "Whether the typing event is for private notes."
+          }
+        }
+      },
+      "risk": "medium: toggle typing status via the Chatwoot Application API"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the account"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the account"
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain of the account"
+          },
+          "support_email": {
+            "type": "string",
+            "description": "The support email of the account"
+          },
+          "auto_resolve_after": {
+            "type": "integer",
+            "description": "Auto resolve conversations after specified minutes"
+          },
+          "auto_resolve_message": {
+            "type": "string",
+            "description": "Message to send when auto resolving"
+          },
+          "auto_resolve_ignore_waiting": {
+            "type": "boolean",
+            "description": "Whether to ignore waiting conversations for auto resolve"
+          },
+          "industry": {
+            "type": "string",
+            "description": "Industry type"
+          },
+          "company_size": {
+            "type": "string",
+            "description": "Company size"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Account timezone"
+          }
+        }
+      },
+      "risk": "medium: update account via the Chatwoot Application API"
+    },
+    {
+      "name": "update_agent",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/agents/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "role": {
+            "type": "string",
+            "description": "Whether its administrator or agent"
+          },
+          "availability": {
+            "type": "string",
+            "description": "The configured availability of the agent."
+          },
+          "auto_offline": {
+            "type": "boolean",
+            "description": "Whether the agent is automatically marked offline when they are away."
+          }
+        }
+      },
+      "risk": "medium: update agent in account via the Chatwoot Application API"
+    },
+    {
+      "name": "update_agent_bot",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/agent_bots/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          },
+          "bot_type": {
+            "type": "integer",
+            "description": "The type of the bot (0 for webhook)"
+          },
+          "bot_config": {
+            "type": "object",
+            "description": "The configuration for the bot"
+          }
+        }
+      },
+      "risk": "medium: update an agent bot via the Chatwoot Application API"
+    },
+    {
+      "name": "update_automation_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/automation_rules/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "Rule name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description about the automation and actions"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "The event when you want to execute the automation actions"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Enable/disable automation rule"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Array of actions which you want to perform when condition matches, e.g add label support if message contains content help.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Array of conditions on which conversation filter would work, e.g message content contains text help.",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "medium: update automation rule in account via the Chatwoot Application API"
+    },
+    {
+      "name": "update_branded_email_layout",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/branded_email_layout",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "branded_email_layout": {
+            "type": "string",
+            "description": "Account-scoped Liquid HTML layout for branded email replies. Maximum length is 262,144 characters. Blank or null removes the account override."
+          }
+        }
+      },
+      "risk": "medium: update account branded email layout via the Chatwoot Application API"
+    },
+    {
+      "name": "update_canned_response",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/canned_responses/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content for canned response"
+          },
+          "short_code": {
+            "type": "string",
+            "description": "Short Code for quick access of the canned response"
+          }
+        }
+      },
+      "risk": "medium: update canned response in account via the Chatwoot Application API"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates an existing Chatwoot contact's profile fields; low risk, no customer notification"
+    },
+    {
+      "name": "update_contact_labels",
+      "kind": "update",
+      "method": "POST",
+      "path": "/contacts/{{ record.id }}/labels",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labels"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Array of labels (comma-separated strings)",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "medium: add labels via the Chatwoot Application API"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the conversation"
+          },
+          "sla_policy_id": {
+            "type": "number",
+            "description": "The ID of the SLA policy (Available only in Enterprise edition)"
+          }
+        }
+      },
+      "risk": "medium: update conversation via the Chatwoot Application API"
+    },
+    {
+      "name": "update_conversation_custom_attributes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/custom_attributes",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "custom_attributes"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The custom attributes to be set for the conversation"
+          },
+          "merge": {
+            "type": "boolean",
+            "description": "When true, only the keys sent in `custom_attributes` are updated and the remaining keys are kept intact. When false (default), the whole custom attributes hash is replaced. Use the destroy_custom_attributes endpoint to remove keys."
+          }
+        }
+      },
+      "risk": "medium: update custom attributes via the Chatwoot Application API"
+    },
+    {
+      "name": "update_conversation_labels",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/labels",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "labels"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Array of labels (comma-separated strings)",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "medium: add labels via the Chatwoot Application API"
+    },
+    {
+      "name": "update_custom_attribute_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_attribute_definitions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "attribute_display_name": {
+            "type": "string",
+            "description": "Attribute display name"
+          },
+          "attribute_display_type": {
+            "type": "integer",
+            "description": "Attribute display type (text- 0, number- 1, currency- 2, percent- 3, link- 4, date- 5, list- 6, checkbox- 7)"
+          },
+          "attribute_description": {
+            "type": "string",
+            "description": "Attribute description"
+          },
+          "attribute_key": {
+            "type": "string",
+            "description": "Attribute unique key value"
+          },
+          "attribute_values": {
+            "type": "array",
+            "description": "Attribute values",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer",
+            "description": "Attribute type(conversation_attribute- 0, contact_attribute- 1)"
+          },
+          "regex_pattern": {
+            "type": "string",
+            "description": "Regex pattern (Only applicable for type- text). The regex pattern is used to validate the attribute value(s)."
+          },
+          "regex_cue": {
+            "type": "string",
+            "description": "Regex cue message (Only applicable for type- text). The cue message is shown when the regex pattern is not matched."
+          }
+        }
+      },
+      "risk": "medium: update custom attribute in account via the Chatwoot Application API"
+    },
+    {
+      "name": "update_custom_filter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_filters/{{ record.custom_filter_id }}",
+      "path_fields": [
+        "custom_filter_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_filter_id"
+        ],
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the custom filter"
+          },
+          "type": {
+            "type": "string",
+            "description": "The description about the custom filter"
+          },
+          "query": {
+            "type": "object",
+            "description": "A query that needs to be saved as a custom filter"
+          }
+        }
+      },
+      "risk": "medium: update a custom filter via the Chatwoot Application API"
+    },
+    {
+      "name": "update_integration_hook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/hooks/{{ record.hook_id }}",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "hook_id"
+        ],
+        "properties": {
+          "hook_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the integration (0 for inactive, 1 for active)"
+          },
+          "settings": {
+            "type": "object",
+            "description": "The settings required by the integration"
+          }
+        }
+      },
+      "risk": "medium: update an integration hook via the Chatwoot Application API"
+    },
+    {
+      "name": "update_label",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/labels/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string",
+            "description": "The label title"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description for the label"
+          },
+          "color": {
+            "type": "string",
+            "description": "Hex color code for the label"
+          },
+          "show_on_sidebar": {
+            "type": "boolean",
+            "description": "Whether the label should appear in the sidebar"
+          }
+        }
+      },
+      "risk": "medium: update a label via the Chatwoot Application API"
+    },
+    {
+      "name": "update_portal",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/portals/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "description": "Header color for help-center in hex format"
+          },
+          "custom_domain": {
+            "type": "string",
+            "description": "Custom domain to display help center."
+          },
+          "header_text": {
+            "type": "string",
+            "description": "Help center header"
+          },
+          "homepage_link": {
+            "type": "string",
+            "description": "link to main dashboard"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the portal"
+          },
+          "page_title": {
+            "type": "string",
+            "description": "Page title for the portal"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug for the portal to display in link"
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Status to check if portal is live"
+          },
+          "config": {
+            "type": "object",
+            "description": "Configuration about supporting locales"
+          }
+        }
+      },
+      "risk": "medium: update a portal via the Chatwoot Application API"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the team"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team"
+          },
+          "allow_auto_assign": {
+            "type": "boolean",
+            "description": "If this setting is turned on, the system would automatically assign the conversation to an agent in the team while assigning the conversation to a team"
+          }
+        }
+      },
+      "risk": "medium: update a team via the Chatwoot Application API"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string",
+            "description": "The url where the events should be sent"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "The events you want to subscribe to.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "medium: update a webhook object via the Chatwoot Application API"
     }
   ]
 }

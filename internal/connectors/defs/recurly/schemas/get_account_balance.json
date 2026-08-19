@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_account_balance record",
+  "type": "object",
+  "x-primary-key": [
+    "account_id"
+  ],
+  "properties": {
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "description": "The unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address used for communicating with this customer."
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "title": "Dunning Campaign ID",
+          "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Account mini details",
+      "required": [
+        "id"
+      ]
+    },
+    "past_due": {
+      "type": "boolean"
+    },
+    "balances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Amount",
+            "description": "Total amount the account is past due."
+          },
+          "processing_prepayment_amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Processing Prepayment Amount",
+            "description": "Total amount for the prepayment credit invoices in a `processing` state on the account."
+          },
+          "available_credit_amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Available Credit Amount",
+            "description": "Total amount of the open balances on credit invoices for the account."
+          }
+        },
+        "additionalProperties": false,
+        "title": "Balance Amount"
+      }
+    },
+    "account_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account",
+    "account_id"
+  ],
+  "additionalProperties": false
+}

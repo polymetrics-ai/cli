@@ -13,6 +13,7 @@ DESCRIPTION
   Reads current, historical, forecast, marine, and location-autocomplete weather data from Weatherstack. Read-only.
 
 ICON
+  id: weatherstack
   asset: icons/weatherstack.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -34,29 +35,29 @@ CONFIGURATION
   latitude
   longitude
   mode
-  query
+  query (required)
   units
-  access_key (secret)
+  access_key (secret) (required)
 
 ETL STREAMS
   current:
     primary key: id
-    fields: current(), id(), location()
+    fields: current(object), id(string), location(object)
   historical:
     primary key: id
-    fields: historical(), id(), location()
+    fields: historical(object), id(string), location(object)
   forecast:
     primary key: id
-    fields: forecast(), id(), location()
+    fields: forecast(object), id(string), location(object)
   marine:
     primary key: id
-    fields: current(), id(), location()
+    fields: current(object), id(string), location(object)
   autocomplete:
     primary key: name, region, country, lat, lon
-    fields: country(), lat(), lon(), name(), region(), timezone_id(), utc_offset()
+    fields: country(string), lat(string), lon(string), name(string), region(string), timezone_id(string), utc_offset(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Weatherstack API read of public weather data

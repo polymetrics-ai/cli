@@ -10,9 +10,10 @@ SYNOPSIS
   pm credentials add <name> --connector warehouse [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Local JSONL warehouse destination used by the dependency-free MVP.
+  Local Parquet warehouse destination queried by the embedded DuckDB engine.
 
 ICON
+  id: pm-warehouse
   asset: icons/pm-warehouse.svg
   source: polymetrics
   review_status: polymetrics
@@ -29,7 +30,7 @@ CONFIGURATION
   path: Local warehouse directory.
 
 ETL STREAMS
-  tables: Local JSONL warehouse tables.
+  tables: Local Parquet warehouse tables.
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -42,6 +43,12 @@ SECURITY
   mutation risk: local dependency-free warehouse writes
   approval: not required for ETL destination writes; reverse ETL still requires approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+SYNC TRANSPORT
+  Source transport: unsupported
+  Destination transport: declared
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Destination executor: native_database/local_parquet_warehouse
 
 EXAMPLES
   # Inspect as a manual

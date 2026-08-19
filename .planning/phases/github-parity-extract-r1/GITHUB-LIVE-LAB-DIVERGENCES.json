@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "run_id": "github-live-lab-20260809-8ccd8dd6",
+  "current_run_id": "github-live-lab-20260810-target-rebind",
+  "source": {
+    "preserved_control": "scripts/github-live-proof-sweep.mjs:shellSafeInvocation",
+    "historical_record": ".planning/phases/github-parity-extract-r1/LIVE-PROOF-REPORT.json: repo view"
+  },
+  "records": [
+    {
+      "id": "repo-view-owner-repo-flags-rejected",
+      "command": "repo view",
+      "phase": "bootstrap target resolution before immutable-ID binding",
+      "state": "harness_regression_observed",
+      "malformed_invocation_shape": "pm github repo view --credential <profile> --owner <owner> --repo <repo> --root <isolated-project> --json",
+      "outcome": "flag_parse_rejected",
+      "provider_request_started": false,
+      "control_invocation_shape": "pm github repo view --credential <profile> --root <isolated-project> --json",
+      "control_result": "ConnectorCommandRead count=1; the stored profile scope did not match the fresh generated lab slug",
+      "resolution": "Use pm github repos list-for-authenticated-user as the independent bootstrap discovery read, filter only in memory for one exact private slug under the authenticated immutable user, then bind that immutable repository ID."
+    },
+    {
+      "id": "github-authenticated-repository-list-rate-limit-scope-error",
+      "run_id": "github-live-lab-20260810-target-rebind",
+      "command": "repos list-for-authenticated-user",
+      "phase": "authenticated repository bootstrap discovery",
+      "state": "local_preflight_defect_observed",
+      "invocation": "pm github repos list-for-authenticated-user --credential github-pm-live-test-20260808081515 --root /tmp/fm-cli-github-parity-extract-r1/pm-lab --json",
+      "executed_binary": "/tmp/fm-cli-github-parity-extract-r1/pm-lab/pm",
+      "pm_exit": 1,
+      "provider_request_started": false,
+      "provider_status": null,
+      "error_envelope": {
+        "api_version": "polymetrics.ai/v1",
+        "error": {
+          "category": "internal",
+          "code": "internal_error",
+          "message": "rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+        },
+        "kind": "Error"
+      },
+      "diagnosis": {
+        "local_stage": "GitHub engine newRuntime rate-limit resolution before requester dispatch",
+        "affected_scope": "GitHub only: every runtime request selected by the whole-connector authenticated-user policy; not shared all-connectors direct-read machinery",
+        "source": "internal/connectors/defs/github/rate_limits.json + internal/connectors/engine/rate_limit_runtime.go",
+        "contract_gap": "GitHub's declared config describes rate_limit_account as optional, but the matching runtime policy fails without it and CLI serializes that local configuration error as internal."
+      },
+      "resolution": "Use the approved non-secret account coordination subject in the target-scoped lab credential, then fix and test the configuration/error-classification contract before relying on this cohort."
+    },
+    {
+      "id": "github-repo-view-current-target-control",
+      "run_id": "github-live-lab-20260810-target-rebind",
+      "command": "repo view",
+      "phase": "current target current-head read control",
+      "state": "proven_read_with_projection_limit",
+      "invocation": "pm github repo view --credential github-pm-live-test-20260808081515 --root /tmp/fm-cli-github-parity-extract-r1/pm-lab --json",
+      "executed_binary": "/tmp/fm-cli-github-parity-extract-r1/pm-lab/pm",
+      "pm_exit": 0,
+      "provider_request_started": true,
+      "provider_status": null,
+      "output_envelope": {
+        "kind": "ConnectorCommandRead",
+        "connector": "github",
+        "command": "repo view"
+      },
+      "assertions": {
+        "immutable_repository_id": "1327549621",
+        "exact_owner_repo": "karthik-sivadas/pm-live-test-direct-read-20260808081515",
+        "private": true,
+        "archived": "not_exposed_by_repo_view_projection"
+      },
+      "limitation": "repo view is the repository ETL stream, and its committed projected schema has no archived field; the successful PM control cannot establish that property.",
+      "resolution": "The captain's independently verified unarchived state remains the authority for target admission; the boundary is pinned to the PM-read immutable repository ID and this control supplies no override flags."
+    },
+    {
+      "id": "org-bootstrap-create-command-absent",
+      "command": "orgs create",
+      "phase": "sandbox organization bootstrap",
+      "state": "pm_surface_missing",
+      "provider_request_started": false,
+      "outcome": "no registered PM command maps to POST /user/orgs or POST /organizations",
+      "resolution": "Do not create or delete an organization until a PM-only creation path can bind one run-owned immutable organization target."
+    },
+    {
+      "id": "app-manifest-code-issuer-absent",
+      "command": "apps create-from-manifest",
+      "phase": "GitHub App fixture bootstrap",
+      "state": "pm_surface_missing",
+      "provider_request_started": false,
+      "outcome": "the PM command requires --code, and no registered PM command issues a manifest conversion code",
+      "resolution": "Do not create an App until a PM-only manifest-code issuance path can supply a code and bind a run-owned App identity."
+    },
+    {
+      "id": "app-authentication-user-credential-401",
+      "command": "apps get-authenticated",
+      "phase": "GitHub App credential probe",
+      "state": "credential_or_entitlement_rejected",
+      "provider_request_started": true,
+      "http_status": 401,
+      "resolution": "A dedicated App JWT or installation credential is required before App-authenticated fixture work can begin."
+    },
+    {
+      "id": "marketplace-user-read-no-fixture-bootstrap",
+      "command": "apps list-subscriptions-for-authenticated-user",
+      "phase": "GitHub Marketplace credential probe",
+      "state": "proven_read",
+      "provider_request_started": true,
+      "http_status": 200,
+      "resolution": "This read proves the user route is reachable but does not create a Marketplace listing, App, plan, or installation fixture."
+    },
+    {
+      "id": "issue-list-read-after-write-visibility-delay",
+      "command": "issue list",
+      "phase": "personal repository editable issue lifecycle",
+      "state": "provider_visibility_delay_observed",
+      "provider_request_started": true,
+      "outcome": "the immediate independent PM list after a completed PM issue create did not yet satisfy the exact generated-record assertion; a later PM-only list did",
+      "resolution": "Retry only a successful PM issue-list assertion for at most six attempts; propagate PM credential, entitlement, scope, and provider errors immediately, and retain no provider payload."
+    }
+  ]
+}

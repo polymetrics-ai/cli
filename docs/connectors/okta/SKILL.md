@@ -11,6 +11,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 
 ## Icon
 
+- id: okta
 - asset: icons/okta.svg
 - source: official
 - review_status: official_verified
@@ -36,7 +37,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 - assignment_id
 - auth_server_id
 - authenticator_id
-- base_url
+- base_url (required)
 - behavior_id
 - brand_id
 - bundle_id
@@ -125,754 +126,754 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 
 - users:
   - primary key: id
-  - fields: created(), email(), id(), last_login(), login(), status()
+  - fields: created(string), email(string), id(string), last_login(string), login(string), status(string)
 - groups:
   - primary key: id
-  - fields: created(), description(), id(), name()
+  - fields: created(string), description(string), id(string), name(string)
 - system_logs:
   - primary key: uuid
   - cursor: published
-  - fields: display_message(), event_type(), published(), uuid()
+  - fields: display_message(string), event_type(string), published(string), uuid(string)
 - well_known_app_authenticator_configuration:
   - primary key: name
-  - fields: appAuthenticatorEnrollEndpoint(), authenticatorId(), createdDate(), key(), lastUpdated(), name(), orgId(), settings(), supportedMethods(), type()
+  - fields: appAuthenticatorEnrollEndpoint(string), authenticatorId(string), createdDate(string), key(string), lastUpdated(string), name(string), orgId(string), settings(object), supportedMethods(array), type(string)
 - well_known_apple_app_site_association:
 - well_known_assetlinks_json:
 - well_known_okta_organization:
   - primary key: id
-  - fields: _links(), id(), pipeline()
+  - fields: _links(object), id(string), pipeline(string)
 - well_known_ssf_configuration:
-  - fields: authorization_schemes(), configuration_endpoint(), default_subjects(), delivery_methods_supported(), issuer(), jwks_uri(), spec_version(), verification_endpoint()
+  - fields: authorization_schemes(array), configuration_endpoint(string), default_subjects(string), delivery_methods_supported(array), issuer(string), jwks_uri(string), spec_version(string), verification_endpoint(string)
 - well_known_webauthn:
 - api_v1_agent_pools:
   - primary key: id
-  - fields: _links(), agents(), disruptedAgents(), id(), inactiveAgents(), name(), operationalStatus(), type()
+  - fields: _links(object), agents(array), disruptedAgents(integer), id(string), inactiveAgents(integer), name(string), operationalStatus(string), type(string)
 - api_v1_agent_pools_pool_id_updates:
   - primary key: id
-  - fields: _links(), agentType(), agents(), enabled(), id(), name(), notifyAdmin(), reason(), schedule(), sortOrder(), status(), targetVersion()
+  - fields: _links(object), agentType(string), agents(array), enabled(boolean), id(string), name(string), notifyAdmin(boolean), reason(string), schedule(object), sortOrder(integer), status(string), targetVersion(string)
 - api_v1_agent_pools_pool_id_updates_settings:
-  - fields: agentType(), continueOnError(), latestVersion(), minimalSupportedVersion(), poolId(), poolName(), releaseChannel()
+  - fields: agentType(string), continueOnError(boolean), latestVersion(string), minimalSupportedVersion(string), poolId(string), poolName(string), releaseChannel(string)
 - api_v1_agent_pools_pool_id_updates_update_id:
   - primary key: id
-  - fields: _links(), agentType(), agents(), enabled(), id(), name(), notifyAdmin(), reason(), schedule(), sortOrder(), status(), targetVersion()
+  - fields: _links(object), agentType(string), agents(array), enabled(boolean), id(string), name(string), notifyAdmin(boolean), reason(string), schedule(object), sortOrder(integer), status(string), targetVersion(string)
 - api_v1_api_tokens:
   - primary key: id
-  - fields: _link(), clientName(), created(), expiresAt(), id(), lastUpdated(), name(), network(), tokenWindow(), userId()
+  - fields: _link(object), clientName(string), created(string), expiresAt(string), id(string), lastUpdated(string), name(string), network(object), tokenWindow(string), userId(string)
 - api_v1_api_tokens_api_token_id:
   - primary key: id
-  - fields: _link(), clientName(), created(), expiresAt(), id(), lastUpdated(), name(), network(), tokenWindow(), userId()
+  - fields: _link(object), clientName(string), created(string), expiresAt(string), id(string), lastUpdated(string), name(string), network(object), tokenWindow(string), userId(string)
 - api_v1_apps:
   - primary key: id
-  - fields: _embedded(), _links(), accessibility(), created(), expressConfiguration(), features(), id(), label(), lastUpdated(), licensing(), orn(), profile(), signOnMode(), status(), universalLogout(), visibility()
+  - fields: _embedded(object), _links(object), accessibility(object), created(string), expressConfiguration(object), features(array), id(string), label(string), lastUpdated(string), licensing(object), orn(string), profile(object), signOnMode(string), status(string), universalLogout(object), visibility(object)
 - api_v1_apps_app_id:
   - primary key: id
-  - fields: _embedded(), _links(), accessibility(), created(), expressConfiguration(), features(), id(), label(), lastUpdated(), licensing(), orn(), profile(), signOnMode(), status(), universalLogout(), visibility()
+  - fields: _embedded(object), _links(object), accessibility(object), created(string), expressConfiguration(object), features(array), id(string), label(string), lastUpdated(string), licensing(object), orn(string), profile(object), signOnMode(string), status(string), universalLogout(object), visibility(object)
 - api_v1_apps_app_id_connections_default:
-  - fields: _links(), authScheme(), baseUrl(), profile(), status()
+  - fields: _links(object), authScheme(string), baseUrl(string), profile(object), status(string)
 - api_v1_apps_app_id_connections_default_jwks:
-  - fields: jwks()
+  - fields: jwks(object)
 - api_v1_apps_app_id_credentials_csrs:
   - primary key: id
-  - fields: _links(), created(), csr(), id(), kty()
+  - fields: _links(object), created(string), csr(string), id(string), kty(string)
 - api_v1_apps_app_id_credentials_csrs_csr_id:
   - primary key: id
-  - fields: _links(), created(), csr(), id(), kty()
+  - fields: _links(object), created(string), csr(string), id(string), kty(string)
 - api_v1_apps_app_id_credentials_jwks:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated()
+  - fields: _links(object), created(string), id(string), lastUpdated(string)
 - api_v1_apps_app_id_credentials_jwks_key_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated()
+  - fields: _links(object), created(string), id(string), lastUpdated(string)
 - api_v1_apps_app_id_credentials_keys:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_apps_app_id_credentials_keys_key_id:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_apps_app_id_credentials_secrets:
   - primary key: id
-  - fields: _links(), client_secret(), created(), id(), lastUpdated(), secret_hash(), status()
+  - fields: _links(object), client_secret(string), created(string), id(string), lastUpdated(string), secret_hash(string), status(string)
 - api_v1_apps_app_id_credentials_secrets_secret_id:
   - primary key: id
-  - fields: _links(), client_secret(), created(), id(), lastUpdated(), secret_hash(), status()
+  - fields: _links(object), client_secret(string), created(string), id(string), lastUpdated(string), secret_hash(string), status(string)
 - api_v1_apps_app_id_cwo_connections:
   - primary key: id
-  - fields: created(), id(), lastUpdated(), requestingAppInstanceId(), resourceAppInstanceId(), status()
+  - fields: created(string), id(string), lastUpdated(string), requestingAppInstanceId(string), resourceAppInstanceId(string), status(string)
 - api_v1_apps_app_id_cwo_connections_connection_id:
   - primary key: id
-  - fields: created(), id(), lastUpdated(), requestingAppInstanceId(), resourceAppInstanceId(), status()
+  - fields: created(string), id(string), lastUpdated(string), requestingAppInstanceId(string), resourceAppInstanceId(string), status(string)
 - api_v1_apps_app_id_features:
   - primary key: name
-  - fields: _links(), description(), name(), status()
+  - fields: _links(object), description(string), name(string), status(string)
 - api_v1_apps_app_id_features_feature_name:
   - primary key: name
-  - fields: _links(), description(), name(), status()
+  - fields: _links(object), description(string), name(string), status(string)
 - api_v1_apps_app_id_federated_claims:
   - primary key: id
-  - fields: created(), expression(), id(), lastUpdated(), name()
+  - fields: created(string), expression(string), id(string), lastUpdated(string), name(string)
 - api_v1_apps_app_id_federated_claims_claim_id:
   - primary key: name
-  - fields: expression(), name()
+  - fields: expression(string), name(string)
 - api_v1_apps_app_id_grants:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), createdBy(), id(), issuer(), lastUpdated(), scopeId(), source(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), createdBy(object), id(string), issuer(string), lastUpdated(string), scopeId(string), source(string), status(string), userId(string)
 - api_v1_apps_app_id_grants_grant_id:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), createdBy(), id(), issuer(), lastUpdated(), scopeId(), source(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), createdBy(object), id(string), issuer(string), lastUpdated(string), scopeId(string), source(string), status(string), userId(string)
 - api_v1_apps_app_id_group_push_mappings:
   - primary key: id
-  - fields: _links(), appConfig(), created(), errorSummary(), id(), lastPush(), lastUpdated(), sourceGroupId(), status(), targetGroupId()
+  - fields: _links(object), appConfig(object), created(string), errorSummary(string), id(string), lastPush(string), lastUpdated(string), sourceGroupId(string), status(string), targetGroupId(string)
 - api_v1_apps_app_id_group_push_mappings_mapping_id:
   - primary key: id
-  - fields: _links(), appConfig(), created(), errorSummary(), id(), lastPush(), lastUpdated(), sourceGroupId(), status(), targetGroupId()
+  - fields: _links(object), appConfig(object), created(string), errorSummary(string), id(string), lastPush(string), lastUpdated(string), sourceGroupId(string), status(string), targetGroupId(string)
 - api_v1_apps_app_id_groups:
   - primary key: id
-  - fields: _embedded(), _links(), id(), lastUpdated(), priority(), profile()
+  - fields: _embedded(object), _links(object), id(string), lastUpdated(string), priority(integer), profile(object)
 - api_v1_apps_app_id_groups_group_id:
   - primary key: id
-  - fields: _embedded(), _links(), id(), lastUpdated(), priority(), profile()
+  - fields: _embedded(object), _links(object), id(string), lastUpdated(string), priority(integer), profile(object)
 - api_v1_apps_app_id_tokens:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_apps_app_id_tokens_token_id:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_apps_app_id_users:
   - primary key: id
-  - fields: _embedded(), _links(), created(), credentials(), externalId(), id(), lastSync(), lastUpdated(), passwordChanged(), profile(), scope(), status(), statusChanged(), syncState()
+  - fields: _embedded(object), _links(object), created(string), credentials(object), externalId(string), id(string), lastSync(string), lastUpdated(string), passwordChanged(string), profile(object), scope(string), status(string), statusChanged(string), syncState(string)
 - api_v1_apps_app_id_users_user_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), credentials(), externalId(), id(), lastSync(), lastUpdated(), passwordChanged(), profile(), scope(), status(), statusChanged(), syncState()
+  - fields: _embedded(object), _links(object), created(string), credentials(object), externalId(string), id(string), lastSync(string), lastUpdated(string), passwordChanged(string), profile(object), scope(string), status(string), statusChanged(string), syncState(string)
 - api_v1_authenticators:
   - primary key: id
-  - fields: _links(), created(), description(), id(), key(), lastUpdated(), name(), status(), type()
+  - fields: _links(object), created(string), description(string), id(string), key(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_authenticators_authenticator_id:
   - primary key: id
-  - fields: _links(), created(), description(), id(), key(), lastUpdated(), name(), status(), type()
+  - fields: _links(object), created(string), description(string), id(string), key(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_authenticators_authenticator_id_aaguids:
   - primary key: name
-  - fields: _links(), aaguid(), attestationRootCertificates(), authenticatorCharacteristics(), name()
+  - fields: _links(object), aaguid(string), attestationRootCertificates(array), authenticatorCharacteristics(object), name(string)
 - api_v1_authenticators_authenticator_id_aaguids_aaguid:
   - primary key: name
-  - fields: _links(), aaguid(), attestationRootCertificates(), authenticatorCharacteristics(), name()
+  - fields: _links(object), aaguid(string), attestationRootCertificates(array), authenticatorCharacteristics(object), name(string)
 - api_v1_authenticators_authenticator_id_methods:
-  - fields: _links(), status(), type()
+  - fields: _links(object), status(string), type(string)
 - api_v1_authenticators_authenticator_id_methods_method_type:
-  - fields: _links(), status(), type()
+  - fields: _links(object), status(string), type(string)
 - api_v1_authorization_servers:
   - primary key: id
-  - fields: _links(), accessTokenEncryptedResponseAlgorithm(), audiences(), created(), credentials(), description(), id(), issuer(), issuerMode(), jwks(), jwks_uri(), lastUpdated(), name(), status()
+  - fields: _links(object), accessTokenEncryptedResponseAlgorithm(string), audiences(array), created(string), credentials(object), description(string), id(string), issuer(string), issuerMode(string), jwks(object), jwks_uri(string), lastUpdated(string), name(string), status(string)
 - api_v1_authorization_servers_auth_server_id:
   - primary key: id
-  - fields: _links(), accessTokenEncryptedResponseAlgorithm(), audiences(), created(), credentials(), description(), id(), issuer(), issuerMode(), jwks(), jwks_uri(), lastUpdated(), name(), status()
+  - fields: _links(object), accessTokenEncryptedResponseAlgorithm(string), audiences(array), created(string), credentials(object), description(string), id(string), issuer(string), issuerMode(string), jwks(object), jwks_uri(string), lastUpdated(string), name(string), status(string)
 - api_v1_authorization_servers_auth_server_id_associated_servers:
   - primary key: id
-  - fields: _links(), accessTokenEncryptedResponseAlgorithm(), audiences(), created(), credentials(), description(), id(), issuer(), issuerMode(), jwks(), jwks_uri(), lastUpdated(), name(), status()
+  - fields: _links(object), accessTokenEncryptedResponseAlgorithm(string), audiences(array), created(string), credentials(object), description(string), id(string), issuer(string), issuerMode(string), jwks(object), jwks_uri(string), lastUpdated(string), name(string), status(string)
 - api_v1_authorization_servers_auth_server_id_claims:
   - primary key: id
-  - fields: _links(), alwaysIncludeInToken(), claimType(), conditions(), group_filter_type(), id(), name(), status(), system(), value(), valueType()
+  - fields: _links(object), alwaysIncludeInToken(boolean), claimType(string), conditions(object), group_filter_type(string), id(string), name(string), status(string), system(boolean), value(string), valueType(string)
 - api_v1_authorization_servers_auth_server_id_claims_claim_id:
   - primary key: id
-  - fields: _links(), alwaysIncludeInToken(), claimType(), conditions(), group_filter_type(), id(), name(), status(), system(), value(), valueType()
+  - fields: _links(object), alwaysIncludeInToken(boolean), claimType(string), conditions(object), group_filter_type(string), id(string), name(string), status(string), system(boolean), value(string), valueType(string)
 - api_v1_authorization_servers_auth_server_id_clients:
-  - fields: _links(), client_id(), client_name(), client_uri(), logo_uri()
+  - fields: _links(object), client_id(string), client_name(string), client_uri(string), logo_uri(string)
 - api_v1_authorization_servers_auth_server_id_clients_client_id_tokens:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_authorization_servers_auth_server_id_credentials_keys:
-  - fields: _links(), alg(), e(), kid(), kty(), n(), status(), use()
+  - fields: _links(object), alg(string), e(string), kid(string), kty(string), n(string), status(string), use(string)
 - api_v1_authorization_servers_auth_server_id_credentials_keys_key_id:
-  - fields: _links(), alg(), e(), kid(), kty(), n(), status(), use()
+  - fields: _links(object), alg(string), e(string), kid(string), kty(string), n(string), status(string), use(string)
 - api_v1_authorization_servers_auth_server_id_policies:
   - primary key: id
-  - fields: _links(), conditions(), created(), description(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), conditions(object), created(string), description(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_authorization_servers_auth_server_id_policies_policy_id:
   - primary key: id
-  - fields: _links(), conditions(), created(), description(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), conditions(object), created(string), description(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_authorization_servers_auth_server_id_policies_policy_id_rules:
   - primary key: id
-  - fields: _links(), actions(), conditions(), created(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), actions(object), conditions(object), created(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id:
   - primary key: id
-  - fields: _links(), actions(), conditions(), created(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), actions(object), conditions(object), created(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys:
   - primary key: id
-  - fields: _links(), created(), e(), id(), kid(), kty(), lastUpdated(), n(), status(), use()
+  - fields: _links(object), created(string), e(string), id(string), kid(string), kty(string), lastUpdated(string), n(string), status(string), use(string)
 - api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id:
   - primary key: id
-  - fields: _links(), created(), e(), id(), kid(), kty(), lastUpdated(), n(), status(), use()
+  - fields: _links(object), created(string), e(string), id(string), kid(string), kty(string), lastUpdated(string), n(string), status(string), use(string)
 - api_v1_authorization_servers_auth_server_id_scopes:
   - primary key: id
-  - fields: _links(), consent(), default(), description(), displayName(), id(), metadataPublish(), name(), optional(), system()
+  - fields: _links(object), consent(string), default(boolean), description(string), displayName(string), id(string), metadataPublish(string), name(string), optional(boolean), system(boolean)
 - api_v1_authorization_servers_auth_server_id_scopes_scope_id:
   - primary key: id
-  - fields: _links(), consent(), default(), description(), displayName(), id(), metadataPublish(), name(), optional(), system()
+  - fields: _links(object), consent(string), default(boolean), description(string), displayName(string), id(string), metadataPublish(string), name(string), optional(boolean), system(boolean)
 - api_v1_behaviors:
   - primary key: id
-  - fields: _link(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _link(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_behaviors_behavior_id:
   - primary key: id
-  - fields: _link(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _link(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_bot_protection_configuration:
-  - fields: _links(), enforcementType(), level(), mode(), supportedFlows()
+  - fields: _links(object), enforcementType(string), level(string), mode(string), supportedFlows(array)
 - api_v1_brands:
   - primary key: id
-  - fields: agreeToCustomPrivacyPolicy(), customPrivacyPolicyUrl(), defaultApp(), emailDomainId(), id(), isDefault(), locale(), name(), removePoweredByOkta()
+  - fields: agreeToCustomPrivacyPolicy(boolean), customPrivacyPolicyUrl(string), defaultApp(object), emailDomainId(string), id(string), isDefault(boolean), locale(string), name(string), removePoweredByOkta(boolean)
 - api_v1_brands_brand_id:
   - primary key: id
-  - fields: agreeToCustomPrivacyPolicy(), customPrivacyPolicyUrl(), defaultApp(), emailDomainId(), id(), isDefault(), locale(), name(), removePoweredByOkta()
+  - fields: agreeToCustomPrivacyPolicy(boolean), customPrivacyPolicyUrl(string), defaultApp(object), emailDomainId(string), id(string), isDefault(boolean), locale(string), name(string), removePoweredByOkta(boolean)
 - api_v1_brands_brand_id_domains:
-  - fields: domains()
+  - fields: domains(array)
 - api_v1_brands_brand_id_pages_error:
-  - fields: _embedded(), _links()
+  - fields: _embedded(object), _links(object)
 - api_v1_brands_brand_id_pages_error_customized:
-  - fields: contentSecurityPolicySetting()
+  - fields: contentSecurityPolicySetting(object)
 - api_v1_brands_brand_id_pages_error_default:
-  - fields: contentSecurityPolicySetting()
+  - fields: contentSecurityPolicySetting(object)
 - api_v1_brands_brand_id_pages_error_preview:
-  - fields: contentSecurityPolicySetting()
+  - fields: contentSecurityPolicySetting(object)
 - api_v1_brands_brand_id_pages_sign_in:
-  - fields: _embedded(), _links()
+  - fields: _embedded(object), _links(object)
 - api_v1_brands_brand_id_pages_sign_in_customized:
-  - fields: contentSecurityPolicySetting(), widgetCustomizations(), widgetVersion()
+  - fields: contentSecurityPolicySetting(object), widgetCustomizations(object), widgetVersion(string)
 - api_v1_brands_brand_id_pages_sign_in_default:
-  - fields: contentSecurityPolicySetting(), widgetCustomizations(), widgetVersion()
+  - fields: contentSecurityPolicySetting(object), widgetCustomizations(object), widgetVersion(string)
 - api_v1_brands_brand_id_pages_sign_in_preview:
-  - fields: contentSecurityPolicySetting(), widgetCustomizations(), widgetVersion()
+  - fields: contentSecurityPolicySetting(object), widgetCustomizations(object), widgetVersion(string)
 - api_v1_brands_brand_id_pages_sign_out_customized:
-  - fields: type(), url()
+  - fields: type(string), url(string)
 - api_v1_brands_brand_id_templates_email:
   - primary key: name
-  - fields: _embedded(), _links(), name()
+  - fields: _embedded(object), _links(object), name(string)
 - api_v1_brands_brand_id_templates_email_template_name:
   - primary key: name
-  - fields: _embedded(), _links(), name()
+  - fields: _embedded(object), _links(object), name(string)
 - api_v1_brands_brand_id_templates_email_template_name_customizations:
   - primary key: id
-  - fields: _links(), created(), id(), isDefault(), language(), lastUpdated()
+  - fields: _links(object), created(string), id(string), isDefault(boolean), language(string), lastUpdated(string)
 - api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id:
   - primary key: id
-  - fields: _links(), created(), id(), isDefault(), language(), lastUpdated()
+  - fields: _links(object), created(string), id(string), isDefault(boolean), language(string), lastUpdated(string)
 - api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id_preview:
-  - fields: _links(), body(), subject()
+  - fields: _links(object), body(string), subject(string)
 - api_v1_brands_brand_id_templates_email_template_name_default_content:
-  - fields: _links()
+  - fields: _links(object)
 - api_v1_brands_brand_id_templates_email_template_name_default_content_preview:
-  - fields: _links(), body(), subject()
+  - fields: _links(object), body(string), subject(string)
 - api_v1_brands_brand_id_templates_email_template_name_settings:
-  - fields: _links(), recipients()
+  - fields: _links(object), recipients(string)
 - api_v1_brands_brand_id_themes:
   - primary key: id
-  - fields: _links(), backgroundImage(), emailTemplateTouchPointVariant(), endUserDashboardTouchPointVariant(), errorPageTouchPointVariant(), favicon(), id(), loadingPageTouchPointVariant(), logo(), primaryColorContrastHex(), primaryColorHex(), secondaryColorContrastHex(), secondaryColorHex(), signInPageTouchPointVariant()
+  - fields: _links(object), backgroundImage(string), emailTemplateTouchPointVariant(string), endUserDashboardTouchPointVariant(string), errorPageTouchPointVariant(string), favicon(string), id(string), loadingPageTouchPointVariant(string), logo(string), primaryColorContrastHex(string), primaryColorHex(string), secondaryColorContrastHex(string), secondaryColorHex(string), signInPageTouchPointVariant(string)
 - api_v1_brands_brand_id_themes_theme_id:
   - primary key: id
-  - fields: _links(), backgroundImage(), emailTemplateTouchPointVariant(), endUserDashboardTouchPointVariant(), errorPageTouchPointVariant(), favicon(), id(), loadingPageTouchPointVariant(), logo(), primaryColorContrastHex(), primaryColorHex(), secondaryColorContrastHex(), secondaryColorHex(), signInPageTouchPointVariant()
+  - fields: _links(object), backgroundImage(string), emailTemplateTouchPointVariant(string), endUserDashboardTouchPointVariant(string), errorPageTouchPointVariant(string), favicon(string), id(string), loadingPageTouchPointVariant(string), logo(string), primaryColorContrastHex(string), primaryColorHex(string), secondaryColorContrastHex(string), secondaryColorHex(string), signInPageTouchPointVariant(string)
 - api_v1_brands_brand_id_well_known_uris:
-  - fields: _embedded(), _links()
+  - fields: _embedded(object), _links(object)
 - api_v1_brands_brand_id_well_known_uris_path:
-  - fields: _links(), representation()
+  - fields: _links(object), representation(object)
 - api_v1_brands_brand_id_well_known_uris_path_customized:
-  - fields: _links(), representation()
+  - fields: _links(object), representation(object)
 - api_v1_captchas:
   - primary key: id
-  - fields: _links(), id(), name(), secretKey(), siteKey(), type()
+  - fields: _links(object), id(string), name(string), secretKey(string), siteKey(string), type(string)
 - api_v1_captchas_captcha_id:
   - primary key: id
-  - fields: _links(), id(), name(), secretKey(), siteKey(), type()
+  - fields: _links(object), id(string), name(string), secretKey(string), siteKey(string), type(string)
 - api_v1_device_assurances:
   - primary key: id
-  - fields: _links(), createdBy(), createdDate(), devicePostureChecks(), displayRemediationMode(), gracePeriod(), id(), lastUpdate(), lastUpdatedBy(), name(), platform()
+  - fields: _links(object), createdBy(string), createdDate(string), devicePostureChecks(object), displayRemediationMode(string), gracePeriod(object), id(string), lastUpdate(string), lastUpdatedBy(string), name(string), platform(string)
 - api_v1_device_assurances_device_assurance_id:
   - primary key: id
-  - fields: _links(), createdBy(), createdDate(), devicePostureChecks(), displayRemediationMode(), gracePeriod(), id(), lastUpdate(), lastUpdatedBy(), name(), platform()
+  - fields: _links(object), createdBy(string), createdDate(string), devicePostureChecks(object), displayRemediationMode(string), gracePeriod(object), id(string), lastUpdate(string), lastUpdatedBy(string), name(string), platform(string)
 - api_v1_device_integrations:
   - primary key: id
-  - fields: _links(), displayName(), id(), metadata(), name(), platform(), status()
+  - fields: _links(object), displayName(string), id(string), metadata(object), name(string), platform(string), status(string)
 - api_v1_device_integrations_device_integration_id:
   - primary key: id
-  - fields: _links(), displayName(), id(), metadata(), name(), platform(), status()
+  - fields: _links(object), displayName(string), id(string), metadata(object), name(string), platform(string), status(string)
 - api_v1_device_posture_checks:
   - primary key: id
-  - fields: _links(), createdBy(), createdDate(), description(), id(), lastUpdate(), lastUpdatedBy(), mappingType(), name(), platform(), query(), remediationSettings(), type(), variableName()
+  - fields: _links(object), createdBy(string), createdDate(string), description(string), id(string), lastUpdate(string), lastUpdatedBy(string), mappingType(string), name(string), platform(string), query(string), remediationSettings(object), type(string), variableName(string)
 - api_v1_device_posture_checks_default:
   - primary key: id
-  - fields: _links(), createdBy(), createdDate(), description(), id(), lastUpdate(), lastUpdatedBy(), mappingType(), name(), platform(), query(), remediationSettings(), type(), variableName()
+  - fields: _links(object), createdBy(string), createdDate(string), description(string), id(string), lastUpdate(string), lastUpdatedBy(string), mappingType(string), name(string), platform(string), query(string), remediationSettings(object), type(string), variableName(string)
 - api_v1_device_posture_checks_posture_check_id:
   - primary key: id
-  - fields: _links(), createdBy(), createdDate(), description(), id(), lastUpdate(), lastUpdatedBy(), mappingType(), name(), platform(), query(), remediationSettings(), type(), variableName()
+  - fields: _links(object), createdBy(string), createdDate(string), description(string), id(string), lastUpdate(string), lastUpdatedBy(string), mappingType(string), name(string), platform(string), query(string), remediationSettings(object), type(string), variableName(string)
 - api_v1_devices:
-  - fields: _embedded()
+  - fields: _embedded(object)
 - api_v1_devices_device_id:
-  - fields: providers()
+  - fields: providers(array)
 - api_v1_devices_device_id_users:
-  - fields: created(), managementStatus(), screenLockType(), user()
+  - fields: created(string), managementStatus(string), screenLockType(string), user(object)
 - api_v1_directories_app_instance_id_groups_group_id_query_result_id:
   - primary key: id
-  - fields: id(), profile()
+  - fields: id(string), profile(object)
 - api_v1_domains:
-  - fields: domains()
+  - fields: domains(array)
 - api_v1_domains_domain_id:
   - primary key: id
-  - fields: _links(), brandId(), certificateSourceType(), dnsRecords(), domain(), id(), publicCertificate(), validationStatus()
+  - fields: _links(object), brandId(string), certificateSourceType(string), dnsRecords(array), domain(string), id(string), publicCertificate(object), validationStatus(string)
 - api_v1_dr_status:
-  - fields: status()
+  - fields: status(array)
 - api_v1_dr_status_domain:
-  - fields: status()
+  - fields: status(array)
 - api_v1_email_domains:
-  - fields: displayName(), userName()
+  - fields: displayName(string), userName(string)
 - api_v1_email_domains_email_domain_id:
-  - fields: displayName(), userName()
+  - fields: displayName(string), userName(string)
 - api_v1_email_servers:
-  - fields: email-servers()
+  - fields: email-servers(array)
 - api_v1_email_servers_email_server_id:
   - primary key: id
-  - fields: alias(), authType(), enabled(), host(), id(), port(), username()
+  - fields: alias(string), authType(string), enabled(boolean), host(string), id(string), port(integer), username(string)
 - api_v1_event_hooks:
   - primary key: id
-  - fields: _links(), channel(), created(), createdBy(), description(), events(), id(), lastUpdated(), name(), status(), verificationStatus()
+  - fields: _links(object), channel(object), created(string), createdBy(string), description(string), events(object), id(string), lastUpdated(string), name(string), status(string), verificationStatus(string)
 - api_v1_event_hooks_event_hook_id:
   - primary key: id
-  - fields: _links(), channel(), created(), createdBy(), description(), events(), id(), lastUpdated(), name(), status(), verificationStatus()
+  - fields: _links(object), channel(object), created(string), createdBy(string), description(string), events(object), id(string), lastUpdated(string), name(string), status(string), verificationStatus(string)
 - api_v1_features:
   - primary key: id
-  - fields: _links(), description(), id(), name(), stage(), status(), type()
+  - fields: _links(object), description(string), id(string), name(string), stage(object), status(string), type(string)
 - api_v1_features_feature_id:
   - primary key: id
-  - fields: _links(), description(), id(), name(), stage(), status(), type()
+  - fields: _links(object), description(string), id(string), name(string), stage(object), status(string), type(string)
 - api_v1_features_feature_id_dependencies:
   - primary key: id
-  - fields: _links(), description(), id(), name(), stage(), status(), type()
+  - fields: _links(object), description(string), id(string), name(string), stage(object), status(string), type(string)
 - api_v1_features_feature_id_dependents:
   - primary key: id
-  - fields: _links(), description(), id(), name(), stage(), status(), type()
+  - fields: _links(object), description(string), id(string), name(string), stage(object), status(string), type(string)
 - api_v1_first_party_app_settings_app_name:
-  - fields: sessionIdleTimeoutMinutes(), sessionMaxLifetimeMinutes()
+  - fields: sessionIdleTimeoutMinutes(integer), sessionMaxLifetimeMinutes(integer)
 - api_v1_groups_rules:
   - primary key: id
-  - fields: _embedded(), actions(), conditions(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _embedded(object), actions(object), conditions(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_groups_rules_group_rule_id:
   - primary key: id
-  - fields: _embedded(), actions(), conditions(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _embedded(object), actions(object), conditions(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_groups_group_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastMembershipUpdated(), lastUpdated(), objectClass(), profile(), type()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastMembershipUpdated(string), lastUpdated(string), objectClass(array), profile(object), type(string)
 - api_v1_groups_group_id_apps:
   - primary key: id
-  - fields: _embedded(), _links(), accessibility(), created(), expressConfiguration(), features(), id(), label(), lastUpdated(), licensing(), orn(), profile(), signOnMode(), status(), universalLogout(), visibility()
+  - fields: _embedded(object), _links(object), accessibility(object), created(string), expressConfiguration(object), features(array), id(string), label(string), lastUpdated(string), licensing(object), orn(string), profile(object), signOnMode(string), status(string), universalLogout(object), visibility(object)
 - api_v1_groups_group_id_owners:
   - primary key: id
-  - fields: displayName(), id(), lastUpdated(), originId(), originType(), resolved(), type()
+  - fields: displayName(string), id(string), lastUpdated(string), originId(string), originType(string), resolved(boolean), type(string)
 - api_v1_groups_group_id_roles:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - api_v1_groups_group_id_roles_role_assignment_id:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps:
   - primary key: id
-  - fields: _links(), category(), description(), displayName(), features(), id(), lastUpdated(), name(), signOnModes(), status(), verificationStatus(), website()
+  - fields: _links(object), category(string), description(string), displayName(string), features(array), id(string), lastUpdated(string), name(string), signOnModes(array), status(string), verificationStatus(string), website(string)
 - api_v1_groups_group_id_roles_role_assignment_id_targets_groups:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastMembershipUpdated(), lastUpdated(), objectClass(), profile(), type()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastMembershipUpdated(string), lastUpdated(string), objectClass(array), profile(object), type(string)
 - api_v1_groups_group_id_users:
   - primary key: id
-  - fields: _embedded(), _links(), activated(), created(), credentials(), id(), lastLogin(), lastUpdated(), passwordChanged(), profile(), realmId(), status(), statusChanged(), transitioningToStatus(), type()
+  - fields: _embedded(object), _links(object), activated(string), created(string), credentials(object), id(string), lastLogin(string), lastUpdated(string), passwordChanged(string), profile(object), realmId(string), status(string), statusChanged(string), transitioningToStatus(string), type(object)
 - api_v1_hook_keys:
   - primary key: id
-  - fields: created(), id(), isUsed(), keyId(), lastUpdated(), name()
+  - fields: created(string), id(string), isUsed(string), keyId(string), lastUpdated(string), name(string)
 - api_v1_hook_keys_public_key_id:
-  - fields: alg(), e(), kid(), kty(), n(), use()
+  - fields: alg(string), e(string), kid(string), kty(string), n(string), use(string)
 - api_v1_hook_keys_id:
   - primary key: id
-  - fields: created(), id(), isUsed(), keyId(), lastUpdated(), name()
+  - fields: created(string), id(string), isUsed(string), keyId(string), lastUpdated(string), name(string)
 - api_v1_iam_assignees_users:
   - primary key: id
-  - fields: _links(), id(), orn()
+  - fields: _links(object), id(string), orn(string)
 - api_v1_iam_governance_bundles:
-  - fields: _links(), bundles()
+  - fields: _links(object), bundles(array)
 - api_v1_iam_governance_bundles_bundle_id:
   - primary key: id
-  - fields: _links(), description(), id(), name(), orn(), status()
+  - fields: _links(object), description(string), id(string), name(string), orn(string), status(string)
 - api_v1_iam_governance_bundles_bundle_id_entitlements:
-  - fields: _links(), entitlements()
+  - fields: _links(object), entitlements(array)
 - api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values:
-  - fields: _links(), entitlementValues()
+  - fields: _links(object), entitlementValues(array)
 - api_v1_iam_governance_opt_in:
-  - fields: _links(), optInStatus()
+  - fields: _links(object), optInStatus(string)
 - api_v1_iam_resource_sets:
-  - fields: _links(), resource-sets()
+  - fields: _links(object), resource-sets(array)
 - api_v1_iam_resource_sets_resource_set_id_or_label:
   - primary key: id
-  - fields: _links(), created(), description(), id(), label(), lastUpdated()
+  - fields: _links(object), created(string), description(string), id(string), label(string), lastUpdated(string)
 - api_v1_iam_resource_sets_resource_set_id_or_label_bindings:
   - primary key: id
-  - fields: _links(), id()
+  - fields: _links(object), id(string)
 - api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label:
   - primary key: id
-  - fields: _links(), id()
+  - fields: _links(object), id(string)
 - api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members:
-  - fields: _links(), members()
+  - fields: _links(object), members(array)
 - api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated()
+  - fields: _links(object), created(string), id(string), lastUpdated(string)
 - api_v1_iam_resource_sets_resource_set_id_or_label_resources:
-  - fields: _links(), resources()
+  - fields: _links(object), resources(array)
 - api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id:
   - primary key: id
-  - fields: _links(), conditions(), created(), id(), lastUpdated(), orn()
+  - fields: _links(object), conditions(object), created(string), id(string), lastUpdated(string), orn(string)
 - api_v1_iam_roles:
   - primary key: id
-  - fields: _links(), created(), description(), id(), label(), lastUpdated()
+  - fields: _links(object), created(string), description(string), id(string), label(string), lastUpdated(string)
 - api_v1_iam_roles_role_id_or_label:
   - primary key: id
-  - fields: _links(), created(), description(), id(), label(), lastUpdated()
+  - fields: _links(object), created(string), description(string), id(string), label(string), lastUpdated(string)
 - api_v1_iam_roles_role_id_or_label_permissions:
-  - fields: _links(), conditions(), created(), label(), lastUpdated()
+  - fields: _links(object), conditions(object), created(string), label(string), lastUpdated(string)
 - api_v1_iam_roles_role_id_or_label_permissions_permission_type:
-  - fields: _links(), conditions(), created(), label(), lastUpdated()
+  - fields: _links(object), conditions(object), created(string), label(string), lastUpdated(string)
 - api_v1_identity_sources_identity_source_id_groups_group_or_external_id:
   - primary key: id
-  - fields: externalId(), id(), profile()
+  - fields: externalId(string), id(string), profile(object)
 - api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership:
-  - fields: memberExternalIds()
+  - fields: memberExternalIds(array)
 - api_v1_identity_sources_identity_source_id_sessions:
   - primary key: id
-  - fields: created(), id(), identitySourceId(), importType(), lastUpdated(), status()
+  - fields: created(string), id(string), identitySourceId(string), importType(string), lastUpdated(string), status(string)
 - api_v1_identity_sources_identity_source_id_sessions_session_id:
   - primary key: id
-  - fields: created(), id(), identitySourceId(), importType(), lastUpdated(), status()
+  - fields: created(string), id(string), identitySourceId(string), importType(string), lastUpdated(string), status(string)
 - api_v1_identity_sources_identity_source_id_users_external_id:
   - primary key: id
-  - fields: created(), externalId(), id(), lastUpdated(), profile()
+  - fields: created(string), externalId(string), id(string), lastUpdated(string), profile(object)
 - api_v1_idps:
   - primary key: id
-  - fields: _links(), created(), id(), issuerMode(), lastUpdated(), name(), policy(), properties(), protocol(), status(), type()
+  - fields: _links(object), created(string), id(string), issuerMode(string), lastUpdated(string), name(string), policy(object), properties(object), protocol(object), status(string), type(string)
 - api_v1_idps_credentials_keys:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_idps_credentials_keys_kid:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_idps_idp_id:
   - primary key: id
-  - fields: _links(), created(), id(), issuerMode(), lastUpdated(), name(), policy(), properties(), protocol(), status(), type()
+  - fields: _links(object), created(string), id(string), issuerMode(string), lastUpdated(string), name(string), policy(object), properties(object), protocol(object), status(string), type(string)
 - api_v1_idps_idp_id_credentials_csrs:
   - primary key: id
-  - fields: _links(), created(), csr(), id(), kty()
+  - fields: _links(object), created(string), csr(string), id(string), kty(string)
 - api_v1_idps_idp_id_credentials_csrs_idp_csr_id:
   - primary key: id
-  - fields: _links(), created(), csr(), id(), kty()
+  - fields: _links(object), created(string), csr(string), id(string), kty(string)
 - api_v1_idps_idp_id_credentials_keys:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_idps_idp_id_credentials_keys_active:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_idps_idp_id_credentials_keys_kid:
-  - fields: created(), e(), expiresAt(), kid(), kty(), lastUpdated(), n(), use(), x5c(), x5t#S256()
+  - fields: created(string), e(string), expiresAt(string), kid(string), kty(string), lastUpdated(string), n(string), use(string), x5c(array), x5t#S256(string)
 - api_v1_idps_idp_id_users:
   - primary key: id
-  - fields: _embedded(), _links(), created(), externalId(), id(), lastUpdated(), profile()
+  - fields: _embedded(object), _links(object), created(string), externalId(string), id(string), lastUpdated(string), profile(object)
 - api_v1_idps_idp_id_users_user_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), externalId(), id(), lastUpdated(), profile()
+  - fields: _embedded(object), _links(object), created(string), externalId(string), id(string), lastUpdated(string), profile(object)
 - api_v1_idps_idp_id_users_user_id_credentials_tokens:
   - primary key: id
-  - fields: expiresAt(), id(), scopes(), token(), tokenAuthScheme(), tokenType()
+  - fields: expiresAt(string), id(string), scopes(array), token(string), tokenAuthScheme(string), tokenType(string)
 - api_v1_inline_hooks:
   - primary key: id
-  - fields: _links(), channel(), created(), id(), lastUpdated(), name(), status(), type(), version()
+  - fields: _links(object), channel(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string), version(string)
 - api_v1_inline_hooks_inline_hook_id:
   - primary key: id
-  - fields: _links(), channel(), created(), id(), lastUpdated(), name(), status(), type(), version()
+  - fields: _links(object), channel(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string), version(string)
 - api_v1_log_streams:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_log_streams_log_stream_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), status(), type()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), status(string), type(string)
 - api_v1_mappings:
   - primary key: id
-  - fields: _links(), id(), source(), target()
+  - fields: _links(object), id(string), source(object), target(object)
 - api_v1_mappings_mapping_id:
   - primary key: id
-  - fields: _links(), id(), properties(), source(), target()
+  - fields: _links(object), id(string), properties(object), source(object), target(object)
 - api_v1_meta_schemas_apps_app_id_default:
   - primary key: id
-  - fields: $schema(), _links(), created(), definitions(), id(), lastUpdated(), name(), properties(), title(), type()
+  - fields: $schema(string), _links(object), created(string), definitions(object), id(string), lastUpdated(string), name(string), properties(object), title(string), type(string)
 - api_v1_meta_schemas_group_default:
   - primary key: id
-  - fields: $schema(), _links(), created(), definitions(), description(), id(), lastUpdated(), name(), properties(), title(), type()
+  - fields: $schema(string), _links(object), created(string), definitions(object), description(string), id(string), lastUpdated(string), name(string), properties(object), title(string), type(string)
 - api_v1_meta_schemas_log_stream:
   - primary key: id
-  - fields: $schema(), _links(), errorMessage(), id(), oneOf(), pattern(), properties(), required(), title(), type()
+  - fields: $schema(string), _links(object), errorMessage(object), id(string), oneOf(array), pattern(string), properties(object), required(array), title(string), type(string)
 - api_v1_meta_schemas_log_stream_log_stream_type:
   - primary key: id
-  - fields: $schema(), _links(), errorMessage(), id(), oneOf(), pattern(), properties(), required(), title(), type()
+  - fields: $schema(string), _links(object), errorMessage(object), id(string), oneOf(array), pattern(string), properties(object), required(array), title(string), type(string)
 - api_v1_meta_schemas_user_linked_objects:
-  - fields: _links(), associated(), primary()
+  - fields: _links(object), associated(object), primary(object)
 - api_v1_meta_schemas_user_linked_objects_linked_object_name:
-  - fields: _links(), associated(), primary()
+  - fields: _links(object), associated(object), primary(object)
 - api_v1_meta_schemas_user_schema_id:
   - primary key: id
-  - fields: $schema(), _links(), created(), definitions(), id(), lastUpdated(), name(), properties(), title(), type()
+  - fields: $schema(string), _links(object), created(string), definitions(object), id(string), lastUpdated(string), name(string), properties(object), title(string), type(string)
 - api_v1_meta_types_user:
   - primary key: id
-  - fields: _links(), created(), createdBy(), default(), description(), displayName(), id(), lastUpdated(), lastUpdatedBy(), name()
+  - fields: _links(object), created(string), createdBy(string), default(boolean), description(string), displayName(string), id(string), lastUpdated(string), lastUpdatedBy(string), name(string)
 - api_v1_meta_types_user_type_id:
   - primary key: id
-  - fields: _links(), created(), createdBy(), default(), description(), displayName(), id(), lastUpdated(), lastUpdatedBy(), name()
+  - fields: _links(object), created(string), createdBy(string), default(boolean), description(string), displayName(string), id(string), lastUpdated(string), lastUpdatedBy(string), name(string)
 - api_v1_meta_uischemas:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), uiSchema()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), uiSchema(object)
 - api_v1_meta_uischemas_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), uiSchema()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), uiSchema(object)
 - api_v1_org:
   - primary key: id
-  - fields: _links(), address1(), address2(), city(), companyName(), country(), created(), endUserSupportHelpURL(), expiresAt(), id(), lastUpdated(), phoneNumber(), postalCode(), state(), status(), subdomain(), supportPhoneNumber(), website()
+  - fields: _links(object), address1(string), address2(string), city(string), companyName(string), country(string), created(string), endUserSupportHelpURL(string), expiresAt(string), id(string), lastUpdated(string), phoneNumber(string), postalCode(string), state(string), status(string), subdomain(string), supportPhoneNumber(string), website(string)
 - api_v1_org_captcha:
-  - fields: _links(), captchaId(), enabledPages()
+  - fields: _links(object), captchaId(string), enabledPages(array)
 - api_v1_org_contacts:
-  - fields: _links(), contactType()
+  - fields: _links(object), contactType(string)
 - api_v1_org_contacts_contact_type:
-  - fields: _links(), userId()
+  - fields: _links(object), userId(string)
 - api_v1_org_factors_yubikey_token_tokens:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastUpdated(), lastVerified(), profile(), status()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastUpdated(string), lastVerified(string), profile(object), status(string)
 - api_v1_org_factors_yubikey_token_tokens_token_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastUpdated(), lastVerified(), profile(), status()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastUpdated(string), lastVerified(string), profile(object), status(string)
 - api_v1_org_org_settings_third_party_admin_setting:
-  - fields: thirdPartyAdmin()
+  - fields: thirdPartyAdmin(boolean)
 - api_v1_org_preferences:
-  - fields: _links(), showEndUserFooter()
+  - fields: _links(object), showEndUserFooter(boolean)
 - api_v1_org_privacy_aerial:
-  - fields: _links(), accountId(), grantedBy(), grantedDate()
+  - fields: _links(object), accountId(string), grantedBy(string), grantedDate(string)
 - api_v1_org_privacy_okta_communication:
-  - fields: _links(), optOutEmailUsers()
+  - fields: _links(object), optOutEmailUsers(boolean)
 - api_v1_org_privacy_okta_support:
-  - fields: _links(), caseNumber(), expiration(), support()
+  - fields: _links(object), caseNumber(string), expiration(string), support(string)
 - api_v1_org_privacy_okta_support_cases:
-  - fields: supportCases()
+  - fields: supportCases(array)
 - api_v1_org_settings_auto_assign_admin_app_setting:
-  - fields: autoAssignAdminAppSetting()
+  - fields: autoAssignAdminAppSetting(boolean)
 - api_v1_org_settings_client_privileges_setting:
-  - fields: clientPrivilegesSetting()
+  - fields: clientPrivilegesSetting(boolean)
 - api_v1_policies:
   - primary key: id
-  - fields: _embedded(), _links(), created(), description(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _embedded(object), _links(object), created(string), description(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_policies_policy_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), description(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _embedded(object), _links(object), created(string), description(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_policies_policy_id_app:
   - primary key: id
-  - fields: _embedded(), _links(), accessibility(), created(), expressConfiguration(), features(), id(), label(), lastUpdated(), licensing(), orn(), profile(), signOnMode(), status(), universalLogout(), visibility()
+  - fields: _embedded(object), _links(object), accessibility(object), created(string), expressConfiguration(object), features(array), id(string), label(string), lastUpdated(string), licensing(object), orn(string), profile(object), signOnMode(string), status(string), universalLogout(object), visibility(object)
 - api_v1_policies_policy_id_mappings:
   - primary key: id
-  - fields: _links(), id()
+  - fields: _links(object), id(string)
 - api_v1_policies_policy_id_mappings_mapping_id:
   - primary key: id
-  - fields: _links(), id()
+  - fields: _links(object), id(string)
 - api_v1_policies_policy_id_rules:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_policies_policy_id_rules_rule_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), priority(), status(), system(), type()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), priority(integer), status(string), system(boolean), type(string)
 - api_v1_principal_rate_limits:
   - primary key: id
-  - fields: createdBy(), createdDate(), defaultConcurrencyPercentage(), defaultPercentage(), id(), lastUpdate(), lastUpdatedBy(), orgId(), principalId(), principalType()
+  - fields: createdBy(string), createdDate(string), defaultConcurrencyPercentage(integer), defaultPercentage(integer), id(string), lastUpdate(string), lastUpdatedBy(string), orgId(string), principalId(string), principalType(string)
 - api_v1_principal_rate_limits_principal_rate_limit_id:
   - primary key: id
-  - fields: createdBy(), createdDate(), defaultConcurrencyPercentage(), defaultPercentage(), id(), lastUpdate(), lastUpdatedBy(), orgId(), principalId(), principalType()
+  - fields: createdBy(string), createdDate(string), defaultConcurrencyPercentage(integer), defaultPercentage(integer), id(string), lastUpdate(string), lastUpdatedBy(string), orgId(string), principalId(string), principalType(string)
 - api_v1_push_providers:
   - primary key: id
-  - fields: _links(), id(), lastUpdatedDate(), name(), providerType()
+  - fields: _links(object), id(string), lastUpdatedDate(string), name(string), providerType(string)
 - api_v1_push_providers_push_provider_id:
   - primary key: id
-  - fields: _links(), id(), lastUpdatedDate(), name(), providerType()
+  - fields: _links(object), id(string), lastUpdatedDate(string), name(string), providerType(string)
 - api_v1_rate_limit_settings_admin_notifications:
-  - fields: notificationsEnabled()
+  - fields: notificationsEnabled(boolean)
 - api_v1_rate_limit_settings_per_client:
-  - fields: defaultMode(), useCaseModeOverrides()
+  - fields: defaultMode(string), useCaseModeOverrides(object)
 - api_v1_rate_limit_settings_warning_threshold:
-  - fields: warningThreshold()
+  - fields: warningThreshold(integer)
 - api_v1_realm_assignments:
   - primary key: id
-  - fields: _links(), actions(), conditions(), created(), domains(), id(), isDefault(), lastUpdated(), name(), priority(), status()
+  - fields: _links(object), actions(object), conditions(object), created(string), domains(array), id(string), isDefault(boolean), lastUpdated(string), name(string), priority(integer), status(string)
 - api_v1_realm_assignments_operations:
-  - fields: _links(), assignmentOperation(), numUserMoved(), realmId(), realmName()
+  - fields: _links(object), assignmentOperation(object), numUserMoved(number), realmId(string), realmName(string)
 - api_v1_realm_assignments_assignment_id:
   - primary key: id
-  - fields: _links(), actions(), conditions(), created(), domains(), id(), isDefault(), lastUpdated(), name(), priority(), status()
+  - fields: _links(object), actions(object), conditions(object), created(string), domains(array), id(string), isDefault(boolean), lastUpdated(string), name(string), priority(integer), status(string)
 - api_v1_realms:
   - primary key: id
-  - fields: _links(), created(), id(), isDefault(), lastUpdated(), profile()
+  - fields: _links(object), created(string), id(string), isDefault(boolean), lastUpdated(string), profile(object)
 - api_v1_realms_realm_id:
   - primary key: id
-  - fields: _links(), created(), id(), isDefault(), lastUpdated(), profile()
+  - fields: _links(object), created(string), id(string), isDefault(boolean), lastUpdated(string), profile(object)
 - api_v1_roles_role_ref_subscriptions:
-  - fields: _links(), channels(), notificationType(), status()
+  - fields: _links(object), channels(array), notificationType(string), status(string)
 - api_v1_roles_role_ref_subscriptions_notification_type:
-  - fields: _links(), channels(), notificationType(), status()
+  - fields: _links(object), channels(array), notificationType(string), status(string)
 - api_v1_security_events_providers:
   - primary key: id
-  - fields: _links(), id(), name(), settings(), status(), type()
+  - fields: _links(object), id(string), name(string), settings(object), status(string), type(string)
 - api_v1_security_events_providers_security_event_provider_id:
   - primary key: id
-  - fields: _links(), id(), name(), settings(), status(), type()
+  - fields: _links(object), id(string), name(string), settings(object), status(string), type(string)
 - api_v1_sessions_session_id:
   - primary key: id
-  - fields: _links(), amr(), createdAt(), expiresAt(), id(), idp(), lastFactorVerification(), lastPasswordVerification(), login(), status(), userId()
+  - fields: _links(object), amr(array), createdAt(string), expiresAt(string), id(string), idp(object), lastFactorVerification(string), lastPasswordVerification(string), login(string), status(string), userId(string)
 - api_v1_ssf_stream:
-  - fields: aud(), delivery(), events_delivered(), events_requested(), events_supported(), format(), iss(), min_verification_interval(), stream_id()
+  - fields: aud(string), delivery(object), events_delivered(array), events_requested(array), events_supported(array), format(string), iss(string), min_verification_interval(integer), stream_id(string)
 - api_v1_ssf_stream_status:
-  - fields: status(), stream_id()
+  - fields: status(string), stream_id(string)
 - api_v1_telephony_providers:
   - primary key: id
-  - fields: enabled(), id(), isPrimaryProvider(), providerCapability(), providerName(), providerSettings(), providerSid()
+  - fields: enabled(boolean), id(string), isPrimaryProvider(boolean), providerCapability(string), providerName(string), providerSettings(object), providerSid(string)
 - api_v1_telephony_providers_custom_telephony_provider_id:
   - primary key: id
-  - fields: enabled(), id(), isPrimaryProvider(), providerCapability(), providerName(), providerSettings(), providerSid()
+  - fields: enabled(boolean), id(string), isPrimaryProvider(boolean), providerCapability(string), providerName(string), providerSettings(object), providerSid(string)
 - api_v1_templates_sms:
   - primary key: id
-  - fields: created(), id(), lastUpdated(), name(), template(), translations(), type()
+  - fields: created(string), id(string), lastUpdated(string), name(string), template(string), translations(object), type(string)
 - api_v1_templates_sms_template_id:
   - primary key: id
-  - fields: created(), id(), lastUpdated(), name(), template(), translations(), type()
+  - fields: created(string), id(string), lastUpdated(string), name(string), template(string), translations(object), type(string)
 - api_v1_threats_configuration:
-  - fields: _links(), action(), created(), excludeZones(), lastUpdated()
+  - fields: _links(object), action(string), created(string), excludeZones(array), lastUpdated(string)
 - api_v1_trusted_origins:
   - primary key: id
-  - fields: _links(), created(), createdBy(), id(), lastUpdated(), lastUpdatedBy(), name(), origin(), scopes(), status()
+  - fields: _links(object), created(string), createdBy(string), id(string), lastUpdated(string), lastUpdatedBy(string), name(string), origin(string), scopes(array), status(string)
 - api_v1_trusted_origins_trusted_origin_id:
-  - fields: allowedOktaApps(), type()
+  - fields: allowedOktaApps(array), type(string)
 - api_v1_users_id:
-  - fields: _embedded()
+  - fields: _embedded(object)
 - api_v1_users_id_app_links:
   - primary key: id
-  - fields: appAssignmentId(), appInstanceId(), appName(), credentialsSetup(), hidden(), id(), label(), linkUrl(), logoUrl(), sortOrder()
+  - fields: appAssignmentId(string), appInstanceId(string), appName(string), credentialsSetup(boolean), hidden(boolean), id(string), label(string), linkUrl(string), logoUrl(string), sortOrder(integer)
 - api_v1_users_id_blocks:
-  - fields: appliesTo(), type()
+  - fields: appliesTo(string), type(string)
 - api_v1_users_id_groups:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastMembershipUpdated(), lastUpdated(), objectClass(), profile(), type()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastMembershipUpdated(string), lastUpdated(string), objectClass(array), profile(object), type(string)
 - api_v1_users_id_idps:
   - primary key: id
-  - fields: _links(), created(), id(), issuerMode(), lastUpdated(), name(), policy(), properties(), protocol(), status(), type()
+  - fields: _links(object), created(string), id(string), issuerMode(string), lastUpdated(string), name(string), policy(object), properties(object), protocol(object), status(string), type(string)
 - api_v1_users_user_id_or_login_linked_objects_relationship_name:
-  - fields: _links()
+  - fields: _links(object)
 - api_v1_users_user_id_authenticator_enrollments:
   - primary key: id
-  - fields: _links(), created(), id(), key(), lastUpdated(), name(), profile(), status(), type()
+  - fields: _links(object), created(string), id(string), key(string), lastUpdated(string), name(string), profile(object), status(string), type(string)
 - api_v1_users_user_id_authenticator_enrollments_enrollment_id:
   - primary key: id
-  - fields: _links(), created(), id(), key(), lastUpdated(), name(), profile(), status(), type()
+  - fields: _links(object), created(string), id(string), key(string), lastUpdated(string), name(string), profile(object), status(string), type(string)
 - api_v1_users_user_id_classification:
-  - fields: lastUpdated(), type()
+  - fields: lastUpdated(string), type(string)
 - api_v1_users_user_id_clients:
-  - fields: _links(), client_id(), client_name(), client_uri(), logo_uri()
+  - fields: _links(object), client_id(string), client_name(string), client_uri(string), logo_uri(string)
 - api_v1_users_user_id_clients_client_id_grants:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), createdBy(), id(), issuer(), lastUpdated(), scopeId(), source(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), createdBy(object), id(string), issuer(string), lastUpdated(string), scopeId(string), source(string), status(string), userId(string)
 - api_v1_users_user_id_clients_client_id_tokens:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_users_user_id_clients_client_id_tokens_token_id:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), expiresAt(), id(), issuer(), lastUpdated(), scopes(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), expiresAt(string), id(string), issuer(string), lastUpdated(string), scopes(array), status(string), userId(string)
 - api_v1_users_user_id_devices:
-  - fields: created(), device(), deviceUserId()
+  - fields: created(string), device(object), deviceUserId(string)
 - api_v1_users_user_id_factors:
   - primary key: id
-  - fields: _embedded(), _links(), created(), factorType(), id(), lastUpdated(), profile(), provider(), status(), vendorName()
+  - fields: _embedded(object), _links(object), created(string), factorType(string), id(string), lastUpdated(string), profile(object), provider(string), status(string), vendorName(string)
 - api_v1_users_user_id_factors_catalog:
-  - fields: _embedded(), _links(), enrollment(), factorType(), provider(), status(), vendorName()
+  - fields: _embedded(object), _links(object), enrollment(string), factorType(string), provider(string), status(string), vendorName(string)
 - api_v1_users_user_id_factors_questions:
-  - fields: answer(), question(), questionText()
+  - fields: answer(string), question(string), questionText(string)
 - api_v1_users_user_id_factors_factor_id:
   - primary key: id
-  - fields: _embedded(), _links(), created(), factorType(), id(), lastUpdated(), profile(), provider(), status(), vendorName()
+  - fields: _embedded(object), _links(object), created(string), factorType(string), id(string), lastUpdated(string), profile(object), provider(string), status(string), vendorName(string)
 - api_v1_users_user_id_factors_factor_id_transactions_transaction_id:
-  - fields: factorResult()
+  - fields: factorResult(string)
 - api_v1_users_user_id_grants:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), createdBy(), id(), issuer(), lastUpdated(), scopeId(), source(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), createdBy(object), id(string), issuer(string), lastUpdated(string), scopeId(string), source(string), status(string), userId(string)
 - api_v1_users_user_id_grants_grant_id:
   - primary key: id
-  - fields: _embedded(), _links(), clientId(), created(), createdBy(), id(), issuer(), lastUpdated(), scopeId(), source(), status(), userId()
+  - fields: _embedded(object), _links(object), clientId(string), created(string), createdBy(object), id(string), issuer(string), lastUpdated(string), scopeId(string), source(string), status(string), userId(string)
 - api_v1_users_user_id_risk:
-  - fields: _links(), riskLevel()
+  - fields: _links(object), riskLevel(string)
 - api_v1_users_user_id_roles:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - api_v1_users_user_id_roles_role_assignment_id:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - api_v1_users_user_id_roles_role_assignment_id_governance:
-  - fields: _links(), grants()
+  - fields: _links(object), grants(array)
 - api_v1_users_user_id_roles_role_assignment_id_governance_grant_id:
-  - fields: _links(), bundleId(), expirationDate(), grantId(), type()
+  - fields: _links(object), bundleId(string), expirationDate(string), grantId(string), type(string)
 - api_v1_users_user_id_roles_role_assignment_id_governance_grant_id_resources:
-  - fields: _links(), resources()
+  - fields: _links(object), resources(array)
 - api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps:
   - primary key: id
-  - fields: _links(), category(), description(), displayName(), features(), id(), lastUpdated(), name(), signOnModes(), status(), verificationStatus(), website()
+  - fields: _links(object), category(string), description(string), displayName(string), features(array), id(string), lastUpdated(string), name(string), signOnModes(array), status(string), verificationStatus(string), website(string)
 - api_v1_users_user_id_roles_role_assignment_id_targets_groups:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastMembershipUpdated(), lastUpdated(), objectClass(), profile(), type()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastMembershipUpdated(string), lastUpdated(string), objectClass(array), profile(object), type(string)
 - api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets:
-  - fields: _links(), assignmentType(), expiration(), orn()
+  - fields: _links(object), assignmentType(string), expiration(string), orn(string)
 - api_v1_users_user_id_subscriptions:
-  - fields: _links(), channels(), notificationType(), status()
+  - fields: _links(object), channels(array), notificationType(string), status(string)
 - api_v1_users_user_id_subscriptions_notification_type:
-  - fields: _links(), channels(), notificationType(), status()
+  - fields: _links(object), channels(array), notificationType(string), status(string)
 - api_v1_zones:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), status(), system(), type(), usage()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), status(string), system(boolean), type(string), usage(string)
 - api_v1_zones_zone_id:
   - primary key: id
-  - fields: _links(), created(), id(), lastUpdated(), name(), status(), system(), type(), usage()
+  - fields: _links(object), created(string), id(string), lastUpdated(string), name(string), status(string), system(boolean), type(string), usage(string)
 - attack_protection_api_v1_authenticator_settings:
-  - fields: verifyKnowledgeSecondWhen2faRequired()
+  - fields: verifyKnowledgeSecondWhen2faRequired(boolean)
 - attack_protection_api_v1_user_lockout_settings:
-  - fields: preventBruteForceLockoutFromUnknownDevices()
+  - fields: preventBruteForceLockoutFromUnknownDevices(boolean)
 - integrations_api_v1_api_services:
   - primary key: id
-  - fields: _links(), configGuideUrl(), createdAt(), createdBy(), grantedScopes(), id(), name(), properties(), type()
+  - fields: _links(object), configGuideUrl(string), createdAt(string), createdBy(string), grantedScopes(array), id(string), name(string), properties(object), type(string)
 - integrations_api_v1_api_services_api_service_id:
   - primary key: id
-  - fields: _links(), configGuideUrl(), createdAt(), createdBy(), grantedScopes(), id(), name(), properties(), type()
+  - fields: _links(object), configGuideUrl(string), createdAt(string), createdBy(string), grantedScopes(array), id(string), name(string), properties(object), type(string)
 - integrations_api_v1_api_services_api_service_id_credentials_secrets:
   - primary key: id
-  - fields: _links(), client_secret(), created(), id(), lastUpdated(), secret_hash(), status()
+  - fields: _links(object), client_secret(string), created(string), id(string), lastUpdated(string), secret_hash(string), status(string)
 - oauth2_v1_clients_client_id_roles:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - oauth2_v1_clients_client_id_roles_role_assignment_id:
   - primary key: id
-  - fields: _embedded(), _links(), assignmentType(), created(), id(), label(), lastUpdated(), status(), type()
+  - fields: _embedded(object), _links(object), assignmentType(string), created(string), id(string), label(string), lastUpdated(string), status(string), type(string)
 - oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps:
   - primary key: id
-  - fields: _links(), category(), description(), displayName(), features(), id(), lastUpdated(), name(), signOnModes(), status(), verificationStatus(), website()
+  - fields: _links(object), category(string), description(string), displayName(string), features(array), id(string), lastUpdated(string), name(string), signOnModes(array), status(string), verificationStatus(string), website(string)
 - oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups:
   - primary key: id
-  - fields: _embedded(), _links(), created(), id(), lastMembershipUpdated(), lastUpdated(), objectClass(), profile(), type()
+  - fields: _embedded(object), _links(object), created(string), id(string), lastMembershipUpdated(string), lastUpdated(string), objectClass(array), profile(object), type(string)
 - okta_personal_settings_api_v1_export_blocklists:
-  - fields: domains()
+  - fields: domains(array)
 - privileged_access_api_v1_okta_service_accounts:
   - primary key: id
-  - fields: created(), description(), email(), id(), lastUpdated(), name(), oktaUserId(), ownerGroupIds(), ownerUserIds(), status(), statusDetail(), username()
+  - fields: created(string), description(string), email(string), id(string), lastUpdated(string), name(string), oktaUserId(string), ownerGroupIds(array), ownerUserIds(array), status(string), statusDetail(string), username(string)
 - privileged_access_api_v1_okta_service_accounts_id:
   - primary key: id
-  - fields: created(), description(), email(), id(), lastUpdated(), name(), oktaUserId(), ownerGroupIds(), ownerUserIds(), status(), statusDetail(), username()
+  - fields: created(string), description(string), email(string), id(string), lastUpdated(string), name(string), oktaUserId(string), ownerGroupIds(array), ownerUserIds(array), status(string), statusDetail(string), username(string)
 - privileged_access_api_v1_service_accounts:
   - primary key: id
-  - fields: containerGlobalName(), containerInstanceName(), containerOrn(), created(), description(), id(), lastUpdated(), name(), ownerGroupIds(), ownerUserIds(), password(), status(), statusDetail(), username()
+  - fields: containerGlobalName(string), containerInstanceName(string), containerOrn(string), created(string), description(string), id(string), lastUpdated(string), name(string), ownerGroupIds(array), ownerUserIds(array), password(string), status(string), statusDetail(string), username(string)
 - privileged_access_api_v1_service_accounts_id:
   - primary key: id
-  - fields: containerGlobalName(), containerInstanceName(), containerOrn(), created(), description(), id(), lastUpdated(), name(), ownerGroupIds(), ownerUserIds(), password(), status(), statusDetail(), username()
+  - fields: containerGlobalName(string), containerInstanceName(string), containerOrn(string), created(string), description(string), id(string), lastUpdated(string), name(string), ownerGroupIds(array), ownerUserIds(array), password(string), status(string), statusDetail(string), username(string)
 - webauthn_registration_api_v1_users_user_id_enrollments:
   - primary key: id
-  - fields: _links(), created(), factorType(), id(), lastUpdated(), profile(), provider(), status(), vendorName()
+  - fields: _links(object), created(string), factorType(string), id(string), lastUpdated(string), profile(object), provider(string), status(string), vendorName(string)
 
 ## Sync Modes
 
@@ -886,7 +887,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_agent_pools_pool_id_updates_settings:
   - endpoint: POST /api/v1/agentPools/{{ record.pool_id }}/updates/settings
-  - required fields: pool_id
+  - required fields: pool_id, agentType
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_agent_pools_pool_id_updates_update_id:
   - endpoint: POST /api/v1/agentPools/{{ record.pool_id }}/updates/{{ record.update_id }}
@@ -933,10 +934,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps:
   - endpoint: POST /api/v1/apps
+  - required fields: signOnMode, label
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id:
   - endpoint: PUT /api/v1/apps/{{ record.app_id }}
-  - required fields: app_id
+  - required fields: app_id, signOnMode, label
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}
@@ -944,7 +946,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_connections_default:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/connections/default
-  - required fields: app_id
+  - required fields: app_id, profile
   - risk: medium: external Okta admin API mutation; approval required
 - execute_api_v1_apps_app_id_connections_default_lifecycle_activate:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/connections/default/lifecycle/activate
@@ -1000,7 +1002,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_cwo_connections_connection_id:
   - endpoint: PATCH /api/v1/apps/{{ record.app_id }}/cwo/connections/{{ record.connection_id }}
-  - required fields: app_id, connection_id
+  - required fields: app_id, connection_id, status
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id_cwo_connections_connection_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}/cwo/connections/{{ record.connection_id }}
@@ -1024,7 +1026,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_grants:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/grants
-  - required fields: app_id
+  - required fields: app_id, issuer, scopeId
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id_grants_grant_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}/grants/{{ record.grant_id }}
@@ -1032,11 +1034,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_group_push_mappings:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/group-push/mappings
-  - required fields: app_id
+  - required fields: app_id, sourceGroupId
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_group_push_mappings_mapping_id:
   - endpoint: PATCH /api/v1/apps/{{ record.app_id }}/group-push/mappings/{{ record.mapping_id }}
-  - required fields: app_id, mapping_id
+  - required fields: app_id, mapping_id, status
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_groups_group_id:
   - endpoint: PUT /api/v1/apps/{{ record.app_id }}/groups/{{ record.group_id }}
@@ -1076,7 +1078,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_users:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/users
-  - required fields: app_id
+  - required fields: app_id, id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_users_user_id:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/users/{{ record.user_id }}
@@ -1210,11 +1212,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules:
   - endpoint: POST /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules
-  - required fields: auth_server_id, policy_id
+  - required fields: auth_server_id, policy_id, name, conditions, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id:
   - endpoint: PUT /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules/{{ record.rule_id }}
-  - required fields: auth_server_id, policy_id, rule_id
+  - required fields: auth_server_id, policy_id, rule_id, name, conditions, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id:
   - endpoint: DELETE /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules/{{ record.rule_id }}
@@ -1246,11 +1248,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_authorization_servers_auth_server_id_scopes:
   - endpoint: POST /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes
-  - required fields: auth_server_id
+  - required fields: auth_server_id, name
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_authorization_servers_auth_server_id_scopes_scope_id:
   - endpoint: PUT /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes/{{ record.scope_id }}
-  - required fields: auth_server_id, scope_id
+  - required fields: auth_server_id, scope_id, name
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_authorization_servers_auth_server_id_scopes_scope_id:
   - endpoint: DELETE /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes/{{ record.scope_id }}
@@ -1258,10 +1260,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_behaviors:
   - endpoint: POST /api/v1/behaviors
+  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_behaviors_behavior_id:
   - endpoint: PUT /api/v1/behaviors/{{ record.behavior_id }}
-  - required fields: behavior_id
+  - required fields: behavior_id, name, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_behaviors_behavior_id:
   - endpoint: DELETE /api/v1/behaviors/{{ record.behavior_id }}
@@ -1277,13 +1280,15 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_bot_protection_configuration:
   - endpoint: POST /api/v1/bot-protection/configuration
+  - required fields: level, mode
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands:
   - endpoint: POST /api/v1/brands
+  - required fields: name
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}
-  - required fields: brand_id
+  - required fields: brand_id, name
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}
@@ -1323,11 +1328,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_pages_sign_out_customized:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/pages/sign-out/customized
-  - required fields: brand_id
+  - required fields: brand_id, type
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands_brand_id_templates_email_template_name_customizations:
   - endpoint: POST /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations
-  - required fields: brand_id, template_name
+  - required fields: brand_id, template_name, language
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_templates_email_template_name_customizations:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations
@@ -1335,7 +1340,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations/{{ record.customization_id }}
-  - required fields: brand_id, template_name, customization_id
+  - required fields: brand_id, template_name, customization_id, language
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations/{{ record.customization_id }}
@@ -1343,7 +1348,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_templates_email_template_name_settings:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/settings
-  - required fields: brand_id, template_name
+  - required fields: brand_id, template_name, recipients
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands_brand_id_templates_email_template_name_test:
   - endpoint: POST /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/test
@@ -1351,7 +1356,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_themes_theme_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/themes/{{ record.theme_id }}
-  - required fields: brand_id, theme_id
+  - required fields: brand_id, theme_id, primaryColorHex, secondaryColorHex, signInPageTouchPointVariant, endUserDashboardTouchPointVariant, errorPageTouchPointVariant, emailTemplateTouchPointVariant
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_themes_theme_id_background_image:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/themes/{{ record.theme_id }}/background-image
@@ -1367,7 +1372,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_well_known_uris_path_customized:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/well-known-uris/{{ record.path }}/customized
-  - required fields: brand_id, path
+  - required fields: brand_id, path, representation
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_captchas:
   - endpoint: POST /api/v1/captchas
@@ -1436,18 +1441,19 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_directories_app_instance_id_groups_modify:
   - endpoint: POST /api/v1/directories/{{ record.app_instance_id }}/groups/modify
-  - required fields: app_instance_id
+  - required fields: app_instance_id, id, parameters
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_directories_app_instance_id_groups_group_id_query:
   - endpoint: POST /api/v1/directories/{{ record.app_instance_id }}/groups/{{ record.group_id }}/query
-  - required fields: app_instance_id, group_id
+  - required fields: app_instance_id, group_id, attributes
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_domains:
   - endpoint: POST /api/v1/domains
+  - required fields: certificateSourceType, domain
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_domains_domain_id:
   - endpoint: PUT /api/v1/domains/{{ record.domain_id }}
-  - required fields: domain_id
+  - required fields: domain_id, brandId
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_domains_domain_id:
   - endpoint: DELETE /api/v1/domains/{{ record.domain_id }}
@@ -1455,7 +1461,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_domains_domain_id_certificate:
   - endpoint: PUT /api/v1/domains/{{ record.domain_id }}/certificate
-  - required fields: domain_id
+  - required fields: domain_id, certificate, certificateChain, privateKey, type
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_domains_domain_id_verify:
   - endpoint: POST /api/v1/domains/{{ record.domain_id }}/verify
@@ -1469,10 +1475,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_email_domains:
   - endpoint: POST /api/v1/email-domains
+  - required fields: displayName, userName
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_email_domains_email_domain_id:
   - endpoint: PUT /api/v1/email-domains/{{ record.email_domain_id }}
-  - required fields: email_domain_id
+  - required fields: email_domain_id, displayName, userName
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_email_domains_email_domain_id:
   - endpoint: DELETE /api/v1/email-domains/{{ record.email_domain_id }}
@@ -1484,10 +1491,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_email_servers:
   - endpoint: POST /api/v1/email-servers
+  - required fields: alias, enabled, host, port, username, authType
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_email_servers_email_server_id:
   - endpoint: PATCH /api/v1/email-servers/{{ record.email_server_id }}
-  - required fields: email_server_id
+  - required fields: email_server_id, authType
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_email_servers_email_server_id:
   - endpoint: DELETE /api/v1/email-servers/{{ record.email_server_id }}
@@ -1495,14 +1503,15 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_email_servers_email_server_id_test:
   - endpoint: POST /api/v1/email-servers/{{ record.email_server_id }}/test
-  - required fields: email_server_id
+  - required fields: email_server_id, fromAddress, toAddress
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_event_hooks:
   - endpoint: POST /api/v1/eventHooks
+  - required fields: name, events, channel
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_event_hooks_event_hook_id:
   - endpoint: PUT /api/v1/eventHooks/{{ record.event_hook_id }}
-  - required fields: event_hook_id
+  - required fields: event_hook_id, name, events, channel
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_event_hooks_event_hook_id:
   - endpoint: DELETE /api/v1/eventHooks/{{ record.event_hook_id }}
@@ -1568,7 +1577,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_groups_group_id_roles:
   - endpoint: POST /api/v1/groups/{{ record.group_id }}/roles
-  - required fields: group_id
+  - required fields: group_id, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_groups_group_id_roles_role_assignment_id:
   - endpoint: DELETE /api/v1/groups/{{ record.group_id }}/roles/{{ record.role_assignment_id }}
@@ -1636,6 +1645,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_iam_resource_sets:
   - endpoint: POST /api/v1/iam/resource-sets
+  - required fields: description, label, resources
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_resource_sets_resource_set_id_or_label:
   - endpoint: PUT /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}
@@ -1663,7 +1673,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_iam_resource_sets_resource_set_id_or_label_resources:
   - endpoint: POST /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}/resources
-  - required fields: resource_set_id_or_label
+  - required fields: resource_set_id_or_label, resourceOrnOrUrl, conditions
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_resource_sets_resource_set_id_or_label_resources:
   - endpoint: PATCH /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}/resources
@@ -1679,10 +1689,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_iam_roles:
   - endpoint: POST /api/v1/iam/roles
+  - required fields: label, description, permissions
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_roles_role_id_or_label:
   - endpoint: PUT /api/v1/iam/roles/{{ record.role_id_or_label }}
-  - required fields: role_id_or_label
+  - required fields: role_id_or_label, label, description
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_iam_roles_role_id_or_label:
   - endpoint: DELETE /api/v1/iam/roles/{{ record.role_id_or_label }}
@@ -1777,6 +1788,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_idps_credentials_keys:
   - endpoint: POST /api/v1/idps/credentials/keys
+  - required fields: x5c
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_idps_credentials_keys_kid:
   - endpoint: PUT /api/v1/idps/credentials/keys/{{ record.kid }}
@@ -1847,10 +1859,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_log_streams:
   - endpoint: POST /api/v1/logStreams
+  - required fields: created, id, lastUpdated, name, status, type, _links
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_log_streams_log_stream_id:
   - endpoint: PUT /api/v1/logStreams/{{ record.log_stream_id }}
-  - required fields: log_stream_id
+  - required fields: log_stream_id, name, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_log_streams_log_stream_id:
   - endpoint: DELETE /api/v1/logStreams/{{ record.log_stream_id }}
@@ -1866,7 +1879,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_mappings_mapping_id:
   - endpoint: POST /api/v1/mappings/{{ record.mapping_id }}
-  - required fields: mapping_id
+  - required fields: mapping_id, properties
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_schemas_apps_app_id_default:
   - endpoint: POST /api/v1/meta/schemas/apps/{{ record.app_id }}/default
@@ -1888,6 +1901,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_types_user:
   - endpoint: POST /api/v1/meta/types/user
+  - required fields: name, displayName
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_types_user_type_id:
   - endpoint: POST /api/v1/meta/types/user/{{ record.type_id }}
@@ -1895,7 +1909,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_meta_types_user_type_id:
   - endpoint: PUT /api/v1/meta/types/user/{{ record.type_id }}
-  - required fields: type_id
+  - required fields: type_id, name, displayName, description
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_meta_types_user_type_id:
   - endpoint: DELETE /api/v1/meta/types/user/{{ record.type_id }}
@@ -1945,9 +1959,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_org_privacy_aerial_grant:
   - endpoint: POST /api/v1/org/privacy/aerial/grant
+  - required fields: accountId
   - risk: medium: external Okta admin API mutation; approval required
 - execute_api_v1_org_privacy_aerial_revoke:
   - endpoint: POST /api/v1/org/privacy/aerial/revoke
+  - required fields: accountId
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_org_privacy_okta_communication_opt_in:
   - endpoint: POST /api/v1/org/privacy/oktaCommunication/optIn
@@ -1976,13 +1992,15 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_orgs:
   - endpoint: POST /api/v1/orgs
+  - required fields: admin, edition, name, subdomain
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_policies:
   - endpoint: POST /api/v1/policies
+  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_policies_policy_id:
   - endpoint: PUT /api/v1/policies/{{ record.policy_id }}
-  - required fields: policy_id
+  - required fields: policy_id, name, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_policies_policy_id:
   - endpoint: DELETE /api/v1/policies/{{ record.policy_id }}
@@ -2030,10 +2048,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_principal_rate_limits:
   - endpoint: POST /api/v1/principal-rate-limits
+  - required fields: principalId, principalType
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_principal_rate_limits_principal_rate_limit_id:
   - endpoint: PUT /api/v1/principal-rate-limits/{{ record.principal_rate_limit_id }}
-  - required fields: principal_rate_limit_id
+  - required fields: principal_rate_limit_id, principalId, principalType
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_push_providers:
   - endpoint: POST /api/v1/push-providers
@@ -2048,12 +2067,15 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_admin_notifications:
   - endpoint: PUT /api/v1/rate-limit-settings/admin-notifications
+  - required fields: notificationsEnabled
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_per_client:
   - endpoint: PUT /api/v1/rate-limit-settings/per-client
+  - required fields: defaultMode
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_warning_threshold:
   - endpoint: PUT /api/v1/rate-limit-settings/warning-threshold
+  - required fields: warningThreshold
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_realm_assignments:
   - endpoint: POST /api/v1/realm-assignments
@@ -2098,10 +2120,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_security_events_providers:
   - endpoint: POST /api/v1/security-events-providers
+  - required fields: name, settings, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_security_events_providers_security_event_provider_id:
   - endpoint: PUT /api/v1/security-events-providers/{{ record.security_event_provider_id }}
-  - required fields: security_event_provider_id
+  - required fields: security_event_provider_id, name, settings, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_security_events_providers_security_event_provider_id:
   - endpoint: DELETE /api/v1/security-events-providers/{{ record.security_event_provider_id }}
@@ -2125,18 +2148,22 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_ssf_stream:
   - endpoint: POST /api/v1/ssf/stream
+  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_ssf_stream:
   - endpoint: PUT /api/v1/ssf/stream
+  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_ssf_stream_2:
   - endpoint: PATCH /api/v1/ssf/stream
+  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_ssf_stream:
   - endpoint: DELETE /api/v1/ssf/stream
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_ssf_stream_verification:
   - endpoint: POST /api/v1/ssf/stream/verification
+  - required fields: stream_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_telephony_providers:
   - endpoint: POST /api/v1/telephony-providers
@@ -2182,6 +2209,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_threats_configuration:
   - endpoint: POST /api/v1/threats/configuration
+  - required fields: action
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_trusted_origins:
   - endpoint: POST /api/v1/trustedOrigins
@@ -2204,6 +2232,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_users:
   - endpoint: POST /api/v1/users
+  - required fields: profile
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_users_id:
   - endpoint: POST /api/v1/users/{{ record.id }}
@@ -2335,11 +2364,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_users_user_id_risk:
   - endpoint: PUT /api/v1/users/{{ record.user_id }}/risk
-  - required fields: user_id
+  - required fields: user_id, riskLevel
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_users_user_id_roles:
   - endpoint: POST /api/v1/users/{{ record.user_id }}/roles
-  - required fields: user_id
+  - required fields: user_id, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_users_user_id_roles_role_assignment_id:
   - endpoint: DELETE /api/v1/users/{{ record.user_id }}/roles/{{ record.role_assignment_id }}
@@ -2387,10 +2416,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_zones:
   - endpoint: POST /api/v1/zones
+  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_zones_zone_id:
   - endpoint: PUT /api/v1/zones/{{ record.zone_id }}
-  - required fields: zone_id
+  - required fields: zone_id, name, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_zones_zone_id:
   - endpoint: DELETE /api/v1/zones/{{ record.zone_id }}
@@ -2412,6 +2442,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_integrations_api_v1_api_services:
   - endpoint: POST /integrations/api/v1/api-services
+  - required fields: type, grantedScopes
   - risk: medium: external Okta admin API mutation; approval required
 - delete_integrations_api_v1_api_services_api_service_id:
   - endpoint: DELETE /integrations/api/v1/api-services/{{ record.api_service_id }}
@@ -2435,7 +2466,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_oauth2_v1_clients_client_id_roles:
   - endpoint: POST /oauth2/v1/clients/{{ record.client_id }}/roles
-  - required fields: client_id
+  - required fields: client_id, type
   - risk: medium: external Okta admin API mutation; approval required
 - delete_oauth2_v1_clients_client_id_roles_role_assignment_id:
   - endpoint: DELETE /oauth2/v1/clients/{{ record.client_id }}/roles/{{ record.role_assignment_id }}
@@ -2473,6 +2504,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_privileged_access_api_v1_okta_service_accounts:
   - endpoint: POST /privileged-access/api/v1/okta-service-accounts
+  - required fields: name, oktaUserId
   - risk: medium: external Okta admin API mutation; approval required
 - update_privileged_access_api_v1_okta_service_accounts_id:
   - endpoint: PATCH /privileged-access/api/v1/okta-service-accounts/{{ record.id }}
@@ -2484,6 +2516,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_privileged_access_api_v1_service_accounts:
   - endpoint: POST /privileged-access/api/v1/service-accounts
+  - required fields: name, containerOrn, username, password
   - risk: medium: external Okta admin API mutation; approval required
 - update_privileged_access_api_v1_service_accounts_id:
   - endpoint: PATCH /privileged-access/api/v1/service-accounts/{{ record.id }}

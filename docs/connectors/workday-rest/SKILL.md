@@ -7,17 +7,19 @@ description: Workday REST connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token authentication. Read-only.
+Reads and writes the full documented Workday REST surface: 907 operations across the 52 independently versioned services Workday's own directory publishes.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -27,15 +29,15 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 ## Configuration
 
 - base_url
-- tenant
-- access_token (secret)
+- tenant (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - workers:
   - primary key: id
   - cursor: updated
-  - fields: descriptor(), id(), updated()
+  - fields: descriptor(string), id(string), updated(string)
 - organizations:
   - primary key: id
   - cursor: updated
@@ -43,17 +45,1905 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 - jobs:
   - primary key: id
   - cursor: updated
-  - fields: descriptor(), id(), updated()
+  - fields: descriptor(string), id(string), updated(string)
 
 ## Sync Modes
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+## Reverse ETL Actions
+
+- absence_management_create_workers_by_id_correct_time_off_entry:
+  - endpoint: POST /absenceManagement/v5/workers/{{ record.ID }}/correctTimeOffEntry
+  - required fields: ID
+  - risk: Workday POST on /absenceManagement/v5/workers/{ID}/correctTimeOffEntry; changes tenant data.
+- absence_management_create_workers_by_id_request_time_off:
+  - endpoint: POST /absenceManagement/v5/workers/{{ record.ID }}/requestTimeOff
+  - required fields: ID
+  - risk: Workday POST on /absenceManagement/v5/workers/{ID}/requestTimeOff; changes tenant data.
+- accounts_payable_create_send_supplier_invoice_attachments_for_scanning:
+  - endpoint: POST /accountsPayable/v1/sendSupplierInvoiceAttachmentsForScanning
+  - risk: Workday POST on /accountsPayable/v1/sendSupplierInvoiceAttachmentsForScanning; changes tenant data.
+- accounts_payable_create_supplier_invoice_requests:
+  - endpoint: POST /accountsPayable/v1/supplierInvoiceRequests
+  - risk: Workday POST on /accountsPayable/v1/supplierInvoiceRequests; changes tenant data.
+- accounts_payable_create_supplier_invoice_requests_by_id_attachments:
+  - endpoint: POST /accountsPayable/v1/supplierInvoiceRequests/{{ record.ID }}/attachments
+  - required fields: ID
+  - risk: Workday POST on /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments; changes tenant data.
+- accounts_payable_create_supplier_invoice_requests_by_id_submit:
+  - endpoint: POST /accountsPayable/v1/supplierInvoiceRequests/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /accountsPayable/v1/supplierInvoiceRequests/{ID}/submit; changes tenant data.
+- common_create_validate_worktags:
+  - endpoint: POST /api/common/v1/validateWorktags
+  - risk: Workday POST on /api/common/v1/validateWorktags; changes tenant data.
+- common_create_workers_by_id_business_title_changes:
+  - endpoint: POST /api/common/v1/workers/{{ record.ID }}/businessTitleChanges
+  - required fields: ID
+  - risk: Workday POST on /api/common/v1/workers/{ID}/businessTitleChanges; changes tenant data.
+- common_create_workers_by_id_job_changes:
+  - endpoint: POST /api/common/v1/workers/{{ record.ID }}/jobChanges
+  - required fields: ID
+  - risk: Workday POST on /api/common/v1/workers/{ID}/jobChanges; changes tenant data.
+- prism_analytics_create_buckets:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/buckets
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/buckets; changes tenant data.
+- prism_analytics_replace_buckets:
+  - endpoint: PUT /api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}
+  - required fields: id
+  - risk: Workday PUT on /api/prismAnalytics/v3/{tenant}/buckets/{id}; changes tenant data.
+- prism_analytics_create_buckets_by_id_complete:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}/complete
+  - required fields: id
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/buckets/{id}/complete; changes tenant data.
+- prism_analytics_create_buckets_by_id_files:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/buckets/{{ record.id }}/files
+  - required fields: id, name, uploadFile
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/buckets/{id}/files; changes tenant data.
+- prism_analytics_create_data_changes_by_data_change_id_activities:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/dataChanges/{{ record.dataChangeID }}/activities
+  - required fields: dataChangeID
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/dataChanges/{dataChangeID}/activities; changes tenant data.
+- prism_analytics_create_data_changes_by_data_change_id_cancel:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/dataChanges/{{ record.dataChangeID }}/cancel/{{ record.activityID }}
+  - required fields: dataChangeID, activityID
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/dataChanges/{dataChangeID}/cancel/{activityID}; changes tenant data.
+- prism_analytics_create_file_containers:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/fileContainers
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/fileContainers; changes tenant data.
+- prism_analytics_create_file_containers_by_file_container_id_files:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/fileContainers/{{ record.fileContainerID }}/files
+  - required fields: fileContainerID, file
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/fileContainers/{fileContainerID}/files; changes tenant data.
+- prism_analytics_create_tables:
+  - endpoint: POST /api/prismAnalytics/v3/{{ config.tenant }}/tables
+  - risk: Workday POST on /api/prismAnalytics/v3/{tenant}/tables; changes tenant data.
+- prism_analytics_update_tables:
+  - endpoint: PATCH /api/prismAnalytics/v3/{{ config.tenant }}/tables/{{ record.id }}
+  - required fields: id
+  - risk: Workday PATCH on /api/prismAnalytics/v3/{tenant}/tables/{id}; changes tenant data.
+- prism_analytics_replace_tables:
+  - endpoint: PUT /api/prismAnalytics/v3/{{ config.tenant }}/tables/{{ record.id }}
+  - required fields: id
+  - risk: Workday PUT on /api/prismAnalytics/v3/{tenant}/tables/{id}; changes tenant data.
+- asor_create_agent_definition:
+  - endpoint: POST /asor/v1/agentDefinition
+  - risk: Workday POST on /asor/v1/agentDefinition; changes tenant data.
+- benefit_partner_create_programs:
+  - endpoint: POST /benefitPartner/v1/programs
+  - risk: Workday POST on /benefitPartner/v1/programs; changes tenant data.
+- budgets_create_run_budget_check:
+  - endpoint: POST /budgets/v1/runBudgetCheck
+  - risk: Workday POST on /budgets/v1/runBudgetCheck; changes tenant data.
+- business_process_create_event_steps_by_id_approve:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/approve
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/approve; changes tenant data.
+- business_process_create_event_steps_by_id_deny:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/deny
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/deny; changes tenant data.
+- business_process_create_event_steps_by_id_questionnaire:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/questionnaire
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/questionnaire; changes tenant data.
+- business_process_create_event_steps_by_id_reassign:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/reassign
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/reassign; changes tenant data.
+- business_process_create_event_steps_by_id_send_back:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/sendBack
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/sendBack; changes tenant data.
+- business_process_create_event_steps_by_id_to_do:
+  - endpoint: POST /businessProcess/v1/eventSteps/{{ record.ID }}/toDo
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/eventSteps/{ID}/toDo; changes tenant data.
+- business_process_create_events_by_id_cancel:
+  - endpoint: POST /businessProcess/v1/events/{{ record.ID }}/cancel
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/events/{ID}/cancel; changes tenant data.
+- business_process_create_events_by_id_rescind:
+  - endpoint: POST /businessProcess/v1/events/{{ record.ID }}/rescind
+  - required fields: ID
+  - risk: Workday POST on /businessProcess/v1/events/{ID}/rescind; changes tenant data.
+- communications_create_managed_recipient:
+  - endpoint: POST /communications/v1/managedRecipient
+  - risk: Workday POST on /communications/v1/managedRecipient; changes tenant data.
+- compensation_create_scorecard_results:
+  - endpoint: POST /compensation/v3/scorecardResults
+  - risk: Workday POST on /compensation/v3/scorecardResults; changes tenant data.
+- compensation_delete_scorecard_results:
+  - endpoint: DELETE /compensation/v3/scorecardResults/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /compensation/v3/scorecardResults/{ID}; changes tenant data.
+- compensation_update_scorecard_results_by_id_scores:
+  - endpoint: PATCH /compensation/v3/scorecardResults/{{ record.ID }}/scores/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /compensation/v3/scorecardResults/{ID}/scores/{subresourceID}; changes tenant data.
+- compensation_create_scorecards:
+  - endpoint: POST /compensation/v3/scorecards
+  - risk: Workday POST on /compensation/v3/scorecards; changes tenant data.
+- compensation_delete_scorecards:
+  - endpoint: DELETE /compensation/v3/scorecards/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /compensation/v3/scorecards/{ID}; changes tenant data.
+- compensation_replace_scorecards:
+  - endpoint: PUT /compensation/v3/scorecards/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /compensation/v3/scorecards/{ID}; changes tenant data.
+- compensation_create_workers_by_id_request_one_time_payment:
+  - endpoint: POST /compensation/v3/workers/{{ record.ID }}/requestOneTimePayment
+  - required fields: ID
+  - risk: Workday POST on /compensation/v3/workers/{ID}/requestOneTimePayment; changes tenant data.
+- connect_create_message_templates:
+  - endpoint: POST /connect/v2/messageTemplates
+  - risk: Workday POST on /connect/v2/messageTemplates; changes tenant data.
+- connect_update_message_templates:
+  - endpoint: PATCH /connect/v2/messageTemplates/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /connect/v2/messageTemplates/{ID}; changes tenant data.
+- connect_replace_message_templates:
+  - endpoint: PUT /connect/v2/messageTemplates/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /connect/v2/messageTemplates/{ID}; changes tenant data.
+- connect_create_send_message:
+  - endpoint: POST /connect/v2/sendMessage
+  - risk: Workday POST on /connect/v2/sendMessage; changes tenant data.
+- custom_object_create_custom_objects:
+  - endpoint: POST /customObject/v2/customObjects/{{ record.customObjectAlias }}
+  - required fields: customObjectAlias
+  - risk: Workday POST on /customObject/v2/customObjects/{customObjectAlias}; changes tenant data.
+- custom_object_delete_custom_objects_by_custom_object_alias:
+  - endpoint: DELETE /customObject/v2/customObjects/{{ record.customObjectAlias }}/{{ record.customObjectID }}
+  - required fields: customObjectAlias, customObjectID
+  - risk: Workday DELETE on /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}; changes tenant data.
+- custom_object_replace_custom_objects_by_custom_object_alias:
+  - endpoint: PUT /customObject/v2/customObjects/{{ record.customObjectAlias }}/{{ record.customObjectID }}
+  - required fields: customObjectAlias, customObjectID
+  - risk: Workday PUT on /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}; changes tenant data.
+- custom_object_definition_create_definitions:
+  - endpoint: POST /customObjectDefinition/v1/definitions
+  - risk: Workday POST on /customObjectDefinition/v1/definitions; changes tenant data.
+- custom_object_definition_delete_definitions:
+  - endpoint: DELETE /customObjectDefinition/v1/definitions/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /customObjectDefinition/v1/definitions/{ID}; changes tenant data.
+- custom_object_definition_replace_definitions:
+  - endpoint: PUT /customObjectDefinition/v1/definitions/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /customObjectDefinition/v1/definitions/{ID}; changes tenant data.
+- custom_object_definition_create_definitions_by_id_activate:
+  - endpoint: POST /customObjectDefinition/v1/definitions/{{ record.ID }}/activate
+  - required fields: ID
+  - risk: Workday POST on /customObjectDefinition/v1/definitions/{ID}/activate; changes tenant data.
+- custom_object_definition_create_definitions_by_id_condition_rules:
+  - endpoint: POST /customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules
+  - required fields: ID
+  - risk: Workday POST on /customObjectDefinition/v1/definitions/{ID}/conditionRules; changes tenant data.
+- custom_object_definition_delete_definitions_by_id_condition_rules:
+  - endpoint: DELETE /customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/conditionRules/{subresourceID}; changes tenant data.
+- custom_object_definition_replace_definitions_by_id_condition_rules:
+  - endpoint: PUT /customObjectDefinition/v1/definitions/{{ record.ID }}/conditionRules/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /customObjectDefinition/v1/definitions/{ID}/conditionRules/{subresourceID}; changes tenant data.
+- custom_object_definition_create_definitions_by_id_fields:
+  - endpoint: POST /customObjectDefinition/v1/definitions/{{ record.ID }}/fields
+  - required fields: ID
+  - risk: Workday POST on /customObjectDefinition/v1/definitions/{ID}/fields; changes tenant data.
+- custom_object_definition_delete_definitions_by_id_fields:
+  - endpoint: DELETE /customObjectDefinition/v1/definitions/{{ record.ID }}/fields/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/fields/{subresourceID}; changes tenant data.
+- custom_object_definition_replace_definitions_by_id_fields:
+  - endpoint: PUT /customObjectDefinition/v1/definitions/{{ record.ID }}/fields/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /customObjectDefinition/v1/definitions/{ID}/fields/{subresourceID}; changes tenant data.
+- custom_object_definition_create_definitions_by_id_validations:
+  - endpoint: POST /customObjectDefinition/v1/definitions/{{ record.ID }}/validations
+  - required fields: ID
+  - risk: Workday POST on /customObjectDefinition/v1/definitions/{ID}/validations; changes tenant data.
+- custom_object_definition_delete_definitions_by_id_validations:
+  - endpoint: DELETE /customObjectDefinition/v1/definitions/{{ record.ID }}/validations/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /customObjectDefinition/v1/definitions/{ID}/validations/{subresourceID}; changes tenant data.
+- custom_object_definition_replace_definitions_by_id_validations:
+  - endpoint: PUT /customObjectDefinition/v1/definitions/{{ record.ID }}/validations/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /customObjectDefinition/v1/definitions/{ID}/validations/{subresourceID}; changes tenant data.
+- custom_object_definition_create_field_types:
+  - endpoint: POST /customObjectDefinition/v1/fieldTypes
+  - risk: Workday POST on /customObjectDefinition/v1/fieldTypes; changes tenant data.
+- custom_object_definition_replace_field_types:
+  - endpoint: PUT /customObjectDefinition/v1/fieldTypes/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /customObjectDefinition/v1/fieldTypes/{ID}; changes tenant data.
+- custom_object_definition_create_field_types_by_id_list_values:
+  - endpoint: POST /customObjectDefinition/v1/fieldTypes/{{ record.ID }}/listValues
+  - required fields: ID
+  - risk: Workday POST on /customObjectDefinition/v1/fieldTypes/{ID}/listValues; changes tenant data.
+- custom_object_definition_replace_field_types_by_id_list_values:
+  - endpoint: PUT /customObjectDefinition/v1/fieldTypes/{{ record.ID }}/listValues/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /customObjectDefinition/v1/fieldTypes/{ID}/listValues/{subresourceID}; changes tenant data.
+- customer_accounts_create_payments:
+  - endpoint: POST /customerAccounts/v1/payments
+  - risk: Workday POST on /customerAccounts/v1/payments; changes tenant data.
+- customer_accounts_create_payments_by_id_remittance_details:
+  - endpoint: POST /customerAccounts/v1/payments/{{ record.ID }}/remittanceDetails
+  - required fields: ID
+  - risk: Workday POST on /customerAccounts/v1/payments/{ID}/remittanceDetails; changes tenant data.
+- expense_create_entries:
+  - endpoint: POST /expense/v1/entries
+  - risk: Workday POST on /expense/v1/entries; changes tenant data.
+- expense_delete_entries:
+  - endpoint: DELETE /expense/v1/entries/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /expense/v1/entries/{ID}; changes tenant data.
+- expense_update_entries:
+  - endpoint: PATCH /expense/v1/entries/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /expense/v1/entries/{ID}; changes tenant data.
+- expense_replace_entries:
+  - endpoint: PUT /expense/v1/entries/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /expense/v1/entries/{ID}; changes tenant data.
+- expense_create_entries_by_id_attachments:
+  - endpoint: POST /expense/v1/entries/{{ record.ID }}/attachments
+  - required fields: ID
+  - risk: Workday POST on /expense/v1/entries/{ID}/attachments; changes tenant data.
+- expense_create_reports:
+  - endpoint: POST /expense/v1/reports
+  - risk: Workday POST on /expense/v1/reports; changes tenant data.
+- expense_create_reports_by_id_lines:
+  - endpoint: POST /expense/v1/reports/{{ record.ID }}/lines
+  - required fields: ID
+  - risk: Workday POST on /expense/v1/reports/{ID}/lines; changes tenant data.
+- expense_create_reports_by_id_submit:
+  - endpoint: POST /expense/v1/reports/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /expense/v1/reports/{ID}/submit; changes tenant data.
+- fin_tax_public_create_electronic_reporting_runs:
+  - endpoint: POST /finTaxPublic/v1/electronicReportingRuns
+  - risk: Workday POST on /finTaxPublic/v1/electronicReportingRuns; changes tenant data.
+- global_payroll_create_effective_changes:
+  - endpoint: POST /globalPayroll/v1/effectiveChanges
+  - risk: Workday POST on /globalPayroll/v1/effectiveChanges; changes tenant data.
+- global_payroll_create_event_driven_integration_vendor_response:
+  - endpoint: POST /globalPayroll/v1/eventDrivenIntegrationVendorResponse
+  - risk: Workday POST on /globalPayroll/v1/eventDrivenIntegrationVendorResponse; changes tenant data.
+- global_payroll_create_notifications:
+  - endpoint: POST /globalPayroll/v1/notifications
+  - risk: Workday POST on /globalPayroll/v1/notifications; changes tenant data.
+- global_payroll_update_pay_groups_by_id_periods:
+  - endpoint: PATCH /globalPayroll/v1/payGroups/{{ record.ID }}/periods/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /globalPayroll/v1/payGroups/{ID}/periods/{subresourceID}; changes tenant data.
+- help_article_update_article_versions_by_id_approval_decision:
+  - endpoint: PATCH /helpArticle/v1/articleVersions/{{ record.ID }}/approvalDecision/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /helpArticle/v1/articleVersions/{ID}/approvalDecision/{subresourceID}; changes tenant data.
+- help_article_create_article_versions_by_id_approval_request:
+  - endpoint: POST /helpArticle/v1/articleVersions/{{ record.ID }}/approvalRequest
+  - required fields: ID
+  - risk: Workday POST on /helpArticle/v1/articleVersions/{ID}/approvalRequest; changes tenant data.
+- help_article_update_article_versions_by_id_approval_request:
+  - endpoint: PATCH /helpArticle/v1/articleVersions/{{ record.ID }}/approvalRequest/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /helpArticle/v1/articleVersions/{ID}/approvalRequest/{subresourceID}; changes tenant data.
+- help_article_create_article_versions_by_id_article_effective_date:
+  - endpoint: POST /helpArticle/v1/articleVersions/{{ record.ID }}/articleEffectiveDate
+  - required fields: ID
+  - risk: Workday POST on /helpArticle/v1/articleVersions/{ID}/articleEffectiveDate; changes tenant data.
+- help_article_delete_article_versions_by_id_article_effective_date:
+  - endpoint: DELETE /helpArticle/v1/articleVersions/{{ record.ID }}/articleEffectiveDate/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /helpArticle/v1/articleVersions/{ID}/articleEffectiveDate/{subresourceID}; changes tenant data.
+- help_case_create_attachments:
+  - endpoint: POST /helpCase/v4/attachments
+  - risk: Workday POST on /helpCase/v4/attachments; changes tenant data.
+- help_case_create_cases:
+  - endpoint: POST /helpCase/v4/cases
+  - risk: Workday POST on /helpCase/v4/cases; changes tenant data.
+- help_case_update_cases:
+  - endpoint: PATCH /helpCase/v4/cases/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /helpCase/v4/cases/{ID}; changes tenant data.
+- help_case_create_cases_by_id_comment:
+  - endpoint: POST /helpCase/v4/cases/{{ record.ID }}/comment
+  - required fields: ID
+  - risk: Workday POST on /helpCase/v4/cases/{ID}/comment; changes tenant data.
+- help_case_create_cases_by_id_internal_note_timeline:
+  - endpoint: POST /helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline
+  - required fields: ID
+  - risk: Workday POST on /helpCase/v4/cases/{ID}/internalNoteTimeline; changes tenant data.
+- help_case_delete_cases_by_id_internal_note_timeline:
+  - endpoint: DELETE /helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /helpCase/v4/cases/{ID}/internalNoteTimeline/{subresourceID}; changes tenant data.
+- help_case_update_cases_by_id_internal_note_timeline:
+  - endpoint: PATCH /helpCase/v4/cases/{{ record.ID }}/internalNoteTimeline/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /helpCase/v4/cases/{ID}/internalNoteTimeline/{subresourceID}; changes tenant data.
+- help_case_create_cases_by_id_reopen:
+  - endpoint: POST /helpCase/v4/cases/{{ record.ID }}/reopen
+  - required fields: ID
+  - risk: Workday POST on /helpCase/v4/cases/{ID}/reopen; changes tenant data.
+- help_case_create_external_creators:
+  - endpoint: POST /helpCase/v4/externalCreators
+  - risk: Workday POST on /helpCase/v4/externalCreators; changes tenant data.
+- help_case_create_external_records:
+  - endpoint: POST /helpCase/v4/externalRecords
+  - risk: Workday POST on /helpCase/v4/externalRecords; changes tenant data.
+- help_case_replace_external_records:
+  - endpoint: PUT /helpCase/v4/externalRecords/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /helpCase/v4/externalRecords/{ID}; changes tenant data.
+- journeys_create_distribution_requests:
+  - endpoint: POST /journeys/v1/distributionRequests
+  - risk: Workday POST on /journeys/v1/distributionRequests; changes tenant data.
+- learning_update_enrollments:
+  - endpoint: PATCH /learning/v1/enrollments/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /learning/v1/enrollments/{ID}; changes tenant data.
+- learning_create_enrollments_by_id_lesson_trackings:
+  - endpoint: POST /learning/v1/enrollments/{{ record.ID }}/lessonTrackings
+  - required fields: ID
+  - risk: Workday POST on /learning/v1/enrollments/{ID}/lessonTrackings; changes tenant data.
+- learning_update_enrollments_by_id_lesson_trackings:
+  - endpoint: PATCH /learning/v1/enrollments/{{ record.ID }}/lessonTrackings/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /learning/v1/enrollments/{ID}/lessonTrackings/{subresourceID}; changes tenant data.
+- learning_create_manage_digital_courses:
+  - endpoint: POST /learning/v1/manageDigitalCourses
+  - risk: Workday POST on /learning/v1/manageDigitalCourses; changes tenant data.
+- learning_create_manage_enrollments:
+  - endpoint: POST /learning/v1/manageEnrollments
+  - risk: Workday POST on /learning/v1/manageEnrollments; changes tenant data.
+- payroll_create_payroll_inputs:
+  - endpoint: POST /payroll/v2/payrollInputs
+  - risk: Workday POST on /payroll/v2/payrollInputs; changes tenant data.
+- payroll_delete_payroll_inputs:
+  - endpoint: DELETE /payroll/v2/payrollInputs/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /payroll/v2/payrollInputs/{ID}; changes tenant data.
+- payroll_update_payroll_inputs:
+  - endpoint: PATCH /payroll/v2/payrollInputs/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /payroll/v2/payrollInputs/{ID}; changes tenant data.
+- payroll_create_tax_rates:
+  - endpoint: POST /payroll/v2/taxRates
+  - risk: Workday POST on /payroll/v2/taxRates; changes tenant data.
+- performance_enablement_create_cascaded_goal_event:
+  - endpoint: POST /performanceEnablement/v5/cascadedGoalEvent
+  - risk: Workday POST on /performanceEnablement/v5/cascadedGoalEvent; changes tenant data.
+- performance_enablement_update_give_requested_feedback_events:
+  - endpoint: PATCH /performanceEnablement/v5/giveRequestedFeedbackEvents/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /performanceEnablement/v5/giveRequestedFeedbackEvents/{ID}; changes tenant data.
+- performance_enablement_create_my_performance_reviews:
+  - endpoint: POST /performanceEnablement/v5/myPerformanceReviews
+  - risk: Workday POST on /performanceEnablement/v5/myPerformanceReviews; changes tenant data.
+- performance_enablement_create_organization_goals:
+  - endpoint: POST /performanceEnablement/v5/organizationGoals
+  - risk: Workday POST on /performanceEnablement/v5/organizationGoals; changes tenant data.
+- performance_enablement_update_organization_goals:
+  - endpoint: PATCH /performanceEnablement/v5/organizationGoals/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /performanceEnablement/v5/organizationGoals/{ID}; changes tenant data.
+- performance_enablement_create_worker_goal_events:
+  - endpoint: POST /performanceEnablement/v5/workerGoalEvents
+  - risk: Workday POST on /performanceEnablement/v5/workerGoalEvents; changes tenant data.
+- performance_enablement_create_worker_goal_events_by_id_goals:
+  - endpoint: POST /performanceEnablement/v5/workerGoalEvents/{{ record.ID }}/goals
+  - required fields: ID
+  - risk: Workday POST on /performanceEnablement/v5/workerGoalEvents/{ID}/goals; changes tenant data.
+- performance_enablement_create_worker_goal_events_by_id_submit:
+  - endpoint: POST /performanceEnablement/v5/workerGoalEvents/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /performanceEnablement/v5/workerGoalEvents/{ID}/submit; changes tenant data.
+- performance_enablement_create_workers_by_id_anytime_feedback_events:
+  - endpoint: POST /performanceEnablement/v5/workers/{{ record.ID }}/anytimeFeedbackEvents
+  - required fields: ID
+  - risk: Workday POST on /performanceEnablement/v5/workers/{ID}/anytimeFeedbackEvents; changes tenant data.
+- performance_enablement_update_workers_by_id_development_items:
+  - endpoint: PATCH /performanceEnablement/v5/workers/{{ record.ID }}/developmentItems/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /performanceEnablement/v5/workers/{ID}/developmentItems/{subresourceID}; changes tenant data.
+- performance_enablement_create_workers_by_id_requested_feedback_on_self_events:
+  - endpoint: POST /performanceEnablement/v5/workers/{{ record.ID }}/requestedFeedbackOnSelfEvents
+  - required fields: ID
+  - risk: Workday POST on /performanceEnablement/v5/workers/{ID}/requestedFeedbackOnSelfEvents; changes tenant data.
+- performance_enablement_create_workers_by_id_requested_feedback_on_worker_events:
+  - endpoint: POST /performanceEnablement/v5/workers/{{ record.ID }}/requestedFeedbackOnWorkerEvents
+  - required fields: ID
+  - risk: Workday POST on /performanceEnablement/v5/workers/{ID}/requestedFeedbackOnWorkerEvents; changes tenant data.
+- person_create_home_contact_information_changes_by_id_addresses:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/addresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/addresses; changes tenant data.
+- person_delete_home_contact_information_changes_by_id_addresses:
+  - endpoint: DELETE /person/v4/homeContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.
+- person_replace_home_contact_information_changes_by_id_addresses:
+  - endpoint: PUT /person/v4/homeContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.
+- person_create_home_contact_information_changes_by_id_email_addresses:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/emailAddresses; changes tenant data.
+- person_delete_home_contact_information_changes_by_id_email_addresses:
+  - endpoint: DELETE /person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.
+- person_update_home_contact_information_changes_by_id_email_addresses:
+  - endpoint: PATCH /person/v4/homeContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.
+- person_create_home_contact_information_changes_by_id_instant_messengers:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/instantMessengers; changes tenant data.
+- person_delete_home_contact_information_changes_by_id_instant_messengers:
+  - endpoint: DELETE /person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.
+- person_update_home_contact_information_changes_by_id_instant_messengers:
+  - endpoint: PATCH /person/v4/homeContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.
+- person_create_home_contact_information_changes_by_id_phone_numbers:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers; changes tenant data.
+- person_delete_home_contact_information_changes_by_id_phone_numbers:
+  - endpoint: DELETE /person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.
+- person_update_home_contact_information_changes_by_id_phone_numbers:
+  - endpoint: PATCH /person/v4/homeContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.
+- person_create_home_contact_information_changes_by_id_submit:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/submit; changes tenant data.
+- person_create_home_contact_information_changes_by_id_web_addresses:
+  - endpoint: POST /person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/homeContactInformationChanges/{ID}/webAddresses; changes tenant data.
+- person_delete_home_contact_information_changes_by_id_web_addresses:
+  - endpoint: DELETE /person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/homeContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.
+- person_update_home_contact_information_changes_by_id_web_addresses:
+  - endpoint: PATCH /person/v4/homeContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/homeContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.
+- person_update_work_contact_information_changes:
+  - endpoint: PATCH /person/v4/workContactInformationChanges/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /person/v4/workContactInformationChanges/{ID}; changes tenant data.
+- person_create_work_contact_information_changes_by_id_addresses:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/addresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/addresses; changes tenant data.
+- person_delete_work_contact_information_changes_by_id_addresses:
+  - endpoint: DELETE /person/v4/workContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.
+- person_replace_work_contact_information_changes_by_id_addresses:
+  - endpoint: PUT /person/v4/workContactInformationChanges/{{ record.ID }}/addresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}; changes tenant data.
+- person_create_work_contact_information_changes_by_id_email_addresses:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/emailAddresses; changes tenant data.
+- person_delete_work_contact_information_changes_by_id_email_addresses:
+  - endpoint: DELETE /person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/workContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.
+- person_update_work_contact_information_changes_by_id_email_addresses:
+  - endpoint: PATCH /person/v4/workContactInformationChanges/{{ record.ID }}/emailAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/workContactInformationChanges/{ID}/emailAddresses/{subresourceID}; changes tenant data.
+- person_create_work_contact_information_changes_by_id_instant_messengers:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/instantMessengers; changes tenant data.
+- person_delete_work_contact_information_changes_by_id_instant_messengers:
+  - endpoint: DELETE /person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/workContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.
+- person_update_work_contact_information_changes_by_id_instant_messengers:
+  - endpoint: PATCH /person/v4/workContactInformationChanges/{{ record.ID }}/instantMessengers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/workContactInformationChanges/{ID}/instantMessengers/{subresourceID}; changes tenant data.
+- person_create_work_contact_information_changes_by_id_phone_numbers:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/phoneNumbers; changes tenant data.
+- person_delete_work_contact_information_changes_by_id_phone_numbers:
+  - endpoint: DELETE /person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/workContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.
+- person_update_work_contact_information_changes_by_id_phone_numbers:
+  - endpoint: PATCH /person/v4/workContactInformationChanges/{{ record.ID }}/phoneNumbers/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/workContactInformationChanges/{ID}/phoneNumbers/{subresourceID}; changes tenant data.
+- person_create_work_contact_information_changes_by_id_submit:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/submit; changes tenant data.
+- person_create_work_contact_information_changes_by_id_web_addresses:
+  - endpoint: POST /person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses
+  - required fields: ID
+  - risk: Workday POST on /person/v4/workContactInformationChanges/{ID}/webAddresses; changes tenant data.
+- person_delete_work_contact_information_changes_by_id_web_addresses:
+  - endpoint: DELETE /person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /person/v4/workContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.
+- person_update_work_contact_information_changes_by_id_web_addresses:
+  - endpoint: PATCH /person/v4/workContactInformationChanges/{{ record.ID }}/webAddresses/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /person/v4/workContactInformationChanges/{ID}/webAddresses/{subresourceID}; changes tenant data.
+- procurement_create_requisitions:
+  - endpoint: POST /procurement/v5/requisitions
+  - risk: Workday POST on /procurement/v5/requisitions; changes tenant data.
+- procurement_update_requisitions:
+  - endpoint: PATCH /procurement/v5/requisitions/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /procurement/v5/requisitions/{ID}; changes tenant data.
+- procurement_create_requisitions_by_id_attachments:
+  - endpoint: POST /procurement/v5/requisitions/{{ record.ID }}/attachments
+  - required fields: ID
+  - risk: Workday POST on /procurement/v5/requisitions/{ID}/attachments; changes tenant data.
+- procurement_delete_requisitions_by_id_attachments:
+  - endpoint: DELETE /procurement/v5/requisitions/{{ record.ID }}/attachments/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /procurement/v5/requisitions/{ID}/attachments/{subresourceID}; changes tenant data.
+- procurement_update_requisitions_by_id_attachments:
+  - endpoint: PATCH /procurement/v5/requisitions/{{ record.ID }}/attachments/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /procurement/v5/requisitions/{ID}/attachments/{subresourceID}; changes tenant data.
+- procurement_create_requisitions_by_id_cancel:
+  - endpoint: POST /procurement/v5/requisitions/{{ record.ID }}/cancel
+  - required fields: ID
+  - risk: Workday POST on /procurement/v5/requisitions/{ID}/cancel; changes tenant data.
+- procurement_create_requisitions_by_id_close:
+  - endpoint: POST /procurement/v5/requisitions/{{ record.ID }}/close
+  - required fields: ID
+  - risk: Workday POST on /procurement/v5/requisitions/{ID}/close; changes tenant data.
+- procurement_create_requisitions_by_id_requisition_events:
+  - endpoint: POST /procurement/v5/requisitions/{{ record.ID }}/requisitionEvents
+  - required fields: ID
+  - risk: Workday POST on /procurement/v5/requisitions/{ID}/requisitionEvents; changes tenant data.
+- procurement_create_requisitions_by_id_requisition_lines:
+  - endpoint: POST /procurement/v5/requisitions/{{ record.ID }}/requisitionLines
+  - required fields: ID
+  - risk: Workday POST on /procurement/v5/requisitions/{ID}/requisitionLines; changes tenant data.
+- procurement_delete_requisitions_by_id_requisition_lines:
+  - endpoint: DELETE /procurement/v5/requisitions/{{ record.ID }}/requisitionLines/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /procurement/v5/requisitions/{ID}/requisitionLines/{subresourceID}; changes tenant data.
+- procurement_update_requisitions_by_id_requisition_lines:
+  - endpoint: PATCH /procurement/v5/requisitions/{{ record.ID }}/requisitionLines/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /procurement/v5/requisitions/{ID}/requisitionLines/{subresourceID}; changes tenant data.
+- projects_create_ad_hoc_project_time_transactions:
+  - endpoint: POST /projects/v3/adHocProjectTimeTransactions
+  - risk: Workday POST on /projects/v3/adHocProjectTimeTransactions; changes tenant data.
+- projects_create_plan_phases:
+  - endpoint: POST /projects/v3/planPhases
+  - risk: Workday POST on /projects/v3/planPhases; changes tenant data.
+- projects_delete_plan_phases:
+  - endpoint: DELETE /projects/v3/planPhases/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /projects/v3/planPhases/{ID}; changes tenant data.
+- projects_update_plan_phases:
+  - endpoint: PATCH /projects/v3/planPhases/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /projects/v3/planPhases/{ID}; changes tenant data.
+- projects_create_plan_tasks:
+  - endpoint: POST /projects/v3/planTasks
+  - risk: Workday POST on /projects/v3/planTasks; changes tenant data.
+- projects_delete_plan_tasks:
+  - endpoint: DELETE /projects/v3/planTasks/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /projects/v3/planTasks/{ID}; changes tenant data.
+- projects_update_plan_tasks:
+  - endpoint: PATCH /projects/v3/planTasks/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /projects/v3/planTasks/{ID}; changes tenant data.
+- projects_create_projects:
+  - endpoint: POST /projects/v3/projects
+  - risk: Workday POST on /projects/v3/projects; changes tenant data.
+- projects_create_projects_by_id_edit:
+  - endpoint: POST /projects/v3/projects/{{ record.ID }}/edit
+  - required fields: ID
+  - risk: Workday POST on /projects/v3/projects/{ID}/edit; changes tenant data.
+- projects_create_resource_forecast_lines_by_id_allocations:
+  - endpoint: POST /projects/v3/resourceForecastLines/{{ record.ID }}/allocations
+  - required fields: ID
+  - risk: Workday POST on /projects/v3/resourceForecastLines/{ID}/allocations; changes tenant data.
+- projects_update_resource_forecast_lines_by_id_allocations:
+  - endpoint: PATCH /projects/v3/resourceForecastLines/{{ record.ID }}/allocations/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /projects/v3/resourceForecastLines/{ID}/allocations/{subresourceID}; changes tenant data.
+- projects_create_resource_plan_lines:
+  - endpoint: POST /projects/v3/resourcePlanLines
+  - risk: Workday POST on /projects/v3/resourcePlanLines; changes tenant data.
+- projects_create_resource_plan_lines_by_id_edit:
+  - endpoint: POST /projects/v3/resourcePlanLines/{{ record.ID }}/edit
+  - required fields: ID
+  - risk: Workday POST on /projects/v3/resourcePlanLines/{ID}/edit; changes tenant data.
+- projects_create_task_resources:
+  - endpoint: POST /projects/v3/taskResources
+  - risk: Workday POST on /projects/v3/taskResources; changes tenant data.
+- projects_delete_task_resources:
+  - endpoint: DELETE /projects/v3/taskResources/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /projects/v3/taskResources/{ID}; changes tenant data.
+- projects_update_task_resources:
+  - endpoint: PATCH /projects/v3/taskResources/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /projects/v3/taskResources/{ID}; changes tenant data.
+- recruiting_create_interviews_by_id_feedback:
+  - endpoint: POST /recruiting/v4/interviews/{{ record.ID }}/feedback
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/interviews/{ID}/feedback; changes tenant data.
+- recruiting_create_prospects:
+  - endpoint: POST /recruiting/v4/prospects
+  - risk: Workday POST on /recruiting/v4/prospects; changes tenant data.
+- recruiting_create_prospects_by_id_educations:
+  - endpoint: POST /recruiting/v4/prospects/{{ record.ID }}/educations
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/prospects/{ID}/educations; changes tenant data.
+- recruiting_create_prospects_by_id_experiences:
+  - endpoint: POST /recruiting/v4/prospects/{{ record.ID }}/experiences
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/prospects/{ID}/experiences; changes tenant data.
+- recruiting_create_prospects_by_id_languages:
+  - endpoint: POST /recruiting/v4/prospects/{{ record.ID }}/languages
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/prospects/{ID}/languages; changes tenant data.
+- recruiting_create_prospects_by_id_resume_attachments:
+  - endpoint: POST /recruiting/v4/prospects/{{ record.ID }}/resumeAttachments
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/prospects/{ID}/resumeAttachments; changes tenant data.
+- recruiting_create_prospects_by_id_skills:
+  - endpoint: POST /recruiting/v4/prospects/{{ record.ID }}/skills
+  - required fields: ID
+  - risk: Workday POST on /recruiting/v4/prospects/{ID}/skills; changes tenant data.
+- request_create_requests:
+  - endpoint: POST /request/v2/requests
+  - risk: Workday POST on /request/v2/requests; changes tenant data.
+- request_create_requests_by_id_close:
+  - endpoint: POST /request/v2/requests/{{ record.ID }}/close
+  - required fields: ID
+  - risk: Workday POST on /request/v2/requests/{ID}/close; changes tenant data.
+- revenue_update_billable_transactions:
+  - endpoint: PATCH /revenue/v1/billableTransactions/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PATCH on /revenue/v1/billableTransactions/{ID}; changes tenant data.
+- staffing_update_job_changes_by_id_administrative:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/administrative/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/administrative/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_business_title:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/businessTitle/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/businessTitle/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_comment:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/comment/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/comment/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_contract:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/contract/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/contract/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_job_classification:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/jobClassification/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/jobClassification/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_job_profile:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/jobProfile/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/jobProfile/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_location:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/location/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/location/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_move_team:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/moveTeam/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/moveTeam/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_opening:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/opening/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/opening/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_position:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/position/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/position/{subresourceID}; changes tenant data.
+- staffing_update_job_changes_by_id_start_details:
+  - endpoint: PATCH /staffing/v7/jobChanges/{{ record.ID }}/startDetails/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/jobChanges/{ID}/startDetails/{subresourceID}; changes tenant data.
+- staffing_create_job_changes_by_id_submit:
+  - endpoint: POST /staffing/v7/jobChanges/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/jobChanges/{ID}/submit; changes tenant data.
+- staffing_create_organization_assignment_changes:
+  - endpoint: POST /staffing/v7/organizationAssignmentChanges
+  - risk: Workday POST on /staffing/v7/organizationAssignmentChanges; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_business_unit:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/businessUnit/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/businessUnit/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_comment:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/comment/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/comment/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_company:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/company/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/company/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_cost_center:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/costCenter/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/costCenter/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_costing:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/costing/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/costing/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_custom_organizations:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/customOrganizations/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/customOrganizations/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_region:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/region/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/region/{subresourceID}; changes tenant data.
+- staffing_update_organization_assignment_changes_by_id_start_details:
+  - endpoint: PATCH /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/startDetails/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/organizationAssignmentChanges/{ID}/startDetails/{subresourceID}; changes tenant data.
+- staffing_create_organization_assignment_changes_by_id_submit:
+  - endpoint: POST /staffing/v7/organizationAssignmentChanges/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/organizationAssignmentChanges/{ID}/submit; changes tenant data.
+- staffing_create_workers_by_id_check_in_topics:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/checkInTopics
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/checkInTopics; changes tenant data.
+- staffing_delete_workers_by_id_check_in_topics:
+  - endpoint: DELETE /staffing/v7/workers/{{ record.ID }}/checkInTopics/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}; changes tenant data.
+- staffing_update_workers_by_id_check_in_topics:
+  - endpoint: PATCH /staffing/v7/workers/{{ record.ID }}/checkInTopics/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}; changes tenant data.
+- staffing_create_workers_by_id_check_ins:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/checkIns
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/checkIns; changes tenant data.
+- staffing_delete_workers_by_id_check_ins:
+  - endpoint: DELETE /staffing/v7/workers/{{ record.ID }}/checkIns/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /staffing/v7/workers/{ID}/checkIns/{subresourceID}; changes tenant data.
+- staffing_update_workers_by_id_check_ins:
+  - endpoint: PATCH /staffing/v7/workers/{{ record.ID }}/checkIns/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /staffing/v7/workers/{ID}/checkIns/{subresourceID}; changes tenant data.
+- staffing_create_workers_by_id_explicit_skills:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/explicitSkills
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/explicitSkills; changes tenant data.
+- staffing_create_workers_by_id_external_skill_level:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/externalSkillLevel
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/externalSkillLevel; changes tenant data.
+- staffing_replace_workers_by_id_external_skill_level:
+  - endpoint: PUT /staffing/v7/workers/{{ record.ID }}/externalSkillLevel/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /staffing/v7/workers/{ID}/externalSkillLevel/{subresourceID}; changes tenant data.
+- staffing_create_workers_by_id_home_contact_information_changes:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/homeContactInformationChanges
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/homeContactInformationChanges; changes tenant data.
+- staffing_create_workers_by_id_job_changes:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/jobChanges
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/jobChanges; changes tenant data.
+- staffing_create_workers_by_id_organization_assignment_changes:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/organizationAssignmentChanges
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/organizationAssignmentChanges; changes tenant data.
+- staffing_create_workers_by_id_skill_items:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/skillItems
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/skillItems; changes tenant data.
+- staffing_create_workers_by_id_work_contact_information_changes:
+  - endpoint: POST /staffing/v7/workers/{{ record.ID }}/workContactInformationChanges
+  - required fields: ID
+  - risk: Workday POST on /staffing/v7/workers/{ID}/workContactInformationChanges; changes tenant data.
+- student_core_create_holds_by_id_override_hold:
+  - endpoint: POST /studentCore/v1/holds/{{ record.ID }}/overrideHold
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/holds/{ID}/overrideHold; changes tenant data.
+- student_core_create_holds_by_id_remove_hold:
+  - endpoint: POST /studentCore/v1/holds/{{ record.ID }}/removeHold
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/holds/{ID}/removeHold; changes tenant data.
+- student_core_create_holds_by_id_update_hold:
+  - endpoint: POST /studentCore/v1/holds/{{ record.ID }}/updateHold
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/holds/{ID}/updateHold; changes tenant data.
+- student_core_create_immigration_events_by_id_dependent_immigration_data:
+  - endpoint: POST /studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData; changes tenant data.
+- student_core_delete_immigration_events_by_id_dependent_immigration_data:
+  - endpoint: DELETE /studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}; changes tenant data.
+- student_core_replace_immigration_events_by_id_dependent_immigration_data:
+  - endpoint: PUT /studentCore/v1/immigrationEvents/{{ record.ID }}/dependentImmigrationData/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}; changes tenant data.
+- student_core_create_immigration_events_by_id_immigration_data:
+  - endpoint: POST /studentCore/v1/immigrationEvents/{{ record.ID }}/immigrationData
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/immigrationEvents/{ID}/immigrationData; changes tenant data.
+- student_core_replace_immigration_events_by_id_immigration_data:
+  - endpoint: PUT /studentCore/v1/immigrationEvents/{{ record.ID }}/immigrationData/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PUT on /studentCore/v1/immigrationEvents/{ID}/immigrationData/{subresourceID}; changes tenant data.
+- student_core_create_immigration_events_by_id_submit:
+  - endpoint: POST /studentCore/v1/immigrationEvents/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/immigrationEvents/{ID}/submit; changes tenant data.
+- student_core_create_students_by_id_apply_hold:
+  - endpoint: POST /studentCore/v1/students/{{ record.ID }}/applyHold
+  - required fields: ID
+  - risk: Workday POST on /studentCore/v1/students/{ID}/applyHold; changes tenant data.
+- student_finance_create_students_by_id_payments:
+  - endpoint: POST /studentFinance/v1/students/{{ record.ID }}/payments
+  - required fields: ID
+  - risk: Workday POST on /studentFinance/v1/students/{ID}/payments; changes tenant data.
+- student_finance_update_students_by_id_payments:
+  - endpoint: PATCH /studentFinance/v1/students/{{ record.ID }}/payments/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /studentFinance/v1/students/{ID}/payments/{subresourceID}; changes tenant data.
+- talent_management_create_create_mentorship_for_me:
+  - endpoint: POST /talentManagement/v2/createMentorshipForMe
+  - risk: Workday POST on /talentManagement/v2/createMentorshipForMe; changes tenant data.
+- talent_management_create_create_mentorship_for_worker:
+  - endpoint: POST /talentManagement/v2/createMentorshipForWorker
+  - risk: Workday POST on /talentManagement/v2/createMentorshipForWorker; changes tenant data.
+- talent_management_create_mentorships_by_id_close:
+  - endpoint: POST /talentManagement/v2/mentorships/{{ record.ID }}/close
+  - required fields: ID
+  - risk: Workday POST on /talentManagement/v2/mentorships/{ID}/close; changes tenant data.
+- talent_management_create_mentorships_by_id_edit:
+  - endpoint: POST /talentManagement/v2/mentorships/{{ record.ID }}/edit
+  - required fields: ID
+  - risk: Workday POST on /talentManagement/v2/mentorships/{ID}/edit; changes tenant data.
+- talent_management_create_succession_plan_events:
+  - endpoint: POST /talentManagement/v2/successionPlanEvents
+  - risk: Workday POST on /talentManagement/v2/successionPlanEvents; changes tenant data.
+- talent_management_create_succession_plan_events_by_id_candidates:
+  - endpoint: POST /talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates
+  - required fields: ID
+  - risk: Workday POST on /talentManagement/v2/successionPlanEvents/{ID}/candidates; changes tenant data.
+- talent_management_delete_succession_plan_events_by_id_candidates:
+  - endpoint: DELETE /talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /talentManagement/v2/successionPlanEvents/{ID}/candidates/{subresourceID}; changes tenant data.
+- talent_management_update_succession_plan_events_by_id_candidates:
+  - endpoint: PATCH /talentManagement/v2/successionPlanEvents/{{ record.ID }}/candidates/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /talentManagement/v2/successionPlanEvents/{ID}/candidates/{subresourceID}; changes tenant data.
+- talent_management_create_succession_plan_events_by_id_submit:
+  - endpoint: POST /talentManagement/v2/successionPlanEvents/{{ record.ID }}/submit
+  - required fields: ID
+  - risk: Workday POST on /talentManagement/v2/successionPlanEvents/{ID}/submit; changes tenant data.
+- talent_management_create_succession_plans:
+  - endpoint: POST /talentManagement/v2/successionPlans
+  - risk: Workday POST on /talentManagement/v2/successionPlans; changes tenant data.
+- time_tracking_create_time_clock_events:
+  - endpoint: POST /timeTracking/v5/timeClockEvents
+  - risk: Workday POST on /timeTracking/v5/timeClockEvents; changes tenant data.
+- time_tracking_delete_time_clock_events:
+  - endpoint: DELETE /timeTracking/v5/timeClockEvents/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday DELETE on /timeTracking/v5/timeClockEvents/{ID}; changes tenant data.
+- time_tracking_replace_time_clock_events:
+  - endpoint: PUT /timeTracking/v5/timeClockEvents/{{ record.ID }}
+  - required fields: ID
+  - risk: Workday PUT on /timeTracking/v5/timeClockEvents/{ID}; changes tenant data.
+- time_tracking_create_worker_time_attestation:
+  - endpoint: POST /timeTracking/v5/workerTimeAttestation
+  - risk: Workday POST on /timeTracking/v5/workerTimeAttestation; changes tenant data.
+- time_tracking_create_workers_by_id_time_review_events:
+  - endpoint: POST /timeTracking/v5/workers/{{ record.ID }}/timeReviewEvents
+  - required fields: ID
+  - risk: Workday POST on /timeTracking/v5/workers/{ID}/timeReviewEvents; changes tenant data.
+- time_tracking_create_workers_by_id_worker_time_block:
+  - endpoint: POST /timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock
+  - required fields: ID
+  - risk: Workday POST on /timeTracking/v5/workers/{ID}/workerTimeBlock; changes tenant data.
+- time_tracking_delete_workers_by_id_worker_time_block:
+  - endpoint: DELETE /timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday DELETE on /timeTracking/v5/workers/{ID}/workerTimeBlock/{subresourceID}; changes tenant data.
+- time_tracking_update_workers_by_id_worker_time_block:
+  - endpoint: PATCH /timeTracking/v5/workers/{{ record.ID }}/workerTimeBlock/{{ record.subresourceID }}
+  - required fields: ID, subresourceID
+  - risk: Workday PATCH on /timeTracking/v5/workers/{ID}/workerTimeBlock/{subresourceID}; changes tenant data.
+
 ## Security
 
-- read risk: external Workday REST API read of worker, organization, and job profile data (HR/PII-adjacent)
-- approval: none; read-only, bearer-token auth
+- read risk: external Workday REST API read across HCM, Financials, Student and Platform services (HR/PII-adjacent)
+- write risk: external Workday REST API mutation across HCM, Financials, Student and Platform services, including HR/PII-adjacent worker, absence, payroll, and financial records; 32 of the 252 write actions are DELETEs that permanently remove Workday records
+- approval: required for every write action; reverse ETL plan, preview, approval, execute, and every DELETE action is gated as destructive and additionally requires a typed confirmation; reads are bearer-token authenticated
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Read and write Workday HCM, Financials, Student and Platform data.
+- Usage: pm workday-rest <service> <action> [flags]
+- Global flags:
+  - --json (boolean): Write machine-readable JSON output.
+  - --connection (string): Use a saved Workday REST connector credential and tenant.: maps_to=connection
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Human Capital Management
+  - staffing job-changes-get - Retrieves a single change job event instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-administrative-list - Retrieves the administrative options for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-administrative-get - Retrieves the administrative options for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-business-title-list - Retrieves a business title for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-business-title-get - Retrieves a business title for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-comment-list - Returns the comment information for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-comment-get - Returns the comment information for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-contract-list - Retrieves the contract options for the specified change job ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-contract-get - Retrieves the contract options for the specified change job ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-job-classification-list - Retrieves a job classification for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-job-classification-get - Retrieves a job classification for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-job-profile-list - Retrieves a job profile for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-job-profile-get - Retrieves a job profile for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-location-list - Returns the location information for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-location-get - Returns the location information for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-move-team-list - Retrieves a move team option from the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-move-team-get - Retrieves a move team option from the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-opening-list - Retrieves the opening options for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-opening-get - Retrieves the opening options for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-position-list - Retrieves a position for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-position-get - Retrieves a position for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-changes-by-id-start-details-list - Retrieves the start details for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-changes-by-id-start-details-get - Retrieves the start details for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing job-families-list - Retrieves a collection of job families. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing job-families-get - Retrieves a single job family instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing job-profiles-list - Retrieves a collection of job profiles. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing job-profiles-get - Retrieves a single job profile instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing jobs-list - Retrieves a collection of jobs. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing jobs-get - Retrieves a single job instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing jobs-by-id-workspace-list - Retrieves a collection of workspaces for the specified job ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing jobs-by-id-workspace-get - Retrieves a single workspace instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-get - Retrieves a single organization assignment change event instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-business-unit-list - Retrieves a business unit for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-business-unit-get - Retrieves a business unit for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-comment-list - Retrieves the comment information for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-comment-get - Retrieves the comment information for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-company-list - Retrieves a company for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-company-get - Retrieves a company for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-cost-center-list - Retrieves a cost center for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-cost-center-get - Retrieves a cost center for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-costing-list - Retrieves the costing organizations for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-costing-get - Retrieves the costing organizations for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-custom-organizations-list - Retrieves the custom organizations for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-custom-organizations-get - Retrieves the custom organizations for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-region-list - Retrieves a region for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-region-get - Retrieves a region for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-start-details-list - Retrieves the start details for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing organization-assignment-changes-by-id-start-details-get - Retrieves the start details for the specified organization assignment change ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing supervisory-organizations-list - Retrieves a supervisory organization for the specified ID. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing supervisory-organizations-get - Retrieves a single supervisory organization instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing supervisory-organizations-by-id-members-list - Retrieves a collection of members for the specified supervisory organization ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing supervisory-organizations-by-id-members-get - Retrieves a single member instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing supervisory-organizations-by-id-org-chart-list - Retrieves information about an organization chart of the specified supervisory organization id. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing supervisory-organizations-by-id-org-chart-get - Retrieves a single organization chart instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing values-job-changes-group-assignment-types-list - Reads /staffing/v7/values/jobChangesGroup/assignmentTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-company-insider-types-list - Reads /staffing/v7/values/jobChangesGroup/companyInsiderTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-contingent-worker-types-list - Reads /staffing/v7/values/jobChangesGroup/contingentWorkerTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-currencies-list - Reads /staffing/v7/values/jobChangesGroup/currencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-employee-types-list - Reads /staffing/v7/values/jobChangesGroup/employeeTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-frequencies-list - Reads /staffing/v7/values/jobChangesGroup/frequencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-headcount-options-list - Reads /staffing/v7/values/jobChangesGroup/headcountOptions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-job-classifications-list - Reads /staffing/v7/values/jobChangesGroup/jobClassifications/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-job-profiles-list - Reads /staffing/v7/values/jobChangesGroup/jobProfiles/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-job-requisitions-list - Reads /staffing/v7/values/jobChangesGroup/jobRequisitions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-jobs-list - Reads /staffing/v7/values/jobChangesGroup/jobs/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-locations-list - Reads /staffing/v7/values/jobChangesGroup/locations/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-pay-rate-types-list - Reads /staffing/v7/values/jobChangesGroup/payRateTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-proposed-position-list - Reads /staffing/v7/values/jobChangesGroup/proposedPosition/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-reason-list - Reads /staffing/v7/values/jobChangesGroup/reason/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-supervisory-organization-list - Reads /staffing/v7/values/jobChangesGroup/supervisoryOrganization/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-templates-list - Reads /staffing/v7/values/jobChangesGroup/templates/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-time-types-list - Reads /staffing/v7/values/jobChangesGroup/timeTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-work-shifts-list - Reads /staffing/v7/values/jobChangesGroup/workShifts/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-work-spaces-list - Reads /staffing/v7/values/jobChangesGroup/workSpaces/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-work-study-awards-list - Reads /staffing/v7/values/jobChangesGroup/workStudyAwards/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-worker-types-list - Reads /staffing/v7/values/jobChangesGroup/workerTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-workers-list - Reads /staffing/v7/values/jobChangesGroup/workers/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-job-changes-group-workers-compensation-code-overrides-list - Reads /staffing/v7/values/jobChangesGroup/workersCompensationCodeOverrides/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-business-units-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/businessUnits/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-companies-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/companies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-cost-centers-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/costCenters/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-customs-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/customs/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-funds-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/funds/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-gifts-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/gifts/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-grants-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/grants/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-jobs-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/jobs/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-positions-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/positions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-programs-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/programs/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-regions-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/regions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing values-organization-assignment-changes-group-workers-list - Reads /staffing/v7/values/organizationAssignmentChangesGroup/workers/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing workers-list - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - staffing workers-get - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-check-in-topics-list - Retrieves a collection of Check-Ins topics. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-check-in-topics-get - Retrieves a single Check-In topic instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-check-ins-list - Retrieves a collection of Check-Ins. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-check-ins-get - Retrieves a single Check-In instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-explicit-skills-list - Get Explicit Skills for Skill Enabled [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-explicit-skills-get - Get Explicit Skills for Skill Enabled [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-external-skill-level-list - Retrieves all external skill level information for a worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-external-skill-level-get - Retrieves all external skill level information for a worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-home-contact-information-changes-get - Retrieves an existing Home Contact Change event for the Person. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-service-dates-list - Retrieves a collection of service dates for the specified worker id. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-service-dates-get - Retrieves a single service date information instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-skill-items-list - Returns skill items. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - staffing workers-by-id-skill-items-get - Returns skill items. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing workers-by-id-work-contact-information-changes-get - Retrieves an existing Work Contact Change event for the Person. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - staffing update-job-changes-by-id-administrative - Partially updates the administrative options for the specified job change ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_administrative]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-business-title - Partially updates the businessTitle options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_business_title]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-comment - Partially updates the comment for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-contract - Partially updates the contract options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_contract]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-job-classification - Partially updates the jobClassification options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_job_classification]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-job-profile - Partially updates the jobProfile options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_job_profile]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-location - Partially updates the location options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_location]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-move-team - Partially updates the moveTeam options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_move_team]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-opening - Partially updates the opening options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_opening]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-position - Partially updates the position options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_position]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-job-changes-by-id-start-details - Partially updates the startDetails options for the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_update_job_changes_by_id_start_details]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing create-job-changes-by-id-submit - Submit the specified change job ID. [intent=reverse_etl availability=implemented write=staffing_create_job_changes_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-organization-assignment-changes - Creates a new change organization assignment event for a specific filled or unfilled position. [intent=reverse_etl availability=implemented write=staffing_create_organization_assignment_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - staffing update-organization-assignment-changes-by-id-business-unit - Partially updates the business unit for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_business_unit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-comment - Partially updates the comment for the organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-company - Partially updates the company for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_company]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-cost-center - Partially updates the cost center for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_cost_center]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-costing - Partially updates the costing organization options for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_costing]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-custom-organizations - Partially updates the custom organizations for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_custom_organizations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-region - Partially updates the region for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_region]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-organization-assignment-changes-by-id-start-details - Partially updates the start details for the specified organization assignment change ID. [intent=reverse_etl availability=implemented write=staffing_update_organization_assignment_changes_by_id_start_details]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing create-organization-assignment-changes-by-id-submit - Submits the organization changes request for the specified ID, and initiates the Change Organization Assignment business process. [intent=reverse_etl availability=implemented write=staffing_create_organization_assignment_changes_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-check-in-topics - Creates Check-In topics. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_check_in_topics]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing delete-workers-by-id-check-in-topics - Deletes an existing Check-In topic instance. [intent=reverse_etl availability=implemented write=staffing_delete_workers_by_id_check_in_topics]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-workers-by-id-check-in-topics - Partially updates an existing Check-In topic instance. [intent=reverse_etl availability=implemented write=staffing_update_workers_by_id_check_in_topics]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required), --type
+  - staffing create-workers-by-id-check-ins - Creates Check-Ins. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_check_ins]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing delete-workers-by-id-check-ins - Deletes an existing Check-In instance. [intent=reverse_etl availability=implemented write=staffing_delete_workers_by_id_check_ins]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing update-workers-by-id-check-ins - Partially updates an existing Check-In instance. [intent=reverse_etl availability=implemented write=staffing_update_workers_by_id_check_ins]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required), --type
+  - staffing create-workers-by-id-explicit-skills - Save skills a user has [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_explicit_skills]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-external-skill-level - Creates external skill levels. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_external_skill_level]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing replace-workers-by-id-external-skill-level - Updates external skill levels. [intent=reverse_etl availability=implemented write=staffing_replace_workers_by_id_external_skill_level]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - staffing create-workers-by-id-home-contact-information-changes - Creates a new Home Contact Change business process event. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_home_contact_information_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-job-changes - Initiates a job change request for a specific worker [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_job_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-organization-assignment-changes - Initiates an organization assignment change for a specific worker. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_organization_assignment_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-skill-items - POST /staffing/v7/workers/{ID}/skillItems. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_skill_items]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - staffing create-workers-by-id-work-contact-information-changes - POST /staffing/v7/workers/{ID}/workContactInformationChanges. [intent=reverse_etl availability=implemented write=staffing_create_workers_by_id_work_contact_information_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person countries-list - Retrieves a collection of information about countries. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person countries-get - Retrieves information about a country. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person countries-by-id-address-components-list - Retrieves the allowed address components and their configuration for the Country and a given Address Configuration Format. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person countries-by-id-name-components-list - Retrieves a collection of configuration information about name components. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-get - Reads /person/v4/homeContactInformationChanges/{ID}. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-addresses-list - Retrieve all existing addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-addresses-get - An address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-email-addresses-list - Retrieve all existing addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-email-addresses-get - An email address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-instant-messengers-list - Retrieve all existing instant messengers staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-instant-messengers-get - An instant messenger as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-phone-numbers-list - Retrieve all existing phone numbers staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-phone-numbers-get - A phone number as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-web-addresses-list - Retrieve all existing web addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person home-contact-information-changes-by-id-web-addresses-get - A web address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-list - Retrieves a person in your Workday tenant. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person people-get - Retrieves a person in your Workday tenant. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-additional-names-list - Retrieves a collection of additional names. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-additional-names-get - Retrieves an additional name. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-audio-name-pronunciation-list - Retrieves a collection of Audio Name Pronunciations [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-audio-name-pronunciation-get - Retrieves an Audio Name Pronunciation [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-home-addresses-list - Retrieves a collection of home addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-home-addresses-get - Retrieves a home address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-home-emails-list - Retrieves a collection of home email addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-home-emails-get - Retrieves a home email address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-home-instant-messengers-list - Retrieves a collection of home instant messenger account usernames. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-home-instant-messengers-get - Retrieves a home instant messenger account username. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-home-phones-list - Retrieves a collection of home phone numbers. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-home-phones-get - Retrieves a home phone number. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-home-web-addresses-list - Retrieves a collection of home web addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-home-web-addresses-get - Retrieves a home web address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-legal-name-list - Retrieves the legal name instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-legal-name-get - Retrieves the legal name instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-personal-information-list - Retrieves a collection of personal information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-personal-information-get - Retrieves a person's personal information. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-photos-list - Retrieves a collection of personal photos. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-photos-get - Retrieves a personal photo. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-preferred-name-list - Retrieves the preferred name instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-preferred-name-get - Retrieves the preferred name instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-public-contact-information-list - Retrieves a collection of public contact information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-public-contact-information-get - Retrieves a person's public contact information. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-work-addresses-list - Retrieves a collection of work addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-work-addresses-get - Retrieves a work address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-work-emails-list - Retrieves a collection of work email addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-work-emails-get - Retrieves a work email address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-work-instant-messengers-list - Retrieves a collection of work instant messenger accounts usernames. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-work-instant-messengers-get - Retrieves a work instant messenger account username. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-work-phones-list - Retrieves a collection of work phone numbers. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-work-phones-get - Retrieves a work phone number. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person people-by-id-work-web-addresses-list - Retrieves a collection of work web addresses. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person people-by-id-work-web-addresses-get - Retrieves a work web address. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person values-common-phone-country-phone-codes-list - Reads /person/v4/values/commonPhone/countryPhoneCodes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-common-phone-phone-device-types-list - Reads /person/v4/values/commonPhone/phoneDeviceTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-country-components-country-list - Reads /person/v4/values/countryComponents/country/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-country-components-country-city-list - Reads /person/v4/values/countryComponents/countryCity/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-country-components-country-region-list - Reads /person/v4/values/countryComponents/countryRegion/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-marital-status-active-martial-statuses-list - Reads /person/v4/values/maritalStatus/activeMartialStatuses/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-academic-list - Reads /person/v4/values/nameComponents/academic/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-hereditary-list - Reads /person/v4/values/nameComponents/hereditary/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-honorary-list - Reads /person/v4/values/nameComponents/honorary/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-professional-list - Reads /person/v4/values/nameComponents/professional/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-religious-list - Reads /person/v4/values/nameComponents/religious/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-royal-list - Reads /person/v4/values/nameComponents/royal/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-salutation-list - Reads /person/v4/values/nameComponents/salutation/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-social-list - Reads /person/v4/values/nameComponents/social/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-name-components-title-list - Reads /person/v4/values/nameComponents/title/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-personal-information-country-allowed-country-list - Reads /person/v4/values/personalInformationCountry/allowedCountry/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person values-personal-information-country-populated-country-list - Reads /person/v4/values/personalInformationCountry/populatedCountry/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - person work-contact-information-changes-get - Reads /person/v4/workContactInformationChanges/{ID}. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-addresses-list - Retrieve all existing addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-addresses-get - An address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-email-addresses-list - Retrieve all existing addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-email-addresses-get - An email address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-instant-messengers-list - Retrieve all existing instant messengers staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-instant-messengers-get - An instant messenger as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-phone-numbers-list - Retrieve all existing phone numbers staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-phone-numbers-get - A phone number as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-web-addresses-list - Retrieve all existing web addresses staged for update by the parent business process [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - person work-contact-information-changes-by-id-web-addresses-get - A web address as it exists staged for update by the parent business process. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - person create-home-contact-information-changes-by-id-addresses - POST /person/v4/homeContactInformationChanges/{ID}/addresses. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-home-contact-information-changes-by-id-addresses - DELETE /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}. [intent=reverse_etl availability=implemented write=person_delete_home_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person replace-home-contact-information-changes-by-id-addresses - PUT /person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}. [intent=reverse_etl availability=implemented write=person_replace_home_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-home-contact-information-changes-by-id-email-addresses - Creates a new email address. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-home-contact-information-changes-by-id-email-addresses - Removes the specified email address. [intent=reverse_etl availability=implemented write=person_delete_home_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-home-contact-information-changes-by-id-email-addresses - Partially update an existing email address. [intent=reverse_etl availability=implemented write=person_update_home_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-home-contact-information-changes-by-id-instant-messengers - Creates a new instant messenger. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-home-contact-information-changes-by-id-instant-messengers - Remove the specified instant messenger. [intent=reverse_etl availability=implemented write=person_delete_home_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-home-contact-information-changes-by-id-instant-messengers - Partially update an existing instant messenger. [intent=reverse_etl availability=implemented write=person_update_home_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-home-contact-information-changes-by-id-phone-numbers - Creates a new phone number. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-home-contact-information-changes-by-id-phone-numbers - Removes the specified phone number. [intent=reverse_etl availability=implemented write=person_delete_home_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-home-contact-information-changes-by-id-phone-numbers - Partially update an existing phone number. [intent=reverse_etl availability=implemented write=person_update_home_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-home-contact-information-changes-by-id-submit - Submit the specified contact change ID. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person create-home-contact-information-changes-by-id-web-addresses - Creates a new web address. [intent=reverse_etl availability=implemented write=person_create_home_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-home-contact-information-changes-by-id-web-addresses - Remove the specified web address. [intent=reverse_etl availability=implemented write=person_delete_home_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-home-contact-information-changes-by-id-web-addresses - Partially update an existing web address. [intent=reverse_etl availability=implemented write=person_update_home_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person read-phone-validation - Validates phone number data to ensure it is valid for Workday. [intent=direct_read availability=implemented operation=workday_rest.person_read_phone_validation]; flags: --page, --page-cursor
+  - person update-work-contact-information-changes - PATCH /person/v4/workContactInformationChanges/{ID}. [intent=reverse_etl availability=implemented write=person_update_work_contact_information_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person create-work-contact-information-changes-by-id-addresses - POST /person/v4/workContactInformationChanges/{ID}/addresses. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-work-contact-information-changes-by-id-addresses - DELETE /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}. [intent=reverse_etl availability=implemented write=person_delete_work_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person replace-work-contact-information-changes-by-id-addresses - PUT /person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}. [intent=reverse_etl availability=implemented write=person_replace_work_contact_information_changes_by_id_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-work-contact-information-changes-by-id-email-addresses - Creates a new email address. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-work-contact-information-changes-by-id-email-addresses - Removes the specified email address. [intent=reverse_etl availability=implemented write=person_delete_work_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-work-contact-information-changes-by-id-email-addresses - Partially update an existing email address. [intent=reverse_etl availability=implemented write=person_update_work_contact_information_changes_by_id_email_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-work-contact-information-changes-by-id-instant-messengers - Creates a new instant messenger. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-work-contact-information-changes-by-id-instant-messengers - Remove the specified instant messenger. [intent=reverse_etl availability=implemented write=person_delete_work_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-work-contact-information-changes-by-id-instant-messengers - Partially update an existing instant messenger. [intent=reverse_etl availability=implemented write=person_update_work_contact_information_changes_by_id_instant_messengers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-work-contact-information-changes-by-id-phone-numbers - Creates a new phone number. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-work-contact-information-changes-by-id-phone-numbers - Removes the specified phone number. [intent=reverse_etl availability=implemented write=person_delete_work_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-work-contact-information-changes-by-id-phone-numbers - Partially update an existing phone number. [intent=reverse_etl availability=implemented write=person_update_work_contact_information_changes_by_id_phone_numbers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person create-work-contact-information-changes-by-id-submit - Submit the specified contact change ID. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person create-work-contact-information-changes-by-id-web-addresses - Creates a new web address. [intent=reverse_etl availability=implemented write=person_create_work_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - person delete-work-contact-information-changes-by-id-web-addresses - Remove the specified web address. [intent=reverse_etl availability=implemented write=person_delete_work_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - person update-work-contact-information-changes-by-id-web-addresses - Partially update an existing web address. [intent=reverse_etl availability=implemented write=person_update_work_contact_information_changes_by_id_web_addresses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - compensation scorecard-results-list - Provides the ability to set up and retrieve Scores on Scorecard Results. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - compensation scorecard-results-get - Provides the ability to set up and retrieve Scores on Scorecard Results. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - compensation scorecards-list - Retrieves Compensation Scorecard information. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - compensation scorecards-get - Retrieves Compensation Scorecard information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - compensation values-one-time-payment-plan-group-one-time-payment-plan-list - Reads /compensation/v3/values/oneTimePaymentPlanGroup/oneTimePaymentPlan/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - compensation workers-list - Retrieves a collection of workers. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - compensation workers-get - Retrieves a worker instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - compensation create-scorecard-results - Creates a new Scorecard Result. [intent=reverse_etl availability=implemented write=compensation_create_scorecard_results]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - compensation delete-scorecard-results - Deletes the Scorecard Results with the specified ID. [intent=reverse_etl availability=implemented write=compensation_delete_scorecard_results]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - compensation update-scorecard-results-by-id-scores - Updates the Score for the specified Scorecard Result. [intent=reverse_etl availability=implemented write=compensation_update_scorecard_results_by_id_scores]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - compensation create-scorecards - Creates a Compensation Scorecard [intent=reverse_etl availability=implemented write=compensation_create_scorecards]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - compensation delete-scorecards - Deletes a Compensation Scorecard with the specified ID. [intent=reverse_etl availability=implemented write=compensation_delete_scorecards]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - compensation replace-scorecards - Updates a Compensation Scorecard [intent=reverse_etl availability=implemented write=compensation_replace_scorecards]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - compensation create-workers-by-id-request-one-time-payment - Request a one-time payment for a worker with the specified ID. [intent=reverse_etl availability=implemented write=compensation_create_workers_by_id_request_one_time_payment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - absence-management balances-list - Retrieves the balance of all absence plan and leave of absence type for the specified worker ID. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - absence-management balances-get - Retrieves the specified balance of all absence plan and leave of absence types. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management values-leave-status-list - Reads /absenceManagement/v5/values/leave/status/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - absence-management values-time-off-status-list - Reads /absenceManagement/v5/values/timeOff/status/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - absence-management workers-list - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - absence-management workers-get - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management workers-by-id-eligible-absence-types-list - Retrieves a collection of eligible absence types for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management workers-by-id-eligible-absence-types-get - Retrieves the eligible absence type for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - absence-management workers-by-id-leaves-of-absence-list - Retrieves the Leaves Of Absence for a specified worker ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management workers-by-id-leaves-of-absence-get - Retrieves the leave of absence for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - absence-management workers-by-id-time-off-details-list - Retrieves a collection of time off details for a specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management workers-by-id-time-off-details-get - Retrieves details of a specified time off entry for a specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - absence-management workers-by-id-valid-time-off-dates-list - Retrieves the valid time off dates for the specified worker ID for the given dates. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - absence-management create-workers-by-id-correct-time-off-entry - Creates a time off correction for the specified worker ID and initiates the business process. [intent=reverse_etl availability=implemented write=absence_management_create_workers_by_id_correct_time_off_entry]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - absence-management create-workers-by-id-request-time-off - Creates a time off request for the specified worker ID and initiates the business process. [intent=reverse_etl availability=implemented write=absence_management_create_workers_by_id_request_time_off]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - time-tracking time-attestation-prompts-list - Retrieves a collection of time attestation prompts for a time clock event. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking time-clock-events-list - Retrieves a collection of time clock events for a worker for a date range. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking time-clock-events-get - Retrieves a time clock event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking time-validations-list - Retrieves a collection of time entry validations. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-enter-time-by-type-time-type-nested-list - Reads /timeTracking/v5/values/enterTimeByType/timeTypeNested/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-types-default-time-entry-code-list - Reads /timeTracking/v5/values/timeTypes/defaultTimeEntryCode/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-types-project-plan-tasks-list - Reads /timeTracking/v5/values/timeTypes/projectPlanTasks/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-types-projects-list - Reads /timeTracking/v5/values/timeTypes/projects/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-types-time-entry-codes-list - Reads /timeTracking/v5/values/timeTypes/timeEntryCodes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-values-out-reason-list - Reads /timeTracking/v5/values/timeValues/outReason/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-values-positions-list - Reads /timeTracking/v5/values/timeValues/positions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking values-time-values-worker-time-zone-list - Reads /timeTracking/v5/values/timeValues/workerTimeZone/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking worker-time-attestation-get - Retrieves a worker time attestation. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking worker-time-attestation-by-id-followup-time-attestation-prompt-list - Reads /timeTracking/v5/workerTimeAttestation/{ID}/followupTimeAttestationPrompt. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking worker-time-attestation-by-id-followup-worker-time-attestation-list - Reads /timeTracking/v5/workerTimeAttestation/{ID}/followupWorkerTimeAttestation. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking worker-time-blocks-list - Retrieves time blocks for specified workers over a date range. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking worker-time-blocks-get - Retrieves a worker time block. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking workers-list - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - time-tracking workers-get - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking workers-by-id-period-list - Retrieves a period from the period schedule the worker is eligible for. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking workers-by-id-time-totals-list - Retrieves a summary of reported hours for a worker over a period. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - time-tracking workers-by-id-time-totals-get - Retrieves a summary of reported hours for a worker over a period. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - time-tracking create-time-clock-events - Adds time clock events for the specified workers. [intent=reverse_etl availability=implemented write=time_tracking_create_time_clock_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - time-tracking delete-time-clock-events - Deletes a time clock event. [intent=reverse_etl availability=implemented write=time_tracking_delete_time_clock_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - time-tracking replace-time-clock-events - Updates the time clock event for the specified ID. [intent=reverse_etl availability=implemented write=time_tracking_replace_time_clock_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - time-tracking create-worker-time-attestation - POST /timeTracking/v5/workerTimeAttestation. [intent=reverse_etl availability=implemented write=time_tracking_create_worker_time_attestation]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - time-tracking create-workers-by-id-time-review-events - Adds time review events for the specified worker. [intent=reverse_etl availability=implemented write=time_tracking_create_workers_by_id_time_review_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - time-tracking create-workers-by-id-worker-time-block - Creates a worker time block. [intent=reverse_etl availability=implemented write=time_tracking_create_workers_by_id_worker_time_block]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - time-tracking delete-workers-by-id-worker-time-block - Deletes a specified worker time block. [intent=reverse_etl availability=implemented write=time_tracking_delete_workers_by_id_worker_time_block]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - time-tracking update-workers-by-id-worker-time-block - Updates a specified worker time block. [intent=reverse_etl availability=implemented write=time_tracking_update_workers_by_id_worker_time_block]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - performance-enablement feedback-badges-list - Retrieves a collection of active Feedback Badges. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement feedback-badges-get - Retrieves a Feedback Badge with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement give-requested-feedback-events-list - Retrieves a collection of feedback given events about the user that responded to the feedback request. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement give-requested-feedback-events-get - Retrieves a single requested feedback given event instance with the specified ID of the user that responded to the feedback request. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement values-cascade-goal-talent-pools-list - Reads /performanceEnablement/v5/values/cascadeGoal/talentPools/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-feedback-on-worker-feedback-on-worker-list - Reads /performanceEnablement/v5/values/feedbackOnWorker/feedbackOnWorker/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-feedback-responder-feedback-responder-list - Reads /performanceEnablement/v5/values/feedbackResponder/feedbackResponder/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-feedback-template-feedback-template-list - Reads /performanceEnablement/v5/values/feedbackTemplate/feedbackTemplate/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-manage-goals-categories-list - Reads /performanceEnablement/v5/values/manageGoals/categories/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-manage-goals-status-list - Reads /performanceEnablement/v5/values/manageGoals/status/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-organization-goal-goal-periods-list - Reads /performanceEnablement/v5/values/organizationGoal/goalPeriods/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-organization-goal-organizations-list - Reads /performanceEnablement/v5/values/organizationGoal/organizations/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-organization-goal-supporting-initiatives-list - Reads /performanceEnablement/v5/values/organizationGoal/supportingInitiatives/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-relates-to-relates-to-list - Reads /performanceEnablement/v5/values/relatesTo/relatesTo/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-review-template-template-for-my-performance-review-list - Reads /performanceEnablement/v5/values/reviewTemplate/templateForMyPerformanceReview/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement values-workers-to-notify-workers-to-notify-list - Reads /performanceEnablement/v5/values/workersToNotify/workersToNotify/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement worker-goal-events-list - Get Worker Goal Events [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement worker-goal-events-get - Get Worker Goal Events [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-list - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - performance-enablement workers-get - Retrieves a collection of workers and current staffing information. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-anytime-feedback-events-list - Retrieves a collection of feedback given events about the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-anytime-feedback-events-get - Retrieves a feedback given event instance with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-development-items-list - Retrieves a collection of development items for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-development-items-get - Retrieves a single development item for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-goals-list - Retrieves a collection of goals for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-goals-get - Retrieves a single goal instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-requested-feedback-on-self-events-list - Retrieves a collection of self-requested feedback events for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-requested-feedback-on-self-events-get - Retrieves a single self-requested feedback event instance for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-requested-feedback-on-worker-events-list - Retrieves a collection of requested feedback events for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - performance-enablement workers-by-id-requested-feedback-on-worker-events-get - Retrieves a single requested feedback event instance for the specified worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - performance-enablement create-cascaded-goal-event - POST /performanceEnablement/v5/cascadedGoalEvent. [intent=reverse_etl availability=implemented write=performance_enablement_create_cascaded_goal_event]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - performance-enablement update-give-requested-feedback-events - Updates the existing Give Requested Feedback Event instance with the specified ID. [intent=reverse_etl availability=implemented write=performance_enablement_update_give_requested_feedback_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement create-my-performance-reviews - Creates a single performance review instance with the specified data. [intent=reverse_etl availability=implemented write=performance_enablement_create_my_performance_reviews]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - performance-enablement create-organization-goals - POST /performanceEnablement/v5/organizationGoals. [intent=reverse_etl availability=implemented write=performance_enablement_create_organization_goals]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - performance-enablement update-organization-goals - Partially updates a single organization goal instance with the specified data. [intent=reverse_etl availability=implemented write=performance_enablement_update_organization_goals]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement create-worker-goal-events - Creates a worker goal event, which eventually kicks off the Manage Goals business process for the specified worker. [intent=reverse_etl availability=implemented write=performance_enablement_create_worker_goal_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - performance-enablement create-worker-goal-events-by-id-goals - Creates a single goal instance with the specified data. [intent=reverse_etl availability=implemented write=performance_enablement_create_worker_goal_events_by_id_goals]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement create-worker-goal-events-by-id-submit - Submits a worker goal event. [intent=reverse_etl availability=implemented write=performance_enablement_create_worker_goal_events_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement create-workers-by-id-anytime-feedback-events - Creates a single feedback given event instance about the specified worker. [intent=reverse_etl availability=implemented write=performance_enablement_create_workers_by_id_anytime_feedback_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement update-workers-by-id-development-items - Deletes an existing development item. [intent=reverse_etl availability=implemented write=performance_enablement_update_workers_by_id_development_items]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - performance-enablement create-workers-by-id-requested-feedback-on-self-events - Creates a single self-requested feedback event instance for the specified worker. [intent=reverse_etl availability=implemented write=performance_enablement_create_workers_by_id_requested_feedback_on_self_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - performance-enablement create-workers-by-id-requested-feedback-on-worker-events - Creates a single requested feedback event instance for the specified worker. [intent=reverse_etl availability=implemented write=performance_enablement_create_workers_by_id_requested_feedback_on_worker_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - talent-management mentorships-list - Get all mentorships [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management mentorships-get - Get all mentorships [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - talent-management succession-plan-events-list - Get Succession Plan Events [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management succession-plan-events-get - Get Succession Plan Events [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - talent-management succession-plan-events-by-id-candidates-list - Retrieves a collection of information for succession plan candidates for a succession plan event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - talent-management succession-plan-events-by-id-candidates-get - Retrieves succession plan candidates for the specified succession plan Event ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - talent-management succession-plans-list - Get succession plans. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management succession-plans-get - Get succession plans [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - talent-management values-succession-plan-members-list - Reads /talentManagement/v2/values/successionPlan/members/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management values-succession-plan-readiness-list - Reads /talentManagement/v2/values/successionPlan/readiness/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management values-succession-plan-strategies-list - Reads /talentManagement/v2/values/successionPlan/strategies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - talent-management create-create-mentorship-for-me - Creates a mentorship for the current processing worker where the user is also the mentee. [intent=reverse_etl availability=implemented write=talent_management_create_create_mentorship_for_me]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - talent-management create-create-mentorship-for-worker - Creates a mentorship between two workers. [intent=reverse_etl availability=implemented write=talent_management_create_create_mentorship_for_worker]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - talent-management create-mentorships-by-id-close - Closes the mentorship. [intent=reverse_etl availability=implemented write=talent_management_create_mentorships_by_id_close]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - talent-management create-mentorships-by-id-edit - Edit the mentorship. [intent=reverse_etl availability=implemented write=talent_management_create_mentorships_by_id_edit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - talent-management create-succession-plan-events - Creates a succession plan event instance for a succession plan. [intent=reverse_etl availability=implemented write=talent_management_create_succession_plan_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - talent-management create-succession-plan-events-by-id-candidates - Creates a single succession plan candidate instance with the specified data. [intent=reverse_etl availability=implemented write=talent_management_create_succession_plan_events_by_id_candidates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - talent-management delete-succession-plan-events-by-id-candidates - Removes a succession plan candidate instance associated to the succession plan event. [intent=reverse_etl availability=implemented write=talent_management_delete_succession_plan_events_by_id_candidates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - talent-management update-succession-plan-events-by-id-candidates - Updates a new succession plan candidate instance associated to the succession plan event. [intent=reverse_etl availability=implemented write=talent_management_update_succession_plan_events_by_id_candidates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - talent-management create-succession-plan-events-by-id-submit - Submits a succession plan event. [intent=reverse_etl availability=implemented write=talent_management_create_succession_plan_events_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - talent-management create-succession-plans - POST /talentManagement/v2/successionPlans. [intent=reverse_etl availability=implemented write=talent_management_create_succession_plans]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - recruiting interviews-list - Reads /recruiting/v4/interviews. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - recruiting interviews-get - Reads /recruiting/v4/interviews/{ID}. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting interviews-by-id-feedback-list - Reads /recruiting/v4/interviews/{ID}/feedback. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting interviews-by-id-feedback-get - Reads /recruiting/v4/interviews/{ID}/feedback/{subresourceID}. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting job-postings-list - Retrieves a collection of job postings. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - recruiting job-postings-get - Retrieves a job posting. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting job-postings-by-id-candidate-availability-template-list - Retrieves a single instance of the candidate availability template version. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting job-postings-by-id-candidate-availability-template-get - Retrieves a single instance of the candidate availability template version. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting job-postings-by-id-questionnaire-list - Retrieves a single questionnaire instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting job-postings-by-id-questionnaire-get - Retrieves a single questionnaire for the specified job posting ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting prospects-get - Retrieves a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting prospects-by-id-educations-list - Retrieves the education of a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting prospects-by-id-educations-get - Retrieves a single education instance for a prospect. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting prospects-by-id-experiences-list - Retrieves the work experience of a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting prospects-by-id-experiences-get - Retrieves a single experience instance for a prospect. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting prospects-by-id-languages-list - Retrieves the languages of a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting prospects-by-id-languages-get - Retrieves a single language instance for a prospect. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting prospects-by-id-resume-attachments-list - Retrieves attached resumes for a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --type, --page, --page-cursor
+  - recruiting prospects-by-id-resume-attachments-get - Retrieves a single resume attachment instance for a prospect. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --type, --page, --page-cursor
+  - recruiting prospects-by-id-skills-list - Retrieves the skills of a single prospect instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - recruiting prospects-by-id-skills-get - Retrieves a single skill instance for a prospect. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - recruiting values-common-countries-list - Reads /recruiting/v4/values/common/countries/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - recruiting create-interviews-by-id-feedback - POST /recruiting/v4/interviews/{ID}/feedback. [intent=reverse_etl availability=implemented write=recruiting_create_interviews_by_id_feedback]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - recruiting create-prospects - Create prospects. [intent=reverse_etl availability=implemented write=recruiting_create_prospects]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - recruiting create-prospects-by-id-educations - Creates educations for a prospect. [intent=reverse_etl availability=implemented write=recruiting_create_prospects_by_id_educations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - recruiting create-prospects-by-id-experiences - Creates experiences for a prospect. [intent=reverse_etl availability=implemented write=recruiting_create_prospects_by_id_experiences]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - recruiting create-prospects-by-id-languages - Creates languages for a prospect. [intent=reverse_etl availability=implemented write=recruiting_create_prospects_by_id_languages]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - recruiting create-prospects-by-id-resume-attachments - Creates resume attachments for a prospect. [intent=reverse_etl availability=implemented write=recruiting_create_prospects_by_id_resume_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - recruiting create-prospects-by-id-skills - Creates skills for a prospect. [intent=reverse_etl availability=implemented write=recruiting_create_prospects_by_id_skills]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - learning content-list - Retrieves a collection of learning content. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning content-get - Retrieves a single learning content instance [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - learning content-by-id-lessons-list - Retrieves a collection of lessons for a learning content. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - learning content-by-id-lessons-get - Retrieves a single lesson for a learning content instance [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - learning enrollments-list - TBD [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning enrollments-get - TBD [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - learning enrollments-by-id-lesson-trackings-list - Retrieves a specific tracking data or a collection of tracking data for an enrollment. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - learning enrollments-by-id-lesson-trackings-get - Retrieves a specific tracking data or a collection of tracking data for an enrollment. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - learning records-list - Retrieves a collection of learning records. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning records-get - Retrieves a single learning record instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - learning values-tracking-enrollment-data-attendance-status-list - Reads /learning/v1/values/trackingEnrollmentData/attendanceStatus/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning values-tracking-enrollment-data-duration-unit-list - Reads /learning/v1/values/trackingEnrollmentData/durationUnit/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning values-tracking-enrollment-data-grade-list - Reads /learning/v1/values/trackingEnrollmentData/grade/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - learning update-enrollments - Partially updates an existing enrollment. [intent=reverse_etl availability=implemented write=learning_update_enrollments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - learning create-enrollments-by-id-lesson-trackings - Creates lesson tracking instances. [intent=reverse_etl availability=implemented write=learning_create_enrollments_by_id_lesson_trackings]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - learning update-enrollments-by-id-lesson-trackings - Updates lesson tracking instances. [intent=reverse_etl availability=implemented write=learning_update_enrollments_by_id_lesson_trackings]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - learning create-manage-digital-courses - Provides the ability to create and update digital courses. [intent=reverse_etl availability=implemented write=learning_create_manage_digital_courses]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - learning create-manage-enrollments - Creates an enrollment. [intent=reverse_etl availability=implemented write=learning_create_manage_enrollments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - payroll jobs-list - Retrieves a collection of jobs. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll jobs-get - Retrieves a single job instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll jobs-by-id-pay-group-list - Retrieves the pay group for a specified job ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll jobs-by-id-pay-group-get - Retrieves a single pay group instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - payroll minimum-wage-rates-list - Retrieves a collection of minimum wage rates. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll minimum-wage-rates-get - Retrieves a collection of minimum wage rates. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll pay-group-details-list - Retrieves a collection of pay group details. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll pay-group-details-get - Retrieves a single pay group detail instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll pay-groups-list - Retrieves a collection of pay groups. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll pay-groups-get - Retrieves a single pay group instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll payroll-inputs-list - Retrieves a collection of payroll inputs. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll payroll-inputs-get - Retrieves a single payroll input instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - payroll tax-rates-list - Retrieves a single or a collection of company SUI rates. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-minimum-wage-rates-group-countries-list - Reads /payroll/v2/values/minimumWageRatesGroup/countries/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-minimum-wage-rates-group-tax-authorities-list - Reads /payroll/v2/values/minimumWageRatesGroup/taxAuthorities/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-payroll-inputs-group-pay-components-list - Reads /payroll/v2/values/payrollInputsGroup/payComponents/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-payroll-inputs-group-positions-list - Reads /payroll/v2/values/payrollInputsGroup/positions/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-payroll-inputs-group-run-categories-list - Reads /payroll/v2/values/payrollInputsGroup/runCategories/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-payroll-inputs-group-worktags-list - Reads /payroll/v2/values/payrollInputsGroup/worktags/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-tax-rates-group-company-instances-list - Reads /payroll/v2/values/taxRatesGroup/companyInstances/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll values-tax-rates-group-state-instances-list - Reads /payroll/v2/values/taxRatesGroup/stateInstances/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - payroll create-payroll-inputs - Creates payroll inputs. [intent=reverse_etl availability=implemented write=payroll_create_payroll_inputs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - payroll delete-payroll-inputs - Deletes an existing payroll input instance. [intent=reverse_etl availability=implemented write=payroll_delete_payroll_inputs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - payroll update-payroll-inputs - Partially updates an existing payroll input instance. [intent=reverse_etl availability=implemented write=payroll_update_payroll_inputs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - payroll create-tax-rates - Creates a single or a collection of Company SUI Rates. [intent=reverse_etl availability=implemented write=payroll_create_tax_rates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - global-payroll effective-changes-get - Retrieves a specific Data Changes on Demand event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - global-payroll event-driven-integration-vendor-response-get - Retrieves a single Event-Driven Integration vendor response. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - global-payroll pay-groups-list - Retrieves a collection of Payroll Interface pay groups. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - global-payroll pay-groups-get - Retrieves a Payroll Interface pay group. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - global-payroll pay-groups-by-id-periods-list - Retrieves a collection of payroll periods for the specified Payroll Interface pay group ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - global-payroll pay-groups-by-id-periods-get - Retrieves a payroll period for the specified Payroll Interface pay group ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - global-payroll read-authorizations - Check subjectId permissions against featureId for each target Id [intent=direct_read availability=implemented operation=workday_rest.global_payroll_read_authorizations]; flags: --page, --page-cursor
+  - global-payroll create-effective-changes - Generates effective change data for organizations or workers based on request parameters. [intent=reverse_etl availability=implemented write=global_payroll_create_effective_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - global-payroll create-event-driven-integration-vendor-response - Updates a specific vendor response instance of Event-Driven Integration with the specified data after the third-party payroll system completes processing of. [intent=reverse_etl availability=implemented write=global_payroll_create_event_driven_integration_vendor_response]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - global-payroll create-notifications - POST Inbound Notifications request. [intent=reverse_etl availability=implemented write=global_payroll_create_notifications]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - global-payroll update-pay-groups-by-id-periods - Partially updates an existing pay period by the specified pay group ID. [intent=reverse_etl availability=implemented write=global_payroll_update_pay_groups_by_id_periods]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - journeys values-related-role-role-list - Reads /journeys/v1/values/relatedRole/role/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - journeys create-distribution-requests - Creates journey distribution. [intent=reverse_etl availability=implemented write=journeys_create_distribution_requests]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - skill read-ml-skills - Returns the Workday ID of a given Machine Learning Skill ID from the Skills Cloud REST service. [intent=direct_read availability=implemented operation=workday_rest.skill_read_ml_skills]; flags: --page, --page-cursor
+  - holiday holiday-events-list - Reads /holiday/v1/holidayEvents. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - benefit-enrollment-event-offerings employee-enrollment-event-list - Retrieves the latest benefit enrollment event of the processing worker. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - benefit-enrollment-event-offerings employee-enrollment-event-get - Retrieves the latest benefit enrollment event of the processing worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - benefit-partner create-programs - Creates a single benefit program instance. [intent=reverse_etl availability=implemented write=benefit_partner_create_programs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+- Financials
+  - accounts-payable supplier-invoice-requests-list - Retrieves a collection of supplier invoices. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - accounts-payable supplier-invoice-requests-get - Retrieves a single supplier invoice instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - accounts-payable supplier-invoice-requests-by-id-attachments-list - Retrieves a collection of attachments for the specified supplier invoice. [intent=direct_read availability=implemented]; flags: --id (required), --type, --page, --page-cursor
+  - accounts-payable supplier-invoice-requests-by-id-attachments-get - Retrieves a single attachment instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --type, --page, --page-cursor
+  - accounts-payable supplier-invoice-requests-by-id-lines-list - Retrieves a collection of supplier invoice lines. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - accounts-payable supplier-invoice-requests-by-id-lines-get - Retrieves a single supplier invoice line instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - accounts-payable create-send-supplier-invoice-attachments-for-scanning - Sends supplier invoice attachments for scanning. [intent=reverse_etl availability=implemented write=accounts_payable_create_send_supplier_invoice_attachments_for_scanning]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - accounts-payable create-supplier-invoice-requests - Creates the supplier invoice as specified in the request. [intent=reverse_etl availability=implemented write=accounts_payable_create_supplier_invoice_requests]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - accounts-payable create-supplier-invoice-requests-by-id-attachments - Creates a new attachment for the supplier invoice. [intent=reverse_etl availability=implemented write=accounts_payable_create_supplier_invoice_requests_by_id_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - accounts-payable create-supplier-invoice-requests-by-id-submit - Submits a single supplier invoice instance. [intent=reverse_etl availability=implemented write=accounts_payable_create_supplier_invoice_requests_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - customer-accounts customers-list - Retrieves a collection of customers. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - customer-accounts customers-get - Retrieves a single customer instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - customer-accounts invoice-pdfs-get - Retrieves a single customer invoice PDF instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - customer-accounts invoice-pdfs-get-download - Downloads the file content of /customerAccounts/v1/invoicePDFs/{ID}. [intent=binary_download availability=implemented operation=workday_rest.customer_accounts_invoice_pdfs_get_download]; flags: --id (required), --dest-root (required), --file-name, --max-bytes
+  - customer-accounts invoices-list - Retrieves a collection of customer invoices and adjustments. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - customer-accounts invoices-get - Retrieves a single customer invoice or adjustment instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - customer-accounts invoices-by-id-print-runs-list - Retrieves a collection of customer invoice print runs for the specified customer invoice or adjustment. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - customer-accounts invoices-by-id-print-runs-get - Retrieves a single customer invoice print run. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - customer-accounts payments-get - Retrieves a single customer invoice payment instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - customer-accounts payments-by-id-remittance-details-get - Retrieves a single customer invoice payment remittance line instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - customer-accounts create-payments - Creates customer invoice payments. [intent=reverse_etl availability=implemented write=customer_accounts_create_payments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - customer-accounts create-payments-by-id-remittance-details - Creates customer invoice payment remittance lines. [intent=reverse_etl availability=implemented write=customer_accounts_create_payments_by_id_remittance_details]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense entries-list - Retrieves a collection of Quick Expenses. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense entries-get - Retrieves a single instance of a Quick Expense. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - expense expense-items-list - Retrieves a collection of expense items. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense expense-items-get - Retrieves a single instance of an expense item. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - expense reports-list - Retrieves a collection of expense reports. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense reports-get - Retrieves a single instance of an Expense Report. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - expense values-bespoke-prompt-currency-list - Reads /expense/v1/values/bespokePrompt/currency/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense values-bespoke-prompt-expense-group-list - Reads /expense/v1/values/bespokePrompt/expenseGroup/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense values-bespoke-prompt-expense-item-list - Reads /expense/v1/values/bespokePrompt/expenseItem/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - expense create-entries - POST /expense/v1/entries. [intent=reverse_etl availability=implemented write=expense_create_entries]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - expense delete-entries - DELETE /expense/v1/entries/{ID}. [intent=reverse_etl availability=implemented write=expense_delete_entries]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense update-entries - PATCH /expense/v1/entries/{ID}. [intent=reverse_etl availability=implemented write=expense_update_entries]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense replace-entries - Updates an existing Quick Expense instance. [intent=reverse_etl availability=implemented write=expense_replace_entries]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense create-entries-by-id-attachments - Creates new attachments for the existing expense entry. [intent=reverse_etl availability=implemented write=expense_create_entries_by_id_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense create-reports - POST /expense/v1/reports. [intent=reverse_etl availability=implemented write=expense_create_reports]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - expense create-reports-by-id-lines - Creates a collection of expense report lines. [intent=reverse_etl availability=implemented write=expense_create_reports_by_id_lines]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - expense create-reports-by-id-submit - POST /expense/v1/reports/{ID}/submit. [intent=reverse_etl availability=implemented write=expense_create_reports_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement purchase-orders-list - Retrieves a collection of purchase orders. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement purchase-orders-get - Retrieves a purchase order. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisition-templates-list - Retrieves a collection of requisition templates. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement requisition-templates-get - Retrieves the goods and service line details of a requisition template. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisitions-list - Retrieves a collection of requisitions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement requisitions-get - Retrieves a requisition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisitions-by-id-attachments-list - Retrieves the metadata of the attachments for the specified requisition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisitions-by-id-attachments-list-download - Downloads the file content of /procurement/v5/requisitions/{ID}/attachments. [intent=binary_download availability=implemented operation=workday_rest.procurement_requisitions_by_id_attachments_list_download]; flags: --id (required), --dest-root (required), --file-name, --max-bytes
+  - procurement requisitions-by-id-attachments-get - Retrieves the metadata or the attachment content of the specified requisition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - procurement requisitions-by-id-attachments-get-download - Downloads the file content of /procurement/v5/requisitions/{ID}/attachments/{subresourceID}. [intent=binary_download availability=implemented operation=workday_rest.procurement_requisitions_by_id_attachments_get_download]; flags: --id (required), --subresource-id (required), --dest-root (required), --file-name, --max-bytes
+  - procurement requisitions-by-id-related-purchase-orders-list - Retrieves a collection of related purchase orders. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisitions-by-id-related-purchase-orders-get - Retrieves a related purchase order for the specified requisition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - procurement requisitions-by-id-requisition-lines-list - Retrieves a collection of requisition lines. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - procurement requisitions-by-id-requisition-lines-get - Retrieves a requisition line for the specified requisition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - procurement values-requisitions-group-commodity-codes-list - Reads /procurement/v5/values/requisitionsGroup/commodityCodes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-companies-list - Reads /procurement/v5/values/requisitionsGroup/companies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-currencies-list - Reads /procurement/v5/values/requisitionsGroup/currencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-deliver-to-location-list - Reads /procurement/v5/values/requisitionsGroup/deliverToLocation/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-inventory-site-list - Reads /procurement/v5/values/requisitionsGroup/inventorySite/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-line-company-list - Reads /procurement/v5/values/requisitionsGroup/lineCompany/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-order-from-connection-list - Reads /procurement/v5/values/requisitionsGroup/orderFromConnection/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-par-location-list - Reads /procurement/v5/values/requisitionsGroup/parLocation/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-requesters-list - Reads /procurement/v5/values/requisitionsGroup/requesters/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-requesting-entity-list - Reads /procurement/v5/values/requisitionsGroup/requestingEntity/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-requisition-types-list - Reads /procurement/v5/values/requisitionsGroup/requisitionTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-resolved-worktags-list - Reads /procurement/v5/values/requisitionsGroup/resolvedWorktags/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-resource-provider-list - Reads /procurement/v5/values/requisitionsGroup/resourceProvider/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-ship-to-address-list - Reads /procurement/v5/values/requisitionsGroup/shipToAddress/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-sourcing-buyer-list - Reads /procurement/v5/values/requisitionsGroup/sourcingBuyer/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-spend-category-list - Reads /procurement/v5/values/requisitionsGroup/spendCategory/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-supplier-contract-list - Reads /procurement/v5/values/requisitionsGroup/supplierContract/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-unit-of-measure-list - Reads /procurement/v5/values/requisitionsGroup/unitOfMeasure/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement values-requisitions-group-worktags-list - Reads /procurement/v5/values/requisitionsGroup/worktags/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - procurement create-requisitions - Creates a requisition. [intent=reverse_etl availability=implemented write=procurement_create_requisitions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - procurement update-requisitions - Updates the header of an existing requisition. [intent=reverse_etl availability=implemented write=procurement_update_requisitions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement create-requisitions-by-id-attachments - Creates a new attachment for the specified requisition. [intent=reverse_etl availability=implemented write=procurement_create_requisitions_by_id_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement delete-requisitions-by-id-attachments - Deletes the specified requisition attachment. [intent=reverse_etl availability=implemented write=procurement_delete_requisitions_by_id_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - procurement update-requisitions-by-id-attachments - Partially updates the metadata of an existing attachment instance for a requisition. [intent=reverse_etl availability=implemented write=procurement_update_requisitions_by_id_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - procurement create-requisitions-by-id-cancel - Cancels an existing requisition. [intent=reverse_etl availability=implemented write=procurement_create_requisitions_by_id_cancel]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement create-requisitions-by-id-close - Closes a specified completed requisition. [intent=reverse_etl availability=implemented write=procurement_create_requisitions_by_id_close]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement create-requisitions-by-id-requisition-events - Submit Requisition to Business Process [intent=reverse_etl availability=implemented write=procurement_create_requisitions_by_id_requisition_events]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement create-requisitions-by-id-requisition-lines - Creates requisition lines for the specified requisition. [intent=reverse_etl availability=implemented write=procurement_create_requisitions_by_id_requisition_lines]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - procurement delete-requisitions-by-id-requisition-lines - Deletes the specified requisition line. [intent=reverse_etl availability=implemented write=procurement_delete_requisitions_by_id_requisition_lines]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - procurement update-requisitions-by-id-requisition-lines - Edits a specific requisition line for the requisition with the specified ID. [intent=reverse_etl availability=implemented write=procurement_update_requisitions_by_id_requisition_lines]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - projects ad-hoc-project-time-transactions-list - Retrieves a collection of ad hoc project time transactions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects ad-hoc-project-time-transactions-get - Retrieves an ad hoc project time transaction instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects plan-phases-list - Retrieves a collection of Project Plan Phases for a specified Project. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects plan-phases-get - Retrieves a single project plan phase instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects plan-tasks-list - Retrieves a collection of Project Plan Tasks for a specified Project or Project Plan Phase. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects plan-tasks-get - Retrieves a single project plan task instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects projects-list - Retrieves a collection of Projects. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects projects-get - Retrieves a single project instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects resource-forecast-lines-list - Retrieves a collection of Resource Forecast Lines. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects resource-forecast-lines-get - Retrieves a single resource forecast line instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects resource-forecast-lines-by-id-allocations-list - Retrieves a Resource Forecast Line Allocation for the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects resource-forecast-lines-by-id-allocations-get - Retrieve Resource Forecast Line Allocation. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - projects resource-plan-lines-list - Retrieves a collection of Resource Plan Lines. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects resource-plan-lines-get - Retrieves a single resource plan line instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects task-resources-list - Retrieves a collection of Task Resources. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects task-resources-get - Retrieves a single task resource instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - projects values-common-companies-list - Reads /projects/v3/values/common/companies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-currencies-list - Reads /projects/v3/values/common/currencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-customers-list - Reads /projects/v3/values/common/customers/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-groups-list - Reads /projects/v3/values/common/groups/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-hierarchies-list - Reads /projects/v3/values/common/hierarchies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-importance-ratings-list - Reads /projects/v3/values/common/importanceRatings/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-optional-hierarchies-list - Reads /projects/v3/values/common/optionalHierarchies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-owners-list - Reads /projects/v3/values/common/owners/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-priorities-list - Reads /projects/v3/values/common/priorities/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-project-dependencies-list - Reads /projects/v3/values/common/projectDependencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-project-states-list - Reads /projects/v3/values/common/projectStates/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-projects-list - Reads /projects/v3/values/common/projects/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-risk-levels-list - Reads /projects/v3/values/common/riskLevels/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-statuses-list - Reads /projects/v3/values/common/statuses/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-success-ratings-list - Reads /projects/v3/values/common/successRatings/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-worktag-types-list - Reads /projects/v3/values/common/worktagTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-common-worktags-list - Reads /projects/v3/values/common/worktags/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-project-plan-project-phases-list - Reads /projects/v3/values/projectPlan/projectPhases/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-project-plan-project-plan-phases-list - Reads /projects/v3/values/projectPlan/projectPlanPhases/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-project-plan-project-plan-tasks-list - Reads /projects/v3/values/projectPlan/projectPlanTasks/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-project-plan-project-tasks-list - Reads /projects/v3/values/projectPlan/projectTasks/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-booking-status-list - Reads /projects/v3/values/resourcePlan/bookingStatus/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-cost-rate-currencies-list - Reads /projects/v3/values/resourcePlan/costRateCurrencies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-requirement-types-list - Reads /projects/v3/values/resourcePlan/requirementTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-requirements-list - Reads /projects/v3/values/resourcePlan/requirements/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-resource-types-list - Reads /projects/v3/values/resourcePlan/resourceTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-role-categories-list - Reads /projects/v3/values/resourcePlan/roleCategories/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-roles-list - Reads /projects/v3/values/resourcePlan/roles/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-unnamed-resources-list - Reads /projects/v3/values/resourcePlan/unnamedResources/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-worker-groups-list - Reads /projects/v3/values/resourcePlan/workerGroups/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-worker-to-replace-unnamed-resources-list - Reads /projects/v3/values/resourcePlan/workerToReplaceUnnamedResources/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects values-resource-plan-workers-list - Reads /projects/v3/values/resourcePlan/workers/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - projects create-ad-hoc-project-time-transactions - Creates ad hoc project time transactions. [intent=reverse_etl availability=implemented write=projects_create_ad_hoc_project_time_transactions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects create-plan-phases - Creates project plan phases. [intent=reverse_etl availability=implemented write=projects_create_plan_phases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects delete-plan-phases - Deletes an existing project plan phase instance. [intent=reverse_etl availability=implemented write=projects_delete_plan_phases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects update-plan-phases - Updates the Project Plan Phase for the specified ID. [intent=reverse_etl availability=implemented write=projects_update_plan_phases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects create-plan-tasks - Creates Project Plan tasks. [intent=reverse_etl availability=implemented write=projects_create_plan_tasks]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects delete-plan-tasks - Deletes an existing project plan task instance. [intent=reverse_etl availability=implemented write=projects_delete_plan_tasks]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects update-plan-tasks - Partially updates an existing Project Plan Task instance with the specified ID and the specified data in the request body. [intent=reverse_etl availability=implemented write=projects_update_plan_tasks]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects create-projects - Creates Project Create Events and initiates the associated workflow to update the project. [intent=reverse_etl availability=implemented write=projects_create_projects]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects create-projects-by-id-edit - Creates Project Edit Events and initiates the associated workflow to update the project. [intent=reverse_etl availability=implemented write=projects_create_projects_by_id_edit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects create-resource-forecast-lines-by-id-allocations - Creates resource forecast line allocations. [intent=reverse_etl availability=implemented write=projects_create_resource_forecast_lines_by_id_allocations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects update-resource-forecast-lines-by-id-allocations - Update forecasted hours for Resource Forecast Line Allocation. [intent=reverse_etl availability=implemented write=projects_update_resource_forecast_lines_by_id_allocations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - projects create-resource-plan-lines - Creates a Resource Plan Line Create event and initiates the Project Resource Plan Line business process. [intent=reverse_etl availability=implemented write=projects_create_resource_plan_lines]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects create-resource-plan-lines-by-id-edit - Creates a Resource Plan Line Edit event and initiates the Project Resource Plan Line business process. [intent=reverse_etl availability=implemented write=projects_create_resource_plan_lines_by_id_edit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects create-task-resources - Creates task resources. [intent=reverse_etl availability=implemented write=projects_create_task_resources]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - projects delete-task-resources - Deletes an existing task resource instance. [intent=reverse_etl availability=implemented write=projects_delete_task_resources]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - projects update-task-resources - Update Task Resource for specified Workday ID. [intent=reverse_etl availability=implemented write=projects_update_task_resources]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - revenue billable-transactions-list - Retrieves a collection of billable transactions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - revenue billable-transactions-get - Retrieves a single billable transaction instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - revenue billable-transactions-by-id-billing-rate-application-list - Retrieves a collection of billing rate applications for the specified billable transaction. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - revenue billable-transactions-by-id-billing-rate-application-get - Retrieves a single billing rate application instance. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - revenue update-billable-transactions - Partially updates an existing billable transaction instance. [intent=reverse_etl availability=implemented write=revenue_update_billable_transactions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - budgets create-run-budget-check - Creates a budget check for transactions. [intent=reverse_etl availability=implemented write=budgets_create_run_budget_check]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - core-accounting currencies-list - Retrieves the details on all currencies in your tenant. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - core-accounting currencies-get - Retrieves the details of a specified currency. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - core-accounting evaluate-account-posting-rules-list - Retrieves the ledger account and resulting worktags of a specified account posting rule. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - contract-compliance supplier-contracts-list - Retrieves all supplier contracts. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - contract-compliance supplier-contracts-get - Retrieves a supplier contract. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - contract-compliance values-contract-compliance-group-companies-or-hierarchies-list - Reads /contractCompliance/v1/values/contractComplianceGroup/companiesOrHierarchies/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - contract-compliance values-contract-compliance-group-contract-types-list - Reads /contractCompliance/v1/values/contractComplianceGroup/contractTypes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - fin-tax-public create-electronic-reporting-runs - The Electronic Reporting service enables applications to create information on electronic reporting of customer and supplier invoice documents. [intent=reverse_etl availability=implemented write=fin_tax_public_create_electronic_reporting_runs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - worktag read-validate-worktags - Validates worktags. [intent=direct_read availability=implemented operation=workday_rest.worktag_read_validate_worktags]; flags: --page, --page-cursor
+  - asor agent-definition-list - This operation returns the specific Agent Definition including Skills and certain Tools used in those Skills. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - asor agent-resource-search-list - Agent Resource Search APi [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - asor agent-resource-search-get - Agent Resource Search APi [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - asor registration-list - This operation returns the specific Agent Registration including Skill Configurations. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - asor registration-get - This operation returns the specific Agent Registration including Skill Configurations. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - asor create-agent-definition - Based on the A2A Agent Card specification, this REST operation allows you to create an Agent Definition in Workday. [intent=reverse_etl availability=implemented write=asor_create_agent_definition]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+- Student
+  - student-core holds-list - This resource returns all Student Hold Assignments or a collection of Student Hold Assignments filtered by query parameters. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core holds-get - This resource returns all Student Hold Assignments or a collection of Student Hold Assignments filtered by query parameters. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core immigration-events-list - Retrieves a collection of immigration events. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core immigration-events-get - Retrieves an immigration event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-dependent-immigration-data-list - Retrieves a collection of dependent immigration data for the specified student ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-dependent-immigration-data-get - Retrieves a dependent immigration data instance for the specified student ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-immigration-data-list - Retrieves a collection of immigration data for the specified immigration event ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-immigration-data-get - Retrieves an immigration data instance for the specified immigration event. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-immigration-pages-list - Reads /studentCore/v1/immigrationEvents/{ID}/immigrationPages. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core immigration-events-by-id-immigration-pages-get - Reads /studentCore/v1/immigrationEvents/{ID}/immigrationPages/{subresourceID}. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core students-list - Retrieves a collection of students. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core students-get - Retrieves a student instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core students-by-id-apply-hold-events-list - Retrieves a collection of Apply Student Hold Events. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core students-by-id-apply-hold-events-get - Retrieves an Apply Student Hold Event instance for the specified student. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core students-by-id-immigration-events-list - Retrieves a collection of immigration events. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core students-by-id-immigration-events-get - Retrieves an immigration event for the specified student. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core students-by-id-residencies-list - Retrieves a collection of residence information for the specified student ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-core students-by-id-residencies-get - Retrieves residence information for the specified student. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-core values-holds-academic-periods-list - Reads /studentCore/v1/values/holds/academicPeriods/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-academic-records-list - Reads /studentCore/v1/values/holds/academicRecords/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-award-items-list - Reads /studentCore/v1/values/holds/awardItems/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-award-years-list - Reads /studentCore/v1/values/holds/awardYears/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-institution-list - Reads /studentCore/v1/values/holds/institution/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-reasons-list - Reads /studentCore/v1/values/holds/reasons/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core values-holds-school-codes-list - Reads /studentCore/v1/values/holds/schoolCodes/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-core create-holds-by-id-override-hold - POST /studentCore/v1/holds/{ID}/overrideHold. [intent=reverse_etl availability=implemented write=student_core_create_holds_by_id_override_hold]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core create-holds-by-id-remove-hold - POST /studentCore/v1/holds/{ID}/removeHold. [intent=reverse_etl availability=implemented write=student_core_create_holds_by_id_remove_hold]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core create-holds-by-id-update-hold - Creates an Update Student Hold Event. [intent=reverse_etl availability=implemented write=student_core_create_holds_by_id_update_hold]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core create-immigration-events-by-id-dependent-immigration-data - Creates dependent immigration data for the specified immigration event. [intent=reverse_etl availability=implemented write=student_core_create_immigration_events_by_id_dependent_immigration_data]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core delete-immigration-events-by-id-dependent-immigration-data - Delete immigration event dependent immigration data. [intent=reverse_etl availability=implemented write=student_core_delete_immigration_events_by_id_dependent_immigration_data]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - student-core replace-immigration-events-by-id-dependent-immigration-data - PUT /studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}. [intent=reverse_etl availability=implemented write=student_core_replace_immigration_events_by_id_dependent_immigration_data]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - student-core create-immigration-events-by-id-immigration-data - Creates an immigration data with the specified ID. [intent=reverse_etl availability=implemented write=student_core_create_immigration_events_by_id_immigration_data]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core replace-immigration-events-by-id-immigration-data - PUT /studentCore/v1/immigrationEvents/{ID}/immigrationData/{subresourceID}. [intent=reverse_etl availability=implemented write=student_core_replace_immigration_events_by_id_immigration_data]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - student-core create-immigration-events-by-id-submit - Submits an immigration event. [intent=reverse_etl availability=implemented write=student_core_create_immigration_events_by_id_submit]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-core create-students-by-id-apply-hold - Creates an Apply Student Hold Event. [intent=reverse_etl availability=implemented write=student_core_create_students_by_id_apply_hold]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-academic-foundation academic-calendars-list - Retrieves a collection of academic calendars. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation academic-calendars-get - Retrieves the academic calendar with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation academic-calendars-by-id-academic-years-list - Retrieves a collection of the academic years associated with an academic calendar. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation academic-calendars-by-id-academic-years-get - Retrieves the academic year associated with an academic calendar with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-academic-foundation academic-levels-list - Retrieves a collection of academic levels. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation academic-levels-get - Retrieves the academic level with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation academic-periods-list - Retrieves a collection of academic periods. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation academic-periods-get - Retrieves the academic period with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation academic-units-list - Retrieves a collection of academic units. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation academic-units-get - Retrieves the Academic Unit with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation educational-credentials-list - Retrieves a collection of educational credentials. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation educational-credentials-get - Retrieves the educational credential with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-academic-foundation programs-of-study-list - Retrieves a collection of programs of study. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-academic-foundation programs-of-study-get - Retrieves the program of study with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-curriculum course-sections-list - Retrieves a collection of course sections. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-curriculum course-sections-get - Retrieves a single course section instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-curriculum course-subjects-list - Reads /studentCurriculum/v1/courseSubjects. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-curriculum course-subjects-get - Reads /studentCurriculum/v1/courseSubjects/{ID}. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-curriculum courses-list - Retrieves a collection of courses. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-curriculum courses-get - Retrieves a single course instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-recruiting values-academic-requirement-evaluation-educational-institution-list - Reads /studentRecruiting/v1/values/academicRequirementEvaluation/educationalInstitution/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-recruiting values-academic-requirement-evaluation-external-course-list - Reads /studentRecruiting/v1/values/academicRequirementEvaluation/externalCourse/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-recruiting values-academic-requirement-evaluation-external-grading-scheme-list - Reads /studentRecruiting/v1/values/academicRequirementEvaluation/externalGradingScheme/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-recruiting values-academic-requirement-evaluation-programs-of-study-list - Reads /studentRecruiting/v1/values/academicRequirementEvaluation/programsOfStudy/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-recruiting values-academic-requirement-evaluation-unit-type-list - Reads /studentRecruiting/v1/values/academicRequirementEvaluation/unitType/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-recruiting read-academic-requirement-evaluation - Calculates evaluation results for potential transfer credit and academic progress. [intent=direct_read availability=implemented operation=workday_rest.student_recruiting_read_academic_requirement_evaluation]; flags: --page, --page-cursor
+  - student-advising values-hypothetical-academic-progress-academic-record-list - Reads /studentAdvising/v1/values/hypotheticalAcademicProgress/academicRecord/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-advising values-hypothetical-academic-progress-program-of-study-list - Reads /studentAdvising/v1/values/hypotheticalAcademicProgress/programOfStudy/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-advising values-hypothetical-academic-progress-student-list - Reads /studentAdvising/v1/values/hypotheticalAcademicProgress/student/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-advising read-hypothetical-academic-progress - Calculates evaluation results for hypothetical academic progress. [intent=direct_read availability=implemented operation=workday_rest.student_advising_read_hypothetical_academic_progress]; flags: --page, --page-cursor
+  - student-engagement students-list - Retrieves a collection of students. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-engagement students-get - Retrieves a student instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-engagement students-by-id-holds-list - DEPRECATED. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-engagement students-by-id-holds-get - DEPRECATED. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-finance students-list - Retrieves a collection of students. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - student-finance students-get - Retrieves a student instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-finance students-by-id-payments-list - Retrieves a collection of student payments. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - student-finance students-by-id-payments-get - Retrieves a single student payment instance for the specified student ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - student-finance create-students-by-id-payments - Creates a student payment. [intent=reverse_etl availability=implemented write=student_finance_create_students_by_id_payments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - student-finance update-students-by-id-payments - Partially updates an existing student payment for the student instance. [intent=reverse_etl availability=implemented write=student_finance_update_students_by_id_payments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+- Platform And Extensibility
+  - common business-title-changes-get - Retrieves a business title change instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common currencies-list - Retrieves a collection of currencies. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common currencies-get - Retrieves a currency instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common customers-get - Retrieves a customer instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common customers-by-id-activities-list - Retrieves a collection of activities for a specific customer. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common customers-by-id-activities-get - Retrieves an activity instance for a specific customer. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common job-change-reasons-list - Retrieves a collection of job change reasons. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common job-change-reasons-get - Retrieves a job change reason instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common organization-types-list - Retrieves a collection of organization types. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common organization-types-get - Retrieves an organization type instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common organizations-list - Retrieves a collection of organizations. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common organizations-get - Retrieves an organization instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common supervisory-organizations-list - Retrieves a collection of supervisory organizations. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common supervisory-organizations-get - Retrieves a supervisory organization instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common supervisory-organizations-by-id-workers-list - Retrieves a collection of workers for a specific supervisory organization. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common supervisory-organizations-by-id-workers-get - Retrieves a worker instance for a specific supervisory organization. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-list - Retrieves a collection of workers. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - common workers-get - Retrieves a worker instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-business-title-changes-list - Retrieves a collection of business title changes for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-business-title-changes-get - Retrieves a business title change instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-direct-reports-list - Retrieves a collection of direct reports for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-direct-reports-get - Retrieves a direct report instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-history-list - Retrieves a collection of history items for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-history-get - Retrieves a history instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-inbox-tasks-list - Retrieves a collection of inbox tasks for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-inbox-tasks-get - Retrieves an inbox task instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-organizations-list - Retrieves a collection of organizations for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-organizations-get - Retrieves an organization instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-pay-slips-list - Retrieves a collection of pay slips for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-pay-slips-get - Retrieves a pay slip instance for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-supervisory-organizations-managed-list - Retrieves a collection of supervisory organizations managed by a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-supervisory-organizations-managed-get - Retrieves a supervisory organization managed by a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-time-off-entries-list - Retrieves a collection of time off entries for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-time-off-entries-get - Retrieves a time off entry for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common workers-by-id-time-off-plans-list - Retrieves a collection of time off plans for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - common workers-by-id-time-off-plans-get - Retrieves a particular time off plan for a specific worker. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - common create-validate-worktags - (End of Life Date: 2025-08-03 ) Validates allowed and required worktag types and worktag combinations so that you can correct errors before you submit. (deprecated by Workday, still documented) [intent=reverse_etl availability=implemented write=common_create_validate_worktags]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - common create-workers-by-id-business-title-changes - Creates a business title change instance with the specified data. [intent=reverse_etl availability=implemented write=common_create_workers_by_id_business_title_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --type
+  - common create-workers-by-id-job-changes - Creates a job change instance with the specified data. [intent=reverse_etl availability=implemented write=common_create_workers_by_id_job_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process event-steps-list - Retrieves business process event steps. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - business-process event-steps-get - Retrieves a business process event step. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-list - Retrieves business process events. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - business-process events-get - Retrieves a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-by-id-attachments-list - Retrieves attachments for a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-by-id-comments-list - Retrieves comments for a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-by-id-completed-steps-list - Retrieves completed steps for a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-by-id-in-progress-steps-list - Retrieves in progress steps for a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process events-by-id-remaining-steps-list - Retrieves remaining steps for a business process event. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process types-list - Retrieves all business process types. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - business-process types-get - Retrieves a business process type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process types-by-id-attachment-categories-list - Retrieves attachment categories for a business process type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - business-process values-send-back-to-list - Reads /businessProcess/v1/values/sendBack/to/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - business-process create-event-steps-by-id-approve - Approves a business process event step. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_approve]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-event-steps-by-id-deny - Denies a business process event step. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_deny]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-event-steps-by-id-questionnaire - Post an action for a Complete Questionnaire step in a business process. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_questionnaire]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-event-steps-by-id-reassign - Reassigns the specified business process event step. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_reassign]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-event-steps-by-id-send-back - Sends back a business process event step. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_send_back]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-event-steps-by-id-to-do - Post an action for a To Do step in a business process. [intent=reverse_etl availability=implemented write=business_process_create_event_steps_by_id_to_do]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-events-by-id-cancel - Cancels a business process event. [intent=reverse_etl availability=implemented write=business_process_create_events_by_id_cancel]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - business-process create-events-by-id-rescind - Rescinds a business process event. [intent=reverse_etl availability=implemented write=business_process_create_events_by_id_rescind]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object custom-objects-by-custom-object-alias-get - Get a specific instance of a multi-instance custom object [intent=direct_read availability=implemented]; flags: --custom-object-alias (required), --custom-object-id (required), --page, --page-cursor
+  - custom-object by-business-object-resource-by-business-object-id-custom-objects-get - Retrieves a collection of multi-instance custom objects. [intent=direct_read availability=implemented]; flags: --business-object-resource (required), --business-object-id (required), --custom-object-alias (required), --page, --page-cursor
+  - custom-object create-custom-objects - Creates instances of multi-instance custom objects. [intent=reverse_etl availability=implemented write=custom_object_create_custom_objects]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --custom-object-alias (required)
+  - custom-object delete-custom-objects-by-custom-object-alias - Deletes an instance of a custom object. [intent=reverse_etl availability=implemented write=custom_object_delete_custom_objects_by_custom_object_alias]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --custom-object-alias (required), --custom-object-id (required)
+  - custom-object replace-custom-objects-by-custom-object-alias - Updates an instance of a multi-instance custom object. [intent=reverse_etl availability=implemented write=custom_object_replace_custom_objects_by_custom_object_alias]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --custom-object-alias (required), --custom-object-id (required)
+  - custom-object-definition definitions-list - Retrieves a collection of custom object definitions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - custom-object-definition definitions-get - Retrieves a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-condition-rules-list - Retrieves a collection of condition rules in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-condition-rules-get - Retrieves a condition rule in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-fields-list - Retrieves a collection of fields in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-fields-get - Retrieves a field in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-validations-list - Retrieves a collection of validations in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition definitions-by-id-validations-get - Retrieves a validation in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - custom-object-definition field-types-list - Retrieves a collection of custom field types. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - custom-object-definition field-types-get - Retrieves a custom field type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition field-types-by-id-list-values-list - Retrieves a collection of list values for a custom list in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - custom-object-definition field-types-by-id-list-values-get - Retrieves a list value for a custom lists in a custom object definition. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - custom-object-definition create-definitions - POST /customObjectDefinition/v1/definitions. [intent=reverse_etl availability=implemented write=custom_object_definition_create_definitions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - custom-object-definition delete-definitions - Deletes a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_delete_definitions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition replace-definitions - Updates an existing custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_definitions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition create-definitions-by-id-activate - POST /customObjectDefinition/v1/definitions/{ID}/activate. [intent=reverse_etl availability=implemented write=custom_object_definition_create_definitions_by_id_activate]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition create-definitions-by-id-condition-rules - POST /customObjectDefinition/v1/definitions/{ID}/conditionRules. [intent=reverse_etl availability=implemented write=custom_object_definition_create_definitions_by_id_condition_rules]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition delete-definitions-by-id-condition-rules - Deletes a condition rule in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_delete_definitions_by_id_condition_rules]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition replace-definitions-by-id-condition-rules - Updates an existing condition rule in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_definitions_by_id_condition_rules]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition create-definitions-by-id-fields - POST /customObjectDefinition/v1/definitions/{ID}/fields. [intent=reverse_etl availability=implemented write=custom_object_definition_create_definitions_by_id_fields]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition delete-definitions-by-id-fields - Deletes a field in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_delete_definitions_by_id_fields]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition replace-definitions-by-id-fields - Updates an existing field in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_definitions_by_id_fields]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition create-definitions-by-id-validations - POST /customObjectDefinition/v1/definitions/{ID}/validations. [intent=reverse_etl availability=implemented write=custom_object_definition_create_definitions_by_id_validations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition delete-definitions-by-id-validations - Deletes a validation in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_delete_definitions_by_id_validations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition replace-definitions-by-id-validations - Updates an existing validation in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_definitions_by_id_validations]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - custom-object-definition create-field-types - POST /customObjectDefinition/v1/fieldTypes. [intent=reverse_etl availability=implemented write=custom_object_definition_create_field_types]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - custom-object-definition replace-field-types - Updates an existing custom field type. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_field_types]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition create-field-types-by-id-list-values - POST /customObjectDefinition/v1/fieldTypes/{ID}/listValues. [intent=reverse_etl availability=implemented write=custom_object_definition_create_field_types_by_id_list_values]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - custom-object-definition replace-field-types-by-id-list-values - Updates an existing list value in a custom object definition. [intent=reverse_etl availability=implemented write=custom_object_definition_replace_field_types_by_id_list_values]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - prism-analytics buckets-list - Get the buckets permitted by the security profile of the current user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - prism-analytics buckets-get - Get bucket by ID [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - prism-analytics buckets-by-id-error-file-list - Get bucket error file by ID [intent=binary_download availability=implemented operation=workday_rest.prism_analytics_buckets_by_id_error_file_list]; flags: --id (required), --dest-root (required), --file-name, --max-bytes
+  - prism-analytics data-changes-list - Get data changes accessible by a user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - prism-analytics data-changes-get - Gets data change associated with ID [intent=direct_read availability=implemented]; flags: --data-change-id (required), --page, --page-cursor
+  - prism-analytics data-changes-by-data-change-id-activities-get - Get details of the activity specified by activityID [intent=direct_read availability=implemented]; flags: --data-change-id (required), --activity-id (required), --page, --page-cursor
+  - prism-analytics data-changes-by-data-change-id-validate-list - Validate data change specified by dataChangeID [intent=direct_read availability=implemented]; flags: --data-change-id (required), --page, --page-cursor
+  - prism-analytics file-containers-by-file-container-id-files-list - Get all files for a file container [intent=direct_read availability=implemented]; flags: --file-container-id (required), --page, --page-cursor
+  - prism-analytics tables-list - Get tables that the current user has permission on [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - prism-analytics tables-get - Get the description of a table by ID [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - prism-analytics create-buckets - Create a new bucket for a table or dataset [intent=reverse_etl availability=implemented write=prism_analytics_create_buckets]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - prism-analytics replace-buckets - Edit an existing bucket with the specified name [intent=reverse_etl availability=implemented write=prism_analytics_replace_buckets]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - prism-analytics create-buckets-by-id-complete - Commit data contained in a bucket into the associated table or dataset [intent=reverse_etl availability=implemented write=prism_analytics_create_buckets_by_id_complete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - prism-analytics create-buckets-by-id-files - Upload a single file to a bucket for a table or dataset [intent=reverse_etl availability=implemented write=prism_analytics_create_buckets_by_id_files]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --name (required), --upload-file (required)
+  - prism-analytics create-data-changes-by-data-change-id-activities - Execute data change by ID [intent=reverse_etl availability=implemented write=prism_analytics_create_data_changes_by_data_change_id_activities]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --data-change-id (required)
+  - prism-analytics create-data-changes-by-data-change-id-cancel - Cancel data change specified by dataChangeID and activityID [intent=reverse_etl availability=implemented write=prism_analytics_create_data_changes_by_data_change_id_cancel]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --data-change-id (required), --activity-id (required)
+  - prism-analytics create-file-containers - Create new fileContainer [intent=reverse_etl availability=implemented write=prism_analytics_create_file_containers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - prism-analytics create-file-containers-by-file-container-id-files - Load file into file container [intent=reverse_etl availability=implemented write=prism_analytics_create_file_containers_by_file_container_id_files]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --file-container-id (required), --file (required)
+  - prism-analytics create-tables - Create a new table with the specified name [intent=reverse_etl availability=implemented write=prism_analytics_create_tables]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - prism-analytics update-tables - Edit the specified attributes of an existing table with the specified id. [intent=reverse_etl availability=implemented write=prism_analytics_update_tables]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - prism-analytics replace-tables - Edit an existing table with the specified name [intent=reverse_etl availability=implemented write=prism_analytics_replace_tables]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - wql data-list - Returns the data from a WQL query. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - wql data-sources-list - Retrieves a collection of data sources, including their primary business objects. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - wql data-sources-get - Retrieves a data source and primary business object for the specified {ID} for use in a WQL query. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - wql data-sources-by-id-data-source-filters-list - Retrieves a data source filter of the data source. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - wql data-sources-by-id-data-source-filters-get - Retrieves the data source filter with the specified {ID} for a specific data source. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - wql data-sources-by-id-fields-list - Retrieves a field of the data source instance, including the related business object of the field. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - wql data-sources-by-id-fields-get - Retrieves the field with a specified {ID} for the specific data source. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - wql read-data - Returns the data from a WQL query. [intent=direct_read availability=implemented operation=workday_rest.wql_read_data]; flags: --page, --page-cursor
+  - graph versions-list - Retrieves all supported Graph API versions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - graph versions-get - Retrieves all supported Graph API versions. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - attachments graphql-get - Retrieves an attachment using a downloadID from a Graph API query response. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - attachments graphql-get-download - Downloads the file content of /attachments/v1/graphql/{ID}. [intent=binary_download availability=implemented operation=workday_rest.attachments_graphql_get_download]; flags: --id (required), --dest-root (required), --file-name, --max-bytes
+  - connect message-templates-list - Retrieves a collection of message templates. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - connect message-templates-get - Retrieves a message template with the specific ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - connect notification-types-list - Retrieves a collection of notification types. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - connect notification-types-get - Retrieves a notification type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - connect values-audience-prompt-group-audience-type-list - Reads /connect/v2/values/AudiencePromptGroup/audienceType/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - connect values-audience-prompt-group-selection-list - Reads /connect/v2/values/AudiencePromptGroup/selection/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - connect create-message-templates - POST /connect/v2/messageTemplates. [intent=reverse_etl availability=implemented write=connect_create_message_templates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - connect update-message-templates - Partially updates an existing message template instance. [intent=reverse_etl availability=implemented write=connect_update_message_templates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - connect replace-message-templates - Updates an existing message template instance. [intent=reverse_etl availability=implemented write=connect_replace_message_templates]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - connect create-send-message - sendMessage API [intent=reverse_etl availability=implemented write=connect_create_send_message]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - communications create-managed-recipient - This API is used to manage a user’s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number. [intent=reverse_etl availability=implemented write=communications_create_managed_recipient]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - help-article article-statuses-list - Retrieves a list of article version statuses for all articles. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-article article-statuses-get - Retrieve an article version status for an article. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-article article-versions-list - Retrieves a list of article versions and the plain text content within each article version. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-article article-versions-get - Retrieve an article version and the plain text content for the article version. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-article article-versions-by-id-approval-decision-list - Returns all approval decisions for the current user. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-article article-versions-by-id-approval-decision-get - Returns all approval decisions for the current user. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - help-article article-versions-by-id-approval-request-get - Returns an instance of Approval Request from /kbApprovalRequest resource. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - help-article values-common-audiences-list - Reads /helpArticle/v1/values/common/audiences/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-article update-article-versions-by-id-approval-decision - Updates the decision type and decision comment. [intent=reverse_etl availability=implemented write=help_article_update_article_versions_by_id_approval_decision]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - help-article create-article-versions-by-id-approval-request - Creates an instance of Approval Request, Approval Decision(s) and Share Assignment. [intent=reverse_etl availability=implemented write=help_article_create_article_versions_by_id_approval_request]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-article update-article-versions-by-id-approval-request - Updates an instance of the /approvalRequest resource. [intent=reverse_etl availability=implemented write=help_article_update_article_versions_by_id_approval_request]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - help-article create-article-versions-by-id-article-effective-date - POST /helpArticle/v1/articleVersions/{ID}/articleEffectiveDate. [intent=reverse_etl availability=implemented write=help_article_create_article_versions_by_id_article_effective_date]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-article delete-article-versions-by-id-article-effective-date - Deletes the effective dates for the article version. [intent=reverse_etl availability=implemented write=help_article_delete_article_versions_by_id_article_effective_date]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - help-case attachments-get - Will return attachments [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case case-suggestions-list - Retrieves a list of suggestions based on case type. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case case-suggestions-get - Retrieves a list of suggestions based on case type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case case-types-list - Retrieves a list of case types that a worker has access to. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case case-types-get - Retrieves a list of case types that a worker has access to. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case cases-list - Retrieves a list of cases that the user is secured to view. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case cases-get - Retrieves a case with the specified ID that the user is secured to view. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case cases-by-id-comment-list - Retrieves a list of comment timeline items for a case. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case cases-by-id-comment-get - Retrieves a comment timeline item for a case with the specified comment timeline ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - help-case cases-by-id-internal-note-timeline-list - Retrieves a list of internal note timeline items for a case. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case cases-by-id-internal-note-timeline-get - Retrieves an internal note timeline item for a case with the specified internal note timeline ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - help-case cases-by-id-timeline-list - Retrieves a list of comment timeline items for a case. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case cases-by-id-timeline-get - Retrieves a comment timeline item for a case with the specified timeline ID. [intent=direct_read availability=implemented]; flags: --id (required), --subresource-id (required), --page, --page-cursor
+  - help-case configuration-list - Retrieves tenant setup configurations related to Help Case Management. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case configuration-get - Retrieves tenant setup configurations related to Help Case Management. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case external-creators-list - Retrieves a collection of external contact details. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case external-creators-get - Retrieves contact details for a single external case contact instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case service-categories-list - Retrieves all parent service categories. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case service-categories-get - Retrieves a service category with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - help-case values-case-flags-group-case-flags-list - Reads /helpCase/v4/values/caseFlagsGroup/caseFlags/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case values-case-label-categories-group-case-label-categories-list - Reads /helpCase/v4/values/caseLabelCategoriesGroup/caseLabelCategories/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case values-case-statuses-group-case-statuses-list - Reads /helpCase/v4/values/caseStatusesGroup/caseStatuses/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case values-external-records-source-list - Reads /helpCase/v4/values/externalRecords/source/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case values-service-teams-group-service-teams-list - Reads /helpCase/v4/values/serviceTeamsGroup/serviceTeams/. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - help-case create-attachments - Uploads an attachment when creating a case. [intent=reverse_etl availability=implemented write=help_case_create_attachments]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - help-case create-cases - Creates a case. [intent=reverse_etl availability=implemented write=help_case_create_cases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - help-case update-cases - Edits a case. [intent=reverse_etl availability=implemented write=help_case_update_cases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-case create-cases-by-id-comment - POST /helpCase/v4/cases/{ID}/comment. [intent=reverse_etl availability=implemented write=help_case_create_cases_by_id_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-case create-cases-by-id-internal-note-timeline - POST /helpCase/v4/cases/{ID}/internalNoteTimeline. [intent=reverse_etl availability=implemented write=help_case_create_cases_by_id_internal_note_timeline]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-case delete-cases-by-id-internal-note-timeline - Deletes an internal note. [intent=reverse_etl availability=implemented write=help_case_delete_cases_by_id_internal_note_timeline]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - help-case update-cases-by-id-internal-note-timeline - Edits an internal note. [intent=reverse_etl availability=implemented write=help_case_update_cases_by_id_internal_note_timeline]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required), --subresource-id (required)
+  - help-case create-cases-by-id-reopen - Updates an existing resolved case instance [intent=reverse_etl availability=implemented write=help_case_create_cases_by_id_reopen]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - help-case create-external-creators - Creates external case contacts. [intent=reverse_etl availability=implemented write=help_case_create_external_creators]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - help-case create-external-records - Creates and links external records to a Help case. [intent=reverse_etl availability=implemented write=help_case_create_external_records]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - help-case replace-external-records - Deletes an existing link instance between an external record and case. [intent=reverse_etl availability=implemented write=help_case_replace_external_records]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - request requests-list - Retrieves a collection of in progress requests based on the specified parameters. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - request requests-get - Retrieves the request with the specified ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - request types-list - Retrieves a collection of request types. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - request types-get - Retrieves a request type. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - request create-requests - Creates a request. [intent=reverse_etl availability=implemented write=request_create_requests]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.
+  - request create-requests-by-id-close - Closes a request. [intent=reverse_etl availability=implemented write=request_create_requests_by_id_close]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Writes to the configured Workday tenant.; flags: --id (required)
+  - privacy activity-logging-list - Retrieves a collection of user activity log entries in a specified time frame. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - system-metrics active-tasks-list - Reads /systemMetrics/v1/activeTasks. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - system-metrics active-tasks-get - Reads /systemMetrics/v1/activeTasks/{ID}. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - system-metrics active-user-sessions-list - Retrieves a collection of active user sessions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - system-metrics active-user-sessions-get - Retrieves an active user session. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - system-metrics system-metrics-overview-list - Retrieves system metrics with the specified ID, including queued tasks, running tasks, and active user sessions. [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - system-metrics system-metrics-overview-get - Retrieves system metrics. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+  - o-auth-client client-details-list - Returns a valid OAuth Client Details for OCFR Clients [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - o-auth-client client-details-get - Returns a valid OAuth Client Details for OCFR Clients [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
+- Help topics:
+  - authentication - Use pm credentials to store the Workday tenant and bearer access token. Never print stored tokens.
+  - services - Workday publishes 52 independently versioned services, each mounted at its own base path. A command names its service first, then the action.
+  - execution-model - ETL commands map to streams. Reverse ETL commands map to approved write actions and keep plan, preview, approval, execute.
 
 ## Commands
 
@@ -74,3 +1964,4 @@ pm connectors inspect workday-rest --json
 - Run pm connectors inspect workday-rest before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

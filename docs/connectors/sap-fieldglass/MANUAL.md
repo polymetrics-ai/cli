@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SAP Fieldglass workers, job postings, and time sheets through the SAP Fieldglass API. Read-only.
 
 ICON
+  id: sapfieldglass
   asset: icons/sapfieldglass.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,21 +29,21 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   workers:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
   job_postings:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
   time_sheets:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external SAP Fieldglass API read of worker, job posting, and time sheet data

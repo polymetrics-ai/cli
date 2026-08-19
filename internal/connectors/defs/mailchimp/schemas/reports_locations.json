@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports_locations",
+  "type": "object",
+  "x-primary-key": [
+    "campaign_id"
+  ],
+  "properties": {
+    "country_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "region": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "region_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "opens": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "proxy_excluded_opens": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

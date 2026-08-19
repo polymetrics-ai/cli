@@ -1,0 +1,28 @@
+{
+  "name": "mysql",
+  "display_name": "MySQL",
+  "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, and bounded reads. Read-only source.",
+  "integration_type": "database",
+  "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "read-only MySQL wire-protocol queries against the configured database",
+    "write": "n/a (read-only source)",
+    "approval": "none required for read-only sync"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "native MySQL wire-protocol and Podman-backed integration tests prove dynamic catalog, reads, and transport-security modes against a live server; fixture replay cannot exercise the protocol."
+  }
+}

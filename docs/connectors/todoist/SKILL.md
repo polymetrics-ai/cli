@@ -11,6 +11,7 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
 
 ## Icon
 
+- id: todoist
 - asset: icons/todoist.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -37,31 +38,32 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
 
 - projects:
   - primary key: id
-  - fields: color(), id(), is_favorite(), name()
+  - fields: color(string), id(string), is_favorite(boolean), name(string)
 - sections:
   - primary key: id
-  - fields: id(), name(), order(), project_id()
+  - fields: id(string), name(string), order(integer), project_id(string)
 - tasks:
   - primary key: id
-  - fields: content(), created_at(), description(), due(), id(), is_completed(), project_id(), section_id()
+  - fields: content(string), created_at(string), description(string), due(object), id(string), is_completed(boolean), project_id(string), section_id(string)
 - comments:
   - primary key: id
-  - fields: content(), id(), posted_at(), project_id(), task_id()
+  - fields: content(string), id(string), posted_at(string), project_id(string), task_id(string)
 - labels:
   - primary key: id
-  - fields: color(), id(), is_favorite(), name(), order()
+  - fields: color(string), id(string), is_favorite(boolean), name(string), order(integer)
 - collaborators:
   - primary key: id, project_id
-  - fields: email(), id(), name(), project_id()
+  - fields: email(string), id(string), name(string), project_id(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_project:
   - endpoint: POST /projects
+  - required fields: name
   - risk: creates a new project in the caller's Todoist account; low-risk external mutation, no approval required
 - update_project:
   - endpoint: POST /projects/{{ record.id }}
@@ -73,10 +75,11 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
   - risk: permanently removes a project and everything in it (its sections, tasks, and comments); irreversible
 - create_section:
   - endpoint: POST /sections
+  - required fields: project_id, name
   - risk: creates a new section within an existing project; low-risk external mutation, no approval required
 - update_section:
   - endpoint: POST /sections/{{ record.id }}
-  - required fields: id
+  - required fields: id, name
   - risk: renames an existing section
 - delete_section:
   - endpoint: DELETE /sections/{{ record.id }}
@@ -84,6 +87,7 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
   - risk: permanently removes a section and every task in it; irreversible
 - create_task:
   - endpoint: POST /tasks
+  - required fields: content
   - risk: creates a new task in the caller's Todoist account (in the given project, or Inbox if omitted); low-risk external mutation, no approval required
 - update_task:
   - endpoint: POST /tasks/{{ record.id }}
@@ -103,10 +107,11 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
   - risk: permanently removes a task; irreversible
 - create_comment:
   - endpoint: POST /comments
+  - required fields: content
   - risk: posts a new comment on a task or project; low-risk external mutation, no approval required
 - update_comment:
   - endpoint: POST /comments/{{ record.id }}
-  - required fields: id
+  - required fields: id, content
   - risk: edits the content of an existing comment
 - delete_comment:
   - endpoint: DELETE /comments/{{ record.id }}
@@ -114,6 +119,7 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
   - risk: permanently removes a comment; irreversible
 - create_label:
   - endpoint: POST /labels
+  - required fields: name
   - risk: creates a new personal label; low-risk external mutation, no approval required
 - update_label:
   - endpoint: POST /labels/{{ record.id }}

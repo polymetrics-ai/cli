@@ -36,11 +36,11 @@ build from source below.
 
 ### Install a release binary
 
-Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
-Windows on amd64 and arm64.
+Release assets are published from `polymetrics-ai/cli` for Linux and macOS on
+amd64 and arm64. Windows is not published; see Troubleshooting.
 
 This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
-macOS/Linux, `unzip` for Windows archives), but does not require Go.
+macOS/Linux), but does not require Go.
 
 ```bash
 os_name="$(uname -s)"
@@ -49,7 +49,6 @@ arch_name="$(uname -m)"
 case "$os_name" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
   *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
 esac
 
@@ -59,25 +58,14 @@ case "$arch_name" in
   *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
 esac
 
-case "$os" in
-  windows) asset_pattern="pm_*_${os}_${arch}.zip" ;;
-  *) asset_pattern="pm_*_${os}_${arch}.tar.gz" ;;
-esac
+asset_pattern="pm_*_${os}_${arch}.tar.gz"
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 gh release download --repo polymetrics-ai/cli --pattern "$asset_pattern" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+binary_name=pm
 
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"
@@ -106,18 +94,16 @@ pm help
 
 ### Build with DuckDB analytics (optional)
 
-The default build ships a simple JSONL query path. For real analytical SQL
-(joins, aggregations, window functions) build the DuckDB engine — this requires
-a C toolchain (CGO):
+DuckDB is embedded in every build. It is the query engine and the only Parquet
+implementation in the binary, so building `pm` requires cgo and a C toolchain:
 
 ```bash
-CGO_ENABLED=1 go build -tags duckdb -o pm ./cmd/pm
-# or run the dedicated verification lane:
-make verify-duckdb
+CGO_ENABLED=1 go build -o pm ./cmd/pm
 ```
 
-The default (CGO-free) and `-tags duckdb` builds are interchangeable; the DuckDB
-build only changes how `pm query` is executed.
+There is no build tag and no CGO-free variant. Two builds that wrote different
+table formats would mean a query that works on one install and fails on another,
+so `pm query` supports read-only `SELECT` and `WITH` in full everywhere.
 
 ### Verify your build
 
@@ -136,8 +122,8 @@ make verify          # gofmt + go vet + go test ./... + build + end-to-end smoke
 | **Connector** | A system Polymetrics can read from and/or write to (`github`, `stripe`, `postgres`, …). One package per system. |
 | **Connection** | A configured source → destination pairing with stream/primary-key/cursor/table mapping. |
 | **Catalog** | The set of streams a source exposes (`pm catalog refresh`). |
-| **Warehouse** | The local landing zone for extracted data (JSONL by default; DuckDB-queryable). |
-| **Sync mode** | How a stream is materialized: `full_refresh_overwrite`, `incremental_append`, `incremental_dedupe_history`, `incremental_dedupe_latest_record`. |
+| **Warehouse** | Local Parquet tables rebuilt from append-only JSONL write-ahead logs and queried by DuckDB. |
+| **Sync mode** | A connection's materialization setting. See [ETL sync modes](cli/etl.md) for accepted names, capability requirements, and typed-compatibility admission. |
 
 ### Adding credentials without leaking secrets
 
@@ -146,11 +132,11 @@ Never paste secrets on the command line. Use one of:
 ```bash
 # from an environment variable
 export GITHUB_TOKEN=ghp_…
-pm credentials add gh --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+pm credentials add gh --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # from stdin (e.g. a private key file)
 pm credentials add gh-app --connector github \
-  --config repository=OWNER/REPO --config auth_type=github_app \
+  --config owner=OWNER --config repo=REPO --config auth_type=github_app \
   --config app_id=12345 --config installation_id=67890 \
   --value-stdin private_key < app-private-key.pem
 ```
@@ -168,7 +154,7 @@ Pull data from a source into the local warehouse. Example with a public GitHub r
 
 ```bash
 pm init
-pm credentials add github    --connector github    --config repository=octocat/Hello-World
+pm credentials add github    --connector github    --config owner=octocat --config repo=Hello-World --config public_access=true
 pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
 
 pm connections create gh \
@@ -185,12 +171,14 @@ For large streams, bound the work:
 ```bash
 pm etl run --connection gh --stream pull_requests --batch-size 100 --json
 # HTTP connectors default to one page for safe local runs; exhaust a stream with:
-pm credentials add github --connector github --config repository=OWNER/REPO --config max_pages=0
+pm credentials add github --connector github --config owner=OWNER --config repo=REPO --config public_access=true --config max_pages=0
 ```
 
-The same pattern works for `stripe`, `postgres`, `slack`, `hubspot`, and the rest —
-only the credential config and stream names change. Use `pm connectors inspect <name>`
-to see a connector's streams, cursors, and required config.
+The same pattern works for `stripe`, `postgres`, `slack`, and other connectors with
+enabled read streams. Planned ledger-only connectors such as `hubspot` remain visible
+in the catalog but list no executable streams until their future implementation lanes
+ship. Use `pm connectors inspect <name>` to see a connector's streams, cursors, and
+required config.
 
 ---
 
@@ -230,7 +218,7 @@ through `plan → preview → approve → execute`.
 ```bash
 export GITHUB_TOKEN=ghp_…
 pm credentials add github-write --connector github \
-  --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # 1. PLAN — describe the write; returns a plan id + one-time approval token + a sample
 pm reverse plan prs_to_github \
@@ -243,8 +231,8 @@ pm reverse plan prs_to_github \
 # 2. PREVIEW — see exactly what would be written (no mutation)
 pm reverse preview <plan-id> --json
 
-# 3. EXECUTE — nothing changes until you replay with the approval token
-pm reverse run <plan-id> --approve <approval-token> --json
+# 3. EXECUTE — enter the approval token as one stdin line; nothing changes until then
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 Approval tokens are **single-use and time-bounded**. A `run` without a valid token
@@ -254,8 +242,9 @@ able to perform them unsupervised.
 **Write actions** are connector-specific and allow-listed. GitHub, for example,
 supports `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `create_pull_request`, `update_pull_request`, `close_pull_request`,
-`request_reviewers`, and `merge_pull_request`. HubSpot supports
-`create_contact` / `update_contact`. Inspect a connector to see its actions:
+`request_reviewers`, and `merge_pull_request`. Planned ledger-only connectors such
+as HubSpot intentionally report no executable write actions until connector-owned
+actions and evidence ship. Inspect a connector to see its actions:
 
 ```bash
 pm connectors inspect github --json   # → manifest.write_actions
@@ -272,18 +261,18 @@ pm connectors inspect stripe  # auth modes, streams, sync modes, write actions
 pm connectors inspect stripe --json
 ```
 
-**118 native connectors** are implemented today (a `646`-connector catalog is the
-roadmap). A few notes:
+The generated connector catalog is the source of truth for current connector counts and
+capabilities. A few examples:
 
-- **GitHub** (`github`) — full certification passed for the current connector surface:
-  509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
-  231 write actions accounted. Public reads need no token; private/higher-rate-limit
+- **GitHub** (`github`) — stream reads plus approval-gated fixed REST and GraphQL writes.
+  Set `public_access` for unauthenticated public reads; private or higher-rate-limit
   reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
-  installation token, or a GitHub App (auto-signs a JWT → installation token). The
-  safe `create_label` write lifecycle passed with read-back and cleanup; other writes
-  remain approval-gated and are either safe untested pairings or blocked by policy.
+  installation token, or a GitHub App (auto-signs a JWT → installation token). Use
+  `pm connectors inspect github --json` and the generated GitHub connector manual for
+  current action availability and certification status.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
-  streams, plus `create_customer` / `update_customer` writes.
+  streams, plus approval-gated customer create/update/delete writes. Run
+  `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.
 - **Postgres** (`postgres`) — connects via `pgx`; discovers schemas/columns; snapshot +
   cursor-incremental reads. Logical-replication CDC is on the roadmap.
 - Most SaaS connectors are read-first; they add approval-gated writes where the upstream
@@ -356,8 +345,13 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
 
 - **`go.mod requires go >= 1.25` / toolchain errors** — use `make` targets (they set
   `GOTOOLCHAIN=auto`), or run `GOTOOLCHAIN=auto go build ./cmd/pm`, or install Go 1.25.11+.
-- **DuckDB build fails to link** — the `-tags duckdb` build needs CGO and a C compiler
-  (`CGO_ENABLED=1`). The default build needs neither; use it if you don't need analytical SQL.
+- **DuckDB build fails to link** — `pm` needs CGO and a C compiler (`CGO_ENABLED=1`,
+  plus gcc or clang). There is no CGO-free build: DuckDB reads and writes every
+  warehouse table.
+- **No Windows release** — `windows/arm64` has no prebuilt DuckDB library and cannot be
+  built; `windows/amd64` was dropped for having no user asking for it. `pm` still builds
+  from source on Windows amd64 with a C toolchain, and WSL works today. Both targets
+  return on a customer ask.
 - **An HTTP connector only returns one page** — connectors default to one page for safe
   local runs. Set `max_pages=0` (aliases: `all`, `unlimited`) on the credential, or
   `--source-config max_pages=0` on the connection.
@@ -385,16 +379,26 @@ Adding a connector is the highest-leverage contribution. The pattern:
    Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
    compare it against the vendor website or official documentation, replace the SVG under
    `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
-   with `review_status` set to `official_verified` or `manual_override`.
+   with `review_status` set to `official_verified` or `manual_override`. Assets under
+   `docs/connectors/icons/simple-icons/` are the exception: they are fetched and checksum-pinned,
+   so refresh them with `node scripts/fetch-simple-icons.mjs --update-lockfile` from `website/`
+   instead of hand-editing. Registry keys are bare connector identifiers —
+   `source-*`/`destination-*` keys are rejected — and every connector needs its own entry; see
+   `docs/migration/icon-registry-single-source.md`.
 6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
-   must report zero findings. Run `go run ./cmd/connectorgen gen` if hook/native package sets
+   must report zero findings. Run `go run ./cmd/connectorgen surface-sync` after changing
+   `operations.json` or a direct-read `api_surface` row, so derivable command metadata and the
+   shared direct-read endpoint ledger are generated rather than hand-copied. See the
+   [migration conventions](migration/conventions.md#2-authoring-rules) for the direct-read
+   reconciliation workflow. Run `go run ./cmd/connectorgen gen` if hook/native package sets
    changed, then `make verify`.
 
 ```bash
 PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
 go run ./cmd/connectorgen validate internal/connectors/defs
-go run ./cmd/connectorgen gen   # only when hook/native package sets change
-make verify                     # must stay green
+go run ./cmd/connectorgen surface-sync   # after operations.json or direct-read api_surface changes
+go run ./cmd/connectorgen gen            # only when hook/native package sets change
+make verify                              # must stay green
 ```
 
 Optional local hook setup:

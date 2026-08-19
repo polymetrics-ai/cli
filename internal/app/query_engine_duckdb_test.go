@@ -1,5 +1,3 @@
-//go:build duckdb
-
 package app_test
 
 import (
@@ -11,7 +9,7 @@ import (
 )
 
 // TestDuckDBJoinAndAggregate is the red-first test for the DuckDB-backed query
-// engine (only built with -tags duckdb). It proves real analytical SQL — a JOIN
+// engine. It proves real analytical SQL — a JOIN
 // plus GROUP BY aggregation over two warehouse tables.
 func TestDuckDBJoinAndAggregate(t *testing.T) {
 	ctx := context.Background()
@@ -24,7 +22,7 @@ func TestDuckDBJoinAndAggregate(t *testing.T) {
 		t.Fatalf("Open: %v", err)
 	}
 	if got := a.QueryEngineName(); got != "duckdb" {
-		t.Fatalf("QueryEngineName() = %q, want duckdb (-tags duckdb build)", got)
+		t.Fatalf("QueryEngineName() = %q, want duckdb", got)
 	}
 
 	seedWarehouseTable(t, root, "customers", []map[string]any{
@@ -37,10 +35,10 @@ func TestDuckDBJoinAndAggregate(t *testing.T) {
 		{"order_id": "o3", "customer_id": "c2", "amount": 70},
 	})
 
-	rows, err := a.QuerySQL(ctx, `
+	rows, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: `
 		SELECT c.name AS name, SUM(o.amount) AS total
 		FROM orders o JOIN customers c USING (customer_id)
-		GROUP BY c.name ORDER BY total DESC`, 10)
+		GROUP BY c.name ORDER BY total DESC`, Limit: 10})
 	if err != nil {
 		t.Fatalf("QuerySQL(join+aggregate): %v", err)
 	}
@@ -77,7 +75,7 @@ func TestDuckDBSelectOnlyRejectsMutation(t *testing.T) {
 		"DROP VIEW orders",
 		"select * from orders; drop view orders",
 	} {
-		if _, err := a.QuerySQL(ctx, bad, 10); err == nil {
+		if _, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: bad, Limit: 10}); err == nil {
 			t.Errorf("QuerySQL(%q) = nil error, want rejection", bad)
 		}
 	}

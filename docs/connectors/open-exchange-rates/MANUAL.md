@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Open Exchange Rates account usage/plan status through the Open Exchange Rates JSON API (read-only). Live/historical/currencies rate-map streams remain quarantined (ENGINE_GAP).
 
 ICON
+  id: open-exchange-rates
   asset: icons/open-exchange-rates.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -28,15 +29,15 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  app_id (secret)
+  app_id (secret) (required)
 
 ETL STREAMS
   usage:
     primary key: app_id
-    fields: app_id(), daily_average(), days_elapsed(), days_remaining(), plan(), requests(), requests_quota(), requests_remaining(), status()
+    fields: app_id(string), daily_average(integer), days_elapsed(integer), days_remaining(integer), plan(string), requests(integer), requests_quota(integer), requests_remaining(integer), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Open Exchange Rates API read of account usage/plan status

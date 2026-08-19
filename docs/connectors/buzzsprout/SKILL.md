@@ -11,9 +11,11 @@ Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play c
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,17 +30,17 @@ Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play c
 
 - base_url
 - podcast_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - episodes:
   - primary key: id
   - cursor: published_at
-  - fields: artist(), artwork_url(), audio_url(), description(), duration(), episode_number(), explicit(), guid(), hq(), id(), inactive_at(), magic_mastering(), private(), published_at(), season_number(), summary(), tags(), title(), total_plays()
+  - fields: artist(string), artwork_url(string), audio_url(string), description(string), duration(integer), episode_number(integer), explicit(boolean), guid(string), hq(boolean), id(integer), inactive_at(string), magic_mastering(boolean), private(boolean), published_at(string), season_number(integer), summary(string), tags(string), title(string), total_plays(integer)
 - podcasts:
   - primary key: id
-  - fields: artwork_url(), author(), contact_email(), description(), explicit(), id(), keywords(), language(), main_category(), sub_category(), timezone(), title(), website_address()
+  - fields: artwork_url(string), author(string), contact_email(string), description(string), explicit(boolean), id(integer), keywords(string), language(string), main_category(string), sub_category(string), timezone(string), title(string), website_address(string)
 
 ## Sync Modes
 

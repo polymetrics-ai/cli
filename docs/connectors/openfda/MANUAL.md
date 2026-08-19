@@ -13,9 +13,11 @@ DESCRIPTION
   Reads documented FDA drug, device, food, animal/veterinary, cosmetics, tobacco, transparency, and other public datasets from the openFDA REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -33,70 +35,70 @@ CONFIGURATION
 ETL STREAMS
   drug_event:
     primary key: safetyreportid
-    fields: fulfillexpeditecriteria(), occurcountry(), primarysourcecountry(), receiptdate(), receivedate(), safetyreportid(), safetyreportversion(), serious(), seriousnessdeath(), transmissiondate()
+    fields: fulfillexpeditecriteria(string), occurcountry(string), primarysourcecountry(string), receiptdate(string), receivedate(string), safetyreportid(string), safetyreportversion(string), serious(string), seriousnessdeath(string), transmissiondate(string)
   drug_label:
     primary key: id
-    fields: effective_time(), id(), indications_and_usage(), openfda(), purpose(), set_id(), version(), warnings()
+    fields: effective_time(string), id(string), indications_and_usage(array), openfda(object), purpose(array), set_id(string), version(string), warnings(array)
   drug_enforcement:
     primary key: recall_number
-    fields: classification(), country(), distribution_pattern(), product_type(), reason_for_recall(), recall_initiation_date(), recall_number(), recalling_firm(), report_date(), state(), status(), voluntary_mandated()
+    fields: classification(string), country(string), distribution_pattern(string), product_type(string), reason_for_recall(string), recall_initiation_date(string), recall_number(string), recalling_firm(string), report_date(string), state(string), status(string), voluntary_mandated(string)
   device_event:
     primary key: mdr_report_key
-    fields: adverse_event_flag(), date_of_event(), date_received(), event_type(), manufacturer_name(), mdr_report_key(), product_problem_flag(), report_number(), report_source_code()
+    fields: adverse_event_flag(string), date_of_event(string), date_received(string), event_type(string), manufacturer_name(string), mdr_report_key(string), product_problem_flag(string), report_number(string), report_source_code(string)
   food_enforcement:
     primary key: recall_number
-    fields: classification(), country(), distribution_pattern(), product_type(), reason_for_recall(), recall_initiation_date(), recall_number(), recalling_firm(), report_date(), state(), status(), voluntary_mandated()
+    fields: classification(string), country(string), distribution_pattern(string), product_type(string), reason_for_recall(string), recall_initiation_date(string), recall_number(string), recalling_firm(string), report_date(string), state(string), status(string), voluntary_mandated(string)
   animalandveterinary_event:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   cosmetic_event:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   food_event:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   drug_ndc:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   drug_drugsfda:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   drug_shortages:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   drug_orangebook:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_510k:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_pma:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_udi:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_enforcement:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_recall:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_classification:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_registrationlisting:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   device_covid19serology:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   tobacco_problem:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   tobacco_researchdigitalads:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   tobacco_researchpreventionads:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   tobacco_researchsmokefree:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   transparency_crl:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   other_historicaldocument:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   other_nsde:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   other_substance:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
   other_unii:
-    fields: id(), openfda()
+    fields: id(string), openfda(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external openFDA API read of public FDA regulatory datasets

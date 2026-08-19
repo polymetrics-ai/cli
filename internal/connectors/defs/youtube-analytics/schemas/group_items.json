@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "group_items",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": ["string", "null"] },
+    "etag": { "type": ["string", "null"] },
+    "group_id": { "type": ["string", "null"] },
+    "resource_kind": { "type": ["string", "null"] },
+    "resource_id": { "type": ["string", "null"] }
+  }
+}

@@ -11,9 +11,11 @@ Reads Finnhub stock symbols, market news, per-symbol company profiles, and per-s
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -31,23 +33,23 @@ Reads Finnhub stock symbols, market news, per-symbol company profiles, and per-s
 - market_news_category
 - mode
 - symbols
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - stock_symbols:
   - primary key: symbol
-  - fields: currency(), description(), displaySymbol(), figi(), mic(), symbol(), type()
+  - fields: currency(string), description(string), displaySymbol(string), figi(string), mic(string), symbol(string), type(string)
 - market_news:
   - primary key: id
   - cursor: datetime
-  - fields: category(), datetime(), headline(), id(), image(), related(), source(), summary(), symbol(), url()
+  - fields: category(string), datetime(integer), headline(string), id(integer), image(string), related(string), source(string), summary(string), symbol(string), url(string)
 - company_profile:
   - primary key: ticker
-  - fields: country(), currency(), exchange(), finnhubIndustry(), ipo(), logo(), marketCapitalization(), name(), phone(), shareOutstanding(), ticker(), weburl()
+  - fields: country(string), currency(string), exchange(string), finnhubIndustry(string), ipo(string), logo(string), marketCapitalization(number), name(string), phone(string), shareOutstanding(number), ticker(string), weburl(string)
 - stock_recommendations:
   - primary key: symbol, period
-  - fields: buy(), hold(), period(), sell(), strongBuy(), strongSell(), symbol()
+  - fields: buy(integer), hold(integer), period(string), sell(integer), strongBuy(integer), strongSell(integer), symbol(string)
 
 ## Sync Modes
 

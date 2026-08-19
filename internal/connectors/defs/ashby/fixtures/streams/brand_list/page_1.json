@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/brand.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "brand_list_id_fixture_43",
+          "name": "Brand List Name Fixture 43",
+          "hostedJobsPageSlug": "brand_list_hostedjobspageslug_fixture_43"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

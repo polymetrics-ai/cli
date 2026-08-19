@@ -1,0 +1,17 @@
+{
+  "record": {
+    "view_id": "fixture_view_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/views/fixture_view_id",
+    "body": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

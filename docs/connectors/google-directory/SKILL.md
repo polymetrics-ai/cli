@@ -11,6 +11,7 @@ Reads Google Admin SDK Directory users, groups, organizational units, and Chrome
 
 ## Icon
 
+- id: googledirectory
 - asset: icons/googledirectory.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -32,26 +33,26 @@ Reads Google Admin SDK Directory users, groups, organizational units, and Chrome
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - users:
   - primary key: id
-  - fields: id(), name(), org_unit_path(), primary_email()
+  - fields: id(string), name(string), org_unit_path(string), primary_email(string)
 - groups:
   - primary key: id
-  - fields: description(), email(), id(), name()
+  - fields: description(string), email(string), id(string), name(string)
 - orgunits:
   - primary key: id
-  - fields: description(), id(), name(), org_unit_path()
+  - fields: description(string), id(string), name(string), org_unit_path(string)
 - chromeos_devices:
   - primary key: id
-  - fields: id(), org_unit_path(), serial_number(), status()
+  - fields: id(string), org_unit_path(string), serial_number(string), status(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

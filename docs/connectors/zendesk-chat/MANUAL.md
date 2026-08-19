@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through the Zendesk Chat REST API v2.
 
 ICON
+  id: zendesk-chat
   asset: icons/zendesk-chat.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,27 +27,27 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   start_date
   access_token (secret)
 
 ETL STREAMS
   agents:
     primary key: id
-    fields: create_date(), display_name(), email(), enabled(), first_name(), id(), last_login(), last_name(), role_id()
+    fields: create_date(string), display_name(string), email(string), enabled(boolean), first_name(string), id(integer), last_login(string), last_name(string), role_id(integer)
   chats:
     primary key: id
     cursor: timestamp
-    fields: comment(), department_id(), duration(), id(), rating(), session(), timestamp(), type(), visitor()
+    fields: comment(string), department_id(integer), duration(integer), id(string), rating(string), session(object), timestamp(string), type(string), visitor(object)
   departments:
     primary key: id
-    fields: description(), enabled(), id(), members(), name(), settings()
+    fields: description(string), enabled(boolean), id(integer), members(array), name(string), settings(object)
   shortcuts:
     primary key: id
-    fields: id(), message(), name(), options(), scope(), tags()
+    fields: id(integer), message(string), name(string), options(string), scope(string), tags(array)
   triggers:
     primary key: id
-    fields: definition(), description(), enabled(), id(), name()
+    fields: definition(object), description(string), enabled(boolean), id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

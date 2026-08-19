@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Mailosaur virtual servers, message summaries, and account usage transactions through the Mailosaur REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -31,20 +33,20 @@ CONFIGURATION
   received_after
   server
   username
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   servers:
     primary key: id
-    fields: id(), messages(), name(), users()
+    fields: id(string), messages(integer), name(string), users(array)
   messages:
     primary key: id
     cursor: received
-    fields: bcc(), cc(), from(), id(), received(), server(), subject(), to(), type()
+    fields: bcc(array), cc(array), from(array), id(string), received(string), server(string), subject(string), to(array), type(string)
   transactions:
     primary key: timestamp
     cursor: timestamp
-    fields: email(), previews(), sms(), timestamp()
+    fields: email(integer), previews(integer), sms(integer), timestamp(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and manages Statsig feature gates, dynamic configs, experiments, segments, target apps, tags, keys, holdouts, layers, users, audit logs, and environments through the Statsig Console API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,52 +28,53 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   feature_gates:
     primary key: id
-    fields: description(), id(), isEnabled(), name(), status()
+    fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
   dynamic_configs:
     primary key: id
-    fields: description(), id(), isEnabled(), name(), status()
+    fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
   experiments:
     primary key: id
-    fields: description(), id(), isEnabled(), name(), status()
+    fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
   segments:
     primary key: id
-    fields: description(), id(), isEnabled(), name(), status()
+    fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
   target_apps:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   tags:
     primary key: id
-    fields: description(), id(), isCore(), name()
+    fields: description(string), id(string), isCore(boolean), name(string)
   keys:
     primary key: key
-    fields: description(), environments(), key(), lastUsed(), primaryTargetApp(), scopes(), secondaryTargetApps(), status(), type()
+    fields: description(string), environments(array), key(string), lastUsed(string), primaryTargetApp(string), scopes(array), secondaryTargetApps(array), status(string), type(string)
   holdouts:
     primary key: id
-    fields: createdTime(), creatorEmail(), creatorID(), creatorName(), description(), experimentIDs(), gateIDs(), id(), idType(), isEnabled(), isGlobal(), lastModifiedTime(), lastModifierID(), layerIDs(), name(), passPercentage(), status(), team(), teamID()
+    fields: createdTime(number), creatorEmail(string), creatorID(string), creatorName(string), description(string), experimentIDs(array), gateIDs(array), id(string), idType(string), isEnabled(boolean), isGlobal(boolean), lastModifiedTime(number), lastModifierID(string), layerIDs(array), name(string), passPercentage(number), status(string), team(string), teamID(string)
   layers:
     primary key: id
-    fields: createdTime(), creatorEmail(), creatorID(), creatorName(), description(), id(), idType(), isImplicitLayer(), lastModifiedTime(), lastModifierID(), name(), team(), teamID()
+    fields: createdTime(number), creatorEmail(string), creatorID(string), creatorName(string), description(string), id(string), idType(string), isImplicitLayer(boolean), lastModifiedTime(number), lastModifierID(string), name(string), team(string), teamID(string)
   users:
     primary key: userID
-    fields: email(), firstName(), lastName(), role(), userID()
+    fields: email(string), firstName(string), lastName(string), role(string), userID(string)
   audit_logs:
     primary key: id
-    fields: actionType(), changeLog(), date(), id(), modifierEmail(), name(), tags(), targetAppIDs(), time(), updatedBy(), updatedByUserID()
+    fields: actionType(string), changeLog(string), date(string), id(string), modifierEmail(string), name(string), tags(array), targetAppIDs(array), time(number), updatedBy(string), updatedByUserID(string)
   environments:
     primary key: name
-    fields: id(), isProduction(), name(), requiresReleasePipeline(), requiresReview()
+    fields: id(string), isProduction(boolean), name(string), requiresReleasePipeline(boolean), requiresReview(boolean)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_gate:
     endpoint: POST /gates
+    required fields: name
     risk: external mutation; approval required
   update_gate:
     endpoint: PATCH /gates/{{ record.id }}
@@ -83,6 +86,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_dynamic_config:
     endpoint: POST /dynamic_configs
+    required fields: name
     risk: external mutation; approval required
   update_dynamic_config:
     endpoint: PATCH /dynamic_configs/{{ record.id }}
@@ -94,6 +98,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_segment:
     endpoint: POST /segments
+    required fields: name, type
     risk: external mutation; approval required
   delete_segment:
     endpoint: DELETE /segments/{{ record.id }}
@@ -101,6 +106,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name, description
     risk: external mutation; approval required
   update_tag:
     endpoint: PATCH /tags/{{ record.id }}
@@ -112,6 +118,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_target_app:
     endpoint: POST /target_app
+    required fields: name, description
     risk: external mutation; approval required
   update_target_app:
     endpoint: PATCH /target_app/{{ record.id }}
@@ -123,6 +130,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_holdout:
     endpoint: POST /holdouts
+    required fields: name
     risk: external mutation; approval required
   delete_holdout:
     endpoint: DELETE /holdouts/{{ record.id }}
@@ -130,6 +138,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_layer:
     endpoint: POST /layers
+    required fields: name, idType
     risk: external mutation; approval required
   delete_layer:
     endpoint: DELETE /layers/{{ record.id }}
@@ -137,6 +146,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_key:
     endpoint: POST /keys
+    required fields: description, type
     risk: external mutation creating a live API credential; approval required
   delete_key:
     endpoint: DELETE /keys/{{ record.key }}

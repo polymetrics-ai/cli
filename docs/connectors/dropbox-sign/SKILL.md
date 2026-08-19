@@ -11,9 +11,17 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-dropbox
+- asset: icons/simple-icons/dropbox.svg
+- title: Dropbox
+- simple_icon_slug: dropbox
+- simple_icon_hex: 0061FF
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Dropbox
+- match: curated-alias
+- matched_by: dropbox
 
 ## Capabilities
 
@@ -28,24 +36,24 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - signature_requests:
   - primary key: signature_request_id
   - cursor: created_at
-  - fields: created_at(), has_error(), is_complete(), is_declined(), message(), requester_email_address(), signature_request_id(), subject(), test_mode(), title()
+  - fields: created_at(integer), has_error(boolean), is_complete(boolean), is_declined(boolean), message(string), requester_email_address(string), signature_request_id(string), subject(string), test_mode(boolean), title(string)
 - templates:
   - primary key: template_id
   - cursor: updated_at
-  - fields: is_creator(), is_embedded(), is_locked(), message(), template_id(), title(), updated_at()
+  - fields: is_creator(boolean), is_embedded(boolean), is_locked(boolean), message(string), template_id(string), title(string), updated_at(integer)
 - team_members:
   - primary key: account_id
-  - fields: account_id(), email_address(), role()
+  - fields: account_id(string), email_address(string), role(string)
 - account:
   - primary key: account_id
-  - fields: account_id(), email_address(), is_paid_hf(), is_paid_hs(), locale(), role_code()
+  - fields: account_id(string), email_address(string), is_paid_hf(boolean), is_paid_hs(boolean), locale(string), role_code(string)
 
 ## Sync Modes
 
@@ -55,7 +63,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 - update_signature_request:
   - endpoint: POST /signature_request/update/{{ record.signature_request_id }}
-  - required fields: signature_request_id
+  - required fields: signature_request_id, signature_id
   - risk: external mutation; changes a signer's email address or name on an in-progress signature request, redirecting where the next request/reminder is delivered; approval required
 - cancel_signature_request:
   - endpoint: POST /signature_request/cancel/{{ record.signature_request_id }}
@@ -63,7 +71,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
   - risk: destructive external mutation; cancels an incomplete signature request, this action is not reversible; approval required
 - remind_signature_request:
   - endpoint: POST /signature_request/remind/{{ record.signature_request_id }}
-  - required fields: signature_request_id
+  - required fields: signature_request_id, email_address
   - risk: external mutation; sends an email reminder to a signer; cannot be sent again within 1 hour of the last reminder (manual or automatic)
 - release_hold_signature_request:
   - endpoint: POST /signature_request/release_hold/{{ record.signature_request_id }}
@@ -90,6 +98,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
   - risk: external mutation; creates a new Team and makes the calling account its member; fails if the caller already belongs to a Team
 - update_team:
   - endpoint: PUT /team
+  - required fields: name
   - risk: external mutation; renames the caller's own Team
 - add_team_member:
   - endpoint: PUT /team/add_member

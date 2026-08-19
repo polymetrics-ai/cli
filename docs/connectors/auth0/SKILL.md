@@ -11,6 +11,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 
 ## Icon
 
+- id: auth0
 - asset: icons/auth0.svg
 - source: official
 - review_status: official_verified
@@ -28,7 +29,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 ## Configuration
 
 - audience
-- base_url
+- base_url (required)
 - mode
 - access_token (secret)
 - client_id (secret)
@@ -39,25 +40,25 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 - users:
   - primary key: user_id
   - cursor: updated_at
-  - fields: blocked(), created_at(), email(), email_verified(), family_name(), given_name(), last_login(), logins_count(), name(), nickname(), picture(), updated_at(), user_id(), username()
+  - fields: blocked(boolean), created_at(string), email(string), email_verified(boolean), family_name(string), given_name(string), last_login(string), logins_count(integer), name(string), nickname(string), picture(string), updated_at(string), user_id(string), username(string)
 - clients:
   - primary key: client_id
-  - fields: app_type(), client_id(), description(), global(), is_first_party(), name(), oidc_conformant()
+  - fields: app_type(string), client_id(string), description(string), global(boolean), is_first_party(boolean), name(string), oidc_conformant(boolean)
 - connections:
   - primary key: id
-  - fields: display_name(), id(), is_domain_connection(), name(), strategy()
+  - fields: display_name(string), id(string), is_domain_connection(boolean), name(string), strategy(string)
 - roles:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - organizations:
   - primary key: id
-  - fields: display_name(), id(), name()
+  - fields: display_name(string), id(string), name(string)
 - role_users:
   - primary key: role_id, user_id
-  - fields: email(), name(), picture(), role_id(), user_id()
+  - fields: email(string), name(string), picture(string), role_id(string), user_id(string)
 - organization_members:
   - primary key: organization_id, user_id
-  - fields: email(), name(), organization_id(), picture(), user_id()
+  - fields: email(string), name(string), organization_id(string), picture(string), user_id(string)
 
 ## Sync Modes
 
@@ -67,6 +68,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 
 - create_user:
   - endpoint: POST /api/v2/users
+  - required fields: connection
   - risk: external mutation; creates a new Auth0 user account (and, when password is set, a live credential); approval required
 - update_user:
   - endpoint: PATCH /api/v2/users/{{ record.user_id }}
@@ -74,6 +76,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing Auth0 user's profile/credential/blocked state; approval required
 - create_client:
   - endpoint: POST /api/v2/clients
+  - required fields: name
   - risk: external mutation; registers a new Auth0 application (client), which can obtain its own OAuth2 credentials; approval required
 - update_client:
   - endpoint: PATCH /api/v2/clients/{{ record.client_id }}
@@ -81,6 +84,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing Auth0 application's configuration; approval required
 - create_role:
   - endpoint: POST /api/v2/roles
+  - required fields: name
   - risk: external mutation; creates a new RBAC role (no permissions attached by default); approval required
 - update_role:
   - endpoint: PATCH /api/v2/roles/{{ record.id }}
@@ -88,6 +92,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing RBAC role's name/description; approval required
 - create_organization:
   - endpoint: POST /api/v2/organizations
+  - required fields: name
   - risk: external mutation; creates a new Auth0 organization (multi-tenant scoping unit); approval required
 - update_organization:
   - endpoint: PATCH /api/v2/organizations/{{ record.id }}

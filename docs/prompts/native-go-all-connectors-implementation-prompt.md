@@ -1,13 +1,7 @@
-# Native Go All Connectors Implementation Prompt
+# Superseded Native Connector Sweep Prompt
 
-Use the `gsd-programming-loop` and `go-engineering` skills.
+The historical prompt is retained at
+[../connector-canon/archive/superseded-gsd/native-go-all-connectors-implementation-prompt.md](../connector-canon/archive/superseded-gsd/native-go-all-connectors-implementation-prompt.md).
 
-Implement the full catalog connector native binding program in the Polymetrics `pm` Go CLI:
-
-- Every catalog connector must have a Go runtime binding.
-- No connector images, Python, Java, Ruby, shell plugins, or untrusted dynamic code may be executed.
-- Keep GitHub as the reference hand-written live SaaS connector.
-- Use fixture-backed conformance for connectors without live credentials.
-- Preserve reverse ETL plan, preview, approval, run, and receipt boundaries.
-- Keep secrets out of logs, JSON, docs, skills, errors, previews, and test fixtures.
-- Verify with `go test ./...`, `go build ./cmd/pm`, docs validation, and `make verify`.
+Use the [connector delivery canon](../connector-canon/INDEX.md) before any
+connector change; it requires the Foundation Check and warehouse-mediated flows.

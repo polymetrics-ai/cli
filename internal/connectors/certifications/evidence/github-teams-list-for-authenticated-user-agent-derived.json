@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_teams_list_for_authenticated_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:05:20.357Z",
+  "run_id": "github-slice2-agent_derived_teams_list_for_authenticated_user",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c60e44708883425e2fd0c74b7c859bf01d9634f7d955c780716cb9471bcb717b}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_teams_list_for_authenticated_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:54afe59973a9149fdd0a6193309617de17ed799b4103cf1013a1e7e9af843c15}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

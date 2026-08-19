@@ -1,0 +1,361 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_plan_add_on record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Add-on ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "plan_id": {
+      "type": "string",
+      "title": "Plan ID"
+    },
+    "code": {
+      "type": "string",
+      "title": "Add-on code",
+      "description": "The unique identifier for the add-on within its plan."
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "title": "State",
+      "description": "Add-ons can be either active or inactive."
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "Describes your add-on and will appear in subscribers' invoices."
+    },
+    "add_on_type": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "usage"
+      ],
+      "title": "Add-on Type",
+      "description": "Whether the add-on type is fixed, or usage-based."
+    },
+    "usage_type": {
+      "type": "string",
+      "enum": [
+        "price",
+        "percentage"
+      ],
+      "title": "Usage Type",
+      "description": "Type of usage, returns usage type if `add_on_type` is `usage`."
+    },
+    "usage_calculation_type": {
+      "type": "string",
+      "enum": [
+        "cumulative",
+        "last_in_period"
+      ],
+      "description": "The type of calculation to be employed for an add-on.  Cumulative billing will sum all usage records created in the current billing cycle.  Last-in-period billing will apply only the most recent usage record in the billing period.  If no value is specified, cumulative billing will be used."
+    },
+    "usage_percentage": {
+      "type": "number",
+      "format": "float",
+      "title": "Usage Percentage",
+      "description": "The percentage taken of the monetary amount of usage tracked. This can be up to 4 decimal places. A value between 0.0 and 100.0."
+    },
+    "measured_unit_id": {
+      "type": "string",
+      "title": "Measured Unit ID",
+      "description": "System-generated unique identifier for an measured unit associated with the add-on."
+    },
+    "liability_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "revenue_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "performance_obligation_id": {
+      "type": "string",
+      "title": "Performance Obligation ID",
+      "description": "The ID of a performance obligation. Performance obligations are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "accounting_code": {
+      "type": "string",
+      "title": "Accounting code",
+      "description": "Accounting code for invoice line items for this add-on. If no value is provided, it defaults to add-on's code.",
+      "pattern": "^[a-z0-9_+-]+$"
+    },
+    "revenue_schedule_type": {
+      "type": "string",
+      "enum": [
+        "at_range_end",
+        "at_range_start",
+        "evenly",
+        "never"
+      ],
+      "title": "Revenue schedule type",
+      "description": "When this add-on is invoiced, the line item will use this revenue schedule. If `item_code`/`item_id` is part of the request then `revenue_schedule_type` must be absent in the request as the value will be set from the item."
+    },
+    "avalara_transaction_type": {
+      "type": "integer",
+      "title": "Avalara Transaction Type",
+      "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the add-on is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types."
+    },
+    "avalara_service_type": {
+      "type": "integer",
+      "title": "Avalara Service Type",
+      "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the add-on is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types."
+    },
+    "tax_code": {
+      "type": "string",
+      "title": "Tax code",
+      "description": "Optional field used by Avalara, Vertex, and Recurly's In-the-Box tax solution to determine taxation rules. You can pass in specific tax codes using any of these tax integrations. For Recurly's In-the-Box tax offering you can also choose to instead use simple values of `unknown`, `physical`, or `digital` tax codes. If `item_code`/`item_id` is part of the request then `tax_code` must be absent."
+    },
+    "harmonized_system_code": {
+      "type": "string",
+      "title": "Harmonized System code",
+      "description": "The Harmonized System (HS) code is an internationally standardized system of names and numbers to classify traded products. The HS code, sometimes called Commodity Code, is used by customs authorities around the world to identify products when assessing duties and taxes. The HS code may also be referred to as the tariff code or customs code. Values should contain only digits and decimals.",
+      "pattern": "^\\d+(\\.\\d+)*$"
+    },
+    "display_quantity": {
+      "type": "boolean",
+      "default": false,
+      "title": "Display quantity?",
+      "description": "Determines if the quantity field is displayed on the hosted pages for the add-on."
+    },
+    "default_quantity": {
+      "type": "integer",
+      "default": 1,
+      "title": "Default quantity",
+      "description": "Default quantity for the hosted pages."
+    },
+    "optional": {
+      "type": "boolean",
+      "title": "Optional",
+      "description": "Whether the add-on is optional for the customer to include in their purchase on the hosted payment page. If false, the add-on will be included when a subscription is created through the Recurly UI. However, the add-on will not be included when a subscription is created through the API."
+    },
+    "currencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "unit_amount": {
+            "type": "number",
+            "format": "float",
+            "title": "Unit price",
+            "description": "Allows up to 2 decimal places. Required unless `unit_amount_decimal` is provided."
+          },
+          "unit_amount_decimal": {
+            "type": "string",
+            "title": "Unit Amount Decimal",
+            "description": "Allows up to 9 decimal places.\nIf `unit_amount_decimal` is provided, `unit_amount` cannot be provided.\n"
+          },
+          "tax_inclusive": {
+            "type": "boolean",
+            "default": false,
+            "title": "Tax Inclusive?",
+            "description": "This field is deprecated. Please do not use it."
+          }
+        },
+        "required": [
+          "currency"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "title": "Add-on pricing"
+    },
+    "item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Item ID"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "title": "Item code",
+          "description": "Unique code to identify the item.",
+          "pattern": "^[a-z0-9_+-]+$"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "title": "State",
+          "description": "The current state of the item."
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "This name describes your item and will appear on the invoice when it's purchased on a one time basis."
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Optional, description."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Item mini details",
+      "description": "Just the important parts."
+    },
+    "tier_type": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "tiered",
+        "stairstep",
+        "volume"
+      ],
+      "default": "flat",
+      "title": "Tier type",
+      "description": "The pricing model for the add-on.  For more information,\n[click here](https://docs.recurly.com/docs/billing-models#section-quantity-based). See our\n[Guide](https://recurly.com/developers/guides/item-addon-guide.html) for an overview of how\nto configure quantity-based pricing models.\n"
+    },
+    "usage_timeframe": {
+      "type": "string",
+      "enum": [
+        "billing_period",
+        "subscription_term"
+      ],
+      "default": "billing_period",
+      "title": "Usage Timeframe",
+      "description": "The time at which usage totals are reset for billing purposes."
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ending_quantity": {
+            "type": "integer",
+            "title": "Ending quantity",
+            "description": "Ending quantity for the tier.  This represents a unit amount for unit-priced add ons. Must be left empty if it is the final tier."
+          },
+          "usage_percentage": {
+            "type": "string",
+            "title": "Usage Percentage",
+            "description": "(deprecated) -- Use the percentage_tiers object instead."
+          },
+          "currencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "title": "Currency",
+                  "description": "3-letter ISO 4217 currency code."
+                },
+                "unit_amount": {
+                  "type": "number",
+                  "format": "float",
+                  "title": "Unit price",
+                  "description": "Allows up to 2 decimal places. Required unless `unit_amount_decimal` is provided."
+                },
+                "unit_amount_decimal": {
+                  "type": "string",
+                  "title": "Unit Amount Decimal",
+                  "description": "Allows up to 9 decimal places.\nIf `unit_amount_decimal` is provided, `unit_amount` cannot be provided.\n"
+                }
+              },
+              "required": [
+                "currency"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "title": "Tier pricing"
+          }
+        },
+        "additionalProperties": false
+      },
+      "title": "Tiers"
+    },
+    "percentage_tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "tiers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ending_amount": {
+                  "type": "number",
+                  "format": "float",
+                  "title": "Ending amount",
+                  "description": "Ending amount for the tier. Allows up to 2 decimal places. Must be left empty if it is the final tier."
+                },
+                "usage_percentage": {
+                  "type": "string",
+                  "title": "Usage Percentage",
+                  "description": "The percentage taken of the monetary amount of usage tracked.\nThis can be up to 4 decimal places represented as a string.\n"
+                }
+              },
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "title": "Tiers"
+          }
+        },
+        "additionalProperties": false
+      },
+      "title": "Percentage Tiers",
+      "description": "This feature is currently in development and requires approval and enablement, please contact support."
+    },
+    "external_sku": {
+      "type": "string",
+      "title": "External SKU",
+      "description": "Optional, stock keeping unit to link the item to other inventory systems."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    },
+    "deleted_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Deleted at"
+    }
+  },
+  "required": [
+    "code",
+    "name",
+    "id"
+  ],
+  "additionalProperties": false
+}

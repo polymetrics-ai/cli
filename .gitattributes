@@ -1,0 +1,6 @@
+# These source-pinned reports preserve their imported Markdown bytes, including
+# intentional hard breaks and final blank lines. Do not normalize them.
+data/archive/cli-github-etl-reverse-etl-gap-map-r1/report.md -whitespace
+data/archive/cli-postgres-parity-issue-tree-r1/report.md -whitespace
+data/cli-cdc-bidirectional-changefeed-design-r1/report.md -whitespace
+data/cli-cdc-large-transaction-strategy-r1/report.md -whitespace

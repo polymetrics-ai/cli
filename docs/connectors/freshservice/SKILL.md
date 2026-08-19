@@ -11,6 +11,7 @@ Reads and writes documented Freshservice REST API v2 resources, preserving legac
 
 ## Icon
 
+- id: freshservice
 - asset: icons/freshservice.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -46,7 +47,7 @@ Reads and writes documented Freshservice REST API v2 resources, preserving legac
 - department_id
 - device_id
 - display_id
-- domain_name
+- domain_name (required)
 - ep_id
 - filter_alerts_order_by
 - filter_alerts_order_type
@@ -111,606 +112,606 @@ Reads and writes documented Freshservice REST API v2 resources, preserving legac
 - view_calendar_events_user_end_time
 - view_calendar_events_user_start_time
 - workspace_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - tickets:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), department_id(), description_text(), due_by(), group_id(), id(), priority(), requester_id(), responder_id(), source(), spam(), status(), subject(), type(), updated_at()
+  - fields: created_at(string), department_id(integer), description_text(string), due_by(string), group_id(integer), id(integer), priority(integer), requester_id(integer), responder_id(integer), source(integer), spam(boolean), status(integer), subject(string), type(string), updated_at(string)
 - agents:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), created_at(), department_ids(), email(), first_name(), id(), job_title(), last_name(), occasional(), updated_at()
+  - fields: active(boolean), created_at(string), department_ids(array), email(string), first_name(string), id(integer), job_title(string), last_name(string), occasional(boolean), updated_at(string)
 - requesters:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), created_at(), department_ids(), first_name(), id(), job_title(), last_name(), primary_email(), updated_at()
+  - fields: active(boolean), created_at(string), department_ids(array), first_name(string), id(integer), job_title(string), last_name(string), primary_email(string), updated_at(string)
 - assets:
   - primary key: id
   - cursor: updated_at
-  - fields: agent_id(), asset_tag(), asset_type_id(), created_at(), department_id(), display_id(), id(), impact(), name(), updated_at(), user_id()
+  - fields: agent_id(integer), asset_tag(string), asset_type_id(integer), created_at(string), department_id(integer), display_id(integer), id(integer), impact(string), name(string), updated_at(string), user_id(integer)
 - problems:
   - primary key: id
   - cursor: updated_at
-  - fields: agent_id(), created_at(), department_id(), due_by(), group_id(), id(), impact(), priority(), requester_id(), status(), subject(), updated_at()
+  - fields: agent_id(integer), created_at(string), department_id(integer), due_by(string), group_id(integer), id(integer), impact(integer), priority(integer), requester_id(integer), status(integer), subject(string), updated_at(string)
 - view_a_ticket:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_tickets:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_ticket_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - get_ticket_activities:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_ticket_time_entry:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_ticket_time_entries:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_req_items_of_sr:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_ticket_approvals:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_ticket_approval:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_ticket_approval_groups:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_ticket_tasks:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_csat_response:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_conversations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_problem:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_problem_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_problem_notes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_problem_time_entry:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_problem_time_entries:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_problem_tasks:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_change:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_changes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_change_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_change_approvals:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_change_approval:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_change_approval_groups:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_change_notes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_time_entry:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_time_entries:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_change_tasks:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_release:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_releases:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_release:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_release_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_release_notes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_release_time_entry:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_release_time_entries:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_release_tasks:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_approvals:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_requester:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_requester_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_an_agent:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_agent_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_role:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_role:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_group:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_group:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_requester_group:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_requester_group:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_members_of_requester_group:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_location:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_locations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_locations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_product:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_products:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_vendor:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_vendors:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_alert:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_alerts:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_alert_logs:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_alert_notes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_alert_note:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_an_asset:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_asset_components:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_asset_requests:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_contracts_of_an_asset:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_relationship:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_relationships:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_relationship_types:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_purchase_orders:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_purchase_order:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_an_asset_type:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_asset_types:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_asset_type_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_users:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_installations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_contract_types:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_contract_type_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_contract:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_contracts:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_associated_assets:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_attachments:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_department:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_departments:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_departments:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_department_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_business_hour:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_business_hours:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_project:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_projects:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_project_task:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_project_tasks:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_project_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_projects_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_templates:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_associations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_project_task_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_project_tasks_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_all_project_tasks_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_task_type_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_task_types:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_task_priorities:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_task_statuses:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_versions:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_sprints:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_memberships:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_project_task_associations:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_notes_task_newgen:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_solution_category:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_solution_category:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_solution_folder:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_solution_sub_folders:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_solution_folder:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_solution_article:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_solution_article:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_service_item:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_service_items:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_service_categories:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - shared_fields:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - retrieve_shared_fields_data:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_an_announcement:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_announcements:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - onboarding_form:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_onboarding_request:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_onboarding_requests:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_onboarding_tickets:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - offboarding_form:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_offboarding_request:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_offboarding_requests:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_offboarding_tickets:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - journey_configs:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - journey_initiator_config_form:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_journey_request:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_journey_requests:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_journey_request_activities:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_schedules:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - filter_schedules:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_schedule:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_shifts:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_shift:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_calendar_events_user:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_calendar_events_schedule:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_calendar_events_shift:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_calendar_events_shift_user:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_calendar_events_schedule_user:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_who_is_oncall:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_ep:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_ep:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_custom_objects:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - show_custom_object:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_custom_object_records:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - get_pir_templates_by_id:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - get_all_pir_templates:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_sla:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_canned_response_folders:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - show_canned_response_folder:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_canned_response_in_folder:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_canned_responses:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - show_canned_response:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - retrieve_emails_with_id:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - retrieve_emails:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_incidents:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_incident:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_incident_updates:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_incident_statuses:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_maintenances:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_maintenance_from_change:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_maintenance_from_maintenance_window:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_maintenance_statuses:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_maintenance_update_from_change:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_maintenance_update_from_maintenance_window:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_status_pages:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - identify_publishable_services_ticket:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - identify_publishable_services_change:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - identify_publishable_services_maintenance:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_service_component:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_service_components:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - list_all_subscribers:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_subscriber:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_delegation:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_physical_subtypes:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_physical_subtype:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_devices:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_device:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_assets_for_freshservice_itam:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_an_asset_for_freshservice_itam:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_cloud_resources:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_cloud_resource:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_cloud_resource_relationships:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_cloud_infrastructure:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_all_lifecycle_events:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 - view_a_lifecycle_event:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), subject(string), updated_at(string)
 
 ## Sync Modes
 

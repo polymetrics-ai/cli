@@ -11,6 +11,7 @@ Reads Project Gutenberg books from the free, public Gutendex JSON API (books, po
 
 ## Icon
 
+- id: source-gutendex
 - asset: icons/source-gutendex.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -41,20 +42,20 @@ Reads Project Gutenberg books from the free, public Gutendex JSON API (books, po
 
 - books:
   - primary key: id
-  - fields: bookshelves(), copyright(), download_count(), id(), languages(), media_type(), subjects(), title()
+  - fields: bookshelves(string), copyright(boolean), download_count(integer), id(integer), languages(string), media_type(string), subjects(string), title(string)
 - popular_books:
   - primary key: id
-  - fields: bookshelves(), copyright(), download_count(), id(), languages(), media_type(), subjects(), title()
+  - fields: bookshelves(string), copyright(boolean), download_count(integer), id(integer), languages(string), media_type(string), subjects(string), title(string)
 - latest_books:
   - primary key: id
-  - fields: bookshelves(), copyright(), download_count(), id(), languages(), media_type(), subjects(), title()
+  - fields: bookshelves(string), copyright(boolean), download_count(integer), id(integer), languages(string), media_type(string), subjects(string), title(string)
 - english_books:
   - primary key: id
-  - fields: bookshelves(), copyright(), download_count(), id(), languages(), media_type(), subjects(), title()
+  - fields: bookshelves(string), copyright(boolean), download_count(integer), id(integer), languages(string), media_type(string), subjects(string), title(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

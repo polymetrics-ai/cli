@@ -1,0 +1,29 @@
+{
+  "api": "REST Write Demo API",
+  "operation_ledger_version": 1,
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/vote",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Bound by the typed rest_write executor."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/widgets/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Bound by the typed rest_write executor.",
+        "notes": "This fixture operation is non-destructive at runtime."
+      }
+    }
+  ]
+}

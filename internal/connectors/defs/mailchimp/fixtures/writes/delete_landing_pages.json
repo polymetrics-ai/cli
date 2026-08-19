@@ -1,0 +1,15 @@
+{
+  "record": {
+    "page_id": "fixture_page_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/landing-pages/fixture_page_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_landing_pages"
+    }
+  }
+}

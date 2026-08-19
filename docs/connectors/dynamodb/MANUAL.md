@@ -13,6 +13,7 @@ DESCRIPTION
   Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.
 
 ICON
+  id: dynamodb
   asset: icons/dynamodb.svg
   source: upstream_registry
   review_status: upstream_seeded

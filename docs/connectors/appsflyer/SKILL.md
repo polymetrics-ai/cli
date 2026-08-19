@@ -11,6 +11,7 @@ Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through th
 
 ## Icon
 
+- id: appsflyer
 - asset: icons/appsflyer.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,20 +28,20 @@ Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through th
 
 ## Configuration
 
-- app_id
+- app_id (required)
 - base_url
 - end_date
 - mode
 - start_date
 - timezone
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - installs_report:
-  - fields: appsflyer_id(), campaign(), event_time(), media_source()
+  - fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 - in_app_events_report:
-  - fields: appsflyer_id(), campaign(), event_time(), media_source()
+  - fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 
 ## Sync Modes
 

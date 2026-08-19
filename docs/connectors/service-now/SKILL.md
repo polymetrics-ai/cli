@@ -11,9 +11,11 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,25 +28,25 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 
 - incidents:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: name(), number(), priority(), short_description(), state(), sys_created_on(), sys_id(), updated_on()
+  - fields: name(string), number(string), priority(string), short_description(string), state(string), sys_created_on(string), sys_id(string), updated_on(string)
 - users:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: active(), email(), name(), number(), sys_id(), updated_on(), user_name()
+  - fields: active(string), email(string), name(string), number(string), sys_id(string), updated_on(string), user_name(string)
 - groups:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: active(), description(), name(), number(), sys_id(), updated_on()
+  - fields: active(string), description(string), name(string), number(string), sys_id(string), updated_on(string)
 
 ## Sync Modes
 
@@ -57,9 +59,11 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
   - risk: creates a new incident record; low-risk external mutation (a new ticket), no approval required
 - create_user:
   - endpoint: POST /api/now/table/sys_user
+  - required fields: user_name
   - risk: creates a new ServiceNow user account record; a new user account granted whatever role/ACL defaults the instance applies is a higher-scrutiny mutation than an incident/group create
 - create_group:
   - endpoint: POST /api/now/table/sys_user_group
+  - required fields: name
   - risk: creates a new user group record; low-risk external mutation, no approval required
 - update_incident:
   - endpoint: PATCH /api/now/table/incident/{{ record.sys_id }}

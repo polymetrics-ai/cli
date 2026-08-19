@@ -13,6 +13,7 @@ DESCRIPTION
   Reads public SpaceX launch, rocket, core, capsule, crew, Dragon, history, payload, and Starlink data.
 
 ICON
+  id: spacex
   asset: icons/spacex.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -32,49 +33,49 @@ CONFIGURATION
 ETL STREAMS
   launches:
     primary key: id
-    fields: capsules(), crew(), date_local(), date_precision(), date_unix(), date_utc(), details(), flight_number(), id(), launchpad(), links(), name(), payloads(), rocket(), ships(), success(), upcoming()
+    fields: capsules(array), crew(array), date_local(string), date_precision(string), date_unix(integer), date_utc(string), details(string), flight_number(integer), id(string), launchpad(string), links(object), name(string), payloads(array), rocket(string), ships(array), success(boolean), upcoming(boolean)
   rockets:
     primary key: id
-    fields: active(), boosters(), company(), cost_per_launch(), country(), description(), first_flight(), id(), name(), stages(), success_rate_pct(), type()
+    fields: active(boolean), boosters(integer), company(string), cost_per_launch(integer), country(string), description(string), first_flight(string), id(string), name(string), stages(integer), success_rate_pct(integer), type(string)
   capsules:
     primary key: id
-    fields: id(), land_landings(), last_update(), launches(), reuse_count(), serial(), status(), type(), water_landings()
+    fields: id(string), land_landings(integer), last_update(string), launches(array), reuse_count(integer), serial(string), status(string), type(string), water_landings(integer)
   cores:
     primary key: id
-    fields: asds_attempts(), asds_landings(), block(), id(), last_update(), launches(), reuse_count(), rtls_attempts(), rtls_landings(), serial(), status()
+    fields: asds_attempts(integer), asds_landings(integer), block(integer), id(string), last_update(string), launches(array), reuse_count(integer), rtls_attempts(integer), rtls_landings(integer), serial(string), status(string)
   crew:
     primary key: id
-    fields: agency(), id(), image(), launches(), name(), status(), wikipedia()
+    fields: agency(string), id(string), image(string), launches(array), name(string), status(string), wikipedia(string)
   dragons:
     primary key: id
-    fields: active(), crew_capacity(), description(), dry_mass_kg(), first_flight(), id(), name(), type()
+    fields: active(boolean), crew_capacity(integer), description(string), dry_mass_kg(integer), first_flight(string), id(string), name(string), type(string)
   history:
     primary key: id
-    fields: details(), event_date_unix(), event_date_utc(), id(), links(), title()
+    fields: details(string), event_date_unix(integer), event_date_utc(string), id(string), links(object), title(string)
   payloads:
     primary key: id
-    fields: customers(), id(), launch(), manufacturers(), mass_kg(), name(), nationalities(), orbit(), reused(), type()
+    fields: customers(array), id(string), launch(string), manufacturers(array), mass_kg(number), name(string), nationalities(array), orbit(string), reused(boolean), type(string)
   starlink:
     primary key: id
-    fields: height_km(), id(), latitude(), launch(), longitude(), spaceTrack(), velocity_kms(), version()
+    fields: height_km(number), id(string), latitude(number), launch(string), longitude(number), spaceTrack(object), velocity_kms(number), version(string)
   launchpads:
     primary key: id
-    fields: full_name(), id(), latitude(), launch_attempts(), launch_successes(), launches(), locality(), longitude(), name(), region(), status()
+    fields: full_name(string), id(string), latitude(number), launch_attempts(integer), launch_successes(integer), launches(array), locality(string), longitude(number), name(string), region(string), status(string)
   landpads:
     primary key: id
-    fields: full_name(), id(), landing_attempts(), landing_successes(), latitude(), launches(), locality(), longitude(), name(), region(), status(), type()
+    fields: full_name(string), id(string), landing_attempts(integer), landing_successes(integer), latitude(number), launches(array), locality(string), longitude(number), name(string), region(string), status(string), type(string)
   ships:
     primary key: id
-    fields: active(), home_port(), id(), launches(), name(), roles(), type(), year_built()
+    fields: active(boolean), home_port(string), id(string), launches(array), name(string), roles(array), type(string), year_built(integer)
   roadster:
     primary key: id
-    fields: earth_distance_km(), id(), launch_date_utc(), launch_mass_kg(), mars_distance_km(), name(), speed_kph(), wikipedia()
+    fields: earth_distance_km(number), id(string), launch_date_utc(string), launch_mass_kg(number), mars_distance_km(number), name(string), speed_kph(number), wikipedia(string)
   company:
     primary key: name
-    fields: ceo(), cto(), employees(), founded(), founder(), headquarters(), name(), summary(), valuation()
+    fields: ceo(string), cto(string), employees(integer), founded(integer), founder(string), headquarters(object), name(string), summary(string), valuation(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external public SpaceX API read of launch and vehicle data

@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.4.0",
+  "source_id": "pm-issue-first-delivery",
+  "ownership": {
+    "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
+    "owner": "The one active canonical worker owns the assigned job and its parent GitHub state inline.",
+    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection."
+  },
+  "base_role": {
+    "name": "pm-delivery-worker",
+    "summary": "Own one issue-first delivery job from issue map through a captain-gated parent merge.",
+    "max_active_workers": 1,
+    "delegation": "none",
+    "forbidden_roles": [
+      "orchestrator",
+      "shepherd",
+      "planner",
+      "reviewer",
+      "verifier",
+      "GSD role"
+    ],
+    "durable_handoff": [
+      "GitHub issues",
+      "branches",
+      "pull requests",
+      "GSD artifacts"
+    ]
+  },
+  "harness_policies": [
+    {
+      "harness": "claude",
+      "format": "markdown_yaml_frontmatter",
+      "documentation_url": "https://code.claude.com/docs/en/sub-agents",
+      "project_discovery": "Claude Code scans .claude/agents recursively while walking upward from the current working directory; names must be unique across each discovered tree.",
+      "precedence": [
+        "managed definitions",
+        "CLI --agents",
+        "project .claude/agents",
+        "user ~/.claude/agents",
+        "plugins"
+      ],
+      "tools": [
+        "Bash",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Read",
+        "Write"
+      ],
+      "skill_tool": "Skill",
+      "preloaded_skills": [
+        "cc-skills-golang:golang-cli",
+        "cc-skills-golang:golang-concurrency",
+        "cc-skills-golang:golang-context",
+        "cc-skills-golang:golang-database",
+        "cc-skills-golang:golang-design-patterns",
+        "cc-skills-golang:golang-documentation",
+        "cc-skills-golang:golang-error-handling",
+        "cc-skills-golang:golang-graphql",
+        "cc-skills-golang:golang-how-to",
+        "cc-skills-golang:golang-lint",
+        "cc-skills-golang:golang-safety",
+        "cc-skills-golang:golang-security",
+        "cc-skills-golang:golang-spf13-cobra",
+        "cc-skills-golang:golang-spf13-viper",
+        "cc-skills-golang:golang-structs-interfaces",
+        "cc-skills-golang:golang-testing",
+        "frontend-design:frontend-design"
+      ],
+      "unavailable_skills": [
+        "vercel-composition-patterns",
+        "vercel-react-best-practices",
+        "web-design-guidelines"
+      ],
+      "unavailable_skill_cost": "Website and docs UI work requiring these design skills cannot satisfy repository skill routing in this Claude worker; preserve state and hand off to a captain-approved harness with trusted plugin packaging.",
+      "skills_documentation_url": "https://code.claude.com/docs/en/slash-commands",
+      "skill_boundary": "Only the listed plugin-qualified identifiers are preloaded through Claude's documented skills frontmatter. Plugin namespaces cannot collide with personal or project skill names. The Skill tool is omitted and denied, so no skill can be invoked during execution, including one that uses context: fork.",
+      "disallowed_tools": [
+        "Agent",
+        "Task",
+        "Skill"
+      ],
+      "permission_mode": "default",
+      "delegation_tool": "Agent",
+      "delegation_guarantee": "The explicit tools allowlist omits Agent and Skill, while disallowedTools removes Agent, its Task alias, and Skill. Claude Code documents that omitting Agent blocks subagent spawning through that tool and omitting Skill prevents runtime skill invocation; plugin-qualified preloads avoid personal and project same-name shadowing.",
+      "smoke_procedure": "In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent <role> -p 'report the active agent name, preloaded skill identifiers, and whether Agent, Task, or Skill is available without modifying files'`; verify the project role is selected, only the plugin-qualified preloads are present, and Agent, Task, Skill, and unrelated fork-capable skills are unavailable."
+    }
+  ],
+  "state_machine": {
+    "name": "issue-first-delivery",
+    "initial_state": "job_received",
+    "steps": [
+      {
+        "id": "job_received",
+        "instruction": "Receive one assigned job and become its single active worker."
+      },
+      {
+        "id": "issue_map",
+        "instruction": "Create or link a navigable parent issue and independently finishable wave sub-issues before any production edit; name children as deliverable outcomes sized to one worker session and record dependencies and decisions."
+      },
+      {
+        "id": "parent_draft_pr",
+        "instruction": "Create the parent branch, a deliberate seed commit, and a draft parent PR to the default branch before any production edit."
+      },
+      {
+        "id": "map_wave_phase",
+        "instruction": "For each dependency-ready wave, map its sub-issue to one GSD phase."
+      },
+      {
+        "id": "discuss_decisions",
+        "instruction": "Run discuss-phase to record known decisions without reopening choices already fixed by issues or repo contracts."
+      },
+      {
+        "id": "plan_tdd",
+        "instruction": "Run plan-phase --tdd and record explicit RED, GREEN, and REFACTOR tasks, verification commands, and scoped commit checkpoints."
+      },
+      {
+        "id": "execute_tdd",
+        "instruction": "Run execute-phase and implement each behavior slice test-first through RED, GREEN, and REFACTOR. Work inline; do not spawn a specialist or GSD role."
+      },
+      {
+        "id": "verify_gaps",
+        "instruction": "Run verify-work. When gaps exist, diagnose them, run plan-phase --gaps, then execute-phase --gaps-only and repeat verification until green."
+      },
+      {
+        "id": "review_no_mistakes",
+        "instruction": "Run code-review, disposition every finding with reasons, then run the applicable no-mistakes review/test/docs/lint gates without --yes."
+      },
+      {
+        "id": "open_sub_pr",
+        "instruction": "Open the wave sub-PR to the parent branch only after its local gates pass."
+      },
+      {
+        "id": "integrate_sub_pr",
+        "instruction": "Integrate the sub-PR only after required checks pass, actionable findings are resolved, automated review coverage satisfies the stacked-PR contract, and an in-scope connector certification Shepherd verdict is PROCEED."
+      },
+      {
+        "id": "integrated_parent_gates",
+        "instruction": "After all children are integrated, run the full no-mistakes pipeline and integrated parent verification and review gates on the parent branch."
+      },
+      {
+        "id": "ready_parent",
+        "instruction": "Mark the draft parent PR ready only when every child is integrated, full parent checks are green, required review coverage is complete, and every in-scope connector certification Shepherd verdict is PROCEED. Ready is not merge approval."
+      },
+      {
+        "id": "captain_merge",
+        "instruction": "Merge the parent only while it is green and only after explicit captain approval."
+      }
+    ]
+  },
+  "connector_overlay": {
+    "name": "pm-connector-worker",
+    "inherits": "pm-delivery-worker",
+    "summary": "Apply the same delivery state machine with connector-specific evidence inserted around implementation.",
+    "completion_wave": 5,
+    "wraps_state": "execute_tdd",
+    "steps": [
+      {
+        "id": "source_policy_map",
+        "instruction": "Build the accepted source-policy API map before implementation."
+      },
+      {
+        "id": "bundle_operation_plan",
+        "instruction": "Plan the bundle and operations with per-field provenance."
+      },
+      {
+        "id": "replay_conformance",
+        "instruction": "Add replay fixtures and conformance tests as the RED evidence before production behavior."
+      },
+      {
+        "id": "implementation_slices",
+        "instruction": "Execute the inherited RED, GREEN, and REFACTOR implementation slices."
+      },
+      {
+        "id": "runtime_surface_gates",
+        "instruction": "Run the real commandrunner Preflight sweep plus connectorgen validate and connectorgen surface-sync --check; do not copy runtime rules into a validator."
+      },
+      {
+        "id": "website_data_refresh",
+        "instruction": "Refresh generated website data and run its drift check."
+      }
+    ]
+  },
+  "codex": {
+    "project_agent_directory": ".codex/agents",
+    "file_format": "standalone_toml",
+    "required_fields": [
+      "name",
+      "description",
+      "developer_instructions"
+    ],
+    "tool_access": {
+      "setting": "agents.enabled",
+      "value": false,
+      "effect": "Set agents.enabled = false to disable Codex multi-agent tools, preventing this worker from delegating to built-in or ambient custom agents."
+    },
+    "discovery": "Codex discovers project-scoped custom agents as standalone TOML files under .codex/agents; the name field is the source of truth.",
+    "project_trust_requirement": "Codex loads project .codex layers only after this repository is trusted. When untrusted, these project-local workers are unavailable by design; trust the project in the Codex client before selecting either worker.",
+    "configuration_precedence": "For general configuration, trusted project config layers take precedence over user config, subject to CLI flags and explicit overrides.",
+    "collision_behavior": "Official documentation does not state how identical user and project standalone agent filenames collide. Do not rely on undocumented collision precedence.",
+    "documentation": {
+      "subagents": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+      "config_basics": "https://developers.openai.com/codex/config-basic/"
+    }
+  },
+  "opencode": {
+    "project_agent_directory": ".opencode/agents",
+    "file_format": "markdown_yaml_frontmatter",
+    "required_fields": [
+      "description",
+      "mode",
+      "permission"
+    ],
+    "mode": "subagent",
+    "permissions": [
+      {
+        "tool": "edit",
+        "access": "allow"
+      },
+      {
+        "tool": "bash",
+        "access": "allow"
+      },
+      {
+        "tool": "skill",
+        "access": "deny"
+      },
+      {
+        "tool": "task",
+        "access": "deny"
+      },
+      {
+        "tool": "external_directory",
+        "access": "deny"
+      }
+    ],
+    "discovery": "OpenCode discovers project agents from Markdown files under .opencode/agents; the filename determines the agent name.",
+    "documentation_url": "https://opencode.ai/docs/agents/",
+    "delegation_guarantee": "The generated permission map denies task and skill while retaining only bounded edit and bash access, so this worker cannot delegate to ambient agents or invoke an adapter-local skill surface."
+  },
+  "connector_certification_gate": {
+    "schema_version": 1,
+    "name": "connector-certification-shepherd",
+    "input_schema_version": 1,
+    "verdict_schema_version": 1,
+    "accepted_evidence_schema_version": 2,
+    "proof_redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "read_only": true,
+    "generated_command": "go run ./cmd/connectorgen certification-matrix --check",
+    "command": {
+      "argv": [
+        "go",
+        "run",
+        "./cmd/agentcontractgen",
+        "certification-gate",
+        "--root",
+        "<repository-root>",
+        "--connector",
+        "<connector>",
+        "--transition",
+        "<transition>"
+      ],
+      "instruction": "Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
+    },
+    "inputs": {
+      "certification_shards": "internal/connectors/defs",
+      "status": "internal/connectors/certifications/status.json",
+      "evidence_directory": "internal/connectors/certifications/evidence"
+    },
+    "input_fields": [
+      "schema_version",
+      "connector",
+      "transition",
+      "inputs.certification_shards",
+      "inputs.status",
+      "inputs.evidence_directory"
+    ],
+    "verdict_fields": [
+      "schema_version",
+      "connector",
+      "transition",
+      "decision",
+      "failures"
+    ],
+    "binding_criteria": [
+      "declared",
+      "implemented",
+      "fixture_tested",
+      "live_tested",
+      "live_evidence"
+    ],
+    "enforced_transitions": [
+      "integrate_sub_pr",
+      "accepted",
+      "ready_parent",
+      "human_ready"
+    ],
+    "verdicts": [
+      "PROCEED",
+      "RETRY",
+      "HALT"
+    ],
+    "unsupported_proof_schema_behavior": "HALT"
+  },
+  "tracker": {
+    "draft_parent_before_production": true,
+    "parent_seed": "Use a deliberate roadmap or status scaffold when useful; otherwise use an empty seed commit solely to make the draft parent PR possible.",
+    "sub_pr_base": "Every wave sub-PR targets the parent branch and uses Refs links for both parent and sub-issue.",
+    "integrate_when": [
+      "targeted and issue-level verification passes",
+      "CI checks pass",
+      "automated review findings are resolved and required coverage exists",
+      "the diff stays inside the sub-issue scope",
+      "no requested-changes review or human gate remains",
+      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
+    ],
+    "ready_when": [
+      "all children are integrated",
+      "full parent verification is green",
+      "integrated review coverage is complete",
+      "no actionable finding remains",
+      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
+    ],
+    "final_merge": "Explicit captain approval is mandatory, approval is valid only while the parent is green, and no worker may merge red."
+  },
+  "gsd": {
+    "commands": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review",
+      "ship"
+    ],
+    "sequence": [
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "discuss-phase",
+          "<phase>"
+        ],
+        "purpose": "Record known decisions."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "plan-phase",
+          "<phase>",
+          "--tdd"
+        ],
+        "purpose": "Plan explicit test-first slices."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "execute-phase",
+          "<phase>"
+        ],
+        "purpose": "Execute RED, GREEN, and REFACTOR inline."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "verify-work",
+          "<phase>"
+        ],
+        "purpose": "Verify behavior and record gaps."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "plan-phase",
+          "<phase>",
+          "--gaps"
+        ],
+        "purpose": "Plan verified gap closure when needed."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "execute-phase",
+          "<phase>",
+          "--gaps-only"
+        ],
+        "purpose": "Execute only planned gaps, then re-verify."
+      },
+      {
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "code-review",
+          "<phase>"
+        ],
+        "purpose": "Review the completed phase and disposition findings."
+      }
+    ],
+    "ship_used": false,
+    "ship_exclusion": "Do not use GSD ship to create a PR. Official ship runs after verification, but this repository requires the seeded draft parent PR before implementation; the repo stacked-parent/sub-issue contract owns PR topology and prevents a duplicate PR."
+  },
+  "no_mistakes": {
+    "verified_version": "v1.41.2",
+    "forbidden_flags": [
+      "--yes"
+    ],
+    "child_command": {
+      "argv": [
+        "no-mistakes",
+        "axi",
+        "run",
+        "--intent",
+        "<issue-intent>",
+        "--skip=push,pr,ci"
+      ],
+      "instruction": "Replace the intent placeholder element with the complete issue intent and execute the argv vector directly without shell interpolation."
+    },
+    "gate_response": "Resolve gates individually by exact finding ID. Self-answer only when the issue, repo contract, or standing authority fixes a routine reversible answer; record the rationale. Use the pipeline to apply bounded fixes and rerun the gate.",
+    "sub_pr_open": {
+      "argv": [
+        "gh-axi",
+        "pr",
+        "create",
+        "--base",
+        "<parent-branch>",
+        "--head",
+        "<child-branch>",
+        "--title",
+        "<conventional-title>",
+        "--body-file",
+        "<pr-body-file>"
+      ],
+      "instruction": "After child-local gates pass, open the sub-PR to the parent branch because this installed version cannot target a non-default PR base."
+    },
+    "parent_command": {
+      "argv": [
+        "no-mistakes",
+        "axi",
+        "run",
+        "--intent",
+        "<parent-intent>"
+      ],
+      "instruction": "Replace the intent placeholder element with the integrated parent intent, then run the full pipeline once on the integrated parent branch and its existing draft parent PR without shell interpolation."
+    }
+  },
+  "authority": {
+    "principle": "Absence never expands authority.",
+    "self_answer_when": [
+      {
+        "id": "contract_fixed",
+        "instruction": "An issue decision, repo contract, or explicit standing authority determines a routine and reversible answer; respond to the specific finding and record the reason."
+      }
+    ],
+    "auto_fix_when": [
+      {
+        "id": "bounded_finding",
+        "instruction": "A code, test, or documentation finding is bounded inside the issue scope; let the active gate apply the fix, then rerun it."
+      }
+    ],
+    "pause_when": [
+      {
+        "id": "product_ambiguity",
+        "instruction": "Product behavior is ambiguous."
+      },
+      {
+        "id": "destructive_irreversible",
+        "instruction": "An action is destructive or irreversible."
+      },
+      {
+        "id": "secrets_auth_security",
+        "instruction": "Secrets, authentication, authorization scope, or a security boundary changes."
+      },
+      {
+        "id": "dependency_production",
+        "instruction": "A dependency or production-impacting change is proposed."
+      },
+      {
+        "id": "generic_write",
+        "instruction": "A generic shell, HTTP write, SQL write, or other unrestricted write capability is proposed."
+      },
+      {
+        "id": "reverse_etl_execute",
+        "instruction": "Reverse-ETL execution approval is required; preserve plan, preview, approval, execute."
+      },
+      {
+        "id": "quality_gate_weakening",
+        "instruction": "A test, review, lint, documentation, or other quality gate would be weakened or skipped."
+      },
+      {
+        "id": "final_merge",
+        "instruction": "The parent is ready for final merge; only the captain may approve it."
+      }
+    ],
+    "invariants": [
+      {
+        "id": "absence_no_authority",
+        "instruction": "Never infer permission from captain absence or silence."
+      },
+      {
+        "id": "never_merge_red",
+        "instruction": "Never merge a red child or parent."
+      },
+      {
+        "id": "parent_merge_captain",
+        "instruction": "Never merge the parent without explicit captain approval."
+      }
+    ]
+  },
+  "wayfinder": {
+    "disposition": "rejected",
+    "dependency": false,
+    "borrowed": [
+      "a navigable parent issue as the job index",
+      "child issues named as deliverable outcomes and sized to one worker session",
+      "explicit dependency and decision modeling"
+    ],
+    "rationale": [
+      "It duplicates the issue-first and GSD planning layer.",
+      "It fans out to more skills and subagents, contrary to the single-worker design.",
+      "It stops at a plan instead of carrying delivery through TDD, review, integration, and captain-gated merge."
+    ]
+  },
+  "pi_harness": {
+    "clean_project_scope": "clean-project",
+    "roles": [
+      "pm-delivery-worker",
+      "pm-connector-worker"
+    ],
+    "child_tools": [
+      "read",
+      "grep",
+      "find",
+      "ls",
+      "bash",
+      "edit",
+      "write"
+    ]
+  },
+  "projections": [
+    {
+      "harness": "claude",
+      "role": "pm-delivery-worker",
+      "path": ".claude/agents/pm-delivery-worker.md",
+      "render_mode": "markdown_yaml_frontmatter",
+      "required": true
+    },
+    {
+      "harness": "claude",
+      "role": "pm-connector-worker",
+      "path": ".claude/agents/pm-connector-worker.md",
+      "render_mode": "markdown_yaml_frontmatter",
+      "required": true
+    },
+    {
+      "harness": "codex",
+      "role": "pm-delivery-worker",
+      "path": ".codex/agents/pm-delivery-worker.toml",
+      "render_mode": "standalone_toml",
+      "required": true
+    },
+    {
+      "harness": "codex",
+      "role": "pm-connector-worker",
+      "path": ".codex/agents/pm-connector-worker.toml",
+      "render_mode": "standalone_toml",
+      "required": true
+    },
+    {
+      "harness": "pi",
+      "role": "pm-delivery-worker",
+      "path": ".pi/agents/pm-delivery-worker.md",
+      "required": true,
+      "render_mode": "full"
+    },
+    {
+      "harness": "pi",
+      "role": "pm-connector-worker",
+      "path": ".pi/agents/pm-connector-worker.md",
+      "required": true,
+      "render_mode": "full"
+    },
+    {
+      "harness": "opencode",
+      "role": "pm-delivery-worker",
+      "path": ".opencode/agents/pm-delivery-worker.md",
+      "render_mode": "opencode_markdown_yaml_frontmatter",
+      "required": true
+    },
+    {
+      "harness": "opencode",
+      "role": "pm-connector-worker",
+      "path": ".opencode/agents/pm-connector-worker.md",
+      "render_mode": "opencode_markdown_yaml_frontmatter",
+      "required": true
+    }
+  ]
+}

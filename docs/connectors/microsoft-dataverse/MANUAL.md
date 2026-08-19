@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users through the Web API.
 
 ICON
+  id: microsoftdataverse
   asset: icons/microsoftdataverse.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,12 +27,12 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   login_base_url
   max_pages
   mode
   page_size
-  scope
+  scope (required)
   token_url
   client_id (secret)
   client_secret (secret)
@@ -40,22 +41,22 @@ CONFIGURATION
 ETL STREAMS
   accounts:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   contacts:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   leads:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   opportunities:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   systemusers:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Microsoft Dataverse Web API read of CRM records

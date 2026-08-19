@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ids": [
+      "resource_fixture_1",
+      "resource_fixture_2"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/resource"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "delete_resources_fixture"
+    }
+  }
+}

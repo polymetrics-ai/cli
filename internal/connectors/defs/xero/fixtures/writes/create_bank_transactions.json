@@ -1,0 +1,30 @@
+{
+  "record": {
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "BankTransactions": [
+      "bank_transaction_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/BankTransactions",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "BankTransactions": [
+        "bank_transaction_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

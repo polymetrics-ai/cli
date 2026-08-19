@@ -2,31 +2,29 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
+	"polymetrics.ai/internal/warehouse"
 )
 
+// seedCLIWarehouseTable materializes an unattributed root-level table through
+// the real Parquet writer. Hand-writing JSONL here produced a fixture in a
+// format the binary under test refuses, which is a fixture bug rather than a
+// product one — see the identical helpers in internal/app and internal/cli.
 func seedCLIWarehouseTable(t *testing.T, root, table string, rows []map[string]any) {
 	t.Helper()
-	dir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	f, err := os.Create(filepath.Join(dir, table+".jsonl"))
-	if err != nil {
-		t.Fatalf("create warehouse table: %v", err)
-	}
-	defer f.Close()
-	enc := json.NewEncoder(f)
+	path := filepath.Join(root, ".polymetrics", "warehouse", table+warehouse.TableFileExt)
+	out := make([]warehouse.Row, 0, len(rows))
 	for _, row := range rows {
-		if err := enc.Encode(row); err != nil {
-			t.Fatalf("encode row: %v", err)
-		}
+		out = append(out, warehouse.Row(row))
+	}
+	if err := warehouse.WriteTable(context.Background(), path, out); err != nil {
+		t.Fatalf("seed warehouse table %s: %v", table, err)
 	}
 }
 

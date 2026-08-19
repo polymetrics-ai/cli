@@ -11,6 +11,7 @@ Reads Open Exchange Rates account usage/plan status through the Open Exchange Ra
 
 ## Icon
 
+- id: open-exchange-rates
 - asset: icons/open-exchange-rates.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,17 +30,17 @@ Reads Open Exchange Rates account usage/plan status through the Open Exchange Ra
 
 - base_url
 - mode
-- app_id (secret)
+- app_id (secret) (required)
 
 ## ETL Streams
 
 - usage:
   - primary key: app_id
-  - fields: app_id(), daily_average(), days_elapsed(), days_remaining(), plan(), requests(), requests_quota(), requests_remaining(), status()
+  - fields: app_id(string), daily_average(integer), days_elapsed(integer), days_remaining(integer), plan(string), requests(integer), requests_quota(integer), requests_remaining(integer), status(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

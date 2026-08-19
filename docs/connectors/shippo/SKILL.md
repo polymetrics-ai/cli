@@ -11,9 +11,11 @@ Reads Shippo addresses, parcels, shipments, and transactions through the Shippo 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,26 +29,26 @@ Reads Shippo addresses, parcels, shipments, and transactions through the Shippo 
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - addresses:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 - parcels:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - shipments:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

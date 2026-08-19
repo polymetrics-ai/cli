@@ -11,9 +11,11 @@ Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Ch
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -28,52 +30,52 @@ Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Ch
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - surveys:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_live(), state(), title(), type(), updated_at()
+  - fields: created_at(string), id(string), is_live(boolean), state(string), title(string), type(string), updated_at(string)
 - tours:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_live(), state(), title(), type(), updated_at()
+  - fields: created_at(string), id(string), is_live(boolean), state(string), title(string), type(string), updated_at(string)
 - launchers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_live(), state(), title(), type(), updated_at()
+  - fields: created_at(string), id(string), is_live(boolean), state(string), title(string), type(string), updated_at(string)
 - tooltips:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_live(), state(), title(), type(), updated_at()
+  - fields: created_at(string), id(string), is_live(boolean), state(string), title(string), type(string), updated_at(string)
 - segments:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), name(), updated_at()
+  - fields: created_at(string), description(string), id(string), name(string), updated_at(string)
 - embeds:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), created_at(), dashboard_url(), description(), id(), name(), position(), published_at(), segment_ids(), style(), tag_ids(), updated_at()
+  - fields: archived_at(string), created_at(string), dashboard_url(string), description(string), id(string), name(string), position(integer), published_at(string), segment_ids(array), style(string), tag_ids(array), updated_at(string)
 - event_names:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), dashboard_url(), description(), id(), kind(), last_seen_at(), name(), published_at(), source(), uid(), updated_at()
+  - fields: created_at(string), dashboard_url(string), description(string), id(string), kind(string), last_seen_at(string), name(string), published_at(string), source(string), uid(string), updated_at(string)
 - tags:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), disabled_at(), id(), last_seen_at(), models_count(), name(), uid(), updated_at()
+  - fields: created_at(string), description(string), disabled_at(string), id(string), last_seen_at(string), models_count(integer), name(string), uid(string), updated_at(string)
 - deliveries:
   - primary key: id
   - cursor: updated_at
-  - fields: at(), at_href(), created_at(), from(), group_kind(), id(), idempotency_key(), interaction_id(), model_id(), model_kind(), once(), options(), profile_id(), until(), updated_at(), use_segmentation()
+  - fields: at(string), at_href(string), created_at(string), from(string), group_kind(string), id(string), idempotency_key(string), interaction_id(string), model_id(string), model_kind(string), once(boolean), options(object), profile_id(string), until(string), updated_at(string), use_segmentation(boolean)
 - webhooks:
   - primary key: id
-  - fields: id(), last_item_at(), last_item_error(), last_item_state(), name(), uid()
+  - fields: id(string), last_item_at(string), last_item_error(string), last_item_state(string), name(string), uid(string)
 - companies:
   - primary key: id
-  - fields: clv(), created_at(), domain(), id(), plan(), uid()
+  - fields: clv(number), created_at(string), domain(string), id(string), plan(string), uid(string)
 
 ## Sync Modes
 
@@ -83,26 +85,27 @@ Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Ch
 
 - publish_survey:
   - endpoint: PATCH /edit/surveys/{{ record.id }}
-  - required fields: id
+  - required fields: id, published_at
   - risk: external mutation publishing/unpublishing a live in-product Microsurvey to end-users; approval required
 - publish_tour:
   - endpoint: PATCH /edit/tours/{{ record.id }}
-  - required fields: id
+  - required fields: id, published_at
   - risk: external mutation publishing/unpublishing a live in-product Tour to end-users; approval required
 - publish_launcher:
   - endpoint: PATCH /edit/launchers/{{ record.id }}
-  - required fields: id
+  - required fields: id, published_at
   - risk: external mutation publishing/unpublishing a live in-product Launcher to end-users; approval required
 - publish_tooltip:
   - endpoint: PATCH /edit/tooltips/{{ record.id }}
-  - required fields: id
+  - required fields: id, published_at
   - risk: external mutation publishing/unpublishing a live in-product Tooltip to end-users; approval required
 - publish_embed:
   - endpoint: PATCH /edit/embeds/{{ record.id }}
-  - required fields: id
+  - required fields: id, published_at
   - risk: external mutation publishing/unpublishing a live in-product Embeddable to end-users; approval required
 - create_delivery:
   - endpoint: POST /edit/deliveries
+  - required fields: model_kind, model_id
   - risk: external mutation directly triggering a Tour or Microsurvey experience for one specific end-user; approval required
 - delete_delivery:
   - endpoint: DELETE /edit/deliveries/{{ record.id }}
@@ -110,6 +113,7 @@ Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Ch
   - risk: cancels a not-yet-triggered Delivery; irreversible once the target has already been shown, approval required
 - create_webhook:
   - endpoint: POST /edit/webhooks
+  - required fields: url, topics
   - risk: external mutation creating a new outbound webhook subscription that will POST Chameleon event data to a third-party URL; approval required
 - delete_webhook:
   - endpoint: DELETE /edit/webhooks/{{ record.id }}

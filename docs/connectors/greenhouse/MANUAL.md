@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes documented Greenhouse Harvest REST API resources through the declarative connector engine.
 
 ICON
+  id: greenhouse
   asset: icons/greenhouse.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -52,157 +53,157 @@ CONFIGURATION
   scorecard_id
   token
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   candidates:
     primary key: id
     cursor: updated_at
-    fields: company(), created_at(), first_name(), id(), is_private(), last_activity(), last_name(), title(), updated_at()
+    fields: company(string), created_at(string), first_name(string), id(integer), is_private(boolean), last_activity(string), last_name(string), title(string), updated_at(string)
   applications:
     primary key: id
     cursor: last_activity_at
-    fields: applied_at(), candidate_id(), id(), last_activity_at(), rejected_at(), source_id(), status()
+    fields: applied_at(string), candidate_id(integer), id(integer), last_activity_at(string), rejected_at(string), source_id(integer), status(string)
   jobs:
     primary key: id
     cursor: updated_at
-    fields: closed_at(), confidential(), created_at(), id(), name(), opened_at(), requisition_id(), status(), updated_at()
+    fields: closed_at(string), confidential(boolean), created_at(string), id(integer), name(string), opened_at(string), requisition_id(string), status(string), updated_at(string)
   offers:
     primary key: id
     cursor: updated_at
-    fields: application_id(), candidate_id(), created_at(), id(), sent_at(), starts_at(), status(), updated_at(), version()
+    fields: application_id(integer), candidate_id(integer), created_at(string), id(integer), sent_at(string), starts_at(string), status(string), updated_at(string), version(integer)
   users:
     primary key: id
     cursor: updated_at
-    fields: created_at(), disabled(), employee_id(), first_name(), id(), last_name(), name(), primary_email_address(), site_admin(), updated_at()
+    fields: created_at(string), disabled(boolean), employee_id(string), first_name(string), id(integer), last_name(string), name(string), primary_email_address(string), site_admin(boolean), updated_at(string)
   activity_feed:
-    fields: id()
+    fields: id(integer)
   application:
-    fields: id()
+    fields: id(integer)
   approvals_for_job:
-    fields: id()
+    fields: id(integer)
   approval_flow:
-    fields: id()
+    fields: id(integer)
   pending_approvals_for_user:
-    fields: id()
+    fields: id(integer)
   candidate:
-    fields: id()
+    fields: id(integer)
   close_reasons:
-    fields: id()
+    fields: id(integer)
   custom_fields:
-    fields: id()
+    fields: id(integer)
   custom_field:
-    fields: id()
+    fields: id(integer)
   custom_field_options:
-    fields: id()
+    fields: id(integer)
   demographic_question_sets:
-    fields: id()
+    fields: id(integer)
   demographic_question_set:
-    fields: id()
+    fields: id(integer)
   demographic_questions:
-    fields: id()
+    fields: id(integer)
   demographic_questions_for_demographic_question_set:
-    fields: id()
+    fields: id(integer)
   demographic_question:
-    fields: id()
+    fields: id(integer)
   demographic_answer_options:
-    fields: id()
+    fields: id(integer)
   demographic_answer_options_for_demographic_question:
-    fields: id()
+    fields: id(integer)
   demographic_answer_option:
-    fields: id()
+    fields: id(integer)
   demographic_answers:
-    fields: id()
+    fields: id(integer)
   demographic_answers_for_application:
-    fields: id()
+    fields: id(integer)
   demographic_answer:
-    fields: id()
+    fields: id(integer)
   departments:
-    fields: id()
+    fields: id(integer)
   department:
-    fields: id()
+    fields: id(integer)
   degrees:
-    fields: id()
+    fields: id(integer)
   disciplines:
-    fields: id()
+    fields: id(integer)
   schools:
-    fields: id()
+    fields: id(integer)
   eeoc:
-    fields: id()
+    fields: id(integer)
   eeoc_data_for_application:
-    fields: id()
+    fields: id(integer)
   email_templates:
-    fields: id()
+    fields: id(integer)
   email_template:
-    fields: id()
+    fields: id(integer)
   job_openings:
-    fields: id()
+    fields: id(integer)
   opening_for_job:
-    fields: id()
+    fields: id(integer)
   job_posts:
-    fields: id()
+    fields: id(integer)
   job_post:
-    fields: id()
+    fields: id(integer)
   job_posts_for_job:
-    fields: id()
+    fields: id(integer)
   job_post_for_job:
-    fields: id()
+    fields: id(integer)
   custom_locations_for_job_post:
-    fields: id()
+    fields: id(integer)
   job_stages:
-    fields: id()
+    fields: id(integer)
   job_stages_for_job:
-    fields: id()
+    fields: id(integer)
   job_stage:
-    fields: id()
+    fields: id(integer)
   job:
-    fields: id()
+    fields: id(integer)
   hiring_team:
-    fields: id()
+    fields: id(integer)
   offers_for_application:
-    fields: id()
+    fields: id(integer)
   current_offer_for_application:
-    fields: id()
+    fields: id(integer)
   offer:
-    fields: id()
+    fields: id(integer)
   offices:
-    fields: id()
+    fields: id(integer)
   office:
-    fields: id()
+    fields: id(integer)
   prospect_pools:
-    fields: id()
+    fields: id(integer)
   prospect_pool:
-    fields: id()
+    fields: id(integer)
   rejection_reasons:
-    fields: id()
+    fields: id(integer)
   scheduled_interviews:
-    fields: id()
+    fields: id(integer)
   scheduled_interviews_for_application:
-    fields: id()
+    fields: id(integer)
   scheduled_interview:
-    fields: id()
+    fields: id(integer)
   scorecards:
-    fields: id()
+    fields: id(integer)
   scorecards_for_application:
-    fields: id()
+    fields: id(integer)
   scorecard:
-    fields: id()
+    fields: id(integer)
   sources:
-    fields: id()
+    fields: id(integer)
   candidate_tags:
-    fields: id()
+    fields: id(integer)
   tags_applied_to_candidate:
-    fields: id()
+    fields: id(integer)
   tracking_link_data_for_token:
-    fields: id()
+    fields: id(integer)
   user:
-    fields: id()
+    fields: id(integer)
   job_permissions:
-    fields: id()
+    fields: id(integer)
   future_job_permissions:
-    fields: id()
+    fields: id(integer)
   user_roles:
-    fields: id()
+    fields: id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -396,6 +397,10 @@ REVERSE ETL ACTIONS
     endpoint: DELETE /candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
     required fields: candidate_id, tag_id
     risk: Destructive Greenhouse mutation: DELETE: Remove tag from candidate.
+  destroy_candidate_tag:
+    endpoint: DELETE /tags/candidate/{{ record.tag_id }}
+    required fields: tag_id
+    risk: Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Greenhouse queues an asynchronous job that strips this tag from EVERY candidate it is applied to before deleting the tag itself, so the blast radius is organisation-wide and is not bounded by any candidate id.
   add_a_candidate_tag:
     endpoint: PUT /candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
     required fields: candidate_id, tag_id
@@ -432,6 +437,153 @@ SECURITY
   write risk: external Greenhouse Harvest API mutations including candidate, application, job, office, department, tag, and user changes
   approval: required for every write action; destructive and identity-changing actions are marked confirm: destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Read Greenhouse Harvest records and safely plan typed Greenhouse mutations.
+  Usage: pm greenhouse <command> [flags]
+  Source CLI: Greenhouse Harvest API (Greenhouse Harvest reference fetched 2026-08-07 (HTTP 200, 1,636,662 bytes))
+  Global flags:
+    --credential (string): Credential name to use for the Greenhouse request.
+    --connection (string): Alias for --credential.
+    --config (string_array): Connector config override as key=value; never pass secret values here.
+    --json (boolean): Emit machine-readable JSON output.
+    --limit (integer): Maximum ETL records to emit.
+    --max-bytes (integer): Maximum bounded direct-read response bytes.
+    --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+    --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
+  ETL streams
+    candidates list - Read Greenhouse List Candidates as ETL records. [intent=etl availability=implemented stream=candidates]
+    applications list - Read Greenhouse List Applications as ETL records. [intent=etl availability=implemented stream=applications]
+    jobs list - Read Greenhouse List Jobs as ETL records. [intent=etl availability=implemented stream=jobs]
+    offers list - Read Greenhouse List Offers as ETL records. [intent=etl availability=implemented stream=offers]
+    users list - Read Greenhouse List Users as ETL records. [intent=etl availability=implemented stream=users]
+    activity-feed list - Read Greenhouse Retrieve Activity Feed as ETL records. [intent=etl availability=implemented stream=activity_feed]; flags: --candidate-id (required)
+    application list - Read Greenhouse Retrieve Application as ETL records. [intent=etl availability=implemented stream=application]; flags: --application-id (required)
+    approvals-for-job list - Read Greenhouse List Approvals For Job as ETL records. [intent=etl availability=implemented stream=approvals_for_job]; flags: --job-id (required)
+    approval-flow list - Read Greenhouse Retrieve Approval Flow as ETL records. [intent=etl availability=implemented stream=approval_flow]; flags: --approval-flow-id (required)
+    pending-approvals-for-user list - Read Greenhouse Pending Approvals For User as ETL records. [intent=etl availability=implemented stream=pending_approvals_for_user]; flags: --user-id (required)
+    candidate list - Read Greenhouse Retrieve Candidate as ETL records. [intent=etl availability=implemented stream=candidate]; flags: --candidate-id (required)
+    close-reasons list - Read Greenhouse List Close Reasons as ETL records. [intent=etl availability=implemented stream=close_reasons]
+    custom-fields list - Read Greenhouse List Custom Fields as ETL records. [intent=etl availability=implemented stream=custom_fields]; flags: --field-type (required)
+    custom-field list - Read Greenhouse Retrieve Custom Field as ETL records. [intent=etl availability=implemented stream=custom_field]; flags: --custom-field-id (required)
+    custom-field-options list - Read Greenhouse List Custom Field Options as ETL records. [intent=etl availability=implemented stream=custom_field_options]; flags: --custom-field-id (required)
+    demographic-question-sets list - Read Greenhouse List Demographic Question Sets as ETL records. [intent=etl availability=implemented stream=demographic_question_sets]
+    demographic-question-set list - Read Greenhouse Retrieve Demographic Question Set as ETL records. [intent=etl availability=implemented stream=demographic_question_set]; flags: --demographic-question-set-id (required)
+    demographic-questions list - Read Greenhouse List Demographic Questions as ETL records. [intent=etl availability=implemented stream=demographic_questions]
+    demographic-questions-for-demographic-question-set list - Read Greenhouse List Demographic Questions For Demographic Question Set as ETL records. [intent=etl availability=implemented stream=demographic_questions_for_demographic_question_set]; flags: --demographic-question-set-id (required)
+    demographic-question list - Read Greenhouse Retrieve Demographic Question as ETL records. [intent=etl availability=implemented stream=demographic_question]; flags: --demographic-question-id (required)
+    demographic-answer-options list - Read Greenhouse List Demographic Answer Options as ETL records. [intent=etl availability=implemented stream=demographic_answer_options]
+    demographic-answer-options-for-demographic-question list - Read Greenhouse List Demographic Answer Options For Demographic Question as ETL records. [intent=etl availability=implemented stream=demographic_answer_options_for_demographic_question]; flags: --demographic-question-id (required)
+    demographic-answer-option list - Read Greenhouse Retrieve Demographic Answer Option as ETL records. [intent=etl availability=implemented stream=demographic_answer_option]; flags: --demographic-answer-option-id (required)
+    demographic-answers list - Read Greenhouse List Demographic Answers as ETL records. [intent=etl availability=implemented stream=demographic_answers]
+    demographic-answers-for-application list - Read Greenhouse List Demographic Answers For Application as ETL records. [intent=etl availability=implemented stream=demographic_answers_for_application]; flags: --application-id (required)
+    demographic-answer list - Read Greenhouse Retrieve Demographic Answer as ETL records. [intent=etl availability=implemented stream=demographic_answer]; flags: --demographic-answer-id (required)
+    departments list - Read Greenhouse List Departments as ETL records. [intent=etl availability=implemented stream=departments]
+    department list - Read Greenhouse Retrieve Department as ETL records. [intent=etl availability=implemented stream=department]; flags: --department-id (required)
+    degrees list - Read Greenhouse List Degrees as ETL records. [intent=etl availability=implemented stream=degrees]
+    disciplines list - Read Greenhouse List Disciplines as ETL records. [intent=etl availability=implemented stream=disciplines]
+    schools list - Read Greenhouse List Schools as ETL records. [intent=etl availability=implemented stream=schools]
+    eeoc list - Read Greenhouse List EEOC as ETL records. [intent=etl availability=implemented stream=eeoc]
+    eeoc-data-for-application list - Read Greenhouse Retrieve EEOC Data for Application as ETL records. [intent=etl availability=implemented stream=eeoc_data_for_application]; flags: --application-id (required)
+    email-templates list - Read Greenhouse List Email Templates as ETL records. [intent=etl availability=implemented stream=email_templates]
+    email-template list - Read Greenhouse Retrieve Email Template as ETL records. [intent=etl availability=implemented stream=email_template]; flags: --email-template-id (required)
+    job-openings list - Read Greenhouse List Job Openings as ETL records. [intent=etl availability=implemented stream=job_openings]; flags: --job-id (required)
+    opening-for-job list - Read Greenhouse Single Opening For Job as ETL records. [intent=etl availability=implemented stream=opening_for_job]; flags: --job-id (required), --opening-id (required)
+    job-posts list - Read Greenhouse List Job Posts as ETL records. [intent=etl availability=implemented stream=job_posts]
+    job-post list - Read Greenhouse Retrieve Job Post as ETL records. [intent=etl availability=implemented stream=job_post]; flags: --job-post-id (required)
+    job-posts-for-job list - Read Greenhouse List Job Posts for Job as ETL records. [intent=etl availability=implemented stream=job_posts_for_job]; flags: --job-id (required)
+    job-post-for-job list - Read Greenhouse Retrieve Job Post for Job as ETL records. [intent=etl availability=implemented stream=job_post_for_job]; flags: --job-id (required)
+    custom-locations-for-job-post list - Read Greenhouse Retrieve Custom Locations for Job Post as ETL records. [intent=etl availability=implemented stream=custom_locations_for_job_post]; flags: --job-post-id (required)
+    job-stages list - Read Greenhouse List Job Stages as ETL records. [intent=etl availability=implemented stream=job_stages]
+    job-stages-for-job list - Read Greenhouse List Job Stages for Job as ETL records. [intent=etl availability=implemented stream=job_stages_for_job]; flags: --job-id (required)
+    job-stage list - Read Greenhouse Retrieve Job Stage as ETL records. [intent=etl availability=implemented stream=job_stage]; flags: --job-stage-id (required)
+    job list - Read Greenhouse Retrieve Job as ETL records. [intent=etl availability=implemented stream=job]; flags: --job-id (required)
+    hiring-team list - Read Greenhouse Hiring Team as ETL records. [intent=etl availability=implemented stream=hiring_team]; flags: --job-id (required)
+    offers-for-application list - Read Greenhouse List Offers for Application as ETL records. [intent=etl availability=implemented stream=offers_for_application]; flags: --application-id (required)
+    current-offer-for-application list - Read Greenhouse Retrieve Current Offer for Application as ETL records. [intent=etl availability=implemented stream=current_offer_for_application]; flags: --application-id (required)
+    offer list - Read Greenhouse Retrieve Offer as ETL records. [intent=etl availability=implemented stream=offer]; flags: --offer-id (required)
+    offices list - Read Greenhouse List Offices as ETL records. [intent=etl availability=implemented stream=offices]
+    office list - Read Greenhouse Retrieve Office as ETL records. [intent=etl availability=implemented stream=office]; flags: --office-id (required)
+    prospect-pools list - Read Greenhouse List Prospect Pools as ETL records. [intent=etl availability=implemented stream=prospect_pools]
+    prospect-pool list - Read Greenhouse Retrieve Prospect Pool as ETL records. [intent=etl availability=implemented stream=prospect_pool]; flags: --prospect-pool-id (required)
+    rejection-reasons list - Read Greenhouse List Rejection Reasons as ETL records. [intent=etl availability=implemented stream=rejection_reasons]
+    scheduled-interviews list - Read Greenhouse List Scheduled Interviews as ETL records. [intent=etl availability=implemented stream=scheduled_interviews]
+    scheduled-interviews-for-application list - Read Greenhouse List Scheduled Interviews for Application as ETL records. [intent=etl availability=implemented stream=scheduled_interviews_for_application]; flags: --application-id (required)
+    scheduled-interview list - Read Greenhouse Retrieve Scheduled Interview as ETL records. [intent=etl availability=implemented stream=scheduled_interview]; flags: --scheduled-interview-id (required)
+    scorecards list - Read Greenhouse List Scorecards as ETL records. [intent=etl availability=implemented stream=scorecards]
+    scorecards-for-application list - Read Greenhouse List Scorecards for Application as ETL records. [intent=etl availability=implemented stream=scorecards_for_application]; flags: --application-id (required)
+    scorecard list - Read Greenhouse Retrieve Scorecard as ETL records. [intent=etl availability=implemented stream=scorecard]; flags: --scorecard-id (required)
+    sources list - Read Greenhouse List Sources as ETL records. [intent=etl availability=implemented stream=sources]
+    candidate-tags list - Read Greenhouse List Candidate Tags as ETL records. [intent=etl availability=implemented stream=candidate_tags]
+    tags-applied-to-candidate list - Read Greenhouse List tags applied to candidate as ETL records. [intent=etl availability=implemented stream=tags_applied_to_candidate]; flags: --candidate-id (required)
+    tracking-link-data-for-token list - Read Greenhouse Tracking Link Data for Token as ETL records. [intent=etl availability=implemented stream=tracking_link_data_for_token]; flags: --token (required)
+    user list - Read Greenhouse Retrieve User as ETL records. [intent=etl availability=implemented stream=user]; flags: --user-id (required)
+    job-permissions list - Read Greenhouse List Job Permissions as ETL records. [intent=etl availability=implemented stream=job_permissions]; flags: --user-id (required)
+    future-job-permissions list - Read Greenhouse List Future Job Permissions as ETL records. [intent=etl availability=implemented stream=future_job_permissions]; flags: --user-id (required)
+    user-roles list - Read Greenhouse List User Roles as ETL records. [intent=etl availability=implemented stream=user_roles]
+  Reverse ETL write plans
+    delete-application plan - Delete Application. [intent=reverse_etl availability=implemented write=delete_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Delete Application.; flags: --application-id (required)
+    add-application-to-candidate-prospect plan - Add Application to Candidate/Prospect. [intent=reverse_etl availability=implemented write=add_application_to_candidate_prospect]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Application to Candidate/Prospect.; flags: --candidate-id (required)
+    update-application plan - Update Application. [intent=reverse_etl availability=implemented write=update_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Application.; flags: --application-id (required)
+    advance-application plan - Advance Application. [intent=reverse_etl availability=implemented write=advance_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Advance Application.; flags: --application-id (required)
+    move-application-different-job plan - Move Application (Different Job). [intent=reverse_etl availability=implemented write=move_application_different_job]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Move Application (Different Job).; flags: --application-id (required)
+    move-application-same-job plan - Move Application (Same Job). [intent=reverse_etl availability=implemented write=move_application_same_job]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Move Application (Same Job).; flags: --application-id (required)
+    convert-prospect-to-candidate plan - Convert Prospect To Candidate. [intent=reverse_etl availability=implemented write=convert_prospect_to_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Convert Prospect To Candidate.; flags: --application-id (required)
+    add-attachment-to-application plan - Add Attachment to Application. [intent=reverse_etl availability=implemented write=add_attachment_to_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Attachment to Application.; flags: --application-id (required)
+    hire-application plan - Hire Application. [intent=reverse_etl availability=implemented write=hire_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Hire Application.; flags: --application-id (required)
+    reject-application plan - Reject Application. [intent=reverse_etl availability=implemented write=reject_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: POST: Reject Application.; flags: --application-id (required)
+    update-rejection-reason plan - Update Rejection Reason. [intent=reverse_etl availability=implemented write=update_rejection_reason]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Rejection Reason.; flags: --application-id (required)
+    unreject-application plan - Unreject Application. [intent=reverse_etl availability=implemented write=unreject_application]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Unreject Application.; flags: --application-id (required)
+    request-approvals plan - Request Approvals. [intent=reverse_etl availability=implemented write=request_approvals]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Request Approvals.; flags: --approval-flow-id (required)
+    replace-an-approver-in-an-approver-group plan - Replace an approver in an approver group. [intent=reverse_etl availability=implemented write=replace_an_approver_in_an_approver_group]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Replace an approver in an approver group.; flags: --approver-group-id (required)
+    create-or-replace-an-approval-flow plan - Create or replace an approval flow. [intent=reverse_etl availability=implemented write=create_or_replace_an_approval_flow]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Create or replace an approval flow.; flags: --job-id (required)
+    delete-candidate plan - Delete Candidate. [intent=reverse_etl availability=implemented write=delete_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Delete Candidate.; flags: --candidate-id (required)
+    edit-candidate plan - Edit Candidate. [intent=reverse_etl availability=implemented write=edit_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Edit Candidate.; flags: --candidate-id (required)
+    add-attachment plan - Add Attachment. [intent=reverse_etl availability=implemented write=add_attachment]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Attachment.; flags: --candidate-id (required)
+    add-candidate plan - Add Candidate. [intent=reverse_etl availability=implemented write=add_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Candidate.
+    add-note plan - Add Note. [intent=reverse_etl availability=implemented write=add_note]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Note.; flags: --candidate-id (required)
+    add-e-mail-note plan - Add E-mail Note. [intent=reverse_etl availability=implemented write=add_e_mail_note]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add E-mail Note.; flags: --candidate-id (required)
+    add-education plan - Add Education. [intent=reverse_etl availability=implemented write=add_education]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Education.; flags: --candidate-id (required)
+    remove-education-from-candidate plan - Remove Education From Candidate. [intent=reverse_etl availability=implemented write=remove_education_from_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove Education From Candidate.; flags: --candidate-id (required), --education-id (required)
+    add-employment plan - Add Employment. [intent=reverse_etl availability=implemented write=add_employment]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Employment.; flags: --candidate-id (required)
+    remove-employment-from-candidate plan - Remove Employment From Candidate. [intent=reverse_etl availability=implemented write=remove_employment_from_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove Employment From Candidate.; flags: --candidate-id (required), --employment-id (required)
+    add-prospect plan - Add Prospect. [intent=reverse_etl availability=implemented write=add_prospect]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Prospect.
+    anonymize-candidate plan - Anonymize Candidate. [intent=reverse_etl availability=implemented write=anonymize_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: PUT: Anonymize Candidate.; flags: --candidate-id (required), --field-names (required)
+    merge-candidates plan - Merge Candidates. [intent=reverse_etl availability=implemented write=merge_candidates]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: PUT: Merge Candidates.
+    create-custom-field plan - Create Custom Field. [intent=reverse_etl availability=implemented write=create_custom_field]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Create Custom Field.
+    update-custom-field plan - Update Custom Field. [intent=reverse_etl availability=implemented write=update_custom_field]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Custom Field.; flags: --custom-field-id (required)
+    delete-custom-field plan - Delete Custom Field. [intent=reverse_etl availability=implemented write=delete_custom_field]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Delete Custom Field.; flags: --custom-field-id (required)
+    create-custom-field-options plan - Create Custom Field Options. [intent=reverse_etl availability=implemented write=create_custom_field_options]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Create Custom Field Options.; flags: --custom-field-id (required)
+    update-custom-field-options plan - Update Custom Field Options. [intent=reverse_etl availability=implemented write=update_custom_field_options]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Custom Field Options.; flags: --custom-field-id (required)
+    remove-custom-field-options plan - Remove Custom Field Options. [intent=reverse_etl availability=implemented write=remove_custom_field_options]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove Custom Field Options.; flags: --custom-field-id (required)
+    edit-department plan - Edit Department. [intent=reverse_etl availability=implemented write=edit_department]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Edit Department.; flags: --department-id (required)
+    add-department plan - Add Department. [intent=reverse_etl availability=implemented write=add_department]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Department.
+    edit-openings plan - Edit Openings. [intent=reverse_etl availability=implemented write=edit_openings]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Edit Openings.; flags: --job-id (required), --opening-id (required)
+    create-new-openings plan - Create New Openings. [intent=reverse_etl availability=implemented write=create_new_openings]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Create New Openings.; flags: --job-id (required)
+    update-job plan - Update Job. [intent=reverse_etl availability=implemented write=update_job]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Job.; flags: --job-id (required)
+    create-job plan - Create Job. [intent=reverse_etl availability=implemented write=create_job]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Create Job.
+    replace-hiring-team plan - Replace Hiring Team. [intent=reverse_etl availability=implemented write=replace_hiring_team]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Replace Hiring Team.; flags: --job-id (required)
+    add-hiring-team-members plan - Add Hiring Team Members. [intent=reverse_etl availability=implemented write=add_hiring_team_members]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Hiring Team Members.; flags: --job-id (required)
+    remove-hiring-team-member plan - Remove Hiring Team Member. [intent=reverse_etl availability=implemented write=remove_hiring_team_member]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.; flags: --job-id (required)
+    update-current-offer plan - Update Current Offer. [intent=reverse_etl availability=implemented write=update_current_offer]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Update Current Offer.; flags: --application-id (required)
+    edit-office plan - Edit Office. [intent=reverse_etl availability=implemented write=edit_office]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Edit Office.; flags: --office-id (required)
+    add-office plan - Add Office. [intent=reverse_etl availability=implemented write=add_office]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add Office.
+    remove-scheduled-interview plan - Remove Scheduled Interview. [intent=reverse_etl availability=implemented write=remove_scheduled_interview]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: Delete: Remove Scheduled Interview.; flags: --scheduled-interview-id (required)
+    add-candidate-tag plan - Add New Candidate Tag. [intent=reverse_etl availability=implemented write=add_candidate_tag]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add New Candidate Tag.
+    remove-tag-from-candidate plan - Remove tag from candidate. [intent=reverse_etl availability=implemented write=remove_tag_from_candidate]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove tag from candidate.; flags: --candidate-id (required), --tag-id (required)
+    destroy-candidate-tag plan - Destroy a candidate tag. [intent=reverse_etl availability=implemented write=destroy_candidate_tag]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Greenhouse queues an asynchronous job that strips this tag from EVERY candidate it is applied to before deleting the tag itself, so the blast radius is organisation-wide and is not bounded by any candidate id.; flags: --tag-id (required)
+    add-a-candidate-tag plan - Add a candidate tag. [intent=reverse_etl availability=implemented write=add_a_candidate_tag]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Add a candidate tag.; flags: --candidate-id (required), --tag-id (required)
+    change-user-permission-level plan - Change user permission level. [intent=reverse_etl availability=implemented write=change_user_permission_level]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PATCH: Change user permission level.
+    add-user plan - Add User. [intent=reverse_etl availability=implemented write=add_user]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add User.
+    add-e-mail-address-to-user plan - Add E-mail Address To User. [intent=reverse_etl availability=implemented write=add_e_mail_address_to_user]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: POST: Add E-mail Address To User.; flags: --user-id (required)
+    remove-a-job-permission plan - Remove a Job Permission. [intent=reverse_etl availability=implemented write=remove_a_job_permission]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove a Job Permission.; flags: --user-id (required)
+    add-a-job-permission plan - Add a Job Permission. [intent=reverse_etl availability=implemented write=add_a_job_permission]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Add a Job Permission.; flags: --user-id (required)
+    remove-a-future-job-permission plan - Remove a Future Job Permission. [intent=reverse_etl availability=implemented write=remove_a_future_job_permission]; approval: reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation.; risk: Destructive Greenhouse mutation: DELETE: Remove a Future Job Permission.; flags: --user-id (required)
+    add-a-future-job-permission plan - Add a Future Job Permission. [intent=reverse_etl availability=implemented write=add_a_future_job_permission]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Greenhouse mutation: PUT: Add a Future Job Permission.; flags: --user-id (required)
+  Help topics:
+    operation-ledger - Greenhouse Harvest documents 138 operations; 127 are covered by this bundle and 11 are blocked with a named dependency.
+    write-safety - Greenhouse write commands use reverse ETL plan -> preview -> approval -> execute; destructive actions require typed confirmation.
 
 EXAMPLES
   # Inspect as a manual

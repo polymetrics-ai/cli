@@ -15,6 +15,7 @@ var errUsage = usageErrorf("invalid usage")
 
 type parsedFlags struct {
 	values map[string][]string
+	bare   map[string]bool
 }
 
 func (p parsedFlags) first(name string) string {
@@ -23,6 +24,19 @@ func (p parsedFlags) first(name string) string {
 		return ""
 	}
 	return values[len(values)-1]
+}
+
+func (p parsedFlags) isBare(name string) bool {
+	return p.bare[name]
+}
+
+func (p parsedFlags) hasBlankValue(name string) bool {
+	for _, value := range p.values[name] {
+		if strings.TrimSpace(value) == "" {
+			return true
+		}
+	}
+	return false
 }
 
 func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
@@ -45,7 +59,7 @@ func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
 }
 
 func parseFlags(args []string) parsedFlags {
-	out := parsedFlags{values: map[string][]string{}}
+	out := parsedFlags{values: map[string][]string{}, bare: map[string]bool{}}
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		if !strings.HasPrefix(arg, "--") {
@@ -59,6 +73,8 @@ func parseFlags(args []string) parsedFlags {
 			if i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
 				value = args[i+1]
 				i++
+			} else {
+				out.bare[key] = true
 			}
 		}
 		out.values[key] = append(out.values[key], value)
@@ -121,6 +137,37 @@ func parseIntFlag(name, value string, fallback int) (int, error) {
 	n, err := strconv.Atoi(value)
 	if err != nil {
 		return 0, validationErrorf("invalid --%s %q, want integer", name, value)
+	}
+	return n, nil
+}
+
+// parseMaxInFlightBatches keeps the command-line contract distinct from the
+// app's zero-value sentinel: absence is passed through as zero, while every
+// supplied value must name an executable bounded pipeline depth.
+func parseMaxInFlightBatches(value string) (int, error) {
+	if value == "" {
+		return 0, nil
+	}
+	n, err := parseIntFlag("max-in-flight-batches", value, 0)
+	if err != nil {
+		return 0, err
+	}
+	if n < 1 || n > 8 {
+		return 0, validationErrorf("--max-in-flight-batches must be between 1 and 8")
+	}
+	return n, nil
+}
+
+func parseTargetCopyWorkers(value string) (int, error) {
+	if value == "" {
+		return 0, nil
+	}
+	n, err := parseIntFlag("target-copy-workers", value, 0)
+	if err != nil {
+		return 0, err
+	}
+	if n < 1 || n > 8 {
+		return 0, validationErrorf("--target-copy-workers must be between 1 and 8")
 	}
 	return n, nil
 }

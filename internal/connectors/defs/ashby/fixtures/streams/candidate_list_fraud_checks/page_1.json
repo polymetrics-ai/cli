@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/candidate.listFraudChecks",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "candidate_list_fraud_checks_id_fixture_14",
+          "candidateId": "candidate_list_fraud_checks_candidateid_fixture_14",
+          "applicationId": "candidate_list_fraud_checks_applicationid_fixture_14",
+          "createdAt": "2026-02-14T14:00:00Z",
+          "fraudSignals": [
+            {
+              "id": "candidate_list_fraud_checks_id_fixture_14",
+              "category": "candidate_list_fraud_checks_category_fixture_14",
+              "name": "Candidate List Fraud Checks Name Fixture 14",
+              "description": "Description fixture 14",
+              "value": "candidate_list_fraud_checks_value_fixture_14"
+            }
+          ]
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "candidateId": "candidateid_fixture"
+  }
+}

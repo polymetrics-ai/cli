@@ -13,6 +13,7 @@ DESCRIPTION
   Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through the LinkedIn Marketing REST API.
 
 ICON
+  id: linkedin
   asset: icons/linkedin.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -31,25 +32,25 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
     cursor: last_modified
-    fields: created_at(), currency(), id(), last_modified(), name(), reference(), status(), test(), type(), version()
+    fields: created_at(integer), currency(string), id(integer), last_modified(integer), name(string), reference(string), status(string), test(boolean), type(string), version(object)
   campaign_groups:
     primary key: id
     cursor: last_modified
-    fields: account(), created_at(), id(), last_modified(), name(), run_schedule(), status(), total_budget()
+    fields: account(string), created_at(integer), id(integer), last_modified(integer), name(string), run_schedule(object), status(string), total_budget(object)
   campaigns:
     primary key: id
     cursor: last_modified
-    fields: account(), campaign_group(), cost_type(), created_at(), daily_budget(), format(), id(), last_modified(), name(), objective_type(), run_schedule(), status(), type(), unit_cost()
+    fields: account(string), campaign_group(string), cost_type(string), created_at(integer), daily_budget(object), format(string), id(integer), last_modified(integer), name(string), objective_type(string), run_schedule(object), status(string), type(string), unit_cost(object)
   creatives:
     primary key: id
     cursor: last_modified
-    fields: account(), campaign(), content(), created_at(), id(), intended_status(), is_serving(), last_modified(), review_status(), status()
+    fields: account(string), campaign(string), content(object), created_at(integer), id(string), intended_status(string), is_serving(boolean), last_modified(integer), review_status(object), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

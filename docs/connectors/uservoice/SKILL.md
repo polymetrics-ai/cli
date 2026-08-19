@@ -11,9 +11,17 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-uservoice
+- asset: icons/simple-icons/uservoice.svg
+- title: UserVoice
+- simple_icon_slug: uservoice
+- simple_icon_hex: FF6720
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=UserVoice
+- match: exact-name-or-slug
+- matched_by: uservoice
 
 ## Capabilities
 
@@ -28,45 +36,45 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
 
 - base_url
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - suggestions:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), state(), title()
+  - fields: created_at(string), id(string), state(string), title(string)
 - forums:
   - primary key: id
   - cursor: updated_at
-  - fields: categories_count(), created_at(), id(), is_default(), is_open(), is_private(), is_public(), moderation_enabled(), name(), open_suggestions_count(), suggestions_count(), updated_at()
+  - fields: categories_count(integer), created_at(string), id(integer), is_default(boolean), is_open(boolean), is_private(boolean), is_public(boolean), moderation_enabled(boolean), name(string), open_suggestions_count(integer), suggestions_count(integer), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: avatar_url(), created_at(), email_address(), guid(), id(), is_admin(), is_owner(), name(), state(), updated_at()
+  - fields: avatar_url(string), created_at(string), email_address(string), guid(string), id(integer), is_admin(boolean), is_owner(boolean), name(string), state(string), updated_at(string)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), open_suggestions_count(), position(), suggestions_count(), updated_at()
+  - fields: created_at(string), id(integer), name(string), open_suggestions_count(integer), position(integer), suggestions_count(integer), updated_at(string)
 - statuses:
   - primary key: id
   - cursor: updated_at
-  - fields: allow_comments(), created_at(), hex_color(), id(), is_default(), is_open(), name(), position(), updated_at()
+  - fields: allow_comments(boolean), created_at(string), hex_color(string), id(integer), is_default(boolean), is_open(boolean), name(string), position(integer), updated_at(string)
 - labels:
   - primary key: id
   - cursor: updated_at
-  - fields: can_recommend(), created_at(), full_name(), id(), level(), name(), open_suggestions_count(), updated_at()
+  - fields: can_recommend(boolean), created_at(string), full_name(string), id(integer), level(integer), name(string), open_suggestions_count(integer), updated_at(string)
 - comments:
   - primary key: id
   - cursor: updated_at
-  - fields: body(), body_mime_type(), created_at(), id(), inappropriate_flags_count(), is_admin_comment(), state(), updated_at()
+  - fields: body(string), body_mime_type(string), created_at(string), id(integer), inappropriate_flags_count(integer), is_admin_comment(boolean), state(string), updated_at(string)
 - notes:
   - primary key: id
   - cursor: updated_at
-  - fields: body(), body_mime_type(), created_at(), id(), reply_count(), updated_at()
+  - fields: body(string), body_mime_type(string), created_at(string), id(integer), reply_count(integer), updated_at(string)
 - teams:
   - primary key: id
-  - fields: id(), members_count(), name()
+  - fields: id(integer), members_count(integer), name(string)
 
 ## Sync Modes
 
@@ -76,6 +84,7 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
 
 - create_suggestion:
   - endpoint: POST /api/v2/admin/suggestions
+  - required fields: title, links
   - risk: creates a new customer suggestion (idea); low-risk external mutation, no approval required
 - update_suggestion:
   - endpoint: PUT /api/v2/admin/suggestions/{{ record.id }}
@@ -91,9 +100,11 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
   - risk: soft-deletes (moderates) a suggestion; UserVoice's own API keeps a matching restore endpoint (not modeled here) so this is a reversible moderation action, not permanent data loss, but is still marked destructive-shaped for operator awareness
 - create_comment:
   - endpoint: POST /api/v2/admin/comments
+  - required fields: body, links
   - risk: posts a new comment on an existing suggestion; low-risk external mutation, no approval required
 - create_label:
   - endpoint: POST /api/v2/admin/labels
+  - required fields: name
   - risk: creates a new label for tagging suggestions; low-risk external mutation, no approval required
 - update_label:
   - endpoint: PUT /api/v2/admin/labels/{{ record.id }}
@@ -101,6 +112,7 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
   - risk: updates an existing label's name/settings; external mutation, no approval required
 - create_note:
   - endpoint: POST /api/v2/admin/notes
+  - required fields: body, links
   - risk: creates an internal (non-public) note on a suggestion; low-risk external mutation, no approval required
 
 ## Security

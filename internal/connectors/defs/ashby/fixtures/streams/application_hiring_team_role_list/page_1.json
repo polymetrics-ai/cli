@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/applicationHiringTeamRole.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "application_hiring_team_role_list_id_fixture_8",
+          "title": "Title fixture 8"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

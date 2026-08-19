@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/interviewStage.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "interview_stage_info_id_fixture_62",
+        "title": "Title fixture 62",
+        "type": "fixture",
+        "interviewPlanId": "interview_stage_info_interviewplanid_fixture_62",
+        "orderInInterviewPlan": 62,
+        "interviewStageGroupId": "interview_stage_info_interviewstagegroupid_fixture_62"
+      }
+    }
+  },
+  "read_query": {
+    "interviewStageId": "interviewstageid_fixture"
+  }
+}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Zendesk Sunshine legacy custom object types, objects, relationship types, and relationships.
 
 ICON
+  id: zendesk-sunshine
   asset: icons/zendesk-sunshine.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,35 +27,37 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  email
+  base_url (required)
+  email (required)
   object_type
   relationship_type
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   object_types:
     primary key: id
-    fields: created_at(), id(), schema()
+    fields: created_at(string), id(string), schema(object)
   relationship_types:
     primary key: id
-    fields: created_at(), id(), source_type(), target_type(), updated_at()
+    fields: created_at(string), id(string), source_type(string), target_type(string), updated_at(string)
   objects:
     primary key: id
-    fields: attributes(), id(), type()
+    fields: attributes(object), id(string), type(string)
   relationships:
     primary key: id
-    fields: id(), source(), target(), type()
+    fields: id(string), source(object), target(object), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_object_record:
     endpoint: POST /objects/records
+    required fields: data
     risk: creates a new record of an EXISTING legacy object type; low-risk external mutation, no approval required. Legacy custom object TYPE creation is blocked by Zendesk as of January 15, 2026, but creating records of already-existing types remains supported until the full legacy API sunset (July 27, 2026)
   upsert_object_record_by_external_id:
     endpoint: PUT /objects/records
+    required fields: data
     risk: creates a new record with the given external_id if none exists, or overwrites the attributes object of the existing record with that external_id and type -- an overwrite, not a merge: any attribute omitted from this call's attributes is cleared on an existing record
   delete_object_record:
     endpoint: DELETE /objects/records/{{ record.id }}
@@ -66,6 +69,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a legacy object type definition; only succeeds if every object record of that type has already been deleted. Standard Zendesk object types (users, tickets, organizations) cannot be deleted this way and the API rejects the request
   create_relationship_record:
     endpoint: POST /relationships/records
+    required fields: data
     risk: links two existing object records (legacy custom object records, or a mix of custom and standard Zendesk records) via an EXISTING relationship type; low-risk external mutation. Legacy relationship TYPE creation is blocked by Zendesk as of January 15, 2026, but creating relationship records of already-existing types remains supported until the full legacy API sunset (July 27, 2026)
   delete_relationship_record:
     endpoint: DELETE /relationships/records/{{ record.id }}

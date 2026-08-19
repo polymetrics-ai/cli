@@ -11,6 +11,7 @@ Reads public Whisky Hunter auction and distillery data. Read-only, no credential
 
 ## Icon
 
+- id: whiskyhunter
 - asset: icons/whiskyhunter.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -33,29 +34,29 @@ Reads public Whisky Hunter auction and distillery data. Read-only, no credential
 
 - auctions:
   - primary key: id
-  - fields: dt(), id(), winning_bid()
+  - fields: dt(string), id(integer), winning_bid(number)
 - distilleries:
   - primary key: id
-  - fields: country(), id(), name()
+  - fields: country(string), id(integer), name(string)
 - auctions_data:
   - primary key: auction_slug, dt
-  - fields: all_auctions_lots_count(), auction_lots_count(), auction_name(), auction_slug(), auction_trading_volume(), dt(), winning_bid_mean()
+  - fields: all_auctions_lots_count(integer), auction_lots_count(integer), auction_name(string), auction_slug(string), auction_trading_volume(number), dt(string), winning_bid_mean(number)
 - auctions_info:
   - primary key: slug
-  - fields: base_currency(), buyers_fee(), listing_fee(), name(), reserve_fee(), sellers_fee(), slug(), url()
+  - fields: base_currency(string), buyers_fee(number), listing_fee(number), name(string), reserve_fee(number), sellers_fee(number), slug(string), url(string)
 - distilleries_info:
   - primary key: slug
-  - fields: country(), name(), slug()
+  - fields: country(string), name(string), slug(string)
 - auction_data:
   - primary key: auction_slug, dt
-  - fields: all_auctions_lots_count(), auction_lots_count(), auction_name(), auction_slug(), auction_trading_volume(), dt(), winning_bid_mean()
+  - fields: all_auctions_lots_count(integer), auction_lots_count(integer), auction_name(string), auction_slug(string), auction_trading_volume(number), dt(string), winning_bid_mean(number)
 - distillery_data:
   - primary key: slug, dt
-  - fields: dt(), lots_count(), name(), slug(), trading_volume(), winning_bid_max(), winning_bid_mean(), winning_bid_min()
+  - fields: dt(string), lots_count(integer), name(string), slug(string), trading_volume(number), winning_bid_max(number), winning_bid_mean(number), winning_bid_min(number)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

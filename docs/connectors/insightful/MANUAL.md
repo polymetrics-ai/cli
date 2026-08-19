@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Insightful workforce-analytics employees, teams, projects, and directory entries through the Insightful REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,24 +29,24 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   employee:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), id(), modelName(), name(), updatedAt()
+    fields: createdAt(integer), email(string), id(string), modelName(string), name(string), updatedAt(integer)
   team:
     primary key: id
-    fields: default(), description(), employees(), id(), modelName(), name(), projects()
+    fields: default(boolean), description(string), employees(array), id(string), modelName(string), name(string), projects(array)
   projects:
     primary key: id
     cursor: updatedAt
-    fields: archived(), billable(), createdAt(), creatorId(), employees(), id(), modelName(), name(), organizationId(), updatedAt()
+    fields: archived(boolean), billable(boolean), createdAt(integer), creatorId(string), employees(array), id(string), modelName(string), name(string), organizationId(string), updatedAt(integer)
   directory:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), modelName(), name(), organizationId(), updatedAt()
+    fields: createdAt(integer), id(string), modelName(string), name(string), organizationId(string), updatedAt(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

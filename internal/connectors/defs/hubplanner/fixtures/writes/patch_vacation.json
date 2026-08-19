@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "vacation_fixture_1",
+    "note": "patched fixture vacation"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/vacation/vacation_fixture_1",
+    "body": {
+      "note": "patched fixture vacation"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "vacation_fixture_1"
+    }
+  }
+}

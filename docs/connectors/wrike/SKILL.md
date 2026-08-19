@@ -11,6 +11,7 @@ Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 
 ## Icon
 
+- id: wrike
 - asset: icons/wrike.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,21 +32,21 @@ Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - tasks:
   - primary key: id
   - cursor: updatedDate
-  - fields: id(), title(), updatedDate()
+  - fields: id(string), title(string), updatedDate(string)
 - folders:
   - primary key: id
   - cursor: updatedDate
-  - fields: id(), title(), updatedDate()
+  - fields: id(string), title(string), updatedDate(string)
 - contacts:
   - primary key: id
-  - fields: firstName(), id(), lastName()
+  - fields: firstName(string), id(string), lastName(string)
 
 ## Sync Modes
 

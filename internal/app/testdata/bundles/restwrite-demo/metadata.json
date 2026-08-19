@@ -1,0 +1,13 @@
+{
+  "name": "restwrite-demo",
+  "display_name": "REST Write Demo",
+  "description": "Test-only rest_write fixture. Not a real connector.",
+  "integration_type": "api",
+  "release_stage": "alpha",
+  "capabilities": { "check": true, "read": false, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
+  "risk": {
+    "read": "does not read production data",
+    "write": "casts one fixture vote",
+    "approval": "writes require plan, preview, explicit approval, and execution"
+  }
+}

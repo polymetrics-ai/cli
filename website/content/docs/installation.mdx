@@ -3,10 +3,10 @@ title: Installation
 description: Install pm from a release binary, via go install, or by building the single Go binary from source.
 ---
 
-`pm` ships as a single Go binary with no runtime dependencies in its default build. Pick the installation method that suits your environment.
+`pm` ships as a single Go binary with no runtime dependencies. Pick the installation method that suits your environment.
 
 <Callout type="info">
-  **Prerequisites:** Release binary install requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go. `go install` and source builds require Go 1.25.11 or later. For the DuckDB-enabled build you additionally need a C toolchain (gcc or clang).
+  **Prerequisites:** Release binary install requires the GitHub CLI (`gh`) and `tar`, but does not require Go. `go install` and source builds require Go 1.25.11 or later. Source builds also need a C toolchain (gcc or clang), because DuckDB is embedded in every build.
 </Callout>
 
 ## Installation methods
@@ -15,9 +15,13 @@ description: Install pm from a release binary, via go install, or by building th
 
 <Tab value="Release binary">
 
-Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux, macOS, and Windows on amd64 and arm64.
+Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux and macOS on amd64 and arm64.
 
-This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go.
+<Callout type="info">
+  **Windows is not published.** `windows/arm64` has no prebuilt DuckDB library and cannot be built at all; `windows/amd64` was dropped because pm has no Windows user asking for it. Both return if someone does — `pm` still builds from source on Windows amd64 with a C toolchain. Use WSL in the meantime.
+</Callout>
+
+This path requires the GitHub CLI (`gh`) and `tar`, but does not require Go.
 
 ```bash
 os_name="$(uname -s)"
@@ -26,7 +30,6 @@ arch_name="$(uname -m)"
 case "$os_name" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
   *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
 esac
 
@@ -40,16 +43,8 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+binary_name=pm
 
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"
@@ -83,20 +78,20 @@ Clone the repository and build locally:
 ```bash
 git clone https://github.com/polymetrics-ai/cli
 cd cli
-make build        # produces ./pm  (CGO-free, default)
+make build        # produces ./pm  (requires a C toolchain for DuckDB)
 make install      # copies ./pm to $GOPATH/bin
 ```
 
-### DuckDB-enabled build
+### Build requirements
 
-The default build uses a pure-Go JSONL warehouse. To unlock the full DuckDB SQL engine -- joins, window functions, aggregations -- build with CGO enabled:
-
-```bash
-CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
-```
+DuckDB is embedded in every build -- it is the query engine and the only Parquet
+implementation in the binary -- so building from source requires cgo and a C
+toolchain (gcc or clang). There is no build flag and no CGO-free variant: two
+builds that wrote different table formats would mean a query that works on one
+install and fails on another.
 
 <Callout type="warn">
-  The DuckDB build requires CGO. Cross-compiling to a different OS or architecture also requires a matching C cross-toolchain. The default CGO-free build is recommended unless you specifically need analytical SQL.
+  Cross-compiling to a different OS or architecture requires a matching C cross-toolchain. `pm` still has zero *runtime* dependencies -- no database, no cache, no network service -- which is unchanged.
 </Callout>
 
 </Tab>
@@ -105,25 +100,25 @@ CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
 
 ## Binary size profile
 
-The default CGO-free `pm` build is still a single local binary. After the connector architecture v2 cleanup, production builds embed only runtime connector bundle files: metadata, connection specs, read/write declarations, schemas, and connector docs.
+`pm` is still a single local binary. After the connector architecture v2 cleanup, production builds embed only runtime connector bundle files: metadata, connection specs, read/write declarations, schemas, and connector docs. Embedding DuckDB adds roughly 31 MiB, measured on darwin/arm64.
 
 | Build mode | Measured size | Use |
 |---|---:|---|
-| Default local build | 74,255,760 bytes (71 MiB) | Developer builds with normal Go symbol/debug data. |
-| Release-style stripped build | 59,172,752 bytes (56 MiB) | Recommended release profile: `go build -trimpath -ldflags="-s -w" ./cmd/pm`. |
+| Default local build | 137,779,042 bytes (131 MiB) | Developer builds with normal Go symbol/debug data. |
+| Release-style stripped build | 111,479,570 bytes (106 MiB) | Recommended release profile: `go build -trimpath -ldflags="-s -w" ./cmd/pm`. |
 
-Conformance-only files are intentionally left out of the shipping binary:
+Non-runtime validation files are intentionally left out of the shipping binary:
 
 | Excluded artifact | Raw size | Why it is not embedded |
 |---|---:|---|
 | `fixtures/**` | 22,496,157 bytes | Used only by connector replay/conformance tests. |
-| `api_surface.json` | 7,045,880 bytes | Used only by authoring and conformance coverage checks. |
+| `api_surface.json` | 7,045,880 bytes | Used by authoring validation, conformance, and full-certification inventory. |
 
-`connectorgen validate` and conformance tests still read the full on-disk definition tree, so the smaller production binary does not weaken connector validation. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
+`connectorgen validate`, conformance tests, and `pm connectors certify --full` from a source checkout still read the full on-disk definition tree, so the smaller production binary does not weaken connector validation. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
 
 ## Release cadence
 
-Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer for a major release.
+Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer; while pm is pre-1.0 they produce a minor release, and from `1.0.0` onward a major release.
 
 ## Verify your installation
 

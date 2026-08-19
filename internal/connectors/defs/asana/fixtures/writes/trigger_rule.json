@@ -1,0 +1,17 @@
+{
+  "record": {
+    "rule_trigger_gid": "fixture-rule-trigger-gid",
+    "data": {
+      "resource": "fixture-resource"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rule_triggers/fixture-rule-trigger-gid/run",
+    "body": {
+      "data": {
+        "resource": "fixture-resource"
+      }
+    }
+  }
+}

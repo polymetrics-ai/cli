@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-dolibarr
+  asset: icons/simple-icons/dolibarr.svg
+  title: Dolibarr
+  simple_icon_slug: dolibarr
+  simple_icon_hex: 263C5C
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Dolibarr
+  match: exact-name-or-slug
+  matched_by: dolibarr
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -33,49 +41,49 @@ CONFIGURATION
   page_size
   product_id
   thirdparty_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   thirdparties:
     primary key: id
     cursor: date_modification
-    fields: client(), country_code(), date_creation(), date_modification(), email(), fournisseur(), id(), name(), name_alias(), phone(), status(), town(), zip()
+    fields: client(string), country_code(string), date_creation(integer), date_modification(integer), email(string), fournisseur(string), id(string), name(string), name_alias(string), phone(string), status(string), town(string), zip(string)
   contacts:
     primary key: id
     cursor: date_modification
-    fields: country_code(), date_creation(), date_modification(), email(), firstname(), id(), lastname(), phone_mobile(), phone_pro(), socid(), statut(), town(), zip()
+    fields: country_code(string), date_creation(integer), date_modification(integer), email(string), firstname(string), id(string), lastname(string), phone_mobile(string), phone_pro(string), socid(string), statut(string), town(string), zip(string)
   products:
     primary key: id
     cursor: date_modification
-    fields: date_creation(), date_modification(), id(), label(), price(), price_ttc(), ref(), status(), status_buy(), stock_reel(), tva_tx(), type()
+    fields: date_creation(integer), date_modification(integer), id(string), label(string), price(string), price_ttc(string), ref(string), status(string), status_buy(string), stock_reel(string), tva_tx(string), type(string)
   invoices:
     primary key: id
     cursor: date_modification
-    fields: date(), date_creation(), date_modification(), id(), paye(), ref(), socid(), status(), total_ht(), total_ttc(), total_tva(), type()
+    fields: date(integer), date_creation(integer), date_modification(integer), id(string), paye(string), ref(string), socid(string), status(string), total_ht(string), total_ttc(string), total_tva(string), type(string)
   orders:
     primary key: id
     cursor: date_modification
-    fields: billed(), date(), date_creation(), date_modification(), id(), ref(), socid(), status(), total_ht(), total_ttc(), total_tva()
+    fields: billed(string), date(integer), date_creation(integer), date_modification(integer), id(string), ref(string), socid(string), status(string), total_ht(string), total_ttc(string), total_tva(string)
   thirdparty_detail:
     primary key: id
     cursor: date_modification
-    fields: address(), client(), code_client(), code_fournisseur(), country_code(), date_creation(), date_modification(), email(), fournisseur(), id(), name(), name_alias(), phone(), siren(), siret(), status(), town(), tva_intra(), zip()
+    fields: address(string), client(string), code_client(string), code_fournisseur(string), country_code(string), date_creation(integer), date_modification(integer), email(string), fournisseur(string), id(string), name(string), name_alias(string), phone(string), siren(string), siret(string), status(string), town(string), tva_intra(string), zip(string)
   contact_detail:
     primary key: id
     cursor: date_modification
-    fields: address(), country_code(), date_creation(), date_modification(), email(), firstname(), id(), lastname(), phone_mobile(), phone_pro(), poste(), socid(), statut(), town(), zip()
+    fields: address(string), country_code(string), date_creation(integer), date_modification(integer), email(string), firstname(string), id(string), lastname(string), phone_mobile(string), phone_pro(string), poste(string), socid(string), statut(string), town(string), zip(string)
   product_detail:
     primary key: id
     cursor: date_modification
-    fields: barcode(), date_creation(), date_modification(), description(), id(), label(), length(), price(), price_ttc(), ref(), status(), status_buy(), stock_reel(), tva_tx(), type(), weight()
+    fields: barcode(string), date_creation(integer), date_modification(integer), description(string), id(string), label(string), length(string), price(string), price_ttc(string), ref(string), status(string), status_buy(string), stock_reel(string), tva_tx(string), type(string), weight(string)
   invoice_detail:
     primary key: id
     cursor: date_modification
-    fields: date(), date_creation(), date_lim_reglement(), date_modification(), id(), note_private(), note_public(), paye(), ref(), remise_percent(), socid(), status(), total_ht(), total_ttc(), total_tva(), type()
+    fields: date(integer), date_creation(integer), date_lim_reglement(integer), date_modification(integer), id(string), note_private(string), note_public(string), paye(string), ref(string), remise_percent(string), socid(string), status(string), total_ht(string), total_ttc(string), total_tva(string), type(string)
   order_detail:
     primary key: id
     cursor: date_modification
-    fields: billed(), date(), date_creation(), date_livraison(), date_modification(), id(), note_private(), note_public(), ref(), remise_percent(), socid(), status(), total_ht(), total_ttc(), total_tva()
+    fields: billed(string), date(integer), date_creation(integer), date_livraison(integer), date_modification(integer), id(string), note_private(string), note_public(string), ref(string), remise_percent(string), socid(string), status(string), total_ht(string), total_ttc(string), total_tva(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -83,6 +91,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_thirdparty:
     endpoint: POST /thirdparties
+    required fields: name
     risk: external mutation; creates a live Dolibarr third party (customer/supplier); approval required
   update_thirdparty:
     endpoint: PUT /thirdparties/{{ record.id }}
@@ -94,6 +103,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr third party; approval required
   create_contact:
     endpoint: POST /contacts
+    required fields: lastname
     risk: external mutation; creates a live Dolibarr contact; approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.id }}
@@ -105,6 +115,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr contact; approval required
   create_product:
     endpoint: POST /products
+    required fields: ref, label
     risk: external mutation; creates a live Dolibarr product/service; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}
@@ -116,6 +127,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr product/service; approval required
   create_invoice:
     endpoint: POST /invoices
+    required fields: socid
     risk: external mutation; creates a live Dolibarr customer invoice (draft status); approval required
   update_invoice:
     endpoint: PUT /invoices/{{ record.id }}
@@ -132,6 +144,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; validates a live Dolibarr invoice, transitioning it out of draft status irreversibly and assigning its final reference number; approval required
   create_order:
     endpoint: POST /orders
+    required fields: socid
     risk: external mutation; creates a live Dolibarr sales order (draft status); approval required
   update_order:
     endpoint: PUT /orders/{{ record.id }}

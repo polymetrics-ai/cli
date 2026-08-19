@@ -13,6 +13,7 @@ DESCRIPTION
   Reads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query API via the OAuth 2.0 refresh-token grant. Read-only.
 
 ICON
+  id: quickbooks
   asset: icons/quickbooks.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -32,30 +33,30 @@ CONFIGURATION
   sandbox
   start_date
   token_url
-  client_id (secret)
-  client_secret (secret)
-  realm_id (secret)
-  refresh_token (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  realm_id (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   customers:
     primary key: id
-    fields: active(), balance(), display_name(), id()
+    fields: active(boolean), balance(number), display_name(string), id(string)
   invoices:
     primary key: id
-    fields: balance(), customer_ref(), doc_number(), id(), total_amt()
+    fields: balance(number), customer_ref(string), doc_number(string), id(string), total_amt(number)
   payments:
     primary key: id
-    fields: customer_ref(), id(), total_amt(), txn_date()
+    fields: customer_ref(string), id(string), total_amt(number), txn_date(string)
   accounts:
     primary key: id
-    fields: account_type(), classification(), id(), name()
+    fields: account_type(string), classification(string), id(string), name(string)
   vendors:
     primary key: id
-    fields: active(), balance(), display_name(), id()
+    fields: active(boolean), balance(number), display_name(string), id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external QuickBooks Online v3 Query API read of customer/invoice/payment/account/vendor entities

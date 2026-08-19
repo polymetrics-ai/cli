@@ -11,6 +11,7 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 
 ## Icon
 
+- id: looker
 - asset: icons/looker.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,7 +28,7 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - token_url
 - access_token (secret)
@@ -38,23 +39,23 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 
 - users:
   - primary key: id
-  - fields: display_name(), email(), id()
+  - fields: display_name(string), email(string), id(string)
 - groups:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - folders:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - looks:
   - primary key: id
-  - fields: folder_id(), id(), title()
+  - fields: folder_id(string), id(string), title(string)
 - dashboards:
   - primary key: id
-  - fields: folder_id(), id(), title()
+  - fields: folder_id(string), id(string), title(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

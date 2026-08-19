@@ -13,10 +13,11 @@ DESCRIPTION
   Reads Elasticsearch index metadata and documents through the REST API. Read-only.
 
 ICON
+  id: elasticsearch
   asset: icons/elasticsearch.svg
-  source: upstream_registry
-  review_status: upstream_seeded
-  review_url: https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
+  source: official
+  review_status: official_verified
+  review_url: https://www.elastic.co/docs/reference/elasticsearch
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  endpoint
+  endpoint (required)
   index
   max_pages
   mode
@@ -39,13 +40,13 @@ CONFIGURATION
 ETL STREAMS
   indices:
     primary key: index
-    fields: docs.count(), index()
+    fields: docs.count(string), index(string)
   documents:
     primary key: id
-    fields: id()
+    fields: id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Elasticsearch cluster read of index metadata and documents

@@ -42,6 +42,8 @@ export type ConnectorCliFlag = {
   mapsTo: string;
   format?: string;
   allowEmpty?: boolean;
+  minimum?: number;
+  required?: boolean;
 };
 
 export type ConnectorCliConstraint = {
@@ -75,6 +77,7 @@ export type ConnectorCliCommand = {
   availability: string;
   stream: string;
   write: string;
+  operation?: string;
   sourceCliPath: string;
   sourceUrl: string;
   flags: ConnectorCliFlag[];

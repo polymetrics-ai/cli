@@ -32,6 +32,9 @@ Decompose the problem (connector or implementation) into:
    sub-issues, and acceptance criteria.
 3. A dependency graph (which sub-issues are ready vs blocked) so the orchestrator can build a
    ready queue.
+4. For connector implementation work, exactly one target connector per implementation lane, plus a
+   foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated
+   connector changes. Do not plan those shared changes inside a connector PR.
 
 Write the decomposition to the phase planning area (`.planning/phases/<phase>/PLAN.md` or the
 parent roadmap the prompt names). Do not call `gh` — issue creation is the Codex issue-creator's
@@ -58,6 +61,7 @@ one sub-issue's write scope. Do not implement.
 Rules:
 
 - Plan before code. Every plan must be executable by a Codex worker with no further decisions.
+- Connector implementation task plans must include target connector scope, ownership guard evidence, changed-path compliance, and the foundation PR path or blocker.
 - Never request, print, store, summarize, or invent secrets.
 - Do not edit production files, shared parent artifacts you were not assigned, or other workers'
   branches.

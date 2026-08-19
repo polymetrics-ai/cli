@@ -1,0 +1,9 @@
+Passed:
+
+- `go vet ./internal/connectors/database ./internal/connectors/native/postgres`
+- `go build ./cmd/pm`
+- `make tidy-check`
+- `make lint` (0 issues)
+- `make docs-check`
+- `make smoke-no-build`
+- `make agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check`

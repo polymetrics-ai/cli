@@ -11,6 +11,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
@@ -31,23 +32,23 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - forms:
   - primary key: id
-  - fields: createdAt(), id(), isClosed(), name(), numberOfSubmissions(), status(), updatedAt(), workspaceId()
+  - fields: createdAt(string), id(string), isClosed(boolean), name(string), numberOfSubmissions(integer), status(string), updatedAt(string), workspaceId(string)
 - workspaces:
   - primary key: id
-  - fields: createdAt(), createdByUserId(), folders(), id(), index(), invites(), members(), name(), updatedAt()
+  - fields: createdAt(string), createdByUserId(string), folders(array), id(string), index(integer), invites(array), members(array), name(string), updatedAt(string)
 - webhooks:
   - primary key: id
-  - fields: createdAt(), eventTypes(), externalSubscriber(), formId(), httpHeaders(), id(), isEnabled(), lastSyncedAt(), signingSecret(), updatedAt(), url()
+  - fields: createdAt(string), eventTypes(array), externalSubscriber(string), formId(string), httpHeaders(array), id(string), isEnabled(boolean), lastSyncedAt(string), signingSecret(string), updatedAt(string), url(string)
 - submissions:
   - primary key: id
   - cursor: submitted_at
-  - fields: formId(), form_id(), id(), isCompleted(), pdfUrl(), previewUrl(), responses(), submittedAt(), submitted_at()
+  - fields: formId(string), form_id(string), id(string), isCompleted(boolean), pdfUrl(string), previewUrl(string), responses(array), submittedAt(string), submitted_at(string)
 
 ## Sync Modes
 
@@ -57,10 +58,11 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: formId, url, eventTypes
   - risk: registers an external endpoint to receive form submission events
 - update_webhook:
   - endpoint: PATCH /webhooks/{{ record.id }}
-  - required fields: id
+  - required fields: id, formId, url, eventTypes, isEnabled
   - risk: changes where and whether an existing webhook delivers form submission events
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}
@@ -68,6 +70,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
   - risk: stops delivery of form submission events to the webhook's registered endpoint; if this is the form's last webhook, the webhooks integration is also marked deleted
 - create_form:
   - endpoint: POST /forms
+  - required fields: blocks, status
   - risk: creates a new live form in the Tally account
 - update_form:
   - endpoint: PATCH /forms/{{ record.id }}
@@ -83,6 +86,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
   - risk: permanently removes a respondent's submission and its answers from Tally
 - create_workspace:
   - endpoint: POST /workspaces
+  - required fields: name
   - risk: creates a new workspace; requires the account to have a Pro subscription
 
 ## Security

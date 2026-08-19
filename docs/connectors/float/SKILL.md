@@ -11,9 +11,11 @@ Reads Float people, projects, clients, tasks, and departments through the Float 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,29 +31,29 @@ Reads Float people, projects, clients, tasks, and departments through the Float 
 - base_url
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - people:
   - primary key: people_id
-  - fields: active(), created(), department_id(), email(), employee_type(), job_title(), modified(), name(), people_id(), people_type_id(), role_id(), start_date()
+  - fields: active(integer), created(string), department_id(integer), email(string), employee_type(integer), job_title(string), modified(string), name(string), people_id(integer), people_type_id(integer), role_id(integer), start_date(string)
 - projects:
   - primary key: project_id
-  - fields: active(), budget_total(), budget_type(), client_id(), color(), created(), default_hourly_rate(), modified(), name(), non_billable(), notes(), project_id(), project_manager(), tags()
+  - fields: active(integer), budget_total(number), budget_type(integer), client_id(integer), color(string), created(string), default_hourly_rate(number), modified(string), name(string), non_billable(integer), notes(string), project_id(integer), project_manager(integer), tags(array)
 - clients:
   - primary key: client_id
-  - fields: client_id(), created(), modified(), name()
+  - fields: client_id(integer), created(string), modified(string), name(string)
 - tasks:
   - primary key: task_id
-  - fields: billable(), created(), modified(), name(), project_id(), task_id(), task_meta_id()
+  - fields: billable(integer), created(string), modified(string), name(string), project_id(integer), task_id(integer), task_meta_id(integer)
 - departments:
   - primary key: department_id
-  - fields: department_id(), name(), parent_id()
+  - fields: department_id(integer), name(string), parent_id(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

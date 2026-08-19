@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Encharge people, segments, fields, account tags, and schemas through the Encharge REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,27 +28,27 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   peoples:
     primary key: id
-    fields: company(), country(), createdAt(), email(), firstName(), id(), lastName(), name(), phone(), title(), updatedAt(), userId()
+    fields: company(string), country(string), createdAt(string), email(string), firstName(string), id(string), lastName(string), name(string), phone(string), title(string), updatedAt(string), userId(string)
   segments:
     primary key: id
-    fields: createdAt(), id(), name(), type(), updatedAt()
+    fields: createdAt(string), id(string), name(string), type(string), updatedAt(string)
   fields:
     primary key: name
-    fields: format(), name(), title(), type()
+    fields: format(string), name(string), title(string), type(string)
   account_tags:
     primary key: tag
-    fields: createdAt(), id(), tag()
+    fields: createdAt(string), id(string), tag(string)
   schemas:
     primary key: name
-    fields: name(), title(), type()
+    fields: name(string), title(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Encharge API read of people, segment, field, and tag data

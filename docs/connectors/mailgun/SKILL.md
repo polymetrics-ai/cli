@@ -11,6 +11,7 @@ Reads Mailgun sending domains, email events, mailing lists, and analytics tags t
 
 ## Icon
 
+- id: mailgun
 - asset: icons/mailgun.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,25 +32,25 @@ Reads Mailgun sending domains, email events, mailing lists, and analytics tags t
 - domain_name
 - mode
 - page_size
-- private_key (secret)
+- private_key (secret) (required)
 
 ## ETL Streams
 
 - domains:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), is_disabled(), name(), smtp_login(), spam_action(), state(), type(), wildcard()
+  - fields: created_at(string), id(string), is_disabled(boolean), name(string), smtp_login(string), spam_action(string), state(string), type(string), wildcard(boolean)
 - events:
   - primary key: id
   - cursor: timestamp
-  - fields: event(), id(), log_level(), message_id(), reason(), recipient(), timestamp()
+  - fields: event(string), id(string), log_level(string), message_id(string), reason(string), recipient(string), timestamp(number)
 - mailing_lists:
   - primary key: address
   - cursor: created_at
-  - fields: access_level(), address(), created_at(), description(), members_count(), name()
+  - fields: access_level(string), address(string), created_at(string), description(string), members_count(integer), name(string)
 - tags:
   - primary key: tag
-  - fields: description(), first_seen(), last_seen(), tag()
+  - fields: description(string), first_seen(string), last_seen(string), tag(string)
 
 ## Sync Modes
 

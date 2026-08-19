@@ -11,9 +11,11 @@ Reads OPUSWatch monitors, incidents, and checks.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,22 +31,22 @@ Reads OPUSWatch monitors, incidents, and checks.
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - monitors:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 - incidents:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 - checks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

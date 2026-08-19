@@ -1,0 +1,22 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "subscriber_hash": "fixture_subscriber_hash",
+    "tags": [],
+    "is_syncing": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/members/fixture_subscriber_hash/tags",
+    "body": {
+      "tags": [],
+      "is_syncing": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_members_tags"
+    }
+  }
+}

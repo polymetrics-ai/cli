@@ -11,9 +11,11 @@ Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and regi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,31 +29,31 @@ Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and regi
 ## Configuration
 
 - mode
-- subdomain
-- api_key (secret)
+- subdomain (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - products:
   - primary key: id
   - cursor: version
-  - fields: brand_id(), created_at(), description(), handle(), has_variants(), id(), is_active(), is_composite(), name(), price_excluding_tax(), price_including_tax(), product_category(), sku(), supplier_id(), supply_price(), updated_at(), version()
+  - fields: brand_id(string), created_at(string), description(string), handle(string), has_variants(boolean), id(string), is_active(boolean), is_composite(boolean), name(string), price_excluding_tax(number), price_including_tax(number), product_category(string), sku(string), supplier_id(string), supply_price(number), updated_at(string), version(integer)
 - customers:
   - primary key: id
   - cursor: version
-  - fields: balance(), created_at(), customer_code(), customer_group_id(), do_not_email(), enable_loyalty(), id(), loyalty_balance(), updated_at(), version(), year_to_date()
+  - fields: balance(number), created_at(string), customer_code(string), customer_group_id(string), do_not_email(boolean), enable_loyalty(boolean), id(string), loyalty_balance(number), updated_at(string), version(integer), year_to_date(number)
 - sales:
   - primary key: id
   - cursor: version
-  - fields: created_at(), customer_id(), id(), invoice_number(), register_id(), sale_date(), status(), total_price(), total_tax(), updated_at(), user_id(), version()
+  - fields: created_at(string), customer_id(string), id(string), invoice_number(string), register_id(string), sale_date(string), status(string), total_price(number), total_tax(number), updated_at(string), user_id(string), version(integer)
 - outlets:
   - primary key: id
   - cursor: version
-  - fields: currency(), currency_symbol(), default_tax_id(), display_prices(), id(), name(), time_zone(), version()
+  - fields: currency(string), currency_symbol(string), default_tax_id(string), display_prices(string), id(string), name(string), time_zone(string), version(integer)
 - registers:
   - primary key: id
   - cursor: version
-  - fields: email_receipt(), id(), invoice_prefix(), invoice_sequence(), is_open(), name(), outlet_id(), print_receipt(), version()
+  - fields: email_receipt(boolean), id(string), invoice_prefix(string), invoice_sequence(integer), is_open(boolean), name(string), outlet_id(string), print_receipt(boolean), version(integer)
 
 ## Sync Modes
 

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook_subscriptions",
+  "type": "object",
+  "x-primary-key": [
+    "_id"
+  ],
+  "required": [
+    "_id"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "companyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creationDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

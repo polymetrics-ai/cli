@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Clarifai applications, datasets, models, model versions, and workflows, and writes application/dataset lifecycle mutations, through the Clarifai v2 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-clarifai
+  asset: icons/simple-icons/clarifai.svg
+  title: Clarifai
+  simple_icon_slug: clarifai
+  simple_icon_hex: 1955FF
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Clarifai
+  match: curated-alias
+  matched_by: clarifai
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -28,45 +36,45 @@ CONFIGURATION
   app_id
   base_url
   mode
-  user_id
-  api_key (secret)
+  user_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   applications:
     primary key: id
-    fields: created_at(), default_language(), description(), id(), modified_at(), name(), user_id()
+    fields: created_at(string), default_language(string), description(string), id(string), modified_at(string), name(string), user_id(string)
   datasets:
     primary key: id
-    fields: app_id(), created_at(), default_processing_info(), description(), id(), modified_at(), user_id()
+    fields: app_id(string), created_at(string), default_processing_info(object), description(string), id(string), modified_at(string), user_id(string)
   models:
     primary key: id
-    fields: app_id(), created_at(), id(), model_type_id(), modified_at(), name(), user_id(), visibility()
+    fields: app_id(string), created_at(string), id(string), model_type_id(string), modified_at(string), name(string), user_id(string), visibility(object)
   model_versions:
     primary key: id
-    fields: app_id(), created_at(), description(), id(), modified_at(), status(), user_id()
+    fields: app_id(string), created_at(string), description(string), id(string), modified_at(string), status(object), user_id(string)
   workflows:
     primary key: id
-    fields: app_id(), created_at(), id(), modified_at(), user_id(), version()
+    fields: app_id(string), created_at(string), id(string), modified_at(string), user_id(string), version(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_application:
     endpoint: POST /users/{{ config.user_id }}/apps
-    optional fields: apps
+    required fields: apps
     risk: creates a new Clarifai application (workspace for datasets/models/workflows); low-risk (additive, no data loss)
   update_application:
     endpoint: PATCH /users/{{ config.user_id }}/apps
-    optional fields: action, apps
+    required fields: action, apps
     risk: updates an existing Clarifai application's settings (description, default workflow, notes); action=overwrite fully replaces the named fields rather than merging, so review the action value before use; approval required
   create_dataset:
     endpoint: POST /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
-    optional fields: datasets
+    required fields: datasets
     risk: creates a new Clarifai dataset within the configured app; low-risk (additive, no data loss)
   delete_dataset:
     endpoint: DELETE /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
-    optional fields: dataset_ids
+    required fields: dataset_ids
     risk: permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required
 
 SECURITY

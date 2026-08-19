@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/calendars/synthetic-conformance-value/acl",
+    "query": {
+      "maxResults": "250"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#acl",
+      "items": [
+        {
+          "kind": "calendar#aclRule",
+          "etag": "etag-acl",
+          "id": "synthetic-conformance-value",
+          "scope": {
+            "type": "user",
+            "value": "fixture@example.test"
+          },
+          "role": "reader"
+        }
+      ]
+    }
+  }
+}

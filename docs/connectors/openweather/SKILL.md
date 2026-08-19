@@ -11,6 +11,7 @@ Reads current weather, hourly and daily forecasts, and government alerts for a c
 
 ## Icon
 
+- id: openweather
 - asset: icons/openweather.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,30 +30,30 @@ Reads current weather, hourly and daily forecasts, and government alerts for a c
 
 - base_url
 - lang
-- lat
-- lon
+- lat (required)
+- lon (required)
 - mode
 - units
-- appid (secret)
+- appid (secret) (required)
 
 ## ETL Streams
 
 - current:
   - primary key: lat, lon, dt
   - cursor: dt
-  - fields: clouds(), dew_point(), dt(), feels_like(), humidity(), lat(), lon(), pressure(), sunrise(), sunset(), temp(), timezone(), uvi(), visibility(), weather(), wind_deg(), wind_gust(), wind_speed()
+  - fields: clouds(integer), dew_point(number), dt(integer), feels_like(number), humidity(integer), lat(string), lon(string), pressure(integer), sunrise(integer), sunset(integer), temp(number), timezone(string), uvi(number), visibility(integer), weather(array), wind_deg(integer), wind_gust(number), wind_speed(number)
 - hourly:
   - primary key: lat, lon, dt
   - cursor: dt
-  - fields: clouds(), dew_point(), dt(), feels_like(), humidity(), lat(), lon(), pop(), pressure(), temp(), timezone(), uvi(), visibility(), weather(), wind_deg(), wind_gust(), wind_speed()
+  - fields: clouds(integer), dew_point(number), dt(integer), feels_like(number), humidity(integer), lat(string), lon(string), pop(number), pressure(integer), temp(number), timezone(string), uvi(number), visibility(integer), weather(array), wind_deg(integer), wind_gust(number), wind_speed(number)
 - daily:
   - primary key: lat, lon, dt
   - cursor: dt
-  - fields: dt(), humidity(), lat(), lon(), pop(), pressure(), summary(), sunrise(), sunset(), temp_day(), temp_max(), temp_min(), timezone(), uvi(), weather(), wind_deg(), wind_speed()
+  - fields: dt(integer), humidity(integer), lat(string), lon(string), pop(number), pressure(integer), summary(string), sunrise(integer), sunset(integer), temp_day(number), temp_max(number), temp_min(number), timezone(string), uvi(number), weather(array), wind_deg(integer), wind_speed(number)
 - alerts:
   - primary key: lat, lon, start, event
   - cursor: start
-  - fields: description(), end(), event(), lat(), lon(), sender_name(), start(), tags(), timezone()
+  - fields: description(string), end(integer), event(string), lat(string), lon(string), sender_name(string), start(integer), tags(array), timezone(string)
 
 ## Sync Modes
 

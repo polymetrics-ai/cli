@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Squarespace orders, products, inventory, profiles, transactions, store pages, webhook subscriptions, and contacts, and writes webhook subscription mutations through the Squarespace Commerce API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-squarespace
+  asset: icons/simple-icons/squarespace.svg
+  title: Squarespace
+  simple_icon_slug: squarespace
+  simple_icon_hex: 000000
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Squarespace
+  match: exact-name-or-slug
+  matched_by: squarespace
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,35 +34,35 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   orders:
     primary key: id
     cursor: modifiedOn
-    fields: createdOn(), id(), modifiedOn(), orderNumber()
+    fields: createdOn(string), id(string), modifiedOn(string), orderNumber(string)
   products:
     primary key: id
     cursor: modifiedOn
-    fields: createdOn(), id(), modifiedOn(), name()
+    fields: createdOn(string), id(string), modifiedOn(string), name(string)
   inventory:
     primary key: sku
-    fields: modifiedOn(), quantity(), sku()
+    fields: modifiedOn(string), quantity(integer), sku(string)
   profiles:
     primary key: id
-    fields: createdOn(), id(), modifiedOn(), name()
+    fields: createdOn(string), id(string), modifiedOn(string), name(string)
   transactions:
     primary key: id
-    fields: createdOn(), customerEmail(), discounts(), id(), modifiedOn(), payments(), salesLineItems(), salesOrderId(), shippingLineItems(), total(), totalNetPayment(), totalNetSales(), totalNetShipping(), totalSales(), totalTaxes(), voided()
+    fields: createdOn(string), customerEmail(string), discounts(array), id(string), modifiedOn(string), payments(array), salesLineItems(array), salesOrderId(string), shippingLineItems(array), total(object), totalNetPayment(object), totalNetSales(object), totalNetShipping(object), totalSales(object), totalTaxes(object), voided(boolean)
   store_pages:
     primary key: id
-    fields: id(), isEnabled(), title(), urlSlug()
+    fields: id(string), isEnabled(boolean), title(string), urlSlug(string)
   webhook_subscriptions:
     primary key: id
-    fields: clientId(), createdOn(), endpointUrl(), id(), topics(), updatedOn(), websiteId()
+    fields: clientId(string), createdOn(string), endpointUrl(string), id(string), topics(array), updatedOn(string), websiteId(string)
   contacts:
     primary key: id
-    fields: createdOn(), defaultShippingAddress(), firstName(), id(), lastName(), locale(), primaryEmail()
+    fields: createdOn(string), defaultShippingAddress(object), firstName(string), id(string), lastName(string), locale(string), primaryEmail(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -62,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_webhook_subscription:
     endpoint: POST /webhook_subscriptions
+    required fields: endpointUrl
     risk: registers a new HTTPS endpoint to receive live order/contact/address event notifications; low-risk external mutation, no approval required
   delete_webhook_subscription:
     endpoint: DELETE /webhook_subscriptions/{{ record.id }}

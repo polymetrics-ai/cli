@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Plaid institutions and category metadata through read-only POST endpoints. All credentials and pagination/filter state travel in the JSON request body (Plaid's own convention), driven by a StreamHook.
 
 ICON
+  id: plaid
   asset: icons/plaid.svg
   source: official
   review_status: official_verified
@@ -31,19 +32,19 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  client_id (secret)
-  secret (secret)
+  client_id (secret) (required)
+  secret (secret) (required)
 
 ETL STREAMS
   institutions:
     primary key: institution_id
-    fields: country_codes(), institution_id(), name()
+    fields: country_codes(string), institution_id(string), name(string)
   categories:
     primary key: category_id
-    fields: category_id(), group(), hierarchy()
+    fields: category_id(string), group(string), hierarchy(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Plaid API read of institution/category metadata

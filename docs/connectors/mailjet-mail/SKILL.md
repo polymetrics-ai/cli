@@ -11,6 +11,7 @@ Reads Mailjet contacts, contact lists, messages, campaigns, and statistics throu
 
 ## Icon
 
+- id: mailjetmail
 - asset: icons/mailjetmail.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,33 +28,33 @@ Reads Mailjet contacts, contact lists, messages, campaigns, and statistics throu
 
 ## Configuration
 
-- api_key
+- api_key (required)
 - base_url
 - mode
 - page_size
-- api_key_secret (secret)
+- api_key_secret (secret) (required)
 
 ## ETL Streams
 
 - contacts:
   - primary key: ID
-  - fields: CreatedAt(), DeliveredCount(), Email(), ID(), IsExcludedFromCampaigns(), IsOptInPending(), IsSpamComplaining(), LastActivityAt(), LastUpdateAt(), Name()
+  - fields: CreatedAt(string), DeliveredCount(integer), Email(string), ID(integer), IsExcludedFromCampaigns(boolean), IsOptInPending(boolean), IsSpamComplaining(boolean), LastActivityAt(string), LastUpdateAt(string), Name(string)
 - contactslists:
   - primary key: ID
-  - fields: Address(), CreatedAt(), ID(), IsDeleted(), Name(), SubscriberCount()
+  - fields: Address(string), CreatedAt(string), ID(integer), IsDeleted(boolean), Name(string), SubscriberCount(integer)
 - messages:
   - primary key: ID
-  - fields: ArrivedAt(), AttemptCount(), CampaignID(), ContactID(), ID(), IsClickTracked(), IsOpenTracked(), MessageSize(), Status()
+  - fields: ArrivedAt(string), AttemptCount(integer), CampaignID(integer), ContactID(integer), ID(integer), IsClickTracked(boolean), IsOpenTracked(boolean), MessageSize(integer), Status(string)
 - campaigns:
   - primary key: ID
-  - fields: CreatedAt(), FromEmail(), FromName(), ID(), IsDeleted(), IsStarred(), SendStartAt(), Status(), Subject()
+  - fields: CreatedAt(string), FromEmail(string), FromName(string), ID(integer), IsDeleted(boolean), IsStarred(boolean), SendStartAt(string), Status(integer), Subject(string)
 - stats:
   - primary key: ID
-  - fields: ID(), MessageBouncedCount(), MessageClickedCount(), MessageDeliveredCount(), MessageOpenedCount(), MessageSentCount(), MessageSpamCount(), MessageUnsubscribedCount()
+  - fields: ID(integer), MessageBouncedCount(integer), MessageClickedCount(integer), MessageDeliveredCount(integer), MessageOpenedCount(integer), MessageSentCount(integer), MessageSpamCount(integer), MessageUnsubscribedCount(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

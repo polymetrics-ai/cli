@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/interviewerPool.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "interviewer_pool_list_id_fixture_68",
+          "title": "Title fixture 68",
+          "isArchived": false,
+          "trainingPath": {
+            "id": "interviewer_pool_list_id_fixture_68",
+            "enabled": false,
+            "trainingStages": [
+              {
+                "id": "interviewer_pool_list_id_fixture_68",
+                "interviewerRole": "Shadow",
+                "interviewsRequired": 68,
+                "isArchived": false,
+                "approvalRequired": false,
+                "approvers": [
+                  {
+                    "id": "interviewer_pool_list_id_fixture_68",
+                    "firstName": "Interviewer Pool List Firstname Fixture 68",
+                    "lastName": "Interviewer Pool List Lastname Fixture 68",
+                    "email": "interviewer_pool_list.email.68@example.invalid",
+                    "globalRole": "Organization Admin",
+                    "isEnabled": false,
+                    "updatedAt": "2026-01-12T08:00:00Z",
+                    "managerId": "interviewer_pool_list_managerid_fixture_68",
+                    "customFields": [
+                      {
+                        "id": "interviewer_pool_list_id_fixture_68",
+                        "isPrivate": false,
+                        "title": "Title fixture 68",
+                        "value": {
+                          "value": 68.0,
+                          "currencyCode": "interviewer_pool_list_currencycode_fixture_68"
+                        },
+                        "valueLabel": "interviewer_pool_list_valuelabel_fixture_68"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

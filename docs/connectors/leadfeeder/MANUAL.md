@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,23 +32,23 @@ CONFIGURATION
   end_date
   mode
   start_date
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
-    fields: currency(), id(), industry(), name(), status(), time_zone(), type()
+    fields: currency(string), id(string), industry(string), name(string), status(string), time_zone(string), type(string)
   leads:
     primary key: id
     cursor: last_visit_date
-    fields: city(), country(), employee_count(), first_visit_date(), id(), industry(), last_visit_date(), name(), quality(), type(), visits(), website()
+    fields: city(string), country(string), employee_count(string), first_visit_date(string), id(string), industry(string), last_visit_date(string), name(string), quality(integer), type(string), visits(integer), website(string)
   visits:
     primary key: id
     cursor: visit_date
-    fields: ended_at(), hostname(), id(), pageviews(), referring_url(), source(), started_at(), type(), visit_date(), visit_length()
+    fields: ended_at(string), hostname(string), id(string), pageviews(integer), referring_url(string), source(string), started_at(string), type(string), visit_date(string), visit_length(integer)
   custom_feeds:
     primary key: id
-    fields: id(), name(), type()
+    fields: id(string), name(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

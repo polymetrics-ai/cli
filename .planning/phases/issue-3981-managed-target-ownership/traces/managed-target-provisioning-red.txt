@@ -1,0 +1,22 @@
+# RED — TestManagedTargetProvisioningTruthTable
+
+Command run before the managed-target production implementation:
+
+```text
+go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'
+```
+
+Result: exit 1 / build failed. The test references the deliberately absent
+driver-neutral contract types:
+
+```text
+undefined: database.ManagedTargetSchema
+undefined: database.TargetOwner
+undefined: database.ManagedTargetRef
+undefined: database.ManagedTargetControlRecord
+undefined: database.ManagedTargetObservation
+undefined: database.ManagedTargetProvisioningPlan
+```
+
+This is the intended RED state: no shared owner/ref/control record, typed plan,
+or create-or-assert state machine existed on the #3974 parent foundation.

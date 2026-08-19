@@ -11,9 +11,11 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,50 +28,50 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: attribute_set_id(), created_at(), id(), name(), price(), sku(), status(), type_id(), updated_at(), visibility(), weight()
+  - fields: attribute_set_id(integer), created_at(string), id(integer), name(string), price(number), sku(string), status(integer), type_id(string), updated_at(string), visibility(integer), weight(number)
 - orders:
   - primary key: entity_id
   - cursor: updated_at
-  - fields: base_grand_total(), created_at(), customer_email(), customer_id(), entity_id(), grand_total(), increment_id(), order_currency_code(), state(), status(), updated_at()
+  - fields: base_grand_total(number), created_at(string), customer_email(string), customer_id(integer), entity_id(integer), grand_total(number), increment_id(string), order_currency_code(string), state(string), status(string), updated_at(string)
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), firstname(), group_id(), id(), lastname(), store_id(), updated_at(), website_id()
+  - fields: created_at(string), email(string), firstname(string), group_id(integer), id(integer), lastname(string), store_id(integer), updated_at(string), website_id(integer)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), is_active(), level(), name(), parent_id(), position(), product_count(), updated_at()
+  - fields: created_at(string), id(integer), is_active(boolean), level(integer), name(string), parent_id(integer), position(integer), product_count(integer), updated_at(string)
 - invoices:
   - primary key: entity_id
   - cursor: updated_at
-  - fields: base_grand_total(), created_at(), entity_id(), grand_total(), increment_id(), order_id(), state(), store_id(), updated_at()
+  - fields: base_grand_total(number), created_at(string), entity_id(integer), grand_total(number), increment_id(string), order_id(integer), state(integer), store_id(integer), updated_at(string)
 - shipments:
   - primary key: entity_id
   - cursor: created_at
-  - fields: created_at(), entity_id(), increment_id(), order_id(), shipment_status(), store_id(), total_qty(), updated_at()
+  - fields: created_at(string), entity_id(integer), increment_id(string), order_id(integer), shipment_status(integer), store_id(integer), total_qty(number), updated_at(string)
 - creditmemos:
   - primary key: entity_id
   - cursor: created_at
-  - fields: base_grand_total(), created_at(), entity_id(), grand_total(), increment_id(), order_id(), state(), store_id(), updated_at()
+  - fields: base_grand_total(number), created_at(string), entity_id(integer), grand_total(number), increment_id(string), order_id(integer), state(integer), store_id(integer), updated_at(string)
 - customer_groups:
   - primary key: id
-  - fields: code(), id(), tax_class_id(), tax_class_name()
+  - fields: code(string), id(integer), tax_class_id(integer), tax_class_name(string)
 - store_websites:
   - primary key: id
-  - fields: code(), default_group_id(), id(), is_default(), name()
+  - fields: code(string), default_group_id(integer), id(integer), is_default(boolean), name(string)
 - store_views:
   - primary key: id
-  - fields: code(), group_id(), id(), is_active(), name(), website_id()
+  - fields: code(string), group_id(integer), id(integer), is_active(boolean), name(string), website_id(integer)
 
 ## Sync Modes
 
@@ -83,6 +85,7 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
   - risk: external mutation; overwrites live Magento catalog product fields; approval required
 - create_category:
   - endpoint: POST /categories
+  - required fields: name, parent_id
   - risk: external mutation; creates a live Magento catalog category; approval required
 - update_category:
   - endpoint: PUT /categories/{{ record.id }}

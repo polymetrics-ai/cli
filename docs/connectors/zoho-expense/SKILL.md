@@ -11,9 +11,17 @@ Reads and writes Zoho Expense API v1 resources through the declarative connector
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-zoho-expense
+- asset: icons/simple-icons/zoho-expense.svg
+- title: Zoho
+- simple_icon_slug: zoho
+- simple_icon_hex: E42527
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
+- match: curated-alias
+- matched_by: zoho
 
 ## Capabilities
 
@@ -40,7 +48,7 @@ Reads and writes Zoho Expense API v1 resources through the declarative connector
 - tax_id
 - trip_id
 - user_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
@@ -58,82 +66,82 @@ Reads and writes Zoho Expense API v1 resources through the declarative connector
   - fields: id(), name(), updated_at(), user_id()
 - currencies:
   - primary key: currency_id
-  - fields: currency_id()
+  - fields: currency_id(string)
 - currency:
   - primary key: currency_id
-  - fields: currency_id()
+  - fields: currency_id(string)
 - customers:
   - primary key: customer_id
-  - fields: customer_id()
+  - fields: customer_id(string)
 - customer:
   - primary key: customer_id
-  - fields: customer_id()
+  - fields: customer_id(string)
 - advance_payments:
   - primary key: advance_payment_id
-  - fields: advance_payment_id()
+  - fields: advance_payment_id(string)
 - advance_payment:
   - primary key: advance_payment_id
-  - fields: advance_payment_id()
+  - fields: advance_payment_id(string)
 - expense_categories:
   - primary key: expense_category_id
-  - fields: expense_category_id()
+  - fields: expense_category_id(string)
 - expense_category:
   - primary key: expense_category_id
-  - fields: expense_category_id()
+  - fields: expense_category_id(string)
 - expense_report:
   - primary key: expense_report_id
-  - fields: expense_report_id()
+  - fields: expense_report_id(string)
 - expense_report_approval_history:
   - primary key: approval_id
-  - fields: approval_id()
+  - fields: approval_id(string)
 - expense_report_validation:
   - primary key: expense_report_id
-  - fields: expense_report_id()
+  - fields: expense_report_id(string)
 - expense_report_budget_summary:
   - primary key: expense_report_id
-  - fields: expense_report_id()
+  - fields: expense_report_id(string)
 - expense_report_reimbursement:
   - primary key: expense_report_id
-  - fields: expense_report_id()
+  - fields: expense_report_id(string)
 - organizations:
   - primary key: organization_id
-  - fields: organization_id()
+  - fields: organization_id(string)
 - organization:
   - primary key: organization_id
-  - fields: organization_id()
+  - fields: organization_id(string)
 - projects:
   - primary key: project_id
-  - fields: project_id()
+  - fields: project_id(string)
 - project:
   - primary key: project_id
-  - fields: project_id()
+  - fields: project_id(string)
 - reporting_tags:
   - primary key: tag_id
-  - fields: tag_id()
+  - fields: tag_id(string)
 - tag_options:
   - primary key: option_id
-  - fields: option_id()
+  - fields: option_id(string)
 - reporting_tag_options_all:
   - primary key: option_id
-  - fields: option_id()
+  - fields: option_id(string)
 - taxes:
   - primary key: tax_id
-  - fields: tax_id()
+  - fields: tax_id(string)
 - tax:
   - primary key: tax_id
-  - fields: tax_id()
+  - fields: tax_id(string)
 - tax_group:
   - primary key: tax_group_id
-  - fields: tax_group_id()
+  - fields: tax_group_id(string)
 - trips:
   - primary key: trip_id
-  - fields: trip_id()
+  - fields: trip_id(string)
 - trip:
   - primary key: trip_id
-  - fields: trip_id()
+  - fields: trip_id(string)
 - user:
   - primary key: user_id
-  - fields: user_id()
+  - fields: user_id(string)
 
 ## Sync Modes
 

@@ -11,6 +11,7 @@ Local JSONL destination that records reverse ETL writes and receipts.
 
 ## Icon
 
+- id: pm-outbox
 - asset: icons/pm-outbox.svg
 - source: polymetrics
 - review_status: polymetrics
@@ -60,7 +61,7 @@ pm connectors inspect outbox --json
 ```bash
 pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox
 pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Agent Rules

@@ -11,6 +11,7 @@ Reads configured datasets from the US Census Bureau's API via a caller-supplied 
 
 ## Icon
 
+- id: uscensus
 - asset: icons/uscensus.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -28,22 +29,22 @@ Reads configured datasets from the US Census Bureau's API via a caller-supplied 
 ## Configuration
 
 - base_url
-- query_params
-- query_path
+- query_params (required)
+- query_path (required)
 - api_key (secret)
 
 ## ETL Streams
 
 - query:
   - primary key: name
-  - fields: estab(), name()
+  - fields: estab(string), name(string)
 - datasets:
   - primary key: identifier
-  - fields: accessLevel(), c_dataset(), c_geographyLink(), c_isAvailable(), c_variablesLink(), c_vintage(), dataset_path(), description(), identifier(), modified(), title()
+  - fields: accessLevel(string), c_dataset(array), c_geographyLink(string), c_isAvailable(boolean), c_variablesLink(string), c_vintage(integer), dataset_path(string), description(string), identifier(string), modified(string), title(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

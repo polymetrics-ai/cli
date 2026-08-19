@@ -3,10 +3,11 @@
 Use this workflow for large work that needs one parent issue, multiple sub-issues, one parent branch,
 and sub-PRs that merge into the parent branch before the parent PR goes to `main`.
 
-When a parent issue has multiple workers or sub-issues, use
-`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`. The parent issue
-orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, and automated
-review coverage routing.
+For parent jobs, use the single-worker compatibility ownership contract at
+`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. It supersedes the legacy
+parent-orchestration entry point: the canonical worker owns shared parent artifacts, parent PR
+state, sub-PR integration decisions, and automated review coverage inline without spawning or
+assigning another worker or role.
 Use `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` before posting any
 review command or requesting Copilot backup review.
 
@@ -35,7 +36,7 @@ review command or requesting Copilot backup review.
   diff yet, create a deliberate parent seed commit before opening the draft parent PR:
   - Prefer a small roadmap/status scaffold commit when the repo needs one.
   - Use an empty commit when the roadmap already exists and any file change would be noise.
-  - Example: `git commit --allow-empty -m "chore(agentic): open parent orchestration pr"`.
+  - Example: `git commit --allow-empty -m "chore(agentic): open parent delivery pr"`.
   - The seed commit exists only to create the reviewable parent PR thread, checks surface, and
     Claude/GitHub review target.
 - A missing parent PR is a workflow blocker for stacked sub-issues. Do not treat a sub-PR as
@@ -77,32 +78,38 @@ keywords for PRs targeting the default branch.
    missing and no human gate blocks creation. If the parent branch has no diff against `main`, add
    the parent seed commit described above first.
 4. Create the sub-issue branch from the parent branch.
-5. Follow the issue-to-PR contract and test-first loop.
-6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
-7. Run targeted verification and broader issue verification.
-8. Run the Claude review loop and reply to every actionable finding with a disposition. Use
-   automatic review whenever the PR is non-draft and targets a reviewed base branch. Use manual
-   review commands only under the fallback conditions in `workflows/claude-review-loop.md`.
-   If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
-   blocking progress, request GitHub Copilot review once as backup when enabled.
-9. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
+5. Follow the issue-to-PR contract and test-first loop. For connector implementation lanes,
+   confirm exactly one target connector, ownership guard evidence, changed-path compliance, and any
+   foundation issue/PR path before production edits; split shared runtime/tooling or unrelated
+   connector work before the connector sub-PR proceeds.
+6. Run targeted verification and broader issue verification.
+7. Run the installed `code-review` flow, disposition every finding, and complete the applicable
+   no-mistakes child review, test, docs, and lint gates without `--yes`.
+8. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
    push to `main`; stop only when a human gate is triggered.
-10. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
-    review-routing event, not as approval. The sub-PR may be integrated into the parent branch only
-    when the parent PR exists and the orchestrator observes Claude review, or records an
-    allowed fallback route, on the parent PR commit range that includes the sub-issue.
-11. Merge the sub-PR into the parent branch without human approval only if every automated gate is
-    green, automated review coverage is satisfied through the sub-PR, parent-PR fallback, or
-    recorded Copilot/human fallback, and no human gate is triggered.
-12. After merging a sub-PR into the parent branch, push the parent branch and update the parent
-    PR's integrated-subissue list. If the parent PR is non-draft and targets `main`, wait for
-    automatic Claude review. If the parent PR is draft or automatic review is skipped, record
+9. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
+10. After the PR exists, wait for CI and run the Claude review loop, replying to every actionable
+    finding with a disposition. Use automatic review whenever the PR is non-draft and targets a
+    reviewed base branch. Use manual review commands only under the fallback conditions in
+    `workflows/claude-review-loop.md`. If Claude is rate-limited, skipped, disabled, paused, or
+    unavailable and review coverage is blocking progress, request GitHub Copilot review once as
+    backup when enabled.
+11. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
+    review-routing event, not as approval. If parent-PR fallback is selected, a technical landing
+    may expose that commit range on the parent PR, but record the wave checkpoint as held for parent
+    review; it is not canonical integration and must not unblock dependent work.
+12. Advance `integrate_sub_pr` only after every automated gate is green, review coverage is
+    satisfied through the sub-PR, parent-PR fallback, or recorded Copilot/human fallback, and no
+    human gate is triggered.
+13. After advancing `integrate_sub_pr`, push the parent branch and update the parent PR's
+    integrated-subissue list. If the parent PR is non-draft and targets `main`, wait for automatic
+    Claude review. If the parent PR is draft or automatic review is skipped, record parent-level
     coverage as pending or use the fallback rules in
     `workflows/automated-review-routing-loop.md`.
-13. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
+14. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
     route, and parent PR status.
-14. Leave the sub-issue open until the parent PR lands on `main`, unless the coordinator explicitly
-    decides that parent-branch integration is the definition of done.
+15. Leave the sub-issue open until the parent PR lands on `main`, unless the canonical worker
+    explicitly decides that parent-branch integration is the definition of done.
 
 ## Parent PR execution loop
 
@@ -115,18 +122,24 @@ keywords for PRs targeting the default branch.
 6. Mark the parent PR ready for human review.
 7. Human approval is required before merging the parent PR into `main`.
 
-## Merge without human approval
+## Child integration without human approval
 
-Sub-PR auto-merge into a parent branch is allowed only for integration branches and only when the
-sub-PR does not cross a human gate. Agents must stop instead of merging when:
+The canonical `integrate_sub_pr` state is allowed only on integration branches and only when the
+sub-PR does not cross a human gate. A technical landing used for parent-PR fallback remains held as
+described above and is not completed integration. Agents must stop instead of integrating when:
 
 - the sub-PR touches auth, secrets, dependencies, destructive external actions, production deploys,
   quality gates, generic write tools, or reverse ETL execution
 - automated review has unresolved actionable comments
 - Claude review was skipped for the sub-PR and no parent-PR review fallback has been created
 - Claude is rate-limited and no Copilot or human fallback route has been recorded
-- CI is failing or unavailable without a documented infrastructure reason
+- CI is failing or unavailable; a documented infrastructure reason records the blocker but never
+  substitutes for passing checks
 - the PR changes files outside the sub-issue scope
-- the parent branch owner marks the parent issue blocked
+- a connector implementation PR's own diff includes generic shared runtime/tooling or unrelated
+  connector changes; naming or linking a foundation issue/PR does not authorize those paths in the
+  connector PR, and they must be moved into the foundation PR before target-aware validation and
+  integration
+- the canonical worker records an unresolved parent job blocker
 
 The parent PR into `main` always requires human approval.

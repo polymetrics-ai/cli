@@ -39,9 +39,38 @@ pm init --root ./demo --json
 | Connections | state file | References credentials by name. |
 | Catalogs | state file | Stream names and schemas only. |
 | ETL runs | state file plus warehouse files | Records are written in bounded batches. |
-| Warehouse | JSONL files by default | DuckDB is available through the tagged build. |
-| Reverse plans | state file | Approval tokens are hashed; JSON output redacts them. |
+| Warehouse | Parquet tables, nested per connection | Queried in-process by embedded DuckDB. |
+| Reverse plans | state file | Approval tokens are hashed and omitted from JSON output. |
 | Schedules | schedule manifests | Local cron/system scheduler bridge. |
+
+### Warehouse layout
+
+Every materialized table lives inside the directory of the connection that
+produced it, so identity is a path component rather than a fragment of a
+filename:
+
+```
+.polymetrics/warehouse/
+  <workspace-id>/
+    <connector>/
+      <connection-id>/
+        owner.json            identity of the connection owning this directory
+        wal/<stream>.jsonl      append-only log; the source of truth
+        tables/<table>.parquet  derived table, rewritten wholesale
+```
+
+Two connections can target the same table name without one overwriting the
+other, because they never share a parent directory. Path components are opaque
+generated identifiers, never display names and never anything derived from a
+credential; the human-readable connection name is kept in `owner.json`, which is
+also asserted before every write. Connection names are validated at creation and
+ambiguous ones are refused rather than rewritten.
+
+A warehouse written by the earlier flat layout, in which every connection shared
+one table file, is refused on read and on write rather than migrated: which
+connection owned a flat table is unknowable, so guessing would recreate the data
+loss the nesting prevents. Delete the warehouse directory and re-run your syncs
+to rebuild it. `pm` never rewrites or deletes warehouse data on your behalf.
 
 ## Connector registry
 
@@ -56,6 +85,20 @@ The registry is generated from connector definition bundles. The public catalog 
 
 Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
 
+### Delivery and certification status
+
+Every connector flow goes through the local warehouse: API → warehouse → API,
+API → warehouse → database, database → warehouse → API, or database →
+warehouse → database. A connection to the same connector does not permit a
+direct hop. Reverse delivery remains plan → preview → approval → execute.
+
+Before a command is declared implemented, the real runtime must accept it in
+preflight; a JSON declaration or generated manual is not enough. Run
+`make connector-runtime-preflight` and `make connector-canon-check` for the
+repository guardrails. There are currently zero accepted live certifications;
+fixtures and certification configuration are not live proof. See the
+[Connector Delivery Canon](/docs/connector-delivery) for the full procedure.
+
 ## ETL engine
 
 ```bash
@@ -68,7 +111,7 @@ pm etl status <run-id> --json
 
 Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches.
 
-Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes require a cursor. Deduped modes require a primary key.
+Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes and deduped compatibility names require a cursor; deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names are accepted public inputs but currently refuse before source I/O unless a matching closed transport is admitted.
 
 ## Query engine
 
@@ -77,31 +120,53 @@ pm query run --table customers --limit 10 --json
 pm query run --sql "SELECT * FROM customers LIMIT 10" --json
 ```
 
-The default binary uses a pure-Go local JSONL query path. It is intentionally conservative. Build with the DuckDB tag when a workflow needs richer analytical SQL such as joins, window functions, or advanced aggregation.
+DuckDB is embedded in every binary and reads the Parquet tables in-process, so joins, window functions and advanced aggregation all work without a build flag. Only read-only `SELECT` and `WITH` statements are accepted.
 
 ## Reverse-ETL gate
 
 ```bash
 pm reverse plan customers_to_outbox --source-table customers --destination outbox:outbox-local --map id:external_id --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 pm reverse status <run-id> --json
 ```
 
-Reverse ETL is deliberately split across plan, preview, approval, and run. Agents can create and preview plans, but JSON plan output redacts approval tokens. Execution rejects missing, expired, replayed, or mismatched approval tokens.
+Reverse ETL is deliberately split across plan, preview, approval, and run. Agents can create and preview plans, but JSON plan output omits approval tokens. Execution rejects missing, expired, replayed, or mismatched approval tokens.
 
 ## Flows
 
 ```bash
+pm flow create --file flow.json --json
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run nightly_leads --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 ```
 
-Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
-Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
+Flow manifests describe ordered ETL, query, RLM, and action steps. `create`
+stores a flow only after its sync jobs resolve to existing ETL connections and
+its action jobs resolve to existing reverse-ETL plans with live standing
+authorization. Missing, malformed, unrecognised, and unapproved references are
+refused before the flow is written. `plan` and `preview` validate the manifest
+and DAG. `run` reloads every job, executes supported steps through existing app
+primitives, and checkpoints progress.
+
+Flow dependencies are inferred from `in` and `out` warehouse tables. RLM steps
+reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved
+from the flow manifest file.
+
+The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
+owns source selection, including the manifest selectors and fail-closed handling
+for case-equivalent or undecidable sources. This is manifest syntax, not a flow
+CLI flag. Approve a reverse-ETL job once at connection, schema, preview,
+mapping, destination action, credential revision, and confirmation-policy
+granularity, then reference that job from the action step. The flow derives its
+scope and authorization; no token or authorization reference is accepted by
+flow create or run. Each execution binds the resolved manifest and payload into
+a prepared-execution identity, dispatches through typed connector validation
+and write APIs, reads the target stream back, and persists an opaque receipt
+before checkpointing.
 
 ```json
 {
@@ -146,11 +211,24 @@ The worker serves the typed RLM Temporal workflow. It is not a generic remote co
 ```bash
 pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
 pm schedule list --json
+pm schedule inspect nightly --json
+pm schedule status nightly --json
 pm schedule install nightly --crontab --json
+pm schedule fire nightly --json
 pm schedule remove nightly --json
 ```
 
-Schedules store local cron expressions for named flows. Installation chooses a local scheduler backend; `--crontab` forces the crontab path.
+Schedules accept only an existing valid flow. Installation chooses a local
+scheduler backend; `--crontab` forces the crontab path. The installed command is
+exactly `pm --root <root> flow run <name> --json`, with no approval token or
+authorization reference in crontab, argv, schedule state, or JSON.
+
+Every unattended firing reloads its jobs and revalidates credential revision,
+manifest/schema, source scope, mappings, destination action, confirmation
+policy, expiry, and revocation before provider I/O. Any drift parks the
+schedule. Failed, ambiguous, rate-limited, and cleanup-failed writes also remain
+stopped or parked instead of replaying. Inspect/status exposes only terminal
+fire status, safe prepared-execution identities, and opaque receipt IDs.
 
 ## Runtime checks and benchmarks
 
@@ -161,7 +239,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-`pm runtime doctor` checks PostgreSQL, DragonflyDB, and Temporal endpoints. `pm perf compare --runtime` uses those services after the local ETL completes. `pm perf sync-modes` benchmarks the supported local sync modes.
+`pm runtime doctor` checks PostgreSQL, DragonflyDB, and Temporal endpoints. `pm perf compare --runtime` uses those services after the local ETL completes. `pm perf sync-modes` benchmarks local sync modes that materialize without a closed transport.
 
 ## Documentation gate
 

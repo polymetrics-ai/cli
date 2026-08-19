@@ -1,0 +1,24 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "segment_id": "fixture_segment_id",
+    "name": "fixture_name",
+    "static_segment": [],
+    "options": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/lists/fixture_list_id/segments/fixture_segment_id",
+    "body": {
+      "name": "fixture_name",
+      "static_segment": [],
+      "options": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_lists_segments"
+    }
+  }
+}

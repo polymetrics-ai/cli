@@ -13,9 +13,11 @@ DESCRIPTION
   Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -30,37 +32,37 @@ CONFIGURATION
   mode
   page_size
   word_search_terms
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   transcript:
     primary key: id
     cursor: created
-    fields: audio_url(), completed(), created(), error(), id(), resource_url(), status()
+    fields: audio_url(string), completed(string), created(string), error(string), id(string), resource_url(string), status(string)
   transcript_sentences:
     primary key: id
     cursor: created
-    fields: created(), id(), resource_url(), status()
+    fields: created(string), id(string), resource_url(string), status(string)
   transcript_paragraphs:
     primary key: id
     cursor: created
-    fields: created(), id(), resource_url(), status()
+    fields: created(string), id(string), resource_url(string), status(string)
   transcript_subtitle:
     primary key: id
     cursor: created
-    fields: created(), id(), resource_url(), status()
+    fields: created(string), id(string), resource_url(string), status(string)
   transcript_detail:
     primary key: id
-    fields: audio_channels(), audio_duration(), audio_url(), auto_chapters(), auto_highlights(), confidence(), entity_detection(), error(), format_text(), id(), language_code(), language_confidence(), punctuate(), redact_pii(), sentiment_analysis(), speaker_labels(), status(), summarization(), summary(), text(), webhook_status_code(), webhook_url()
+    fields: audio_channels(integer), audio_duration(number), audio_url(string), auto_chapters(boolean), auto_highlights(boolean), confidence(number), entity_detection(boolean), error(string), format_text(boolean), id(string), language_code(string), language_confidence(number), punctuate(boolean), redact_pii(boolean), sentiment_analysis(boolean), speaker_labels(boolean), status(string), summarization(boolean), summary(string), text(string), webhook_status_code(integer), webhook_url(string)
   transcript_sentence_items:
     primary key: transcript_id, start
-    fields: channel(), confidence(), end(), speaker(), start(), text(), transcript_id()
+    fields: channel(string), confidence(number), end(integer), speaker(string), start(integer), text(string), transcript_id(string)
   transcript_paragraph_items:
     primary key: transcript_id, start
-    fields: channel(), confidence(), end(), speaker(), start(), text(), transcript_id()
+    fields: channel(string), confidence(number), end(integer), speaker(string), start(integer), text(string), transcript_id(string)
   transcript_word_search_matches:
     primary key: transcript_id, text
-    fields: count(), indexes(), text(), timestamps(), transcript_id()
+    fields: count(integer), indexes(array), text(string), timestamps(array), transcript_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -68,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_transcript:
     endpoint: POST /v2/transcript
+    required fields: audio_url
     risk: external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required
 
 SECURITY

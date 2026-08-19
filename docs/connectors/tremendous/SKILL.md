@@ -11,9 +11,11 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -27,32 +29,32 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - orders:
   - primary key: id
-  - fields: campaign_id(), created_at(), id(), payment_status()
+  - fields: campaign_id(string), created_at(string), id(string), payment_status(string)
 - rewards:
   - primary key: id
-  - fields: created_at(), id(), order_id(), status()
+  - fields: created_at(string), id(string), order_id(string), status(string)
 - funding_sources:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - products:
   - primary key: id
-  - fields: category(), countries(), currency_codes(), description(), disclosure(), documents(), id(), images(), name(), skus(), subcategory(), usage_instructions()
+  - fields: category(string), countries(array), currency_codes(array), description(string), disclosure(string), documents(array), id(string), images(array), name(string), skus(array), subcategory(string), usage_instructions(string)
 - invoices:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency_code(), id(), international(), orders(), paid_at(), po_number(), rewards(), status()
+  - fields: amount(number), created_at(string), currency_code(string), id(string), international(boolean), orders(array), paid_at(string), po_number(string), rewards(array), status(string)
 - members:
   - primary key: id
-  - fields: active(), email(), id(), name(), role(), status()
+  - fields: active(boolean), email(string), id(string), name(string), role(string), status(string)
 
 ## Sync Modes
 
@@ -62,6 +64,7 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 
 - create_order:
   - endpoint: POST /api/v2/orders
+  - required fields: payment, reward
   - risk: spends real funding-source balance to issue a gift card / prepaid card / donation reward to a recipient; external mutation with real financial impact, approval required
 - approve_order:
   - endpoint: POST /api/v2/order_approvals/{{ record.id }}/approve
@@ -86,6 +89,7 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
   - risk: generates a new redemption link for an existing LINK-delivery reward; low-risk, does not move funds
 - create_invoice:
   - endpoint: POST /api/v2/invoices
+  - required fields: amount
   - risk: creates an invoice that funds the organization's Tremendous balance once paid; low direct risk (a document, not a payment itself), no approval required
 - delete_invoice:
   - endpoint: DELETE /api/v2/invoices/{{ record.id }}
@@ -93,9 +97,11 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
   - risk: removes an invoice; per Tremendous's own docs this is a cosmetic operation with no further financial consequence (an already-paid invoice's funds are unaffected)
 - create_member:
   - endpoint: POST /api/v2/members
+  - required fields: email, role
   - risk: invites a new user to manage the Tremendous organization (funding sources, campaigns, orders); grants organization access, approval required
 - create_webhook:
   - endpoint: POST /api/v2/webhooks
+  - required fields: url
   - risk: registers/replaces the organization's single webhook endpoint; a changed url redirects all future event deliveries to a different endpoint (Tremendous allows exactly one webhook per organization)
 - delete_webhook:
   - endpoint: DELETE /api/v2/webhooks/{{ record.id }}

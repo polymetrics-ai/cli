@@ -1,0 +1,597 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "offer_list",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the offer"
+    },
+    "decidedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "applicationId": {
+      "type": "string",
+      "description": "The id of the application associated with the offer"
+    },
+    "acceptanceStatus": {
+      "type": "string",
+      "description": "The candidate's acceptance status for the offer",
+      "enum": [
+        "Accepted",
+        "Declined",
+        "Pending",
+        "Created",
+        "Cancelled"
+      ]
+    },
+    "offerStatus": {
+      "type": "string",
+      "description": "The current status of the offer process",
+      "enum": [
+        "WaitingOnOfferCreation",
+        "WaitingOnApprovalStart",
+        "WaitingOnOfferApproval",
+        "WaitingOnApprovalDefinition",
+        "WaitingOnCandidateResponse",
+        "CandidateRejected",
+        "CandidateAccepted",
+        "OfferCancelled"
+      ]
+    },
+    "latestVersion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the offer version"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "salary": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "description": "The numeric currency amount"
+            },
+            "currencyCode": {
+              "type": "string",
+              "description": "A valid ISO 4217 currency code"
+            }
+          },
+          "required": [
+            "value",
+            "currencyCode"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The time the offer version was created",
+          "format": "date-time"
+        },
+        "openingId": {
+          "type": "string"
+        },
+        "customFields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the custom field"
+              },
+              "isPrivate": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string",
+                "description": "The custom field title"
+              },
+              "valueLabel": {
+                "type": "string"
+              },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "The numeric currency amount"
+                  },
+                  "currencyCode": {
+                    "type": "string",
+                    "description": "A valid ISO 4217 currency code"
+                  }
+                },
+                "required": [
+                  "value",
+                  "currencyCode"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "value"
+            ]
+          }
+        },
+        "fileHandles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the file"
+              },
+              "name": {
+                "type": "string",
+                "description": "The file name"
+              },
+              "handle": {
+                "type": "string",
+                "description": "The file handle that can be used with the file.info endpoint"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "handle"
+            ]
+          }
+        },
+        "author": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The unique identifier for the user"
+            },
+            "firstName": {
+              "type": "string",
+              "description": "The user's first name"
+            },
+            "lastName": {
+              "type": "string",
+              "description": "The user's last name"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "globalRole": {
+              "type": "string",
+              "description": "The user's global role in the organization",
+              "enum": [
+                "Organization Admin",
+                "Elevated Access",
+                "Limited Access",
+                "External Recruiter"
+              ]
+            },
+            "isEnabled": {
+              "type": "boolean",
+              "description": "Whether the user is enabled (not deactivated)"
+            },
+            "updatedAt": {
+              "type": "string",
+              "description": "The timestamp when the user was last updated (ISO 8601 format)"
+            },
+            "managerId": {
+              "type": "string",
+              "description": "The unique identifier for the user's manager"
+            },
+            "customFields": {
+              "type": "array",
+              "description": "Custom fields associated with the user (only included when requested)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "The unique identifier for the custom field definition"
+                  },
+                  "isPrivate": {
+                    "type": "boolean",
+                    "description": "Whether the custom field is private"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the custom field"
+                  },
+                  "value": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "description": "The currency amount"
+                      },
+                      "currencyCode": {
+                        "type": "string",
+                        "description": "The currency code"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "currencyCode"
+                    ]
+                  },
+                  "valueLabel": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "isPrivate",
+                  "title",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "id",
+            "firstName",
+            "lastName",
+            "email",
+            "globalRole",
+            "isEnabled",
+            "updatedAt"
+          ]
+        },
+        "approvalStatus": {
+          "type": "string",
+          "description": "The approval status of this offer version, if approvals are configured",
+          "enum": [
+            "Approved",
+            "WaitingOnApprovals",
+            "Declined"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "createdAt"
+      ]
+    },
+    "formDefinition": {
+      "type": "object",
+      "properties": {
+        "sections": {
+          "type": "array",
+          "description": "The sections in the form definition",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "descriptionHtml": {
+                "type": "string"
+              },
+              "descriptionPlain": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "array",
+                "description": "The fields in this form section",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "isRequired": {
+                      "type": "boolean",
+                      "description": "Whether this form field is required"
+                    },
+                    "descriptionHtml": {
+                      "type": "string"
+                    },
+                    "descriptionPlain": {
+                      "type": "string"
+                    },
+                    "field": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The unique identifier for the form definition field"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the form definition field"
+                        },
+                        "path": {
+                          "type": "string",
+                          "description": "The path used to submit values for this field"
+                        },
+                        "humanReadablePath": {
+                          "type": "string",
+                          "description": "The human-readable path for the form field"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "The display title for the form field"
+                        },
+                        "isNullable": {
+                          "type": "boolean",
+                          "description": "Whether the form field accepts null values"
+                        },
+                        "selectableValues": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "label": {
+                                "type": "string",
+                                "description": "The display label for the selectable value"
+                              },
+                              "value": {
+                                "type": "string",
+                                "description": "The submitted value for the selectable option"
+                              }
+                            },
+                            "required": [
+                              "label",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "path",
+                        "humanReadablePath",
+                        "title",
+                        "isNullable"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "isRequired",
+                    "field"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "fields"
+            ]
+          }
+        }
+      },
+      "required": [
+        "sections"
+      ]
+    },
+    "versions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the offer version"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "salary": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "description": "The numeric currency amount"
+              },
+              "currencyCode": {
+                "type": "string",
+                "description": "A valid ISO 4217 currency code"
+              }
+            },
+            "required": [
+              "value",
+              "currencyCode"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The time the offer version was created",
+            "format": "date-time"
+          },
+          "openingId": {
+            "type": "string"
+          },
+          "customFields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The unique identifier for the custom field"
+                },
+                "isPrivate": {
+                  "type": "boolean"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "The custom field title"
+                },
+                "valueLabel": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "description": "The numeric currency amount"
+                    },
+                    "currencyCode": {
+                      "type": "string",
+                      "description": "A valid ISO 4217 currency code"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "currencyCode"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "value"
+              ]
+            }
+          },
+          "fileHandles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The unique identifier for the file"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The file name"
+                },
+                "handle": {
+                  "type": "string",
+                  "description": "The file handle that can be used with the file.info endpoint"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "handle"
+              ]
+            }
+          },
+          "author": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the user"
+              },
+              "firstName": {
+                "type": "string",
+                "description": "The user's first name"
+              },
+              "lastName": {
+                "type": "string",
+                "description": "The user's last name"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "globalRole": {
+                "type": "string",
+                "description": "The user's global role in the organization",
+                "enum": [
+                  "Organization Admin",
+                  "Elevated Access",
+                  "Limited Access",
+                  "External Recruiter"
+                ]
+              },
+              "isEnabled": {
+                "type": "boolean",
+                "description": "Whether the user is enabled (not deactivated)"
+              },
+              "updatedAt": {
+                "type": "string",
+                "description": "The timestamp when the user was last updated (ISO 8601 format)"
+              },
+              "managerId": {
+                "type": "string",
+                "description": "The unique identifier for the user's manager"
+              },
+              "customFields": {
+                "type": "array",
+                "description": "Custom fields associated with the user (only included when requested)",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the custom field definition"
+                    },
+                    "isPrivate": {
+                      "type": "boolean",
+                      "description": "Whether the custom field is private"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "The title of the custom field"
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "description": "The currency amount"
+                        },
+                        "currencyCode": {
+                          "type": "string",
+                          "description": "The currency code"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "currencyCode"
+                      ]
+                    },
+                    "valueLabel": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "isPrivate",
+                    "title",
+                    "value"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "firstName",
+              "lastName",
+              "email",
+              "globalRole",
+              "isEnabled",
+              "updatedAt"
+            ]
+          },
+          "approvalStatus": {
+            "type": "string",
+            "description": "The approval status of this offer version, if approvals are configured",
+            "enum": [
+              "Approved",
+              "WaitingOnApprovals",
+              "Declined"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt"
+        ]
+      }
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

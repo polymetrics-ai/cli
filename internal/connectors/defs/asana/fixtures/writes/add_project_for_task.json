@@ -1,0 +1,21 @@
+{
+  "record": {
+    "task_gid": "fixture-task-gid",
+    "data": {
+      "project": "fixture-project",
+      "insert_after": "fixture-insert-after",
+      "insert_before": "fixture-insert-before"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/fixture-task-gid/addProject",
+    "body": {
+      "data": {
+        "project": "fixture-project",
+        "insert_after": "fixture-insert-after",
+        "insert_before": "fixture-insert-before"
+      }
+    }
+  }
+}

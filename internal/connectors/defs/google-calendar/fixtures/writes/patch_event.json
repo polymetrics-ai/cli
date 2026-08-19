@@ -1,0 +1,4 @@
+{
+  "record": {"calendar_id": "calendar_fixture_1", "event_id": "event_fixture_1", "summary": "Updated Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}},
+  "expect": {"method": "PATCH", "path": "/calendars/calendar_fixture_1/events/event_fixture_1", "body": {"summary": "Updated Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}}}
+}

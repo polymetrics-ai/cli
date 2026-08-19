@@ -11,9 +11,11 @@ Reads SolarWinds Service Desk incidents, problems, changes, change catalogs, rel
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -38,80 +40,80 @@ Reads SolarWinds Service Desk incidents, problems, changes, change catalogs, rel
 
 - incidents:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - departments:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - categories:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - problems:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - changes:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - change_catalogs:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - releases:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - solutions:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - catalog_items:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - configuration_items:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - sites:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - roles:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - groups:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - hardwares:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - mobiles:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - other_assets:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - softwares:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - printers:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - contracts:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - purchase_orders:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - vendors:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - audits:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - risks:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

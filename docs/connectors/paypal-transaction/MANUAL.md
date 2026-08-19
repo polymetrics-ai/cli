@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PayPal transactions, balances, catalog products, and customer disputes through the PayPal REST API using OAuth 2.0 client-credentials auth.
 
 ICON
+  id: paypal
   asset: icons/paypal.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,25 +31,25 @@ CONFIGURATION
   end_date
   max_pages
   mode
-  start_date
-  client_id (secret)
-  client_secret (secret)
+  start_date (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   transactions:
     primary key: transaction_id
     cursor: transaction_initiation_date
-    fields: amount(), currency_code(), fee_amount(), paypal_account_id(), transaction_event_code(), transaction_id(), transaction_initiation_date(), transaction_status(), transaction_updated_date()
+    fields: amount(string), currency_code(string), fee_amount(string), paypal_account_id(string), transaction_event_code(string), transaction_id(string), transaction_initiation_date(string), transaction_status(string), transaction_updated_date(string)
   balances:
     primary key: currency
-    fields: available_value(), currency(), primary(), total_currency_code(), total_value(), withheld_value()
+    fields: available_value(string), currency(string), primary(boolean), total_currency_code(string), total_value(string), withheld_value(string)
   products:
     primary key: id
-    fields: category(), create_time(), description(), id(), name(), type()
+    fields: category(string), create_time(string), description(string), id(string), name(string), type(string)
   disputes:
     primary key: dispute_id
     cursor: update_time
-    fields: create_time(), dispute_amount_currency_code(), dispute_amount_value(), dispute_id(), dispute_state(), reason(), status(), update_time()
+    fields: create_time(string), dispute_amount_currency_code(string), dispute_amount_value(string), dispute_id(string), dispute_state(string), reason(string), status(string), update_time(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

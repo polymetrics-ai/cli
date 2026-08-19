@@ -1,0 +1,30 @@
+{
+  "record": {
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "Contacts": [
+      "contact_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/Contacts",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "Contacts": [
+        "contact_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

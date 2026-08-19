@@ -11,6 +11,7 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 
 ## Icon
 
+- id: oura
 - asset: icons/oura.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -34,118 +35,118 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 - latest
 - start_date
 - start_datetime
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - personal_info:
   - primary key: id
-  - fields: age(), biological_sex(), email(), height(), id(), weight()
+  - fields: age(integer), biological_sex(string), email(string), height(number), id(string), weight(number)
 - daily_sleep:
   - primary key: id
   - cursor: day
-  - fields: day(), id(), score(), timestamp()
+  - fields: day(string), id(string), score(integer), timestamp(string)
 - daily_activity:
   - primary key: id
   - cursor: day
-  - fields: day(), id(), score(), timestamp()
+  - fields: day(string), id(string), score(integer), timestamp(string)
 - daily_readiness:
   - primary key: id
   - cursor: day
-  - fields: day(), id(), score(), timestamp()
+  - fields: day(string), id(string), score(integer), timestamp(string)
 - daily_cardiovascular_age:
   - primary key: id
-  - fields: day(), id(), pulse_wave_velocity(), vascular_age()
+  - fields: day(string), id(string), pulse_wave_velocity(number), vascular_age(integer)
 - daily_resilience:
   - primary key: id
-  - fields: contributors(), day(), id(), level()
+  - fields: contributors(object), day(string), id(string), level(string)
 - daily_spo2:
   - primary key: id
-  - fields: breathing_disturbance_index(), day(), id(), spo2_percentage()
+  - fields: breathing_disturbance_index(integer), day(string), id(string), spo2_percentage(object)
 - daily_stress:
   - primary key: id
-  - fields: day(), day_summary(), id(), recovery_high(), stress_high()
+  - fields: day(string), day_summary(string), id(string), recovery_high(integer), stress_high(integer)
 - enhanced_tag:
   - primary key: id
-  - fields: comment(), custom_name(), end_day(), end_time(), id(), start_day(), start_time(), tag_type_code()
+  - fields: comment(string), custom_name(string), end_day(string), end_time(string), id(string), start_day(string), start_time(string), tag_type_code(string)
 - rest_mode_period:
   - primary key: id
-  - fields: end_day(), end_time(), episodes(), id(), start_day(), start_time()
+  - fields: end_day(string), end_time(string), episodes(array), id(string), start_day(string), start_time(string)
 - ring_configuration:
   - primary key: id
-  - fields: color(), design(), firmware_version(), hardware_type(), id(), set_up_at(), size()
+  - fields: color(string), design(string), firmware_version(string), hardware_type(string), id(string), set_up_at(string), size(integer)
 - session:
   - primary key: id
-  - fields: day(), end_datetime(), heart_rate(), heart_rate_variability(), id(), mood(), motion_count(), start_datetime(), type()
+  - fields: day(string), end_datetime(string), heart_rate(object), heart_rate_variability(object), id(string), mood(string), motion_count(object), start_datetime(string), type(string)
 - sleep:
   - primary key: id
-  - fields: app_sleep_phase_5_min(), average_breath(), average_heart_rate(), average_hrv(), awake_time(), bedtime_end(), bedtime_start(), day(), deep_sleep_duration(), efficiency(), heart_rate(), hrv(), id(), latency(), light_sleep_duration(), low_battery_alert(), lowest_heart_rate(), movement_30_sec(), period(), readiness(), readiness_score_delta(), rem_sleep_duration(), restless_periods(), ring_id(), sleep_algorithm_version(), sleep_analysis_reason(), sleep_phase_30_sec(), sleep_phase_5_min(), sleep_score_delta(), time_in_bed(), total_sleep_duration(), type()
+  - fields: app_sleep_phase_5_min(string), average_breath(number), average_heart_rate(number), average_hrv(integer), awake_time(integer), bedtime_end(string), bedtime_start(string), day(string), deep_sleep_duration(integer), efficiency(integer), heart_rate(object), hrv(object), id(string), latency(integer), light_sleep_duration(integer), low_battery_alert(boolean), lowest_heart_rate(integer), movement_30_sec(string), period(integer), readiness(object), readiness_score_delta(integer), rem_sleep_duration(integer), restless_periods(integer), ring_id(string), sleep_algorithm_version(string), sleep_analysis_reason(string), sleep_phase_30_sec(string), sleep_phase_5_min(string), sleep_score_delta(integer), time_in_bed(integer), total_sleep_duration(integer), type(string)
 - sleep_time:
   - primary key: id
-  - fields: day(), id(), optimal_bedtime(), recommendation(), status()
+  - fields: day(string), id(string), optimal_bedtime(object), recommendation(string), status(string)
 - tag:
   - primary key: id
-  - fields: day(), id(), tags(), text(), timestamp()
+  - fields: day(string), id(string), tags(array), text(string), timestamp(string)
 - vo2_max:
   - primary key: id
-  - fields: day(), id(), timestamp(), vo2_max()
+  - fields: day(string), id(string), timestamp(string), vo2_max(integer)
 - workout:
   - primary key: id
-  - fields: activity(), calories(), day(), distance(), end_datetime(), id(), intensity(), label(), source(), start_datetime()
+  - fields: activity(string), calories(number), day(string), distance(number), end_datetime(string), id(string), intensity(string), label(string), source(string), start_datetime(string)
 - heartrate:
   - primary key: timestamp
-  - fields: bpm(), source(), timestamp(), timestamp_unix()
+  - fields: bpm(integer), source(string), timestamp(string), timestamp_unix(integer)
 - ring_battery_level:
   - primary key: timestamp
-  - fields: charging(), in_charger(), level(), timestamp(), timestamp_unix()
+  - fields: charging(boolean), in_charger(boolean), level(integer), timestamp(string), timestamp_unix(integer)
 - daily_sleep_detail:
   - primary key: id
-  - fields: contributors(), day(), id(), score(), timestamp()
+  - fields: contributors(object), day(string), id(string), score(integer), timestamp(string)
 - daily_activity_detail:
   - primary key: id
-  - fields: active_calories(), average_met_minutes(), class_5_min(), contributors(), day(), equivalent_walking_distance(), high_activity_met_minutes(), high_activity_time(), id(), inactivity_alerts(), low_activity_met_minutes(), low_activity_time(), medium_activity_met_minutes(), medium_activity_time(), met(), meters_to_target(), non_wear_time(), resting_time(), score(), sedentary_met_minutes(), sedentary_time(), steps(), target_calories(), target_meters(), timestamp(), total_calories()
+  - fields: active_calories(integer), average_met_minutes(number), class_5_min(string), contributors(object), day(string), equivalent_walking_distance(integer), high_activity_met_minutes(integer), high_activity_time(integer), id(string), inactivity_alerts(integer), low_activity_met_minutes(integer), low_activity_time(integer), medium_activity_met_minutes(integer), medium_activity_time(integer), met(object), meters_to_target(integer), non_wear_time(integer), resting_time(integer), score(integer), sedentary_met_minutes(integer), sedentary_time(integer), steps(integer), target_calories(integer), target_meters(integer), timestamp(string), total_calories(integer)
 - daily_readiness_detail:
   - primary key: id
-  - fields: contributors(), day(), id(), score(), temperature_deviation(), temperature_trend_deviation(), timestamp()
+  - fields: contributors(object), day(string), id(string), score(integer), temperature_deviation(number), temperature_trend_deviation(number), timestamp(string)
 - daily_cardiovascular_age_detail:
   - primary key: id
-  - fields: day(), id(), pulse_wave_velocity(), vascular_age()
+  - fields: day(string), id(string), pulse_wave_velocity(number), vascular_age(integer)
 - daily_resilience_detail:
   - primary key: id
-  - fields: contributors(), day(), id(), level()
+  - fields: contributors(object), day(string), id(string), level(string)
 - daily_spo2_detail:
   - primary key: id
-  - fields: breathing_disturbance_index(), day(), id(), spo2_percentage()
+  - fields: breathing_disturbance_index(integer), day(string), id(string), spo2_percentage(object)
 - daily_stress_detail:
   - primary key: id
-  - fields: day(), day_summary(), id(), recovery_high(), stress_high()
+  - fields: day(string), day_summary(string), id(string), recovery_high(integer), stress_high(integer)
 - enhanced_tag_detail:
   - primary key: id
-  - fields: comment(), custom_name(), end_day(), end_time(), id(), start_day(), start_time(), tag_type_code()
+  - fields: comment(string), custom_name(string), end_day(string), end_time(string), id(string), start_day(string), start_time(string), tag_type_code(string)
 - rest_mode_period_detail:
   - primary key: id
-  - fields: end_day(), end_time(), episodes(), id(), start_day(), start_time()
+  - fields: end_day(string), end_time(string), episodes(array), id(string), start_day(string), start_time(string)
 - ring_configuration_detail:
   - primary key: id
-  - fields: color(), design(), firmware_version(), hardware_type(), id(), set_up_at(), size()
+  - fields: color(string), design(string), firmware_version(string), hardware_type(string), id(string), set_up_at(string), size(integer)
 - session_detail:
   - primary key: id
-  - fields: day(), end_datetime(), heart_rate(), heart_rate_variability(), id(), mood(), motion_count(), start_datetime(), type()
+  - fields: day(string), end_datetime(string), heart_rate(object), heart_rate_variability(object), id(string), mood(string), motion_count(object), start_datetime(string), type(string)
 - sleep_detail:
   - primary key: id
-  - fields: app_sleep_phase_5_min(), average_breath(), average_heart_rate(), average_hrv(), awake_time(), bedtime_end(), bedtime_start(), day(), deep_sleep_duration(), efficiency(), heart_rate(), hrv(), id(), latency(), light_sleep_duration(), low_battery_alert(), lowest_heart_rate(), movement_30_sec(), period(), readiness(), readiness_score_delta(), rem_sleep_duration(), restless_periods(), ring_id(), sleep_algorithm_version(), sleep_analysis_reason(), sleep_phase_30_sec(), sleep_phase_5_min(), sleep_score_delta(), time_in_bed(), total_sleep_duration(), type()
+  - fields: app_sleep_phase_5_min(string), average_breath(number), average_heart_rate(number), average_hrv(integer), awake_time(integer), bedtime_end(string), bedtime_start(string), day(string), deep_sleep_duration(integer), efficiency(integer), heart_rate(object), hrv(object), id(string), latency(integer), light_sleep_duration(integer), low_battery_alert(boolean), lowest_heart_rate(integer), movement_30_sec(string), period(integer), readiness(object), readiness_score_delta(integer), rem_sleep_duration(integer), restless_periods(integer), ring_id(string), sleep_algorithm_version(string), sleep_analysis_reason(string), sleep_phase_30_sec(string), sleep_phase_5_min(string), sleep_score_delta(integer), time_in_bed(integer), total_sleep_duration(integer), type(string)
 - sleep_time_detail:
   - primary key: id
-  - fields: day(), id(), optimal_bedtime(), recommendation(), status()
+  - fields: day(string), id(string), optimal_bedtime(object), recommendation(string), status(string)
 - tag_detail:
   - primary key: id
-  - fields: day(), id(), tags(), text(), timestamp()
+  - fields: day(string), id(string), tags(array), text(string), timestamp(string)
 - vo2_max_detail:
   - primary key: id
-  - fields: day(), id(), timestamp(), vo2_max()
+  - fields: day(string), id(string), timestamp(string), vo2_max(integer)
 - workout_detail:
   - primary key: id
-  - fields: activity(), calories(), day(), distance(), end_datetime(), id(), intensity(), label(), source(), start_datetime()
+  - fields: activity(string), calories(number), day(string), distance(number), end_datetime(string), id(string), intensity(string), label(string), source(string), start_datetime(string)
 
 ## Sync Modes
 

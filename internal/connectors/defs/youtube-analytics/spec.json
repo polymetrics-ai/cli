@@ -23,7 +23,7 @@
       "type": "string",
       "format": "uri",
       "default": "https://youtubereporting.googleapis.com/v1",
-      "description": "YouTube Reporting API base URL override for tests or proxies."
+      "description": "YouTube Reporting API base URL override for tests or proxies. Reporting streams and job write actions use this host."
     },
     "token_url": {
       "type": "string",
@@ -34,20 +34,41 @@
     "scopes": {
       "type": "string",
       "default": "https://www.googleapis.com/auth/yt-analytics.readonly",
-      "description": "OAuth scope requested on the token-refresh grant."
+      "description": "OAuth scope requested on the token-refresh grant. Use a caller-controlled value only when the selected Google account and operation require a different documented YouTube Analytics/Reporting scope."
     },
     "content_owner_id": {
       "type": "string",
-      "description": "Optional content-owner ID; sent as the onBehalfOfContentOwner query parameter for content-owner-scoped accounts."
+      "description": "Optional content-owner ID; sent as the onBehalfOfContentOwner query parameter for content-owner-scoped read streams. Declarative write actions omit this optional query parameter until write-action query templates are supported."
     },
     "job_id": {
       "type": "string",
-      "description": "Reporting job ID the 'reports' stream is scoped to (required only when reading the reports stream)."
+      "description": "Reporting job ID. Required when reading the reports stream, the single job stream, or the single report stream."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Reporting report ID. Required when reading the single report stream."
+    },
+    "include_system_managed": {
+      "type": "string",
+      "enum": ["true", "false"],
+      "description": "Optional includeSystemManaged value for Reporting jobs and report types."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional Reporting reports.list createdAfter filter, expressed as an RFC3339/Google datetime string."
+    },
+    "start_time_at_or_after": {
+      "type": "string",
+      "description": "Optional Reporting reports.list startTimeAtOrAfter filter, expressed as an RFC3339/Google datetime string."
+    },
+    "start_time_before": {
+      "type": "string",
+      "description": "Optional Reporting reports.list startTimeBefore filter, expressed as an RFC3339/Google datetime string."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-100)."
+      "description": "Records per page (1-100 for Reporting list operations)."
     },
     "max_pages": {
       "type": "string",

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,17 +29,17 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   bucket_stats:
     primary key: id
     cursor: date
-    fields: bucket(), date(), id(), storage_bytes()
+    fields: bucket(string), date(string), id(string), storage_bytes(integer)
   account_stats:
     primary key: id
     cursor: date
-    fields: date(), id(), object_count(), storage_bytes()
+    fields: date(string), id(string), object_count(integer), storage_bytes(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

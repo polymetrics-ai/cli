@@ -1,0 +1,1746 @@
+{
+  "actions": [
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Conversation."
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversationId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Conversation.",
+      "path_fields": [
+        "conversationId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversationId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Conversation.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversationId }}/attachments/{{ record.attachmentId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachmentId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "attachmentId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Attachment.",
+      "path_fields": [
+        "conversationId",
+        "attachmentId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_chat_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/chats",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Chat Thread.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "create_customer_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/customer",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Customer Thread.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "update_custom_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversationId }}/fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Custom Fields.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Note.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "create_phone_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/phones",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Phone Thread.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "create_reply_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/reply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Reply Thread.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "delete_snooze",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversationId }}/snooze",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Snooze.",
+      "path_fields": [
+        "conversationId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_snooze",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversationId }}/snooze",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Snooze.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "update_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversationId }}/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Tags.",
+      "path_fields": [
+        "conversationId"
+      ]
+    },
+    {
+      "name": "update_thread",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversationId }}/threads/{{ record.threadId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "threadId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "threadId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Thread.",
+      "path_fields": [
+        "conversationId",
+        "threadId"
+      ]
+    },
+    {
+      "name": "upload_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversationId }}/threads/{{ record.threadId }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "threadId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "threadId"
+        ]
+      },
+      "risk": "Help Scout mutation: Upload Attachment.",
+      "path_fields": [
+        "conversationId",
+        "threadId"
+      ]
+    },
+    {
+      "name": "delete_thread_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversationId }}/threads/{{ record.threadId }}/schedule",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "threadId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "threadId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Thread Schedule.",
+      "path_fields": [
+        "conversationId",
+        "threadId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "publish_thread_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversationId }}/threads/{{ record.threadId }}/schedule",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "threadId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "threadId"
+        ]
+      },
+      "risk": "Help Scout mutation: Publish Thread Schedule.",
+      "path_fields": [
+        "conversationId",
+        "threadId"
+      ]
+    },
+    {
+      "name": "update_thread_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversationId }}/threads/{{ record.threadId }}/schedule",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "threadId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversationId",
+          "threadId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Thread Schedule.",
+      "path_fields": [
+        "conversationId",
+        "threadId"
+      ]
+    },
+    {
+      "name": "create_customer_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer-properties",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Customer Property Definition."
+    },
+    {
+      "name": "delete_customer_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customer-properties/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "slug"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Customer Property Definition.",
+      "path_fields": [
+        "slug"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Customer."
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "async": {
+            "type": [
+              "string",
+              "boolean"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Customer. Hard-deletes the customer, their microsurvey responses and every conversation they participated in, in compliance with GDPR erasure. There is no undo. Pass async=true to run it asynchronously (202 Accepted instead of 204 No Content), which is the only form that works for a customer with more than 100 conversations.",
+      "path_fields": [
+        "customerId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "query": {
+        "async": {
+          "template": "{{ record.async }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customers/{{ record.customerId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Customer.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "overwrite_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Overwrite Customer.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/address",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Address.",
+      "path_fields": [
+        "customerId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/address",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Address.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "update_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/address",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Address.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "create_chat_handle",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/chats",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Chat Handle.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_chat_handle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/chats/{{ record.chatId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "chatId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "chatId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Chat Handle.",
+      "path_fields": [
+        "customerId",
+        "chatId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_chat_handles",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/chats/{{ record.chatId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "chatId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "chatId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Chat Handles.",
+      "path_fields": [
+        "customerId",
+        "chatId"
+      ]
+    },
+    {
+      "name": "create_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Email.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/emails/{{ record.emailId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "emailId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "emailId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Email.",
+      "path_fields": [
+        "customerId",
+        "emailId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_email",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/emails/{{ record.emailId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "emailId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "emailId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Email.",
+      "path_fields": [
+        "customerId",
+        "emailId"
+      ]
+    },
+    {
+      "name": "create_phone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/phones",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Phone.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_phone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/phones/{{ record.phoneId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "phoneId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "phoneId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Phone.",
+      "path_fields": [
+        "customerId",
+        "phoneId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_phone",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/phones/{{ record.phoneId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "phoneId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "phoneId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Phone.",
+      "path_fields": [
+        "customerId",
+        "phoneId"
+      ]
+    },
+    {
+      "name": "update_customer_properties",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customers/{{ record.customerId }}/properties",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Customer Properties.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "create_social_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/social-profiles",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Social Profile.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_social_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/social-profiles/{{ record.socialProfileId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "socialProfileId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "socialProfileId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Social Profile.",
+      "path_fields": [
+        "customerId",
+        "socialProfileId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_social_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/social-profiles/{{ record.socialProfileId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "socialProfileId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "socialProfileId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Social Profile.",
+      "path_fields": [
+        "customerId",
+        "socialProfileId"
+      ]
+    },
+    {
+      "name": "create_website",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customerId }}/websites",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Website.",
+      "path_fields": [
+        "customerId"
+      ]
+    },
+    {
+      "name": "delete_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerId }}/websites/{{ record.websiteId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "websiteId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "websiteId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Website.",
+      "path_fields": [
+        "customerId",
+        "websiteId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_website",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerId }}/websites/{{ record.websiteId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "websiteId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customerId",
+          "websiteId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Website.",
+      "path_fields": [
+        "customerId",
+        "websiteId"
+      ]
+    },
+    {
+      "name": "update_routing_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/mailboxes/{{ record.mailboxId }}/routing",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mailboxId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailboxId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Routing configuration.",
+      "path_fields": [
+        "mailboxId"
+      ]
+    },
+    {
+      "name": "create_saved_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mailboxes/{{ record.mailboxId }}/saved-replies",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mailboxId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailboxId"
+        ]
+      },
+      "risk": "Help Scout mutation: Create Saved Reply.",
+      "path_fields": [
+        "mailboxId"
+      ]
+    },
+    {
+      "name": "delete_saved_reply",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/mailboxes/{{ record.mailboxId }}/saved-replies/{{ record.savedReplyId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mailboxId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "savedReplyId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailboxId",
+          "savedReplyId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Saved Reply.",
+      "path_fields": [
+        "mailboxId",
+        "savedReplyId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_saved_reply",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/mailboxes/{{ record.mailboxId }}/saved-replies/{{ record.savedReplyId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mailboxId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "savedReplyId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailboxId",
+          "savedReplyId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Saved Reply.",
+      "path_fields": [
+        "mailboxId",
+        "savedReplyId"
+      ]
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Organization."
+    },
+    {
+      "name": "create_organization_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/properties",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Organization Property Definition."
+    },
+    {
+      "name": "delete_organization_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/properties/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "slug"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Organization Property Definition.",
+      "path_fields": [
+        "slug"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_organization_property_definition",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/properties/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "slug"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Organization Property Definition.",
+      "path_fields": [
+        "slug"
+      ]
+    },
+    {
+      "name": "delete_organization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organizationId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Organization by ID.",
+      "path_fields": [
+        "organizationId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organizationId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organizationId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Organization.",
+      "path_fields": [
+        "organizationId"
+      ]
+    },
+    {
+      "name": "remove_organization_property_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}/properties/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organizationId",
+          "slug"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Remove Organization Property Value.",
+      "path_fields": [
+        "organizationId",
+        "slug"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_organization_property_value",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organizationId }}/properties/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organizationId",
+          "slug"
+        ]
+      },
+      "risk": "Help Scout mutation: Set Organization Property Value.",
+      "path_fields": [
+        "organizationId",
+        "slug"
+      ]
+    },
+    {
+      "name": "update_team_members",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/teams/{{ record.teamId }}/members",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teamId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Team Members.",
+      "path_fields": [
+        "teamId"
+      ]
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create User."
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.userId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "userId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete User.",
+      "path_fields": [
+        "userId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conversation_reassignment_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.userId }}/conversation-reassignment",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "userId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Conversation Reassignment configuration.",
+      "path_fields": [
+        "userId"
+      ]
+    },
+    {
+      "name": "set_user_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.userId }}/status",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "userId"
+        ]
+      },
+      "risk": "Help Scout mutation: Set user status.",
+      "path_fields": [
+        "userId"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Help Scout mutation: Create Webhook."
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhookId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webhookId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "webhookId"
+        ]
+      },
+      "risk": "Destructive Help Scout mutation: Delete Webhook.",
+      "path_fields": [
+        "webhookId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.webhookId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webhookId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "webhookId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update Webhook.",
+      "path_fields": [
+        "webhookId"
+      ]
+    },
+    {
+      "name": "update_workflow_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/workflows/{{ record.workflowId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workflowId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workflowId"
+        ]
+      },
+      "risk": "Help Scout mutation: Update workflow status.",
+      "path_fields": [
+        "workflowId"
+      ]
+    },
+    {
+      "name": "run_manual_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflowId }}/run",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workflowId": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workflowId"
+        ]
+      },
+      "risk": "Help Scout mutation: Run Manual Workflows.",
+      "path_fields": [
+        "workflowId"
+      ]
+    }
+  ]
+}

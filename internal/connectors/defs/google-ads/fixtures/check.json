@@ -1,7 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/customers:listAccessibleCustomers" },
+  "request": {
+    "method": "GET",
+    "path": "/v22/customers:listAccessibleCustomers"
+  },
   "response": {
     "status": 200,
-    "body": { "resourceNames": [] }
+    "body": {
+      "resourceNames": []
+    }
   }
 }

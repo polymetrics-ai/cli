@@ -11,9 +11,11 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -38,87 +40,87 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 - reviewer_external_id
 - reviewer_id
 - setting_keys
-- shop_domain
+- shop_domain (required)
 - webhook_id
 - widget_page
 - widget_per_page
 - widget_review_type
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - reviews:
   - primary key: id
   - cursor: created_at
-  - fields: body(), created_at(), curated(), hidden(), id(), product_external_id(), published(), rating(), reviewer_email(), reviewer_id(), reviewer_name(), source(), title(), updated_at(), verified()
+  - fields: body(string), created_at(string), curated(string), hidden(boolean), id(integer), product_external_id(string), published(boolean), rating(integer), reviewer_email(string), reviewer_id(integer), reviewer_name(string), source(string), title(string), updated_at(string), verified(string)
 - products:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), external_id(), handle(), id(), title(), updated_at(), url()
+  - fields: created_at(string), external_id(string), handle(string), id(integer), title(string), updated_at(string), url(string)
 - widgets:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status(), updated_at(), widget_type()
+  - fields: created_at(string), id(integer), name(string), status(string), updated_at(string), widget_type(string)
 - product_review_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - preview_badge_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - featured_carousel_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - reviews_tab_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - all_reviews_page_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - verified_badge_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - all_reviews_count_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - all_reviews_rating_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - shop_reviews_count_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - shop_reviews_rating_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - widget_settings:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - html_miracle_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - checkout_comments_widget:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - reviews_count:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 - review:
   - primary key: id
-  - fields: body(), created_at(), curated(), has_published_pictures(), has_published_videos(), hidden(), id(), pictures(), product_external_id(), product_handle(), product_title(), rating(), reviewer(), reviewer_email(), reviewer_id(), reviewer_name(), source(), title(), updated_at(), verified()
+  - fields: body(string), created_at(string), curated(string), has_published_pictures(boolean), has_published_videos(boolean), hidden(boolean), id(integer), pictures(array), product_external_id(string), product_handle(string), product_title(string), rating(integer), reviewer(object), reviewer_email(string), reviewer_id(integer), reviewer_name(string), source(string), title(string), updated_at(string), verified(string)
 - reviewer:
   - primary key: id
-  - fields: accepts_marketing(), email(), external_id(), id(), name(), phone(), tags(), unsubscribed_at()
+  - fields: accepts_marketing(boolean), email(string), external_id(integer), id(integer), name(string), phone(string), tags(array), unsubscribed_at(string)
 - webhooks:
   - primary key: id
-  - fields: failure_count(), id(), key(), url()
+  - fields: failure_count(integer), id(integer), key(string), url(string)
 - webhook:
   - primary key: id
-  - fields: failure_count(), id(), key(), url()
+  - fields: failure_count(integer), id(integer), key(string), url(string)
 - shop_info:
   - primary key: id
-  - fields: awesome(), country(), created_at(), currency(), custom_domain(), domain(), email(), id(), name(), owner(), phone(), plan(), platform(), timezone(), updated_at(), widget_version()
+  - fields: awesome(boolean), country(string), created_at(string), currency(string), custom_domain(string), domain(string), email(string), id(integer), name(string), owner(string), phone(string), plan(string), platform(string), timezone(string), updated_at(string), widget_version(string)
 - settings:
   - primary key: id
-  - fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+  - fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 
 ## Sync Modes
 
@@ -128,31 +130,35 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 
 - create_review:
   - endpoint: POST /reviews
+  - required fields: shop_domain, platform, name, email, rating, body
   - risk: creates a public web review in Judge.me; approval required
 - update_review:
   - endpoint: PUT /reviews/{{ record.id }}
-  - required fields: id
+  - required fields: id, curated
   - risk: publishes or hides a Judge.me review by changing curated status; approval required
 - update_reviewer:
   - endpoint: PUT /reviewers/{{ record.id }}
-  - required fields: id
+  - required fields: id, reviewer
   - risk: creates or updates reviewer identity fields in Judge.me; approval required
 - request_reviewer_data:
   - endpoint: POST /reviewers/data_request
+  - required fields: customer
   - risk: submits a Judge.me reviewer data request; approval required
 - delete_webhook:
   - endpoint: DELETE /webhooks
-  - optional fields: key, url
+  - required fields: key, url
   - risk: deletes a Judge.me webhook subscription; approval required
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: webhook
   - risk: creates a Judge.me webhook subscription; approval required
 - update_webhook:
   - endpoint: PUT /webhooks/{{ record.id }}
-  - required fields: id
+  - required fields: id, webhook
   - risk: updates a Judge.me webhook subscription; approval required
 - bulk_create_webhooks:
   - endpoint: POST /webhooks/bulk_create
+  - required fields: webhooks
   - risk: creates multiple Judge.me webhook subscriptions; approval required
 - update_shop:
   - endpoint: PUT /shops
@@ -162,12 +168,15 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
   - risk: uninstalls the shop from Judge.me; destructive approval required
 - create_checkout_comment:
   - endpoint: POST /shops
+  - required fields: content, external_product_id, create_from, customer
   - risk: creates a checkout comment in Judge.me Checkout Comments; approval required
 - create_reply:
   - endpoint: POST /replies
+  - required fields: review_id, reply
   - risk: creates a public reply on a Judge.me review; approval required
 - create_private_reply:
   - endpoint: POST /private_replies
+  - required fields: review_id, private_reply
   - risk: creates a private email reply for a Judge.me review; approval required
 
 ## Security

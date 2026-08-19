@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resource-tag",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "resource_tag_fixture_1",
+        "value": "Fixture Resource Tag",
+        "category": "resource"
+      }
+    ]
+  }
+}

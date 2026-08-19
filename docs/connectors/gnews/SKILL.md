@@ -11,6 +11,7 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 
 ## Icon
 
+- id: gnews
 - asset: icons/gnews.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -41,18 +42,18 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 - start_date
 - top_headlines_query
 - top_headlines_topic
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - search:
   - primary key: id
   - cursor: published_at
-  - fields: content(), description(), id(), image(), lang(), published_at(), source_country(), source_id(), source_name(), source_url(), title(), url()
+  - fields: content(string), description(string), id(string), image(string), lang(string), published_at(string), source_country(string), source_id(string), source_name(string), source_url(string), title(string), url(string)
 - top_headlines:
   - primary key: id
   - cursor: published_at
-  - fields: content(), description(), id(), image(), lang(), published_at(), source_country(), source_id(), source_name(), source_url(), title(), url()
+  - fields: content(string), description(string), id(string), image(string), lang(string), published_at(string), source_country(string), source_id(string), source_name(string), source_url(string), title(string), url(string)
 
 ## Sync Modes
 

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/email-activity",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "emails": [
+        {
+          "email_id": "fixture@example.invalid",
+          "campaign_id": "fixture_campaign_id",
+          "list_id": "fixture_list_id",
+          "list_is_active": true,
+          "email_address": "fixture@example.invalid",
+          "activity": [],
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

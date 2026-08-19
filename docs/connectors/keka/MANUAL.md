@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes the documented Keka HRMS REST API surface for Core HR, documents, leave, attendance, payroll, PSA, PMS, hire, expense, assets, requisitions, skills, and BGV resources.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,10 +28,10 @@ AUTHENTICATION
 
 CONFIGURATION
   attachment_id
-  base_url
+  base_url (required)
   bgv_id
   candidate_id
-  client_id
+  client_id (required)
   document_id
   document_type_id
   employee_id
@@ -44,185 +46,185 @@ CONFIGURATION
   task_id
   token_url
   api_key (secret)
-  client_secret (secret)
+  client_secret (secret) (required)
 
 ETL STREAMS
   employees:
     primary key: id
-    fields: department(), displayName(), email(), employeeNumber(), employmentStatus(), firstName(), id(), jobTitle(), lastName()
+    fields: department(string), displayName(string), email(string), employeeNumber(string), employmentStatus(string), firstName(string), id(string), jobTitle(string), lastName(string)
   attendance:
     primary key: id
-    fields: attendanceDate(), employeeId(), id(), shiftEndTime(), shiftStartTime(), status(), totalGrossHours()
+    fields: attendanceDate(string), employeeId(string), id(string), shiftEndTime(string), shiftStartTime(string), status(string), totalGrossHours(number)
   leave_types:
     primary key: id
-    fields: id(), identifier(), isActive(), leaveTypeUnit(), name()
+    fields: id(string), identifier(string), isActive(boolean), leaveTypeUnit(string), name(string)
   leave_requests:
     primary key: id
-    fields: dayCount(), employeeId(), fromDate(), id(), leaveTypeId(), status(), toDate()
+    fields: dayCount(number), employeeId(string), fromDate(string), id(string), leaveTypeId(string), status(string), toDate(string)
   clients:
     primary key: id
-    fields: code(), id(), isActive(), name()
+    fields: code(string), id(string), isActive(boolean), name(string)
   projects:
     primary key: id
-    fields: billingType(), clientId(), code(), id(), name(), status()
+    fields: billingType(string), clientId(string), code(string), id(string), name(string), status(string)
   employee:
     primary key: id
-    fields: accountStatus(), attendanceNumber(), bandInfo(), bloodGroup(), captureSchemeInfo(), city(), contingentType(), countryCode(), currentAddress(), customFields(), dateOfBirth(), displayName(), dottedLineManager(), educationDetails(), email(), employeeNumber(), employmentStatus(), exitDate(), exitReason(), exitStatus(), exitType(), expensePolicyInfo(), experienceDetails(), firstName(), gender(), groups(), homePhone(), id(), image(), invitationStatus(), isPrivate(), isProfileComplete(), jobTitle(), joiningDate(), l2Manager(), lastName(), leavePlanInfo(), maritalStatus(), marriageDate(), middleName(), mobilePhone(), overtimePolicyInfo(), payGradeInfo(), permanentAddress(), personalEmail(), probationEndDate(), professionalSummary(), relations(), reportsTo(), resignationSubmittedDate(), secondaryJobTitle(), shiftPolicyInfo(), timeType(), trackingPolicyInfo(), weeklyOffPolicyInfo(), workPhone(), workerType()
+    fields: accountStatus(integer), attendanceNumber(string), bandInfo(null), bloodGroup(integer), captureSchemeInfo(object), city(string), contingentType(object), countryCode(string), currentAddress(null), customFields(array), dateOfBirth(string), displayName(string), dottedLineManager(object), educationDetails(array), email(string), employeeNumber(string), employmentStatus(integer), exitDate(null), exitReason(null), exitStatus(integer), exitType(integer), expensePolicyInfo(object), experienceDetails(array), firstName(string), gender(integer), groups(array), homePhone(null), id(string), image(object), invitationStatus(integer), isPrivate(boolean), isProfileComplete(boolean), jobTitle(object), joiningDate(string), l2Manager(object), lastName(string), leavePlanInfo(object), maritalStatus(integer), marriageDate(null), middleName(null), mobilePhone(string), overtimePolicyInfo(null), payGradeInfo(null), permanentAddress(null), personalEmail(null), probationEndDate(string), professionalSummary(null), relations(array), reportsTo(object), resignationSubmittedDate(null), secondaryJobTitle(null), shiftPolicyInfo(object), timeType(integer), trackingPolicyInfo(null), weeklyOffPolicyInfo(object), workPhone(null), workerType(integer)
   employee_update_fields:
-    fields: jobFields(), profileFields()
+    fields: jobFields(array), profileFields(array)
   groups:
     primary key: id
-    fields: code(), description(), groupTypeId(), id(), name()
+    fields: code(null), description(string), groupTypeId(string), id(string), name(string)
   group_types:
     primary key: id
-    fields: id(), isSystemDefined(), name(), systemGroupType()
+    fields: id(string), isSystemDefined(boolean), name(string), systemGroupType(integer)
   departments:
     primary key: id
-    fields: departmentHeads(), description(), id(), isArchived(), name(), parentId()
+    fields: departmentHeads(array), description(string), id(string), isArchived(boolean), name(string), parentId(null)
   locations:
     primary key: id
-    fields: address(), description(), id(), name()
+    fields: address(object), description(string), id(string), name(string)
   job_titles:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
   currencies:
     primary key: id
-    fields: code(), id(), name()
+    fields: code(string), id(string), name(string)
   notice_periods:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   exit_reasons:
-    fields: exitReason(), terminationReason()
+    fields: exitReason(array), terminationReason(array)
   document_types:
     primary key: id
-    fields: documentFields(), id(), name()
+    fields: documentFields(array), id(string), name(string)
   employee_documents:
     primary key: id
-    fields: attachments(), attributes(), id(), name()
+    fields: attachments(array), attributes(array), id(string), name(string)
   employee_document_attachment_download_urls:
-    fields: fileURL()
+    fields: fileURL(string)
   leave_balances:
-    fields: employeeIdentifier(), employeeName(), employeeNumber(), leaveBalance()
+    fields: employeeIdentifier(string), employeeName(string), employeeNumber(string), leaveBalance(array)
   leave_plans:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   capture_schemes:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   shift_policies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   holiday_calendars:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   tracking_policies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   weekly_off_policies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   salary_components:
     primary key: id
-    fields: accountingCode(), id(), identifier(), title()
+    fields: accountingCode(null), id(string), identifier(string), title(string)
   pay_groups:
     primary key: identifier
-    fields: description(), identifier(), legalEntityId(), legalEntityName(), name()
+    fields: description(string), identifier(string), legalEntityId(string), legalEntityName(string), name(string)
   pay_cycles:
   pay_register:
   pay_batches:
   batch_payments:
   pay_grades:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   pay_bands:
   employee_salaries:
     primary key: id
-    fields: ctc(), deductions(), earnings(), effectiveFrom(), employee(), gross(), id(), remunerationType()
+    fields: ctc(integer), deductions(array), earnings(array), effectiveFrom(string), employee(object), gross(integer), id(string), remunerationType(integer)
   employee_fnf_details:
     primary key: id
-    fields: comments(), contributions(), deductions(), earnings(), employeeNumber(), esiNumber(), exitRequestStatus(), id(), lastWorkingDay(), leaveEncashmentDays(), lossOfPayDays(), netAmount(), netRecovery(), noOfPayDays(), okToRehire(), panNumber(), payAction(), pfNumber(), resignationNote(), settlementDate(), terminationNoticeDate(), terminationReason(), terminationType(), uanNumber()
+    fields: comments(string), contributions(array), deductions(array), earnings(array), employeeNumber(string), esiNumber(null), exitRequestStatus(integer), id(string), lastWorkingDay(string), leaveEncashmentDays(integer), lossOfPayDays(integer), netAmount(integer), netRecovery(null), noOfPayDays(integer), okToRehire(boolean), panNumber(null), payAction(integer), pfNumber(null), resignationNote(null), settlementDate(string), terminationNoticeDate(string), terminationReason(string), terminationType(integer), uanNumber(null)
   client:
   billing_roles:
     primary key: id
-    fields: billingRate(), id(), name()
+    fields: billingRate(object), id(string), name(string)
   project_phases:
   project:
   project_allocations:
     primary key: id
-    fields: employee(), endDate(), id(), startDate()
+    fields: employee(object), endDate(string), id(string), startDate(string)
   project_time_entries:
   project_tasks:
   project_task_time_entries:
   project_task_assignees:
     primary key: id
-    fields: assignedTo(), description(), endDate(), estimatedHours(), id(), name(), projectId(), startDate(), taskBillingType(), taskType()
+    fields: assignedTo(array), description(string), endDate(string), estimatedHours(number), id(string), name(string), projectId(string), startDate(string), taskBillingType(integer), taskType(integer)
   timesheet_entries:
   pms_timeframes:
   goals:
     primary key: id
-    fields: childGoals(), currentValue(), departmentId(), description(), employeeId(), employeeNumber(), endDate(), id(), initialValue(), isPrivate(), metricType(), name(), parentGoal(), progress(), startDate(), status(), tags(), targetValue(), timeFrameId(), type()
+    fields: childGoals(array), currentValue(integer), departmentId(null), description(string), employeeId(string), employeeNumber(string), endDate(string), id(string), initialValue(integer), isPrivate(boolean), metricType(integer), name(string), parentGoal(null), progress(integer), startDate(string), status(integer), tags(array), targetValue(integer), timeFrameId(string), type(integer)
   badges:
     primary key: id
-    fields: description(), id(), name(), status()
+    fields: description(string), id(string), name(string), status(integer)
   praise:
   review_groups:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(null), id(string), name(string)
   review_cycles:
     primary key: id
-    fields: fromDate(), id(), isAdhoc(), name(), reviewGroup(), status(), toDate()
+    fields: fromDate(string), id(string), isAdhoc(boolean), name(string), reviewGroup(object), status(integer), toDate(string)
   reviews:
     primary key: id
-    fields: employee(), id(), ratings(), reviewCycle(), reviewGroup(), status(), summary()
+    fields: employee(object), id(string), ratings(array), reviewCycle(object), reviewGroup(object), status(integer), summary(null)
   hire_jobs:
     primary key: id
-    fields: createdBy(), createdOn(), departmentName(), description(), experience(), id(), jobLocations(), jobType(), noOfOpenings(), orgJobId(), publishedBy(), publishedOn(), status(), targetHireDate(), title(), totalHiredPositions()
+    fields: createdBy(string), createdOn(string), departmentName(string), description(string), experience(null), id(string), jobLocations(array), jobType(string), noOfOpenings(string), orgJobId(null), publishedBy(string), publishedOn(string), status(integer), targetHireDate(string), title(string), totalHiredPositions(string)
   job_application_fields:
     primary key: id
-    fields: fieldName(), fieldOptions(), fieldType(), id(), isSystemGenerated(), required()
+    fields: fieldName(string), fieldOptions(array), fieldType(integer), id(string), isSystemGenerated(boolean), required(boolean)
   candidates:
     primary key: id
-    fields: additionalCandidateDetails(), educationDetails(), email(), experienceDetails(), firstName(), gender(), id(), jobApplicationDetails(), lastName(), middleName(), mobilePhone(), skills()
+    fields: additionalCandidateDetails(object), educationDetails(array), email(string), experienceDetails(array), firstName(string), gender(integer), id(string), jobApplicationDetails(object), lastName(string), middleName(null), mobilePhone(object), skills(array)
   candidate_interviews:
     primary key: id
-    fields: candidateId(), endTime(), id(), interviewDate(), interviewType(), jobId(), panelMembers(), scheduledBy(), scheduledDate(), stageId(), startTime(), timeZoneId()
+    fields: candidateId(string), endTime(object), id(string), interviewDate(string), interviewType(string), jobId(string), panelMembers(string), scheduledBy(string), scheduledDate(string), stageId(string), startTime(object), timeZoneId(string)
   candidate_scorecards:
   preboarding_candidates:
     primary key: id
-    fields: countryCode(), department(), email(), expectedDateOfJoining(), firstName(), gender(), id(), jobTitle(), lastName(), middleName(), mobileNumber(), stage(), status(), workLocation()
+    fields: countryCode(string), department(null), email(string), expectedDateOfJoining(string), firstName(string), gender(integer), id(string), jobTitle(null), lastName(string), middleName(null), mobileNumber(string), stage(integer), status(integer), workLocation(string)
   expense_categories:
     primary key: id
-    fields: categoryType(), code(), description(), id(), name()
+    fields: categoryType(integer), code(string), description(string), id(string), name(string)
   expense_claims:
     primary key: id
-    fields: approvalStatus(), claimNumber(), employee(), expenses(), id(), submittedOn(), title()
+    fields: approvalStatus(integer), claimNumber(string), employee(object), expenses(array), id(string), submittedOn(string), title(string)
   expense_policies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   assets:
     primary key: id
-    fields: assetCategoryId(), assetConditionId(), assetId(), assetName(), assetTypeId(), assignedOn(), assignedTo(), id(), status()
+    fields: assetCategoryId(string), assetConditionId(string), assetId(string), assetName(string), assetTypeId(string), assignedOn(string), assignedTo(object), id(string), status(integer)
   asset_types:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   asset_categories:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   asset_conditions:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   requisition_requests:
     primary key: id
-    fields: additionalComments(), additionalFields(), budget(), department(), hired(), id(), isArchived(), isPriority(), jobNumber(), jobType(), locations(), openPositions(), requestedBy(), requestedOn(), requisitionFor(), requisitionTypes(), status(), subDepartment(), targetHiringDate(), toBeReplaced()
+    fields: additionalComments(string), additionalFields(null), budget(string), department(string), hired(integer), id(string), isArchived(boolean), isPriority(boolean), jobNumber(string), jobType(integer), locations(array), openPositions(integer), requestedBy(string), requestedOn(string), requisitionFor(string), requisitionTypes(array), status(integer), subDepartment(null), targetHiringDate(string), toBeReplaced(array)
   employee_skills:
     primary key: id
-    fields: id(), rating(), skillName()
+    fields: id(string), rating(integer), skillName(string)
   bgv_requests:
     primary key: id
-    fields: bgvDecision(), candidateId(), checks(), email(), firstName(), gender(), id(), lastName(), middleName(), mobileNumber(), status()
+    fields: bgvDecision(integer), candidateId(string), checks(array), email(string), firstName(string), gender(integer), id(string), lastName(string), middleName(null), mobileNumber(null), status(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_employee:

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Freshchat account, user, conversation, agent, group, channel, role, outbound, report, metrics, and business-hours data through the Freshchat v2 REST API; writes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,9 +28,18 @@ AUTHENTICATION
 
 CONFIGURATION
   agent_id
-  base_url
+  agents_availability_status
+  agents_groups
+  agents_is_deactivated
+  agents_sort_by
+  agents_sort_order
+  base_url (required)
   business_hours_group_id
+  channels_locale
   conversation_id
+  conversation_messages_from_time
+  groups_sort_by
+  groups_sort_order
   metrics_aggregator
   metrics_end
   metrics_filter_by
@@ -42,68 +53,77 @@ CONFIGURATION
   report_id
   report_status
   user_id
-  api_key (secret)
+  users_created_from
+  users_created_to
+  users_email
+  users_first_name
+  users_last_name
+  users_phone_no
+  users_reference_id
+  users_updated_from
+  users_updated_to
+  api_key (secret) (required)
 
 ETL STREAMS
   account_configuration:
     primary key: account_id
-    fields: account_domain(), account_id(), app_id(), bundle_id(), bundle_type(), datacenter(), organisation_domain(), organisation_id(), plan_type()
+    fields: account_domain(string), account_id(integer), app_id(string), bundle_id(integer), bundle_type(string), datacenter(string), organisation_domain(string), organisation_id(integer), plan_type(string)
   agents:
     primary key: id
     cursor: updated_time
-    fields: avatar(), biography(), created_time(), email(), first_name(), groups(), id(), is_deactivated(), is_deleted(), last_name(), role_id(), social_profiles(), updated_time()
+    fields: avatar(object), biography(string), created_time(string), email(string), first_name(string), groups(array), id(string), is_deactivated(boolean), is_deleted(boolean), last_name(string), role_id(string), social_profiles(array), updated_time(string)
   agent_details:
     primary key: id
     cursor: updated_time
-    fields: avatar(), biography(), created_time(), email(), first_name(), groups(), id(), is_deactivated(), is_deleted(), last_name(), role_id(), social_profiles(), updated_time()
+    fields: avatar(object), biography(string), created_time(string), email(string), first_name(string), groups(array), id(string), is_deactivated(boolean), is_deleted(boolean), last_name(string), role_id(string), social_profiles(array), updated_time(string)
   agent_statuses:
     primary key: id
-    fields: enabled(), id(), name(), type()
+    fields: enabled(boolean), id(string), name(string), type(string)
   users:
     primary key: id
     cursor: updated_time
-    fields: avatar(), created_time(), email(), first_name(), id(), last_name(), phone(), properties(), reference_id(), restore_id(), updated_time()
+    fields: avatar(object), created_time(string), email(string), first_name(string), id(string), last_name(string), phone(string), properties(array), reference_id(string), restore_id(string), updated_time(string)
   user_details:
     primary key: id
     cursor: updated_time
-    fields: avatar(), created_time(), email(), first_name(), id(), last_name(), phone(), properties(), reference_id(), restore_id(), updated_time()
+    fields: avatar(object), created_time(string), email(string), first_name(string), id(string), last_name(string), phone(string), properties(array), reference_id(string), restore_id(string), updated_time(string)
   user_conversations:
     primary key: id
-    fields: app_id(), assigned_agent_id(), assigned_group_id(), channel_id(), created_time(), id(), messages(), priority(), properties(), status(), updated_time(), user_id()
+    fields: app_id(string), assigned_agent_id(string), assigned_group_id(string), channel_id(string), created_time(string), id(string), messages(array), priority(string), properties(object), status(string), updated_time(string), user_id(string)
   conversation_detail:
     primary key: id
-    fields: app_id(), assigned_agent_id(), assigned_group_id(), channel_id(), created_time(), id(), messages(), priority(), properties(), status(), updated_time(), user_id()
+    fields: app_id(string), assigned_agent_id(string), assigned_group_id(string), channel_id(string), created_time(string), id(string), messages(array), priority(string), properties(object), status(string), updated_time(string), user_id(string)
   conversation_messages:
     primary key: id
-    fields: actor_id(), actor_type(), app_id(), conversation_id(), created_time(), id(), message_parts(), message_type(), updated_time()
+    fields: actor_id(string), actor_type(string), app_id(string), conversation_id(string), created_time(string), id(string), message_parts(array), message_type(string), updated_time(string)
   conversation_fields:
     primary key: name
-    fields: choices(), label(), name(), required(), type()
+    fields: choices(array), label(string), name(string), required(boolean), type(string)
   groups:
     primary key: id
-    fields: created_time(), description(), id(), name(), routing_type(), updated_time()
+    fields: created_time(string), description(string), id(string), name(string), routing_type(string), updated_time(string)
   channels:
     primary key: id
     cursor: updated_time
-    fields: created_time(), enabled(), icon(), id(), locale(), name(), public(), tags(), updated_time(), welcome_message()
+    fields: created_time(string), enabled(boolean), icon(object), id(string), locale(string), name(string), public(boolean), tags(array), updated_time(string), welcome_message(object)
   roles:
     primary key: id
-    fields: description(), id(), name(), role()
+    fields: description(string), id(string), name(string), role(string)
   outbound_messages:
     primary key: id
-    fields: created_time(), from(), id(), provider(), request_id(), status(), template(), to(), updated_time()
+    fields: created_time(string), from(object), id(string), provider(string), request_id(string), status(string), template(object), to(object), updated_time(string)
   report_status:
     primary key: id
-    fields: id(), interval(), link(), links(), status()
+    fields: id(string), interval(string), link(object), links(array), status(string)
   historical_metrics:
     primary key: metric_type
-    fields: aggregator(), data(), end(), filters(), interval(), metric_type(), metrics(), start()
+    fields: aggregator(string), data(array), end(string), filters(object), interval(string), metric_type(string), metrics(array), start(string)
   instant_metrics:
     primary key: metric_type
-    fields: aggregator(), data(), end(), filters(), interval(), metric_type(), metrics(), start()
+    fields: aggregator(string), data(array), end(string), filters(object), interval(string), metric_type(string), metrics(array), start(string)
   business_hours_status:
     primary key: group_id
-    fields: business_hours_id(), group_id(), timezone(), within_business_hours()
+    fields: business_hours_id(string), group_id(string), timezone(string), within_business_hours(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -119,7 +139,7 @@ REVERSE ETL ACTIONS
   delete_user:
     endpoint: DELETE /users/{{ record.user_id }}
     required fields: user_id
-    risk: deletes a Freshchat user/contact
+    risk: deletes a Freshchat user/contact; destructive and idempotent for configured missing statuses
   create_conversation:
     endpoint: POST /conversations
     risk: creates a Freshchat conversation
@@ -133,24 +153,26 @@ REVERSE ETL ACTIONS
     risk: sends a message into an existing Freshchat conversation
   create_agent:
     endpoint: POST /agents
-    risk: creates a Freshchat agent account
+    required fields: email
+    risk: creates a Freshchat admin/agent account; requires typed destructive confirmation because this is an administrative user-management action
   update_agent:
     endpoint: PUT /agents/{{ record.agent_id }}
     required fields: agent_id
-    risk: updates an existing Freshchat agent
+    risk: updates a Freshchat admin/agent account; requires typed destructive confirmation because this mutates administrative access metadata
   update_agent_status:
     endpoint: PATCH /agents/{{ record.agent_id }}
-    required fields: agent_id
-    risk: updates an agent's Freshchat availability status
+    required fields: agent_id, status
+    risk: updates a Freshchat agent availability status; requires typed destructive confirmation for administrative agent-state mutation
   delete_agent:
     endpoint: DELETE /agents/{{ record.agent_id }}
     required fields: agent_id
-    risk: deletes a Freshchat agent
+    risk: deletes a Freshchat admin/agent account; destructive and idempotent for configured missing statuses
   send_outbound_whatsapp_message:
     endpoint: POST /outbound-messages/whatsapp
     risk: sends an outbound WhatsApp message through Freshchat
   extract_report:
     endpoint: POST /reports/raw
+    required fields: start, end, event, format
     risk: requests generation of a Freshchat raw report extract
   create_csat_rating:
     endpoint: POST /csat/{{ record.conversation_id }}
@@ -162,6 +184,72 @@ SECURITY
   write risk: creates, updates, or deletes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings
   approval: reverse ETL writes require plan preview and approval token
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.
+  Usage: pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]
+  Source CLI: Freshchat API (Freshchat API docs ETag W/"26e4fd8b1fe01578eae1dbaff6b69224")
+  Global flags:
+    --credential (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
+    --config (string_array): Connector config override as key=value; never pass secret values here.
+    --json (boolean): Render machine-readable JSON output.
+    --limit (integer): Maximum records to emit from stream-backed commands.
+    --preview (boolean): Preview a reverse-ETL write without making a network mutation.
+    --plan (string): Execute an approved reverse-ETL plan by id.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+    --confirm (string): Typed confirmation challenge for destructive/admin reverse-ETL writes.
+  Freshchat account read commands
+    account configuration - Read Freshchat account configuration. [intent=etl availability=implemented stream=account_configuration]
+  Freshchat agent read/write/admin commands
+    agents list - List Freshchat agents with optional documented filters. [intent=etl availability=implemented stream=agents]; flags: --is-deactivated, --groups, --availability-status, --sort-order, --sort-by
+    agents view - Read one Freshchat agent by configured agent id. [intent=etl availability=implemented stream=agent_details]; flags: --agent-id
+    agents statuses - List Freshchat agent statuses. [intent=etl availability=implemented stream=agent_statuses]
+    agents create - Plan creation of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=create_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat admin/agent account.; flags: --email, --first-name, --last-name, --role-id, --groups
+    agents update - Plan update of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=update_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Updates a Freshchat admin/agent account.; flags: --agent-id, --first-name, --last-name, --role-id, --groups, --is-deactivated
+    agents status update - Plan update of a Freshchat agent availability status. [intent=reverse_etl availability=implemented write=update_agent_status]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Updates a Freshchat agent availability status.; flags: --agent-id, --status
+    agents delete - Plan deletion of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=delete_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Deletes a Freshchat admin/agent account.; flags: --agent-id
+  Freshchat user read/write commands
+    users list - List Freshchat users with documented search filters. [intent=etl availability=implemented stream=users]; notes: Freshchat requires at least one user search filter for successful live /users responses; connector config and command metadata expose the documented filter set without a raw query escape hatch.; flags: --first-name, --last-name, --email, --reference-id, --phone-no, --created-from, --created-to, --updated-from, --updated-to
+    users view - Read one Freshchat user by configured user id. [intent=etl availability=implemented stream=user_details]; flags: --user-id
+    users conversations - List conversations for a Freshchat user. [intent=etl availability=implemented stream=user_conversations]; flags: --user-id
+    users create - Plan creation of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=create_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat user/contact visible to agents.; flags: --email, --first-name, --last-name, --phone, --reference-id
+    users update - Plan update of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=update_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Updates an existing Freshchat user/contact.; flags: --user-id, --email, --first-name, --last-name, --phone, --reference-id
+    users delete - Plan deletion of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=delete_user]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Deletes a Freshchat user/contact.; flags: --user-id
+  Freshchat conversation read/write commands
+    conversations view - Read one Freshchat conversation. [intent=etl availability=implemented stream=conversation_detail]; flags: --conversation-id
+    conversations messages - List messages in a Freshchat conversation. [intent=etl availability=implemented stream=conversation_messages]; flags: --conversation-id, --from-time
+    conversations fields - List Freshchat conversation property fields. [intent=etl availability=implemented stream=conversation_fields]
+    conversations create - Plan creation of a Freshchat conversation. [intent=reverse_etl availability=implemented write=create_conversation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat conversation.; flags: --user-id, --channel-id
+    conversations update - Plan update of a Freshchat conversation. [intent=reverse_etl availability=implemented write=update_conversation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Updates status, routing, priority, or properties on a Freshchat conversation.; flags: --conversation-id, --status, --assigned-agent-id, --assigned-group-id, --priority
+    conversations message send - Plan sending a message into a Freshchat conversation. [intent=reverse_etl availability=implemented write=send_conversation_message]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Sends a visible message into an existing Freshchat conversation.; flags: --conversation-id, --actor-type, --actor-id
+  Freshchat group read commands
+    groups list - List Freshchat groups. [intent=etl availability=implemented stream=groups]; flags: --sort-order, --sort-by
+  Freshchat channel read commands
+    channels list - List Freshchat channels/topics. [intent=etl availability=implemented stream=channels]; flags: --locale
+  Freshchat role read commands
+    roles list - List Freshchat roles. [intent=etl availability=implemented stream=roles]
+  Freshchat outbound read/write commands
+    outbound messages list - List Freshchat outbound messages. [intent=etl availability=implemented stream=outbound_messages]; flags: --request-id
+    outbound whatsapp send - Plan sending an outbound WhatsApp message through Freshchat. [intent=reverse_etl availability=implemented write=send_outbound_whatsapp_message]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Sends an outbound WhatsApp message through Freshchat.; flags: --provider
+  Freshchat report read/write commands
+    reports status - Read Freshchat raw report status. [intent=etl availability=implemented stream=report_status]; flags: --report-id, --status
+    reports extract - Plan generation of a Freshchat raw report extract. [intent=reverse_etl availability=implemented write=extract_report]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Requests generation of a Freshchat raw report extract.; flags: --start, --end, --event, --format
+  Freshchat metrics read commands
+    metrics historical - Read Freshchat historical metrics. [intent=etl availability=implemented stream=historical_metrics]; flags: --metric, --start, --end, --group-by, --filter-by, --aggregator, --interval
+    metrics instant - Read Freshchat instant metrics. [intent=etl availability=implemented stream=instant_metrics]; flags: --metric, --group-by, --filter-by, --summary
+  Freshchat business-hours read commands
+    business-hours status - Check whether a Freshchat group is within business hours. [intent=etl availability=implemented stream=business_hours_status]; flags: --group-id
+  Freshchat CSAT write commands
+    csat create - Plan creation of a Freshchat CSAT rating. [intent=reverse_etl availability=implemented write=create_csat_rating]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a CSAT rating for a Freshchat conversation.; flags: --conversation-id, --rating, --comment
+  Planned bounded provider-search commands
+    direct users fetch - Planned bounded subset fetch for up to 100 Freshchat user ids. [intent=direct_read availability=planned]; approval: none until #2985 provides executable provider_search/provider_query safety; no live call is available today.; risk: medium; notes: Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.; flags: --ids, --page, --page-cursor
+  Planned binary/multipart commands
+    binary files upload - Planned Freshchat file upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts one multipart file with a documented 25 MB cap; this connector currently accepts no filesystem path or binary payload.; flags: --file
+    binary images upload - Planned Freshchat image upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts multipart image input; this connector currently accepts no filesystem path or binary payload.; flags: --image
+  Help topics:
+    destructive-confirmation - Freshchat DELETE and admin/agent-management operations require typed destructive confirmation plus reverse ETL plan -> preview -> approval -> execute.
+    provider-search - Freshchat POST /users/fetch remains planned/blocked on #2985 and is not exposed as a raw query/body command.
+    binary-uploads - Freshchat file/image uploads remain planned/blocked until a typed binary/multipart safety contract exists.
 
 EXAMPLES
   # Inspect as a manual

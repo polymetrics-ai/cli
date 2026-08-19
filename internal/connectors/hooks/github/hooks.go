@@ -3,7 +3,6 @@
 package github
 
 import (
-	"bytes"
 	"context"
 	"crypto"
 	"crypto/rand"
@@ -39,19 +38,42 @@ func New() *Hooks { return &Hooks{} }
 func (h *Hooks) ConnectorName() string { return "github" }
 
 var (
-	_ engine.Hooks     = (*Hooks)(nil)
-	_ engine.AuthHook  = (*Hooks)(nil)
-	_ engine.WriteHook = (*Hooks)(nil)
+	_ engine.Hooks                    = (*Hooks)(nil)
+	_ engine.AuthHook                 = (*Hooks)(nil)
+	_ engine.DeclaredRouteAuthHook    = (*Hooks)(nil)
+	_ engine.RateLimitAuthProfileHook = (*Hooks)(nil)
+	_ engine.WriteHook                = (*Hooks)(nil)
 )
 
-// Authenticator mints an RS256 JWT (matches legacy's githubAppJWT) and
-// exchanges it for an installation token via POST
-// /app/installations/{id}/access_tokens, returning a Bearer authenticator.
-// ctx is honored (a real network call); uncached, matching legacy's own
-// re-mint-on-every-call behavior.
-func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, _ engine.AuthSpec) (connsdk.Authenticator, error) {
+const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id}/access_tokens"
+
+// Authenticator remains the base AuthHook implementation for compatibility,
+// but deliberately refuses a direct GitHub App exchange. The token request is
+// network-capable and must receive the engine-owned declared-route requester.
+func (h *Hooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.AuthSpec) (connsdk.Authenticator, error) {
+	return nil, errors.New("github_app authentication requires engine declared-route admission")
+}
+
+// RateLimitAuthProfile identifies GitHub App custom authentication for
+// rate-limit selection.
+func (h *Hooks) RateLimitAuthProfile(_ connectors.RuntimeConfig, spec engine.AuthSpec) (string, bool) {
+	if spec.Mode != "custom" || spec.Hook != "github" {
+		return "", false
+	}
+	return "github_app", true
+}
+
+// AuthenticatorWithDeclaredRoute mints an RS256 JWT (matching legacy's
+// githubAppJWT) and exchanges it for an installation token through the
+// declared `POST /app/installations/{installation_id}/access_tokens` route.
+// The actual path contains the escaped configured installation ID; the engine
+// admits that physical path immediately before sending it.
+func (h *Hooks) AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, _ engine.AuthSpec, requester engine.DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
+	}
+	if requester == nil {
+		return nil, errors.New("github_app authentication requires engine declared-route admission")
 	}
 	appID := strings.TrimSpace(cfg.Config["app_id"])
 	if appID == "" {
@@ -70,35 +92,23 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 		return nil, err
 	}
 
-	baseURL := strings.TrimRight(strings.TrimSpace(cfg.Config["base_url"]), "/")
-	if baseURL == "" {
-		baseURL = "https://api.github.com"
-	}
-	endpoint := baseURL + "/app/installations/" + url.PathEscape(installationID) + "/access_tokens"
-	body, err := json.Marshal(installationTokenPayload(cfg))
-	if err != nil {
-		return nil, fmt.Errorf("github_app: encode installation token request: %w", err)
-	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
-	if err != nil {
-		return nil, fmt.Errorf("github_app: build installation token request: %w", err)
-	}
-	req.Header.Set("Authorization", "Bearer "+jwt)
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.DoJSON(ctx, engine.DeclaredRouteRequest{
+		Method:       http.MethodPost,
+		DeclaredPath: githubInstallationTokenDeclaredPath,
+		Path:         "/app/installations/" + url.PathEscape(installationID) + "/access_tokens",
+		Headers: map[string]string{
+			"Authorization": "Bearer " + jwt,
+			"Accept":        "application/vnd.github+json",
+		},
+		Body: installationTokenPayload(cfg),
+	})
 	if err != nil {
 		return nil, fmt.Errorf("github_app: exchange installation token: %w", err)
-	}
-	defer func() { _ = resp.Body.Close() }()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("github_app: installation token exchange returned status %d", resp.StatusCode)
 	}
 	var out struct {
 		Token string `json:"token"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+	if err := json.Unmarshal(resp.Body, &out); err != nil {
 		return nil, fmt.Errorf("github_app: decode installation token response: %w", err)
 	}
 	if strings.TrimSpace(out.Token) == "" {
@@ -212,6 +222,36 @@ var metaFields = []string{"labels", "assignees", "milestone"}
 var reviewerFields = []string{"reviewers", "team_reviewers"}
 var pullCoreFields = []string{"title", "body", "state", "base", "maintainer_can_modify"}
 
+// Every path below is an existing GitHub bundle declaration: action paths for
+// the primary write and api_surface paths for a hook-only follow-up. Keeping
+// the declarations here makes a hook request use the same rate-limit
+// resolution boundary as a declarative request without exposing a generic
+// request escape hatch.
+const (
+	githubIssueDeclaredPath              = "/repos/{owner}/{repo}/issues/{issue_number}"
+	githubIssueCommentDeclaredPath       = "/repos/{owner}/{repo}/issues/{issue_number}/comments"
+	githubLabelDeclaredPath              = "/repos/{owner}/{repo}/labels"
+	githubLabelByNameDeclaredPath        = "/repos/{owner}/{repo}/labels/{name}"
+	githubPullDeclaredPath               = "/repos/{owner}/{repo}/pulls"
+	githubPullByNumberDeclaredPath       = "/repos/{owner}/{repo}/pulls/{pull_number}"
+	githubRequestedReviewersDeclaredPath = "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+)
+
+// githubWriteRequester acquires one declaration-aware requester for exactly
+// one physical GitHub WriteHook send. A compound action intentionally calls it
+// again for every follow-up so each request gets an independent rate-limit
+// admission and completion observation lifecycle.
+func githubWriteRequester(rt *engine.Runtime, method, declaredPath string) (*connsdk.Requester, error) {
+	if rt == nil {
+		return nil, errors.New("github write hook runtime is unavailable")
+	}
+	requester, err := rt.RequesterFor(method, declaredPath)
+	if err != nil {
+		return nil, fmt.Errorf("github write hook resolve %s %s: %w", method, declaredPath, err)
+	}
+	return requester, nil
+}
+
 // ExecuteWrite: 4 compound actions + label color normalization; anything
 // else returns handled=false (declarative fallback).
 func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
@@ -237,6 +277,46 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 	}
 }
 
+func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
+	switch action.Name {
+	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label":
+		return true
+	default:
+		return false
+	}
+}
+
+// MapWriteRecord pins the one field that distinguishes `repo archive` from
+// `repo unarchive`. Both ride PATCH /repos/{owner}/{repo}, the same endpoint as
+// the generic `repo update`, which is why they exist as separate write actions
+// rather than as flags: a command named "archive" that only archives when the
+// caller also supplies archived=true is a command that lies.
+//
+// They pin the record rather than the request, unlike closeResource, so the
+// declarative path stays intact: preview and execution build one body from one
+// record, which is what makes the digest an operator approves the request that
+// runs. The action's body_fields allow-list keeps the pinned field the only one
+// sent.
+func (h *Hooks) MapWriteRecord(action engine.WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	switch action.Name {
+	case "archive_repo":
+		return pinRepoArchived(rec, true), true, nil
+	case "unarchive_repo":
+		return pinRepoArchived(rec, false), true, nil
+	default:
+		return rec, false, nil
+	}
+}
+
+func pinRepoArchived(rec connectors.Record, archived bool) connectors.Record {
+	pinned := make(connectors.Record, len(rec))
+	for key, value := range rec {
+		pinned[key] = value
+	}
+	pinned["archived"] = archived
+	return pinned
+}
+
 // createLabel/updateLabel reproduce githubCreateLabelPayload/
 // githubUpdateLabelPayload: a leading "#" on color is stripped
 // (github.go:1120,1133; ledger G3 — update_label's fields are all optional).
@@ -249,7 +329,11 @@ func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 	if v := optionalString(rec, "description"); v != "" {
 		payload["description"] = v
 	}
-	_, err := rt.Requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubLabelDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
 	return err
 }
 
@@ -268,7 +352,11 @@ func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 		}
 	}
 	path := fmt.Sprintf("%s/labels/%s", repoPath(rt), url.PathEscape(name))
-	_, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPatch, githubLabelByNameDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
 }
 
@@ -295,7 +383,15 @@ func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberFiel
 		}
 	}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
-	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	declaredPath, err := githubResourceDeclaredPath(resource)
+	if err != nil {
+		return err
+	}
+	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
 }
 
@@ -310,8 +406,27 @@ func reopenResource(ctx context.Context, rt *engine.Runtime, resource, numberFie
 	}
 	payload := map[string]any{"state": "open"}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
-	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	declaredPath, err := githubResourceDeclaredPath(resource)
+	if err != nil {
+		return err
+	}
+	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
+}
+
+func githubResourceDeclaredPath(resource string) (string, error) {
+	switch resource {
+	case "issues":
+		return githubIssueDeclaredPath, nil
+	case "pulls":
+		return githubPullByNumberDeclaredPath, nil
+	default:
+		return "", fmt.Errorf("github write hook has no declared route for resource %q", resource)
+	}
 }
 
 func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
@@ -322,7 +437,11 @@ func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 			payload[k] = v
 		}
 	}
-	resp, err := rt.Requester.Do(ctx, http.MethodPost, repoPath(rt)+"/pulls", nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubPullDeclaredPath)
+	if err != nil {
+		return err
+	}
+	resp, err := requester.Do(ctx, http.MethodPost, repoPath(rt)+"/pulls", nil, payload)
 	if err != nil {
 		return err
 	}
@@ -342,7 +461,11 @@ func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 	}
 	if core := selectFields(rec, pullCoreFields); len(core) > 0 {
 		path := fmt.Sprintf("%s/pulls/%d", repoPath(rt), number)
-		if _, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, core); err != nil {
+		requester, err := githubWriteRequester(rt, http.MethodPatch, githubPullByNumberDeclaredPath)
+		if err != nil {
+			return err
+		}
+		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, core); err != nil {
 			return err
 		}
 	}
@@ -354,7 +477,11 @@ func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, rec connectors.Record) error {
 	if meta := selectFields(rec, metaFields); len(meta) > 0 {
 		path := fmt.Sprintf("%s/issues/%d", repoPath(rt), number)
-		if _, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, meta); err != nil {
+		requester, err := githubWriteRequester(rt, http.MethodPatch, githubIssueDeclaredPath)
+		if err != nil {
+			return err
+		}
+		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, meta); err != nil {
 			return err
 		}
 	}
@@ -363,13 +490,24 @@ func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, r
 		return nil
 	}
 	path := fmt.Sprintf("%s/pulls/%d/requested_reviewers", repoPath(rt), number)
-	_, err := rt.Requester.Do(ctx, http.MethodPost, path, nil, reviewers)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubRequestedReviewersDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, path, nil, reviewers)
 	return err
 }
 
 func postComment(ctx context.Context, rt *engine.Runtime, resource string, number int, body string) error {
+	if resource != "issues" {
+		return fmt.Errorf("github write hook has no declared comment route for resource %q", resource)
+	}
 	path := fmt.Sprintf("%s/%s/%d/comments", repoPath(rt), resource, number)
-	_, err := rt.Requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubIssueCommentDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
 	return err
 }
 

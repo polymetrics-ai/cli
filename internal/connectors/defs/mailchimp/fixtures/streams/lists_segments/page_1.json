@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/segments",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "segments": [
+        {
+          "id": 1,
+          "list_id": "fixture_list_id",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "name": "fixture_name",
+          "member_count": 1,
+          "type": "fixture_type",
+          "created_at": "fixture_created_at",
+          "options": {}
+        }
+      ]
+    }
+  }
+}

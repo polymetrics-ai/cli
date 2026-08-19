@@ -11,9 +11,11 @@ Reads incident.io incidents, severities, incident roles, users, and follow-ups t
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -29,29 +31,29 @@ Reads incident.io incidents, severities, incident roles, users, and follow-ups t
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - incidents:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), mode(), name(), reference(), severity_id(), severity_name(), status_category(), status_id(), status_name(), summary(), updated_at(), visibility()
+  - fields: created_at(string), id(string), mode(string), name(string), reference(string), severity_id(string), severity_name(string), status_category(string), status_id(string), status_name(string), summary(string), updated_at(string), visibility(string)
 - severities:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), name(), rank(), updated_at()
+  - fields: created_at(string), description(string), id(string), name(string), rank(integer), updated_at(string)
 - incident_roles:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), instructions(), name(), role_type(), shortform(), updated_at()
+  - fields: created_at(string), description(string), id(string), instructions(string), name(string), role_type(string), shortform(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: base_role_id(), base_role_name(), email(), id(), name(), role(), slack_user_id()
+  - fields: base_role_id(string), base_role_name(string), email(string), id(string), name(string), role(string), slack_user_id(string)
 - follow_ups:
   - primary key: id
   - cursor: updated_at
-  - fields: assignee_id(), assignee_name(), completed_at(), created_at(), description(), id(), incident_id(), status(), title(), updated_at()
+  - fields: assignee_id(string), assignee_name(string), completed_at(string), created_at(string), description(string), id(string), incident_id(string), status(string), title(string), updated_at(string)
 
 ## Sync Modes
 

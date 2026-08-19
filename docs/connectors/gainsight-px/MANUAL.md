@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).
 
 ICON
+  id: gainsight-px
   asset: icons/gainsight-px.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,24 +31,24 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
-    fields: createDate(), id(), industry(), lastModifiedDate(), lastSeenDate(), location(), name(), numberOfEmployees(), numberOfUsers(), plan(), sfdcId(), trackedSubscriptionId(), website()
+    fields: createDate(string), id(string), industry(string), lastModifiedDate(string), lastSeenDate(string), location(string), name(string), numberOfEmployees(string), numberOfUsers(string), plan(string), sfdcId(string), trackedSubscriptionId(string), website(string)
   users:
     primary key: id
-    fields: accountId(), aptrinsicId(), createDate(), email(), firstName(), id(), lastModifiedDate(), lastName(), lastSeenDate(), numberOfVisits(), role(), score(), signUpDate(), title(), type()
+    fields: accountId(string), aptrinsicId(string), createDate(integer), email(string), firstName(string), id(string), lastModifiedDate(integer), lastName(string), lastSeenDate(integer), numberOfVisits(integer), role(string), score(number), signUpDate(integer), title(string), type(string)
   feature:
     primary key: id
-    fields: id(), name(), parentFeatureId(), propertyKey(), status(), type()
+    fields: id(string), name(string), parentFeatureId(string), propertyKey(string), status(string), type(string)
   segments:
     primary key: id
-    fields: createdBy(), createdDate(), description(), id(), modifiedBy(), modifiedDate(), name(), priority(), productId(), productName(), status()
+    fields: createdBy(string), createdDate(string), description(string), id(string), modifiedBy(string), modifiedDate(string), name(string), priority(string), productId(string), productName(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Gainsight PX (aptrinsic) API read of account, user, feature, and segment data

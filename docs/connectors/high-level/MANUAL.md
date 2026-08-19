@@ -13,9 +13,11 @@ DESCRIPTION
   Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,28 +29,28 @@ AUTHENTICATION
 CONFIGURATION
   api_version
   base_url
-  location_id
-  api_key (secret)
+  location_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   pipelines:
     primary key: id
-    fields: dateAdded(), dateUpdated(), id(), locationId(), name(), stages()
+    fields: dateAdded(string), dateUpdated(string), id(string), locationId(string), name(string), stages(array)
   contacts:
     primary key: id
     cursor: dateUpdated
-    fields: contactName(), dateAdded(), dateUpdated(), email(), firstName(), id(), lastName(), locationId(), phone(), source(), type()
+    fields: contactName(string), dateAdded(string), dateUpdated(string), email(string), firstName(string), id(string), lastName(string), locationId(string), phone(string), source(string), type(string)
   opportunities:
     primary key: id
     cursor: dateUpdated
-    fields: assignedTo(), contactId(), dateAdded(), dateUpdated(), id(), monetaryValue(), name(), pipelineId(), pipelineStageId(), source(), status()
+    fields: assignedTo(string), contactId(string), dateAdded(string), dateUpdated(string), id(string), monetaryValue(number), name(string), pipelineId(string), pipelineStageId(string), source(string), status(string)
   custom_fields:
     primary key: id
-    fields: dataType(), fieldKey(), id(), model(), name(), position()
+    fields: dataType(string), fieldKey(string), id(string), model(string), name(string), position(integer)
   form_submissions:
     primary key: id
     cursor: createdAt
-    fields: contactId(), createdAt(), email(), formId(), id(), locationId(), name()
+    fields: contactId(string), createdAt(string), email(string), formId(string), id(string), locationId(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

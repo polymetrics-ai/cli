@@ -13,9 +13,17 @@ DESCRIPTION
   Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-huggingface
+  asset: icons/simple-icons/huggingface.svg
+  title: Hugging Face
+  simple_icon_slug: huggingface
+  simple_icon_hex: FFD21E
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Hugging%20Face
+  match: curated-alias
+  matched_by: huggingface
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,7 +34,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  dataset_name
+  dataset_name (required)
   access_token (secret)
   api_token (secret)
   token (secret)
@@ -34,13 +42,13 @@ CONFIGURATION
 ETL STREAMS
   splits:
     primary key: dataset, config, split
-    fields: config(), dataset(), split()
+    fields: config(string), dataset(string), split(string)
   sizes:
     primary key: dataset, config, split
-    fields: config(), dataset(), num_bytes_memory(), num_bytes_parquet_files(), num_columns(), num_rows(), split()
+    fields: config(string), dataset(string), num_bytes_memory(integer), num_bytes_parquet_files(integer), num_columns(integer), num_rows(integer), split(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Hugging Face dataset-viewer API read of dataset split/size metadata; an optional access token unlocks gated/private dataset reads

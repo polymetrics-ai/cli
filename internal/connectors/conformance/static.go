@@ -203,9 +203,20 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 		return engine.ResolveCheckWhen(template, specKeys)
 	}
+	checkPath := func(what, template string) error {
+		if template == "" {
+			return nil
+		}
+		return engine.ResolveCheckRequestPath(what, template, specKeys)
+	}
 
-	if err := check(b.HTTP.URL); err != nil {
+	if err := checkPath("base.url", b.HTTP.URL); err != nil {
 		return err
+	}
+	if b.HTTP.Check != nil {
+		if err := checkPath("base.check.path", b.HTTP.Check.Path); err != nil {
+			return err
+		}
 	}
 	for _, h := range b.HTTP.Headers {
 		if err := check(h); err != nil {
@@ -224,8 +235,13 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 	}
 	for _, s := range b.Streams {
-		if err := check(s.Path); err != nil {
+		if err := checkPath("path", s.Path); err != nil {
 			return fmt.Errorf("stream %q: %w", s.Name, err)
+		}
+		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
+			if err := checkPath("fan_out.ids_from.request.path", s.FanOut.IDsFrom.Request.Path); err != nil {
+				return fmt.Errorf("stream %q: %w", s.Name, err)
+			}
 		}
 		for _, v := range s.Query {
 			// engine.StreamSpec.Query values are engine.QueryParam (gap-loop
@@ -287,6 +303,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	if b.Surface == nil {
 		return fmt.Errorf("api_surface.json did not load")
 	}
+	if provenance := engine.ValidateSurfaceProvenance(b.Surface); provenance.Status == engine.SurfaceProvenanceInvalid {
+		return provenance.Issues[0]
+	}
 
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
@@ -297,9 +316,19 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		writes[w.Name] = true
 	}
 	directReads := map[string]bool{}
+	graphQLOperations := map[string]engine.OperationSpec{}
+	for _, operation := range b.Operations {
+		if operation.Kind == "graphql_query" || operation.Kind == "graphql_mutation" {
+			graphQLOperations[operation.ID] = operation
+		}
+	}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
-			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+			// binary_download commands consume an api_surface endpoint the same
+			// way a direct read does and are tracked by the same covered_by
+			// bookkeeping, so they satisfy that coverage too.
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}
@@ -312,7 +341,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(ep.CoveredBy.OperationTargets()) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -337,11 +366,13 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
-			if ep.CoveredBy.Write != "" {
-				if !writes[ep.CoveredBy.Write] {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write)
+			// Singular and plural alike: one documented endpoint may back
+			// several write contracts, and every one still has to exist.
+			for _, write := range ep.CoveredBy.WriteTargets() {
+				if !writes[write] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
 				}
-				coveredWrites[ep.CoveredBy.Write] = true
+				coveredWrites[write] = true
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
 				if !directReads[directRead] {
@@ -352,10 +383,25 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
 				}
 			}
+			for _, operationID := range ep.CoveredBy.OperationTargets() {
+				operation, ok := graphQLOperations[operationID]
+				if !ok || operation.GraphQL == nil {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.operations %q is not a declared fixed GraphQL operation", i, ep.Method, ep.Path, operationID)
+				}
+				if !strings.EqualFold(ep.Method, "POST") || operation.GraphQL.Path != ep.Path {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.operations %q does not match its declared GraphQL POST transport", i, ep.Method, ep.Path, operationID)
+				}
+				switch operation.Kind {
+				case "graphql_query":
+					hasNonExcludedGET = true
+				case "graphql_mutation":
+					hasNonExcludedMutation = true
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if mutationMethods[strings.ToUpper(ep.Method)] {
+			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
@@ -363,7 +409,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				return fmt.Errorf("endpoint %d (%s %s) excluded.category %q is not in the closed vocabulary", i, ep.Method, ep.Path, ep.Excluded.Category)
 			}
 		case hasOperation:
-			if err := checkSurfaceOperation(i, ep); err != nil {
+			if err := checkSurfaceOperation(i, ep, b.Surface.OperationLedgerVersion >= 2); err != nil {
 				return err
 			}
 		}
@@ -384,13 +430,13 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		return fmt.Errorf("capabilities.write is false but api_surface.json has a non-excluded POST/PUT/PATCH/DELETE endpoint")
 	}
 	if !b.Metadata.Capabilities.Read && hasNonExcludedGET {
-		return fmt.Errorf("capabilities.read is false but api_surface.json has a non-excluded GET endpoint")
+		return fmt.Errorf("capabilities.read is false but api_surface.json has a non-excluded executable read surface")
 	}
 
 	return nil
 }
 
-func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint) error {
+func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint, v2Ledger bool) error {
 	op := ep.Operation
 	if op == nil {
 		return nil
@@ -414,9 +460,11 @@ func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint) error {
 	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
 		return fmt.Errorf("%s operation.duplicate_of is required for duplicate rows", prefix)
 	}
-	if sourceRequiredOperationModels[op.Model] &&
-		strings.TrimSpace(op.SourceURL) == "" &&
-		strings.TrimSpace(op.Notes) == "" {
+	hasCitation := strings.TrimSpace(op.SourceURL) != "" || strings.TrimSpace(op.Notes) != ""
+	if v2Ledger && ep.Provenance != nil && strings.TrimSpace(ep.Provenance.SourceURL) != "" {
+		hasCitation = true
+	}
+	if sourceRequiredOperationModels[op.Model] && !hasCitation {
 		return fmt.Errorf("%s operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows", prefix)
 	}
 	return nil

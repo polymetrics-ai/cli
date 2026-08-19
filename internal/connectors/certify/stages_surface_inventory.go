@@ -1,38 +1,36 @@
 package certify
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
+// SurfaceProvenanceResult is the provider-artifact evidence attached to an
+// api_surface inventory. It is independent of executable endpoint coverage.
+type SurfaceProvenanceResult struct {
+	Status         string `json:"status"`
+	LedgerVersion  int    `json:"ledger_version"`
+	ArtifactCount  int    `json:"artifact_count"`
+	EndpointCount  int    `json:"endpoint_count"`
+	CitedEndpoints int    `json:"cited_endpoints"`
+	Reason         string `json:"reason,omitempty"`
+}
+
 type SurfaceResult struct {
-	Result          string         `json:"result"`
-	Endpoints       int            `json:"endpoints"`
-	Covered         int            `json:"covered"`
-	Blocked         int            `json:"blocked"`
-	CoveredBy       map[string]int `json:"covered_by,omitempty"`
-	BlockedByModel  map[string]int `json:"blocked_by_model,omitempty"`
-	BlockedByStatus map[string]int `json:"blocked_by_status,omitempty"`
-	Reason          string         `json:"reason,omitempty"`
-}
-
-type apiSurfaceFile struct {
-	Endpoints []apiSurfaceEndpoint `json:"endpoints"`
-}
-
-type apiSurfaceEndpoint struct {
-	CoveredBy map[string]any       `json:"covered_by"`
-	Operation *apiSurfaceOperation `json:"operation"`
-}
-
-type apiSurfaceOperation struct {
-	Model  string `json:"model"`
-	Status string `json:"status"`
-	Reason string `json:"reason"`
+	Result          string                   `json:"result"`
+	Endpoints       int                      `json:"endpoints"`
+	Covered         int                      `json:"covered"`
+	Blocked         int                      `json:"blocked"`
+	CoveredBy       map[string]int           `json:"covered_by,omitempty"`
+	BlockedByModel  map[string]int           `json:"blocked_by_model,omitempty"`
+	BlockedByStatus map[string]int           `json:"blocked_by_status,omitempty"`
+	Provenance      *SurfaceProvenanceResult `json:"provenance,omitempty"`
+	Reason          string                   `json:"reason,omitempty"`
 }
 
 func stageSurfaceInventory(rc *runContext, rep *Report) error {
@@ -70,26 +68,47 @@ func surfaceInventoryFor(connector string) (SurfaceResult, error) {
 	if err != nil {
 		return SurfaceResult{}, fmt.Errorf("read %s api surface: %w", connector, err)
 	}
-	var file apiSurfaceFile
-	if err := json.Unmarshal(raw, &file); err != nil {
+	result, err := surfaceInventoryFromRaw(raw)
+	if err != nil {
 		return SurfaceResult{}, fmt.Errorf("parse %s api surface: %w", connector, err)
 	}
+	return result, nil
+}
+
+func surfaceInventoryFromRaw(raw []byte) (SurfaceResult, error) {
+	surface, err := engine.ParseAPISurface(raw)
+	if err != nil {
+		return SurfaceResult{}, err
+	}
+	provenance := engine.ValidateSurfaceProvenance(&surface)
 	result := SurfaceResult{
 		Result:          "pass",
-		Endpoints:       len(file.Endpoints),
+		Endpoints:       len(surface.Endpoints),
 		CoveredBy:       map[string]int{},
 		BlockedByModel:  map[string]int{},
 		BlockedByStatus: map[string]int{},
+		Provenance: &SurfaceProvenanceResult{
+			Status:         provenance.Status,
+			LedgerVersion:  provenance.LedgerVersion,
+			ArtifactCount:  provenance.ArtifactCount,
+			EndpointCount:  provenance.EndpointCount,
+			CitedEndpoints: provenance.CitedEndpoints,
+		},
 	}
-	for i, endpoint := range file.Endpoints {
-		covered := len(endpoint.CoveredBy) > 0
+	if provenance.Status == engine.SurfaceProvenanceInvalid {
+		result.Result = "fail"
+		result.Reason = provenance.Issues[0].Error()
+		result.Provenance.Reason = result.Reason
+		return result, nil
+	}
+
+	for i, endpoint := range surface.Endpoints {
+		covered := hasSurfaceCoverage(endpoint.CoveredBy)
 		blocked := endpoint.Operation != nil && endpoint.Operation.Model != "" && endpoint.Operation.Status != "" && endpoint.Operation.Reason != ""
 		switch {
 		case covered:
 			result.Covered++
-			for key, value := range endpoint.CoveredBy {
-				result.CoveredBy[key] += coveredCount(value)
-			}
+			addSurfaceCoverageCounts(result.CoveredBy, endpoint.CoveredBy)
 		case blocked:
 			result.Blocked++
 			result.BlockedByModel[endpoint.Operation.Model]++
@@ -101,6 +120,28 @@ func surfaceInventoryFor(connector string) (SurfaceResult, error) {
 		}
 	}
 	return result, nil
+}
+
+func hasSurfaceCoverage(coverage *engine.SurfaceCoverage) bool {
+	return coverage != nil && (coverage.Stream != "" || len(coverage.WriteTargets()) > 0 || coverage.DirectRead != "" || len(coverage.DirectReads) > 0 || len(coverage.OperationTargets()) > 0)
+}
+
+func addSurfaceCoverageCounts(counts map[string]int, coverage *engine.SurfaceCoverage) {
+	if coverage.Stream != "" {
+		counts["stream"]++
+	}
+	if writes := coverage.WriteTargets(); len(writes) > 0 {
+		counts["write"] += len(writes)
+	}
+	if coverage.DirectRead != "" {
+		counts["direct_read"]++
+	}
+	if len(coverage.DirectReads) > 0 {
+		counts["direct_reads"] += len(coverage.DirectReads)
+	}
+	if operations := coverage.OperationTargets(); len(operations) > 0 {
+		counts["operation"] += len(operations)
+	}
 }
 
 func findAPISurfacePath(connector string) (string, error) {
@@ -120,24 +161,5 @@ func findAPISurfacePath(connector string) (string, error) {
 			return "", fmt.Errorf("read %s api surface: %w", connector, fs.ErrNotExist)
 		}
 		wd = parent
-	}
-}
-
-func coveredCount(value any) int {
-	switch typed := value.(type) {
-	case []any:
-		return len(typed)
-	case []string:
-		return len(typed)
-	case string:
-		if typed == "" {
-			return 0
-		}
-		return 1
-	default:
-		if value == nil {
-			return 0
-		}
-		return 1
 	}
 }

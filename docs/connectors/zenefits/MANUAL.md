@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Zenefits people, companies, departments, locations, employments, custom fields/values, bank accounts, labor groups, and time-off data.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,51 +28,51 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  token (secret)
+  token (secret) (required)
 
 ETL STREAMS
   people:
     primary key: id
-    fields: first_name(), id(), last_name(), status()
+    fields: first_name(string), id(string), last_name(string), status(string)
   companies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   locations:
     primary key: id
-    fields: city(), company(), country(), id(), name(), people(), phone(), state(), street1(), street2(), zip()
+    fields: city(string), company(object), country(string), id(string), name(string), people(object), phone(string), state(string), street1(string), street2(string), zip(string)
   employments:
     primary key: id
-    fields: annual_salary(), comp_type(), employment_type(), hire_date(), id(), is_active(), pay_rate(), person(), termination_date(), termination_type(), working_hours_per_week()
+    fields: annual_salary(string), comp_type(string), employment_type(string), hire_date(string), id(string), is_active(boolean), pay_rate(string), person(object), termination_date(string), termination_type(string), working_hours_per_week(string)
   custom_fields:
     primary key: id
-    fields: can_manager_view_field(), can_person_edit_field(), can_person_view_field(), custom_field_type(), custom_field_values(), help_text(), help_url(), id(), is_field_required(), is_sensitive(), name()
+    fields: can_manager_view_field(boolean), can_person_edit_field(boolean), can_person_view_field(boolean), custom_field_type(string), custom_field_values(object), help_text(string), help_url(string), id(string), is_field_required(boolean), is_sensitive(boolean), name(string)
   custom_field_values:
     primary key: id
-    fields: custom_field(), id(), person(), value()
+    fields: custom_field(object), id(string), person(object), value(string)
   company_banks:
     primary key: id
-    fields: account_number(), account_type(), bank_name(), company(), id(), routing_number()
+    fields: account_number(string), account_type(string), bank_name(string), company(object), id(string), routing_number(string)
   employee_banks:
     primary key: id
-    fields: account_number(), account_type(), amount_per_paycheck(), bank_name(), id(), is_primary_account(), is_salary_account(), percentage_per_paycheck(), person(), priority(), routing_number()
+    fields: account_number(string), account_type(string), amount_per_paycheck(string), bank_name(string), id(string), is_primary_account(boolean), is_salary_account(boolean), percentage_per_paycheck(string), person(object), priority(string), routing_number(string)
   labor_group_types:
     primary key: id
-    fields: id(), labor_groups(), name()
+    fields: id(string), labor_groups(object), name(string)
   labor_groups:
     primary key: id
-    fields: assigned_members(), code(), id(), labor_group_type(), name()
+    fields: assigned_members(object), code(string), id(string), labor_group_type(object), name(string)
   vacation_types:
     primary key: id
-    fields: company(), counts_as(), id(), name(), status(), vacation_requests()
+    fields: company(object), counts_as(string), id(string), name(string), status(string), vacation_requests(object)
   vacation_requests:
     primary key: id
-    fields: approved_date(), created_date(), creator(), deny_reason(), end_date(), hours(), id(), person(), reason(), start_date(), status(), vacation_type()
+    fields: approved_date(string), created_date(string), creator(object), deny_reason(string), end_date(string), hours(string), id(string), person(object), reason(string), start_date(string), status(string), vacation_type(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Zenefits account read of people, companies, departments, locations, employments, custom field definitions/values, company and employee bank account details, labor groups, and time-off vacation types/requests

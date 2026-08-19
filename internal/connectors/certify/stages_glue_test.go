@@ -2,6 +2,9 @@ package certify_test
 
 import (
 	"context"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
@@ -16,7 +19,7 @@ import (
 func TestGlueStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -27,6 +30,7 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
@@ -51,8 +55,8 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 	if rep.Capabilities.Schedule == nil {
 		t.Fatalf("Capabilities.Schedule is nil, want populated after schedule_roundtrip")
 	}
-	if rep.Capabilities.Schedule.Result != "pass" {
-		t.Errorf("Capabilities.Schedule.Result = %q, want pass", rep.Capabilities.Schedule.Result)
+	if rep.Capabilities.Schedule.Result != "not_live" || !strings.Contains(rep.Capabilities.Schedule.Reason, "scheduler daemon") {
+		t.Errorf("Capabilities.Schedule = %+v, want direct-fire evidence and explicit not_live scheduler boundary", rep.Capabilities.Schedule)
 	}
 	if rep.Capabilities.Schedule.Backend != "crontab" {
 		t.Errorf("Capabilities.Schedule.Backend = %q, want crontab", rep.Capabilities.Schedule.Backend)
@@ -82,7 +86,7 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 			t.Errorf("%s stage failed: %+v", name, s)
 		}
 	}
-	for _, name := range []string{"schedule_create", "schedule_list", "schedule_install", "schedule_remove"} {
+	for _, name := range []string{"schedule_create", "schedule_list", "schedule_install", "schedule_fire", "schedule_remove"} {
 		s := mustStage(t, rep, name)
 		if !s.Passed {
 			t.Errorf("%s stage failed: %+v", name, s)
@@ -90,14 +94,14 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 	}
 }
 
-// TestGlueStagesFlowPreviewHasZeroSideEffects proves the preview (dry_run)
-// step does not write to the warehouse: the query table backing the flow's
-// query step must not exist (or be empty) until the real `flow run`
-// executes it (design §D "preview dry_run with zero side effects").
-func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
+// TestGlueStagesScheduleFireObservesInstalledFlowAndRestoresBackend is the
+// happy-path proof that certification does more than install and remove an
+// entry: it invokes the installed schedule's CLI execution route and observes
+// both the completed flow and its durable terminal fire status before cleanup.
+func TestGlueStagesScheduleFireObservesInstalledFlowAndRestoresBackend(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -108,6 +112,116 @@ func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
+
+	fired := mustStage(t, rep, "schedule_fire")
+	if !fired.Passed || fired.CLI.Kind != "ScheduleFire" || fired.CLI.ExitCode != 0 {
+		t.Fatalf("schedule_fire = %+v, want successful ScheduleFire", fired)
+	}
+	if rep.Capabilities.Schedule == nil {
+		t.Fatal("Capabilities.Schedule = nil, want direct-fire and scheduler-boundary evidence")
+	}
+	if rep.Capabilities.Schedule.Result != "not_live" {
+		t.Fatalf("Capabilities.Schedule.Result = %q, want explicit not_live backend boundary", rep.Capabilities.Schedule.Result)
+	}
+	if !strings.Contains(rep.Capabilities.Schedule.Reason, "scheduler daemon") {
+		t.Fatalf("Capabilities.Schedule.Reason = %q, want explicit scheduler daemon boundary", rep.Capabilities.Schedule.Reason)
+	}
+	if rep.Capabilities.Schedule.Residue {
+		t.Fatalf("Capabilities.Schedule.Residue = true, want the installed backend restored after fire")
+	}
+}
+
+// TestGlueStagesScheduleFireRefusalFailsBeforeRemovalSuccess is the bad-path
+// proof: a failed install assertion must refuse the named fire before its CLI
+// invocation and fail the aggregate rather than being hidden by backend cleanup.
+func TestGlueStagesScheduleFireRefusalFailsBeforeRemovalSuccess(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	certify.SabotageExpectedKind(r, "schedule_install", "NotScheduleInstall")
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+
+	fired := mustStage(t, rep, "schedule_fire")
+	if fired.Passed || !strings.Contains(fired.Error, "schedule_install did not pass") {
+		t.Fatalf("schedule_fire = %+v, want install-gated refusal before execution", fired)
+	}
+	if driver.seen["schedule_fire"] != 0 {
+		t.Fatalf("schedule fire invocations = %d, want zero after failed install assertion", driver.seen["schedule_fire"])
+	}
+	if roundtrip := mustStage(t, rep, "schedule_roundtrip"); roundtrip.Passed {
+		t.Fatalf("schedule_roundtrip = %+v, want failed aggregate after refused fire", roundtrip)
+	}
+	if remove := mustStage(t, rep, "schedule_remove"); !remove.Passed {
+		t.Fatalf("schedule_remove = %+v, want cleanup attempted after fire refusal", remove)
+	}
+	if rep.Passed {
+		t.Fatalf("Report.Passed = true, want false after refused schedule fire")
+	}
+}
+
+// TestGlueStagesScheduleFireEmptyBackendIsRestoredAndDaemonIsNotLive is the
+// edge proof for an absent pre-existing backend: cleanup must preserve the
+// empty snapshot while the report refuses to claim that a real scheduler
+// daemon, rather than the direct CLI fire, was observed.
+func TestGlueStagesScheduleFireEmptyBackendIsRestoredAndDaemonIsNotLive(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		KeepWork:  true,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
+
+	workdir := certify.LastWorkdir(r)
+	t.Cleanup(func() { _ = os.RemoveAll(workdir) })
+	backend, err := os.ReadFile(filepath.Join(workdir, "cert-crontab"))
+	if err != nil {
+		t.Fatalf("read restored empty certification backend: %v", err)
+	}
+	if len(backend) != 0 {
+		t.Fatalf("restored empty certification backend = %q, want byte-for-byte empty snapshot", backend)
+	}
+	if rep.Capabilities.Schedule == nil || rep.Capabilities.Schedule.Result != "not_live" {
+		t.Fatalf("Capabilities.Schedule = %+v, want explicit not_live scheduler daemon result", rep.Capabilities.Schedule)
+	}
+}
+
+// TestGlueStagesFlowPreviewHasZeroSideEffects proves the preview (dry_run)
+// step does not write to the warehouse: the query table backing the flow's
+// query step must not exist (or be empty) until the real `flow run`
+// executes it (design §D "preview dry_run with zero side effects").
+func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
@@ -129,7 +243,7 @@ func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -140,6 +254,7 @@ func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	install := mustStage(t, rep, "schedule_install")
 	if !install.Passed {
@@ -162,7 +277,7 @@ func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 func TestGlueStagesSabotageFlowFailsNamedStage(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -174,6 +289,7 @@ func TestGlueStagesSabotageFlowFailsNamedStage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if rep.Passed {
 		t.Fatalf("Report.Passed = true, want false after flow sabotage")
 	}
@@ -197,7 +313,7 @@ func TestGlueStagesSecretLeakInFlowStdoutFailsSecretRedaction(t *testing.T) {
 	const knownSecret = "sample-cert-token"
 	t.Setenv("PM_SAMPLE_TOKEN", knownSecret)
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -209,6 +325,7 @@ func TestGlueStagesSecretLeakInFlowStdoutFailsSecretRedaction(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	flowRun := mustStage(t, rep, "flow_run")
 	if !flowRun.Passed {

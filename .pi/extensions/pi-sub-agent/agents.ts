@@ -4,9 +4,17 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { execFileSync } from "node:child_process";
 import { getAgentDir, parseFrontmatter } from "@earendil-works/pi-coding-agent";
 
-export type AgentScope = "user" | "project" | "both";
+export type AgentScope = "clean-project" | "user" | "project" | "both";
+
+const CLEAN_PROJECT_SCOPE = "clean-project";
+const AGENT_CONTRACT_CHECK_TIMEOUT_MS = 30_000;
+
+export function shouldConfirmProjectAgents(scope: AgentScope): boolean {
+	return scope === CLEAN_PROJECT_SCOPE || scope === "project" || scope === "both";
+}
 
 export const THINKING_LEVELS = ["off", "minimal", "low", "medium", "high", "xhigh"] as const;
 
@@ -19,7 +27,7 @@ export interface AgentConfig {
 	model?: string;
 	thinking?: AgentThinkingLevel;
 	systemPrompt: string;
-	source: "user" | "project" | "extension";
+	source: "user" | "project";
 	filePath: string;
 }
 export interface AgentDiscoveryResult {
@@ -97,72 +105,60 @@ function parseTools(value: unknown): string[] | undefined {
 	return tools.length > 0 ? tools : undefined;
 }
 
-function loadAgentsFromDir(dir: string, source: "user" | "project" | "extension"): AgentConfig[] {
-	const agents: AgentConfig[] = [];
-
-	if (!fs.existsSync(dir)) {
-		return agents;
+function loadAgentFile(filePath: string, source: "user" | "project"): AgentConfig | undefined {
+	let content: string;
+	try {
+		content = fs.readFileSync(filePath, "utf-8");
+	} catch {
+		return undefined;
 	}
+
+	let parsed: { frontmatter: Record<string, unknown>; body: string };
+	try {
+		parsed = parseFrontmatter<Record<string, unknown>>(content);
+	} catch {
+		return undefined;
+	}
+
+	const { frontmatter, body } = parsed;
+	const name = frontmatterString(frontmatter.name);
+	const description = frontmatterString(frontmatter.description);
+	if (!name || !description) return undefined;
+
+	const tools = parseTools(frontmatter.tools);
+	const rawModel = frontmatterString(frontmatter.model);
+	const parsedModel = rawModel ? splitModelThinking(rawModel) : undefined;
+	const model = parsedModel?.model;
+	const thinking = frontmatterThinking(frontmatter.thinking) ?? parsedModel?.thinking;
+	const agent: AgentConfig = {
+		name,
+		description,
+		systemPrompt: body,
+		source,
+		filePath,
+	};
+	if (tools) agent.tools = tools;
+	if (model) agent.model = model;
+	if (thinking) agent.thinking = thinking;
+	return agent;
+}
+
+function loadAgentsFromDir(dir: string, source: "user" | "project"): AgentConfig[] {
+	if (!fs.existsSync(dir)) return [];
 
 	let entries: fs.Dirent[];
 	try {
 		entries = fs.readdirSync(dir, { withFileTypes: true });
 	} catch {
-		return agents;
+		return [];
 	}
 
+	const agents: AgentConfig[] = [];
 	for (const entry of entries) {
-		if (!entry.name.endsWith(".md")) continue;
-		if (!entry.isFile() && !entry.isSymbolicLink()) continue;
-
-		const filePath = path.join(dir, entry.name);
-		let content: string;
-		try {
-			content = fs.readFileSync(filePath, "utf-8");
-		} catch {
-			continue;
-		}
-
-		let parsed: { frontmatter: Record<string, unknown>; body: string };
-		try {
-			parsed = parseFrontmatter<Record<string, unknown>>(content);
-		} catch {
-			continue;
-		}
-
-		const { frontmatter, body } = parsed;
-		const name = frontmatterString(frontmatter.name);
-		const description = frontmatterString(frontmatter.description);
-
-		if (!name || !description) {
-			continue;
-		}
-
-		const tools = parseTools(frontmatter.tools);
-		const rawModel = frontmatterString(frontmatter.model);
-		const parsedModel = rawModel ? splitModelThinking(rawModel) : undefined;
-		const model = parsedModel?.model;
-		const thinking = frontmatterThinking(frontmatter.thinking) ?? parsedModel?.thinking;
-
-		const agent: AgentConfig = {
-			name,
-			description,
-			systemPrompt: body,
-			source,
-			filePath,
-		};
-		if (tools) {
-			agent.tools = tools;
-		}
-		if (model) {
-			agent.model = model;
-		}
-		if (thinking) {
-			agent.thinking = thinking;
-		}
-		agents.push(agent);
+		if (!entry.name.endsWith(".md") || (!entry.isFile() && !entry.isSymbolicLink())) continue;
+		const agent = loadAgentFile(path.join(dir, entry.name), source);
+		if (agent) agents.push(agent);
 	}
-
 	return agents;
 }
 
@@ -186,23 +182,127 @@ function findNearestProjectAgentsDir(cwd: string): string | null {
 	}
 }
 
-export function discoverAgents(cwd: string, scope: AgentScope, extensionAgentsDir?: string): AgentDiscoveryResult {
-	const userDir = path.join(getAgentDir(), "agents");
-	const projectAgentsDir = findNearestProjectAgentsDir(cwd);
-	const extensionAgents = extensionAgentsDir ? loadAgentsFromDir(extensionAgentsDir, "extension") : [];
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
+}
 
-	const userAgents = scope === "project" ? [] : loadAgentsFromDir(userDir, "user");
-	const projectAgents = scope === "user" || !projectAgentsDir ? [] : loadAgentsFromDir(projectAgentsDir, "project");
+function isSafeAgentFileStem(value: string): boolean {
+	return /^[a-z0-9][a-z0-9-]*$/.test(value);
+}
+
+function isRealDirectory(directory: string): boolean {
+	try {
+		const stats = fs.lstatSync(directory);
+		return stats.isDirectory() && !stats.isSymbolicLink();
+	} catch {
+		return false;
+	}
+}
+
+function isRegularFile(filePath: string): boolean {
+	try {
+		const stats = fs.lstatSync(filePath);
+		return stats.isFile() && !stats.isSymbolicLink();
+	} catch {
+		return false;
+	}
+}
+
+function generatedAgentContractIsCurrent(projectRoot: string): boolean {
+	try {
+		execFileSync("go", ["run", "./cmd/agentcontractgen", "check", "--root", projectRoot], {
+			cwd: projectRoot,
+			stdio: "ignore",
+			timeout: AGENT_CONTRACT_CHECK_TIMEOUT_MS,
+			windowsHide: true,
+		});
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+function canonicalCleanProjectRoles(projectRoot: string): string[] {
+	const canonicalPath = path.join(projectRoot, ".agents", "agentic-delivery", "canonical", "delivery-contract.json");
+	let value: unknown;
+	try {
+		value = JSON.parse(fs.readFileSync(canonicalPath, "utf-8"));
+	} catch {
+		return [];
+	}
+	if (!isRecord(value)) return [];
+	const baseRole = isRecord(value.base_role) ? value.base_role : undefined;
+	const connectorOverlay = isRecord(value.connector_overlay) ? value.connector_overlay : undefined;
+	const piHarness = isRecord(value.pi_harness) ? value.pi_harness : undefined;
+	const baseName = baseRole?.name;
+	const connectorName = connectorOverlay?.name;
+	const scope = piHarness?.clean_project_scope;
+	const roles = piHarness?.roles;
+	if (
+		scope !== CLEAN_PROJECT_SCOPE ||
+		typeof baseName !== "string" ||
+		typeof connectorName !== "string" ||
+		!isSafeAgentFileStem(baseName) ||
+		!isSafeAgentFileStem(connectorName) ||
+		baseName === connectorName ||
+		!Array.isArray(roles) ||
+		roles.length !== 2 ||
+		roles[0] !== baseName ||
+		roles[1] !== connectorName ||
+		roles.some((role) => typeof role !== "string" || !role.trim())
+	) {
+		return [];
+	}
+	return [baseName, connectorName];
+}
+
+function loadCleanProjectAgents(projectAgentsDir: string): AgentConfig[] {
+	const projectRoot = path.dirname(path.dirname(projectAgentsDir));
+	const canonicalDir = path.join(projectRoot, ".agents", "agentic-delivery", "canonical");
+	const canonicalPath = path.join(canonicalDir, "delivery-contract.json");
+	for (const directory of [
+		path.join(projectRoot, ".pi"),
+		projectAgentsDir,
+		path.join(projectRoot, ".agents"),
+		path.join(projectRoot, ".agents", "agentic-delivery"),
+		canonicalDir,
+	]) {
+		if (!isRealDirectory(directory)) return [];
+	}
+	if (!isRegularFile(canonicalPath) || !generatedAgentContractIsCurrent(projectRoot)) return [];
+
+	const roles = canonicalCleanProjectRoles(projectRoot);
+	if (roles.length !== 2) return [];
+
+	const agents: AgentConfig[] = [];
+	for (const role of roles) {
+		const filePath = path.join(projectAgentsDir, `${role}.md`);
+		if (!isRegularFile(filePath)) return [];
+		const agent = loadAgentFile(filePath, "project");
+		if (!agent || agent.name !== role) return [];
+		agents.push(agent);
+	}
+	return agents;
+}
+
+export function discoverAgents(cwd: string, scope: AgentScope): AgentDiscoveryResult {
+	const projectAgentsDir = findNearestProjectAgentsDir(cwd);
+	const userAgents = scope === "project" || scope === CLEAN_PROJECT_SCOPE
+		? []
+		: loadAgentsFromDir(path.join(getAgentDir(), "agents"), "user");
+	const projectAgents = scope === "user" || !projectAgentsDir
+		? []
+		: scope === CLEAN_PROJECT_SCOPE
+			? loadCleanProjectAgents(projectAgentsDir)
+			: loadAgentsFromDir(projectAgentsDir, "project");
+
+	if (scope === CLEAN_PROJECT_SCOPE) {
+		return { agents: projectAgents, projectAgentsDir };
+	}
 
 	const agentMap = new Map<string, AgentConfig>();
-
-	for (const agent of extensionAgents) agentMap.set(agent.name, agent);
-	if (scope !== "project") {
-		for (const agent of userAgents) agentMap.set(agent.name, agent);
-	}
-	if (scope !== "user") {
-		for (const agent of projectAgents) agentMap.set(agent.name, agent);
-	}
+	for (const agent of userAgents) agentMap.set(agent.name, agent);
+	for (const agent of projectAgents) agentMap.set(agent.name, agent);
 
 	return { agents: Array.from(agentMap.values()), projectAgentsDir };
 }

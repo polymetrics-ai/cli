@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/BatchPayments/synthetic-conformance-value/History"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "HistoryRecords": [
+        {
+          "Details": "details_fixture",
+          "Changes": "changes_fixture",
+          "User": "user_fixture",
+          "DateUTC": "date_utc_fixture_1"
+        }
+      ]
+    }
+  }
+}

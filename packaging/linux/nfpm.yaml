@@ -1,0 +1,40 @@
+# nfpm builds the Linux deb and rpm packages.
+#
+# This is the same tool GoReleaser embeds to produce them — GoReleaser's `nfpms`
+# block is a wrapper around this configuration. Calling nfpm directly is what
+# lets the release build each target natively on its own runner (pm embeds
+# DuckDB, so every target is a cgo build and cannot be cross-compiled from one
+# host) without a GoReleaser Pro licence for the `prebuilt` builder.
+#
+# The fields below are the source of truth for the packages assembled by
+# `scripts/assemble-release-assets.sh`. `scripts/verify-release-assets.sh`
+# checks the resulting file names, and `scripts/test-linux-packages.sh`
+# installs the packages under QEMU on every pull request, so drift fails CI
+# rather than shipping.
+name: pm
+arch: ${PM_PACKAGE_ARCH}
+version: ${PM_PACKAGE_VERSION}
+release: "1"
+section: utils
+priority: optional
+maintainer: Polymetrics AI
+vendor: Polymetrics AI
+homepage: https://cli.polymetrics.ai
+license: AGPL-3.0-only
+description: |-
+  Local-first data CLI for ETL, embedded DuckDB SQL, reverse ETL,
+  scheduling, and AI-agent-safe automation.
+
+contents:
+  - src: ${PM_PACKAGE_BINARY}
+    dst: /usr/bin/pm
+    file_info:
+      mode: 0755
+  - src: ./LICENSE
+    dst: /usr/share/doc/pm/LICENSE
+    file_info:
+      mode: 0644
+  - src: ./NOTICE
+    dst: /usr/share/doc/pm/NOTICE
+    file_info:
+      mode: 0644

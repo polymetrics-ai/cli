@@ -3,12 +3,12 @@ title: Query
 description: Run table scans or read-only SQL over local warehouse data using pm query run.
 ---
 
-After an extraction lands data in the local warehouse, `pm query run` lets you inspect it without leaving the local workspace. The default binary uses a pure-Go JSONL query engine for table reads and conservative SELECT parsing. Building with `-tags duckdb` unlocks the DuckDB-backed engine for richer analytical SQL.
+After an extraction lands data in the local warehouse, `pm query run` lets you inspect it without leaving the local workspace. Every binary embeds DuckDB and reads the warehouse's Parquet tables directly, so `--sql` accepts read-only `SELECT` and `WITH` statements in full -- joins, aggregates, `GROUP BY`, window functions and CTEs. Writes are refused.
 
 ## Basic usage
 
 ```bash
-pm query run --table <table> [--limit <n>] [--json]
+pm query run --table <table> [--connection <name>] [--limit <n>] [--json]
 pm query run --sql "<SQL statement>" [--limit <n>] [--json]
 pm query run --table <table> --agent-mode summary --fields id,email --sample 3
 pm query run --table <table> --agent-mode stream --fields id,email
@@ -16,11 +16,64 @@ pm query run --table <table> --agent-mode stream --fields id,email
 
 `--table` is shorthand for `SELECT * FROM <table> LIMIT <n>`. Use `--sql` for any other query.
 
+## Tables belong to a connection
+
+Every connection materializes its tables into its own directory under the
+warehouse root, so two connections can target the same table name without one
+overwriting the other. When more than one connection has a table of the
+requested name, `pm query run` refuses the read and lists the owning
+connections rather than guessing which one you meant:
+
+```
+table "records" is materialized by 2 connections (acme, globex); pass --connection to choose one
+```
+
+Add `--connection` to pick one:
+
+```bash
+pm query run --table records --connection acme --json
+```
+
+### Case-equivalent names on one legacy connection
+
+DuckDB treats ASCII case-equivalent identifiers as the same SQL name. New
+local-warehouse connections therefore reject distinct destination table
+spellings such as `records` and `RECORDS` before saving the connection.
+
+An older connection may already contain that invalid inventory. `pm` leaves
+the existing configuration and data unchanged when it opens the project. The
+[connection manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/connections.md)
+owns the pre-sync recovery rule. A SQL reference to either spelling is also
+refused: `--connection` cannot choose between two destinations owned by the
+same connection. To inspect retained data, use `--table` with the exact
+spelling that the local resolver can see; do not rely on case aliasing. Then
+create replacement connections whose destination table names differ by more
+than ASCII letter case.
+
+A table written straight through the warehouse connector's write surface — a
+reverse ETL run whose destination is `warehouse`, or a file seeded by hand —
+lands at the warehouse root instead, because a direct write carries no
+connection identity. Such a table is listed and selected as `_unattributed`, a
+value no connection name can take:
+
+```bash
+pm query run --table records --connection _unattributed --json
+```
+
+`--connection` scopes `--table` reads only, because a `--sql` query names its
+table inside the statement. In the default build an ambiguous table name in
+`--sql` is refused the same way and points you back at the `--table` form. In
+the DuckDB build a shared name is instead registered once per owning
+connection as `<table>__<connection-id>` and never bare, so a join can never
+silently read one connection's rows while meaning another's; `pm connections
+list --json` reports each connection's `id`.
+
 ## Flag reference
 
 | Flag | Description |
 |---|---|
 | `--table` | Table name to query. Returns all columns up to `--limit` rows. |
+| `--connection` | Connection whose table to read. Required only when several connections share the table name. Use `_unattributed` for a root-level table. |
 | `--sql` | Raw SQL statement. Takes precedence over `--table` when both are provided. |
 | `--limit` | Maximum rows to return. Default is 100. |
 | `--fields` | Comma-separated projection applied before output. |
@@ -61,8 +114,8 @@ pm query run \
   --json
 ```
 
-<Callout type="warn">
-  Joins require the DuckDB build (`CGO_ENABLED=1 go build -tags duckdb ./cmd/pm`). The default CGO-free build is intentionally conservative.
+<Callout type="info">
+  Joins work in every build. DuckDB is embedded rather than optional, so there is no build flag to remember and no query that works on one install and fails on another.
 </Callout>
 
 ### Filter and sort
@@ -112,14 +165,18 @@ The envelope always contains:
 
 With `--agent-mode summary`, the output is a compact single JSON object with `kind`, `count`, `fields`, and `sample`. With `--agent-mode stream`, each stdout line is one projected JSON row.
 
-## Engine modes
+## Engine
 
-| Build | Query behavior |
-|---|---|
-| Default | Local JSONL table reads and conservative SELECT parsing. |
-| `-tags duckdb` | DuckDB-backed read-only SQL over local warehouse files. |
+There is one engine, in every build: DuckDB, embedded, reading the warehouse's
+Parquet tables in-process. Only read-only `SELECT` and `WITH` statements are
+accepted; statement chaining and every write keyword are refused before the
+query reaches the engine.
 
-Both modes keep query execution local. Output can contain data rows, so agents should use explicit `--limit`, `--fields`, or `--agent-mode summary`.
+Because the tables are plain Parquet files, the same data is readable by pandas,
+Polars, Spark, DuckDB's own CLI, or any other Parquet reader without `pm`
+involved.
+
+Query execution stays local. Output can contain data rows, so agents should use explicit `--limit`, `--fields`, or `--agent-mode summary`.
 
 ## Workflow: extract then query
 

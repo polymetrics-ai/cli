@@ -11,6 +11,7 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 
 ## Icon
 
+- id: coda
 - asset: icons/coda.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,47 +32,46 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 - doc_id
 - mode
 - page_size
-- auth_token (secret)
+- auth_token (secret) (required)
 
 ## ETL Streams
 
 - docs:
   - primary key: id
-  - fields: browserLink(), createdAt(), folderId(), href(), id(), name(), owner(), ownerName(), type(), updatedAt(), workspaceId()
+  - fields: browserLink(string), createdAt(string), folderId(string), href(string), id(string), name(string), owner(string), ownerName(string), type(string), updatedAt(string), workspaceId(string)
 - tables:
   - primary key: id
-  - fields: browserLink(), doc_id(), href(), id(), name(), rowCount(), tableType(), type()
+  - fields: browserLink(string), doc_id(string), href(string), id(string), name(string), rowCount(integer), tableType(string), type(string)
 - pages:
   - primary key: id
-  - fields: browserLink(), contentType(), doc_id(), href(), id(), name(), subtitle(), type()
+  - fields: browserLink(string), contentType(string), doc_id(string), href(string), id(string), name(string), subtitle(string), type(string)
 - formulas:
   - primary key: id
-  - fields: doc_id(), href(), id(), name(), type()
+  - fields: doc_id(string), href(string), id(string), name(string), type(string)
 - controls:
   - primary key: id
-  - fields: controlType(), doc_id(), href(), id(), name(), type()
+  - fields: controlType(string), doc_id(string), href(string), id(string), name(string), type(string)
 - columns:
   - primary key: id
-  - fields: calculated(), defaultValue(), display(), doc_id(), format(), formula(), href(), id(), name(), table_id(), type()
+  - fields: calculated(boolean), defaultValue(string), display(boolean), doc_id(string), format(object), formula(string), href(string), id(string), name(string), table_id(string), type(string)
 - rows:
   - primary key: id
-  - fields: browserLink(), createdAt(), doc_id(), href(), id(), index(), name(), table_id(), type(), updatedAt(), values()
+  - fields: browserLink(string), createdAt(string), doc_id(string), href(string), id(string), index(integer), name(string), table_id(string), type(string), updatedAt(string), values(object)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - upsert_rows:
   - endpoint: POST /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows
-  - required fields: table_id
-  - optional fields: rows, keyColumns
+  - required fields: table_id, rows
+  - optional fields: keyColumns
   - risk: inserts new rows, or upserts existing ones when keyColumns is set, into a Coda table; queued for async processing (202) and generally applied within seconds
 - update_row:
   - endpoint: PUT /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}
-  - required fields: table_id, row_id
-  - optional fields: row
+  - required fields: table_id, row_id, row
   - risk: overwrites cell values on an existing row; queued for async processing (202) and generally applied within seconds
 - delete_row:
   - endpoint: DELETE /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}
@@ -79,8 +79,7 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
   - risk: permanently removes a row from a Coda table; irreversible, queued for async processing (202)
 - delete_rows:
   - endpoint: DELETE /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows
-  - required fields: table_id
-  - optional fields: rowIds
+  - required fields: table_id, rowIds
   - risk: permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)
 - push_button:
   - endpoint: POST /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}/buttons/{{ record.column_id }}

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 
 ICON
+  id: pivotal-tracker
   asset: icons/pivotal-tracker.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,24 +28,24 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   project_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   projects:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   stories:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   iterations:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   epics:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Pivotal Tracker API read of project, story, iteration, and epic data

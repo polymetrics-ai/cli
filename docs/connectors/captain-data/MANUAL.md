@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Captain Data workspace, workflows, jobs, and job results, and writes a launch_workflow action to trigger a new workflow run, through the Captain Data v3 REST API.
 
 ICON
+  id: captain-data
   asset: icons/captain-data.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,26 +30,26 @@ CONFIGURATION
   base_url
   job_uid
   mode
-  project_uid
+  project_uid (required)
   workflow_uid
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   workspace:
     primary key: uid
-    fields: created_at(), name(), plan(), uid()
+    fields: created_at(string), name(string), plan(string), uid(string)
   workflows:
     primary key: uid
-    fields: created_at(), name(), status(), uid(), updated_at()
+    fields: created_at(string), name(string), status(string), uid(string), updated_at(string)
   jobs:
     primary key: uid
-    fields: created_at(), ended_at(), status(), uid(), workflow_uid()
+    fields: created_at(string), ended_at(string), status(string), uid(string), workflow_uid(string)
   job_results:
     primary key: uid
-    fields: created_at(), data(), job_uid(), status(), uid()
+    fields: created_at(string), data(object), job_uid(string), status(string), uid(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   launch_workflow:

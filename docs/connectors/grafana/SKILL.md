@@ -11,6 +11,7 @@ Reads Grafana dashboards, folders, data sources, organization users, and provisi
 
 ## Icon
 
+- id: grafana
 - asset: icons/grafana.svg
 - source: official
 - review_status: official_verified
@@ -27,31 +28,31 @@ Reads Grafana dashboards, folders, data sources, organization users, and provisi
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - dashboards:
   - primary key: uid
-  - fields: folderId(), folderTitle(), folderUid(), id(), isStarred(), orgId(), tags(), title(), type(), uid(), url()
+  - fields: folderId(integer), folderTitle(string), folderUid(string), id(integer), isStarred(boolean), orgId(integer), tags(array), title(string), type(string), uid(string), url(string)
 - folders:
   - primary key: uid
-  - fields: id(), orgId(), tags(), title(), type(), uid(), url()
+  - fields: id(integer), orgId(integer), tags(array), title(string), type(string), uid(string), url(string)
 - datasources:
   - primary key: uid
-  - fields: access(), id(), isDefault(), name(), orgId(), readOnly(), type(), uid(), url()
+  - fields: access(string), id(integer), isDefault(boolean), name(string), orgId(integer), readOnly(boolean), type(string), uid(string), url(string)
 - org_users:
   - primary key: userId
-  - fields: email(), lastSeenAt(), login(), orgId(), role(), userId()
+  - fields: email(string), lastSeenAt(string), login(string), orgId(integer), role(string), userId(integer)
 - alert_rules:
   - primary key: uid
-  - fields: condition(), execErrState(), folderUID(), for(), id(), noDataState(), orgID(), ruleGroup(), title(), uid()
+  - fields: condition(string), execErrState(string), folderUID(string), for(string), id(integer), noDataState(string), orgID(integer), ruleGroup(string), title(string), uid(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

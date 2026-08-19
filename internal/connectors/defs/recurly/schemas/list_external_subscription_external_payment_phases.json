@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_external_subscription_external_payment_phases record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "External payment phase ID",
+      "description": "System-generated unique identifier for an external payment phase ID, e.g. `e28zov4fw0v2`."
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Started At"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Ends At"
+    },
+    "starting_billing_period_index": {
+      "type": "integer",
+      "title": "Starting Billing Period Index"
+    },
+    "ending_billing_period_index": {
+      "type": "integer",
+      "title": "Ending Billing Period Index"
+    },
+    "offer_type": {
+      "type": "string",
+      "title": "Offer Type",
+      "description": "Type of discount offer given, e.g. \"FREE_TRIAL\""
+    },
+    "offer_name": {
+      "type": "string",
+      "title": "Offer Name",
+      "description": "Name of the discount offer given, e.g. \"introductory\""
+    },
+    "period_count": {
+      "type": "integer",
+      "title": "Period Count",
+      "description": "Number of billing periods"
+    },
+    "period_length": {
+      "type": "string",
+      "title": "Period Length",
+      "description": "Billing cycle length"
+    },
+    "amount": {
+      "type": "string",
+      "format": "decimal",
+      "title": "Amount",
+      "description": "Allows up to 9 decimal places"
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "description": "3-letter ISO 4217 currency code."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at",
+      "description": "When the external subscription was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated at",
+      "description": "When the external subscription was updated in Recurly."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

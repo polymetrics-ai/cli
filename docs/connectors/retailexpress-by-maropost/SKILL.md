@@ -11,9 +11,11 @@ Reads Retail Express products, customers, orders, stock levels, and stores throu
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -26,7 +28,7 @@ Reads Retail Express products, customers, orders, stock levels, and stores throu
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - created_after
 - status
 - store_id
@@ -39,22 +41,22 @@ Reads Retail Express products, customers, orders, stock levels, and stores throu
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), sku(), status(), stream(), updated_at()
+  - fields: id(string), name(string), sku(string), status(string), stream(string), updated_at(string)
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), first_name(), id(), last_name(), stream(), updated_at()
+  - fields: email(string), first_name(string), id(string), last_name(string), stream(string), updated_at(string)
 - orders:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), order_number(), status(), stream(), total(), updated_at()
+  - fields: customer_id(string), id(string), order_number(string), status(string), stream(string), total(number), updated_at(string)
 - stock_levels:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), product_id(), quantity(), store_id(), stream(), updated_at()
+  - fields: id(string), product_id(string), quantity(number), store_id(string), stream(string), updated_at(string)
 - stores:
   - primary key: id
-  - fields: code(), id(), name(), status(), stream()
+  - fields: code(string), id(string), name(string), status(string), stream(string)
 
 ## Sync Modes
 

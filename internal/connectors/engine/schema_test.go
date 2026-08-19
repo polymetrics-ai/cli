@@ -49,7 +49,7 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string"}}}`,
 		},
 		{
-			name: "annotations preserved but not enforced",
+			name: "annotations compile",
 			raw:  `{"type":"string","format":"date-time","default":"x","title":"t","description":"d","$schema":"http://json-schema.org/draft-07/schema#"}`,
 		},
 		{
@@ -146,6 +146,25 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `"ABC"`,
 			wantErr:   true,
 			errSubstr: "pattern",
+		},
+		{
+			name:     "absolute URI valid",
+			raw:      `{"type":"string","format":"uri"}`,
+			instance: `"https://example.invalid/calendar?channel=1#watch"`,
+		},
+		{
+			name:      "relative URI invalid",
+			raw:       `{"type":"string","format":"uri"}`,
+			instance:  `"calendar/watch"`,
+			wantErr:   true,
+			errSubstr: "format",
+		},
+		{
+			name:      "malformed URI escape invalid",
+			raw:       `{"type":"string","format":"uri"}`,
+			instance:  `"https://example.invalid/%ZZ"`,
+			wantErr:   true,
+			errSubstr: "format",
 		},
 		{
 			name:     "minProperties valid",
@@ -343,5 +362,118 @@ func TestSchemaCompileErrorMessages(t *testing.T) {
 	_, err = CompileSchema(json.RawMessage(`{"type":"bogus-type"}`))
 	if err == nil {
 		t.Fatalf("expected error for unknown type value")
+	}
+}
+
+// --- array cardinality (minItems/maxItems) ---------------------------------
+//
+// The engine dialect had no way to say "this array must not be empty", which
+// is why 25 Airtable operations sat blocked behind
+// airtable-array-cardinality-foundation, and why drip/writes.json and
+// zoho-bigin/writes.json each ship a written apology for the same gap.
+
+func TestCompileSchemaArrayCardinalityKeywords(t *testing.T) {
+	for _, raw := range []string{
+		`{"type":"array","minItems":1}`,
+		`{"type":"array","maxItems":100}`,
+		`{"type":"array","minItems":1,"maxItems":100}`,
+		`{"type":"object","properties":{"ids":{"type":"array","minItems":1}}}`,
+	} {
+		if _, err := CompileSchema(json.RawMessage(raw)); err != nil {
+			t.Fatalf("CompileSchema(%s): unexpected error: %v", raw, err)
+		}
+	}
+}
+
+func TestSchemaValidateMinItems(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":1,"items":{"type":"string"}}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+
+	if err := sch.Validate(map[string]any{"ids": []any{"a"}}); err != nil {
+		t.Fatalf("one element: unexpected error: %v", err)
+	}
+	err = sch.Validate(map[string]any{"ids": []any{}})
+	if err == nil {
+		t.Fatal("empty array: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") || !strings.Contains(err.Error(), "/ids") {
+		t.Fatalf("empty array: error should name minItems and the path, got %v", err)
+	}
+
+	// minItems governs array CONTENT, never presence: "required and non-empty"
+	// is required + minItems, exactly as in real draft-07. A missing optional
+	// array must stay valid or every existing bundle silently changes meaning.
+	optional, err := CompileSchema(json.RawMessage(`{"type":"object","properties":{"ids":{"type":"array","minItems":1}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema optional: %v", err)
+	}
+	if err := optional.Validate(map[string]any{}); err != nil {
+		t.Fatalf("absent optional array: want valid, got %v", err)
+	}
+}
+
+func TestSchemaValidateMaxItems(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"array","maxItems":2}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := sch.Validate([]any{"a", "b"}); err != nil {
+		t.Fatalf("at limit: unexpected error: %v", err)
+	}
+	err = sch.Validate([]any{"a", "b", "c"})
+	if err == nil {
+		t.Fatal("over limit: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "maxItems") {
+		t.Fatalf("over limit: error should name maxItems, got %v", err)
+	}
+}
+
+func TestSchemaArrayCardinalityIgnoresNonArrays(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"minItems":1,"maxItems":2}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	for _, v := range []any{"string", json.Number("7"), true, nil, map[string]any{}} {
+		if err := sch.Validate(v); err != nil {
+			t.Fatalf("non-array %v: want ignored, got %v", v, err)
+		}
+	}
+}
+
+func TestSchemaMinItemsZeroIsHonored(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"array","minItems":0}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := sch.Validate([]any{}); err != nil {
+		t.Fatalf("explicit minItems 0: want empty array valid, got %v", err)
+	}
+}
+
+func TestCompileSchemaRejectsInvalidArrayCardinality(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  string
+		want string
+	}{
+		{name: "negative minItems", raw: `{"type":"array","minItems":-1}`, want: "minItems"},
+		{name: "negative maxItems", raw: `{"type":"array","maxItems":-1}`, want: "maxItems"},
+		{name: "non integer minItems", raw: `{"type":"array","minItems":"1"}`, want: "minItems"},
+		{name: "non integer maxItems", raw: `{"type":"array","maxItems":true}`, want: "maxItems"},
+		{name: "maxItems below minItems", raw: `{"type":"array","minItems":3,"maxItems":2}`, want: "maxItems"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := CompileSchema(json.RawMessage(tt.raw))
+			if err == nil {
+				t.Fatalf("want compile error, got nil")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("error should mention %q, got %v", tt.want, err)
+			}
+		})
 	}
 }

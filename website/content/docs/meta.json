@@ -7,6 +7,7 @@
     "---",
     "Core Concepts",
     "[Connectors](/docs/connectors)",
+    "connector-delivery",
     "etl",
     "query",
     "reverse-etl",

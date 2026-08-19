@@ -9,6 +9,14 @@ description: Local Outbox connector knowledge and safe action guide.
 
 Local JSONL destination that records reverse ETL writes and receipts.
 
+## Icon
+
+- id: pm-outbox
+- asset: icons/pm-outbox.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
+
 ## Capabilities
 
 - check=true catalog=true read=false write=true query=false
@@ -53,7 +61,7 @@ pm connectors inspect outbox --json
 ```bash
 pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox
 pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Agent Rules
@@ -61,4 +69,3 @@ pm reverse run <plan-id> --approve <approval-token> --json
 - Run pm connectors inspect outbox before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

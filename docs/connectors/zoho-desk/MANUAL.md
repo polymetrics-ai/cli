@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Zoho Desk tickets, contacts, and accounts through the Zoho Desk REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-zoho-desk
+  asset: icons/simple-icons/zoho-desk.svg
+  title: Zoho
+  simple_icon_slug: zoho
+  simple_icon_hex: E42527
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Zoho
+  match: curated-alias
+  matched_by: zoho
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -30,21 +38,21 @@ CONFIGURATION
   mode
   org_id
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   tickets:
     primary key: id
     cursor: updated_at
-    fields: channel(), createdTime(), email(), id(), modifiedTime(), name(), priority(), status(), subject(), ticketNumber(), updated_at()
+    fields: channel(string), createdTime(string), email(string), id(string), modifiedTime(string), name(string), priority(string), status(string), subject(string), ticketNumber(string), updated_at(string)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: accountId(), createdTime(), email(), firstName(), id(), lastName(), modifiedTime(), name(), phone(), updated_at()
+    fields: accountId(string), createdTime(string), email(string), firstName(string), id(string), lastName(string), modifiedTime(string), name(string), phone(string), updated_at(string)
   accounts:
     primary key: id
     cursor: updated_at
-    fields: accountName(), createdTime(), id(), modifiedTime(), name(), phone(), updated_at(), website()
+    fields: accountName(string), createdTime(string), id(string), modifiedTime(string), name(string), phone(string), updated_at(string), website(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

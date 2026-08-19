@@ -1182,6 +1182,33 @@
       "confirm": "destructive"
     },
     {
+      "name": "destroy_candidate_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/candidate/{{ record.tag_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Greenhouse queues an asynchronous job that strips this tag from EVERY candidate it is applied to before deleting the tag itself, so the blast radius is organisation-wide and is not bounded by any candidate id.",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
       "name": "add_a_candidate_tag",
       "kind": "update",
       "method": "PUT",

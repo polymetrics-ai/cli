@@ -1,0 +1,9 @@
+{
+  "issue": 3992,
+  "phase": "issue-3992-schedule-authorization-r1",
+  "state": "verified",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-3992-schedule-authorization-r1",
+  "gsd_mode": "inline_manual_fallback",
+  "fallback_reason": "#3992 is not a roadmap-numbered GSD phase and this environment cannot provide compatible isolated Pi workers; the canonical contract requires a single inline worker."
+}

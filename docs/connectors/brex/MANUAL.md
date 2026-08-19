@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, accounts, statements, transfers, and webhooks through the Brex platform REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-brex
+  asset: icons/simple-icons/brex.svg
+  title: Brex
+  simple_icon_slug: brex
+  simple_icon_hex: 212121
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Brex
+  match: exact-name-or-slug
+  matched_by: brex
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -30,59 +38,59 @@ CONFIGURATION
   mode
   page_size
   start_date
-  user_token (secret)
+  user_token (secret) (required)
 
 ETL STREAMS
   transactions:
     primary key: id
     cursor: posted_at_date
-    fields: amount(), card_id(), description(), id(), initiated_at_date(), posted_at_date(), type()
+    fields: amount(object), card_id(string), description(string), id(string), initiated_at_date(string), posted_at_date(string), type(string)
   users:
     primary key: id
-    fields: department_id(), email(), first_name(), id(), last_name(), manager_id(), status()
+    fields: department_id(string), email(string), first_name(string), id(string), last_name(string), manager_id(string), status(string)
   expenses:
     primary key: id
     cursor: purchased_at
-    fields: category(), department_id(), id(), location_id(), memo(), merchant_id(), original_amount(), purchased_at(), status(), updated_at(), user_id()
+    fields: category(string), department_id(string), id(string), location_id(string), memo(string), merchant_id(string), original_amount(object), purchased_at(string), status(string), updated_at(string), user_id(string)
   vendors:
     primary key: id
-    fields: company_name(), email(), id(), payment_accounts(), phone()
+    fields: company_name(string), email(string), id(string), payment_accounts(array), phone(string)
   budgets:
     primary key: budget_id
-    fields: account_id(), budget_id(), creator_user_id(), description(), limit(), name(), parent_budget_id(), period_type(), status()
+    fields: account_id(string), budget_id(string), creator_user_id(string), description(string), limit(object), name(string), parent_budget_id(string), period_type(string), status(string)
   departments:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
   locations:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
   titles:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   legal_entities:
     primary key: id
-    fields: billingAddress(), createdAt(), displayName(), id(), isDefault(), status()
+    fields: billingAddress(object), createdAt(string), displayName(string), id(string), isDefault(boolean), status(string)
   cards:
     primary key: id
-    fields: billing_address(), budget_id(), card_name(), card_type(), expiration_date(), has_been_transferred(), id(), last_four(), limit_type(), mailing_address(), owner(), spend_controls(), status()
+    fields: billing_address(object), budget_id(string), card_name(string), card_type(string), expiration_date(object), has_been_transferred(boolean), id(string), last_four(string), limit_type(string), mailing_address(object), owner(object), spend_controls(object), status(string)
   accounts_card:
     primary key: id
-    fields: account_limit(), available_balance(), current_balance(), current_statement_period(), id(), status()
+    fields: account_limit(object), available_balance(object), current_balance(object), current_statement_period(object), id(string), status(string)
   accounts_cash:
     primary key: id
-    fields: account_number(), available_balance(), current_balance(), id(), name(), primary(), routing_number(), status()
+    fields: account_number(string), available_balance(object), current_balance(object), id(string), name(string), primary(boolean), routing_number(string), status(string)
   card_statements:
     primary key: id
-    fields: end_balance(), id(), period(), start_balance()
+    fields: end_balance(object), id(string), period(object), start_balance(object)
   linked_accounts:
     primary key: id
-    fields: available_balance(), bank_details(), brex_account_id(), current_balance(), id(), last_four()
+    fields: available_balance(object), bank_details(object), brex_account_id(string), current_balance(object), id(string), last_four(string)
   transfers:
     primary key: id
-    fields: amount(), cancellation_reason(), counterparty(), creator_user_id(), description(), estimated_delivery_date(), id(), originating_account(), payment_type(), process_date(), status()
+    fields: amount(object), cancellation_reason(string), counterparty(object), creator_user_id(string), description(string), estimated_delivery_date(string), id(string), originating_account(object), payment_type(string), process_date(string), status(string)
   webhooks:
     primary key: id
-    fields: event_types(), group_id(), id(), status(), url()
+    fields: event_types(array), group_id(string), id(string), status(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -98,15 +106,19 @@ REVERSE ETL ACTIONS
     risk: permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve
   create_department:
     endpoint: POST /v2/departments
+    required fields: name
     risk: creates a new organizational department; low-risk external mutation, no approval required
   create_location:
     endpoint: POST /v2/locations
+    required fields: name
     risk: creates a new organizational location; low-risk external mutation, no approval required
   create_title:
     endpoint: POST /v2/titles
+    required fields: name
     risk: creates a new job title; low-risk external mutation, no approval required
   create_user:
     endpoint: POST /v2/users
+    required fields: email, first_name, last_name
     risk: invites a new user to the Brex account; sends a real invitation email to the target address
   update_user:
     endpoint: PUT /v2/users/{{ record.id }}
@@ -134,7 +146,7 @@ REVERSE ETL ACTIONS
     risk: mutates an existing card expense's memo; low-risk metadata-only external mutation
   update_webhook:
     endpoint: PUT /v1/webhooks/{{ record.id }}
-    required fields: id
+    required fields: id, url, event_types, status
     risk: re-points an already-registered webhook's delivery URL, event set, or active status; redirects live event delivery immediately
   delete_webhook:
     endpoint: DELETE /v1/webhooks/{{ record.id }}

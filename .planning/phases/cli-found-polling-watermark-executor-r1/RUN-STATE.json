@@ -1,0 +1,27 @@
+{
+  "phase": "cli-found-polling-watermark-executor-r1",
+  "branch": "fm/cli-found-polling-watermark-executor-r1",
+  "status": "verified",
+  "adapter": "pi-project-local",
+  "runtime_fallback": "manual inline execution of generated GSD prompts; no compatible isolated Pi role runtime",
+  "issue": 3855,
+  "skills": [
+    "golang-how-to",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-context",
+    "golang-concurrency",
+    "golang-database",
+    "golang-cli",
+    "golang-documentation"
+  ],
+  "owned_paths": [
+    "internal/connectors/**",
+    "docs/migration/conventions.md",
+    ".planning/phases/cli-found-polling-watermark-executor-r1/**"
+  ]
+}

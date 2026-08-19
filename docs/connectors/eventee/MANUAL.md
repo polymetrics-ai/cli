@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Eventee event agenda, attendee, registration, group, review, and partner data; writes documented Eventee agenda, attendee, registration, partner, speaker, and track mutations through the public REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -26,48 +28,48 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   lectures:
     primary key: id
-    fields: available(), booked(), capacity(), code(), created_at(), description(), end(), event_day_id(), event_id(), hall_id(), id(), name(), start(), type(), updated_at()
+    fields: available(boolean), booked(integer), capacity(integer), code(string), created_at(string), description(string), end(string), event_day_id(integer), event_id(integer), hall_id(integer), id(integer), name(string), start(string), type(integer), updated_at(string)
   speakers:
     primary key: id
-    fields: bio(), company(), country(), email(), event_id(), id(), language(), name(), order(), phone(), position(), web()
+    fields: bio(string), company(string), country(string), email(string), event_id(integer), id(integer), language(string), name(string), order(integer), phone(string), position(string), web(string)
   days:
     primary key: id
-    fields: content_url(), date(), event_id(), id()
+    fields: content_url(string), date(string), event_id(integer), id(integer)
   halls:
     primary key: id
-    fields: created_at(), event_id(), id(), name(), order(), updated_at()
+    fields: created_at(string), event_id(integer), id(integer), name(string), order(integer), updated_at(string)
   tracks:
     primary key: id
-    fields: color(), created_at(), id(), name(), order(), updated_at()
+    fields: color(string), created_at(string), id(integer), name(string), order(integer), updated_at(string)
   workshops:
     primary key: id
-    fields: available(), booked(), capacity(), code(), created_at(), description(), end(), event_day_id(), event_id(), hall_id(), id(), name(), start(), type(), updated_at()
+    fields: available(boolean), booked(integer), capacity(integer), code(string), created_at(string), description(string), end(string), event_day_id(integer), event_id(integer), hall_id(integer), id(integer), name(string), start(string), type(integer), updated_at(string)
   pauses:
     primary key: id
-    fields: created_at(), description(), end(), id(), name(), start(), updated_at()
+    fields: created_at(string), description(string), end(string), id(integer), name(string), start(string), updated_at(string)
   partners:
     primary key: id
-    fields: address(), code(), company(), created_at(), description(), email(), exhibitor(), id(), phone(), sponsor(), updated_at(), web()
+    fields: address(string), code(string), company(string), created_at(string), description(string), email(string), exhibitor(boolean), id(integer), phone(string), sponsor(boolean), updated_at(string), web(string)
   reviews:
     primary key: id
-    fields: OS(), comment(), created_at(), device(), id(), lecture(), lecture_id(), stars(), updated_at(), user_id(), username(), userphoto()
+    fields: OS(string), comment(string), created_at(string), device(string), id(integer), lecture(object), lecture_id(integer), stars(integer), updated_at(string), user_id(integer), username(string), userphoto(string)
   groups:
     primary key: id
-    fields: agenda(), color(), emoji(), gamification(), id(), is_default(), name(), networking(), newsfeed(), public_name(), session_ratings(), social_wall(), ticket_names()
+    fields: agenda(boolean), color(string), emoji(string), gamification(boolean), id(integer), is_default(boolean), name(string), networking(boolean), newsfeed(boolean), public_name(string), session_ratings(boolean), social_wall(boolean), ticket_names(array)
   participants:
     primary key: id
-    fields: checked_at(), company(), email(), first_name(), group_id(), id(), last_name(), name(), position(), registered_at(), role()
+    fields: checked_at(string), company(string), email(string), first_name(string), group_id(integer), id(integer), last_name(string), name(string), position(string), registered_at(string), role(string)
   registrations:
     primary key: id
-    fields: bio(), company(), email(), email_valid(), facebook_link(), first_name(), group_id(), id(), last_name(), linked_in_link(), phone(), photo(), position(), send_email(), status(), twitter_link(), web()
+    fields: bio(string), company(string), email(string), email_valid(boolean), facebook_link(string), first_name(string), group_id(integer), id(integer), last_name(string), linked_in_link(string), phone(string), photo(string), position(string), send_email(boolean), status(integer), twitter_link(string), web(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   clear_test_content:
@@ -75,10 +77,11 @@ REVERSE ETL ACTIONS
     risk: deletes all tracks, pauses, speakers, workshops, lectures, and halls from the configured test event
   create_hall:
     endpoint: POST /hall
+    required fields: name
     risk: creates a hall in the configured event
   update_hall:
     endpoint: PATCH /hall/{{ record.id }}
-    required fields: id
+    required fields: id, name
     risk: updates a hall in the configured event
   delete_hall:
     endpoint: DELETE /hall/{{ record.id }}
@@ -86,10 +89,11 @@ REVERSE ETL ACTIONS
     risk: deletes a hall from the configured event
   create_lecture:
     endpoint: POST /lecture
+    required fields: name, start, end, hall_id, speakers, type, tracks
     risk: creates a lecture or session in the configured event
   update_lecture:
     endpoint: PATCH /lecture/{{ record.id }}
-    required fields: id
+    required fields: id, name, start, end, hall_id, speakers, type, tracks
     risk: updates an existing lecture or session in the configured event
   delete_lecture:
     endpoint: DELETE /lecture/{{ record.id }}
@@ -97,20 +101,23 @@ REVERSE ETL ACTIONS
     risk: deletes a lecture or session from the configured event
   invite_attendees:
     endpoint: PUT /attendee/invite
+    required fields: users
     risk: invites one or more attendees to the configured event
   update_attendee_checkin:
     endpoint: PUT /attendee/{{ record.id }}/checkin
-    required fields: id
+    required fields: id, checkin
     risk: sets the check-in state for an attendee
   remove_attendee:
     endpoint: DELETE /attendee
+    required fields: email
     risk: removes an invited attendee and may remove their access and event-linked information
   create_partner:
     endpoint: POST /partner
+    required fields: company
     risk: creates a partner, sponsor, or exhibitor profile in the configured event
   update_partner:
     endpoint: PATCH /partner/{{ record.id }}
-    required fields: id
+    required fields: id, company
     risk: updates an existing partner, sponsor, or exhibitor profile in the configured event
   delete_partner:
     endpoint: DELETE /partner/{{ record.id }}
@@ -118,10 +125,11 @@ REVERSE ETL ACTIONS
     risk: deletes a partner, sponsor, or exhibitor profile from the configured event
   create_pause:
     endpoint: POST /pause
+    required fields: name, start, end
     risk: creates a pause or break in the configured event agenda
   update_pause:
     endpoint: PATCH /pause/{{ record.id }}
-    required fields: id
+    required fields: id, name, start, end
     risk: updates an existing pause or break in the configured event agenda
   delete_pause:
     endpoint: DELETE /pause/{{ record.id }}
@@ -129,16 +137,19 @@ REVERSE ETL ACTIONS
     risk: deletes a pause or break from the configured event agenda
   invite_registrations:
     endpoint: PUT /registration/invite
+    required fields: registrations
     risk: invites one or more registrants to the configured event
   remove_registration:
     endpoint: DELETE /registration
+    required fields: email
     risk: removes an invited registrant from the configured event
   create_speaker:
     endpoint: POST /speaker
+    required fields: name, phone
     risk: creates a speaker profile in the configured event
   update_speaker:
     endpoint: PATCH /speaker/{{ record.id }}
-    required fields: id
+    required fields: id, name, phone
     risk: updates an existing speaker profile in the configured event
   delete_speaker:
     endpoint: DELETE /speaker/{{ record.id }}

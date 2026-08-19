@@ -11,6 +11,7 @@ Reads HoorayHR users, time-off, leave-types, and sick-leave records through the 
 
 ## Icon
 
+- id: hoorayhr
 - asset: icons/hoorayhr.svg
 - source: official
 - review_status: official_verified
@@ -28,28 +29,28 @@ Reads HoorayHR users, time-off, leave-types, and sick-leave records through the 
 ## Configuration
 
 - base_url
-- hoorayhrusername
+- hoorayhrusername (required)
 - mode
-- hoorayhrpassword (secret)
+- hoorayhrpassword (secret) (required)
 
 ## ETL Streams
 
 - users:
   - primary key: id
-  - fields: companyId(), companyStartDate(), createdAt(), email(), firstName(), id(), isAdmin(), jobTitle(), lastName(), status(), updatedAt()
+  - fields: companyId(integer), companyStartDate(string), createdAt(string), email(string), firstName(string), id(integer), isAdmin(boolean), jobTitle(string), lastName(string), status(string), updatedAt(string)
 - time_off:
   - primary key: id
-  - fields: createdAt(), end(), id(), leaveTypeId(), leaveUnit(), notes(), start(), status(), timeOffType(), updatedAt(), userId()
+  - fields: createdAt(string), end(string), id(integer), leaveTypeId(integer), leaveUnit(string), notes(string), start(string), status(string), timeOffType(string), updatedAt(string), userId(integer)
 - leave_types:
   - primary key: id
-  - fields: budget(), color(), createdAt(), default(), icon(), id(), leaveInDays(), name(), unpaidLeave(), updatedAt()
+  - fields: budget(number), color(string), createdAt(string), default(boolean), icon(string), id(integer), leaveInDays(boolean), name(string), unpaidLeave(boolean), updatedAt(string)
 - sick_leaves:
   - primary key: id
-  - fields: actualReturn(), actualStart(), createdAt(), id(), notes(), percentage(), reportedReturn(), reportedStart(), status(), updatedAt(), userId()
+  - fields: actualReturn(string), actualStart(string), createdAt(string), id(integer), notes(string), percentage(number), reportedReturn(string), reportedStart(string), status(string), updatedAt(string), userId(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

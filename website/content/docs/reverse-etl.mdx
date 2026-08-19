@@ -3,14 +3,14 @@ title: Reverse ETL
 description: Write data back to any destination using the plan-preview-approve-run gate that keeps humans and agents in control.
 ---
 
-Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. No connector action executes until an approval token is explicitly presented at run time. This design makes reverse-ETL safe to delegate to an AI agent without the risk of silent mutations.
+Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. Destructive operations cannot receive an approval token until their no-network preview is persisted, and no connector action executes until an approval token is explicitly presented at run time.
 
 ## The four-step gate
 
 ```bash
-pm reverse plan <name> [flags]             # generate a plan and approval token
-pm reverse preview <plan-id> [--json]      # inspect exactly what will change
-pm reverse run <plan-id> --approve <token> [--json]   # execute
+pm reverse plan <name> [flags]                       # generate a typed plan
+pm reverse preview <plan-id> [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]...   # inspect; destructive plans issue their token here
+pm reverse run <plan-id> --approval-token-stdin [--confirm destructive] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
 ```
 
 <Callout type="warn">
@@ -31,7 +31,9 @@ pm reverse plan sync \
   --json
 ```
 
-The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID and an approval token.
+The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID. Non-destructive plans also return an approval token in plain-text mode. Destructive plans deliberately do not: their token is issued only after preview succeeds. DryRunWrite engine preview warnings preserve the resolved execution request; `redact_fields` still masks fields in stored source-table samples and write errors, but does not replace values in those warnings. Engine direct-read, operation-direct-read, and binary-download executors preserve bounded HTTP URL/query/body diagnostics before downstream rendering. The stored source-table sample is an app-level summary, not a substitute for that engine preview.
+
+Each connection materializes its tables into its own directory, so several connections can hold a table of the same name. Pass `--connection <name>` when they do, or `--connection _unattributed` for a root-level table that no connection owns. The connection is resolved once here and recorded on the plan, so `preview` and `run` keep reading the table the plan was built against even after another connection materializes one of the same name; neither takes a connection selector of its own.
 
 JSON output:
 
@@ -42,7 +44,7 @@ JSON output:
   "plan": {
     "id": "plan_abc123",
     "name": "sync",
-    "status": "pending",
+    "status": "planned",
     "record_count": 5,
     "expires_at": "2026-01-15T11:00:00Z"
   },
@@ -51,36 +53,67 @@ JSON output:
 ```
 
 <Callout type="info">
-  The approval token is printed in plain-text mode but is **omitted from the JSON output** for security. Retrieve it from the plain-text run or your vault. Tokens are time-bounded and single-use.
+  Approval tokens are printed only in plain-text mode and are **omitted from JSON output**. For destructive plans, run preview without `--json` to receive the token after inspecting the output. Tokens are time-bounded and single-use.
 </Callout>
 
 ### 2. Preview the plan
 
 ```bash
-pm reverse preview plan_abc123 --json
+pm reverse preview plan_abc123          # destructive plans issue the token here
+pm reverse preview plan_abc123 --json   # machine-readable output omits the token
 ```
 
-The preview returns the full plan record including all staged actions. Review it before approving.
+Preview returns the plan metadata and mapped sample rows. For destructive plans it also runs the destination's real no-network dry-run path, returns DryRunWrite engine preview warnings that preserve the resolved execution request, persists a digest that binds the complete staged request set and its execution identity, changes the plan status to `previewed`, and issues the approval token in plain-text output. Fields declared in `redact_fields` are not substituted in the engine preview, so the operator approves the content that will be sent; the separately stored source-table sample remains masked. The non-destructive `create_issue` example below remains `planned`; a destructive preview reports `previewed`.
 
 ```json
 {
   "kind": "ReversePlanPreview",
   "plan": {
     "id": "plan_abc123",
-    "status": "pending",
+    "status": "planned",
     "record_count": 5,
-    "actions": [
-      { "action": "create_issue", "title": "Fix login bug", "body": "Steps to reproduce..." }
+    "action": "create_issue",
+    "sample": [
+      { "title": "Fix login bug", "body": "Steps to reproduce..." }
     ]
   }
 }
 ```
 
+### Re-supplying withheld sensitive fields
+
+A connector-command plan (`pm <connector> <command>`, or a plan of that mode previewed through `pm reverse`) does not persist the fields its write action declares in `redact_fields`, or — for a `direct_write` operation — the fields that operation declares in `sensitive_policy.redact_fields`. Those keys are removed from the stored plan outright rather than replaced with a placeholder, so no secret value reaches the project state file.
+
+<Callout type="warn">
+  Withholding binds to the **write action or operation**, not to the command. A `redact_fields` list declared on the command entry itself is compatibility metadata and withholds nothing, so `pm connectors inspect <name> --json` can show a redact list that no plan acts on. Read the write action's or operation's declaration when you need the binding one.
+</Callout>
+
+Preview and run therefore need those values back on the same invocation. Ordinary withheld fields use the connector command's own flags:
+
+```bash
+pm reverse preview plan_abc123 --access-token "$PM_OAUTH_TOKEN"
+pm reverse run plan_abc123 --approval-token-stdin --access-token "$PM_OAUTH_TOKEN"
+```
+
+A field declared `env_only` must instead be read from the environment. Name the field and environment variable—not the sensitive value—with `--from-env <flag>=ENV`:
+
+```bash
+pm reverse preview plan_abc123 --from-env input=GITHUB_MIGRATION_INPUT
+pm reverse run plan_abc123 --approval-token-stdin --from-env input=GITHUB_MIGRATION_INPUT
+```
+
+Only fields the plan actually removed are requested — a declared sensitive field you never supplied was never stored and is never demanded back. Where a declared field covers a subtree that several flags fill, those flags re-supply it between them. A re-supplied value that differs from the one the plan was built from fails the plan-hash check before anything is dispatched, and nothing is written back to the state file at preview or run.
+
 ### 3. Execute with an approval token
 
 ```bash
-pm reverse run plan_abc123 --approve tk_xyz789 --json
+pm reverse run plan_abc123 --approval-token-stdin --json
+# Destructive plans additionally require: --confirm destructive
 ```
+
+Enter the approval token as one line on standard input, then end input. The
+marker accepts no value, so the token never enters the command line, environment,
+or project files. A failed dispatch is recorded and is not automatically retried.
 
 JSON output:
 
@@ -110,12 +143,16 @@ Returns all plans and their associated runs.
 
 | Guarantee | Detail |
 |---|---|
-| **Approval tokens are time-bounded** | A token expires after a configurable window. Expired tokens are rejected. |
+| **Approval tokens are time-bounded** | Stored plans and destructive approval grants expire; expired approvals are rejected. |
 | **Tokens are single-use** | Replaying a token returns exit code `7` (policy / approval needed). |
-| **Secrets are never printed** | Only secret field names appear in plan manifests; values are never exposed. |
+| **Destructive tokens follow preview** | DELETE and declared destructive operations receive no token until a no-network preview digest is persisted. |
+| **Preview identity is revalidated** | The app recomputes the digest immediately before dispatch; the shared engine gate compares it again. |
+| **Confirmation is closed and typed** | Destructive execution accepts `--confirm destructive`, not caller-defined confirmation text. |
+| **Declared sensitive fields are not stored** | A connector-command plan removes every field its write action declares in `redact_fields`, or its `direct_write` operation declares in `sensitive_policy.redact_fields`, before persisting, and re-persists none of them at preview or run. Ordinary fields are re-supplied per invocation with the connector command's own `--<flag> <value>` form; fields declared `env_only` must use `--from-env <flag>=ENV` so their values never enter argv. A `redact_fields` list on the command entry itself is compatibility metadata and is not a withholding guarantee. |
+| **Engine content boundary** | DryRunWrite engine preview warnings preserve the resolved execution request, including fields declared in `redact_fields`; stored source-table samples and write errors still apply those declarations. Engine direct-read, operation-direct-read, and binary-download executors preserve bounded HTTP URL/query/body diagnostics before downstream rendering. These engine-level guarantees do not establish complete `pm` CLI output. Credential storage remains encrypted at rest. |
 | **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
 
-This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, a human (or an explicitly trusted policy) issues the token, and only then does data move.
+This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, the app issues a token at the allowed lifecycle point, and a human (or an explicitly trusted policy) authorizes its use before data moves.
 
 ## Exit codes
 
@@ -123,7 +160,7 @@ This design lets you delegate reverse-ETL to an AI agent with confidence: the ag
 |---:|---|---|
 | `0` | Success | Continue. |
 | `4` | Auth error | Surface to a human to update credentials. |
-| `7` | Approval required | Obtain an approval token from the plan step, then retry. |
+| `7` | Approval required | Obtain the token from human-readable plan output, or from preview output for a destructive plan, then retry. |
 | `1` | Internal error | File a bug report. |
 
 ## Where to go next

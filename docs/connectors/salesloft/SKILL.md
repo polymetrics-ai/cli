@@ -11,6 +11,7 @@ Reads Salesloft people, accounts, cadences, users, and emails through the Salesl
 
 ## Icon
 
+- id: salesloft
 - asset: icons/salesloft.svg
 - source: official
 - review_status: official_verified
@@ -44,23 +45,23 @@ Reads Salesloft people, accounts, cadences, users, and emails through the Salesl
 - people:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), created_at(), display_name(), do_not_contact(), email_address(), first_name(), id(), last_name(), owner_id(), person_company_name(), phone(), title(), updated_at()
+  - fields: account_id(integer), created_at(string), display_name(string), do_not_contact(boolean), email_address(string), first_name(string), id(integer), last_name(string), owner_id(integer), person_company_name(string), phone(string), title(string), updated_at(string)
 - accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), city(), company_type(), country(), created_at(), domain(), id(), industry(), name(), owner_id(), phone(), updated_at(), website()
+  - fields: archived_at(string), city(string), company_type(string), country(string), created_at(string), domain(string), id(integer), industry(string), name(string), owner_id(integer), phone(string), updated_at(string), website(string)
 - cadences:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), created_at(), id(), name(), remove_bounces_enabled(), remove_replies_enabled(), shared(), team_cadence(), updated_at()
+  - fields: archived_at(string), created_at(string), id(integer), name(string), remove_bounces_enabled(boolean), remove_replies_enabled(boolean), shared(boolean), team_cadence(boolean), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), created_at(), email(), first_name(), guid(), id(), last_name(), name(), time_zone(), updated_at()
+  - fields: active(boolean), created_at(string), email(string), first_name(string), guid(string), id(integer), last_name(string), name(string), time_zone(string), updated_at(string)
 - emails:
   - primary key: id
   - cursor: updated_at
-  - fields: bounced(), click_tracking(), created_at(), id(), sent_at(), status(), subject(), updated_at(), view_tracking()
+  - fields: bounced(boolean), click_tracking(boolean), created_at(string), id(integer), sent_at(string), status(string), subject(string), updated_at(string), view_tracking(boolean)
 
 ## Sync Modes
 

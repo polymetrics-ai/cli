@@ -11,6 +11,7 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 
 ## Icon
 
+- id: recharge
 - asset: icons/recharge.svg
 - source: official
 - review_status: official_verified
@@ -30,23 +31,23 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 - api_version
 - base_url
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
 - customers:
   - primary key: id
-  - fields: created_at(), email(), id(), updated_at()
+  - fields: created_at(string), email(string), id(integer), updated_at(string)
 - subscriptions:
   - primary key: id
-  - fields: created_at(), customer_id(), id(), status(), updated_at()
+  - fields: created_at(string), customer_id(integer), id(integer), status(string), updated_at(string)
 - orders:
   - primary key: id
-  - fields: created_at(), customer_id(), id(), status(), updated_at()
+  - fields: created_at(string), customer_id(integer), id(integer), status(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

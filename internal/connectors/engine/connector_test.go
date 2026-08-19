@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -12,6 +13,30 @@ import (
 )
 
 // --- compile-time interface assertions (design §B.7, API-CONTRACT.md §2) ---
+
+func TestCatalogStaticSchemaMatchesDiscoveredSchemaProjection(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	staticCatalog, err := New(bundle, nil).Catalog(context.Background(), connectors.RuntimeConfig{})
+	if err != nil {
+		t.Fatalf("static Catalog: %v", err)
+	}
+	if len(staticCatalog.Streams) != 1 {
+		t.Fatalf("static Catalog streams = %d, want 1", len(staticCatalog.Streams))
+	}
+
+	discovered, err := connectors.StreamFromSchema("widgets", "", fsys["acme/schemas/widgets.json"].Data)
+	if err != nil {
+		t.Fatalf("StreamFromSchema: %v", err)
+	}
+	if !reflect.DeepEqual(staticCatalog.Streams[0], discovered) {
+		t.Fatalf("static stream = %#v, discovered stream = %#v; catalog consumers must not need separate paths", staticCatalog.Streams[0], discovered)
+	}
+}
 
 var (
 	_ connectors.Connector          = (*Connector)(nil)
@@ -23,13 +48,16 @@ var (
 )
 
 // Base itself is NOT asserted against connectors.Connector or
-// connectors.ManifestProvider: per API-CONTRACT.md §2 it only serves
-// Name/Metadata/Definition (identity, catalog-adjacent metadata, and docs) —
-// Tier-3 natives that embed it supply Check/Catalog/Read/Write themselves,
-// and are not required to also provide a legacy Manifest(). tier3FakeConnector
-// below is the compile-time proof that Base + those four methods together
-// satisfy connectors.Connector.
-var _ connectors.DefinitionProvider = Base{}
+// connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that
+// embed it supply Check/Catalog/Read/Write themselves and are not required to
+// also provide a legacy Manifest(). tier3FakeConnector below is the
+// compile-time proof that Base + those four methods together satisfy
+// connectors.Connector.
+var (
+	_ connectors.DefinitionProvider              = Base{}
+	_ connectors.OperationDirectReadPreflighter  = Base{}
+	_ connectors.OperationDirectWritePreflighter = Base{}
+)
 
 // --- test fixtures ---
 
@@ -59,7 +87,7 @@ func widgetsRecordSchema(t *testing.T, primaryKey, cursorField string) *StreamSc
 
 func minimalSpecSchema(t *testing.T) *Schema {
 	t.Helper()
-	sch, err := CompileSchema([]byte(`{"type":"object","properties":{"api_key":{"type":"string","x-secret":true}}}`))
+	sch, err := CompileSchema([]byte(`{"type":"object","required":["account_id","api_key"],"properties":{"account_id":{"type":"string"},"api_key":{"type":"string","x-secret":true}}}`))
 	if err != nil {
 		t.Fatalf("CompileSchema: %v", err)
 	}
@@ -133,6 +161,12 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 	if m.Metadata.Name != "acme" {
 		t.Fatalf("Manifest().Metadata.Name = %q, want acme", m.Metadata.Name)
 	}
+	if len(m.ConfigFields) != 1 || m.ConfigFields[0].Name != "account_id" || !m.ConfigFields[0].Required {
+		t.Fatalf("Manifest().ConfigFields = %#v, want required account_id", m.ConfigFields)
+	}
+	if len(m.SecretFields) != 1 || m.SecretFields[0].Name != "api_key" || !m.SecretFields[0].Required {
+		t.Fatalf("Manifest().SecretFields = %#v, want required api_key", m.SecretFields)
+	}
 	if len(m.Streams) != 1 || m.Streams[0].Name != "widgets" {
 		t.Fatalf("Manifest().Streams = %+v, want one stream named widgets", m.Streams)
 	}
@@ -142,11 +176,71 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 	if len(m.Streams[0].CursorFields) != 1 || m.Streams[0].CursorFields[0] != "updated_at" {
 		t.Fatalf("Manifest().Streams[0].CursorFields = %v, want [updated_at]", m.Streams[0].CursorFields)
 	}
-	// PK + no incremental block -> dedup-capable but non-incremental modes only.
 	wantModes := []string{"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped"}
 	assertStringSliceEqual(t, m.SyncModes, wantModes)
 	if m.Risk.Read == "" {
 		t.Fatalf("Manifest().Risk.Read is empty, want a synthesized risk string")
+	}
+}
+
+func TestCommandSurfaceAddsSharedApprovalStdinMarkerForWrites(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		globalFlags []CLIFlag
+		intent      string
+		wantCount   int
+		wantSummary string
+	}{
+		{
+			name:        "reverse ETL derives marker",
+			intent:      "reverse_etl",
+			wantCount:   1,
+			wantSummary: "Read the approval token as one bounded line from standard input.",
+		},
+		{
+			name:      "direct write derives marker",
+			intent:    "direct_write",
+			wantCount: 1,
+		},
+		{
+			name: "declared marker is not duplicated",
+			globalFlags: []CLIFlag{{
+				Name:    "approval-token-stdin",
+				Type:    "boolean",
+				Summary: "bundle declaration",
+			}},
+			intent:      "reverse_etl",
+			wantCount:   1,
+			wantSummary: "bundle declaration",
+		},
+		{
+			name:      "read command has no marker",
+			intent:    "direct_read",
+			wantCount: 0,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			surface := synthesizeCommandSurface(Bundle{CLISurface: &CLISurface{
+				GlobalFlags: tc.globalFlags,
+				Commands:    []CLICommand{{Path: "widgets apply", Intent: tc.intent}},
+			}})
+			if surface == nil {
+				t.Fatal("synthesizeCommandSurface returned nil")
+			}
+			count := 0
+			for _, flag := range surface.GlobalFlags {
+				if flag.Name != "approval-token-stdin" {
+					continue
+				}
+				count++
+				if tc.wantSummary != "" && flag.Summary != tc.wantSummary {
+					t.Fatalf("approval stdin summary = %q, want %q", flag.Summary, tc.wantSummary)
+				}
+			}
+			if count != tc.wantCount {
+				t.Fatalf("approval stdin marker count = %d, want %d", count, tc.wantCount)
+			}
+		})
 	}
 }
 
@@ -296,8 +390,23 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			want: []string{"full_refresh_append", "full_refresh_overwrite"},
 		},
 		{
-			name:       "pk only adds dedup modes",
+			name:       "primary key alone does not admit cursor-required compatibility modes",
 			primaryKey: "id",
+			want:       []string{"full_refresh_append", "full_refresh_overwrite"},
+		},
+		{
+			name:        "incremental cursor without schema cursor advertises incremental modes",
+			primaryKey:  "id",
+			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+				"incremental_append", "incremental_append_deduped",
+			},
+		},
+		{
+			name:        "cursor field without incremental block retains only full refresh modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
 			want: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 			},
@@ -315,6 +424,25 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			primaryKey:  "id",
 			cursorField: "updated_at",
 			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+				"incremental_append", "incremental_append_deduped",
+			},
+		},
+		{
+			name:        "mismatched incremental and schema cursors do not advertise incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{CursorField: "created_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+			},
+		},
+		{
+			name:        "empty incremental cursor retains schema-backed incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{},
 			want: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 				"incremental_append", "incremental_append_deduped",
@@ -341,6 +469,41 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 func TestDerivedSyncModesNilSchemaIsNeitherCase(t *testing.T) {
 	got := DerivedSyncModes(StreamSpec{Name: "widgets"}, nil)
 	assertStringSliceEqual(t, got, []string{"full_refresh_append", "full_refresh_overwrite"})
+}
+
+func TestConnectorIncrementalCursorWithoutSchemaFieldProjectsEffectiveCursor(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	t.Cleanup(srv.Close)
+	b := newConnectorTestBundle(t, srv)
+	b.Streams[0].Incremental = &IncrementalSpec{CursorField: "updated_at"}
+	b.Schemas["widgets"] = widgetsRecordSchema(t, "id", "")
+	b.Schemas["widgets"].Raw = json.RawMessage(`{
+		"type": "object",
+		"x-primary-key": ["id"],
+		"properties": {
+			"id": {"type": "string"},
+			"name": {"type": "string"},
+			"updated_at": {"type": "string"}
+		}
+	}`)
+
+	c := New(b, nil)
+	catalog, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
+	if err != nil {
+		t.Fatalf("Catalog: %v", err)
+	}
+	if len(catalog.Streams) != 1 || !reflect.DeepEqual(catalog.Streams[0].CursorFields, []string{"updated_at"}) {
+		t.Fatalf("Catalog().Streams = %+v, want incremental cursor projection", catalog.Streams)
+	}
+
+	definition := c.Definition()
+	if len(definition.Streams) != 1 || definition.Streams[0].CursorField != "updated_at" {
+		t.Fatalf("Definition().Streams = %+v, want incremental cursor projection", definition.Streams)
+	}
+	assertStringSliceEqual(t, definition.Streams[0].SyncModes, []string{
+		"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+		"incremental_append", "incremental_append_deduped",
+	})
 }
 
 func assertStringSliceEqual(t *testing.T, got, want []string) {

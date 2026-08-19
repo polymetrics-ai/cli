@@ -11,6 +11,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 ## Icon
 
+- id: aircall
 - asset: icons/aircall.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -29,35 +30,35 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 - base_url
 - start_date
-- api_id (secret)
-- api_token (secret)
+- api_id (secret) (required)
+- api_token (secret) (required)
 
 ## ETL Streams
 
 - calls:
   - primary key: id
   - cursor: started_at
-  - fields: answered_at(), archived(), direction(), duration(), ended_at(), id(), missed_call_reason(), raw_digits(), recording(), sid(), started_at(), status(), voicemail()
+  - fields: answered_at(integer), archived(boolean), direction(string), duration(integer), ended_at(integer), id(integer), missed_call_reason(string), raw_digits(string), recording(string), sid(string), started_at(integer), status(string), voicemail(string)
 - users:
   - primary key: id
   - cursor: created_at
-  - fields: availability_status(), available(), created_at(), email(), id(), language(), name(), time_zone(), wrap_up_time()
+  - fields: availability_status(string), available(boolean), created_at(string), email(string), id(integer), language(string), name(string), time_zone(string), wrap_up_time(integer)
 - contacts:
   - primary key: id
   - cursor: created_at
-  - fields: company_name(), created_at(), first_name(), id(), information(), is_shared(), last_name(), updated_at()
+  - fields: company_name(string), created_at(string), first_name(string), id(integer), information(string), is_shared(boolean), last_name(string), updated_at(string)
 - numbers:
   - primary key: id
-  - fields: country(), created_at(), digits(), id(), is_ivr(), live_recording_activated(), name(), open(), time_zone()
+  - fields: country(string), created_at(string), digits(string), id(integer), is_ivr(boolean), live_recording_activated(boolean), name(string), open(boolean), time_zone(string)
 - teams:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - tags:
   - primary key: id
-  - fields: color(), description(), id(), name()
+  - fields: color(string), description(string), id(integer), name(string)
 - webhooks:
   - primary key: id
-  - fields: active(), events(), id(), url()
+  - fields: active(boolean), events(array), id(integer), url(string)
 
 ## Sync Modes
 
@@ -67,6 +68,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 - create_user:
   - endpoint: POST /users
+  - required fields: name, email
   - risk: creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required
 - update_user:
   - endpoint: PUT /users/{{ record.id }}
@@ -78,6 +80,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required
 - create_team:
   - endpoint: POST /teams
+  - required fields: name
   - risk: creates a new team container; low-risk external mutation, no approval required
 - delete_team:
   - endpoint: DELETE /teams/{{ record.id }}
@@ -104,6 +107,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes a directory contact; irreversible
 - create_tag:
   - endpoint: POST /tags
+  - required fields: name, color
   - risk: creates a new call-tagging label; low-risk external mutation, no approval required
 - update_tag:
   - endpoint: PUT /tags/{{ record.id }}
@@ -115,6 +119,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes a tag; it is un-applied from every call that previously carried it
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: url, events
   - risk: registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling
 - update_webhook:
   - endpoint: PUT /webhooks/{{ record.id }}
@@ -134,13 +139,11 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: restores a previously archived call to default call-list views
 - comment_call:
   - endpoint: POST /calls/{{ record.id }}/comments
-  - required fields: id
-  - optional fields: content
+  - required fields: id, content
   - risk: adds an internal comment note to a call record; visible to other agents with call access, no external side effect
 - tag_call:
   - endpoint: POST /calls/{{ record.id }}/tags
-  - required fields: id
-  - optional fields: tag_ids
+  - required fields: id, tag_ids
   - risk: applies the given tags to a call; additive, does not remove tags already present
 
 ## Security

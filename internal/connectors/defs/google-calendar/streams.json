@@ -1,10 +1,18 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
+    "url": "https://www.googleapis.com/calendar/v3",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
     "auth": [
       {
-        "mode": "none"
+        "mode": "custom",
+        "hook": "google-calendar",
+        "token_url": "https://oauth2.googleapis.com/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token_2 }}"
       }
     ],
     "pagination": {
@@ -12,50 +20,200 @@
     },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/users/me/calendarList",
+      "query": {
+        "maxResults": "1"
+      }
     },
-    "error_map": []
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "Google Calendar OAuth refresh grant failed or access token expired; re-run pm credentials add google-calendar"
+      },
+      {
+        "status": 403,
+        "hint": "Google Calendar account or OAuth grant lacks access for the requested calendar operation"
+      },
+      {
+        "status": 404,
+        "hint": "Google Calendar resource not found; verify calendar, event, ACL rule, setting, or channel identifiers"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Google Calendar API rate limit exceeded; retry with bounded batches or lower concurrency"
+      }
+    ]
   },
   "streams": [
     {
       "name": "calendar_list",
-      "method": "GET",
-      "path": "/__legacy_hook/calendar_list",
-      "records": {
-        "path": "data"
+      "path": "/users/me/calendarList",
+      "query": {
+        "maxResults": "250"
       },
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "projection": "schema",
       "schema": "schemas/calendar_list.json"
     },
     {
-      "name": "events",
-      "method": "GET",
-      "path": "/__legacy_hook/events",
+      "name": "calendar_list_entry",
+      "path": "/users/me/calendarList/{{ config.calendarid }}",
       "records": {
-        "path": "data"
+        "path": ".",
+        "single_object": true
       },
-      "schema": "schemas/events.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/calendar_list_entry.json"
+    },
+    {
+      "name": "calendar",
+      "path": "/calendars/{{ config.calendarid }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/calendar.json"
+    },
+    {
+      "name": "colors",
+      "path": "/colors",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/colors.json"
+    },
+    {
+      "name": "events",
+      "path": "/calendars/{{ config.calendarid }}/events",
+      "query": {
+        "maxResults": "250"
+      },
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "projection": "schema",
       "incremental": {
         "cursor_field": "updated",
-        "client_filtered": true
-      }
+        "request_param": "updatedMin",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "event",
+      "path": "/calendars/{{ config.calendarid }}/events/{{ config.event_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event.json"
+    },
+    {
+      "name": "event_instances",
+      "path": "/calendars/{{ config.calendarid }}/events/{{ config.event_id }}/instances",
+      "query": {
+        "maxResults": "250"
+      },
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event_instances.json"
     },
     {
       "name": "settings",
-      "method": "GET",
-      "path": "/__legacy_hook/settings",
-      "records": {
-        "path": "data"
+      "path": "/users/me/settings",
+      "query": {
+        "maxResults": "250"
       },
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "projection": "schema",
       "schema": "schemas/settings.json"
     },
     {
-      "name": "acl",
-      "method": "GET",
-      "path": "/__legacy_hook/acl",
+      "name": "setting",
+      "path": "/users/me/settings/{{ config.setting }}",
       "records": {
-        "path": "data"
+        "path": ".",
+        "single_object": true
       },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/setting.json"
+    },
+    {
+      "name": "acl",
+      "path": "/calendars/{{ config.calendarid }}/acl",
+      "query": {
+        "maxResults": "250"
+      },
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "projection": "schema",
       "schema": "schemas/acl.json"
+    },
+    {
+      "name": "acl_rule",
+      "path": "/calendars/{{ config.calendarid }}/acl/{{ config.rule_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/acl_rule.json"
     }
   ]
 }

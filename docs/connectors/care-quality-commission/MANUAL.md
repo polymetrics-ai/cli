@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Care Quality Commission (CQC) registered locations, providers, and inspection areas from the public CQC Syndication API. Read-only (full-refresh).
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,21 +29,21 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   locations:
     primary key: locationId
-    fields: locationId(), locationName(), postalCode()
+    fields: locationId(string), locationName(string), postalCode(string)
   providers:
     primary key: providerId
-    fields: providerId(), providerName()
+    fields: providerId(string), providerName(string)
   inspection_areas:
     primary key: inspectionAreaId
-    fields: endDate(), inspectionAreaId(), inspectionAreaName(), inspectionAreaType(), inspectionCategories(), orgInspectionAreaRetirementDate(), status(), supersededBy()
+    fields: endDate(string), inspectionAreaId(string), inspectionAreaName(string), inspectionAreaType(string), inspectionCategories(array), orgInspectionAreaRetirementDate(string), status(string), supersededBy(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external CQC Syndication API read of publicly published care provider/location data

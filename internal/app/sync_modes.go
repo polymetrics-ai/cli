@@ -7,13 +7,16 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/synccontract"
 )
 
 type SourceSyncMode string
 
 const (
-	SourceSyncFullRefresh SourceSyncMode = "full_refresh"
-	SourceSyncIncremental SourceSyncMode = "incremental"
+	SourceSyncFullRefresh   SourceSyncMode = "full_refresh"
+	SourceSyncIncremental   SourceSyncMode = "incremental"
+	SourceSyncChangeCapture SourceSyncMode = "change_capture"
 )
 
 type DestinationSyncMode string
@@ -23,13 +26,89 @@ const (
 	DestinationSyncOverwrite        DestinationSyncMode = "overwrite"
 	DestinationSyncAppendDeduped    DestinationSyncMode = "append_dedup"
 	DestinationSyncOverwriteDeduped DestinationSyncMode = "overwrite_dedup"
+	DestinationSyncUpsert           DestinationSyncMode = "upsert"
+	DestinationSyncDedupeHistory    DestinationSyncMode = "dedupe_history"
 	DefaultUserFacingSyncMode                           = "full_refresh_overwrite"
 )
 
 type SyncMode struct {
-	Name        string
-	Source      SourceSyncMode
-	Destination DestinationSyncMode
+	Name                string
+	Source              SourceSyncMode
+	Destination         DestinationSyncMode
+	ContractMode        synccontract.Mode
+	LegacyCompatibility bool
+}
+
+// UnsupportedSyncModeError is returned before a connection can be persisted
+// or a source can be selected. Callers can distinguish an invalid user input
+// from a mode that parsed correctly but later failed transport preflight.
+type UnsupportedSyncModeError struct {
+	Mode string
+}
+
+func (e *UnsupportedSyncModeError) Error() string {
+	if e == nil {
+		return "unsupported sync mode"
+	}
+	return fmt.Sprintf("unsupported sync mode %q", e.Mode)
+}
+
+const syncModeCompatibilityVersion uint = 1
+
+type syncModeDefinition struct {
+	mode                         SyncMode
+	legacyInput                  bool
+	persistedLegacyCompatibility bool
+}
+
+func (d syncModeDefinition) persistedLegacyMode() SyncMode {
+	mode := d.mode
+	mode.LegacyCompatibility = d.persistedLegacyCompatibility
+	return mode
+}
+
+var syncModeDefinitions = map[string]syncModeDefinition{
+	"full_refresh_append": {
+		mode:                         SyncMode{Name: "full_refresh_append", Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, LegacyCompatibility: true},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"full_refresh_overwrite": {
+		mode:                         SyncMode{Name: "full_refresh_overwrite", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, LegacyCompatibility: true},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"full_refresh_overwrite_deduped": {
+		mode:        SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped},
+		legacyInput: true,
+	},
+	string(synccontract.ModeFullOverwrite): {
+		mode: SyncMode{Name: string(synccontract.ModeFullOverwrite), Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite},
+	},
+	string(synccontract.ModeFullAppend): {
+		mode: SyncMode{Name: string(synccontract.ModeFullAppend), Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend},
+	},
+	"incremental_append": {
+		mode:                         SyncMode{Name: "incremental_append", Source: SourceSyncIncremental, Destination: DestinationSyncAppend},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"incremental_append_deduped": {
+		mode:        SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped},
+		legacyInput: true,
+	},
+	string(synccontract.ModeIncrementalUpsert): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalUpsert), Source: SourceSyncIncremental, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeIncrementalUpsert},
+	},
+	string(synccontract.ModeIncrementalDedupe): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalDedupe), Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe},
+	},
+	string(synccontract.ModeIncrementalDedupeHistory): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalDedupeHistory), Source: SourceSyncIncremental, Destination: DestinationSyncDedupeHistory, ContractMode: synccontract.ModeIncrementalDedupeHistory},
+	},
+	string(synccontract.ModeChangeCapture): {
+		mode: SyncMode{Name: string(synccontract.ModeChangeCapture), Source: SourceSyncChangeCapture, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeChangeCapture},
+	},
 }
 
 func ParseSyncMode(raw string) (SyncMode, error) {
@@ -37,30 +116,64 @@ func ParseSyncMode(raw string) (SyncMode, error) {
 	if value == "" {
 		value = DefaultUserFacingSyncMode
 	}
-	switch value {
-	case "full_refresh_append":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend}, nil
-	case "full_refresh_overwrite":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite}, nil
-	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
-		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped}, nil
-	case "incremental_append":
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend}, nil
-	case "incremental_append_deduped", "incremental_append_dedup":
-		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped}, nil
-	default:
-		return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
+	if mode, _, ok := publicSyncMode(value); ok {
+		return mode, nil
 	}
+	if definition, ok := syncModeDefinitions[value]; ok {
+		return definition.mode, nil
+	}
+	return SyncMode{}, &UnsupportedSyncModeError{Mode: raw}
+}
+
+func publicSyncMode(raw string) (SyncMode, synccontract.PublicMode, bool) {
+	public, ok := synccontract.LookupPublicMode(raw)
+	if !ok {
+		return SyncMode{}, synccontract.PublicMode{}, false
+	}
+	definition, ok := syncModeDefinitions[public.Name]
+	if !ok {
+		return SyncMode{}, synccontract.PublicMode{}, false
+	}
+	mode := definition.mode
+	mode.ContractMode = public.ContractMode
+	return mode, public, true
+}
+
+func ParseStreamSyncMode(stream StreamConfig) (SyncMode, error) {
+	if stream.LegacyCompatibility {
+		return parseLegacySyncMode(stream.SyncMode)
+	}
+	return ParseSyncMode(stream.SyncMode)
+}
+
+func parseLegacySyncMode(raw string) (SyncMode, error) {
+	value := strings.TrimSpace(strings.ToLower(raw))
+	if value == "" {
+		value = DefaultUserFacingSyncMode
+	}
+	_, public, ok := publicSyncMode(value)
+	if !ok {
+		return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
+	}
+	definition, ok := syncModeDefinitions[public.Name]
+	if ok && definition.legacyInput {
+		mode := definition.persistedLegacyMode()
+		mode.ContractMode = public.ContractMode
+		return mode, nil
+	}
+	return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
+}
+
+func isLegacySyncModeName(raw string) bool {
+	if strings.TrimSpace(raw) == "" {
+		return false
+	}
+	_, err := parseLegacySyncMode(raw)
+	return err == nil
 }
 
 func MustSyncModeNames() []string {
-	return []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"incremental_append",
-		"incremental_append_deduped",
-	}
+	return synccontract.PublicModeNames()
 }
 
 func (m SyncMode) RequiresCursor() bool {
@@ -68,7 +181,7 @@ func (m SyncMode) RequiresCursor() bool {
 }
 
 func (m SyncMode) RequiresPrimaryKey() bool {
-	return m.IsDeduped()
+	return m.IsDeduped() || m.Destination == DestinationSyncUpsert || m.Destination == DestinationSyncDedupeHistory
 }
 
 func (m SyncMode) IsOverwrite() bool {
@@ -76,11 +189,18 @@ func (m SyncMode) IsOverwrite() bool {
 }
 
 func (m SyncMode) IsDeduped() bool {
-	return m.Destination == DestinationSyncAppendDeduped || m.Destination == DestinationSyncOverwriteDeduped
+	return m.Destination == DestinationSyncAppendDeduped || m.Destination == DestinationSyncOverwriteDeduped || m.Destination == DestinationSyncDedupeHistory
+}
+
+// IsContractMode reports a new closed vocabulary entry. It may parse and be
+// persisted, but RunETL refuses to execute it until a native executor and the
+// shared conformance evidence have been admitted.
+func (m SyncMode) IsContractMode() bool {
+	return m.ContractMode != "" && !m.LegacyCompatibility
 }
 
 func ValidateStreamSyncConfig(stream StreamConfig) error {
-	mode, err := ParseSyncMode(stream.SyncMode)
+	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
 		return err
 	}
@@ -98,8 +218,6 @@ func streamStateKey(connection, stream string) string {
 }
 
 func compareCursor(a, b string) int {
-	a = strings.TrimSpace(a)
-	b = strings.TrimSpace(b)
 	if a == b {
 		return 0
 	}
@@ -170,9 +288,6 @@ func recordCursor(record map[string]any, field string) (string, error) {
 		return "", fmt.Errorf("record is missing cursor field %q", field)
 	}
 	cursor := toComparableString(value)
-	if strings.TrimSpace(cursor) == "" {
-		return "", fmt.Errorf("record has empty cursor field %q", field)
-	}
 	return cursor, nil
 }
 

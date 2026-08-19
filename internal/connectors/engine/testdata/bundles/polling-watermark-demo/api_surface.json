@@ -1,0 +1,6 @@
+{
+  "api": "Polling Watermark Demo API (test-only)",
+  "endpoints": [
+    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } }
+  ]
+}

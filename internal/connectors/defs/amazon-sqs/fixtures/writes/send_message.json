@@ -1,0 +1,11 @@
+{
+  "record": {
+    "message_body": "fixture message",
+    "message_group_id": "fixture-group",
+    "message_deduplication_id": "fixture-dedup"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.SendMessage"
+  }
+}

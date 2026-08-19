@@ -1,0 +1,23 @@
+{
+  "record": {
+    "campaign_id": "fixture_campaign_id",
+    "plain_text": "fixture_plain_text",
+    "html": "fixture_html",
+    "url": "https://example.invalid/mailchimp-fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/campaigns/fixture_campaign_id/content",
+    "body": {
+      "plain_text": "fixture_plain_text",
+      "html": "fixture_html",
+      "url": "https://example.invalid/mailchimp-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_put_campaigns_content"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "plan_id": "fixture_plan_id",
+    "add_on_id": "fixture_add_on_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/plans/fixture_plan_id/add_ons/fixture_add_on_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": "fixture_code",
+      "name": "fixture_name",
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "active",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

@@ -7,10 +7,11 @@ description: GitHub connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).
+Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and plans approval-gated reverse ETL actions through fixed GitHub REST and GraphQL operations.
 
 ## Icon
 
+- id: github
 - asset: icons/github.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -20,17 +21,6 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 
 - check=true catalog=true read=true write=true query=false
 - Integration type: api
-
-## Certification
-
-- Full certification: passed for the current GitHub connector surface.
-- Accounted API endpoints: 509 total, 440 covered, 69 explicitly blocked.
-- Catalog streams: 37.
-- Direct-read command families checked: 2.
-- Write actions accounted: 231.
-- Live write lifecycle: `create_label` passed with read-back verification and cleanup.
-- Remaining write actions are safe untested pairings or blocked by policy; destructive/admin/binary surfaces are not executed blindly.
-- Binary download surfaces remain safely blocked until a bounded binary executor and destination policy exist.
 
 ## Authentication
 
@@ -45,9 +35,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - installation_permissions
 - installation_repositories
 - installation_repository_ids
-- owner
+- owner (required)
 - public_access
-- repo
+- rate_limit_account
+- rate_limit_ip
+- rate_limit_repository
+- repo (required)
 - since
 - private_key (secret)
 - private_key_base64 (secret)
@@ -58,125 +51,137 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - repository:
   - primary key: node_id
   - cursor: updated_at
-  - fields: created_at(), default_branch(), description(), forks_count(), full_name(), html_url(), id(), language(), name(), node_id(), open_issues_count(), private(), pushed_at(), repository(), stargazers_count(), updated_at(), watchers_count()
+  - fields: created_at(string), default_branch(string), description(string), forks_count(integer), full_name(string), html_url(string), id(integer), language(string), name(string), node_id(string), open_issues_count(integer), private(boolean), pushed_at(string), repository(string), stargazers_count(integer), updated_at(string), watchers_count(integer)
 - issues:
   - primary key: node_id
   - cursor: updated_at
-  - fields: author_association(), body(), closed_at(), comments(), created_at(), html_url(), id(), locked(), node_id(), number(), repository(), state(), state_reason(), title(), updated_at(), url(), user_id(), user_login()
+  - fields: author_association(string), body(string), closed_at(string), comments(integer), created_at(string), html_url(string), id(integer), labels(array), locked(boolean), node_id(string), number(integer), repository(string), state(string), state_reason(string), title(string), updated_at(string), url(string), user_id(integer), user_login(string)
 - pull_requests:
   - primary key: node_id
   - cursor: updated_at
-  - fields: author_association(), base_ref(), base_sha(), body(), closed_at(), comments(), created_at(), draft(), head_ref(), head_sha(), html_url(), id(), locked(), merge_commit_sha(), merged_at(), node_id(), number(), repository(), state(), title(), updated_at(), url(), user_id(), user_login()
+  - fields: author_association(string), base_ref(string), base_sha(string), body(string), closed_at(string), comments(integer), created_at(string), draft(boolean), head_ref(string), head_sha(string), html_url(string), id(integer), locked(boolean), merge_commit_sha(string), merged_at(string), node_id(string), number(integer), repository(string), state(string), title(string), updated_at(string), url(string), user_id(integer), user_login(string)
 - branches:
   - primary key: name
-  - fields: commit_sha(), commit_url(), name(), protected(), repository()
+  - fields: commit_sha(string), commit_url(string), name(string), protected(boolean), repository(string)
 - commits:
   - primary key: sha
   - cursor: commit_committer_date
-  - fields: author_id(), author_login(), commit_author_date(), commit_author_email(), commit_author_name(), commit_committer_date(), commit_committer_email(), commit_committer_name(), commit_message(), committer_id(), committer_login(), html_url(), node_id(), repository(), sha(), url()
+  - fields: author_id(integer), author_login(string), commit_author_date(string), commit_author_email(string), commit_author_name(string), commit_committer_date(string), commit_committer_email(string), commit_committer_name(string), commit_message(string), committer_id(integer), committer_login(string), html_url(string), node_id(string), repository(string), sha(string), url(string)
 - tags:
   - primary key: name
-  - fields: commit_sha(), commit_url(), name(), node_id(), repository(), tarball_url(), zipball_url()
+  - fields: commit_sha(string), commit_url(string), name(string), node_id(string), repository(string), tarball_url(string), zipball_url(string)
 - releases:
   - primary key: id
   - cursor: published_at
-  - fields: assets_count(), author_login(), body(), created_at(), draft(), html_url(), id(), name(), node_id(), prerelease(), published_at(), repository(), tag_name(), target_commitish()
+  - fields: assets_count(integer), author_login(string), body(string), created_at(string), draft(boolean), html_url(string), id(integer), name(string), node_id(string), prerelease(boolean), published_at(string), repository(string), tag_name(string), target_commitish(string)
 - labels:
   - primary key: name
-  - fields: color(), default(), description(), id(), name(), node_id(), repository(), url()
+  - fields: color(string), default(boolean), description(string), id(integer), name(string), node_id(string), repository(string), url(string)
 - milestones:
   - primary key: number
   - cursor: updated_at
-  - fields: closed_at(), closed_issues(), created_at(), creator_login(), description(), due_on(), id(), node_id(), number(), open_issues(), repository(), state(), title(), updated_at()
+  - fields: closed_at(string), closed_issues(integer), created_at(string), creator_login(string), description(string), due_on(string), id(integer), node_id(string), number(integer), open_issues(integer), repository(string), state(string), title(string), updated_at(string)
 - issue_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: author_association(), body(), created_at(), html_url(), id(), issue_url(), node_id(), repository(), updated_at(), user_id(), user_login()
+  - fields: author_association(string), body(string), created_at(string), html_url(string), id(integer), issue_url(string), node_id(string), repository(string), updated_at(string), user_id(integer), user_login(string)
 - pull_request_review_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: body(), commit_id(), created_at(), diff_hunk(), html_url(), id(), node_id(), original_commit_id(), original_position(), path(), position(), pull_request_review_id(), pull_request_url(), repository(), updated_at(), user_login()
+  - fields: body(string), commit_id(string), created_at(string), diff_hunk(string), html_url(string), id(integer), node_id(string), original_commit_id(string), original_position(integer), path(string), position(integer), pull_request_review_id(integer), pull_request_url(string), repository(string), updated_at(string), user_login(string)
 - collaborators:
   - primary key: id
-  - fields: contributions(), html_url(), id(), login(), node_id(), relation(), repository(), role_name(), site_admin(), type()
+  - fields: contributions(integer), html_url(string), id(integer), login(string), node_id(string), relation(string), repository(string), role_name(string), site_admin(boolean), type(string)
 - contributors:
   - primary key: id
-  - fields: contributions(), html_url(), id(), login(), node_id(), relation(), repository(), role_name(), site_admin(), type()
+  - fields: contributions(integer), html_url(string), id(integer), login(string), node_id(string), relation(string), repository(string), role_name(string), site_admin(boolean), type(string)
 - stargazers:
   - primary key: id
-  - fields: contributions(), html_url(), id(), login(), node_id(), relation(), repository(), role_name(), site_admin(), type()
+  - fields: contributions(integer), html_url(string), id(integer), login(string), node_id(string), relation(string), repository(string), role_name(string), site_admin(boolean), type(string)
 - subscribers:
   - primary key: id
-  - fields: contributions(), html_url(), id(), login(), node_id(), relation(), repository(), role_name(), site_admin(), type()
+  - fields: contributions(integer), html_url(string), id(integer), login(string), node_id(string), relation(string), repository(string), role_name(string), site_admin(boolean), type(string)
 - workflows:
   - primary key: id
   - cursor: updated_at
-  - fields: badge_url(), created_at(), html_url(), id(), name(), node_id(), path(), repository(), state(), updated_at()
+  - fields: badge_url(string), created_at(string), html_url(string), id(integer), name(string), node_id(string), path(string), repository(string), state(string), updated_at(string)
 - workflow_runs:
   - primary key: id
   - cursor: updated_at
-  - fields: conclusion(), created_at(), event(), head_branch(), head_sha(), html_url(), id(), name(), node_id(), repository(), run_attempt(), run_number(), status(), updated_at(), workflow_id()
+  - fields: conclusion(string), created_at(string), event(string), head_branch(string), head_sha(string), html_url(string), id(integer), name(string), node_id(string), repository(string), run_attempt(integer), run_number(integer), status(string), updated_at(string), workflow_id(integer)
 - workflow_artifacts:
   - primary key: id
   - cursor: updated_at
-  - fields: archive_download_url(), created_at(), expired(), expires_at(), id(), name(), node_id(), repository(), size_in_bytes(), updated_at(), url(), workflow_run_id()
+  - fields: archive_download_url(string), created_at(string), expired(boolean), expires_at(string), id(integer), name(string), node_id(string), repository(string), size_in_bytes(integer), updated_at(string), url(string), workflow_run_id(integer)
 - deployments:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), creator_login(), description(), environment(), id(), node_id(), ref(), repository(), sha(), task(), updated_at()
+  - fields: created_at(string), creator_login(string), description(string), environment(string), id(integer), node_id(string), ref(string), repository(string), sha(string), task(string), updated_at(string)
 - commit_comments:
   - primary key: id
   - cursor: updated_at
-  - fields: author_association(), body(), commit_id(), created_at(), html_url(), id(), line(), node_id(), path(), position(), repository(), updated_at(), url(), user_id(), user_login()
+  - fields: author_association(string), body(string), commit_id(string), created_at(string), html_url(string), id(integer), line(integer), node_id(string), path(string), position(integer), repository(string), updated_at(string), url(string), user_id(integer), user_login(string)
 - deploy_keys:
   - primary key: id
-  - fields: added_by(), created_at(), enabled(), id(), key(), last_used(), read_only(), repository(), title(), url(), verified()
+  - fields: added_by(string), created_at(string), enabled(boolean), id(integer), key(string), last_used(string), read_only(boolean), repository(string), title(string), url(string), verified(boolean)
 - webhooks:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), config_url(), created_at(), deliveries_url(), events(), id(), name(), ping_url(), repository(), test_url(), type(), updated_at(), url()
+  - fields: active(boolean), config_url(string), created_at(string), deliveries_url(string), events(array), id(integer), name(string), ping_url(string), repository(string), test_url(string), type(string), updated_at(string), url(string)
 - environments:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), html_url(), id(), name(), node_id(), repository(), updated_at(), url()
+  - fields: created_at(string), html_url(string), id(integer), name(string), node_id(string), repository(string), updated_at(string), url(string)
 - forks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), default_branch(), forks_count(), full_name(), html_url(), id(), name(), node_id(), open_issues_count(), owner_login(), private(), pushed_at(), repository(), stargazers_count(), updated_at(), watchers_count()
+  - fields: created_at(string), default_branch(string), forks_count(integer), full_name(string), html_url(string), id(integer), name(string), node_id(string), open_issues_count(integer), owner_login(string), private(boolean), pushed_at(string), repository(string), stargazers_count(integer), updated_at(string), watchers_count(integer)
 - invitations:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), expired(), html_url(), id(), invitee_login(), inviter_login(), node_id(), permissions(), repository(), url()
+  - fields: created_at(string), expired(boolean), html_url(string), id(integer), invitee_login(string), inviter_login(string), node_id(string), permissions(string), repository(string), url(string)
 - issue_events:
   - primary key: id
   - cursor: created_at
-  - fields: actor_login(), commit_id(), commit_url(), created_at(), event(), id(), lock_reason(), node_id(), repository(), url()
+  - fields: actor_login(string), commit_id(string), commit_url(string), created_at(string), event(string), id(integer), lock_reason(string), node_id(string), repository(string), url(string)
 - code_scanning_alerts:
   - primary key: number
   - cursor: updated_at
-  - fields: created_at(), dismissed_at(), dismissed_by_login(), dismissed_comment(), dismissed_reason(), fixed_at(), html_url(), number(), repository(), rule_id(), rule_severity(), state(), tool_name(), updated_at(), url()
+  - fields: created_at(string), dismissed_at(string), dismissed_by_login(string), dismissed_comment(string), dismissed_reason(string), fixed_at(string), html_url(string), number(integer), repository(string), rule_id(string), rule_severity(string), state(string), tool_name(string), updated_at(string), url(string)
 - dependabot_alerts:
   - primary key: number
   - cursor: updated_at
-  - fields: auto_dismissed_at(), created_at(), dismissed_at(), dismissed_by_login(), dismissed_comment(), dismissed_reason(), fixed_at(), html_url(), number(), package_ecosystem(), package_name(), repository(), state(), updated_at(), url()
+  - fields: auto_dismissed_at(string), created_at(string), dismissed_at(string), dismissed_by_login(string), dismissed_comment(string), dismissed_reason(string), fixed_at(string), html_url(string), number(integer), package_ecosystem(string), package_name(string), repository(string), state(string), updated_at(string), url(string)
 - secret_scanning_alerts:
   - primary key: number
   - cursor: updated_at
-  - fields: created_at(), html_url(), number(), push_protection_bypassed(), repository(), resolution(), resolved_at(), resolved_by_login(), secret_type(), secret_type_display_name(), state(), updated_at(), url(), validity()
+  - fields: created_at(string), html_url(string), number(integer), push_protection_bypassed(boolean), repository(string), resolution(string), resolved_at(string), resolved_by_login(string), secret_type(string), secret_type_display_name(string), state(string), updated_at(string), url(string), validity(string)
 - security_advisories:
   - primary key: ghsa_id
   - cursor: updated_at
-  - fields: author_login(), closed_at(), created_at(), cve_id(), ghsa_id(), html_url(), published_at(), publisher_login(), repository(), severity(), state(), summary(), updated_at(), url(), withdrawn_at()
+  - fields: author_login(string), closed_at(string), created_at(string), cve_id(string), ghsa_id(string), html_url(string), published_at(string), publisher_login(string), repository(string), severity(string), state(string), summary(string), updated_at(string), url(string), withdrawn_at(string)
 - repo_rulesets:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), enforcement(), id(), name(), repository(), source(), source_type(), target(), updated_at()
+  - fields: created_at(string), enforcement(string), id(integer), name(string), repository(string), source(string), source_type(string), target(string), updated_at(string)
 - autolinks:
   - primary key: id
-  - fields: id(), is_alphanumeric(), key_prefix(), repository(), updated_at(), url_template()
+  - fields: id(integer), is_alphanumeric(boolean), key_prefix(string), repository(string), updated_at(string), url_template(string)
 - languages:
   - primary key: repository
-  - fields: repository()
+  - fields: repository(string)
+- projects:
+  - primary key: id
+  - fields: closed(boolean), id(string), number(integer), owner(string), repository(string), title(string), updated_at(string), url(string)
+- project_items:
+  - primary key: id
+  - fields: content_id(string), content_number(integer), content_state(string), content_title(string), content_type(string), content_url(string), created_at(string), id(string), project_id(string), project_number(integer), project_title(string), repository(string), type(string), updated_at(string)
+- discussions:
+  - primary key: id
+  - fields: answer_chosen_at(string), author_login(string), category_id(string), category_name(string), category_slug(string), created_at(string), id(string), is_answered(boolean), number(integer), repository(string), title(string), updated_at(string), url(string)
+- discussion:
+  - primary key: id
+  - fields: answer_chosen_at(string), author_login(string), body(string), category_id(string), category_name(string), category_slug(string), comments(object), created_at(string), id(string), is_answered(boolean), number(integer), repository(string), title(string), updated_at(string), url(string)
 
 ## Sync Modes
 
@@ -186,6 +191,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 
 - create_issue:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues
+  - required fields: title
   - risk: creates user-visible GitHub issue and may notify watchers
 - update_issue:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}
@@ -193,15 +199,19 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: mutates existing GitHub issue or pull request issue metadata
 - comment_issue:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/comments
-  - required fields: issue_number
-  - optional fields: body
+  - required fields: issue_number, body
   - risk: creates user-visible comment and may notify participants
 - close_issue:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}
   - required fields: issue_number
   - risk: closes existing GitHub issue
+- reopen_issue:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}
+  - required fields: issue_number
+  - risk: reopens a previously closed GitHub issue
 - create_pull_request:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls
+  - required fields: head, base
   - risk: creates user-visible pull request and may notify watchers/reviewers
 - update_pull_request:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}
@@ -211,6 +221,10 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}
   - required fields: pull_number
   - risk: closes existing GitHub pull request
+- reopen_pull_request:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}
+  - required fields: pull_number
+  - risk: reopens a previously closed GitHub pull request
 - request_reviewers:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers
   - required fields: pull_number
@@ -221,6 +235,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: irreversibly changes repository history unless branch protection blocks merge
 - create_label:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/labels
+  - required fields: name, color
   - risk: changes repository taxonomy used by issues and pull requests
 - update_label:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}
@@ -233,6 +248,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a label from the repository and existing issue metadata
 - create_milestone:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/milestones
+  - required fields: title
   - risk: creates planning metadata visible to repository collaborators
 - update_milestone:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/milestones/{{ record.milestone_number }}
@@ -244,6 +260,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes repository planning metadata from GitHub
 - create_release:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/releases
+  - required fields: tag_name
   - risk: publishes release metadata and may notify repository watchers
 - update_release:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}
@@ -255,7 +272,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes release metadata from GitHub; tags are not deleted by this action
 - dispatch_workflow:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/dispatches
-  - required fields: workflow_id
+  - required fields: workflow_id, ref
   - risk: starts CI/CD automation that may deploy, publish, or mutate external systems
 - rerun_workflow_run:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/rerun
@@ -275,15 +292,16 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: submits reviewer feedback and may approve or request changes on a pull request
 - create_or_update_file:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}
-  - required fields: path
+  - required fields: path, message, content
   - risk: writes a commit to the repository and may trigger CI/CD
 - delete_file:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}
-  - required fields: path
-  - optional fields: message, sha, branch, committer, author
+  - required fields: path, message, sha
+  - optional fields: branch, committer, author
   - risk: writes a commit that removes a file from the repository
 - create_webhook:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks
+  - required fields: config
   - risk: registers an outbound webhook that will receive repository event payloads
 - update_webhook:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}
@@ -295,6 +313,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a webhook; the target will stop receiving repository event payloads
 - create_deploy_key:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/keys
+  - required fields: key
   - risk: grants a new SSH public key deploy access to the repository
 - delete_deploy_key:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}
@@ -310,12 +329,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a deployment environment and its protection rules
 - create_commit_comment:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/commits/{{ record.commit_sha }}/comments
-  - required fields: commit_sha
+  - required fields: commit_sha, body
   - risk: creates a user-visible comment attached to a specific commit
 - update_commit_comment:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}
-  - required fields: comment_id
-  - optional fields: body
+  - required fields: comment_id, body
   - risk: changes the text of an existing commit comment
 - delete_commit_comment:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}
@@ -323,8 +341,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a commit comment
 - update_issue_comment:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}
-  - required fields: comment_id
-  - optional fields: body
+  - required fields: comment_id, body
   - risk: changes the text of an existing issue or pull request comment
 - delete_issue_comment:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}
@@ -346,8 +363,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: replaces every label on an issue or pull request, removing any not listed
 - add_issue_labels:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels
-  - required fields: issue_number
-  - optional fields: labels
+  - required fields: issue_number, labels
   - risk: adds labels to an issue or pull request without removing existing ones
 - remove_issue_label:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels/{{ record.name }}
@@ -355,22 +371,19 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a single label from an issue or pull request
 - add_issue_assignees:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/assignees
-  - required fields: issue_number
-  - optional fields: assignees
+  - required fields: issue_number, assignees
   - risk: assigns additional GitHub users to an issue or pull request and may notify them
 - remove_issue_assignees:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/assignees
-  - required fields: issue_number
-  - optional fields: assignees
+  - required fields: issue_number, assignees
   - risk: removes assignees from an issue or pull request
 - create_review_comment:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments
-  - required fields: pull_number
+  - required fields: pull_number, body, commit_id, path
   - risk: creates a user-visible inline review comment on a pull request diff
 - update_review_comment:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}
-  - required fields: comment_id
-  - optional fields: body
+  - required fields: comment_id, body
   - risk: changes the text of an existing pull request review comment
 - delete_review_comment:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}
@@ -378,13 +391,13 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a pull request review comment
 - submit_pull_request_review:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}/events
-  - required fields: pull_number, review_id
-  - optional fields: body, event
+  - required fields: pull_number, review_id, event
+  - optional fields: body
   - risk: submits a pending pull request review, which may approve or request changes
 - dismiss_pull_request_review:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}/dismissals
-  - required fields: pull_number, review_id
-  - optional fields: message, event
+  - required fields: pull_number, review_id, message
+  - optional fields: event
   - risk: dismisses an existing pull request review, clearing its approval status
 - update_pull_request_branch:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/update-branch
@@ -401,6 +414,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a downloadable asset from a published release
 - replace_repo_topics:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/topics
+  - required fields: names
   - risk: replaces the repository's entire topic list, removing any topic not listed
 - add_collaborator:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{ record.username }}
@@ -413,11 +427,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: revokes a collaborator's access to the repository
 - create_ref:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/refs
+  - required fields: ref, sha
   - risk: creates a new branch or tag ref pointing at the given commit SHA
 - update_ref:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}
-  - required fields: ref
-  - optional fields: sha, force
+  - required fields: ref, sha
+  - optional fields: force
   - risk: moves an existing branch or tag ref to a different commit SHA, potentially discarding history
 - delete_ref:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}
@@ -425,23 +440,26 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: permanently deletes a branch or tag ref
 - merge_branch:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/merges
+  - required fields: base, head
   - risk: creates a merge commit combining the head ref into the base branch
 - update_code_scanning_alert:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}
-  - required fields: alert_number
+  - required fields: alert_number, state
   - risk: changes a code scanning alert's triage state, which can suppress a real security finding
 - update_dependabot_alert:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/dependabot/alerts/{{ record.alert_number }}
-  - required fields: alert_number
+  - required fields: alert_number, state
   - risk: changes a dependabot alert's triage state, which can suppress a real vulnerability finding
 - create_deployment:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/deployments
+  - required fields: ref
   - risk: records a new deployment and may trigger CI/CD deployment automation
 - create_fork:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/forks
   - risk: creates a new repository forked from this one, under the caller's account or a target organization
 - create_repo_ruleset:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/rulesets
+  - required fields: name, enforcement
   - risk: creates a repository ruleset that can block pushes, merges, or deletions repo-wide once active
 - update_repo_ruleset:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{ record.ruleset_id }}
@@ -453,8 +471,2092 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced
 - update_secret_scanning_alert:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/alerts/{{ record.alert_number }}
-  - required fields: alert_number
+  - required fields: alert_number, state
   - risk: changes a secret scanning alert's triage state, which can suppress a real leaked-credential finding
+- repo:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}
+  - risk: critical
+- repo2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}
+  - risk: high
+- unarchive_repo:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}
+  - optional fields: archived
+  - risk: returns the configured repository to a writable state
+- archive_repo:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}
+  - optional fields: archived
+  - risk: archives the configured repository, making it read-only for every consumer
+- actions_cache_retention_limit2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/cache/retention-limit
+  - risk: high
+- actions_cache_storage_limit2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/cache/storage-limit
+  - risk: high
+- actions_caches:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/caches
+  - risk: medium
+- actions_caches_cache_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/caches/{{ record.cache_id }}
+  - required fields: cache_id
+  - risk: medium
+- actions_jobs_job_id_rerun:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/jobs/{{ record.job_id }}/rerun
+  - required fields: job_id
+  - risk: medium
+- actions_oidc_customization_sub2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/oidc/customization/sub
+  - risk: high
+- actions_permissions2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions
+  - risk: high
+- actions_permissions_access2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/access
+  - risk: high
+- actions_permissions_artifact_and_log_retention2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/artifact-and-log-retention
+  - risk: high
+- actions_permissions_fork_pr_contributor_approval2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-contributor-approval
+  - risk: high
+- actions_permissions_fork_pr_workflows_private_repos2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-workflows-private-repos
+  - risk: high
+- actions_permissions_selected_actions2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/selected-actions
+  - risk: high
+- actions_permissions_workflow2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/workflow
+  - risk: high
+- actions_runners_generate_jitconfig:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/generate-jitconfig
+  - risk: high
+- actions_runners_registration_token:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token
+  - risk: high
+- actions_runners_remove_token:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token
+  - risk: high
+- actions_runners_runner_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}
+  - required fields: runner_id
+  - risk: high
+- actions_runners_runner_id_labels:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: runner_id
+  - risk: high
+- actions_runners_runner_id_labels3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: runner_id
+  - risk: high
+- actions_runners_runner_id_labels4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: runner_id
+  - risk: high
+- actions_runners_runner_id_labels_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}
+  - required fields: runner_id, name
+  - risk: high
+- actions_runs_run_id_approve:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/approve
+  - required fields: run_id
+  - risk: high
+- actions_runs_run_id_deployment_protection_rule:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/deployment_protection_rule
+  - required fields: run_id
+  - risk: high
+- actions_runs_run_id_logs:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/logs
+  - required fields: run_id
+  - risk: critical
+- actions_runs_run_id_pending_deployments2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/pending_deployments
+  - required fields: run_id
+  - risk: high
+- actions_secrets_secret_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: high
+- actions_secrets_secret_name3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}
+  - required fields: secret_name, encrypted_value, key_id
+  - risk: high
+- actions_variables2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/variables
+  - required fields: name, value
+  - risk: high
+- actions_variables_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}
+  - required fields: name
+  - risk: high
+- actions_variables_name3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}
+  - required fields: name, value
+  - risk: high
+- actions_workflows_workflow_id_disable:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/disable
+  - required fields: workflow_id
+  - risk: high
+- actions_workflows_workflow_id_enable:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/enable
+  - required fields: workflow_id
+  - risk: high
+- attestations:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/attestations
+  - risk: high
+- autolinks:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/autolinks
+  - required fields: key_prefix, url_template
+  - risk: medium
+- autolinks_autolink_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/autolinks/{{ record.autolink_id }}
+  - required fields: autolink_id
+  - risk: medium
+- automated_security_fixes:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes
+  - risk: high
+- automated_security_fixes3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes
+  - risk: high
+- branches_branch_protection:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection
+  - required fields: branch
+  - risk: high
+- branches_branch_protection3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection
+  - required fields: branch, required_status_checks, enforce_admins, required_pull_request_reviews, restrictions
+  - risk: high
+- branches_branch_protection_enforce_admins:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_enforce_admins3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_pull_request_reviews:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_pull_request_reviews3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_signatures:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_signatures3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_status_checks:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_status_checks3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_status_checks_contexts:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_status_checks_contexts3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_required_status_checks_contexts4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_apps:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_apps3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_apps4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_teams:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_teams3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_teams4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_users:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_users3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users
+  - required fields: branch
+  - risk: high
+- branches_branch_protection_restrictions_users4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users
+  - required fields: branch
+  - risk: high
+- branches_branch_rename:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/rename
+  - required fields: branch
+  - risk: critical
+- check_runs:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/check-runs
+  - required fields: name, head_sha
+  - risk: medium
+- check_runs_check_run_id2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}
+  - required fields: check_run_id
+  - risk: medium
+- check_runs_check_run_id_rerequest:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}/rerequest
+  - required fields: check_run_id
+  - risk: medium
+- check_suites:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/check-suites
+  - risk: medium
+- check_suites_preferences:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/check-suites/preferences
+  - risk: medium
+- check_suites_check_suite_id_rerequest:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/check-suites/{{ record.check_suite_id }}/rerequest
+  - required fields: check_suite_id
+  - risk: medium
+- code_quality_setup2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/code-quality/setup
+  - risk: high
+- code_scanning_alerts_alert_number_autofix2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix
+  - required fields: alert_number
+  - risk: high
+- code_scanning_alerts_alert_number_autofix_commits:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix/commits
+  - required fields: alert_number
+  - risk: high
+- code_scanning_analyses_analysis_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/analyses/{{ record.analysis_id }}
+  - required fields: analysis_id
+  - risk: high
+- code_scanning_codeql_databases_language:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/databases/{{ record.language }}
+  - required fields: language
+  - risk: high
+- code_scanning_codeql_variant_analyses:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/variant-analyses
+  - risk: high
+- code_scanning_default_setup2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/default-setup
+  - risk: high
+- code_scanning_sarifs:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/code-scanning/sarifs
+  - risk: medium
+- codespaces2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/codespaces
+  - risk: medium
+- codespaces_secrets_secret_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: medium
+- codespaces_secrets_secret_name3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: medium
+- comments_comment_id_reactions2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions
+  - required fields: comment_id
+  - risk: medium
+- comments_comment_id_reactions_reaction_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}
+  - required fields: comment_id, reaction_id
+  - risk: medium
+- dependabot_secrets_secret_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: high
+- dependabot_secrets_secret_name3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: high
+- dependency_graph_snapshots:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/dependency-graph/snapshots
+  - risk: medium
+- deployments_deployment_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}
+  - required fields: deployment_id
+  - risk: critical
+- deployments_deployment_id_statuses2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}/statuses
+  - required fields: deployment_id
+  - risk: medium
+- dispatches:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/dispatches
+  - risk: medium
+- environments_environment_name_deployment_branch_policies2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies
+  - required fields: environment_name
+  - risk: high
+- environments_environment_name_deployment_branch_policies_branch_policy_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}
+  - required fields: environment_name, branch_policy_id
+  - risk: high
+- environments_environment_name_deployment_branch_policies_branch_policy_id3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}
+  - required fields: environment_name, branch_policy_id
+  - risk: high
+- environments_environment_name_deployment_protection_rules2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules
+  - required fields: environment_name
+  - risk: high
+- environments_environment_name_deployment_protection_rules_protection_rule_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules/{{ record.protection_rule_id }}
+  - required fields: environment_name, protection_rule_id
+  - risk: high
+- environments_environment_name_secrets_secret_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}
+  - required fields: environment_name, secret_name
+  - risk: high
+- environments_environment_name_secrets_secret_name3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}
+  - required fields: environment_name, secret_name
+  - risk: high
+- environments_environment_name_variables2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables
+  - required fields: environment_name
+  - risk: high
+- environments_environment_name_variables_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}
+  - required fields: environment_name, name
+  - risk: high
+- environments_environment_name_variables_name3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}
+  - required fields: environment_name, name
+  - risk: high
+- git_blobs:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/blobs
+  - required fields: content
+  - risk: medium
+- git_commits:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/commits
+  - required fields: message, tree
+  - risk: medium
+- git_trees:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/trees
+  - required fields: tree
+  - risk: medium
+- hooks_hook_id_deliveries_delivery_id_attempts:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts
+  - required fields: hook_id, delivery_id
+  - risk: medium
+- hooks_hook_id_pings:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/pings
+  - required fields: hook_id
+  - risk: low
+- hooks_hook_id_tests:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/tests
+  - required fields: hook_id
+  - risk: low
+- immutable_releases:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/immutable-releases
+  - risk: high
+- immutable_releases3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/immutable-releases
+  - risk: high
+- import:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/import
+  - risk: medium
+- import3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/import
+  - risk: medium
+- import4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/import
+  - risk: medium
+- import_authors_author_id:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/import/authors/{{ record.author_id }}
+  - required fields: author_id
+  - risk: medium
+- import_lfs:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/import/lfs
+  - risk: medium
+- interaction_limits:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/interaction-limits
+  - risk: high
+- interaction_limits3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/interaction-limits
+  - risk: high
+- interaction_limits_pulls_bypass_list:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list
+  - risk: high
+- interaction_limits_pulls_bypass_list3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list
+  - risk: high
+- invitations_invitation_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}
+  - required fields: invitation_id
+  - risk: medium
+- invitations_invitation_id2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}
+  - required fields: invitation_id
+  - risk: medium
+- issues_comments_comment_id_pin:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin
+  - required fields: comment_id
+  - risk: medium
+- issues_comments_comment_id_pin2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin
+  - required fields: comment_id
+  - risk: medium
+- issues_comments_comment_id_reactions2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions
+  - required fields: comment_id
+  - risk: medium
+- issues_comments_comment_id_reactions_reaction_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}
+  - required fields: comment_id, reaction_id
+  - risk: medium
+- issues_issue_number_dependencies_blocked_by2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by
+  - required fields: issue_number
+  - risk: medium
+- issues_issue_number_dependencies_blocked_by_issue_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}
+  - required fields: issue_number, issue_id
+  - risk: medium
+- issues_issue_number_issue_field_values2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values
+  - required fields: issue_number
+  - risk: high
+- issues_issue_number_issue_field_values3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values
+  - required fields: issue_number
+  - risk: high
+- issues_issue_number_issue_field_values_issue_field_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}
+  - required fields: issue_number, issue_field_id
+  - risk: high
+- issues_issue_number_reactions2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions
+  - required fields: issue_number
+  - risk: medium
+- issues_issue_number_reactions_reaction_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions/{{ record.reaction_id }}
+  - required fields: issue_number, reaction_id
+  - risk: medium
+- issues_issue_number_sub_issue:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issue
+  - required fields: issue_number
+  - risk: medium
+- issues_issue_number_sub_issues2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues
+  - required fields: issue_number
+  - risk: medium
+- issues_issue_number_sub_issues_priority:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues/priority
+  - required fields: issue_number
+  - risk: medium
+- merge_upstream:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/merge-upstream
+  - risk: medium
+- notifications2:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/notifications
+  - risk: medium
+- pages:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/pages
+  - risk: medium
+- pages3:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pages
+  - risk: medium
+- pages4:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/pages
+  - risk: medium
+- pages_builds2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pages/builds
+  - risk: medium
+- pages_deployments:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pages/deployments
+  - risk: medium
+- pages_deployments_pages_deployment_id_cancel:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pages/deployments/{{ record.pages_deployment_id }}/cancel
+  - required fields: pages_deployment_id
+  - risk: medium
+- private_vulnerability_reporting:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting
+  - risk: high
+- private_vulnerability_reporting3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting
+  - risk: high
+- properties_values2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/properties/values
+  - risk: high
+- pulls_comments_comment_id_reactions2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions
+  - required fields: comment_id
+  - risk: medium
+- pulls_comments_comment_id_reactions_reaction_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}
+  - required fields: comment_id, reaction_id
+  - risk: medium
+- pulls_pull_number_codespaces:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/codespaces
+  - required fields: pull_number
+  - risk: medium
+- pulls_pull_number_requested_reviewers:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers
+  - required fields: pull_number
+  - risk: medium
+- releases_generate_notes:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/releases/generate-notes
+  - risk: low
+- releases_release_id_assets2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets
+  - required fields: release_id
+  - risk: medium
+- releases_release_id_reactions2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions
+  - required fields: release_id
+  - risk: medium
+- releases_release_id_reactions_reaction_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}
+  - required fields: release_id, reaction_id
+  - risk: medium
+- secret_scanning_push_protection_bypasses:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/push-protection-bypasses
+  - risk: high
+- security_advisories:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/security-advisories
+  - risk: high
+- security_advisories_reports:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/security-advisories/reports
+  - risk: high
+- security_advisories_ghsa_id:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}
+  - required fields: ghsa_id
+  - risk: high
+- security_advisories_ghsa_id_cve:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/cve
+  - required fields: ghsa_id
+  - risk: high
+- security_advisories_ghsa_id_forks:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/forks
+  - required fields: ghsa_id
+  - risk: high
+- statuses_sha:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/statuses/{{ record.sha }}
+  - required fields: sha, state
+  - risk: medium
+- subscription:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/subscription
+  - risk: medium
+- subscription3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/subscription
+  - risk: medium
+- transfer:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/transfer
+  - risk: critical
+- vulnerability_alerts:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts
+  - risk: high
+- vulnerability_alerts3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts
+  - risk: high
+- agent_tasks_create_task_in_repo:
+  - endpoint: POST /agents/repos/{{ config.owner }}/{{ config.repo }}/tasks
+  - required fields: prompt
+  - risk: Creates provider-side state: Start a task.
+- apps_create_from_manifest:
+  - endpoint: POST /app-manifests/{{ record.code }}/conversions
+  - required fields: code
+  - risk: Creates provider-side state: Create a GitHub App from a manifest.
+- apps_update_webhook_config_for_app:
+  - endpoint: PATCH /app/hook/config
+  - risk: Mutates existing provider-side state: Update a webhook configuration for an app.
+- apps_redeliver_webhook_delivery:
+  - endpoint: POST /app/hook/deliveries/{{ record.delivery_id }}/attempts
+  - required fields: delivery_id
+  - risk: Creates provider-side state: Redeliver a delivery for an app webhook.
+- apps_delete_installation:
+  - endpoint: DELETE /app/installations/{{ record.installation_id }}
+  - required fields: installation_id
+  - risk: Destructive: Delete an installation for the authenticated app. Removes provider-side state.
+- apps_suspend_installation:
+  - endpoint: PUT /app/installations/{{ record.installation_id }}/suspended
+  - required fields: installation_id
+  - risk: Mutates existing provider-side state: Suspend an app installation.
+- apps_unsuspend_installation:
+  - endpoint: DELETE /app/installations/{{ record.installation_id }}/suspended
+  - required fields: installation_id
+  - risk: Destructive: Unsuspend an app installation. Removes provider-side state.
+- apps_scope_token:
+  - endpoint: POST /applications/{{ record.client_id }}/token/scoped
+  - required fields: client_id, access_token
+  - risk: Creates provider-side state: Create a scoped access token.
+- credentials_revoke:
+  - endpoint: POST /credentials/revoke
+  - required fields: credentials
+  - risk: Creates provider-side state: Revoke a list of credentials.
+- actions_set_actions_cache_retention_limit_for_enterprise:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/actions/cache/retention-limit
+  - required fields: enterprise
+  - risk: Mutates existing provider-side state: Set GitHub Actions cache retention limit for an enterprise.
+- actions_set_actions_cache_storage_limit_for_enterprise:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/actions/cache/storage-limit
+  - required fields: enterprise
+  - risk: Mutates existing provider-side state: Set GitHub Actions cache storage limit for an enterprise.
+- oidc_create_oidc_custom_property_inclusion_for_enterprise:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo
+  - required fields: enterprise, custom_property_name
+  - risk: Creates provider-side state: Create an OIDC custom property inclusion for an enterprise.
+- oidc_delete_oidc_custom_property_inclusion_for_enterprise:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}
+  - required fields: enterprise, custom_property_name
+  - risk: Destructive: Delete an OIDC custom property inclusion for an enterprise. Removes provider-side state.
+- code_security_create_configuration_for_enterprise:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/code-security/configurations
+  - required fields: enterprise, name
+  - risk: Creates provider-side state: Create a code security configuration for an enterprise.
+- code_security_update_enterprise_configuration:
+  - endpoint: PATCH /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}
+  - required fields: enterprise, configuration_id
+  - risk: Mutates existing provider-side state: Update a custom code security configuration for an enterprise.
+- code_security_delete_configuration_for_enterprise:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}
+  - required fields: enterprise, configuration_id
+  - risk: Destructive: Delete a code security configuration for an enterprise. Removes provider-side state.
+- code_security_attach_enterprise_configuration:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/attach
+  - required fields: enterprise, configuration_id, scope
+  - risk: Creates provider-side state: Attach an enterprise configuration to repositories.
+- code_security_set_configuration_as_default_for_enterprise:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/defaults
+  - required fields: enterprise, configuration_id
+  - risk: Mutates existing provider-side state: Set a code security configuration as a default for an enterprise.
+- copilot_set_enterprise_coding_agent_policy:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/copilot/policies/coding_agent
+  - required fields: enterprise, policy_state
+  - risk: Mutates existing provider-side state: Set the coding agent policy for an enterprise.
+- copilot_add_organizations_to_enterprise_coding_agent_policy:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/copilot/policies/coding_agent/organizations
+  - required fields: enterprise
+  - risk: Creates provider-side state: Add organizations to the enterprise coding agent policy.
+- copilot_remove_organizations_from_enterprise_coding_agent_policy:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/copilot/policies/coding_agent/organizations
+  - required fields: enterprise
+  - risk: Destructive: Remove organizations from the enterprise coding agent policy. Removes provider-side state.
+- dependabot_update_repository_access_for_enterprise:
+  - endpoint: PATCH /enterprises/{{ record.enterprise }}/dependabot/repository-access
+  - required fields: enterprise
+  - risk: Mutates existing provider-side state: Updates Dependabot's repository access list for an enterprise.
+- dependabot_set_repository_access_default_level_for_enterprise:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/dependabot/repository-access/default-level
+  - required fields: enterprise, default_level
+  - risk: Mutates existing provider-side state: Set the default repository access level for Dependabot in an enterprise.
+- enterprise_teams_create:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/teams
+  - required fields: enterprise, name
+  - risk: Creates provider-side state: Create an enterprise team.
+- enterprise_team_memberships_bulk_add:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/add
+  - required fields: enterprise, usernames
+  - risk: Creates provider-side state: Bulk add team members.
+- enterprise_team_memberships_bulk_remove:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/remove
+  - required fields: enterprise, usernames
+  - risk: Creates provider-side state: Bulk remove team members.
+- enterprise_team_memberships_add:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}
+  - required fields: enterprise, username
+  - risk: Mutates existing provider-side state: Add team member.
+- enterprise_team_memberships_remove:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}
+  - required fields: enterprise, username
+  - risk: Destructive: Remove team membership. Removes provider-side state.
+- enterprise_team_organizations_bulk_add:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/add
+  - required fields: enterprise, organization_slugs
+  - risk: Creates provider-side state: Add organization assignments.
+- enterprise_team_organizations_bulk_remove:
+  - endpoint: POST /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/remove
+  - required fields: enterprise, organization_slugs
+  - risk: Creates provider-side state: Remove organization assignments.
+- enterprise_team_organizations_add:
+  - endpoint: PUT /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}
+  - required fields: enterprise, org
+  - risk: Mutates existing provider-side state: Add an organization assignment.
+- enterprise_team_organizations_delete:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}
+  - required fields: enterprise, org
+  - risk: Destructive: Delete an organization assignment. Removes provider-side state.
+- enterprise_teams_update:
+  - endpoint: PATCH /enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}
+  - required fields: enterprise, team_slug
+  - risk: Mutates existing provider-side state: Update an enterprise team.
+- enterprise_teams_delete:
+  - endpoint: DELETE /enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}
+  - required fields: enterprise, team_slug
+  - risk: Destructive: Delete an enterprise team. Removes provider-side state.
+- gists_create:
+  - endpoint: POST /gists
+  - required fields: files
+  - risk: Creates provider-side state: Create a gist.
+- gists_update:
+  - endpoint: PATCH /gists/{{ record.gist_id }}
+  - required fields: gist_id
+  - risk: Mutates existing provider-side state: Update a gist.
+- gists_delete:
+  - endpoint: DELETE /gists/{{ record.gist_id }}
+  - required fields: gist_id
+  - risk: Destructive: Delete a gist. Removes provider-side state.
+- gists_create_comment:
+  - endpoint: POST /gists/{{ record.gist_id }}/comments
+  - required fields: gist_id, body
+  - risk: Creates provider-side state: Create a gist comment.
+- gists_update_comment:
+  - endpoint: PATCH /gists/{{ record.gist_id }}/comments/{{ record.comment_id }}
+  - required fields: gist_id, comment_id, body
+  - risk: Mutates existing provider-side state: Update a gist comment.
+- gists_delete_comment:
+  - endpoint: DELETE /gists/{{ record.gist_id }}/comments/{{ record.comment_id }}
+  - required fields: gist_id, comment_id
+  - risk: Destructive: Delete a gist comment. Removes provider-side state.
+- gists_fork:
+  - endpoint: POST /gists/{{ record.gist_id }}/forks
+  - required fields: gist_id
+  - risk: Creates provider-side state: Fork a gist.
+- gists_star:
+  - endpoint: PUT /gists/{{ record.gist_id }}/star
+  - required fields: gist_id
+  - risk: Mutates existing provider-side state: Star a gist.
+- gists_unstar:
+  - endpoint: DELETE /gists/{{ record.gist_id }}/star
+  - required fields: gist_id
+  - risk: Destructive: Unstar a gist. Removes provider-side state.
+- apps_revoke_installation_access_token:
+  - endpoint: DELETE /installation/token
+  - risk: Destructive: Revoke an installation access token. Removes provider-side state.
+- activity_mark_notifications_as_read:
+  - endpoint: PUT /notifications
+  - risk: Mutates existing provider-side state: Mark notifications as read.
+- activity_mark_thread_as_read:
+  - endpoint: PATCH /notifications/threads/{{ record.thread_id }}
+  - required fields: thread_id
+  - risk: Mutates existing provider-side state: Mark a thread as read.
+- activity_mark_thread_as_done:
+  - endpoint: DELETE /notifications/threads/{{ record.thread_id }}
+  - required fields: thread_id
+  - risk: Destructive: Mark a thread as done. Removes provider-side state.
+- activity_set_thread_subscription:
+  - endpoint: PUT /notifications/threads/{{ record.thread_id }}/subscription
+  - required fields: thread_id
+  - risk: Mutates existing provider-side state: Set a thread subscription.
+- activity_delete_thread_subscription:
+  - endpoint: DELETE /notifications/threads/{{ record.thread_id }}/subscription
+  - required fields: thread_id
+  - risk: Destructive: Delete a thread subscription. Removes provider-side state.
+- actions_set_actions_cache_retention_limit_for_organization:
+  - endpoint: PUT /organizations/{{ record.org }}/actions/cache/retention-limit
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set GitHub Actions cache retention limit for an organization.
+- actions_set_actions_cache_storage_limit_for_organization:
+  - endpoint: PUT /organizations/{{ record.org }}/actions/cache/storage-limit
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set GitHub Actions cache storage limit for an organization.
+- billing_create_organization_budget:
+  - endpoint: POST /organizations/{{ record.org }}/settings/billing/budgets
+  - required fields: org
+  - risk: Creates provider-side state: Create a budget for an organization.
+- billing_update_budget_org:
+  - endpoint: PATCH /organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}
+  - required fields: org, budget_id
+  - risk: Mutates existing provider-side state: Update a budget for an organization.
+- billing_delete_budget_org:
+  - endpoint: DELETE /organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}
+  - required fields: org, budget_id
+  - risk: Destructive: Delete a budget for an organization. Removes provider-side state.
+- orgs_update:
+  - endpoint: PATCH /orgs/{{ record.org }}
+  - required fields: org
+  - risk: Mutates existing provider-side state: Update an organization.
+- orgs_delete:
+  - endpoint: DELETE /orgs/{{ record.org }}
+  - required fields: org
+  - risk: Destructive: Delete an organization. Removes provider-side state.
+- actions_create_hosted_runner_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/hosted-runners
+  - required fields: org, name, image, size, runner_group_id
+  - risk: Creates provider-side state: Create a GitHub-hosted runner for an organization.
+- actions_delete_custom_image_from_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}
+  - required fields: org, image_definition_id
+  - risk: Destructive: Delete a custom image from the organization. Removes provider-side state.
+- actions_delete_custom_image_version_from_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}/versions/{{ record.version }}
+  - required fields: org, image_definition_id, version
+  - risk: Destructive: Delete an image version of custom image from the organization. Removes provider-side state.
+- actions_update_hosted_runner_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}
+  - required fields: org, hosted_runner_id
+  - risk: Mutates existing provider-side state: Update a GitHub-hosted runner for an organization.
+- actions_delete_hosted_runner_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}
+  - required fields: org, hosted_runner_id
+  - risk: Destructive: Delete a GitHub-hosted runner for an organization. Removes provider-side state.
+- oidc_create_oidc_custom_property_inclusion_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/oidc/customization/properties/repo
+  - required fields: org, custom_property_name
+  - risk: Creates provider-side state: Create an OIDC custom property inclusion for an organization.
+- oidc_delete_oidc_custom_property_inclusion_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}
+  - required fields: org, custom_property_name
+  - risk: Destructive: Delete an OIDC custom property inclusion for an organization. Removes provider-side state.
+- oidc_update_oidc_custom_sub_template_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/oidc/customization/sub
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set the customization template for an OIDC subject claim for an organization.
+- actions_set_github_actions_permissions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions
+  - required fields: org, enabled_repositories
+  - risk: Mutates existing provider-side state: Set GitHub Actions permissions for an organization.
+- actions_set_artifact_and_log_retention_settings_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/artifact-and-log-retention
+  - required fields: org, days
+  - risk: Mutates existing provider-side state: Set artifact and log retention settings for an organization.
+- actions_set_fork_pr_contributor_approval_permissions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/fork-pr-contributor-approval
+  - required fields: org, approval_policy
+  - risk: Mutates existing provider-side state: Set fork PR contributor approval permissions for an organization.
+- actions_set_private_repo_fork_pr_workflows_settings_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/fork-pr-workflows-private-repos
+  - required fields: org, run_workflows_from_fork_pull_requests
+  - risk: Mutates existing provider-side state: Set private repo fork PR workflow settings for an organization.
+- actions_set_selected_repositories_enabled_github_actions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/repositories
+  - required fields: org, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories enabled for GitHub Actions in an organization.
+- actions_enable_selected_repository_github_actions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Mutates existing provider-side state: Enable a selected repository for GitHub Actions in an organization.
+- actions_disable_selected_repository_github_actions_organization:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Destructive: Disable a selected repository for GitHub Actions in an organization. Removes provider-side state.
+- actions_set_allowed_actions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/selected-actions
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set allowed actions and reusable workflows for an organization.
+- actions_set_self_hosted_runners_permissions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/self-hosted-runners
+  - required fields: org, enabled_repositories
+  - risk: Mutates existing provider-side state: Set self-hosted runners settings for an organization.
+- actions_set_selected_repositories_self_hosted_runners_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories
+  - required fields: org, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set repositories allowed to use self-hosted runners in an organization.
+- actions_enable_selected_repository_self_hosted_runners_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Mutates existing provider-side state: Add a repository to the list of repositories allowed to use self-hosted runners in an organization.
+- actions_disable_selected_repository_self_hosted_runners_organization:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Destructive: Remove a repository from the list of repositories allowed to use self-hosted runners in an organization. Removes provider-side state.
+- actions_set_github_actions_default_workflow_permissions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/permissions/workflow
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set default workflow permissions for an organization.
+- actions_create_self_hosted_runner_group_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/runner-groups
+  - required fields: org, name
+  - risk: Creates provider-side state: Create a self-hosted runner group for an organization.
+- actions_update_self_hosted_runner_group_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}
+  - required fields: org, runner_group_id, name
+  - risk: Mutates existing provider-side state: Update a self-hosted runner group for an organization.
+- actions_delete_self_hosted_runner_group_from_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}
+  - required fields: org, runner_group_id
+  - risk: Destructive: Delete a self-hosted runner group from an organization. Removes provider-side state.
+- actions_set_repo_access_to_self_hosted_runner_group_in_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories
+  - required fields: org, runner_group_id, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization.
+- actions_add_repo_access_to_self_hosted_runner_group_in_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}
+  - required fields: org, runner_group_id, repository_id
+  - risk: Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.
+- actions_remove_repo_access_to_self_hosted_runner_group_in_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}
+  - required fields: org, runner_group_id, repository_id
+  - risk: Destructive: Remove repository access to a self-hosted runner group in an organization. Removes provider-side state.
+- actions_set_self_hosted_runners_in_group_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners
+  - required fields: org, runner_group_id, runners
+  - risk: Mutates existing provider-side state: Set self-hosted runners in a group for an organization.
+- actions_add_self_hosted_runner_to_group_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}
+  - required fields: org, runner_group_id, runner_id
+  - risk: Mutates existing provider-side state: Add a self-hosted runner to a group for an organization.
+- actions_remove_self_hosted_runner_from_group_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}
+  - required fields: org, runner_group_id, runner_id
+  - risk: Destructive: Remove a self-hosted runner from a group for an organization. Removes provider-side state.
+- actions_generate_runner_jitconfig_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/runners/generate-jitconfig
+  - required fields: org, name, runner_group_id, labels
+  - risk: Creates provider-side state: Create configuration for a just-in-time runner for an organization.
+- actions_create_registration_token_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/runners/registration-token
+  - required fields: org
+  - risk: Creates provider-side state: Create a registration token for an organization.
+- actions_create_remove_token_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/runners/remove-token
+  - required fields: org
+  - risk: Creates provider-side state: Create a remove token for an organization.
+- actions_delete_self_hosted_runner_from_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}
+  - required fields: org, runner_id
+  - risk: Destructive: Delete a self-hosted runner from an organization. Removes provider-side state.
+- actions_add_custom_labels_to_self_hosted_runner_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: org, runner_id, labels
+  - risk: Creates provider-side state: Add custom labels to a self-hosted runner for an organization.
+- actions_set_custom_labels_for_self_hosted_runner_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: org, runner_id, labels
+  - risk: Mutates existing provider-side state: Set custom labels for a self-hosted runner for an organization.
+- actions_remove_all_custom_labels_from_self_hosted_runner_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels
+  - required fields: org, runner_id
+  - risk: Destructive: Remove all custom labels from a self-hosted runner for an organization. Removes provider-side state.
+- actions_remove_custom_label_from_self_hosted_runner_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}
+  - required fields: org, runner_id, name
+  - risk: Destructive: Remove a custom label from a self-hosted runner for an organization. Removes provider-side state.
+- actions_create_or_update_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name, encrypted_value, key_id, visibility
+  - risk: Mutates existing provider-side state: Create or update an organization secret.
+- actions_delete_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Destructive: Delete an organization secret. Removes provider-side state.
+- actions_set_selected_repos_for_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories
+  - required fields: org, secret_name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
+- actions_add_selected_repo_to_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
+- actions_remove_selected_repo_from_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
+- actions_create_org_variable:
+  - endpoint: POST /orgs/{{ record.org }}/actions/variables
+  - required fields: org, name, value, visibility
+  - risk: Creates provider-side state: Create an organization variable.
+- actions_update_org_variable:
+  - endpoint: PATCH /orgs/{{ record.org }}/actions/variables/{{ record.name }}
+  - required fields: org, name
+  - risk: Mutates existing provider-side state: Update an organization variable.
+- actions_delete_org_variable:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/variables/{{ record.name }}
+  - required fields: org, name
+  - risk: Destructive: Delete an organization variable. Removes provider-side state.
+- actions_set_selected_repos_for_org_variable:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories
+  - required fields: org, name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization variable.
+- actions_add_selected_repo_to_org_variable:
+  - endpoint: PUT /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}
+  - required fields: org, name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization variable.
+- actions_remove_selected_repo_from_org_variable:
+  - endpoint: DELETE /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}
+  - required fields: org, name, repository_id
+  - risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.
+- agents_create_or_update_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name, encrypted_value, key_id, visibility
+  - risk: Mutates existing provider-side state: Create or update an organization secret.
+- agents_delete_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Destructive: Delete an organization secret. Removes provider-side state.
+- agents_set_selected_repos_for_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories
+  - required fields: org, secret_name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
+- agents_add_selected_repo_to_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
+- agents_remove_selected_repo_from_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
+- agents_create_org_variable:
+  - endpoint: POST /orgs/{{ record.org }}/agents/variables
+  - required fields: org, name, value, visibility
+  - risk: Creates provider-side state: Create an organization variable.
+- agents_update_org_variable:
+  - endpoint: PATCH /orgs/{{ record.org }}/agents/variables/{{ record.name }}
+  - required fields: org, name
+  - risk: Mutates existing provider-side state: Update an organization variable.
+- agents_delete_org_variable:
+  - endpoint: DELETE /orgs/{{ record.org }}/agents/variables/{{ record.name }}
+  - required fields: org, name
+  - risk: Destructive: Delete an organization variable. Removes provider-side state.
+- agents_set_selected_repos_for_org_variable:
+  - endpoint: PUT /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories
+  - required fields: org, name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization variable.
+- agents_add_selected_repo_to_org_variable:
+  - endpoint: PUT /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}
+  - required fields: org, name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization variable.
+- agents_remove_selected_repo_from_org_variable:
+  - endpoint: DELETE /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}
+  - required fields: org, name, repository_id
+  - risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.
+- orgs_create_artifact_deployment_record:
+  - endpoint: POST /orgs/{{ record.org }}/artifacts/metadata/deployment-record
+  - required fields: org, name, digest, status, logical_environment, deployment_name
+  - risk: Creates provider-side state: Create an artifact deployment record.
+- orgs_set_cluster_deployment_records:
+  - endpoint: POST /orgs/{{ record.org }}/artifacts/metadata/deployment-record/cluster/{{ record.cluster }}
+  - required fields: org, cluster, logical_environment, deployments
+  - risk: Creates provider-side state: Set cluster deployment records.
+- orgs_create_cluster_deployment_records_job:
+  - endpoint: POST /orgs/{{ record.org }}/artifacts/metadata/deployment-record/cluster/{{ record.cluster }}/jobs
+  - required fields: org, cluster, logical_environment, deployments
+  - risk: Creates provider-side state: Create a cluster deployment records job.
+- orgs_create_artifact_storage_record:
+  - endpoint: POST /orgs/{{ record.org }}/artifacts/metadata/storage-record
+  - required fields: org, name, digest, registry_url
+  - risk: Creates provider-side state: Create artifact metadata storage record.
+- orgs_delete_attestations_by_subject_digest:
+  - endpoint: DELETE /orgs/{{ record.org }}/attestations/digest/{{ record.subject_digest }}
+  - required fields: org, subject_digest
+  - risk: Destructive: Delete attestations by subject digest. Removes provider-side state.
+- orgs_delete_attestations_by_id:
+  - endpoint: DELETE /orgs/{{ record.org }}/attestations/{{ record.attestation_id }}
+  - required fields: org, attestation_id
+  - risk: Destructive: Delete attestations by ID. Removes provider-side state.
+- orgs_block_user:
+  - endpoint: PUT /orgs/{{ record.org }}/blocks/{{ record.username }}
+  - required fields: org, username
+  - risk: Mutates existing provider-side state: Block a user from an organization.
+- orgs_unblock_user:
+  - endpoint: DELETE /orgs/{{ record.org }}/blocks/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Unblock a user from an organization. Removes provider-side state.
+- campaigns_update_campaign:
+  - endpoint: PATCH /orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}
+  - required fields: org, campaign_number
+  - risk: Mutates existing provider-side state: Update a campaign.
+- campaigns_delete_campaign:
+  - endpoint: DELETE /orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}
+  - required fields: org, campaign_number
+  - risk: Destructive: Delete a campaign for an organization. Removes provider-side state.
+- code_security_create_configuration:
+  - endpoint: POST /orgs/{{ record.org }}/code-security/configurations
+  - required fields: org, name
+  - risk: Creates provider-side state: Create a code security configuration.
+- code_security_detach_configuration:
+  - endpoint: DELETE /orgs/{{ record.org }}/code-security/configurations/detach
+  - required fields: org, selected_repository_ids
+  - risk: Destructive: Detach configurations from repositories. Removes provider-side state.
+- code_security_update_configuration:
+  - endpoint: PATCH /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}
+  - required fields: org, configuration_id
+  - risk: Mutates existing provider-side state: Update a code security configuration.
+- code_security_delete_configuration:
+  - endpoint: DELETE /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}
+  - required fields: org, configuration_id
+  - risk: Destructive: Delete a code security configuration. Removes provider-side state.
+- code_security_attach_configuration:
+  - endpoint: POST /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}/attach
+  - required fields: org, configuration_id, scope
+  - risk: Creates provider-side state: Attach a configuration to repositories.
+- code_security_set_configuration_as_default:
+  - endpoint: PUT /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}/defaults
+  - required fields: org, configuration_id
+  - risk: Mutates existing provider-side state: Set a code security configuration as a default for an organization.
+- codespaces_set_codespaces_access:
+  - endpoint: PUT /orgs/{{ record.org }}/codespaces/access
+  - required fields: org, visibility
+  - risk: Mutates existing provider-side state: Manage access control for organization codespaces (deprecated by GitHub, still documented).
+- codespaces_set_codespaces_access_users:
+  - endpoint: POST /orgs/{{ record.org }}/codespaces/access/selected_users
+  - required fields: org, selected_usernames
+  - risk: Creates provider-side state: Add users to Codespaces access for an organization (deprecated by GitHub, still documented).
+- codespaces_delete_codespaces_access_users:
+  - endpoint: DELETE /orgs/{{ record.org }}/codespaces/access/selected_users
+  - required fields: org, selected_usernames
+  - risk: Destructive: Remove users from Codespaces access for an organization (deprecated by GitHub, still documented). Removes provider-side state.
+- codespaces_create_or_update_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name, visibility
+  - risk: Mutates existing provider-side state: Create or update an organization secret.
+- codespaces_delete_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Destructive: Delete an organization secret. Removes provider-side state.
+- codespaces_set_selected_repos_for_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories
+  - required fields: org, secret_name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
+- codespaces_add_selected_repo_to_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
+- codespaces_remove_selected_repo_from_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
+- copilot_spaces_create_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/copilot-spaces
+  - required fields: org, name
+  - risk: Creates provider-side state: Create an organization Copilot Space.
+- copilot_spaces_update_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}
+  - required fields: org, space_number
+  - risk: Mutates existing provider-side state: Set an organization Copilot Space.
+- copilot_spaces_delete_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}
+  - required fields: org, space_number
+  - risk: Destructive: Delete an organization Copilot Space. Removes provider-side state.
+- copilot_spaces_add_collaborator_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators
+  - required fields: org, space_number, actor_type, actor_identifier, role
+  - risk: Creates provider-side state: Add a collaborator to an organization Copilot Space.
+- copilot_spaces_update_collaborator_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
+  - required fields: org, space_number, actor_type, actor_identifier, role
+  - risk: Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space.
+- copilot_spaces_remove_collaborator_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
+  - required fields: org, space_number, actor_type, actor_identifier
+  - risk: Destructive: Remove a collaborator from an organization Copilot Space. Removes provider-side state.
+- copilot_spaces_create_resource_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources
+  - required fields: org, space_number, resource_type, metadata
+  - risk: Creates provider-side state: Create a resource for an organization Copilot Space.
+- copilot_spaces_update_resource_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}
+  - required fields: org, space_number, space_resource_id
+  - risk: Mutates existing provider-side state: Set a resource for an organization Copilot Space.
+- copilot_spaces_delete_resource_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}
+  - required fields: org, space_number, space_resource_id
+  - risk: Destructive: Delete a resource from an organization Copilot Space. Removes provider-side state.
+- copilot_add_copilot_seats_for_teams:
+  - endpoint: POST /orgs/{{ record.org }}/copilot/billing/selected_teams
+  - required fields: org, selected_teams
+  - risk: Creates provider-side state: Add teams to the Copilot subscription for an organization.
+- copilot_cancel_copilot_seat_assignment_for_teams:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot/billing/selected_teams
+  - required fields: org, selected_teams
+  - risk: Destructive: Remove teams from the Copilot subscription for an organization. Removes provider-side state.
+- copilot_add_copilot_seats_for_users:
+  - endpoint: POST /orgs/{{ record.org }}/copilot/billing/selected_users
+  - required fields: org, selected_usernames
+  - risk: Creates provider-side state: Add users to the Copilot subscription for an organization.
+- copilot_cancel_copilot_seat_assignment_for_users:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot/billing/selected_users
+  - required fields: org, selected_usernames
+  - risk: Destructive: Remove users from the Copilot subscription for an organization. Removes provider-side state.
+- copilot_set_copilot_coding_agent_permissions_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot/coding-agent/permissions
+  - required fields: org, enabled_repositories
+  - risk: Mutates existing provider-side state: Set Copilot cloud agent permissions for an organization.
+- copilot_set_copilot_coding_agent_selected_repositories_for_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories
+  - required fields: org, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for Copilot cloud agent in an organization.
+- copilot_enable_copilot_coding_agent_for_repository_in_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Mutates existing provider-side state: Enable a repository for Copilot cloud agent in an organization.
+- copilot_disable_copilot_coding_agent_for_repository_in_organization:
+  - endpoint: DELETE /orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Destructive: Disable a repository for Copilot cloud agent in an organization. Removes provider-side state.
+- copilot_set_copilot_content_exclusion_for_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/copilot/content_exclusion
+  - required fields: org
+  - risk: Mutates existing provider-side state: Set Copilot content exclusion rules for an organization.
+- dependabot_update_repository_access_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/dependabot/repository-access
+  - required fields: org
+  - risk: Mutates existing provider-side state: Updates Dependabot's repository access list for an organization.
+- dependabot_set_repository_access_default_level:
+  - endpoint: PUT /orgs/{{ record.org }}/dependabot/repository-access/default-level
+  - required fields: org, default_level
+  - risk: Mutates existing provider-side state: Set the default repository access level for Dependabot.
+- dependabot_create_or_update_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name, visibility
+  - risk: Mutates existing provider-side state: Create or update an organization secret.
+- dependabot_delete_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Destructive: Delete an organization secret. Removes provider-side state.
+- dependabot_set_selected_repos_for_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories
+  - required fields: org, secret_name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
+- dependabot_add_selected_repo_to_org_secret:
+  - endpoint: PUT /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
+- dependabot_remove_selected_repo_from_org_secret:
+  - endpoint: DELETE /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: org, secret_name, repository_id
+  - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
+- orgs_create_webhook:
+  - endpoint: POST /orgs/{{ record.org }}/hooks
+  - required fields: org, name, config
+  - risk: Creates provider-side state: Create an organization webhook.
+- orgs_update_webhook:
+  - endpoint: PATCH /orgs/{{ record.org }}/hooks/{{ record.hook_id }}
+  - required fields: org, hook_id
+  - risk: Mutates existing provider-side state: Update an organization webhook.
+- orgs_delete_webhook:
+  - endpoint: DELETE /orgs/{{ record.org }}/hooks/{{ record.hook_id }}
+  - required fields: org, hook_id
+  - risk: Destructive: Delete an organization webhook. Removes provider-side state.
+- orgs_update_webhook_config_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/config
+  - required fields: org, hook_id
+  - risk: Mutates existing provider-side state: Update a webhook configuration for an organization.
+- orgs_redeliver_webhook_delivery:
+  - endpoint: POST /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts
+  - required fields: org, hook_id, delivery_id
+  - risk: Creates provider-side state: Redeliver a delivery for an organization webhook.
+- orgs_ping_webhook:
+  - endpoint: POST /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/pings
+  - required fields: org, hook_id
+  - risk: Creates provider-side state: Ping an organization webhook.
+- interactions_set_restrictions_for_org:
+  - endpoint: PUT /orgs/{{ record.org }}/interaction-limits
+  - required fields: org, limit
+  - risk: Mutates existing provider-side state: Set interaction restrictions for an organization.
+- interactions_remove_restrictions_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/interaction-limits
+  - required fields: org
+  - risk: Destructive: Remove interaction restrictions for an organization. Removes provider-side state.
+- interactions_update_pull_request_creation_cap_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/interaction-limits/pulls/creation-cap
+  - required fields: org, enabled
+  - risk: Mutates existing provider-side state: Update pull request creation cap for an org.
+- orgs_create_invitation:
+  - endpoint: POST /orgs/{{ record.org }}/invitations
+  - required fields: org
+  - risk: Creates provider-side state: Create an organization invitation.
+- orgs_cancel_invitation:
+  - endpoint: DELETE /orgs/{{ record.org }}/invitations/{{ record.invitation_id }}
+  - required fields: org, invitation_id
+  - risk: Destructive: Cancel an organization invitation. Removes provider-side state.
+- orgs_create_issue_field:
+  - endpoint: POST /orgs/{{ record.org }}/issue-fields
+  - required fields: org, name, data_type
+  - risk: Creates provider-side state: Create issue field for an organization.
+- orgs_update_issue_field:
+  - endpoint: PATCH /orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}
+  - required fields: org, issue_field_id
+  - risk: Mutates existing provider-side state: Update issue field for an organization.
+- orgs_delete_issue_field:
+  - endpoint: DELETE /orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}
+  - required fields: org, issue_field_id
+  - risk: Destructive: Delete issue field for an organization. Removes provider-side state.
+- orgs_create_issue_type:
+  - endpoint: POST /orgs/{{ record.org }}/issue-types
+  - required fields: org, name, is_enabled
+  - risk: Creates provider-side state: Create issue type for an organization.
+- orgs_update_issue_type:
+  - endpoint: PUT /orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}
+  - required fields: org, issue_type_id, name, is_enabled
+  - risk: Mutates existing provider-side state: Update issue type for an organization.
+- orgs_delete_issue_type:
+  - endpoint: DELETE /orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}
+  - required fields: org, issue_type_id
+  - risk: Destructive: Delete issue type for an organization. Removes provider-side state.
+- orgs_remove_member:
+  - endpoint: DELETE /orgs/{{ record.org }}/members/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Remove an organization member. Removes provider-side state.
+- codespaces_delete_from_organization:
+  - endpoint: DELETE /orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}
+  - required fields: org, username, codespace_name
+  - risk: Destructive: Delete a codespace from the organization. Removes provider-side state.
+- codespaces_stop_in_organization:
+  - endpoint: POST /orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}/stop
+  - required fields: org, username, codespace_name
+  - risk: Creates provider-side state: Stop a codespace for an organization user.
+- orgs_set_membership_for_user:
+  - endpoint: PUT /orgs/{{ record.org }}/memberships/{{ record.username }}
+  - required fields: org, username
+  - risk: Mutates existing provider-side state: Set organization membership for a user.
+- orgs_remove_membership_for_user:
+  - endpoint: DELETE /orgs/{{ record.org }}/memberships/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Remove organization membership for a user. Removes provider-side state.
+- migrations_start_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/migrations
+  - required fields: org, repositories
+  - risk: Creates provider-side state: Start an organization migration.
+- migrations_delete_archive_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/migrations/{{ record.migration_id }}/archive
+  - required fields: org, migration_id
+  - risk: Destructive: Delete an organization migration archive. Removes provider-side state.
+- migrations_unlock_repo_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock
+  - required fields: org, migration_id, repo_name
+  - risk: Destructive: Unlock an organization repository. Removes provider-side state.
+- orgs_revoke_all_org_roles_team:
+  - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}
+  - required fields: org, team_slug
+  - risk: Destructive: Remove all organization roles for a team. Removes provider-side state.
+- orgs_assign_team_to_org_role:
+  - endpoint: PUT /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}
+  - required fields: org, team_slug, role_id
+  - risk: Mutates existing provider-side state: Assign an organization role to a team.
+- orgs_revoke_org_role_team:
+  - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}
+  - required fields: org, team_slug, role_id
+  - risk: Destructive: Remove an organization role from a team. Removes provider-side state.
+- orgs_revoke_all_org_roles_user:
+  - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Remove all organization roles for a user. Removes provider-side state.
+- orgs_assign_user_to_org_role:
+  - endpoint: PUT /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}
+  - required fields: org, username, role_id
+  - risk: Mutates existing provider-side state: Assign an organization role to a user.
+- orgs_revoke_org_role_user:
+  - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}
+  - required fields: org, username, role_id
+  - risk: Destructive: Remove an organization role from a user. Removes provider-side state.
+- orgs_convert_member_to_outside_collaborator:
+  - endpoint: PUT /orgs/{{ record.org }}/outside_collaborators/{{ record.username }}
+  - required fields: org, username
+  - risk: Mutates existing provider-side state: Convert an organization member to outside collaborator.
+- orgs_remove_outside_collaborator:
+  - endpoint: DELETE /orgs/{{ record.org }}/outside_collaborators/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Remove outside collaborator from an organization. Removes provider-side state.
+- packages_delete_package_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}
+  - required fields: org, package_type, package_name
+  - risk: Destructive: Delete a package for an organization. Removes provider-side state.
+- packages_restore_package_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore
+  - required fields: org, package_type, package_name
+  - risk: Creates provider-side state: Restore a package for an organization.
+- packages_delete_package_version_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
+  - required fields: org, package_type, package_name, package_version_id
+  - risk: Destructive: Delete package version for an organization. Removes provider-side state.
+- packages_restore_package_version_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
+  - required fields: org, package_type, package_name, package_version_id
+  - risk: Creates provider-side state: Restore package version for an organization.
+- orgs_review_pat_grant_requests_in_bulk:
+  - endpoint: POST /orgs/{{ record.org }}/personal-access-token-requests
+  - required fields: org, action
+  - risk: Creates provider-side state: Review requests to access organization resources with fine-grained personal access tokens.
+- orgs_review_pat_grant_request:
+  - endpoint: POST /orgs/{{ record.org }}/personal-access-token-requests/{{ record.pat_request_id }}
+  - required fields: org, pat_request_id, action
+  - risk: Creates provider-side state: Review a request to access organization resources with a fine-grained personal access token.
+- orgs_update_pat_accesses:
+  - endpoint: POST /orgs/{{ record.org }}/personal-access-tokens
+  - required fields: org, action, pat_ids
+  - risk: Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens.
+- orgs_update_pat_access:
+  - endpoint: POST /orgs/{{ record.org }}/personal-access-tokens/{{ record.pat_id }}
+  - required fields: org, pat_id, action
+  - risk: Creates provider-side state: Update the access a fine-grained personal access token has to organization resources.
+- private_registries_create_org_private_registry:
+  - endpoint: POST /orgs/{{ record.org }}/private-registries
+  - required fields: org, registry_type, url, visibility
+  - risk: Creates provider-side state: Create a private registry for an organization.
+- private_registries_update_org_private_registry:
+  - endpoint: PATCH /orgs/{{ record.org }}/private-registries/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Mutates existing provider-side state: Update a private registry for an organization.
+- private_registries_delete_org_private_registry:
+  - endpoint: DELETE /orgs/{{ record.org }}/private-registries/{{ record.secret_name }}
+  - required fields: org, secret_name
+  - risk: Destructive: Delete a private registry for an organization. Removes provider-side state.
+- projects_create_draft_item_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/drafts
+  - required fields: org, project_number, title
+  - risk: Creates provider-side state: Create draft item for organization owned project.
+- projects_update_item_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
+  - required fields: org, project_number, item_id, fields
+  - risk: Mutates existing provider-side state: Update project item for organization.
+- projects_delete_item_for_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
+  - required fields: org, project_number, item_id
+  - risk: Destructive: Delete project item for organization. Removes provider-side state.
+- projects_create_view_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/views
+  - required fields: org, project_number, name, layout
+  - risk: Creates provider-side state: Create a view for an organization-owned project.
+- orgs_custom_properties_for_repos_create_or_update_organization_definitions:
+  - endpoint: PATCH /orgs/{{ record.org }}/properties/schema
+  - required fields: org, properties
+  - risk: Mutates existing provider-side state: Create or update custom properties for an organization.
+- orgs_custom_properties_for_repos_create_or_update_organization_definition:
+  - endpoint: PUT /orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}
+  - required fields: org, custom_property_name, value_type
+  - risk: Mutates existing provider-side state: Create or update a custom property for an organization.
+- orgs_custom_properties_for_repos_delete_organization_definition:
+  - endpoint: DELETE /orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}
+  - required fields: org, custom_property_name
+  - risk: Destructive: Remove a custom property for an organization. Removes provider-side state.
+- orgs_custom_properties_for_repos_create_or_update_organization_values:
+  - endpoint: PATCH /orgs/{{ record.org }}/properties/values
+  - required fields: org, repository_names, properties
+  - risk: Mutates existing provider-side state: Create or update custom property values for organization repositories.
+- orgs_set_public_membership_for_authenticated_user:
+  - endpoint: PUT /orgs/{{ record.org }}/public_members/{{ record.username }}
+  - required fields: org, username
+  - risk: Mutates existing provider-side state: Set public organization membership for the authenticated user.
+- orgs_remove_public_membership_for_authenticated_user:
+  - endpoint: DELETE /orgs/{{ record.org }}/public_members/{{ record.username }}
+  - required fields: org, username
+  - risk: Destructive: Remove public organization membership for the authenticated user. Removes provider-side state.
+- repos_create_in_org:
+  - endpoint: POST /orgs/{{ record.org }}/repos
+  - required fields: org, name
+  - risk: Creates provider-side state: Create an organization repository.
+- repos_create_org_ruleset:
+  - endpoint: POST /orgs/{{ record.org }}/rulesets
+  - required fields: org, name, enforcement
+  - risk: Creates provider-side state: Create an organization repository ruleset.
+- repos_update_org_ruleset:
+  - endpoint: PUT /orgs/{{ record.org }}/rulesets/{{ record.ruleset_id }}
+  - required fields: org, ruleset_id
+  - risk: Mutates existing provider-side state: Update an organization repository ruleset.
+- repos_delete_org_ruleset:
+  - endpoint: DELETE /orgs/{{ record.org }}/rulesets/{{ record.ruleset_id }}
+  - required fields: org, ruleset_id
+  - risk: Destructive: Delete an organization repository ruleset. Removes provider-side state.
+- secret_scanning_bulk_create_org_custom_patterns:
+  - endpoint: POST /orgs/{{ record.org }}/secret-scanning/custom-patterns
+  - required fields: org, patterns
+  - risk: Creates provider-side state: Bulk create organization custom patterns.
+- secret_scanning_bulk_delete_org_custom_patterns:
+  - endpoint: DELETE /orgs/{{ record.org }}/secret-scanning/custom-patterns
+  - required fields: org, patterns
+  - risk: Destructive: Bulk delete organization custom patterns. Removes provider-side state.
+- secret_scanning_update_org_pattern_configs:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/pattern-configurations
+  - required fields: org
+  - risk: Mutates existing provider-side state: Update organization pattern configurations.
+- orgs_add_security_manager_team:
+  - endpoint: PUT /orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}
+  - required fields: org, team_slug
+  - risk: Mutates existing provider-side state: Add a security manager team (deprecated by GitHub, still documented).
+- orgs_remove_security_manager_team:
+  - endpoint: DELETE /orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}
+  - required fields: org, team_slug
+  - risk: Destructive: Remove a security manager team (deprecated by GitHub, still documented). Removes provider-side state.
+- orgs_set_immutable_releases_settings:
+  - endpoint: PUT /orgs/{{ record.org }}/settings/immutable-releases
+  - required fields: org, enforced_repositories
+  - risk: Mutates existing provider-side state: Set immutable releases settings for an organization.
+- orgs_set_immutable_releases_settings_repositories:
+  - endpoint: PUT /orgs/{{ record.org }}/settings/immutable-releases/repositories
+  - required fields: org, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for immutable releases enforcement.
+- orgs_enable_selected_repository_immutable_releases_organization:
+  - endpoint: PUT /orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Mutates existing provider-side state: Enable a selected repository for immutable releases in an organization.
+- orgs_disable_selected_repository_immutable_releases_organization:
+  - endpoint: DELETE /orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}
+  - required fields: org, repository_id
+  - risk: Destructive: Disable a selected repository for immutable releases in an organization. Removes provider-side state.
+- hosted_compute_create_network_configuration_for_org:
+  - endpoint: POST /orgs/{{ record.org }}/settings/network-configurations
+  - required fields: org, name, network_settings_ids
+  - risk: Creates provider-side state: Create a hosted compute network configuration for an organization.
+- hosted_compute_update_network_configuration_for_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}
+  - required fields: org, network_configuration_id
+  - risk: Mutates existing provider-side state: Update a hosted compute network configuration for an organization.
+- hosted_compute_delete_network_configuration_from_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}
+  - required fields: org, network_configuration_id
+  - risk: Destructive: Delete a hosted compute network configuration from an organization. Removes provider-side state.
+- teams_create:
+  - endpoint: POST /orgs/{{ record.org }}/teams
+  - required fields: org, name
+  - risk: Creates provider-side state: Create a team.
+- teams_update_in_org:
+  - endpoint: PATCH /orgs/{{ record.org }}/teams/{{ record.team_slug }}
+  - required fields: org, team_slug
+  - risk: Mutates existing provider-side state: Update a team.
+- teams_delete_in_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/teams/{{ record.team_slug }}
+  - required fields: org, team_slug
+  - risk: Destructive: Delete a team. Removes provider-side state.
+- teams_add_or_update_membership_for_user_in_org:
+  - endpoint: PUT /orgs/{{ record.org }}/teams/{{ record.team_slug }}/memberships/{{ record.username }}
+  - required fields: org, team_slug, username
+  - risk: Mutates existing provider-side state: Add or update team membership for a user.
+- teams_remove_membership_for_user_in_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/teams/{{ record.team_slug }}/memberships/{{ record.username }}
+  - required fields: org, team_slug, username
+  - risk: Destructive: Remove team membership for a user. Removes provider-side state.
+- teams_add_or_update_repo_permissions_in_org:
+  - endpoint: PUT /orgs/{{ record.org }}/teams/{{ record.team_slug }}/repos/{{ config.owner }}/{{ config.repo }}
+  - required fields: org, team_slug
+  - risk: Mutates existing provider-side state: Add or update team repository permissions.
+- teams_remove_repo_in_org:
+  - endpoint: DELETE /orgs/{{ record.org }}/teams/{{ record.team_slug }}/repos/{{ config.owner }}/{{ config.repo }}
+  - required fields: org, team_slug
+  - risk: Destructive: Remove a repository from a team. Removes provider-side state.
+- orgs_enable_or_disable_security_product_on_all_org_repos:
+  - endpoint: POST /orgs/{{ record.org }}/{{ record.security_product }}/{{ record.enablement }}
+  - required fields: org, security_product, enablement
+  - risk: Creates provider-side state: Enable or disable a security feature for an organization (deprecated by GitHub, still documented).
+- interactions_update_pull_request_creation_cap_for_repo:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/creation-cap
+  - required fields: enabled
+  - risk: Mutates existing provider-side state: Update pull request creation cap for a repository.
+- issues_approve_suggestion:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/approve
+  - required fields: issue_number, suggestion_id
+  - risk: Creates provider-side state: Approve an issue suggestion.
+- issues_dismiss_suggestion:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/dismiss
+  - required fields: issue_number, suggestion_id
+  - risk: Creates provider-side state: Dismiss an issue suggestion.
+- pulls_merge_async:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/merge-async
+  - required fields: pull_number
+  - risk: Mutates existing provider-side state: Merge a pull request asynchronously.
+- secret_scanning_bulk_create_repo_custom_patterns:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns
+  - required fields: patterns
+  - risk: Creates provider-side state: Bulk create repository custom patterns.
+- secret_scanning_bulk_delete_repo_custom_patterns:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns
+  - required fields: patterns
+  - risk: Destructive: Bulk delete repository custom patterns. Removes provider-side state.
+- pull_request_stacks_create:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/stacks
+  - required fields: pull_requests
+  - risk: Creates provider-side state: Create a pull request stack.
+- pull_request_stacks_add:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/stacks/{{ record.stack_number }}/add
+  - required fields: stack_number, pull_requests
+  - risk: Creates provider-side state: Add pull requests to a pull request stack.
+- pull_request_stacks_unstack:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/stacks/{{ record.stack_number }}/unstack
+  - required fields: stack_number
+  - risk: Creates provider-side state: Remove pull requests from a pull request stack.
+- repos_create_using_template:
+  - endpoint: POST /repos/{{ record.template_owner }}/{{ record.template_repo }}/generate
+  - required fields: template_owner, template_repo, name
+  - risk: Creates provider-side state: Create a repository using a template.
+- teams_update_legacy:
+  - endpoint: PATCH /teams/{{ record.team_id }}
+  - required fields: team_id, name
+  - risk: Mutates existing provider-side state: Update a team (Legacy) (deprecated by GitHub, still documented).
+- teams_delete_legacy:
+  - endpoint: DELETE /teams/{{ record.team_id }}
+  - required fields: team_id
+  - risk: Destructive: Delete a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.
+- teams_add_member_legacy:
+  - endpoint: PUT /teams/{{ record.team_id }}/members/{{ record.username }}
+  - required fields: team_id, username
+  - risk: Mutates existing provider-side state: Add team member (Legacy) (deprecated by GitHub, still documented).
+- teams_remove_member_legacy:
+  - endpoint: DELETE /teams/{{ record.team_id }}/members/{{ record.username }}
+  - required fields: team_id, username
+  - risk: Destructive: Remove team member (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.
+- teams_add_or_update_membership_for_user_legacy:
+  - endpoint: PUT /teams/{{ record.team_id }}/memberships/{{ record.username }}
+  - required fields: team_id, username
+  - risk: Mutates existing provider-side state: Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented).
+- teams_remove_membership_for_user_legacy:
+  - endpoint: DELETE /teams/{{ record.team_id }}/memberships/{{ record.username }}
+  - required fields: team_id, username
+  - risk: Destructive: Remove team membership for a user (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.
+- teams_add_or_update_repo_permissions_legacy:
+  - endpoint: PUT /teams/{{ record.team_id }}/repos/{{ config.owner }}/{{ config.repo }}
+  - required fields: team_id
+  - risk: Mutates existing provider-side state: Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented).
+- teams_remove_repo_legacy:
+  - endpoint: DELETE /teams/{{ record.team_id }}/repos/{{ config.owner }}/{{ config.repo }}
+  - required fields: team_id
+  - risk: Destructive: Remove a repository from a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.
+- users_update_authenticated:
+  - endpoint: PATCH /user
+  - risk: Mutates existing provider-side state: Update the authenticated user.
+- users_block:
+  - endpoint: PUT /user/blocks/{{ record.username }}
+  - required fields: username
+  - risk: Mutates existing provider-side state: Block a user.
+- users_unblock:
+  - endpoint: DELETE /user/blocks/{{ record.username }}
+  - required fields: username
+  - risk: Destructive: Unblock a user. Removes provider-side state.
+- codespaces_create_or_update_secret_for_authenticated_user:
+  - endpoint: PUT /user/codespaces/secrets/{{ record.secret_name }}
+  - required fields: secret_name, key_id
+  - risk: Mutates existing provider-side state: Create or update a secret for the authenticated user.
+- codespaces_delete_secret_for_authenticated_user:
+  - endpoint: DELETE /user/codespaces/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: Destructive: Delete a secret for the authenticated user. Removes provider-side state.
+- codespaces_set_repositories_for_secret_for_authenticated_user:
+  - endpoint: PUT /user/codespaces/secrets/{{ record.secret_name }}/repositories
+  - required fields: secret_name, selected_repository_ids
+  - risk: Mutates existing provider-side state: Set selected repositories for a user secret.
+- codespaces_add_repository_for_secret_for_authenticated_user:
+  - endpoint: PUT /user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: secret_name, repository_id
+  - risk: Mutates existing provider-side state: Add a selected repository to a user secret.
+- codespaces_remove_repository_for_secret_for_authenticated_user:
+  - endpoint: DELETE /user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
+  - required fields: secret_name, repository_id
+  - risk: Destructive: Remove a selected repository from a user secret. Removes provider-side state.
+- codespaces_update_for_authenticated_user:
+  - endpoint: PATCH /user/codespaces/{{ record.codespace_name }}
+  - required fields: codespace_name
+  - risk: Mutates existing provider-side state: Update a codespace for the authenticated user.
+- codespaces_delete_for_authenticated_user:
+  - endpoint: DELETE /user/codespaces/{{ record.codespace_name }}
+  - required fields: codespace_name
+  - risk: Destructive: Delete a codespace for the authenticated user. Removes provider-side state.
+- codespaces_export_for_authenticated_user:
+  - endpoint: POST /user/codespaces/{{ record.codespace_name }}/exports
+  - required fields: codespace_name
+  - risk: Creates provider-side state: Export a codespace for the authenticated user.
+- codespaces_publish_for_authenticated_user:
+  - endpoint: POST /user/codespaces/{{ record.codespace_name }}/publish
+  - required fields: codespace_name
+  - risk: Creates provider-side state: Create a repository from an unpublished codespace.
+- codespaces_start_for_authenticated_user:
+  - endpoint: POST /user/codespaces/{{ record.codespace_name }}/start
+  - required fields: codespace_name
+  - risk: Creates provider-side state: Start a codespace for the authenticated user.
+- codespaces_stop_for_authenticated_user:
+  - endpoint: POST /user/codespaces/{{ record.codespace_name }}/stop
+  - required fields: codespace_name
+  - risk: Creates provider-side state: Stop a codespace for the authenticated user.
+- users_set_primary_email_visibility_for_authenticated_user:
+  - endpoint: PATCH /user/email/visibility
+  - required fields: visibility
+  - risk: Mutates existing provider-side state: Set primary email visibility for the authenticated user.
+- users_follow:
+  - endpoint: PUT /user/following/{{ record.username }}
+  - required fields: username
+  - risk: Mutates existing provider-side state: Follow a user.
+- users_unfollow:
+  - endpoint: DELETE /user/following/{{ record.username }}
+  - required fields: username
+  - risk: Destructive: Unfollow a user. Removes provider-side state.
+- users_create_gpg_key_for_authenticated_user:
+  - endpoint: POST /user/gpg_keys
+  - required fields: armored_public_key
+  - risk: Creates provider-side state: Create a GPG key for the authenticated user.
+- users_delete_gpg_key_for_authenticated_user:
+  - endpoint: DELETE /user/gpg_keys/{{ record.gpg_key_id }}
+  - required fields: gpg_key_id
+  - risk: Destructive: Delete a GPG key for the authenticated user. Removes provider-side state.
+- apps_add_repo_to_installation_for_authenticated_user:
+  - endpoint: PUT /user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}
+  - required fields: installation_id, repository_id
+  - risk: Mutates existing provider-side state: Add a repository to an app installation.
+- apps_remove_repo_from_installation_for_authenticated_user:
+  - endpoint: DELETE /user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}
+  - required fields: installation_id, repository_id
+  - risk: Destructive: Remove a repository from an app installation. Removes provider-side state.
+- interactions_set_restrictions_for_authenticated_user:
+  - endpoint: PUT /user/interaction-limits
+  - required fields: limit
+  - risk: Mutates existing provider-side state: Set interaction restrictions for your public repositories.
+- interactions_remove_restrictions_for_authenticated_user:
+  - endpoint: DELETE /user/interaction-limits
+  - risk: Destructive: Remove interaction restrictions from your public repositories. Removes provider-side state.
+- users_create_public_ssh_key_for_authenticated_user:
+  - endpoint: POST /user/keys
+  - required fields: key
+  - risk: Creates provider-side state: Create a public SSH key for the authenticated user.
+- users_delete_public_ssh_key_for_authenticated_user:
+  - endpoint: DELETE /user/keys/{{ record.key_id }}
+  - required fields: key_id
+  - risk: Destructive: Delete a public SSH key for the authenticated user. Removes provider-side state.
+- orgs_update_membership_for_authenticated_user:
+  - endpoint: PATCH /user/memberships/orgs/{{ record.org }}
+  - required fields: org, state
+  - risk: Mutates existing provider-side state: Update an organization membership for the authenticated user.
+- migrations_start_for_authenticated_user:
+  - endpoint: POST /user/migrations
+  - required fields: repositories
+  - risk: Creates provider-side state: Start a user migration.
+- migrations_delete_archive_for_authenticated_user:
+  - endpoint: DELETE /user/migrations/{{ record.migration_id }}/archive
+  - required fields: migration_id
+  - risk: Destructive: Delete a user migration archive. Removes provider-side state.
+- migrations_unlock_repo_for_authenticated_user:
+  - endpoint: DELETE /user/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock
+  - required fields: migration_id, repo_name
+  - risk: Destructive: Unlock a user repository. Removes provider-side state.
+- packages_delete_package_for_authenticated_user:
+  - endpoint: DELETE /user/packages/{{ record.package_type }}/{{ record.package_name }}
+  - required fields: package_type, package_name
+  - risk: Destructive: Delete a package for the authenticated user. Removes provider-side state.
+- packages_restore_package_for_authenticated_user:
+  - endpoint: POST /user/packages/{{ record.package_type }}/{{ record.package_name }}/restore
+  - required fields: package_type, package_name
+  - risk: Creates provider-side state: Restore a package for the authenticated user.
+- packages_delete_package_version_for_authenticated_user:
+  - endpoint: DELETE /user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
+  - required fields: package_type, package_name, package_version_id
+  - risk: Destructive: Delete a package version for the authenticated user. Removes provider-side state.
+- packages_restore_package_version_for_authenticated_user:
+  - endpoint: POST /user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
+  - required fields: package_type, package_name, package_version_id
+  - risk: Creates provider-side state: Restore a package version for the authenticated user.
+- repos_create_for_authenticated_user:
+  - endpoint: POST /user/repos
+  - required fields: name
+  - risk: Creates provider-side state: Create a repository for the authenticated user.
+- repos_accept_invitation_for_authenticated_user:
+  - endpoint: PATCH /user/repository_invitations/{{ record.invitation_id }}
+  - required fields: invitation_id
+  - risk: Mutates existing provider-side state: Accept a repository invitation.
+- repos_decline_invitation_for_authenticated_user:
+  - endpoint: DELETE /user/repository_invitations/{{ record.invitation_id }}
+  - required fields: invitation_id
+  - risk: Destructive: Decline a repository invitation. Removes provider-side state.
+- users_add_social_account_for_authenticated_user:
+  - endpoint: POST /user/social_accounts
+  - required fields: account_urls
+  - risk: Creates provider-side state: Add social accounts for the authenticated user.
+- users_delete_social_account_for_authenticated_user:
+  - endpoint: DELETE /user/social_accounts
+  - required fields: account_urls
+  - risk: Destructive: Delete social accounts for the authenticated user. Removes provider-side state.
+- users_create_ssh_signing_key_for_authenticated_user:
+  - endpoint: POST /user/ssh_signing_keys
+  - required fields: key
+  - risk: Creates provider-side state: Create a SSH signing key for the authenticated user.
+- users_delete_ssh_signing_key_for_authenticated_user:
+  - endpoint: DELETE /user/ssh_signing_keys/{{ record.ssh_signing_key_id }}
+  - required fields: ssh_signing_key_id
+  - risk: Destructive: Delete an SSH signing key for the authenticated user. Removes provider-side state.
+- activity_star_repo_for_authenticated_user:
+  - endpoint: PUT /user/starred/{{ config.owner }}/{{ config.repo }}
+  - risk: Mutates existing provider-side state: Star a repository for the authenticated user.
+- activity_unstar_repo_for_authenticated_user:
+  - endpoint: DELETE /user/starred/{{ config.owner }}/{{ config.repo }}
+  - risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
+- projects_create_view_for_user:
+  - endpoint: POST /users/{{ record.user_id }}/projectsV2/{{ record.project_number }}/views
+  - required fields: user_id, project_number, name, layout
+  - risk: Creates provider-side state: Create a view for a user-owned project.
+- users_delete_attestations_by_subject_digest:
+  - endpoint: DELETE /users/{{ record.username }}/attestations/digest/{{ record.subject_digest }}
+  - required fields: username, subject_digest
+  - risk: Destructive: Delete attestations by subject digest. Removes provider-side state.
+- users_delete_attestations_by_id:
+  - endpoint: DELETE /users/{{ record.username }}/attestations/{{ record.attestation_id }}
+  - required fields: username, attestation_id
+  - risk: Destructive: Delete attestations by ID. Removes provider-side state.
+- copilot_spaces_create_for_user:
+  - endpoint: POST /users/{{ record.username }}/copilot-spaces
+  - required fields: username, name
+  - risk: Creates provider-side state: Create a Copilot Space for a user.
+- copilot_spaces_update_for_user:
+  - endpoint: PUT /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}
+  - required fields: username, space_number
+  - risk: Mutates existing provider-side state: Set a Copilot Space for a user.
+- copilot_spaces_delete_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}
+  - required fields: username, space_number
+  - risk: Destructive: Delete a Copilot Space for a user. Removes provider-side state.
+- copilot_spaces_add_collaborator_for_user:
+  - endpoint: POST /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators
+  - required fields: username, space_number, actor_type, actor_identifier, role
+  - risk: Creates provider-side state: Add a collaborator to a Copilot Space for a user.
+- copilot_spaces_update_collaborator_for_user:
+  - endpoint: PUT /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
+  - required fields: username, space_number, actor_type, actor_identifier, role
+  - risk: Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user.
+- copilot_spaces_remove_collaborator_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
+  - required fields: username, space_number, actor_type, actor_identifier
+  - risk: Destructive: Remove a collaborator from a Copilot Space for a user. Removes provider-side state.
+- copilot_spaces_create_resource_for_user:
+  - endpoint: POST /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources
+  - required fields: username, space_number, resource_type, metadata
+  - risk: Creates provider-side state: Create a resource for a Copilot Space for a user.
+- copilot_spaces_update_resource_for_user:
+  - endpoint: PUT /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}
+  - required fields: username, space_number, space_resource_id
+  - risk: Mutates existing provider-side state: Set a resource for a Copilot Space for a user.
+- copilot_spaces_delete_resource_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}
+  - required fields: username, space_number, space_resource_id
+  - risk: Destructive: Delete a resource from a Copilot Space for a user. Removes provider-side state.
+- packages_delete_package_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}
+  - required fields: username, package_type, package_name
+  - risk: Destructive: Delete a package for a user. Removes provider-side state.
+- packages_restore_package_for_user:
+  - endpoint: POST /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore
+  - required fields: username, package_type, package_name
+  - risk: Creates provider-side state: Restore a package for a user.
+- packages_delete_package_version_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
+  - required fields: username, package_type, package_name, package_version_id
+  - risk: Destructive: Delete package version for a user. Removes provider-side state.
+- packages_restore_package_version_for_user:
+  - endpoint: POST /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
+  - required fields: username, package_type, package_name, package_version_id
+  - risk: Creates provider-side state: Restore package version for a user.
+- projects_update_item_for_user:
+  - endpoint: PATCH /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
+  - required fields: username, project_number, item_id, fields
+  - risk: Mutates existing provider-side state: Update project item for user.
+- projects_delete_item_for_user:
+  - endpoint: DELETE /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
+  - required fields: username, project_number, item_id
+  - risk: Destructive: Delete project item for user. Removes provider-side state.
+- orgs_attestations_delete_request_by_subject_digests:
+  - endpoint: POST /orgs/{{ record.org }}/attestations/delete-request
+  - required fields: org, subject_digests
+  - risk: low
+- orgs_attestations_delete_request_by_attestation_ids:
+  - endpoint: POST /orgs/{{ record.org }}/attestations/delete-request
+  - required fields: org, attestation_ids
+  - risk: low
+- orgs_campaigns_create_code_scanning:
+  - endpoint: POST /orgs/{{ record.org }}/campaigns
+  - required fields: org, code_scanning_alerts, description, ends_at, name
+  - risk: low
+- orgs_campaigns_create_secret_scanning:
+  - endpoint: POST /orgs/{{ record.org }}/campaigns
+  - required fields: org, description, ends_at, name, secret_scanning_alerts
+  - risk: low
+- orgs_projectsv2_fields_create_existing_issue_field:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: org, project_number, issue_field_id
+  - risk: low
+- orgs_projectsv2_fields_create_new_field:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: org, project_number, data_type, name
+  - risk: low
+- orgs_projectsv2_fields_create_single_select:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: org, project_number, data_type, name, single_select_options
+  - risk: low
+- orgs_projectsv2_fields_create_iteration:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: org, project_number, data_type, iteration_configuration, name
+  - risk: low
+- orgs_projectsv2_items_create_by_id:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items
+  - required fields: org, project_number, id, type
+  - risk: low
+- orgs_projectsv2_items_create_by_repo_number:
+  - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items
+  - required fields: org, project_number, number, owner, repo, type
+  - risk: low
+- user_codespaces_create_from_repository:
+  - endpoint: POST /user/codespaces
+  - required fields: repository_id
+  - risk: low
+- user_codespaces_create_from_pull_request:
+  - endpoint: POST /user/codespaces
+  - required fields: pull_request
+  - risk: low
+- users_attestations_delete_request_by_subject_digests:
+  - endpoint: POST /users/{{ record.username }}/attestations/delete-request
+  - required fields: username, subject_digests
+  - risk: low
+- users_attestations_delete_request_by_attestation_ids:
+  - endpoint: POST /users/{{ record.username }}/attestations/delete-request
+  - required fields: username, attestation_ids
+  - risk: low
+- users_projectsv2_fields_create_new_field:
+  - endpoint: POST /users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: username, project_number, data_type, name
+  - risk: low
+- users_projectsv2_fields_create_single_select:
+  - endpoint: POST /users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: username, project_number, data_type, name, single_select_options
+  - risk: low
+- users_projectsv2_fields_create_iteration:
+  - endpoint: POST /users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields
+  - required fields: username, project_number, data_type, iteration_configuration, name
+  - risk: low
+- users_projectsv2_items_create_by_id:
+  - endpoint: POST /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items
+  - required fields: username, project_number, id, type
+  - risk: low
+- users_projectsv2_items_create_by_repo_number:
+  - endpoint: POST /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items
+  - required fields: username, project_number, number, owner, repo, type
+  - risk: low
+- app_installations_installation_id_access_tokens:
+  - endpoint: POST /app/installations/{{ record.installation_id }}/access_tokens
+  - required fields: installation_id
+  - risk: low
+- actions_artifacts_artifact_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts/{{ record.artifact_id }}
+  - required fields: artifact_id
+  - risk: low
+- actions_runs_run_id_force_cancel:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/force-cancel
+  - required fields: run_id
+  - risk: low
+- actions_runs_run_id_rerun_failed_jobs:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/rerun-failed-jobs
+  - required fields: run_id
+  - risk: low
+- agents_secrets_secret_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}
+  - required fields: secret_name
+  - risk: low
+- agents_secrets_secret_name3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}
+  - required fields: secret_name, encrypted_value, key_id
+  - risk: low
+- agents_variables2:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/agents/variables
+  - required fields: name, value
+  - risk: low
+- agents_variables_name:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}
+  - required fields: name
+  - risk: low
+- agents_variables_name3:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}
+  - required fields: name
+  - risk: low
+- git_tags:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/tags
+  - required fields: tag, message, object, type
+  - risk: low
+- hooks_hook_id_config2:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/config
+  - required fields: hook_id
+  - risk: low
+- issues_issue_number_labels:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels
+  - required fields: issue_number
+  - risk: low
+- pulls_pull_number_comments_comment_id_replies:
+  - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments/{{ record.comment_id }}/replies
+  - required fields: pull_number, comment_id, body
+  - risk: low
+- pulls_pull_number_reviews_review_id:
+  - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}
+  - required fields: pull_number, review_id
+  - risk: low
+- pulls_pull_number_reviews_review_id3:
+  - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}
+  - required fields: pull_number, review_id, body
+  - risk: low
+- applications_client_id_grant:
+  - endpoint: DELETE /applications/{{ record.client_id }}/grant
+  - required fields: client_id, access_token
+  - risk: low
+- applications_client_id_token:
+  - endpoint: POST /applications/{{ record.client_id }}/token
+  - required fields: client_id, access_token
+  - risk: low
+- applications_client_id_token2:
+  - endpoint: PATCH /applications/{{ record.client_id }}/token
+  - required fields: client_id, access_token
+  - risk: low
+- applications_client_id_token3:
+  - endpoint: DELETE /applications/{{ record.client_id }}/token
+  - required fields: client_id, access_token
+  - risk: low
+- org_custom_pattern_update_pattern:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: org, pattern_id, custom_pattern_version, pattern
+  - risk: low
+- org_custom_pattern_update_start_delimiter:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: org, pattern_id, custom_pattern_version, start_delimiter
+  - risk: low
+- org_custom_pattern_update_end_delimiter:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: org, pattern_id, custom_pattern_version, end_delimiter
+  - risk: low
+- org_custom_pattern_update_must_match:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: org, pattern_id, custom_pattern_version, must_match
+  - risk: low
+- org_custom_pattern_update_must_not_match:
+  - endpoint: PATCH /orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: org, pattern_id, custom_pattern_version, must_not_match
+  - risk: low
+- repo_custom_pattern_update_pattern:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: pattern_id, custom_pattern_version, pattern
+  - risk: low
+- repo_custom_pattern_update_start_delimiter:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: pattern_id, custom_pattern_version, start_delimiter
+  - risk: low
+- repo_custom_pattern_update_end_delimiter:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: pattern_id, custom_pattern_version, end_delimiter
+  - risk: low
+- repo_custom_pattern_update_must_match:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: pattern_id, custom_pattern_version, must_match
+  - risk: low
+- repo_custom_pattern_update_must_not_match:
+  - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}
+  - required fields: pattern_id, custom_pattern_version, must_not_match
+  - risk: low
+- user_emails_add_object:
+  - endpoint: POST /user/emails
+  - required fields: emails
+  - risk: low
+- user_emails_add_array:
+  - endpoint: POST /user/emails
+  - required fields: emails
+  - risk: low
+- user_emails_delete_object:
+  - endpoint: DELETE /user/emails
+  - required fields: emails
+  - risk: low
+- user_emails_delete_array:
+  - endpoint: DELETE /user/emails
+  - required fields: emails
+  - risk: low
 
 ## Security
 
@@ -462,6 +2564,1607 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - write risk: external GitHub API mutation
 - approval: reverse ETL plan approval required before writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Work with GitHub repositories from the command line.
+- Usage: pm github <command> <subcommand> [flags]
+- Source CLI: gh (https://cli.github.com/manual/gh_help_reference)
+- Global flags:
+  - --json (boolean): Write machine-readable JSON output.
+  - --connection (string): Use a saved GitHub connector credential and repository scope.: maps_to=connection
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Core Commands
+  - issue list - List issues [intent=etl availability=implemented stream=issues]; flags: --state
+  - issue view - View issue details [intent=direct_read availability=implemented operation=github.issues_issue_number]; notes: Compatibility alias of issues view; uses that declaration-owned provider contract.; flags: --issue-number (required), --page, --page-cursor
+  - issue create - Create an issue [intent=reverse_etl availability=implemented write=create_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates a visible issue in the configured repository.; flags: --title, --body, --label, --assignee, --milestone
+  - issue edit - Edit an issue [intent=reverse_etl availability=implemented write=update_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates title, body, labels, assignees, milestone, or state on an existing issue.; flags: --issue-number, --title, --body, --state, --state-reason, --label, --assignee, --milestone, --type
+  - issue close - Close an issue [intent=reverse_etl availability=implemented write=close_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Closes an existing issue.; flags: --issue-number, --comment, --state-reason
+  - issue reopen - Reopen an issue [intent=reverse_etl availability=implemented write=reopen_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Reopens a previously closed issue.; flags: --issue-number
+  - issue comment - Comment on an issue [intent=reverse_etl availability=implemented write=comment_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Adds a visible issue comment.; flags: --issue-number, --body
+  - issue lock - Lock issue conversation [intent=reverse_etl availability=implemented write=lock_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Locks issue conversation for repository users.; flags: --issue-number, --lock-reason
+  - issue unlock - Unlock issue conversation [intent=reverse_etl availability=implemented write=unlock_issue]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Unlocks issue conversation.; flags: --issue-number
+  - issue delete - Delete an issue [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; notes: Compatibility alias of graphql mutation delete-issue; uses that declaration-owned provider contract.; flags: --input (required)
+  - issue develop - Manage development branches for an issue [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a typed local git composite executor for branch creation and optional checkout; no such executor exists.
+  - issue status - Show relevant issues [intent=direct_read availability=implemented]; notes: Compatibility alias of issues list-for-authenticated-user; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - issue pin - Pin an issue [intent=direct_write availability=implemented operation=github.graphql.mutation.pin-issue]; approval: plan, preview, approval, execute; risk: high; notes: Compatibility alias of graphql mutation pin-issue; uses that declaration-owned provider contract.; flags: --input (required)
+  - issue unpin - Unpin an issue [intent=direct_write availability=implemented operation=github.graphql.mutation.unpin-issue]; approval: plan, preview, approval, execute; risk: high; notes: Compatibility alias of graphql mutation unpin-issue; uses that declaration-owned provider contract.; flags: --input (required)
+  - issue transfer - Transfer an issue [intent=direct_write availability=implemented operation=github.graphql.mutation.transfer-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; notes: Compatibility alias of graphql mutation transfer-issue; uses that declaration-owned provider contract.; flags: --input (required)
+  - pr list - List pull requests [intent=etl availability=implemented stream=pull_requests]
+  - pr view - View pull request details [intent=direct_read availability=implemented operation=github.pulls_pull_number]; notes: Compatibility alias of pulls view; uses that declaration-owned provider contract.; flags: --pull-number (required), --page, --page-cursor
+  - pr create - Create a pull request [intent=reverse_etl availability=implemented write=create_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates a visible pull request and may request reviewers.; flags: --head, --base, --title, --body, --issue, --draft, --maintainer-can-modify, --label, --assignee, --milestone, --reviewer, --team-reviewer
+  - pr edit - Edit a pull request [intent=reverse_etl availability=implemented write=update_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates an existing pull request.; flags: --pull-number, --title, --body, --state, --base, --maintainer-can-modify, --label, --assignee, --milestone, --reviewer, --team-reviewer
+  - pr close - Close a pull request [intent=reverse_etl availability=implemented write=close_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Closes an existing pull request.; flags: --pull-number, --comment
+  - pr reopen - Reopen a pull request [intent=reverse_etl availability=implemented write=reopen_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Reopens a previously closed pull request.; flags: --pull-number
+  - pr comment - Comment on a pull request [intent=reverse_etl availability=implemented write=comment_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Comments on a pull request (PRs are issues in GitHub's data model).; flags: --pull-number, --body
+  - pr merge - Merge a pull request [intent=reverse_etl availability=implemented write=merge_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Merges code into the pull request base branch.; flags: --pull-number, --commit-title, --commit-message, --sha, --merge-method
+  - pr review - Add a pull request review [intent=reverse_etl availability=implemented write=create_pull_request_review]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Adds a visible pull request review.; flags: --pull-number, --body, --commit-id, --event
+  - pr checks - Show pull request checks [intent=direct_read availability=implemented operation=github.commits_ref_check_runs]; notes: Compatibility alias of commits check-runs view; uses that declaration-owned provider contract.; flags: --ref (required), --check-name, --filter, --status, --app-id, --page, --page-cursor
+  - pr diff - Show pull request diff [intent=binary_download availability=implemented operation=github.pull.diff]; notes: Downloads one diff with GitHub's fixed application/vnd.github.diff representation and the bounded binary-download policy.; flags: --pull-number (required), --dest-root (required), --file-name, --max-bytes
+  - pr checkout - Check out a pull request locally [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a typed local git executor that can fetch and check out pull-request refs; no such executor exists.
+  - pr ready - Mark a draft pull request ready [intent=direct_write availability=implemented operation=github.graphql.mutation.mark-pull-request-ready-for-review]; approval: plan, preview, approval, execute; risk: high; notes: Compatibility alias of graphql mutation mark-pull-request-ready-for-review; uses that declaration-owned provider contract.; flags: --input (required)
+  - pr update-branch - Update a pull request branch [intent=reverse_etl availability=implemented write=update_pull_request_branch]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Updates a pull request branch from its base branch.; flags: --pull-number, --expected-head-sha
+  - pr status - Show relevant pull requests [intent=etl availability=implemented stream=pull_requests]; notes: Compatibility alias of pr list; uses that declaration-owned provider contract.
+  - pr lock - Lock pull request conversation [intent=reverse_etl availability=implemented write=lock_issue]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Locks a pull request's conversation.; flags: --pull-number, --lock-reason
+  - pr unlock - Unlock pull request conversation [intent=reverse_etl availability=implemented write=unlock_issue]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Unlocks a pull request's conversation.; flags: --pull-number
+  - pr revert - Revert a pull request [intent=direct_write availability=implemented operation=github.graphql.mutation.revert-pull-request]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; notes: Compatibility alias of graphql mutation revert-pull-request; uses that declaration-owned provider contract.; flags: --input (required)
+  - repo view - View repository metadata [intent=etl availability=implemented stream=repository]
+  - repo list - List repositories for an owner [intent=direct_read availability=implemented operation=github.repo.list]; notes: Fixed RepositoryOwner query supports user and organization owners and returns one cursor-addressable page.; flags: --login (required), --first (required), --page, --page-cursor
+  - repo create - Create a repository [intent=reverse_etl availability=implemented write=repos_create_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --name, --description, --private, --auto-init, --gitignore-template, --license-template, --has-issues, --has-wiki
+  - repo delete - Delete a repository [intent=reverse_etl availability=implemented write=repo]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical
+  - repo archive - Archive a repository [intent=reverse_etl availability=implemented write=archive_repo]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - repo unarchive - Unarchive a repository [intent=reverse_etl availability=implemented write=unarchive_repo]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - repo fork - Fork a repository [intent=reverse_etl availability=implemented write=create_fork]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates a fork of the configured repository.; flags: --organization, --name, --default-branch-only
+  - repo clone - Clone a repository locally [intent=local_workflow availability=unsupported_local operation=github.repo.clone unsupported local workflow]; notes: Requires a typed local git clone executor; github.repo.clone is metadata-only and no local git executor exists.
+  - repo sync - Sync a local repository [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a typed local git fetch/branch/reset workflow; no local git executor exists.
+  - repo set-default - Set the default local repository [intent=config availability=unsupported_local unsupported local workflow]; notes: Writes gh-local repository config, but the connector runtime has no gh config executor.
+  - repo read-file - Read repository file metadata [intent=direct_read availability=implemented]; notes: Executes the fixed GitHub repository contents read endpoint with file content and raw download URLs redacted.; flags: --path, --ref, --page, --page-cursor
+  - repo read-dir - Read repository directory contents [intent=direct_read availability=implemented]; notes: Executes the fixed GitHub repository contents read endpoint for directory listings; file responses are rejected.; flags: --path, --ref, --page, --page-cursor
+  - repo autolink list - List repository autolinks [intent=etl availability=implemented stream=autolinks]
+  - repo autolink create - Create a repository autolink [intent=reverse_etl availability=implemented write=autolinks]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; notes: Compatibility alias of autolinks create; uses that declaration-owned provider contract.; flags: --key-prefix (required), --url-template (required), --is-alphanumeric
+  - repo autolink delete - Delete a repository autolink [intent=reverse_etl availability=implemented write=autolinks_autolink_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; notes: Compatibility alias of autolinks delete; uses that declaration-owned provider contract.; flags: --autolink-id (required)
+  - repo deploy-key list - List deploy keys [intent=etl availability=implemented stream=deploy_keys]
+  - repo deploy-key add - Add a deploy key [intent=reverse_etl availability=implemented write=create_deploy_key]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Adds a deploy key to the repository.; flags: --title, --key, --read-only
+  - repo deploy-key delete - Delete a deploy key [intent=reverse_etl availability=implemented write=delete_deploy_key]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes a deploy key from the repository.; flags: --key-id
+  - repo license list - List license templates [intent=direct_read availability=implemented]; notes: Compatibility alias of licenses get-all-commonly-used; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - repo gitignore list - List gitignore templates [intent=direct_read availability=implemented]; notes: Compatibility alias of gitignore get-all-templates; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - repo ruleset create - Create a repository ruleset [intent=reverse_etl availability=implemented write=create_repo_ruleset]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates repository rules that can affect contribution workflows.; notes: Connector-native write action; the current gh ruleset surface documents check, list, and view, but not create.; flags: --name, --target, --enforcement
+  - repo ruleset update - Update a repository ruleset [intent=reverse_etl availability=implemented write=update_repo_ruleset]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Updates repository rules that can affect contribution workflows.; notes: Connector-native write action; the current gh ruleset surface documents check, list, and view, but not update.; flags: --ruleset-id, --name, --target, --enforcement
+  - repo ruleset delete - Delete a repository ruleset [intent=reverse_etl availability=implemented write=delete_repo_ruleset]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes repository rules that can affect contribution workflows.; notes: Connector-native write action; the current gh ruleset surface documents check, list, and view, but not delete.; flags: --ruleset-id
+  - repo delete-2 - DELETE /repos/{owner}/{repo} [intent=reverse_etl availability=implemented write=repo]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical
+  - repo update - PATCH /repos/{owner}/{repo} [intent=reverse_etl availability=implemented write=repo2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - repo sbom view - Download /repos/{owner}/{repo}/dependency-graph/sbom [intent=binary_download availability=implemented operation=github.dependency_graph_sbom]; flags: --dest-root (required), --file-name, --max-bytes
+  - repo sbom fetch - Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid} [intent=binary_download availability=implemented operation=github.dependency_graph_sbom_fetch_report_sbom_uuid]; flags: --sbom-uuid, --dest-root (required), --file-name, --max-bytes
+  - repo sbom generate - Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report [intent=binary_download availability=implemented operation=github.dependency_graph_sbom_generate_report]; flags: --dest-root (required), --file-name, --max-bytes
+  - repo archive tarball - Download /repos/{owner}/{repo}/tarball/{ref} [intent=binary_download availability=implemented operation=github.tarball_ref]; flags: --ref, --dest-root (required), --file-name, --max-bytes
+  - repo archive zipball - Download /repos/{owner}/{repo}/zipball/{ref} [intent=binary_download availability=implemented operation=github.zipball_ref]; flags: --ref, --dest-root (required), --file-name, --max-bytes
+  - repo secret-scanning custom-pattern update-pattern - PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_pattern) [intent=reverse_etl availability=implemented write=repo_custom_pattern_update_pattern]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pattern-id (required), --pattern (required), --start-delimiter, --end-delimiter, --must-match, --must-not-match, --custom-pattern-version (required)
+  - repo secret-scanning custom-pattern update-start-delimiter - PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_start_delimiter) [intent=reverse_etl availability=implemented write=repo_custom_pattern_update_start_delimiter]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pattern-id (required), --pattern, --start-delimiter (required), --end-delimiter, --must-match, --must-not-match, --custom-pattern-version (required)
+  - repo secret-scanning custom-pattern update-end-delimiter - PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_end_delimiter) [intent=reverse_etl availability=implemented write=repo_custom_pattern_update_end_delimiter]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pattern-id (required), --pattern, --start-delimiter, --end-delimiter (required), --must-match, --must-not-match, --custom-pattern-version (required)
+  - repo secret-scanning custom-pattern update-must-match - PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_match) [intent=reverse_etl availability=implemented write=repo_custom_pattern_update_must_match]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pattern-id (required), --pattern, --start-delimiter, --end-delimiter, --must-match (required), --must-not-match, --custom-pattern-version (required)
+  - repo secret-scanning custom-pattern update-must-not-match - PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_not_match) [intent=reverse_etl availability=implemented write=repo_custom_pattern_update_must_not_match]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pattern-id (required), --pattern, --start-delimiter, --end-delimiter, --must-match, --must-not-match (required), --custom-pattern-version (required)
+  - release list - List releases [intent=etl availability=implemented stream=releases]
+  - release view - View a release [intent=direct_read availability=implemented operation=github.releases_release_id]; notes: Compatibility alias of releases view; uses that declaration-owned provider contract.; flags: --release-id (required), --page, --page-cursor
+  - release create - Create a release [intent=reverse_etl availability=implemented write=create_release]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates a visible release.; flags: --tag-name, --target-commitish, --name, --body, --draft, --prerelease, --generate-release-notes, --make-latest
+  - release edit - Edit a release [intent=reverse_etl availability=implemented write=update_release]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates an existing release.; flags: --release-id, --tag-name, --target-commitish, --name, --body, --draft, --prerelease, --generate-release-notes, --make-latest
+  - release delete - Delete a release [intent=reverse_etl availability=implemented write=delete_release]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes an existing release.; flags: --release-id
+  - release upload - Upload release assets [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: GitHub release assets use a separate upload host and raw request body; no bounded binary-upload executor exists.
+  - release download - Download release assets [intent=binary_download availability=implemented operation=github.release.download_assets]; notes: Downloads one declared asset by ID with the bounded binary-download policy; archive extraction is disabled.; flags: --asset-id (required), --dest-root (required), --file-name, --max-bytes
+  - release delete-asset - Delete a release asset [intent=reverse_etl availability=implemented write=delete_release_asset]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes an existing release asset.; flags: --asset-id
+  - release verify - Verify release assets [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires local cryptographic verification of downloaded release assets; no cryptographic verification executor exists.
+- GitHub Actions Commands
+  - workflow list - List workflows [intent=etl availability=implemented stream=workflows]
+  - workflow view - View workflow details [intent=direct_read availability=implemented operation=github.actions_workflows_workflow_id]; notes: Compatibility alias of actions workflows view; uses that declaration-owned provider contract.; flags: --workflow-id (required), --page, --page-cursor
+  - workflow run - Dispatch a workflow [intent=reverse_etl availability=implemented write=dispatch_workflow]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Triggers a GitHub Actions workflow run.; flags: --workflow-id, --ref
+  - workflow enable - Enable a workflow [intent=reverse_etl availability=implemented write=actions_workflows_workflow_id_enable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; notes: Compatibility alias of actions enable set; uses that declaration-owned provider contract.; flags: --workflow-id (required)
+  - workflow disable - Disable a workflow [intent=reverse_etl availability=implemented write=actions_workflows_workflow_id_disable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; notes: Compatibility alias of actions disable set; uses that declaration-owned provider contract.; flags: --workflow-id (required)
+  - run list - List workflow runs [intent=etl availability=implemented stream=workflow_runs]
+  - run view - View workflow run details [intent=direct_read availability=implemented operation=github.actions_runs_run_id]; notes: Compatibility alias of actions runs view; uses that declaration-owned provider contract.; flags: --run-id (required), --exclude-pull-requests, --page, --page-cursor
+  - run rerun - Rerun a workflow run [intent=reverse_etl availability=implemented write=rerun_workflow_run]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Reruns a GitHub Actions workflow run.; flags: --run-id
+  - run cancel - Cancel a workflow run [intent=reverse_etl availability=implemented write=cancel_workflow_run]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Cancels a GitHub Actions workflow run.; flags: --run-id
+  - run delete - Delete a workflow run [intent=reverse_etl availability=implemented write=delete_workflow_run]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes workflow run data.; flags: --run-id
+  - run download - Download workflow artifacts [intent=binary_download availability=implemented operation=github.actions_artifacts_artifact_id_archive_format]; notes: Downloads one selected artifact as a bounded archive file; archive extraction remains deliberately disabled.; flags: --artifact-id (required), --archive-format (required), --dest-root (required), --file-name, --max-bytes
+  - run watch - Watch a workflow run [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a polling and terminal-rendering workflow with cancellation; no typed polling/watch executor exists.
+  - run logs view - Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs [intent=binary_download availability=implemented operation=github.actions_jobs_job_id_logs]; flags: --job-id, --dest-root (required), --file-name, --max-bytes
+  - run logs view-2 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs [intent=binary_download availability=implemented operation=github.actions_runs_run_id_attempts_attempt_number_logs]; flags: --run-id, --attempt-number, --dest-root (required), --file-name, --max-bytes
+  - run logs view-3 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs [intent=binary_download availability=implemented operation=github.actions_runs_run_id_logs2]; flags: --run-id, --dest-root (required), --file-name, --max-bytes
+  - cache list - List GitHub Actions caches [intent=direct_read availability=implemented operation=github.actions_caches2]; notes: Compatibility alias of actions caches view; uses that declaration-owned provider contract.; flags: --direction, --key, --ref, --sort, --page, --page-cursor
+  - cache delete - Delete GitHub Actions caches [intent=reverse_etl availability=implemented write=actions_caches_cache_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --cache-id
+- Collaboration Commands
+  - label list - List labels [intent=etl availability=implemented stream=labels]
+  - label create - Create a label [intent=reverse_etl availability=implemented write=create_label]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates a repository label.; flags: --name, --color, --description
+  - label edit - Edit a label [intent=reverse_etl availability=implemented write=update_label]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates a repository label.; flags: --name, --new-name, --color, --description
+  - label delete - Delete a label [intent=reverse_etl availability=implemented write=delete_label]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes a repository label.; flags: --name
+  - label clone - Clone labels between repositories [intent=direct_write availability=unsupported_api]; notes: GitHub exposes label list/create primitives, but cloning requires a paginated multi-write composite executor with partial-failure handling; no such executor exists.
+  - ruleset list - List repository rulesets [intent=etl availability=implemented stream=repo_rulesets]
+  - ruleset view - View repository ruleset details [intent=direct_read availability=implemented operation=github.rulesets_ruleset_id]; notes: Compatibility alias of rulesets view; uses that declaration-owned provider contract.; flags: --ruleset-id (required), --includes-parents, --page, --page-cursor
+  - ruleset check - Check rules that apply to a branch [intent=direct_read availability=implemented operation=github.rules_branches_branch]; notes: Compatibility alias of rules branches view; uses that declaration-owned provider contract.; flags: --branch (required), --per-page, --page, --page-cursor
+  - org list - List organizations for the authenticated user [intent=direct_read availability=implemented]; notes: Compatibility alias of orgs list-for-authenticated-user; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - org secret-scanning custom-pattern update-pattern - PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_pattern) [intent=reverse_etl availability=implemented write=org_custom_pattern_update_pattern]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --pattern-id (required), --pattern (required), --start-delimiter, --end-delimiter, --must-match, --must-not-match, --custom-pattern-version (required)
+  - org secret-scanning custom-pattern update-start-delimiter - PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_start_delimiter) [intent=reverse_etl availability=implemented write=org_custom_pattern_update_start_delimiter]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --pattern-id (required), --pattern, --start-delimiter (required), --end-delimiter, --must-match, --must-not-match, --custom-pattern-version (required)
+  - org secret-scanning custom-pattern update-end-delimiter - PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_end_delimiter) [intent=reverse_etl availability=implemented write=org_custom_pattern_update_end_delimiter]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --pattern-id (required), --pattern, --start-delimiter, --end-delimiter (required), --must-match, --must-not-match, --custom-pattern-version (required)
+  - org secret-scanning custom-pattern update-must-match - PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_match) [intent=reverse_etl availability=implemented write=org_custom_pattern_update_must_match]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --pattern-id (required), --pattern, --start-delimiter, --end-delimiter, --must-match (required), --must-not-match, --custom-pattern-version (required)
+  - org secret-scanning custom-pattern update-must-not-match - PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_not_match) [intent=reverse_etl availability=implemented write=org_custom_pattern_update_must_not_match]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --pattern-id (required), --pattern, --start-delimiter, --end-delimiter, --must-match, --must-not-match (required), --custom-pattern-version (required)
+  - project list - List projects [intent=etl availability=implemented stream=projects]; notes: Lists Projects v2 for the configured repository owner using a fixed GraphQL query. Private projects require read:project scope.
+  - project create - Create a project [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2]; approval: plan, preview, approval, execute; risk: high; notes: Compatibility alias of graphql mutation create-project-v2; uses that declaration-owned provider contract.; flags: --input (required)
+  - project item-list - List project items [intent=etl availability=implemented stream=project_items]; notes: Lists items for a Project v2 node ID using a fixed GraphQL query. Private projects require read:project scope.; flags: --project-id
+  - discussion list - List discussions [intent=etl availability=implemented stream=discussions]; notes: Lists repository discussions using a fixed GraphQL query. Private repositories require repo scope; public repositories require public_repo scope.
+  - discussion view - View a discussion [intent=etl availability=implemented stream=discussion]; notes: Views one repository discussion using a fixed GraphQL query. Private repositories require repo scope; public repositories require public_repo scope.; flags: --number
+  - discussion create - Create a discussion [intent=direct_write availability=implemented operation=github.graphql.mutation.create-discussion]; approval: plan, preview, approval, execute; risk: high; notes: Compatibility alias of graphql mutation create-discussion; uses that declaration-owned provider contract.; flags: --input (required)
+- Security And Configuration Commands
+  - secret list - List repository secrets [intent=direct_read availability=implemented operation=github.actions_secrets]; notes: Returns secret metadata only; values are never exposed.; flags: --page, --page-cursor
+  - secret set - Create or update a secret [intent=reverse_etl availability=implemented write=actions_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --secret-name, --encrypted-value, --key-id
+  - secret delete - Delete a secret [intent=reverse_etl availability=implemented write=actions_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --secret-name
+  - secret delete-2 - DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name} [intent=reverse_etl availability=implemented write=actions_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --secret-name
+  - secret set-2 - PUT /repos/{owner}/{repo}/actions/secrets/{secret_name} [intent=reverse_etl availability=implemented write=actions_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --secret-name, --encrypted-value, --key-id
+  - secret delete-3 - DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name} [intent=reverse_etl availability=implemented write=codespaces_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --secret-name
+  - secret set-3 - PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name} [intent=reverse_etl availability=implemented write=codespaces_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --secret-name
+  - secret delete-4 - DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name} [intent=reverse_etl availability=implemented write=dependabot_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --secret-name
+  - secret set-4 - PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name} [intent=reverse_etl availability=implemented write=dependabot_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --secret-name
+  - secret delete-5 - DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name} [intent=reverse_etl availability=implemented write=environments_environment_name_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --environment-name, --secret-name
+  - secret set-5 - PUT /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name} [intent=reverse_etl availability=implemented write=environments_environment_name_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name, --secret-name
+  - secret delete-6 - DELETE /repos/{owner}/{repo}/agents/secrets/{secret_name} [intent=reverse_etl availability=implemented write=agents_secrets_secret_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --secret-name (required)
+  - secret set-6 - PUT /repos/{owner}/{repo}/agents/secrets/{secret_name} [intent=reverse_etl availability=implemented write=agents_secrets_secret_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --secret-name (required), --encrypted-value (required), --key-id (required)
+  - variable list - List repository variables [intent=direct_read availability=implemented operation=github.actions_variables]; notes: Compatibility alias of actions variables view; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - variable get - Get a repository variable [intent=direct_read availability=implemented operation=github.actions_variables_name2]; notes: Compatibility alias of actions variables view-2; uses that declaration-owned provider contract.; flags: --name (required), --page, --page-cursor
+  - variable set - Create or update a repository variable [intent=direct_write availability=unsupported_api]; notes: GitHub uses distinct create and update endpoints; set requires a conditional composite executor. The typed variable create and update commands remain available.
+  - variable delete - Delete a repository variable [intent=reverse_etl availability=implemented write=actions_variables_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; notes: Compatibility alias of variable delete-2; uses that declaration-owned provider contract.; flags: --name (required)
+  - variable create - POST /repos/{owner}/{repo}/actions/variables [intent=reverse_etl availability=implemented write=actions_variables2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --name (required), --value (required)
+  - variable delete-2 - DELETE /repos/{owner}/{repo}/actions/variables/{name} [intent=reverse_etl availability=implemented write=actions_variables_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --name (required)
+  - variable update - PATCH /repos/{owner}/{repo}/actions/variables/{name} [intent=reverse_etl availability=implemented write=actions_variables_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --name (required), --value (required)
+  - variable create-2 - POST /repos/{owner}/{repo}/environments/{environment_name}/variables [intent=reverse_etl availability=implemented write=environments_environment_name_variables2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name
+  - variable delete-3 - DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name} [intent=reverse_etl availability=implemented write=environments_environment_name_variables_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --environment-name, --name
+  - variable update-2 - PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name} [intent=reverse_etl availability=implemented write=environments_environment_name_variables_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name, --name
+  - variable create-3 - POST /repos/{owner}/{repo}/agents/variables [intent=reverse_etl availability=implemented write=agents_variables2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --name (required), --value (required)
+  - variable delete-4 - DELETE /repos/{owner}/{repo}/agents/variables/{name} [intent=reverse_etl availability=implemented write=agents_variables_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --name (required)
+  - variable update-3 - PATCH /repos/{owner}/{repo}/agents/variables/{name} [intent=reverse_etl availability=implemented write=agents_variables_name3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --name (required), --value
+  - gpg-key list - List GPG keys [intent=direct_read availability=implemented]; notes: Compatibility alias of users list-gpg-keys-for-authenticated-user; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - ssh-key list - List SSH keys [intent=direct_read availability=implemented]; notes: Compatibility alias of users list-public-ssh-keys-for-authenticated-user; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - attestation verify - Verify artifact attestations [intent=direct_read availability=unsupported_local unsupported local workflow]; notes: GitHub GET /repos/{owner}/{repo}/attestations/{subject_digest} only lists bundles; signature, identity, subject-digest, and policy verification is local and no cryptographic verifier exists.; flags: --page, --page-cursor
+- Local Workflow Commands
+  - auth login - Authenticate gh [intent=auth availability=unsupported_local unsupported local workflow]; notes: Interactive gh credential bootstrap belongs to gh, while pm uses its own credential store; no gh auth executor exists.
+  - auth status - View gh authentication status [intent=auth availability=unsupported_local unsupported local workflow]; notes: Inspects gh's local credential store, outside pm's credential abstraction; no gh auth status executor exists.
+  - auth token - Print gh token [intent=auth availability=unsupported_local unsupported local workflow]; notes: The upstream command prints a credential; pm's no-secret-disclosure boundary prohibits this executor.
+  - config get - Read gh local config [intent=config availability=unsupported_local unsupported local workflow]; notes: Reads gh-local configuration; the connector runtime has no gh config executor.
+  - config set - Write gh local config [intent=config availability=unsupported_local unsupported local workflow]; notes: Writes gh-local configuration; the connector runtime has no gh config executor.
+  - browse - Open GitHub in a browser [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a local browser-launch workflow; no browser-launch executor exists.
+  - alias list - List gh aliases [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Reads local aliases from gh configuration; no gh-config or local-filesystem executor exists.
+  - extension list - List gh extensions [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Reads installed local extensions and their manifests; no local extensions executor exists.
+  - completion - Generate shell completion [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Generates gh-specific shell completion, while connector commands bypass Cobra and expose no shell completion executor contract.
+- Additional Commands
+  - api - Make an authenticated GitHub API request [intent=raw_api availability=unsupported_local unsupported local workflow]; notes: Generic authenticated REST/GraphQL dispatch is intentionally prohibited; fixed declared operations are the supported replacement.
+  - search repos - Search repositories [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - search issues - Search issues and pull requests [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - search prs - Search pull requests [intent=direct_read availability=implemented]; notes: Compatibility alias of search issues; uses that declaration-owned provider contract.; flags: --q (required), --page, --page-cursor
+  - search code - Search code [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - search commits - Search commits [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - search labels - Search labels [intent=direct_read availability=implemented]; flags: --repository-id (required), --q (required), --page, --page-cursor
+  - search topics - Search topics [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - search users - Search users [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
+  - gist list - List gists [intent=direct_read availability=implemented]; notes: Compatibility alias of gists list; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - gist create - Create a gist [intent=direct_write availability=unsupported_api]; notes: GitHub POST /gists exists, but gh gist create requires a dynamic filename-keyed files object and executing it would write outside the authorized organization/repository fixture; the command remains declared.
+  - codespace list - List codespaces [intent=direct_read availability=implemented]; notes: Compatibility alias of codespaces list-for-authenticated-user; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - codespace create - Create a codespace [intent=reverse_etl availability=implemented write=user_codespaces_create_from_repository]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; notes: Compatibility alias of codespaces create-from-repository; uses that declaration-owned provider contract.; flags: --repository-id (required), --ref, --location, --geo, --client-ip, --machine, --devcontainer-path, --multi-repo-permissions-opt-out, --working-directory, --idle-timeout-minutes, --display-name, --retention-period-minutes
+  - codespace ssh - SSH into a codespace [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires a local SSH subprocess and interactive terminal session; no SSH or subprocess executor exists.
+  - status - Print GitHub status [intent=direct_read availability=implemented operation=github.graphql.query.viewer]; notes: Compatibility alias of graphql query viewer; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+  - copilot - Use GitHub Copilot CLI [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Runs an external interactive extension; no extension or subprocess executor exists.
+  - copilot configuration view - Read /repos/{owner}/{repo}/copilot/cloud-agent/configuration [intent=direct_read availability=implemented operation=github.copilot_cloud_agent_configuration]; flags: --page, --page-cursor
+  - copilot copilot-enterprise-one-day-usage-metrics - Get Copilot enterprise usage metrics for a specific day [intent=direct_read availability=implemented]; flags: --enterprise (required), --day (required), --page, --page-cursor
+  - copilot copilot-enterprise-usage-metrics - Get Copilot enterprise usage metrics [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - copilot copilot-enterprise-repos-one-day-report - Get Copilot enterprise repository report for a specific day [intent=direct_read availability=implemented]; flags: --enterprise (required), --day (required), --page, --page-cursor
+  - copilot copilot-enterprise-user-teams-one-day-report - Get Copilot enterprise user-teams report for a specific day [intent=direct_read availability=implemented]; flags: --enterprise (required), --day (required), --page, --page-cursor
+  - copilot copilot-users-one-day-usage-metrics - Get Copilot users usage metrics for a specific day [intent=direct_read availability=implemented]; flags: --enterprise (required), --day (required), --page, --page-cursor
+  - copilot copilot-users-usage-metrics - Get Copilot users usage metrics [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - copilot get-copilot-organization-details - Get Copilot seat information and settings for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot list-copilot-seats - List all Copilot seat assignments for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot get-copilot-coding-agent-permissions-organization - Get Copilot cloud agent permissions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot list-copilot-coding-agent-selected-repositories-for-organization - List repositories enabled for Copilot cloud agent in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot copilot-content-exclusion-for-organization - Get Copilot content exclusion rules for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot copilot-organization-one-day-usage-metrics - Get Copilot organization usage metrics for a specific day [intent=direct_read availability=implemented]; flags: --org (required), --day (required), --page, --page-cursor
+  - copilot copilot-organization-usage-metrics - Get Copilot organization usage metrics [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot copilot-organization-repos-one-day-report - Get Copilot organization repository report for a specific day [intent=direct_read availability=implemented]; flags: --org (required), --day (required), --page, --page-cursor
+  - copilot copilot-organization-user-teams-one-day-report - Get Copilot organization user-teams report for a specific day [intent=direct_read availability=implemented]; flags: --org (required), --day (required), --page, --page-cursor
+  - copilot copilot-organization-users-one-day-usage-metrics - Get Copilot organization users usage metrics for a specific day [intent=direct_read availability=implemented]; flags: --org (required), --day (required), --page, --page-cursor
+  - copilot copilot-organization-users-usage-metrics - Get Copilot organization users usage metrics [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot get-copilot-seat-details-for-user - Get Copilot seat assignment details for a user [intent=direct_read availability=implemented]; flags: --org (required), --username (required), --page, --page-cursor
+  - copilot set-enterprise-coding-agent-policy - Set the coding agent policy for an enterprise [intent=reverse_etl availability=implemented write=copilot_set_enterprise_coding_agent_policy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set the coding agent policy for an enterprise.; flags: --enterprise (required), --policy-state (required)
+  - copilot add-organizations-to-enterprise-coding-agent-policy - Add organizations to the enterprise coding agent policy [intent=reverse_etl availability=implemented write=copilot_add_organizations_to_enterprise_coding_agent_policy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add organizations to the enterprise coding agent policy.; flags: --enterprise (required), --organizations
+  - copilot remove-organizations-from-enterprise-coding-agent-policy - Remove organizations from the enterprise coding agent policy [intent=reverse_etl availability=implemented write=copilot_remove_organizations_from_enterprise_coding_agent_policy]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove organizations from the enterprise coding agent policy. Removes provider-side state.; flags: --enterprise (required), --organizations
+  - copilot add-copilot-seats-for-teams - Add teams to the Copilot subscription for an organization [intent=reverse_etl availability=implemented write=copilot_add_copilot_seats_for_teams]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add teams to the Copilot subscription for an organization.; flags: --org (required), --selected-teams (required)
+  - copilot cancel-copilot-seat-assignment-for-teams - Remove teams from the Copilot subscription for an organization [intent=reverse_etl availability=implemented write=copilot_cancel_copilot_seat_assignment_for_teams]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove teams from the Copilot subscription for an organization. Removes provider-side state.; flags: --org (required), --selected-teams (required)
+  - copilot add-copilot-seats-for-users - Add users to the Copilot subscription for an organization [intent=reverse_etl availability=implemented write=copilot_add_copilot_seats_for_users]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add users to the Copilot subscription for an organization.; flags: --org (required), --selected-usernames (required)
+  - copilot cancel-copilot-seat-assignment-for-users - Remove users from the Copilot subscription for an organization [intent=reverse_etl availability=implemented write=copilot_cancel_copilot_seat_assignment_for_users]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove users from the Copilot subscription for an organization. Removes provider-side state.; flags: --org (required), --selected-usernames (required)
+  - copilot set-copilot-coding-agent-permissions-organization - Set Copilot cloud agent permissions for an organization [intent=reverse_etl availability=implemented write=copilot_set_copilot_coding_agent_permissions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set Copilot cloud agent permissions for an organization.; flags: --org (required), --enabled-repositories (required)
+  - copilot set-copilot-coding-agent-selected-repositories-for-organization - Set selected repositories for Copilot cloud agent in an organization [intent=reverse_etl availability=implemented write=copilot_set_copilot_coding_agent_selected_repositories_for_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for Copilot cloud agent in an organization.; flags: --org (required), --selected-repository-ids (required)
+  - copilot enable-copilot-coding-agent-for-repository-in-organization - Enable a repository for Copilot cloud agent in an organization [intent=reverse_etl availability=implemented write=copilot_enable_copilot_coding_agent_for_repository_in_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Enable a repository for Copilot cloud agent in an organization.; flags: --org (required), --repository-id (required)
+  - copilot disable-copilot-coding-agent-for-repository-in-organization - Disable a repository for Copilot cloud agent in an organization [intent=reverse_etl availability=implemented write=copilot_disable_copilot_coding_agent_for_repository_in_organization]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Disable a repository for Copilot cloud agent in an organization. Removes provider-side state.; flags: --org (required), --repository-id (required)
+  - copilot set-copilot-content-exclusion-for-organization - Set Copilot content exclusion rules for an organization [intent=reverse_etl availability=implemented write=copilot_set_copilot_content_exclusion_for_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set Copilot content exclusion rules for an organization.; flags: --org (required)
+  - skill list - List GitHub Skills [intent=direct_read availability=unsupported_api]; notes: gh skill list scans the local filesystem for agent-host skill directories; GitHub provides no backing collection and the connector has no local-filesystem workflow executor.; flags: --page, --page-cursor
+  - agent-task list - List GitHub agent tasks [intent=direct_read availability=implemented]; notes: Compatibility alias of agent-tasks list-tasks; uses that declaration-owned provider contract.; flags: --page, --page-cursor
+- Other Commands
+  - artifact download - Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format} [intent=binary_download availability=implemented operation=github.actions_artifacts_artifact_id_archive_format]; flags: --artifact-id, --archive-format, --dest-root (required), --file-name, --max-bytes
+  - actions retention-limit view - Read /repos/{owner}/{repo}/actions/cache/retention-limit [intent=direct_read availability=implemented operation=github.actions_cache_retention_limit]; flags: --page, --page-cursor
+  - actions retention-limit set - PUT /repos/{owner}/{repo}/actions/cache/retention-limit [intent=reverse_etl availability=implemented write=actions_cache_retention_limit2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions storage-limit view - Read /repos/{owner}/{repo}/actions/cache/storage-limit [intent=direct_read availability=implemented operation=github.actions_cache_storage_limit]; flags: --page, --page-cursor
+  - actions storage-limit set - PUT /repos/{owner}/{repo}/actions/cache/storage-limit [intent=reverse_etl availability=implemented write=actions_cache_storage_limit2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions usage view - Read /repos/{owner}/{repo}/actions/cache/usage [intent=direct_read availability=implemented operation=github.actions_cache_usage]; flags: --page, --page-cursor
+  - actions caches delete - DELETE /repos/{owner}/{repo}/actions/caches [intent=reverse_etl availability=implemented write=actions_caches]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium
+  - actions caches view - Read /repos/{owner}/{repo}/actions/caches [intent=direct_read availability=implemented operation=github.actions_caches2]; flags: --direction, --key, --ref, --sort, --page, --page-cursor
+  - actions caches delete-2 - DELETE /repos/{owner}/{repo}/actions/caches/{cache_id} [intent=reverse_etl availability=implemented write=actions_caches_cache_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --cache-id
+  - actions concurrency_groups view - Read /repos/{owner}/{repo}/actions/concurrency_groups [intent=direct_read availability=implemented operation=github.actions_concurrency_groups]; flags: --page, --page-cursor
+  - actions concurrency_groups view-2 - Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name} [intent=direct_read availability=implemented operation=github.actions_concurrency_groups_concurrency_group_name]; flags: --concurrency-group-name (required), --ahead-of-job, --ahead-of-run, --page, --page-cursor
+  - actions jobs view - Read /repos/{owner}/{repo}/actions/jobs/{job_id} [intent=direct_read availability=implemented operation=github.actions_jobs_job_id]; flags: --job-id (required), --page, --page-cursor
+  - actions rerun create - POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun [intent=reverse_etl availability=implemented write=actions_jobs_job_id_rerun]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --job-id
+  - actions sub view - Read /repos/{owner}/{repo}/actions/oidc/customization/sub [intent=direct_read availability=implemented operation=github.actions_oidc_customization_sub]; flags: --page, --page-cursor
+  - actions sub set - PUT /repos/{owner}/{repo}/actions/oidc/customization/sub [intent=reverse_etl availability=implemented write=actions_oidc_customization_sub2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions organization-secrets view - Read /repos/{owner}/{repo}/actions/organization-secrets [intent=direct_read availability=implemented operation=github.actions_organization_secrets]; flags: --page, --page-cursor
+  - actions organization-variables view - Read /repos/{owner}/{repo}/actions/organization-variables [intent=direct_read availability=implemented operation=github.actions_organization_variables]; flags: --page, --page-cursor
+  - actions permissions view - Read /repos/{owner}/{repo}/actions/permissions [intent=direct_read availability=implemented operation=github.actions_permissions]; flags: --page, --page-cursor
+  - actions permissions set - PUT /repos/{owner}/{repo}/actions/permissions [intent=reverse_etl availability=implemented write=actions_permissions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions access view - Read /repos/{owner}/{repo}/actions/permissions/access [intent=direct_read availability=implemented operation=github.actions_permissions_access]; flags: --page, --page-cursor
+  - actions permissions set-2 - PUT /repos/{owner}/{repo}/actions/permissions/access [intent=reverse_etl availability=implemented write=actions_permissions_access2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions artifact-and-log-retention view - Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention [intent=direct_read availability=implemented operation=github.actions_permissions_artifact_and_log_retention]; flags: --page, --page-cursor
+  - actions permissions set-3 - PUT /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention [intent=reverse_etl availability=implemented write=actions_permissions_artifact_and_log_retention2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions fork-pr-contributor-approval view - Read /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval [intent=direct_read availability=implemented operation=github.actions_permissions_fork_pr_contributor_approval]; flags: --page, --page-cursor
+  - actions permissions set-4 - PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval [intent=reverse_etl availability=implemented write=actions_permissions_fork_pr_contributor_approval2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions fork-pr-workflows-private-repos view - Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos [intent=direct_read availability=implemented operation=github.actions_permissions_fork_pr_workflows_private_repos]; flags: --page, --page-cursor
+  - actions permissions set-5 - PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos [intent=reverse_etl availability=implemented write=actions_permissions_fork_pr_workflows_private_repos2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions selected-actions view - Read /repos/{owner}/{repo}/actions/permissions/selected-actions [intent=direct_read availability=implemented operation=github.actions_permissions_selected_actions]; flags: --page, --page-cursor
+  - actions permissions set-6 - PUT /repos/{owner}/{repo}/actions/permissions/selected-actions [intent=reverse_etl availability=implemented write=actions_permissions_selected_actions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions workflow view - Read /repos/{owner}/{repo}/actions/permissions/workflow [intent=direct_read availability=implemented operation=github.actions_permissions_workflow]; flags: --page, --page-cursor
+  - actions permissions set-7 - PUT /repos/{owner}/{repo}/actions/permissions/workflow [intent=reverse_etl availability=implemented write=actions_permissions_workflow2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions runners view - Read /repos/{owner}/{repo}/actions/runners [intent=direct_read availability=implemented operation=github.actions_runners]; flags: --name, --page, --page-cursor
+  - actions downloads view - Read /repos/{owner}/{repo}/actions/runners/downloads [intent=direct_read availability=implemented operation=github.actions_runners_downloads]; flags: --page, --page-cursor
+  - actions generate-jitconfig create - POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig [intent=reverse_etl availability=implemented write=actions_runners_generate_jitconfig]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions registration-token create - POST /repos/{owner}/{repo}/actions/runners/registration-token [intent=reverse_etl availability=implemented write=actions_runners_registration_token]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions remove-token create - POST /repos/{owner}/{repo}/actions/runners/remove-token [intent=reverse_etl availability=implemented write=actions_runners_remove_token]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - actions runners delete - DELETE /repos/{owner}/{repo}/actions/runners/{runner_id} [intent=reverse_etl availability=implemented write=actions_runners_runner_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --runner-id
+  - actions runners view-2 - Read /repos/{owner}/{repo}/actions/runners/{runner_id} [intent=direct_read availability=implemented operation=github.actions_runners_runner_id2]; flags: --runner-id (required), --page, --page-cursor
+  - actions labels delete - DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels [intent=reverse_etl availability=implemented write=actions_runners_runner_id_labels]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --runner-id
+  - actions labels view - Read /repos/{owner}/{repo}/actions/runners/{runner_id}/labels [intent=direct_read availability=implemented operation=github.actions_runners_runner_id_labels2]; flags: --runner-id (required), --page, --page-cursor
+  - actions labels create - POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels [intent=reverse_etl availability=implemented write=actions_runners_runner_id_labels3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --runner-id
+  - actions labels set - PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels [intent=reverse_etl availability=implemented write=actions_runners_runner_id_labels4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --runner-id
+  - actions labels delete-2 - DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name} [intent=reverse_etl availability=implemented write=actions_runners_runner_id_labels_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --runner-id, --name
+  - actions approvals view - Read /repos/{owner}/{repo}/actions/runs/{run_id}/approvals [intent=direct_read availability=implemented operation=github.actions_runs_run_id_approvals]; flags: --run-id (required), --page, --page-cursor
+  - actions approve create - POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve [intent=reverse_etl availability=implemented write=actions_runs_run_id_approve]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --run-id
+  - actions attempts view - Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number} [intent=direct_read availability=implemented operation=github.actions_runs_run_id_attempts_attempt_number]; flags: --run-id (required), --attempt-number (required), --exclude-pull-requests, --page, --page-cursor
+  - actions jobs view-2 - Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs [intent=direct_read availability=implemented operation=github.actions_runs_run_id_attempts_attempt_number_jobs]; flags: --run-id (required), --attempt-number (required), --page, --page-cursor
+  - actions concurrency_groups view-3 - Read /repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups [intent=direct_read availability=implemented operation=github.actions_runs_run_id_concurrency_groups]; flags: --run-id (required), --page, --page-cursor
+  - actions deployment_protection_rule create - POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule [intent=reverse_etl availability=implemented write=actions_runs_run_id_deployment_protection_rule]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --run-id
+  - actions jobs view-3 - Read /repos/{owner}/{repo}/actions/runs/{run_id}/jobs [intent=direct_read availability=implemented operation=github.actions_runs_run_id_jobs]; flags: --run-id (required), --filter, --page, --page-cursor
+  - actions logs delete - DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs [intent=reverse_etl availability=implemented write=actions_runs_run_id_logs]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical; flags: --run-id
+  - actions pending_deployments view - Read /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments [intent=direct_read availability=implemented operation=github.actions_runs_run_id_pending_deployments]; flags: --run-id (required), --page, --page-cursor
+  - actions pending_deployments create - POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments [intent=reverse_etl availability=implemented write=actions_runs_run_id_pending_deployments2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --run-id
+  - actions timing view - Read /repos/{owner}/{repo}/actions/runs/{run_id}/timing [intent=direct_read availability=implemented operation=github.actions_runs_run_id_timing]; flags: --run-id (required), --page, --page-cursor
+  - actions secrets view - Read /repos/{owner}/{repo}/actions/secrets [intent=direct_read availability=implemented operation=github.actions_secrets]; flags: --page, --page-cursor
+  - actions public-key view - Read /repos/{owner}/{repo}/actions/secrets/public-key [intent=direct_read availability=implemented operation=github.actions_secrets_public_key]; flags: --page, --page-cursor
+  - actions secrets view-2 - Read /repos/{owner}/{repo}/actions/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.actions_secrets_secret_name2]; flags: --secret-name (required), --page, --page-cursor
+  - actions variables view - Read /repos/{owner}/{repo}/actions/variables [intent=direct_read availability=implemented operation=github.actions_variables]; flags: --page, --page-cursor
+  - actions variables view-2 - Read /repos/{owner}/{repo}/actions/variables/{name} [intent=direct_read availability=implemented operation=github.actions_variables_name2]; flags: --name (required), --page, --page-cursor
+  - actions disable set - PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable [intent=reverse_etl availability=implemented write=actions_workflows_workflow_id_disable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --workflow-id
+  - actions enable set - PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable [intent=reverse_etl availability=implemented write=actions_workflows_workflow_id_enable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --workflow-id
+  - actions timing view-2 - Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing [intent=direct_read availability=implemented operation=github.actions_workflows_workflow_id_timing]; flags: --workflow-id (required), --page, --page-cursor
+  - assignees view - Read /repos/{owner}/{repo}/assignees/{assignee} [intent=direct_read availability=implemented operation=github.assignees_assignee]; flags: --assignee (required), --page, --page-cursor
+  - attestations create - POST /repos/{owner}/{repo}/attestations [intent=reverse_etl availability=implemented write=attestations]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - attestations view - Read /repos/{owner}/{repo}/attestations/{subject_digest} [intent=direct_read availability=implemented operation=github.attestations_subject_digest]; flags: --subject-digest (required), --predicate-type, --page, --page-cursor
+  - autolinks create - POST /repos/{owner}/{repo}/autolinks [intent=reverse_etl availability=implemented write=autolinks]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --key-prefix (required), --url-template (required), --is-alphanumeric
+  - autolinks delete - DELETE /repos/{owner}/{repo}/autolinks/{autolink_id} [intent=reverse_etl availability=implemented write=autolinks_autolink_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --autolink-id
+  - automated-security-fixes delete - DELETE /repos/{owner}/{repo}/automated-security-fixes [intent=reverse_etl availability=implemented write=automated_security_fixes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - automated-security-fixes view - Read /repos/{owner}/{repo}/automated-security-fixes [intent=direct_read availability=implemented operation=github.automated_security_fixes2]; flags: --page, --page-cursor
+  - automated-security-fixes set - PUT /repos/{owner}/{repo}/automated-security-fixes [intent=reverse_etl availability=implemented write=automated_security_fixes3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - branches protection delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection [intent=reverse_etl availability=implemented write=branches_branch_protection]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches protection view - Read /repos/{owner}/{repo}/branches/{branch}/protection [intent=direct_read availability=implemented operation=github.branches_branch_protection2]; flags: --branch (required), --page, --page-cursor
+  - branches protection set - PUT /repos/{owner}/{repo}/branches/{branch}/protection [intent=reverse_etl availability=implemented write=branches_branch_protection3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch (required), --required-status-checks (required), --enforce-admins (required), --required-pull-request-reviews (required), --restrictions (required)
+  - branches enforce_admins delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=reverse_etl availability=implemented write=branches_branch_protection_enforce_admins]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches enforce_admins view - Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=direct_read availability=implemented operation=github.branches_branch_protection_enforce_admins2]; flags: --branch (required), --page, --page-cursor
+  - branches enforce_admins create - POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=reverse_etl availability=implemented write=branches_branch_protection_enforce_admins3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches required_pull_request_reviews delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews [intent=reverse_etl availability=implemented write=branches_branch_protection_required_pull_request_reviews]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches required_pull_request_reviews view - Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews [intent=direct_read availability=implemented operation=github.branches_branch_protection_required_pull_request_reviews2]; flags: --branch (required), --page, --page-cursor
+  - branches required_pull_request_reviews update - PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews [intent=reverse_etl availability=implemented write=branches_branch_protection_required_pull_request_reviews3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches required_signatures delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures [intent=reverse_etl availability=implemented write=branches_branch_protection_required_signatures]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches required_signatures view - Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures [intent=direct_read availability=implemented operation=github.branches_branch_protection_required_signatures2]; flags: --branch (required), --page, --page-cursor
+  - branches required_signatures create - POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures [intent=reverse_etl availability=implemented write=branches_branch_protection_required_signatures3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches required_status_checks delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks [intent=reverse_etl availability=implemented write=branches_branch_protection_required_status_checks]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches required_status_checks view - Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks [intent=direct_read availability=implemented operation=github.branches_branch_protection_required_status_checks2]; flags: --branch (required), --page, --page-cursor
+  - branches required_status_checks update - PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks [intent=reverse_etl availability=implemented write=branches_branch_protection_required_status_checks3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches contexts delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts [intent=reverse_etl availability=implemented write=branches_branch_protection_required_status_checks_contexts]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches contexts view - Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts [intent=direct_read availability=implemented operation=github.branches_branch_protection_required_status_checks_contexts2]; flags: --branch (required), --page, --page-cursor
+  - branches contexts create - POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts [intent=reverse_etl availability=implemented write=branches_branch_protection_required_status_checks_contexts3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches contexts set - PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts [intent=reverse_etl availability=implemented write=branches_branch_protection_required_status_checks_contexts4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches restrictions delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches restrictions view - Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions [intent=direct_read availability=implemented operation=github.branches_branch_protection_restrictions2]; flags: --branch (required), --page, --page-cursor
+  - branches apps delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_apps]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches apps view - Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps [intent=direct_read availability=implemented operation=github.branches_branch_protection_restrictions_apps2]; flags: --branch (required), --page, --page-cursor
+  - branches apps create - POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_apps3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches apps set - PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_apps4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches teams delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_teams]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches teams view - Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams [intent=direct_read availability=implemented operation=github.branches_branch_protection_restrictions_teams2]; flags: --branch (required), --page, --page-cursor
+  - branches teams create - POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_teams3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches teams set - PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_teams4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches users delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_users]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
+  - branches users view - Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=direct_read availability=implemented operation=github.branches_branch_protection_restrictions_users2]; flags: --branch (required), --page, --page-cursor
+  - branches users create - POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_users3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches users set - PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_users4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches rename create - POST /repos/{owner}/{repo}/branches/{branch}/rename [intent=reverse_etl availability=implemented write=branches_branch_rename]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical; flags: --branch
+  - check-runs create - POST /repos/{owner}/{repo}/check-runs [intent=reverse_etl availability=implemented write=check_runs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --name (required), --head-sha (required), --details-url, --external-id, --status, --started-at, --conclusion, --completed-at, --output, --actions
+  - check-runs view - Read /repos/{owner}/{repo}/check-runs/{check_run_id} [intent=direct_read availability=implemented operation=github.check_runs_check_run_id]; flags: --check-run-id (required), --page, --page-cursor
+  - check-runs update - PATCH /repos/{owner}/{repo}/check-runs/{check_run_id} [intent=reverse_etl availability=implemented write=check_runs_check_run_id2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --check-run-id
+  - check-runs annotations view - Read /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations [intent=direct_read availability=implemented operation=github.check_runs_check_run_id_annotations]; flags: --check-run-id (required), --page, --page-cursor
+  - check-runs rerequest create - POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest [intent=reverse_etl availability=implemented write=check_runs_check_run_id_rerequest]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --check-run-id
+  - check-suites create - POST /repos/{owner}/{repo}/check-suites [intent=reverse_etl availability=implemented write=check_suites]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - check-suites preferences update - PATCH /repos/{owner}/{repo}/check-suites/preferences [intent=reverse_etl availability=implemented write=check_suites_preferences]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - check-suites view - Read /repos/{owner}/{repo}/check-suites/{check_suite_id} [intent=direct_read availability=implemented operation=github.check_suites_check_suite_id]; flags: --check-suite-id (required), --page, --page-cursor
+  - check-suites check-runs view - Read /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs [intent=direct_read availability=implemented operation=github.check_suites_check_suite_id_check_runs]; flags: --check-suite-id (required), --check-name, --filter, --status, --page, --page-cursor
+  - check-suites rerequest create - POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest [intent=reverse_etl availability=implemented write=check_suites_check_suite_id_rerequest]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --check-suite-id
+  - code-quality findings view - Read /repos/{owner}/{repo}/code-quality/findings [intent=direct_read availability=implemented operation=github.code_quality_findings]; flags: --direction, --state, --page, --page-cursor
+  - code-quality findings view-2 - Read /repos/{owner}/{repo}/code-quality/findings/{finding_number} [intent=direct_read availability=implemented operation=github.code_quality_findings_finding_number]; flags: --finding-number (required), --page, --page-cursor
+  - code-quality setup view - Read /repos/{owner}/{repo}/code-quality/setup [intent=direct_read availability=implemented operation=github.code_quality_setup]; flags: --page, --page-cursor
+  - code-quality setup update - PATCH /repos/{owner}/{repo}/code-quality/setup [intent=reverse_etl availability=implemented write=code_quality_setup2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - code-scanning autofix view - Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix [intent=direct_read availability=implemented operation=github.code_scanning_alerts_alert_number_autofix]; flags: --alert-number (required), --page, --page-cursor
+  - code-scanning autofix create - POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix [intent=reverse_etl availability=implemented write=code_scanning_alerts_alert_number_autofix2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --alert-number
+  - code-scanning commits create - POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits [intent=reverse_etl availability=implemented write=code_scanning_alerts_alert_number_autofix_commits]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --alert-number
+  - code-scanning instances view - Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances [intent=direct_read availability=implemented operation=github.code_scanning_alerts_alert_number_instances]; flags: --alert-number (required), --pr, --ref, --page, --page-cursor
+  - code-scanning analyses view - Read /repos/{owner}/{repo}/code-scanning/analyses [intent=direct_read availability=implemented operation=github.code_scanning_analyses]; flags: --direction, --pr, --ref, --sarif-id, --sort, --tool-guid, --tool-name, --page, --page-cursor
+  - code-scanning analyses delete - DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id} [intent=reverse_etl availability=implemented write=code_scanning_analyses_analysis_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --analysis-id
+  - code-scanning analyses view-2 - Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id} [intent=direct_read availability=implemented operation=github.code_scanning_analyses_analysis_id2]; flags: --analysis-id (required), --page, --page-cursor
+  - code-scanning databases view - Read /repos/{owner}/{repo}/code-scanning/codeql/databases [intent=direct_read availability=implemented operation=github.code_scanning_codeql_databases]; flags: --page, --page-cursor
+  - code-scanning databases delete - DELETE /repos/{owner}/{repo}/code-scanning/codeql/databases/{language} [intent=reverse_etl availability=implemented write=code_scanning_codeql_databases_language]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --language
+  - code-scanning databases view-2 - Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language} [intent=direct_read availability=implemented operation=github.code_scanning_codeql_databases_language2]; flags: --language (required), --page, --page-cursor
+  - code-scanning variant-analyses create - POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses [intent=reverse_etl availability=implemented write=code_scanning_codeql_variant_analyses]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - code-scanning variant-analyses view - Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id} [intent=direct_read availability=implemented operation=github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id]; flags: --codeql-variant-analysis-id (required), --page, --page-cursor
+  - code-scanning repos view - Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name} [intent=direct_read availability=implemented operation=github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id_repos_repo_owner_repo_name]; flags: --codeql-variant-analysis-id (required), --repo-owner (required), --repo-name (required), --page, --page-cursor
+  - code-scanning default-setup view - Read /repos/{owner}/{repo}/code-scanning/default-setup [intent=direct_read availability=implemented operation=github.code_scanning_default_setup]; flags: --page, --page-cursor
+  - code-scanning default-setup update - PATCH /repos/{owner}/{repo}/code-scanning/default-setup [intent=reverse_etl availability=implemented write=code_scanning_default_setup2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - code-sanning upload - POST /repos/{owner}/{repo}/code-scanning/sarifs [intent=reverse_etl availability=implemented write=code_scanning_sarifs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - code-scanning sarifs view - Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id} [intent=direct_read availability=implemented operation=github.code_scanning_sarifs_sarif_id]; flags: --sarif-id (required), --page, --page-cursor
+  - code-security-configuration view - Read /repos/{owner}/{repo}/code-security-configuration [intent=direct_read availability=implemented operation=github.code_security_configuration]; flags: --page, --page-cursor
+  - codeowners errors view - Read /repos/{owner}/{repo}/codeowners/errors [intent=direct_read availability=implemented operation=github.codeowners_errors]; flags: --ref, --page, --page-cursor
+  - codespaces view - Read /repos/{owner}/{repo}/codespaces [intent=direct_read availability=implemented operation=github.codespaces]; flags: --page, --page-cursor
+  - codespaces create - POST /repos/{owner}/{repo}/codespaces [intent=reverse_etl availability=implemented write=codespaces2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - codespaces devcontainers view - Read /repos/{owner}/{repo}/codespaces/devcontainers [intent=direct_read availability=implemented operation=github.codespaces_devcontainers]; flags: --page, --page-cursor
+  - codespaces machines view - Read /repos/{owner}/{repo}/codespaces/machines [intent=direct_read availability=implemented operation=github.codespaces_machines]; flags: --client-ip, --location, --ref, --page, --page-cursor
+  - codespaces new view - Read /repos/{owner}/{repo}/codespaces/new [intent=direct_read availability=implemented operation=github.codespaces_new]; flags: --client-ip, --ref, --page, --page-cursor
+  - codespaces permissions_check view - Read /repos/{owner}/{repo}/codespaces/permissions_check [intent=direct_read availability=implemented operation=github.codespaces_permissions_check]; flags: --devcontainer-path (required), --ref (required), --page, --page-cursor
+  - codespaces secrets view - Read /repos/{owner}/{repo}/codespaces/secrets [intent=direct_read availability=implemented operation=github.codespaces_secrets]; flags: --page, --page-cursor
+  - codespaces public-key view - Read /repos/{owner}/{repo}/codespaces/secrets/public-key [intent=direct_read availability=implemented operation=github.codespaces_secrets_public_key]; flags: --page, --page-cursor
+  - codespaces secrets view-2 - Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.codespaces_secrets_secret_name2]; flags: --secret-name (required), --page, --page-cursor
+  - comments reactions view - Read /repos/{owner}/{repo}/comments/{comment_id}/reactions [intent=direct_read availability=implemented operation=github.comments_comment_id_reactions]; flags: --comment-id (required), --content, --page, --page-cursor
+  - comments reactions create - POST /repos/{owner}/{repo}/comments/{comment_id}/reactions [intent=reverse_etl availability=implemented write=comments_comment_id_reactions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --comment-id
+  - comments reactions delete - DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id} [intent=reverse_etl availability=implemented write=comments_comment_id_reactions_reaction_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --comment-id, --reaction-id
+  - commits branches-where-head view - Read /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head [intent=direct_read availability=implemented operation=github.commits_commit_sha_branches_where_head]; flags: --commit-sha (required), --page, --page-cursor
+  - commits pulls view - Read /repos/{owner}/{repo}/commits/{commit_sha}/pulls [intent=direct_read availability=implemented operation=github.commits_commit_sha_pulls]; flags: --commit-sha (required), --page, --page-cursor
+  - commits check-runs view - Read /repos/{owner}/{repo}/commits/{ref}/check-runs [intent=direct_read availability=implemented operation=github.commits_ref_check_runs]; flags: --ref (required), --check-name, --filter, --status, --app-id, --page, --page-cursor
+  - commits check-suites view - Read /repos/{owner}/{repo}/commits/{ref}/check-suites [intent=direct_read availability=implemented operation=github.commits_ref_check_suites]; flags: --ref (required), --check-name, --app-id, --page, --page-cursor
+  - commits status view - Read /repos/{owner}/{repo}/commits/{ref}/status [intent=direct_read availability=implemented operation=github.commits_ref_status]; flags: --ref (required), --page, --page-cursor
+  - commits statuses view - Read /repos/{owner}/{repo}/commits/{ref}/statuses [intent=direct_read availability=implemented operation=github.commits_ref_statuses]; flags: --ref (required), --page, --page-cursor
+  - community profile view - Read /repos/{owner}/{repo}/community/profile [intent=direct_read availability=implemented operation=github.community_profile]; flags: --page, --page-cursor
+  - compare view - Read /repos/{owner}/{repo}/compare/{basehead} [intent=direct_read availability=implemented operation=github.compare_basehead]; flags: --basehead (required), --page, --page-cursor
+  - dependabot secrets view - Read /repos/{owner}/{repo}/dependabot/secrets [intent=direct_read availability=implemented operation=github.dependabot_secrets]; flags: --page, --page-cursor
+  - dependabot public-key view - Read /repos/{owner}/{repo}/dependabot/secrets/public-key [intent=direct_read availability=implemented operation=github.dependabot_secrets_public_key]; flags: --page, --page-cursor
+  - dependabot secrets view-2 - Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.dependabot_secrets_secret_name2]; flags: --secret-name (required), --page, --page-cursor
+  - dependency-graph compare view - Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead} [intent=direct_read availability=implemented operation=github.dependency_graph_compare_basehead]; flags: --basehead (required), --name, --page, --page-cursor
+  - dependency-graph snapshots create - POST /repos/{owner}/{repo}/dependency-graph/snapshots [intent=reverse_etl availability=implemented write=dependency_graph_snapshots]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - deployments delete - DELETE /repos/{owner}/{repo}/deployments/{deployment_id} [intent=reverse_etl availability=implemented write=deployments_deployment_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical; flags: --deployment-id
+  - deployments statuses view - Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses [intent=direct_read availability=implemented operation=github.deployments_deployment_id_statuses]; flags: --deployment-id (required), --page, --page-cursor
+  - deployments statuses create - POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses [intent=reverse_etl availability=implemented write=deployments_deployment_id_statuses2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --deployment-id
+  - dispatches create - POST /repos/{owner}/{repo}/dispatches [intent=reverse_etl availability=implemented write=dispatches]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - environments deployment-branch-policies view - Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies [intent=direct_read availability=implemented operation=github.environments_environment_name_deployment_branch_policies]; flags: --environment-name (required), --page, --page-cursor
+  - environments deployment-branch-policies create - POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies [intent=reverse_etl availability=implemented write=environments_environment_name_deployment_branch_policies2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name
+  - environments deployment-branch-policies delete - DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id} [intent=reverse_etl availability=implemented write=environments_environment_name_deployment_branch_policies_branch_policy_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --environment-name, --branch-policy-id
+  - environments deployment-branch-policies view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id} [intent=direct_read availability=implemented operation=github.environments_environment_name_deployment_branch_policies_branch_policy_id2]; flags: --environment-name (required), --branch-policy-id (required), --page, --page-cursor
+  - environments deployment-branch-policies set - PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id} [intent=reverse_etl availability=implemented write=environments_environment_name_deployment_branch_policies_branch_policy_id3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name, --branch-policy-id
+  - environments deployment_protection_rules view - Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules [intent=direct_read availability=implemented operation=github.environments_environment_name_deployment_protection_rules]; flags: --environment-name (required), --page, --page-cursor
+  - environments deployment_protection_rules create - POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules [intent=reverse_etl availability=implemented write=environments_environment_name_deployment_protection_rules2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --environment-name
+  - environments apps view - Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps [intent=direct_read availability=implemented operation=github.environments_environment_name_deployment_protection_rules_apps]; flags: --environment-name (required), --page, --page-cursor
+  - environments deployment_protection_rules delete - DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id} [intent=reverse_etl availability=implemented write=environments_environment_name_deployment_protection_rules_protection_rule_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --environment-name, --protection-rule-id
+  - environments deployment_protection_rules view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id} [intent=direct_read availability=implemented operation=github.environments_environment_name_deployment_protection_rules_protection_rule_id2]; flags: --environment-name (required), --protection-rule-id (required), --page, --page-cursor
+  - environments secrets view - Read /repos/{owner}/{repo}/environments/{environment_name}/secrets [intent=direct_read availability=implemented operation=github.environments_environment_name_secrets]; flags: --environment-name (required), --page, --page-cursor
+  - environments public-key view - Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key [intent=direct_read availability=implemented operation=github.environments_environment_name_secrets_public_key]; flags: --environment-name (required), --page, --page-cursor
+  - environments secrets view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.environments_environment_name_secrets_secret_name2]; flags: --environment-name (required), --secret-name (required), --page, --page-cursor
+  - environments variables view - Read /repos/{owner}/{repo}/environments/{environment_name}/variables [intent=direct_read availability=implemented operation=github.environments_environment_name_variables]; flags: --environment-name (required), --page, --page-cursor
+  - environments variables view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name} [intent=direct_read availability=implemented operation=github.environments_environment_name_variables_name2]; flags: --environment-name (required), --name (required), --page, --page-cursor
+  - git blobs create - POST /repos/{owner}/{repo}/git/blobs [intent=reverse_etl availability=implemented write=git_blobs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --content (required), --encoding
+  - git blobs view - Read /repos/{owner}/{repo}/git/blobs/{file_sha} [intent=direct_read availability=implemented operation=github.git_blobs_file_sha]; flags: --file-sha (required), --page, --page-cursor
+  - git commits create - POST /repos/{owner}/{repo}/git/commits [intent=reverse_etl availability=implemented write=git_commits]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --message (required), --tree (required), --parents, --author, --committer, --signature
+  - git ref view - Read /repos/{owner}/{repo}/git/ref/{ref} [intent=direct_read availability=implemented operation=github.git_ref_ref]; flags: --ref (required), --page, --page-cursor
+  - git tags view - Read /repos/{owner}/{repo}/git/tags/{tag_sha} [intent=direct_read availability=implemented operation=github.git_tags_tag_sha]; flags: --tag-sha (required), --page, --page-cursor
+  - git trees create - POST /repos/{owner}/{repo}/git/trees [intent=reverse_etl availability=implemented write=git_trees]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --tree (required), --base-tree
+  - git trees view - Read /repos/{owner}/{repo}/git/trees/{tree_sha} [intent=direct_read availability=implemented operation=github.git_trees_tree_sha]; flags: --tree-sha (required), --recursive, --page, --page-cursor
+  - hash-algorithm view - Read /repos/{owner}/{repo}/hash-algorithm [intent=direct_read availability=implemented operation=github.hash_algorithm]; flags: --page, --page-cursor
+  - hooks deliveries view - Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries [intent=direct_read availability=implemented operation=github.hooks_hook_id_deliveries]; flags: --hook-id (required), --status, --page, --page-cursor
+  - hooks deliveries view-2 - Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id} [intent=direct_read availability=implemented operation=github.hooks_hook_id_deliveries_delivery_id]; flags: --hook-id (required), --delivery-id (required), --page, --page-cursor
+  - webhook create - POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts [intent=reverse_etl availability=implemented write=hooks_hook_id_deliveries_delivery_id_attempts]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --hook-id, --delivery-id
+  - webhook create-2 - POST /repos/{owner}/{repo}/hooks/{hook_id}/pings [intent=reverse_etl availability=implemented write=hooks_hook_id_pings]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --hook-id
+  - webhook create-3 - POST /repos/{owner}/{repo}/hooks/{hook_id}/tests [intent=reverse_etl availability=implemented write=hooks_hook_id_tests]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --hook-id
+  - immutable-releases delete - DELETE /repos/{owner}/{repo}/immutable-releases [intent=reverse_etl availability=implemented write=immutable_releases]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - immutable-releases view - Read /repos/{owner}/{repo}/immutable-releases [intent=direct_read availability=implemented operation=github.immutable_releases2]; flags: --page, --page-cursor
+  - immutable-releases set - PUT /repos/{owner}/{repo}/immutable-releases [intent=reverse_etl availability=implemented write=immutable_releases3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - import delete - DELETE /repos/{owner}/{repo}/import [intent=reverse_etl availability=implemented write=import]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium
+  - import view - Read /repos/{owner}/{repo}/import [intent=direct_read availability=implemented operation=github.import2]; flags: --page, --page-cursor
+  - import update - PATCH /repos/{owner}/{repo}/import [intent=reverse_etl availability=implemented write=import3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - import set - PUT /repos/{owner}/{repo}/import [intent=reverse_etl availability=implemented write=import4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - import authors view - Read /repos/{owner}/{repo}/import/authors [intent=direct_read availability=implemented operation=github.import_authors]; flags: --since, --page, --page-cursor
+  - import authors update - PATCH /repos/{owner}/{repo}/import/authors/{author_id} [intent=reverse_etl availability=implemented write=import_authors_author_id]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --author-id
+  - import large_files view - Read /repos/{owner}/{repo}/import/large_files [intent=direct_read availability=implemented operation=github.import_large_files]; flags: --page, --page-cursor
+  - import lfs update - PATCH /repos/{owner}/{repo}/import/lfs [intent=reverse_etl availability=implemented write=import_lfs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - installation view - Read /repos/{owner}/{repo}/installation [intent=direct_read availability=implemented operation=github.installation]; flags: --page, --page-cursor
+  - interaction-limits delete - DELETE /repos/{owner}/{repo}/interaction-limits [intent=reverse_etl availability=implemented write=interaction_limits]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - interaction-limits view - Read /repos/{owner}/{repo}/interaction-limits [intent=direct_read availability=implemented operation=github.interaction_limits2]; flags: --page, --page-cursor
+  - interaction-limits set - PUT /repos/{owner}/{repo}/interaction-limits [intent=reverse_etl availability=implemented write=interaction_limits3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - interaction-limits bypass-list delete - DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list [intent=reverse_etl availability=implemented write=interaction_limits_pulls_bypass_list]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - interaction-limits bypass-list view - Read /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list [intent=direct_read availability=implemented operation=github.interaction_limits_pulls_bypass_list2]; flags: --page, --page-cursor
+  - interaction-limits bypass-list set - PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list [intent=reverse_etl availability=implemented write=interaction_limits_pulls_bypass_list3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - invitations delete - DELETE /repos/{owner}/{repo}/invitations/{invitation_id} [intent=reverse_etl availability=implemented write=invitations_invitation_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --invitation-id
+  - invitations update - PATCH /repos/{owner}/{repo}/invitations/{invitation_id} [intent=reverse_etl availability=implemented write=invitations_invitation_id2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --invitation-id
+  - issue-types view - Read /repos/{owner}/{repo}/issue-types [intent=direct_read availability=implemented operation=github.issue_types]; flags: --page, --page-cursor
+  - issues pin delete - DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/pin [intent=reverse_etl availability=implemented write=issues_comments_comment_id_pin]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --comment-id
+  - issues pin set - PUT /repos/{owner}/{repo}/issues/comments/{comment_id}/pin [intent=reverse_etl availability=implemented write=issues_comments_comment_id_pin2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --comment-id
+  - issues reactions view - Read /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions [intent=direct_read availability=implemented operation=github.issues_comments_comment_id_reactions]; flags: --comment-id (required), --content, --page, --page-cursor
+  - issues reactions create - POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions [intent=reverse_etl availability=implemented write=issues_comments_comment_id_reactions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --comment-id
+  - issues reactions delete - DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id} [intent=reverse_etl availability=implemented write=issues_comments_comment_id_reactions_reaction_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --comment-id, --reaction-id
+  - issues assignees view - Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee} [intent=direct_read availability=implemented operation=github.issues_issue_number_assignees_assignee]; flags: --issue-number (required), --assignee (required), --page, --page-cursor
+  - issues blocked_by view - Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by [intent=direct_read availability=implemented operation=github.issues_issue_number_dependencies_blocked_by]; flags: --issue-number (required), --page, --page-cursor
+  - issues blocked_by create - POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by [intent=reverse_etl availability=implemented write=issues_issue_number_dependencies_blocked_by2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --issue-number
+  - issues blocked_by delete - DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id} [intent=reverse_etl availability=implemented write=issues_issue_number_dependencies_blocked_by_issue_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --issue-number, --issue-id
+  - issues blocking view - Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking [intent=direct_read availability=implemented operation=github.issues_issue_number_dependencies_blocking]; flags: --issue-number (required), --page, --page-cursor
+  - issues issue-field-values view - Read /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values [intent=direct_read availability=implemented operation=github.issues_issue_number_issue_field_values]; flags: --issue-number (required), --page, --page-cursor
+  - issues issue-field-values create - POST /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values [intent=reverse_etl availability=implemented write=issues_issue_number_issue_field_values2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --issue-number
+  - issues issue-field-values set - PUT /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values [intent=reverse_etl availability=implemented write=issues_issue_number_issue_field_values3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --issue-number
+  - issues issue-field-values delete - DELETE /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id} [intent=reverse_etl availability=implemented write=issues_issue_number_issue_field_values_issue_field_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --issue-number, --issue-field-id
+  - issues parent view - Read /repos/{owner}/{repo}/issues/{issue_number}/parent [intent=direct_read availability=implemented operation=github.issues_issue_number_parent]; flags: --issue-number (required), --page, --page-cursor
+  - issues reactions view-2 - Read /repos/{owner}/{repo}/issues/{issue_number}/reactions [intent=direct_read availability=implemented operation=github.issues_issue_number_reactions]; flags: --issue-number (required), --content, --page, --page-cursor
+  - issues reactions create-2 - POST /repos/{owner}/{repo}/issues/{issue_number}/reactions [intent=reverse_etl availability=implemented write=issues_issue_number_reactions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --issue-number
+  - issues reactions delete-2 - DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id} [intent=reverse_etl availability=implemented write=issues_issue_number_reactions_reaction_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --issue-number, --reaction-id
+  - issues sub_issue delete - DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue [intent=reverse_etl availability=implemented write=issues_issue_number_sub_issue]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --issue-number
+  - issues sub_issues view - Read /repos/{owner}/{repo}/issues/{issue_number}/sub_issues [intent=direct_read availability=implemented operation=github.issues_issue_number_sub_issues]; flags: --issue-number (required), --page, --page-cursor
+  - issues sub_issues create - POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues [intent=reverse_etl availability=implemented write=issues_issue_number_sub_issues2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --issue-number
+  - issues priority update - PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority [intent=reverse_etl availability=implemented write=issues_issue_number_sub_issues_priority]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --issue-number
+  - license view - Read /repos/{owner}/{repo}/license [intent=direct_read availability=implemented operation=github.license]; flags: --ref, --page, --page-cursor
+  - merge-upstream create - POST /repos/{owner}/{repo}/merge-upstream [intent=reverse_etl availability=implemented write=merge_upstream]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - milestones labels view - Read /repos/{owner}/{repo}/milestones/{milestone_number}/labels [intent=direct_read availability=implemented operation=github.milestones_milestone_number_labels]; flags: --milestone-number (required), --page, --page-cursor
+  - notifications view - Read /repos/{owner}/{repo}/notifications [intent=direct_read availability=implemented operation=github.notifications]; flags: --all, --before, --participating, --since, --page, --page-cursor
+  - notifications set - PUT /repos/{owner}/{repo}/notifications [intent=reverse_etl availability=implemented write=notifications2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - pages delete - DELETE /repos/{owner}/{repo}/pages [intent=reverse_etl availability=implemented write=pages]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium
+  - pages view - Read /repos/{owner}/{repo}/pages [intent=direct_read availability=implemented operation=github.pages2]; flags: --page, --page-cursor
+  - pages create - POST /repos/{owner}/{repo}/pages [intent=reverse_etl availability=implemented write=pages3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - pages set - PUT /repos/{owner}/{repo}/pages [intent=reverse_etl availability=implemented write=pages4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - pages builds view - Read /repos/{owner}/{repo}/pages/builds [intent=direct_read availability=implemented operation=github.pages_builds]; flags: --page, --page-cursor
+  - pages builds create - POST /repos/{owner}/{repo}/pages/builds [intent=reverse_etl availability=implemented write=pages_builds2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - pages latest view - Read /repos/{owner}/{repo}/pages/builds/latest [intent=direct_read availability=implemented operation=github.pages_builds_latest]; flags: --page, --page-cursor
+  - pages builds view-2 - Read /repos/{owner}/{repo}/pages/builds/{build_id} [intent=direct_read availability=implemented operation=github.pages_builds_build_id]; flags: --build-id (required), --page, --page-cursor
+  - pages deployments create - POST /repos/{owner}/{repo}/pages/deployments [intent=reverse_etl availability=implemented write=pages_deployments]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - pages deployments view - Read /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id} [intent=direct_read availability=implemented operation=github.pages_deployments_pages_deployment_id]; flags: --pages-deployment-id (required), --page, --page-cursor
+  - pages cancel create - POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel [intent=reverse_etl availability=implemented write=pages_deployments_pages_deployment_id_cancel]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --pages-deployment-id
+  - pages health view - Read /repos/{owner}/{repo}/pages/health [intent=direct_read availability=implemented operation=github.pages_health]; flags: --page, --page-cursor
+  - private-vulnerability-reporting delete - DELETE /repos/{owner}/{repo}/private-vulnerability-reporting [intent=reverse_etl availability=implemented write=private_vulnerability_reporting]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - private-vulnerability-reporting view - Read /repos/{owner}/{repo}/private-vulnerability-reporting [intent=direct_read availability=implemented operation=github.private_vulnerability_reporting2]; flags: --page, --page-cursor
+  - private-vulnerability-reporting set - PUT /repos/{owner}/{repo}/private-vulnerability-reporting [intent=reverse_etl availability=implemented write=private_vulnerability_reporting3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - properties values view - Read /repos/{owner}/{repo}/properties/values [intent=direct_read availability=implemented operation=github.properties_values]; flags: --page, --page-cursor
+  - properties values update - PATCH /repos/{owner}/{repo}/properties/values [intent=reverse_etl availability=implemented write=properties_values2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - pulls reactions view - Read /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions [intent=direct_read availability=implemented operation=github.pulls_comments_comment_id_reactions]; flags: --comment-id (required), --content, --page, --page-cursor
+  - pulls reactions create - POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions [intent=reverse_etl availability=implemented write=pulls_comments_comment_id_reactions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --comment-id
+  - pulls reactions delete - DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id} [intent=reverse_etl availability=implemented write=pulls_comments_comment_id_reactions_reaction_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --comment-id, --reaction-id
+  - pulls codespaces create - POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces [intent=reverse_etl availability=implemented write=pulls_pull_number_codespaces]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --pull-number
+  - pulls commits view - Read /repos/{owner}/{repo}/pulls/{pull_number}/commits [intent=direct_read availability=implemented operation=github.pulls_pull_number_commits]; flags: --pull-number (required), --page, --page-cursor
+  - pulls files view - Read /repos/{owner}/{repo}/pulls/{pull_number}/files [intent=direct_read availability=implemented operation=github.pulls_pull_number_files]; flags: --pull-number (required), --page, --page-cursor
+  - pulls merge view - Read /repos/{owner}/{repo}/pulls/{pull_number}/merge [intent=direct_read availability=implemented operation=github.pulls_pull_number_merge]; flags: --pull-number (required), --page, --page-cursor
+  - pulls requested_reviewers delete - DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers [intent=reverse_etl availability=implemented write=pulls_pull_number_requested_reviewers]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --pull-number
+  - pulls reviews view - Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews [intent=direct_read availability=implemented operation=github.pulls_pull_number_reviews]; flags: --pull-number (required), --page, --page-cursor
+  - pulls comments view - Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments [intent=direct_read availability=implemented operation=github.pulls_pull_number_reviews_review_id_comments]; flags: --pull-number (required), --review-id (required), --page, --page-cursor
+  - readme view - Read /repos/{owner}/{repo}/readme [intent=direct_read availability=implemented operation=github.readme]; flags: --ref, --page, --page-cursor
+  - readme view-2 - Read /repos/{owner}/{repo}/readme/{dir} [intent=direct_read availability=implemented operation=github.readme_dir]; flags: --dir (required), --ref, --page, --page-cursor
+  - releases assets view - Read /repos/{owner}/{repo}/releases/assets/{asset_id} [intent=direct_read availability=implemented operation=github.releases_assets_asset_id]; flags: --asset-id (required), --page, --page-cursor
+  - releases generate-notes view - POST /repos/{owner}/{repo}/releases/generate-notes [intent=reverse_etl availability=implemented write=releases_generate_notes]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low
+  - releases assets view-2 - Read /repos/{owner}/{repo}/releases/{release_id}/assets [intent=direct_read availability=implemented operation=github.releases_release_id_assets]; flags: --release-id (required), --page, --page-cursor
+  - releases assets view-3 - POST /repos/{owner}/{repo}/releases/{release_id}/assets [intent=reverse_etl availability=implemented write=releases_release_id_assets2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --release-id
+  - releases reactions view - Read /repos/{owner}/{repo}/releases/{release_id}/reactions [intent=direct_read availability=implemented operation=github.releases_release_id_reactions]; flags: --release-id (required), --content, --page, --page-cursor
+  - releases reactions create - POST /repos/{owner}/{repo}/releases/{release_id}/reactions [intent=reverse_etl availability=implemented write=releases_release_id_reactions2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --release-id
+  - releases reactions delete - DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id} [intent=reverse_etl availability=implemented write=releases_release_id_reactions_reaction_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium; flags: --release-id, --reaction-id
+  - rulesets rule-suites view - Read /repos/{owner}/{repo}/rulesets/rule-suites [intent=direct_read availability=implemented operation=github.rulesets_rule_suites]; flags: --actor-name, --evaluate-status, --ref, --rule-suite-result, --time-period, --page, --page-cursor
+  - rulesets rule-suites view-2 - Read /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id} [intent=direct_read availability=implemented operation=github.rulesets_rule_suites_rule_suite_id]; flags: --rule-suite-id (required), --page, --page-cursor
+  - rulesets history view - Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history [intent=direct_read availability=implemented operation=github.rulesets_ruleset_id_history]; flags: --ruleset-id (required), --page, --page-cursor
+  - rulesets history view-2 - Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id} [intent=direct_read availability=implemented operation=github.rulesets_ruleset_id_history_version_id]; flags: --ruleset-id (required), --version-id (required), --page, --page-cursor
+  - secret-scanning locations view - Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations [intent=direct_read availability=implemented operation=github.secret_scanning_alerts_alert_number_locations]; flags: --alert-number (required), --page, --page-cursor
+  - secret-scanning push-protection-bypasses create - POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses [intent=reverse_etl availability=implemented write=secret_scanning_push_protection_bypasses]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - secret-scanning scan-history view - Read /repos/{owner}/{repo}/secret-scanning/scan-history [intent=direct_read availability=implemented operation=github.secret_scanning_scan_history]; flags: --page, --page-cursor
+  - security-advisories create - POST /repos/{owner}/{repo}/security-advisories [intent=reverse_etl availability=implemented write=security_advisories]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - security-advisories reports create - POST /repos/{owner}/{repo}/security-advisories/reports [intent=reverse_etl availability=implemented write=security_advisories_reports]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - security-advisories update - PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id} [intent=reverse_etl availability=implemented write=security_advisories_ghsa_id]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --ghsa-id
+  - security-advisories cve create - POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve [intent=reverse_etl availability=implemented write=security_advisories_ghsa_id_cve]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --ghsa-id
+  - security-advisories forks create - POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks [intent=reverse_etl availability=implemented write=security_advisories_ghsa_id_forks]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --ghsa-id
+  - stats code_frequency view - Read /repos/{owner}/{repo}/stats/code_frequency [intent=direct_read availability=implemented operation=github.stats_code_frequency]; flags: --page, --page-cursor
+  - stats commit_activity view - Read /repos/{owner}/{repo}/stats/commit_activity [intent=direct_read availability=implemented operation=github.stats_commit_activity]; flags: --page, --page-cursor
+  - stats contributors view - Read /repos/{owner}/{repo}/stats/contributors [intent=direct_read availability=implemented operation=github.stats_contributors]; flags: --page, --page-cursor
+  - stats participation view - Read /repos/{owner}/{repo}/stats/participation [intent=direct_read availability=implemented operation=github.stats_participation]; flags: --page, --page-cursor
+  - stats punch_card view - Read /repos/{owner}/{repo}/stats/punch_card [intent=direct_read availability=implemented operation=github.stats_punch_card]; flags: --page, --page-cursor
+  - statuses create - POST /repos/{owner}/{repo}/statuses/{sha} [intent=reverse_etl availability=implemented write=statuses_sha]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --sha (required), --state (required), --target-url, --description, --context
+  - subscription delete - DELETE /repos/{owner}/{repo}/subscription [intent=reverse_etl availability=implemented write=subscription]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium
+  - subscription view - Read /repos/{owner}/{repo}/subscription [intent=direct_read availability=implemented operation=github.subscription2]; flags: --page, --page-cursor
+  - subscription set - PUT /repos/{owner}/{repo}/subscription [intent=reverse_etl availability=implemented write=subscription3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - teams view - Read /repos/{owner}/{repo}/teams [intent=direct_read availability=implemented operation=github.teams]; flags: --page, --page-cursor
+  - traffic clones view - Read /repos/{owner}/{repo}/traffic/clones [intent=direct_read availability=implemented operation=github.traffic_clones]; flags: --per, --page, --page-cursor
+  - traffic paths view - Read /repos/{owner}/{repo}/traffic/popular/paths [intent=direct_read availability=implemented operation=github.traffic_popular_paths]; flags: --page, --page-cursor
+  - traffic referrers view - Read /repos/{owner}/{repo}/traffic/popular/referrers [intent=direct_read availability=implemented operation=github.traffic_popular_referrers]; flags: --page, --page-cursor
+  - traffic views view - Read /repos/{owner}/{repo}/traffic/views [intent=direct_read availability=implemented operation=github.traffic_views]; flags: --per, --page, --page-cursor
+  - transfer create - POST /repos/{owner}/{repo}/transfer [intent=reverse_etl availability=implemented write=transfer]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical
+  - vulnerability-alerts delete - DELETE /repos/{owner}/{repo}/vulnerability-alerts [intent=reverse_etl availability=implemented write=vulnerability_alerts]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
+  - vulnerability-alerts view - Read /repos/{owner}/{repo}/vulnerability-alerts [intent=direct_read availability=implemented operation=github.vulnerability_alerts2]; flags: --page, --page-cursor
+  - vulnerability-alerts set - PUT /repos/{owner}/{repo}/vulnerability-alerts [intent=reverse_etl availability=implemented write=vulnerability_alerts3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
+  - meta root - GitHub API Root [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - security-advisories list-global-advisories - List global security advisories [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - security-advisories get-global-advisory - Get a global security advisory [intent=direct_read availability=implemented]; flags: --ghsa-id (required), --page, --page-cursor
+  - agent-tasks list-tasks-for-repo - List tasks for repository [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - agent-tasks get-task-by-repo-and-id - Get a task by repo [intent=direct_read availability=implemented]; flags: --task-id (required), --page, --page-cursor
+  - agent-tasks list-tasks - List tasks [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - agent-tasks get-task-by-id - Get a task by ID [intent=direct_read availability=implemented]; flags: --task-id (required), --page, --page-cursor
+  - apps get-authenticated - Get the authenticated app [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps get-webhook-config-for-app - Get a webhook configuration for an app [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-webhook-deliveries - List deliveries for an app webhook [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps get-webhook-delivery - Get a delivery for an app webhook [intent=direct_read availability=implemented]; flags: --delivery-id (required), --page, --page-cursor
+  - apps list-installation-requests-for-authenticated-app - List installation requests for the authenticated app [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-installations - List installations for the authenticated app [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps get-installation - Get an installation for the authenticated app [intent=direct_read availability=implemented]; flags: --installation-id (required), --page, --page-cursor
+  - apps get-by-slug - Get an app [intent=direct_read availability=implemented]; flags: --app-slug (required), --page, --page-cursor
+  - classroom get-an-assignment - Closing down - Get an assignment (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --assignment-id (required), --page, --page-cursor
+  - classroom list-accepted-assignments-for-an-assignment - Closing down - List accepted assignments for an assignment (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --assignment-id (required), --page, --page-cursor
+  - classroom get-assignment-grades - Closing down - Get assignment grades (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --assignment-id (required), --page, --page-cursor
+  - classroom list-classrooms - Closing down - List classrooms (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - classroom get-a-classroom - Closing down - Get a classroom (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --classroom-id (required), --page, --page-cursor
+  - classroom list-assignments-for-a-classroom - Closing down - List assignments for a classroom (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --classroom-id (required), --page, --page-cursor
+  - codes-of-conduct get-all-codes-of-conduct - Get all codes of conduct [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - codes-of-conduct get-conduct-code - Get a code of conduct [intent=direct_read availability=implemented]; flags: --key (required), --page, --page-cursor
+  - emojis get - Get emojis [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - actions get-actions-cache-retention-limit-for-enterprise - Get GitHub Actions cache retention limit for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - actions get-actions-cache-storage-limit-for-enterprise - Get GitHub Actions cache storage limit for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - oidc list-oidc-custom-property-inclusions-for-enterprise - List OIDC custom property inclusions for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - code-security get-configurations-for-enterprise - Get code security configurations for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - code-security get-default-configurations-for-enterprise - Get default code security configurations for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - code-security get-single-configuration-for-enterprise - Retrieve a code security configuration of an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --configuration-id (required), --page, --page-cursor
+  - code-security get-repositories-for-enterprise-configuration - Get repositories associated with an enterprise code security configuration [intent=direct_read availability=implemented]; flags: --enterprise (required), --configuration-id (required), --page, --page-cursor
+  - dependabot list-alerts-for-enterprise - List Dependabot alerts for an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - dependabot repository-access-for-enterprise - Lists the repositories Dependabot can access in an enterprise [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - enterprise-teams list - List enterprise teams [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - enterprise-team-memberships list - List members in an enterprise team [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - enterprise-team-memberships get - Get enterprise team membership [intent=direct_read availability=implemented]; flags: --enterprise (required), --username (required), --page, --page-cursor
+  - enterprise-team-organizations get-assignments - Get organization assignments [intent=direct_read availability=implemented]; flags: --enterprise (required), --page, --page-cursor
+  - enterprise-team-organizations get-assignment - Get organization assignment [intent=direct_read availability=implemented]; flags: --enterprise (required), --org (required), --page, --page-cursor
+  - enterprise-teams get - Get an enterprise team [intent=direct_read availability=implemented]; flags: --enterprise (required), --team-slug (required), --page, --page-cursor
+  - activity list-public-events - List public events [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - activity get-feeds - Get feeds [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - gists list - List gists for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - gists list-public - List public gists [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - gists list-starred - List starred gists [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - gists get - Get a gist [intent=direct_read availability=implemented]; flags: --gist-id (required), --page, --page-cursor
+  - gists list-comments - List gist comments [intent=direct_read availability=implemented]; flags: --gist-id (required), --page, --page-cursor
+  - gists get-comment - Get a gist comment [intent=direct_read availability=implemented]; flags: --gist-id (required), --comment-id (required), --page, --page-cursor
+  - gists list-commits - List gist commits [intent=direct_read availability=implemented]; flags: --gist-id (required), --page, --page-cursor
+  - gists list-forks - List gist forks [intent=direct_read availability=implemented]; flags: --gist-id (required), --page, --page-cursor
+  - gists get-revision - Get a gist revision [intent=direct_read availability=implemented]; flags: --gist-id (required), --sha (required), --page, --page-cursor
+  - gitignore get-all-templates - Get all gitignore templates [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - gitignore get-template - Get a gitignore template [intent=direct_read availability=implemented]; flags: --name (required), --page, --page-cursor
+  - apps list-repos-accessible-to-installation - List repositories accessible to the app installation [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - issues list - List issues assigned to the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - licenses get-all-commonly-used - Get all commonly used licenses [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - licenses get - Get a license [intent=direct_read availability=implemented]; flags: --license (required), --page, --page-cursor
+  - apps get-subscription-plan-for-account - Get a subscription plan for an account [intent=direct_read availability=implemented]; flags: --account-id (required), --page, --page-cursor
+  - apps list-plans - List plans [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-accounts-for-plan - List accounts for a plan [intent=direct_read availability=implemented]; flags: --plan-id (required), --page, --page-cursor
+  - apps get-subscription-plan-for-account-stubbed - Get a subscription plan for an account (stubbed) [intent=direct_read availability=implemented]; flags: --account-id (required), --page, --page-cursor
+  - apps list-plans-stubbed - List plans (stubbed) [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-accounts-for-plan-stubbed - List accounts for a plan (stubbed) [intent=direct_read availability=implemented]; flags: --plan-id (required), --page, --page-cursor
+  - meta get - Get GitHub meta information [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - activity list-public-events-for-repo-network - List public events for a network of repositories [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - activity list-notifications-for-authenticated-user - List notifications for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - activity get-thread - Get a thread [intent=direct_read availability=implemented]; flags: --thread-id (required), --page, --page-cursor
+  - activity get-thread-subscription-for-authenticated-user - Get a thread subscription for the authenticated user [intent=direct_read availability=implemented]; flags: --thread-id (required), --page, --page-cursor
+  - orgs list - List organizations [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - actions get-actions-cache-retention-limit-for-organization - Get GitHub Actions cache retention limit for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-actions-cache-storage-limit-for-organization - Get GitHub Actions cache storage limit for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - billing get-github-billing-ai-credit-usage-report-org - Get billing AI credit usage report for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - billing get-all-budgets-org - Get all budgets for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - billing get-budget-org - Get a budget by ID for an organization [intent=direct_read availability=implemented]; flags: --org (required), --budget-id (required), --page, --page-cursor
+  - billing get-github-billing-premium-request-usage-report-org - Get billing premium request usage report for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - billing get-github-billing-usage-report-org - Get billing usage report for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - billing get-github-billing-usage-summary-report-org - Get billing usage summary for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs get - Get an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-actions-cache-usage-for-org - Get GitHub Actions cache usage for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-actions-cache-usage-by-repo-for-org - List repositories with GitHub Actions cache usage for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-hosted-runners-for-org - List GitHub-hosted runners for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-custom-images-for-org - List custom images for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-custom-image-for-org - Get a custom image definition for GitHub Actions Hosted Runners [intent=direct_read availability=implemented]; flags: --org (required), --image-definition-id (required), --page, --page-cursor
+  - actions list-custom-image-versions-for-org - List image versions of a custom image for an organization [intent=direct_read availability=implemented]; flags: --org (required), --image-definition-id (required), --page, --page-cursor
+  - actions get-custom-image-version-for-org - Get an image version of a custom image for GitHub Actions Hosted Runners [intent=direct_read availability=implemented]; flags: --org (required), --image-definition-id (required), --version (required), --page, --page-cursor
+  - actions get-hosted-runners-github-owned-images-for-org - Get GitHub-owned images for GitHub-hosted runners in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-hosted-runners-partner-images-for-org - Get partner images for GitHub-hosted runners in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-hosted-runners-limits-for-org - Get limits on GitHub-hosted runners for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-hosted-runners-machine-specs-for-org - Get GitHub-hosted runners machine specs for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-hosted-runners-platforms-for-org - Get platforms for GitHub-hosted runners in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-hosted-runner-for-org - Get a GitHub-hosted runner for an organization [intent=direct_read availability=implemented]; flags: --org (required), --hosted-runner-id (required), --page, --page-cursor
+  - oidc list-oidc-custom-property-inclusions-for-org - List OIDC custom property inclusions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - oidc get-oidc-custom-sub-template-for-org - Get the customization template for an OIDC subject claim for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-github-actions-permissions-organization - Get GitHub Actions permissions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-artifact-and-log-retention-settings-organization - Get artifact and log retention settings for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-fork-pr-contributor-approval-permissions-organization - Get fork PR contributor approval permissions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-private-repo-fork-pr-workflows-settings-organization - Get private repo fork PR workflow settings for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-selected-repositories-enabled-github-actions-organization - List selected repositories enabled for GitHub Actions in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-allowed-actions-organization - Get allowed actions and reusable workflows for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-self-hosted-runners-permissions-organization - Get self-hosted runners settings for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-selected-repositories-self-hosted-runners-organization - List repositories allowed to use self-hosted runners in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-github-actions-default-workflow-permissions-organization - Get default workflow permissions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-self-hosted-runner-groups-for-org - List self-hosted runner groups for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-self-hosted-runner-group-for-org - Get a self-hosted runner group for an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-group-id (required), --page, --page-cursor
+  - actions list-github-hosted-runners-in-group-for-org - List GitHub-hosted runners in a group for an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-group-id (required), --page, --page-cursor
+  - actions list-repo-access-to-self-hosted-runner-group-in-org - List repository access to a self-hosted runner group in an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-group-id (required), --page, --page-cursor
+  - actions list-self-hosted-runners-in-group-for-org - List self-hosted runners in a group for an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-group-id (required), --page, --page-cursor
+  - actions list-self-hosted-runners-for-org - List self-hosted runners for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions list-runner-applications-for-org - List runner applications for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-self-hosted-runner-for-org - Get a self-hosted runner for an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-id (required), --page, --page-cursor
+  - actions list-labels-for-self-hosted-runner-for-org - List labels for a self-hosted runner for an organization [intent=direct_read availability=implemented]; flags: --org (required), --runner-id (required), --page, --page-cursor
+  - actions list-org-secrets - List organization secrets [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-org-public-key - Get an organization public key [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-org-secret - Get an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - actions list-selected-repos-for-org-secret - List selected repositories for an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - actions list-org-variables - List organization variables [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - actions get-org-variable - Get an organization variable [intent=direct_read availability=implemented]; flags: --org (required), --name (required), --page, --page-cursor
+  - actions list-selected-repos-for-org-variable - List selected repositories for an organization variable [intent=direct_read availability=implemented]; flags: --org (required), --name (required), --page, --page-cursor
+  - agents list-org-secrets - List organization secrets [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - agents get-org-public-key - Get an organization public key [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - agents get-org-secret - Get an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - agents list-selected-repos-for-org-secret - List selected repositories for an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - agents list-org-variables - List organization variables [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - agents get-org-variable - Get an organization variable [intent=direct_read availability=implemented]; flags: --org (required), --name (required), --page, --page-cursor
+  - agents list-selected-repos-for-org-variable - List selected repositories for an organization variable [intent=direct_read availability=implemented]; flags: --org (required), --name (required), --page, --page-cursor
+  - orgs get-cluster-deployment-records-job - Get cluster deployment records job status [intent=direct_read availability=implemented]; flags: --org (required), --cluster (required), --job-id (required), --page, --page-cursor
+  - orgs list-artifact-deployment-records - List artifact deployment records [intent=direct_read availability=implemented]; flags: --org (required), --subject-digest (required), --page, --page-cursor
+  - orgs list-artifact-storage-records - List artifact storage records [intent=direct_read availability=implemented]; flags: --org (required), --subject-digest (required), --page, --page-cursor
+  - orgs list-attestation-repositories - List attestation repositories [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-attestations - List attestations [intent=direct_read availability=implemented]; flags: --org (required), --subject-digest (required), --page, --page-cursor
+  - orgs list-blocked-users - List users blocked by an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - campaigns list-org-campaigns - List campaigns for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - campaigns get-campaign-summary - Get a campaign for an organization [intent=direct_read availability=implemented]; flags: --org (required), --campaign-number (required), --page, --page-cursor
+  - code-scanning list-alerts-for-org - List code scanning alerts for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - code-security get-configurations-for-org - Get code security configurations for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - code-security get-default-configurations - Get default code security configurations [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - code-security get-configuration - Get a code security configuration [intent=direct_read availability=implemented]; flags: --org (required), --configuration-id (required), --page, --page-cursor
+  - code-security get-repositories-for-configuration - Get repositories associated with a code security configuration [intent=direct_read availability=implemented]; flags: --org (required), --configuration-id (required), --page, --page-cursor
+  - codespaces list-in-organization - List codespaces for the organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - codespaces list-org-secrets - List organization secrets [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - codespaces get-org-public-key - Get an organization public key [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - codespaces get-org-secret - Get an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - codespaces list-selected-repos-for-org-secret - List selected repositories for an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - copilot-spaces list-for-org - List organization Copilot Spaces [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - copilot-spaces get-for-org - Get an organization Copilot Space [intent=direct_read availability=implemented]; flags: --org (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces list-collaborators-for-org - List collaborators for an organization Copilot Space [intent=direct_read availability=implemented]; flags: --org (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces list-resources-for-org - List resources for an organization Copilot Space [intent=direct_read availability=implemented]; flags: --org (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces get-resource-for-org - Get a resource for an organization Copilot Space [intent=direct_read availability=implemented]; flags: --org (required), --space-number (required), --space-resource-id (required), --page, --page-cursor
+  - dependabot list-alerts-for-org - List Dependabot alerts for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - dependabot repository-access-for-org - Lists the repositories Dependabot can access in an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - dependabot list-org-secrets - List organization secrets [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - dependabot get-org-public-key - Get an organization public key [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - dependabot get-org-secret - Get an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - dependabot list-selected-repos-for-org-secret - List selected repositories for an organization secret [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - packages list-docker-migration-conflicting-packages-for-organization - Get list of conflicting packages during Docker migration for organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - activity list-public-org-events - List public organization events [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-failed-invitations - List failed organization invitations [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-webhooks - List organization webhooks [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs get-webhook - Get an organization webhook [intent=direct_read availability=implemented]; flags: --org (required), --hook-id (required), --page, --page-cursor
+  - orgs get-webhook-config-for-org - Get a webhook configuration for an organization [intent=direct_read availability=implemented]; flags: --org (required), --hook-id (required), --page, --page-cursor
+  - orgs list-webhook-deliveries - List deliveries for an organization webhook [intent=direct_read availability=implemented]; flags: --org (required), --hook-id (required), --page, --page-cursor
+  - orgs get-webhook-delivery - Get a webhook delivery for an organization webhook [intent=direct_read availability=implemented]; flags: --org (required), --hook-id (required), --delivery-id (required), --page, --page-cursor
+  - api-insights get-route-stats-by-actor - Get route stats by actor [intent=direct_read availability=implemented]; flags: --org (required), --actor-type (required), --actor-id (required), --min-timestamp (required), --page, --page-cursor
+  - api-insights get-subject-stats - Get subject stats [intent=direct_read availability=implemented]; flags: --org (required), --min-timestamp (required), --page, --page-cursor
+  - api-insights get-summary-stats - Get summary stats [intent=direct_read availability=implemented]; flags: --org (required), --min-timestamp (required), --page, --page-cursor
+  - api-insights get-summary-stats-by-user - Get summary stats by user [intent=direct_read availability=implemented]; flags: --org (required), --user-id (required), --min-timestamp (required), --page, --page-cursor
+  - api-insights get-summary-stats-by-actor - Get summary stats by actor [intent=direct_read availability=implemented]; flags: --org (required), --actor-type (required), --actor-id (required), --min-timestamp (required), --page, --page-cursor
+  - api-insights get-time-stats - Get time stats [intent=direct_read availability=implemented]; flags: --org (required), --min-timestamp (required), --timestamp-increment (required), --page, --page-cursor
+  - api-insights get-time-stats-by-user - Get time stats by user [intent=direct_read availability=implemented]; flags: --org (required), --user-id (required), --min-timestamp (required), --timestamp-increment (required), --page, --page-cursor
+  - api-insights get-time-stats-by-actor - Get time stats by actor [intent=direct_read availability=implemented]; flags: --org (required), --actor-type (required), --actor-id (required), --min-timestamp (required), --timestamp-increment (required), --page, --page-cursor
+  - api-insights get-user-stats - Get user stats [intent=direct_read availability=implemented]; flags: --org (required), --user-id (required), --min-timestamp (required), --page, --page-cursor
+  - apps get-org-installation - Get an organization installation for the authenticated app [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-app-installations - List app installations for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - interactions get-restrictions-for-org - Get interaction restrictions for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - interactions get-pull-request-creation-cap-for-org - Get pull request creation cap for an org [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-pending-invitations - List pending organization invitations [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-invitation-teams - List organization invitation teams [intent=direct_read availability=implemented]; flags: --org (required), --invitation-id (required), --page, --page-cursor
+  - orgs list-issue-fields - List issue fields for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-issue-types - List issue types for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - issues list-for-org - List organization issues assigned to the authenticated user [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-members - List organization members [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - codespaces get-codespaces-for-user-in-org - List codespaces for a user in organization [intent=direct_read availability=implemented]; flags: --org (required), --username (required), --page, --page-cursor
+  - orgs get-membership-for-user - Get organization membership for a user [intent=direct_read availability=implemented]; flags: --org (required), --username (required), --page, --page-cursor
+  - migrations list-for-org - List organization migrations [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - migrations get-status-for-org - Get an organization migration status [intent=direct_read availability=implemented]; flags: --org (required), --migration-id (required), --page, --page-cursor
+  - migrations download-archive-for-org - Download an organization migration archive [intent=binary_download availability=implemented operation=github.migrations_download_archive_for_org]; flags: --org (required), --migration-id (required), --dest-root (required), --file-name, --max-bytes
+  - migrations list-repos-for-org - List repositories in an organization migration [intent=direct_read availability=implemented]; flags: --org (required), --migration-id (required), --page, --page-cursor
+  - orgs list-org-roles - Get all organization roles for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs get-org-role - Get an organization role [intent=direct_read availability=implemented]; flags: --org (required), --role-id (required), --page, --page-cursor
+  - orgs list-org-role-teams - List teams that are assigned to an organization role [intent=direct_read availability=implemented]; flags: --org (required), --role-id (required), --page, --page-cursor
+  - orgs list-org-role-users - List users that are assigned to an organization role [intent=direct_read availability=implemented]; flags: --org (required), --role-id (required), --page, --page-cursor
+  - orgs list-outside-collaborators - List outside collaborators for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - packages list-packages-for-organization - List packages for an organization [intent=direct_read availability=implemented]; flags: --org (required), --package-type (required), --page, --page-cursor
+  - packages get-package-for-organization - Get a package for an organization [intent=direct_read availability=implemented]; flags: --org (required), --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-all-package-versions-for-package-owned-by-org - List package versions for a package owned by an organization [intent=direct_read availability=implemented]; flags: --org (required), --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-package-version-for-organization - Get a package version for an organization [intent=direct_read availability=implemented]; flags: --org (required), --package-type (required), --package-name (required), --package-version-id (required), --page, --page-cursor
+  - orgs list-pat-grant-requests - List requests to access organization resources with fine-grained personal access tokens [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-pat-grant-request-repositories - List repositories requested to be accessed by a fine-grained personal access token [intent=direct_read availability=implemented]; flags: --org (required), --pat-request-id (required), --page, --page-cursor
+  - orgs list-pat-grants - List fine-grained personal access tokens with access to organization resources [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-pat-grant-repositories - List repositories a fine-grained personal access token has access to [intent=direct_read availability=implemented]; flags: --org (required), --pat-id (required), --page, --page-cursor
+  - private-registries list-org-private-registries - List private registries for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - private-registries get-org-public-key - Get private registries public key for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - private-registries get-org-private-registry - Get a private registry for an organization [intent=direct_read availability=implemented]; flags: --org (required), --secret-name (required), --page, --page-cursor
+  - projects list-for-org - List projects for organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - projects get-for-org - Get project for organization [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --page, --page-cursor
+  - projects list-fields-for-org - List project fields for organization [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --page, --page-cursor
+  - projects get-field-for-org - Get project field for organization [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --field-id (required), --page, --page-cursor
+  - projects list-items-for-org - List items for an organization owned project [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --page, --page-cursor
+  - projects get-org-item - Get an item for an organization owned project [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --item-id (required), --page, --page-cursor
+  - projects list-view-items-for-org - List items for an organization project view [intent=direct_read availability=implemented]; flags: --org (required), --project-number (required), --view-number (required), --page, --page-cursor
+  - orgs custom-properties-for-repos-get-organization-definitions - Get all custom properties for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs custom-properties-for-repos-get-organization-definition - Get a custom property for an organization [intent=direct_read availability=implemented]; flags: --org (required), --custom-property-name (required), --page, --page-cursor
+  - orgs custom-properties-for-repos-get-organization-values - List custom property values for organization repositories [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-public-members - List public organization members [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - repos list-for-org - List organization repositories [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - repos get-org-rulesets - Get all organization repository rulesets [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - repos get-org-rule-suites - List organization rule suites [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - repos get-org-rule-suite - Get an organization rule suite [intent=direct_read availability=implemented]; flags: --org (required), --rule-suite-id (required), --page, --page-cursor
+  - repos get-org-ruleset - Get an organization repository ruleset [intent=direct_read availability=implemented]; flags: --org (required), --ruleset-id (required), --page, --page-cursor
+  - orgs get-org-ruleset-history - Get organization ruleset history [intent=direct_read availability=implemented]; flags: --org (required), --ruleset-id (required), --page, --page-cursor
+  - orgs get-org-ruleset-version - Get organization ruleset version [intent=direct_read availability=implemented]; flags: --org (required), --ruleset-id (required), --version-id (required), --page, --page-cursor
+  - secret-scanning list-alerts-for-org - List secret scanning alerts for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - secret-scanning list-org-custom-patterns - List organization custom patterns [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - secret-scanning list-org-pattern-configs - List organization pattern configurations [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - security-advisories list-org-repository-advisories - List repository security advisories for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs list-security-manager-teams - List security manager teams (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs get-immutable-releases-settings - Get immutable releases settings for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - orgs get-immutable-releases-settings-repositories - List selected repositories for immutable releases enforcement [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - hosted-compute list-network-configurations-for-org - List hosted compute network configurations for an organization [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - hosted-compute get-network-configuration-for-org - Get a hosted compute network configuration for an organization [intent=direct_read availability=implemented]; flags: --org (required), --network-configuration-id (required), --page, --page-cursor
+  - hosted-compute get-network-settings-for-org - Get a hosted compute network settings resource for an organization [intent=direct_read availability=implemented]; flags: --org (required), --network-settings-id (required), --page, --page-cursor
+  - teams list - List teams [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - teams get-by-name - Get a team by name [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - teams list-pending-invitations-in-org - List pending team invitations [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - teams list-members-in-org - List team members [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - teams get-membership-for-user-in-org - Get team membership for a user [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --username (required), --page, --page-cursor
+  - teams list-repos-in-org - List team repositories [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - teams check-permissions-for-repo-in-org - Check team permissions for a repository [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - teams list-child-in-org - List child teams [intent=direct_read availability=implemented]; flags: --org (required), --team-slug (required), --page, --page-cursor
+  - rate-limit get - Get rate limit status for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - interactions get-pull-request-creation-cap-for-repo - Get pull request creation cap for a repository [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - issues list-suggestions - List issue suggestions [intent=direct_read availability=implemented]; flags: --issue-number (required), --page, --page-cursor
+  - pulls get-merge-async-result - Get the result of an asynchronous merge [intent=direct_read availability=implemented]; flags: --pull-number (required), --uuid (required), --page, --page-cursor
+  - secret-scanning list-repo-custom-patterns - List repository custom patterns [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - pull-request-stacks list - List pull request stacks [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - pull-request-stacks get - Get a pull request stack [intent=direct_read availability=implemented]; flags: --stack-number (required), --page, --page-cursor
+  - repos list-public - List public repositories [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - teams get-legacy - Get a team (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - teams list-pending-invitations-legacy - List pending team invitations (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - teams list-members-legacy - List team members (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - teams get-membership-for-user-legacy - Get team membership for a user (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --username (required), --page, --page-cursor
+  - teams list-repos-legacy - List team repositories (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - teams check-permissions-for-repo-legacy - Check team permissions for a repository (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - teams list-child-legacy - List child teams (Legacy) (deprecated by GitHub, still documented) [intent=direct_read availability=implemented]; flags: --team-id (required), --page, --page-cursor
+  - users get-authenticated - Get the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-blocked-by-authenticated-user - List users blocked by the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - codespaces list-for-authenticated-user - List codespaces for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - codespaces list-secrets-for-authenticated-user - List secrets for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - codespaces get-public-key-for-authenticated-user - Get public key for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - codespaces get-secret-for-authenticated-user - Get a secret for the authenticated user [intent=direct_read availability=implemented]; flags: --secret-name (required), --page, --page-cursor
+  - codespaces list-repositories-for-secret-for-authenticated-user - List selected repositories for a user secret [intent=direct_read availability=implemented]; flags: --secret-name (required), --page, --page-cursor
+  - codespaces get-for-authenticated-user - Get a codespace for the authenticated user [intent=direct_read availability=implemented]; flags: --codespace-name (required), --page, --page-cursor
+  - codespaces get-export-details-for-authenticated-user - Get details about a codespace export [intent=direct_read availability=implemented]; flags: --codespace-name (required), --export-id (required), --page, --page-cursor
+  - codespaces codespace-machines-for-authenticated-user - List machine types for a codespace [intent=direct_read availability=implemented]; flags: --codespace-name (required), --page, --page-cursor
+  - packages list-docker-migration-conflicting-packages-for-authenticated-user - Get list of conflicting packages during Docker migration for authenticated-user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-emails-for-authenticated-user - List email addresses for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-followers-for-authenticated-user - List followers of the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-followed-by-authenticated-user - List the people the authenticated user follows [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-gpg-keys-for-authenticated-user - List GPG keys for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users get-gpg-key-for-authenticated-user - Get a GPG key for the authenticated user [intent=direct_read availability=implemented]; flags: --gpg-key-id (required), --page, --page-cursor
+  - apps list-installations-for-authenticated-user - List app installations accessible to the user access token [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-installation-repos-for-authenticated-user - List repositories accessible to the user access token [intent=direct_read availability=implemented]; flags: --installation-id (required), --page, --page-cursor
+  - interactions get-restrictions-for-authenticated-user - Get interaction restrictions for your public repositories [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - issues list-for-authenticated-user - List user account issues assigned to the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-public-ssh-keys-for-authenticated-user - List public SSH keys for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users get-public-ssh-key-for-authenticated-user - Get a public SSH key for the authenticated user [intent=direct_read availability=implemented]; flags: --key-id (required), --page, --page-cursor
+  - apps list-subscriptions-for-authenticated-user - List subscriptions for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - apps list-subscriptions-for-authenticated-user-stubbed - List subscriptions for the authenticated user (stubbed) [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - orgs list-memberships-for-authenticated-user - List organization memberships for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - orgs get-membership-for-authenticated-user - Get an organization membership for the authenticated user [intent=direct_read availability=implemented]; flags: --org (required), --page, --page-cursor
+  - migrations list-for-authenticated-user - List user migrations [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - migrations get-status-for-authenticated-user - Get a user migration status [intent=direct_read availability=implemented]; flags: --migration-id (required), --page, --page-cursor
+  - migrations get-archive-for-authenticated-user - Download a user migration archive [intent=binary_download availability=implemented operation=github.migrations_get_archive_for_authenticated_user]; flags: --migration-id (required), --dest-root (required), --file-name, --max-bytes
+  - migrations list-repos-for-authenticated-user - List repositories for a user migration [intent=direct_read availability=implemented]; flags: --migration-id (required), --page, --page-cursor
+  - orgs list-for-authenticated-user - List organizations for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - packages list-packages-for-authenticated-user - List packages for the authenticated user's namespace [intent=direct_read availability=implemented]; flags: --package-type (required), --page, --page-cursor
+  - packages get-package-for-authenticated-user - Get a package for the authenticated user [intent=direct_read availability=implemented]; flags: --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-all-package-versions-for-package-owned-by-authenticated-user - List package versions for a package owned by the authenticated user [intent=direct_read availability=implemented]; flags: --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-package-version-for-authenticated-user - Get a package version for the authenticated user [intent=direct_read availability=implemented]; flags: --package-type (required), --package-name (required), --package-version-id (required), --page, --page-cursor
+  - users list-public-emails-for-authenticated-user - List public email addresses for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - repos list-for-authenticated-user - List repositories for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - repos list-invitations-for-authenticated-user - List repository invitations for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-social-accounts-for-authenticated-user - List social accounts for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users list-ssh-signing-keys-for-authenticated-user - List SSH signing keys for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users get-ssh-signing-key-for-authenticated-user - Get an SSH signing key for the authenticated user [intent=direct_read availability=implemented]; flags: --ssh-signing-key-id (required), --page, --page-cursor
+  - activity list-repos-starred-by-authenticated-user - List repositories starred by the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - activity list-watched-repos-for-authenticated-user - List repositories watched by the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - teams list-for-authenticated-user - List teams for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users get-by-id - Get a user using their ID [intent=direct_read availability=implemented]; flags: --account-id (required), --page, --page-cursor
+  - users list - List users [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - users get-by-username - Get a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-attestations - List attestations [intent=direct_read availability=implemented]; flags: --username (required), --subject-digest (required), --page, --page-cursor
+  - copilot-spaces list-for-user - List Copilot Spaces for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - copilot-spaces get-for-user - Get a Copilot Space for a user [intent=direct_read availability=implemented]; flags: --username (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces list-collaborators-for-user - List collaborators for a Copilot Space for a user [intent=direct_read availability=implemented]; flags: --username (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces list-resources-for-user - List resources for a Copilot Space for a user [intent=direct_read availability=implemented]; flags: --username (required), --space-number (required), --page, --page-cursor
+  - copilot-spaces get-resource-for-user - Get a resource for a Copilot Space for a user [intent=direct_read availability=implemented]; flags: --username (required), --space-number (required), --space-resource-id (required), --page, --page-cursor
+  - packages list-docker-migration-conflicting-packages-for-user - Get list of conflicting packages during Docker migration for user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - activity list-events-for-authenticated-user - List events for the authenticated user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - activity list-org-events-for-authenticated-user - List organization events for the authenticated user [intent=direct_read availability=implemented]; flags: --username (required), --org (required), --page, --page-cursor
+  - activity list-public-events-for-user - List public events for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-followers-for-user - List followers of a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-following-for-user - List the people a user follows [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - gists list-for-user - List gists for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-gpg-keys-for-user - List GPG keys for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users get-context-for-user - Get contextual information for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - apps get-user-installation - Get a user installation for the authenticated app [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-public-keys-for-user - List public keys for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - orgs list-for-user - List organizations for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - packages list-packages-for-user - List packages for a user [intent=direct_read availability=implemented]; flags: --username (required), --package-type (required), --page, --page-cursor
+  - packages get-package-for-user - Get a package for a user [intent=direct_read availability=implemented]; flags: --username (required), --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-all-package-versions-for-package-owned-by-user - List package versions for a package owned by a user [intent=direct_read availability=implemented]; flags: --username (required), --package-type (required), --package-name (required), --page, --page-cursor
+  - packages get-package-version-for-user - Get a package version for a user [intent=direct_read availability=implemented]; flags: --username (required), --package-type (required), --package-name (required), --package-version-id (required), --page, --page-cursor
+  - projects list-for-user - List projects for user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - projects get-for-user - Get project for user [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --page, --page-cursor
+  - projects list-fields-for-user - List project fields for user [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --page, --page-cursor
+  - projects get-field-for-user - Get project field for user [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --field-id (required), --page, --page-cursor
+  - projects list-items-for-user - List items for a user owned project [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --page, --page-cursor
+  - projects get-user-item - Get an item for a user owned project [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --item-id (required), --page, --page-cursor
+  - projects list-view-items-for-user - List items for a user project view [intent=direct_read availability=implemented]; flags: --username (required), --project-number (required), --view-number (required), --page, --page-cursor
+  - activity list-received-events-for-user - List events received by the authenticated user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - activity list-received-public-events-for-user - List public events received by a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - repos list-for-user - List repositories for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - billing get-github-billing-ai-credit-usage-report-user - Get billing AI credit usage report for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - billing get-github-billing-premium-request-usage-report-user - Get billing premium request usage report for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - billing get-github-billing-usage-report-user - Get billing usage report for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - billing get-github-billing-usage-summary-report-user - Get billing usage summary for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-social-accounts-for-user - List social accounts for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - users list-ssh-signing-keys-for-user - List SSH signing keys for a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - activity list-repos-starred-by-user - List repositories starred by a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - activity list-repos-watched-by-user - List repositories watched by a user [intent=direct_read availability=implemented]; flags: --username (required), --page, --page-cursor
+  - meta get-all-versions - Get all API versions [intent=direct_read availability=implemented]; flags: --page, --page-cursor
+  - agent-tasks create-task-in-repo - Start a task [intent=reverse_etl availability=implemented write=agent_tasks_create_task_in_repo]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Start a task.; flags: --prompt (required), --model, --custom-agent, --create-pull-request, --base-ref, --head-ref
+  - apps create-from-manifest - Create a GitHub App from a manifest [intent=reverse_etl availability=implemented write=apps_create_from_manifest]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a GitHub App from a manifest.; flags: --code (required)
+  - apps update-webhook-config-for-app - Update a webhook configuration for an app [intent=reverse_etl availability=implemented write=apps_update_webhook_config_for_app]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a webhook configuration for an app.; flags: --url, --content-type, --secret, --insecure-ssl
+  - apps redeliver-webhook-delivery - Redeliver a delivery for an app webhook [intent=reverse_etl availability=implemented write=apps_redeliver_webhook_delivery]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Redeliver a delivery for an app webhook.; flags: --delivery-id (required)
+  - apps delete-installation - Delete an installation for the authenticated app [intent=reverse_etl availability=implemented write=apps_delete_installation]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an installation for the authenticated app. Removes provider-side state.; flags: --installation-id (required)
+  - apps suspend-installation - Suspend an app installation [intent=reverse_etl availability=implemented write=apps_suspend_installation]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Suspend an app installation.; flags: --installation-id (required)
+  - apps unsuspend-installation - Unsuspend an app installation [intent=reverse_etl availability=implemented write=apps_unsuspend_installation]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unsuspend an app installation. Removes provider-side state.; flags: --installation-id (required)
+  - apps scope-token - Create a scoped access token [intent=reverse_etl availability=implemented write=apps_scope_token]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a scoped access token.; flags: --client-id (required), --access-token (required), --target, --target-id, --repositories
+  - credentials revoke - Revoke a list of credentials [intent=reverse_etl availability=implemented write=credentials_revoke]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Revoke a list of credentials.; flags: --credentials (required)
+  - actions set-actions-cache-retention-limit-for-enterprise - Set GitHub Actions cache retention limit for an enterprise [intent=reverse_etl availability=implemented write=actions_set_actions_cache_retention_limit_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set GitHub Actions cache retention limit for an enterprise.; flags: --enterprise (required), --max-cache-retention-days
+  - actions set-actions-cache-storage-limit-for-enterprise - Set GitHub Actions cache storage limit for an enterprise [intent=reverse_etl availability=implemented write=actions_set_actions_cache_storage_limit_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set GitHub Actions cache storage limit for an enterprise.; flags: --enterprise (required), --max-cache-size-gb
+  - oidc create-oidc-custom-property-inclusion-for-enterprise - Create an OIDC custom property inclusion for an enterprise [intent=reverse_etl availability=implemented write=oidc_create_oidc_custom_property_inclusion_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an OIDC custom property inclusion for an enterprise.; flags: --enterprise (required), --custom-property-name (required)
+  - oidc delete-oidc-custom-property-inclusion-for-enterprise - Delete an OIDC custom property inclusion for an enterprise [intent=reverse_etl availability=implemented write=oidc_delete_oidc_custom_property_inclusion_for_enterprise]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an OIDC custom property inclusion for an enterprise. Removes provider-side state.; flags: --enterprise (required), --custom-property-name (required)
+  - code-security create-configuration-for-enterprise - Create a code security configuration for an enterprise [intent=reverse_etl availability=implemented write=code_security_create_configuration_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a code security configuration for an enterprise.; flags: --enterprise (required), --name (required), --description, --advanced-security, --code-security, --dependency-graph, --dependency-graph-autosubmit-action, --dependabot-alerts, --dependabot-security-updates, --code-scanning-default-setup, --code-scanning-delegated-alert-dismissal, --secret-protection, --secret-scanning, --secret-scanning-push-protection, --secret-scanning-validity-checks, --secret-scanning-non-provider-patterns, --secret-scanning-generic-secrets, --secret-scanning-delegated-alert-dismissal, --secret-scanning-extended-metadata, --private-vulnerability-reporting, --enforcement
+  - code-security update-enterprise-configuration - Update a custom code security configuration for an enterprise [intent=reverse_etl availability=implemented write=code_security_update_enterprise_configuration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a custom code security configuration for an enterprise.; flags: --enterprise (required), --configuration-id (required), --name, --description, --advanced-security, --code-security, --dependency-graph, --dependency-graph-autosubmit-action, --dependabot-alerts, --dependabot-security-updates, --code-scanning-default-setup, --code-scanning-delegated-alert-dismissal, --secret-protection, --secret-scanning, --secret-scanning-push-protection, --secret-scanning-validity-checks, --secret-scanning-non-provider-patterns, --secret-scanning-generic-secrets, --secret-scanning-delegated-alert-dismissal, --secret-scanning-extended-metadata, --private-vulnerability-reporting, --enforcement
+  - code-security delete-configuration-for-enterprise - Delete a code security configuration for an enterprise [intent=reverse_etl availability=implemented write=code_security_delete_configuration_for_enterprise]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a code security configuration for an enterprise. Removes provider-side state.; flags: --enterprise (required), --configuration-id (required)
+  - code-security attach-enterprise-configuration - Attach an enterprise configuration to repositories [intent=reverse_etl availability=implemented write=code_security_attach_enterprise_configuration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Attach an enterprise configuration to repositories.; flags: --enterprise (required), --configuration-id (required), --scope (required)
+  - code-security set-configuration-as-default-for-enterprise - Set a code security configuration as a default for an enterprise [intent=reverse_etl availability=implemented write=code_security_set_configuration_as_default_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a code security configuration as a default for an enterprise.; flags: --enterprise (required), --configuration-id (required), --default-for-new-repos
+  - dependabot update-repository-access-for-enterprise - Updates Dependabot's repository access list for an enterprise [intent=reverse_etl availability=implemented write=dependabot_update_repository_access_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Updates Dependabot's repository access list for an enterprise.; flags: --enterprise (required)
+  - dependabot set-repository-access-default-level-for-enterprise - Set the default repository access level for Dependabot in an enterprise [intent=reverse_etl availability=implemented write=dependabot_set_repository_access_default_level_for_enterprise]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set the default repository access level for Dependabot in an enterprise.; flags: --enterprise (required), --default-level (required)
+  - enterprise-teams create - Create an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an enterprise team.; flags: --enterprise (required), --name (required), --description, --sync-to-organizations, --organization-selection-type, --group-id, --notification-setting
+  - enterprise-team-memberships bulk-add - Bulk add team members [intent=reverse_etl availability=implemented write=enterprise_team_memberships_bulk_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk add team members.; flags: --enterprise (required), --usernames (required)
+  - enterprise-team-memberships bulk-remove - Bulk remove team members [intent=reverse_etl availability=implemented write=enterprise_team_memberships_bulk_remove]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk remove team members.; flags: --enterprise (required), --usernames (required)
+  - enterprise-team-memberships add - Add team member [intent=reverse_etl availability=implemented write=enterprise_team_memberships_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add team member.; flags: --enterprise (required), --username (required)
+  - enterprise-team-memberships remove - Remove team membership [intent=reverse_etl availability=implemented write=enterprise_team_memberships_remove]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team membership. Removes provider-side state.; flags: --enterprise (required), --username (required)
+  - enterprise-team-organizations bulk-add - Add organization assignments [intent=reverse_etl availability=implemented write=enterprise_team_organizations_bulk_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add organization assignments.; flags: --enterprise (required), --organization-slugs (required)
+  - enterprise-team-organizations bulk-remove - Remove organization assignments [intent=reverse_etl availability=implemented write=enterprise_team_organizations_bulk_remove]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Remove organization assignments.; flags: --enterprise (required), --organization-slugs (required)
+  - enterprise-team-organizations add - Add an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add an organization assignment.; flags: --enterprise (required), --org (required)
+  - enterprise-team-organizations delete - Delete an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization assignment. Removes provider-side state.; flags: --enterprise (required), --org (required)
+  - enterprise-teams update - Update an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_update]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an enterprise team.; flags: --enterprise (required), --team-slug (required), --name, --description, --sync-to-organizations, --organization-selection-type, --group-id, --notification-setting
+  - enterprise-teams delete - Delete an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an enterprise team. Removes provider-side state.; flags: --enterprise (required), --team-slug (required)
+  - gists create - Create a gist [intent=reverse_etl availability=implemented write=gists_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a gist.; flags: --description, --files (required), --public
+  - gists update - Update a gist [intent=reverse_etl availability=implemented write=gists_update]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a gist.; flags: --gist-id (required), --description
+  - gists delete - Delete a gist [intent=reverse_etl availability=implemented write=gists_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a gist. Removes provider-side state.; flags: --gist-id (required)
+  - gists create-comment - Create a gist comment [intent=reverse_etl availability=implemented write=gists_create_comment]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a gist comment.; flags: --gist-id (required), --body (required)
+  - gists update-comment - Update a gist comment [intent=reverse_etl availability=implemented write=gists_update_comment]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a gist comment.; flags: --gist-id (required), --comment-id (required), --body (required)
+  - gists delete-comment - Delete a gist comment [intent=reverse_etl availability=implemented write=gists_delete_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a gist comment. Removes provider-side state.; flags: --gist-id (required), --comment-id (required)
+  - gists fork - Fork a gist [intent=reverse_etl availability=implemented write=gists_fork]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Fork a gist.; flags: --gist-id (required)
+  - gists star - Star a gist [intent=reverse_etl availability=implemented write=gists_star]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Star a gist.; flags: --gist-id (required)
+  - gists unstar - Unstar a gist [intent=reverse_etl availability=implemented write=gists_unstar]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unstar a gist. Removes provider-side state.; flags: --gist-id (required)
+  - apps revoke-installation-access-token - Revoke an installation access token [intent=reverse_etl availability=implemented write=apps_revoke_installation_access_token]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Revoke an installation access token. Removes provider-side state.
+  - activity mark-notifications-as-read - Mark notifications as read [intent=reverse_etl availability=implemented write=activity_mark_notifications_as_read]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Mark notifications as read.; flags: --last-read-at, --read
+  - activity mark-thread-as-read - Mark a thread as read [intent=reverse_etl availability=implemented write=activity_mark_thread_as_read]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Mark a thread as read.; flags: --thread-id (required)
+  - activity mark-thread-as-done - Mark a thread as done [intent=reverse_etl availability=implemented write=activity_mark_thread_as_done]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Mark a thread as done. Removes provider-side state.; flags: --thread-id (required)
+  - activity set-thread-subscription - Set a thread subscription [intent=reverse_etl availability=implemented write=activity_set_thread_subscription]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a thread subscription.; flags: --thread-id (required), --ignored
+  - activity delete-thread-subscription - Delete a thread subscription [intent=reverse_etl availability=implemented write=activity_delete_thread_subscription]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a thread subscription. Removes provider-side state.; flags: --thread-id (required)
+  - actions set-actions-cache-retention-limit-for-organization - Set GitHub Actions cache retention limit for an organization [intent=reverse_etl availability=implemented write=actions_set_actions_cache_retention_limit_for_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set GitHub Actions cache retention limit for an organization.; flags: --org (required), --max-cache-retention-days
+  - actions set-actions-cache-storage-limit-for-organization - Set GitHub Actions cache storage limit for an organization [intent=reverse_etl availability=implemented write=actions_set_actions_cache_storage_limit_for_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set GitHub Actions cache storage limit for an organization.; flags: --org (required), --max-cache-size-gb
+  - billing create-organization-budget - Create a budget for an organization [intent=reverse_etl availability=implemented write=billing_create_organization_budget]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a budget for an organization.; flags: --org (required), --budget-amount, --prevent-further-usage, --budget-scope, --budget-entity-name, --budget-type, --budget-product-sku, --user
+  - billing update-budget-org - Update a budget for an organization [intent=reverse_etl availability=implemented write=billing_update_budget_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a budget for an organization.; flags: --org (required), --budget-id (required), --budget-amount, --prevent-further-usage, --budget-scope, --budget-entity-name, --budget-type, --budget-product-sku, --user
+  - billing delete-budget-org - Delete a budget for an organization [intent=reverse_etl availability=implemented write=billing_delete_budget_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a budget for an organization. Removes provider-side state.; flags: --org (required), --budget-id (required)
+  - orgs update - Update an organization [intent=reverse_etl availability=implemented write=orgs_update]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization.; flags: --org (required), --billing-email, --company, --email, --twitter-username, --location, --name, --description, --has-organization-projects, --has-repository-projects, --default-repository-permission, --members-can-create-repositories, --members-can-create-internal-repositories, --members-can-create-private-repositories, --members-can-create-public-repositories, --members-allowed-repository-creation-type, --members-can-create-pages, --members-can-create-public-pages, --members-can-create-private-pages, --members-can-fork-private-repositories, --web-commit-signoff-required, --blog, --advanced-security-enabled-for-new-repositories, --dependabot-alerts-enabled-for-new-repositories, --dependabot-security-updates-enabled-for-new-repositories, --dependency-graph-enabled-for-new-repositories, --secret-scanning-enabled-for-new-repositories, --secret-scanning-push-protection-enabled-for-new-repositories, --secret-scanning-push-protection-custom-link-enabled, --secret-scanning-push-protection-custom-link, --deploy-keys-enabled-for-repositories
+  - orgs delete - Delete an organization [intent=reverse_etl availability=implemented write=orgs_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization. Removes provider-side state.; flags: --org (required)
+  - actions create-hosted-runner-for-org - Create a GitHub-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_create_hosted_runner_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a GitHub-hosted runner for an organization.; flags: --enable-static-ip, --image (required), --image-gen, --maximum-runners, --name (required), --org (required), --runner-group-id (required), --size (required)
+  - actions delete-custom-image-from-org - Delete a custom image from the organization [intent=reverse_etl availability=implemented write=actions_delete_custom_image_from_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a custom image from the organization. Removes provider-side state.; flags: --org (required), --image-definition-id (required)
+  - actions delete-custom-image-version-from-org - Delete an image version of custom image from the organization [intent=reverse_etl availability=implemented write=actions_delete_custom_image_version_from_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an image version of custom image from the organization. Removes provider-side state.; flags: --org (required), --image-definition-id (required), --version (required)
+  - actions update-hosted-runner-for-org - Update a GitHub-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_update_hosted_runner_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a GitHub-hosted runner for an organization.; flags: --org (required), --hosted-runner-id (required), --name, --runner-group-id, --maximum-runners, --enable-static-ip, --size, --image-source, --image-id, --image-version, --image-gen
+  - actions delete-hosted-runner-for-org - Delete a GitHub-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_delete_hosted_runner_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a GitHub-hosted runner for an organization. Removes provider-side state.; flags: --org (required), --hosted-runner-id (required)
+  - oidc create-oidc-custom-property-inclusion-for-org - Create an OIDC custom property inclusion for an organization [intent=reverse_etl availability=implemented write=oidc_create_oidc_custom_property_inclusion_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an OIDC custom property inclusion for an organization.; flags: --org (required), --custom-property-name (required)
+  - oidc delete-oidc-custom-property-inclusion-for-org - Delete an OIDC custom property inclusion for an organization [intent=reverse_etl availability=implemented write=oidc_delete_oidc_custom_property_inclusion_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an OIDC custom property inclusion for an organization. Removes provider-side state.; flags: --org (required), --custom-property-name (required)
+  - oidc update-oidc-custom-sub-template-for-org - Set the customization template for an OIDC subject claim for an organization [intent=reverse_etl availability=implemented write=oidc_update_oidc_custom_sub_template_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set the customization template for an OIDC subject claim for an organization.; flags: --org (required), --include-claim-keys, --use-immutable-subject
+  - actions set-github-actions-permissions-organization - Set GitHub Actions permissions for an organization [intent=reverse_etl availability=implemented write=actions_set_github_actions_permissions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set GitHub Actions permissions for an organization.; flags: --org (required), --enabled-repositories (required), --allowed-actions, --sha-pinning-required
+  - actions set-artifact-and-log-retention-settings-organization - Set artifact and log retention settings for an organization [intent=reverse_etl availability=implemented write=actions_set_artifact_and_log_retention_settings_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set artifact and log retention settings for an organization.; flags: --org (required), --days (required)
+  - actions set-fork-pr-contributor-approval-permissions-organization - Set fork PR contributor approval permissions for an organization [intent=reverse_etl availability=implemented write=actions_set_fork_pr_contributor_approval_permissions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set fork PR contributor approval permissions for an organization.; flags: --org (required), --approval-policy (required)
+  - actions set-private-repo-fork-pr-workflows-settings-organization - Set private repo fork PR workflow settings for an organization [intent=reverse_etl availability=implemented write=actions_set_private_repo_fork_pr_workflows_settings_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set private repo fork PR workflow settings for an organization.; flags: --org (required), --run-workflows-from-fork-pull-requests (required), --send-write-tokens-to-workflows, --send-secrets-and-variables, --require-approval-for-fork-pr-workflows
+  - actions set-selected-repositories-enabled-github-actions-organization - Set selected repositories enabled for GitHub Actions in an organization [intent=reverse_etl availability=implemented write=actions_set_selected_repositories_enabled_github_actions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories enabled for GitHub Actions in an organization.; flags: --org (required), --selected-repository-ids (required)
+  - actions enable-selected-repository-github-actions-organization - Enable a selected repository for GitHub Actions in an organization [intent=reverse_etl availability=implemented write=actions_enable_selected_repository_github_actions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Enable a selected repository for GitHub Actions in an organization.; flags: --org (required), --repository-id (required)
+  - actions disable-selected-repository-github-actions-organization - Disable a selected repository for GitHub Actions in an organization [intent=reverse_etl availability=implemented write=actions_disable_selected_repository_github_actions_organization]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Disable a selected repository for GitHub Actions in an organization. Removes provider-side state.; flags: --org (required), --repository-id (required)
+  - actions set-allowed-actions-organization - Set allowed actions and reusable workflows for an organization [intent=reverse_etl availability=implemented write=actions_set_allowed_actions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set allowed actions and reusable workflows for an organization.; flags: --org (required), --github-owned-allowed, --verified-allowed, --patterns-allowed
+  - actions set-self-hosted-runners-permissions-organization - Set self-hosted runners settings for an organization [intent=reverse_etl availability=implemented write=actions_set_self_hosted_runners_permissions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set self-hosted runners settings for an organization.; flags: --org (required), --enabled-repositories (required)
+  - actions set-selected-repositories-self-hosted-runners-organization - Set repositories allowed to use self-hosted runners in an organization [intent=reverse_etl availability=implemented write=actions_set_selected_repositories_self_hosted_runners_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set repositories allowed to use self-hosted runners in an organization.; flags: --org (required), --selected-repository-ids (required)
+  - actions enable-selected-repository-self-hosted-runners-organization - Add a repository to the list of repositories allowed to use self-hosted runners in an organization [intent=reverse_etl availability=implemented write=actions_enable_selected_repository_self_hosted_runners_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add a repository to the list of repositories allowed to use self-hosted runners in an organization.; flags: --org (required), --repository-id (required)
+  - actions disable-selected-repository-self-hosted-runners-organization - Remove a repository from the list of repositories allowed to use self-hosted runners in an organization [intent=reverse_etl availability=implemented write=actions_disable_selected_repository_self_hosted_runners_organization]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a repository from the list of repositories allowed to use self-hosted runners in an organization. Removes provider-side state.; flags: --org (required), --repository-id (required)
+  - actions set-github-actions-default-workflow-permissions-organization - Set default workflow permissions for an organization [intent=reverse_etl availability=implemented write=actions_set_github_actions_default_workflow_permissions_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set default workflow permissions for an organization.; flags: --org (required), --default-workflow-permissions, --can-approve-pull-request-reviews
+  - actions create-self-hosted-runner-group-for-org - Create a self-hosted runner group for an organization [intent=reverse_etl availability=implemented write=actions_create_self_hosted_runner_group_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a self-hosted runner group for an organization.; flags: --org (required), --name (required), --visibility, --allows-public-repositories, --restricted-to-workflows, --selected-workflows, --network-configuration-id
+  - actions update-self-hosted-runner-group-for-org - Update a self-hosted runner group for an organization [intent=reverse_etl availability=implemented write=actions_update_self_hosted_runner_group_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a self-hosted runner group for an organization.; flags: --org (required), --runner-group-id (required), --name (required), --visibility, --allows-public-repositories, --restricted-to-workflows, --selected-workflows, --network-configuration-id
+  - actions delete-self-hosted-runner-group-from-org - Delete a self-hosted runner group from an organization [intent=reverse_etl availability=implemented write=actions_delete_self_hosted_runner_group_from_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a self-hosted runner group from an organization. Removes provider-side state.; flags: --org (required), --runner-group-id (required)
+  - actions set-repo-access-to-self-hosted-runner-group-in-org - Set repository access for a self-hosted runner group in an organization [intent=reverse_etl availability=implemented write=actions_set_repo_access_to_self_hosted_runner_group_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization.; flags: --org (required), --runner-group-id (required), --selected-repository-ids (required)
+  - actions add-repo-access-to-self-hosted-runner-group-in-org - Add repository access to a self-hosted runner group in an organization [intent=reverse_etl availability=implemented write=actions_add_repo_access_to_self_hosted_runner_group_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.; flags: --org (required), --runner-group-id (required), --repository-id (required)
+  - actions remove-repo-access-to-self-hosted-runner-group-in-org - Remove repository access to a self-hosted runner group in an organization [intent=reverse_etl availability=implemented write=actions_remove_repo_access_to_self_hosted_runner_group_in_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove repository access to a self-hosted runner group in an organization. Removes provider-side state.; flags: --org (required), --runner-group-id (required), --repository-id (required)
+  - actions set-self-hosted-runners-in-group-for-org - Set self-hosted runners in a group for an organization [intent=reverse_etl availability=implemented write=actions_set_self_hosted_runners_in_group_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set self-hosted runners in a group for an organization.; flags: --org (required), --runner-group-id (required), --runners (required)
+  - actions add-self-hosted-runner-to-group-for-org - Add a self-hosted runner to a group for an organization [intent=reverse_etl availability=implemented write=actions_add_self_hosted_runner_to_group_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add a self-hosted runner to a group for an organization.; flags: --org (required), --runner-group-id (required), --runner-id (required)
+  - actions remove-self-hosted-runner-from-group-for-org - Remove a self-hosted runner from a group for an organization [intent=reverse_etl availability=implemented write=actions_remove_self_hosted_runner_from_group_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a self-hosted runner from a group for an organization. Removes provider-side state.; flags: --org (required), --runner-group-id (required), --runner-id (required)
+  - actions generate-runner-jitconfig-for-org - Create configuration for a just-in-time runner for an organization [intent=reverse_etl availability=implemented write=actions_generate_runner_jitconfig_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create configuration for a just-in-time runner for an organization.; flags: --org (required), --name (required), --runner-group-id (required), --labels (required), --work-folder
+  - actions create-registration-token-for-org - Create a registration token for an organization [intent=reverse_etl availability=implemented write=actions_create_registration_token_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a registration token for an organization.; flags: --org (required)
+  - actions create-remove-token-for-org - Create a remove token for an organization [intent=reverse_etl availability=implemented write=actions_create_remove_token_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a remove token for an organization.; flags: --org (required)
+  - actions delete-self-hosted-runner-from-org - Delete a self-hosted runner from an organization [intent=reverse_etl availability=implemented write=actions_delete_self_hosted_runner_from_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a self-hosted runner from an organization. Removes provider-side state.; flags: --org (required), --runner-id (required)
+  - actions add-custom-labels-to-self-hosted-runner-for-org - Add custom labels to a self-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_add_custom_labels_to_self_hosted_runner_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add custom labels to a self-hosted runner for an organization.; flags: --org (required), --runner-id (required), --labels (required)
+  - actions set-custom-labels-for-self-hosted-runner-for-org - Set custom labels for a self-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_set_custom_labels_for_self_hosted_runner_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set custom labels for a self-hosted runner for an organization.; flags: --org (required), --runner-id (required), --labels (required)
+  - actions remove-all-custom-labels-from-self-hosted-runner-for-org - Remove all custom labels from a self-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_remove_all_custom_labels_from_self_hosted_runner_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove all custom labels from a self-hosted runner for an organization. Removes provider-side state.; flags: --org (required), --runner-id (required)
+  - actions remove-custom-label-from-self-hosted-runner-for-org - Remove a custom label from a self-hosted runner for an organization [intent=reverse_etl availability=implemented write=actions_remove_custom_label_from_self_hosted_runner_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a custom label from a self-hosted runner for an organization. Removes provider-side state.; flags: --org (required), --runner-id (required), --name (required)
+  - actions create-or-update-org-secret - Create or update an organization secret [intent=reverse_etl availability=implemented write=actions_create_or_update_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update an organization secret.; flags: --org (required), --secret-name (required), --encrypted-value (required), --key-id (required), --visibility (required)
+  - actions delete-org-secret - Delete an organization secret [intent=reverse_etl availability=implemented write=actions_delete_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required)
+  - actions set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
+  - actions add-selected-repo-to-org-secret - Add selected repository to an organization secret [intent=reverse_etl availability=implemented write=actions_add_selected_repo_to_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization secret.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - actions remove-selected-repo-from-org-secret - Remove selected repository from an organization secret [intent=reverse_etl availability=implemented write=actions_remove_selected_repo_from_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - actions create-org-variable - Create an organization variable [intent=reverse_etl availability=implemented write=actions_create_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization variable.; flags: --org (required), --name (required), --value (required), --visibility (required)
+  - actions update-org-variable - Update an organization variable [intent=reverse_etl availability=implemented write=actions_update_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization variable.; flags: --org (required), --name (required), --value, --visibility
+  - actions delete-org-variable - Delete an organization variable [intent=reverse_etl availability=implemented write=actions_delete_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization variable. Removes provider-side state.; flags: --org (required), --name (required)
+  - actions set-selected-repos-for-org-variable - Set selected repositories for an organization variable [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization variable.; flags: --name (required), --org (required), --selected-repository-ids (required)
+  - actions add-selected-repo-to-org-variable - Add selected repository to an organization variable [intent=reverse_etl availability=implemented write=actions_add_selected_repo_to_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization variable.; flags: --org (required), --name (required), --repository-id (required)
+  - actions remove-selected-repo-from-org-variable - Remove selected repository from an organization variable [intent=reverse_etl availability=implemented write=actions_remove_selected_repo_from_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.; flags: --org (required), --name (required), --repository-id (required)
+  - agents create-or-update-org-secret - Create or update an organization secret [intent=reverse_etl availability=implemented write=agents_create_or_update_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update an organization secret.; flags: --org (required), --secret-name (required), --encrypted-value (required), --key-id (required), --visibility (required)
+  - agents delete-org-secret - Delete an organization secret [intent=reverse_etl availability=implemented write=agents_delete_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required)
+  - agents set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
+  - agents add-selected-repo-to-org-secret - Add selected repository to an organization secret [intent=reverse_etl availability=implemented write=agents_add_selected_repo_to_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization secret.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - agents remove-selected-repo-from-org-secret - Remove selected repository from an organization secret [intent=reverse_etl availability=implemented write=agents_remove_selected_repo_from_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - agents create-org-variable - Create an organization variable [intent=reverse_etl availability=implemented write=agents_create_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization variable.; flags: --org (required), --name (required), --value (required), --visibility (required)
+  - agents update-org-variable - Update an organization variable [intent=reverse_etl availability=implemented write=actions_update_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization variable.; flags: --org (required), --name (required), --value, --visibility
+  - agents delete-org-variable - Delete an organization variable [intent=reverse_etl availability=implemented write=agents_delete_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization variable. Removes provider-side state.; flags: --org (required), --name (required)
+  - agents set-selected-repos-for-org-variable - Set selected repositories for an organization variable [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization variable.; flags: --name (required), --org (required), --selected-repository-ids (required)
+  - agents add-selected-repo-to-org-variable - Add selected repository to an organization variable [intent=reverse_etl availability=implemented write=agents_add_selected_repo_to_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization variable.; flags: --org (required), --name (required), --repository-id (required)
+  - agents remove-selected-repo-from-org-variable - Remove selected repository from an organization variable [intent=reverse_etl availability=implemented write=agents_remove_selected_repo_from_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.; flags: --org (required), --name (required), --repository-id (required)
+  - orgs create-artifact-deployment-record - Create an artifact deployment record [intent=reverse_etl availability=implemented write=orgs_create_artifact_deployment_record]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an artifact deployment record.; flags: --org (required), --name (required), --digest (required), --status (required), --logical-environment (required), --deployment-name (required), --version, --physical-environment, --cluster, --runtime-risks, --github-repository, --return-records
+  - orgs set-cluster-deployment-records - Set cluster deployment records [intent=reverse_etl availability=implemented write=orgs_set_cluster_deployment_records]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Set cluster deployment records.; flags: --cluster (required), --deployments (required), --logical-environment (required), --org (required), --partial-success, --physical-environment, --return-records
+  - orgs create-cluster-deployment-records-job - Create a cluster deployment records job [intent=reverse_etl availability=implemented write=orgs_create_cluster_deployment_records_job]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a cluster deployment records job.; flags: --cluster (required), --deployments (required), --logical-environment (required), --org (required), --physical-environment
+  - orgs create-artifact-storage-record - Create artifact metadata storage record [intent=reverse_etl availability=implemented write=orgs_create_artifact_storage_record]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create artifact metadata storage record.; flags: --org (required), --name (required), --digest (required), --registry-url (required), --version, --artifact-url, --path, --repository, --status, --github-repository, --return-records
+  - orgs list-attestations-bulk - List attestations by bulk subject digests [intent=direct_read availability=implemented operation=github.orgs_list_attestations_bulk]; flags: --org (required), --subject-digests (required), --predicate-type, --page, --page-cursor
+  - orgs delete-attestations-by-subject-digest - Delete attestations by subject digest [intent=reverse_etl availability=implemented write=orgs_delete_attestations_by_subject_digest]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by subject digest. Removes provider-side state.; flags: --org (required), --subject-digest (required)
+  - orgs delete-attestations-by-id - Delete attestations by ID [intent=reverse_etl availability=implemented write=orgs_delete_attestations_by_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by ID. Removes provider-side state.; flags: --org (required), --attestation-id (required)
+  - orgs block-user - Block a user from an organization [intent=reverse_etl availability=implemented write=orgs_block_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Block a user from an organization.; flags: --org (required), --username (required)
+  - orgs unblock-user - Unblock a user from an organization [intent=reverse_etl availability=implemented write=orgs_unblock_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unblock a user from an organization. Removes provider-side state.; flags: --org (required), --username (required)
+  - campaigns update-campaign - Update a campaign [intent=reverse_etl availability=implemented write=campaigns_update_campaign]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a campaign.; flags: --org (required), --campaign-number (required), --name, --description, --managers, --team-managers, --ends-at, --contact-link, --state
+  - campaigns delete-campaign - Delete a campaign for an organization [intent=reverse_etl availability=implemented write=campaigns_delete_campaign]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a campaign for an organization. Removes provider-side state.; flags: --org (required), --campaign-number (required)
+  - code-security create-configuration - Create a code security configuration [intent=reverse_etl availability=implemented write=code_security_create_configuration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a code security configuration.; flags: --org (required), --name (required), --description, --advanced-security, --code-security, --dependency-graph, --dependency-graph-autosubmit-action, --dependabot-alerts, --dependabot-security-updates, --dependabot-delegated-alert-dismissal, --code-scanning-default-setup, --code-scanning-delegated-alert-dismissal, --secret-protection, --secret-scanning, --secret-scanning-push-protection, --secret-scanning-delegated-bypass, --secret-scanning-validity-checks, --secret-scanning-non-provider-patterns, --secret-scanning-generic-secrets, --secret-scanning-delegated-alert-dismissal, --secret-scanning-extended-metadata, --private-vulnerability-reporting, --enforcement
+  - code-security detach-configuration - Detach configurations from repositories [intent=reverse_etl availability=implemented write=code_security_detach_configuration]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Detach configurations from repositories. Removes provider-side state.; flags: --org (required), --selected-repository-ids (required)
+  - code-security update-configuration - Update a code security configuration [intent=reverse_etl availability=implemented write=code_security_update_configuration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a code security configuration.; flags: --org (required), --configuration-id (required), --name, --description, --advanced-security, --code-security, --dependency-graph, --dependency-graph-autosubmit-action, --dependabot-alerts, --dependabot-security-updates, --dependabot-delegated-alert-dismissal, --code-scanning-default-setup, --code-scanning-delegated-alert-dismissal, --secret-protection, --secret-scanning, --secret-scanning-push-protection, --secret-scanning-delegated-bypass, --secret-scanning-validity-checks, --secret-scanning-non-provider-patterns, --secret-scanning-generic-secrets, --secret-scanning-delegated-alert-dismissal, --secret-scanning-extended-metadata, --private-vulnerability-reporting, --enforcement
+  - code-security delete-configuration - Delete a code security configuration [intent=reverse_etl availability=implemented write=code_security_delete_configuration]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a code security configuration. Removes provider-side state.; flags: --org (required), --configuration-id (required)
+  - code-security attach-configuration - Attach a configuration to repositories [intent=reverse_etl availability=implemented write=code_security_attach_configuration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Attach a configuration to repositories.; flags: --org (required), --configuration-id (required), --scope (required)
+  - code-security set-configuration-as-default - Set a code security configuration as a default for an organization [intent=reverse_etl availability=implemented write=code_security_set_configuration_as_default]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a code security configuration as a default for an organization.; flags: --org (required), --configuration-id (required), --default-for-new-repos
+  - codespaces set-codespaces-access - Manage access control for organization codespaces (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=codespaces_set_codespaces_access]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Manage access control for organization codespaces (deprecated by GitHub, still documented).; flags: --org (required), --visibility (required), --selected-usernames
+  - codespaces set-codespaces-access-users - Add users to Codespaces access for an organization (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=codespaces_set_codespaces_access_users]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add users to Codespaces access for an organization (deprecated by GitHub, still documented).; flags: --org (required), --selected-usernames (required)
+  - codespaces delete-codespaces-access-users - Remove users from Codespaces access for an organization (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=codespaces_delete_codespaces_access_users]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove users from Codespaces access for an organization (deprecated by GitHub, still documented). Removes provider-side state.; flags: --org (required), --selected-usernames (required)
+  - codespaces create-or-update-org-secret - Create or update an organization secret [intent=reverse_etl availability=implemented write=codespaces_create_or_update_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update an organization secret.; flags: --org (required), --secret-name (required), --visibility (required), --encrypted-value, --key-id
+  - codespaces delete-org-secret - Delete an organization secret [intent=reverse_etl availability=implemented write=codespaces_delete_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required)
+  - codespaces set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=codespaces_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
+  - codespaces add-selected-repo-to-org-secret - Add selected repository to an organization secret [intent=reverse_etl availability=implemented write=codespaces_add_selected_repo_to_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization secret.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - codespaces remove-selected-repo-from-org-secret - Remove selected repository from an organization secret [intent=reverse_etl availability=implemented write=codespaces_remove_selected_repo_from_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - copilot-spaces create-for-org - Create an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_create_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization Copilot Space.; flags: --org (required), --name (required), --description, --general-instructions, --base-role
+  - copilot-spaces update-for-org - Set an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_update_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set an organization Copilot Space.; flags: --org (required), --space-number (required), --name, --description, --general-instructions, --base-role
+  - copilot-spaces delete-for-org - Delete an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_delete_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization Copilot Space. Removes provider-side state.; flags: --org (required), --space-number (required)
+  - copilot-spaces add-collaborator-for-org - Add a collaborator to an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_add_collaborator_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add a collaborator to an organization Copilot Space.; flags: --org (required), --space-number (required), --actor-type (required), --actor-identifier (required), --role (required)
+  - copilot-spaces update-collaborator-for-org - Set a collaborator role for an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_update_collaborator_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space.; flags: --org (required), --space-number (required), --actor-type (required), --actor-identifier (required), --role (required)
+  - copilot-spaces remove-collaborator-for-org - Remove a collaborator from an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_remove_collaborator_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a collaborator from an organization Copilot Space. Removes provider-side state.; flags: --org (required), --space-number (required), --actor-type (required), --actor-identifier (required)
+  - copilot-spaces create-resource-for-org - Create a resource for an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_create_resource_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a resource for an organization Copilot Space.; flags: --metadata (required), --org (required), --resource-type (required), --space-number (required)
+  - copilot-spaces update-resource-for-org - Set a resource for an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_update_resource_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a resource for an organization Copilot Space.; flags: --org (required), --space-number (required), --space-resource-id (required)
+  - copilot-spaces delete-resource-for-org - Delete a resource from an organization Copilot Space [intent=reverse_etl availability=implemented write=copilot_spaces_delete_resource_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a resource from an organization Copilot Space. Removes provider-side state.; flags: --org (required), --space-number (required), --space-resource-id (required)
+  - dependabot update-repository-access-for-org - Updates Dependabot's repository access list for an organization [intent=reverse_etl availability=implemented write=dependabot_update_repository_access_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Updates Dependabot's repository access list for an organization.; flags: --org (required)
+  - dependabot set-repository-access-default-level - Set the default repository access level for Dependabot [intent=reverse_etl availability=implemented write=dependabot_set_repository_access_default_level]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set the default repository access level for Dependabot.; flags: --org (required), --default-level (required)
+  - dependabot create-or-update-org-secret - Create or update an organization secret [intent=reverse_etl availability=implemented write=dependabot_create_or_update_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update an organization secret.; flags: --org (required), --secret-name (required), --visibility (required), --encrypted-value, --key-id, --selected-repository-ids
+  - dependabot delete-org-secret - Delete an organization secret [intent=reverse_etl availability=implemented write=dependabot_delete_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required)
+  - dependabot set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=dependabot_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
+  - dependabot add-selected-repo-to-org-secret - Add selected repository to an organization secret [intent=reverse_etl availability=implemented write=dependabot_add_selected_repo_to_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization secret.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - dependabot remove-selected-repo-from-org-secret - Remove selected repository from an organization secret [intent=reverse_etl availability=implemented write=dependabot_remove_selected_repo_from_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required), --repository-id (required)
+  - orgs create-webhook - Create an organization webhook [intent=reverse_etl availability=implemented write=orgs_create_webhook]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization webhook.; flags: --org (required), --name (required), --config-url (required), --events, --active
+  - orgs update-webhook - Update an organization webhook [intent=reverse_etl availability=implemented write=orgs_update_webhook]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization webhook.; flags: --org (required), --hook-id (required), --events, --active, --name
+  - orgs delete-webhook - Delete an organization webhook [intent=reverse_etl availability=implemented write=orgs_delete_webhook]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization webhook. Removes provider-side state.; flags: --org (required), --hook-id (required)
+  - orgs update-webhook-config-for-org - Update a webhook configuration for an organization [intent=reverse_etl availability=implemented write=orgs_update_webhook_config_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a webhook configuration for an organization.; flags: --org (required), --hook-id (required), --url, --content-type, --secret, --insecure-ssl
+  - orgs redeliver-webhook-delivery - Redeliver a delivery for an organization webhook [intent=reverse_etl availability=implemented write=orgs_redeliver_webhook_delivery]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Redeliver a delivery for an organization webhook.; flags: --org (required), --hook-id (required), --delivery-id (required)
+  - orgs ping-webhook - Ping an organization webhook [intent=reverse_etl availability=implemented write=orgs_ping_webhook]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Ping an organization webhook.; flags: --org (required), --hook-id (required)
+  - interactions set-restrictions-for-org - Set interaction restrictions for an organization [intent=reverse_etl availability=implemented write=interactions_set_restrictions_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set interaction restrictions for an organization.; flags: --org (required), --limit (required), --expiry
+  - interactions remove-restrictions-for-org - Remove interaction restrictions for an organization [intent=reverse_etl availability=implemented write=interactions_remove_restrictions_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove interaction restrictions for an organization. Removes provider-side state.; flags: --org (required)
+  - interactions update-pull-request-creation-cap-for-org - Update pull request creation cap for an org [intent=reverse_etl availability=implemented write=interactions_update_pull_request_creation_cap_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update pull request creation cap for an org.; flags: --org (required), --enabled (required), --max-open-pull-requests
+  - orgs create-invitation - Create an organization invitation [intent=reverse_etl availability=implemented write=orgs_create_invitation]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization invitation.; flags: --org (required), --invitee-id, --email, --role
+  - orgs cancel-invitation - Cancel an organization invitation [intent=reverse_etl availability=implemented write=orgs_cancel_invitation]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Cancel an organization invitation. Removes provider-side state.; flags: --org (required), --invitation-id (required)
+  - orgs create-issue-field - Create issue field for an organization [intent=reverse_etl availability=implemented write=orgs_create_issue_field]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create issue field for an organization.; flags: --org (required), --name (required), --data-type (required), --description, --visibility
+  - orgs update-issue-field - Update issue field for an organization [intent=reverse_etl availability=implemented write=orgs_update_issue_field]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update issue field for an organization.; flags: --org (required), --issue-field-id (required), --name, --description, --visibility
+  - orgs delete-issue-field - Delete issue field for an organization [intent=reverse_etl availability=implemented write=orgs_delete_issue_field]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete issue field for an organization. Removes provider-side state.; flags: --org (required), --issue-field-id (required)
+  - orgs create-issue-type - Create issue type for an organization [intent=reverse_etl availability=implemented write=orgs_create_issue_type]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create issue type for an organization.; flags: --org (required), --name (required), --is-enabled (required), --description, --color
+  - orgs update-issue-type - Update issue type for an organization [intent=reverse_etl availability=implemented write=orgs_update_issue_type]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update issue type for an organization.; flags: --org (required), --issue-type-id (required), --name (required), --is-enabled (required), --description, --color
+  - orgs delete-issue-type - Delete issue type for an organization [intent=reverse_etl availability=implemented write=orgs_delete_issue_type]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete issue type for an organization. Removes provider-side state.; flags: --org (required), --issue-type-id (required)
+  - orgs remove-member - Remove an organization member [intent=reverse_etl availability=implemented write=orgs_remove_member]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove an organization member. Removes provider-side state.; flags: --org (required), --username (required)
+  - codespaces delete-from-organization - Delete a codespace from the organization [intent=reverse_etl availability=implemented write=codespaces_delete_from_organization]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a codespace from the organization. Removes provider-side state.; flags: --org (required), --username (required), --codespace-name (required)
+  - codespaces stop-in-organization - Stop a codespace for an organization user [intent=reverse_etl availability=implemented write=codespaces_stop_in_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Stop a codespace for an organization user.; flags: --org (required), --username (required), --codespace-name (required)
+  - orgs set-membership-for-user - Set organization membership for a user [intent=reverse_etl availability=implemented write=orgs_set_membership_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set organization membership for a user.; flags: --org (required), --username (required), --role
+  - orgs remove-membership-for-user - Remove organization membership for a user [intent=reverse_etl availability=implemented write=orgs_remove_membership_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove organization membership for a user. Removes provider-side state.; flags: --org (required), --username (required)
+  - migrations start-for-org - Start an organization migration [intent=reverse_etl availability=implemented write=migrations_start_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Start an organization migration.; flags: --org (required), --repositories (required), --lock-repositories, --exclude-metadata, --exclude-git-data, --exclude-attachments, --exclude-releases, --exclude-owner-projects, --org-metadata-only, --exclude
+  - migrations delete-archive-for-org - Delete an organization migration archive [intent=reverse_etl availability=implemented write=migrations_delete_archive_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization migration archive. Removes provider-side state.; flags: --org (required), --migration-id (required)
+  - migrations unlock-repo-for-org - Unlock an organization repository [intent=reverse_etl availability=implemented write=migrations_unlock_repo_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unlock an organization repository. Removes provider-side state.; flags: --org (required), --migration-id (required), --repo-name (required)
+  - orgs revoke-all-org-roles-team - Remove all organization roles for a team [intent=reverse_etl availability=implemented write=orgs_revoke_all_org_roles_team]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove all organization roles for a team. Removes provider-side state.; flags: --org (required), --team-slug (required)
+  - orgs assign-team-to-org-role - Assign an organization role to a team [intent=reverse_etl availability=implemented write=orgs_assign_team_to_org_role]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Assign an organization role to a team.; flags: --org (required), --team-slug (required), --role-id (required)
+  - orgs revoke-org-role-team - Remove an organization role from a team [intent=reverse_etl availability=implemented write=orgs_revoke_org_role_team]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove an organization role from a team. Removes provider-side state.; flags: --org (required), --team-slug (required), --role-id (required)
+  - orgs revoke-all-org-roles-user - Remove all organization roles for a user [intent=reverse_etl availability=implemented write=orgs_revoke_all_org_roles_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove all organization roles for a user. Removes provider-side state.; flags: --org (required), --username (required)
+  - orgs assign-user-to-org-role - Assign an organization role to a user [intent=reverse_etl availability=implemented write=orgs_assign_user_to_org_role]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Assign an organization role to a user.; flags: --org (required), --username (required), --role-id (required)
+  - orgs revoke-org-role-user - Remove an organization role from a user [intent=reverse_etl availability=implemented write=orgs_revoke_org_role_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove an organization role from a user. Removes provider-side state.; flags: --org (required), --username (required), --role-id (required)
+  - orgs convert-member-to-outside-collaborator - Convert an organization member to outside collaborator [intent=reverse_etl availability=implemented write=orgs_convert_member_to_outside_collaborator]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Convert an organization member to outside collaborator.; flags: --org (required), --username (required), --async
+  - orgs remove-outside-collaborator - Remove outside collaborator from an organization [intent=reverse_etl availability=implemented write=orgs_remove_outside_collaborator]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove outside collaborator from an organization. Removes provider-side state.; flags: --org (required), --username (required)
+  - packages delete-package-for-org - Delete a package for an organization [intent=reverse_etl availability=implemented write=packages_delete_package_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a package for an organization. Removes provider-side state.; flags: --org (required), --package-type (required), --package-name (required)
+  - packages restore-package-for-org - Restore a package for an organization [intent=reverse_etl availability=implemented write=packages_restore_package_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore a package for an organization.; flags: --org (required), --package-type (required), --package-name (required)
+  - packages delete-package-version-for-org - Delete package version for an organization [intent=reverse_etl availability=implemented write=packages_delete_package_version_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete package version for an organization. Removes provider-side state.; flags: --org (required), --package-type (required), --package-name (required), --package-version-id (required)
+  - packages restore-package-version-for-org - Restore package version for an organization [intent=reverse_etl availability=implemented write=packages_restore_package_version_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore package version for an organization.; flags: --org (required), --package-type (required), --package-name (required), --package-version-id (required)
+  - orgs review-pat-grant-requests-in-bulk - Review requests to access organization resources with fine-grained personal access tokens [intent=reverse_etl availability=implemented write=orgs_review_pat_grant_requests_in_bulk]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Review requests to access organization resources with fine-grained personal access tokens.; flags: --org (required), --action (required), --reason
+  - orgs review-pat-grant-request - Review a request to access organization resources with a fine-grained personal access token [intent=reverse_etl availability=implemented write=orgs_review_pat_grant_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Review a request to access organization resources with a fine-grained personal access token.; flags: --org (required), --pat-request-id (required), --action (required), --reason
+  - orgs update-pat-accesses - Update the access to organization resources via fine-grained personal access tokens [intent=reverse_etl availability=implemented write=orgs_update_pat_accesses]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens.; flags: --action (required), --org (required), --pat-ids (required)
+  - orgs update-pat-access - Update the access a fine-grained personal access token has to organization resources [intent=reverse_etl availability=implemented write=orgs_update_pat_access]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Update the access a fine-grained personal access token has to organization resources.; flags: --org (required), --pat-id (required), --action (required)
+  - private-registries create-org-private-registry - Create a private registry for an organization [intent=reverse_etl availability=implemented write=private_registries_create_org_private_registry]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a private registry for an organization.; flags: --org (required), --registry-type (required), --url (required), --visibility (required), --username, --replaces-base, --encrypted-value, --key-id, --auth-type, --tenant-id, --client-id, --aws-region, --account-id, --role-name, --domain, --domain-owner, --jfrog-oidc-provider-name, --audience, --identity-mapping-name, --namespace, --service-slug, --api-host, --workload-identity-provider, --service-account
+  - private-registries update-org-private-registry - Update a private registry for an organization [intent=reverse_etl availability=implemented write=private_registries_update_org_private_registry]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a private registry for an organization.; flags: --org (required), --secret-name (required), --registry-type, --url, --username, --replaces-base, --encrypted-value, --key-id, --visibility, --auth-type, --tenant-id, --client-id, --aws-region, --account-id, --role-name, --domain, --domain-owner, --jfrog-oidc-provider-name, --audience, --identity-mapping-name, --namespace, --service-slug, --api-host, --workload-identity-provider, --service-account
+  - private-registries delete-org-private-registry - Delete a private registry for an organization [intent=reverse_etl availability=implemented write=private_registries_delete_org_private_registry]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a private registry for an organization. Removes provider-side state.; flags: --org (required), --secret-name (required)
+  - projects create-draft-item-for-org - Create draft item for organization owned project [intent=reverse_etl availability=implemented write=projects_create_draft_item_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create draft item for organization owned project.; flags: --org (required), --project-number (required), --title (required), --body
+  - projects update-item-for-org - Update project item for organization [intent=reverse_etl availability=implemented write=projects_update_item_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update project item for organization.; flags: --fields (required), --item-id (required), --org (required), --project-number (required)
+  - projects delete-item-for-org - Delete project item for organization [intent=reverse_etl availability=implemented write=projects_delete_item_for_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete project item for organization. Removes provider-side state.; flags: --org (required), --project-number (required), --item-id (required)
+  - projects create-view-for-org - Create a view for an organization-owned project [intent=reverse_etl availability=implemented write=projects_create_view_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a view for an organization-owned project.; flags: --org (required), --project-number (required), --name (required), --layout (required), --filter
+  - orgs custom-properties-for-repos-create-or-update-organization-definitions - Create or update custom properties for an organization [intent=reverse_etl availability=implemented write=orgs_custom_properties_for_repos_create_or_update_organization_definitions]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update custom properties for an organization.; flags: --org (required), --properties (required)
+  - orgs custom-properties-for-repos-create-or-update-organization-definition - Create or update a custom property for an organization [intent=reverse_etl availability=implemented write=orgs_custom_properties_for_repos_create_or_update_organization_definition]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update a custom property for an organization.; flags: --org (required), --custom-property-name (required), --value-type (required), --required, --default-value, --description, --allowed-values, --values-editable-by, --require-explicit-values
+  - orgs custom-properties-for-repos-delete-organization-definition - Remove a custom property for an organization [intent=reverse_etl availability=implemented write=orgs_custom_properties_for_repos_delete_organization_definition]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a custom property for an organization. Removes provider-side state.; flags: --org (required), --custom-property-name (required)
+  - orgs custom-properties-for-repos-create-or-update-organization-values - Create or update custom property values for organization repositories [intent=reverse_etl availability=implemented write=orgs_custom_properties_for_repos_create_or_update_organization_values]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update custom property values for organization repositories.; flags: --org (required), --properties (required), --repository-names (required)
+  - orgs set-public-membership-for-authenticated-user - Set public organization membership for the authenticated user [intent=reverse_etl availability=implemented write=orgs_set_public_membership_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set public organization membership for the authenticated user.; flags: --org (required), --username (required)
+  - orgs remove-public-membership-for-authenticated-user - Remove public organization membership for the authenticated user [intent=reverse_etl availability=implemented write=orgs_remove_public_membership_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove public organization membership for the authenticated user. Removes provider-side state.; flags: --org (required), --username (required)
+  - repos create-in-org - Create an organization repository [intent=reverse_etl availability=implemented write=repos_create_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization repository.; flags: --org (required), --name (required), --description, --homepage, --private, --visibility, --has-issues, --has-projects, --has-wiki, --has-downloads, --is-template, --team-id, --auto-init, --gitignore-template, --license-template, --allow-squash-merge, --allow-merge-commit, --allow-rebase-merge, --allow-auto-merge, --delete-branch-on-merge, --use-squash-pr-title-as-default, --squash-merge-commit-title, --squash-merge-commit-message, --merge-commit-title, --merge-commit-message
+  - repos create-org-ruleset - Create an organization repository ruleset [intent=reverse_etl availability=implemented write=repos_create_org_ruleset]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization repository ruleset.; flags: --org (required), --name (required), --enforcement (required), --target
+  - repos update-org-ruleset - Update an organization repository ruleset [intent=reverse_etl availability=implemented write=repos_update_org_ruleset]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization repository ruleset.; flags: --org (required), --ruleset-id (required), --name, --target, --enforcement
+  - repos delete-org-ruleset - Delete an organization repository ruleset [intent=reverse_etl availability=implemented write=repos_delete_org_ruleset]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization repository ruleset. Removes provider-side state.; flags: --org (required), --ruleset-id (required)
+  - secret-scanning bulk-create-org-custom-patterns - Bulk create organization custom patterns [intent=reverse_etl availability=implemented write=secret_scanning_bulk_create_org_custom_patterns]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk create organization custom patterns.; flags: --org (required), --patterns (required)
+  - secret-scanning bulk-delete-org-custom-patterns - Bulk delete organization custom patterns [intent=reverse_etl availability=implemented write=secret_scanning_bulk_delete_org_custom_patterns]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Bulk delete organization custom patterns. Removes provider-side state.; flags: --org (required), --patterns (required), --post-delete-action
+  - secret-scanning update-org-pattern-configs - Update organization pattern configurations [intent=reverse_etl availability=implemented write=secret_scanning_update_org_pattern_configs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update organization pattern configurations.; flags: --org (required), --pattern-config-version
+  - orgs add-security-manager-team - Add a security manager team (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=orgs_add_security_manager_team]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add a security manager team (deprecated by GitHub, still documented).; flags: --org (required), --team-slug (required)
+  - orgs remove-security-manager-team - Remove a security manager team (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=orgs_remove_security_manager_team]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a security manager team (deprecated by GitHub, still documented). Removes provider-side state.; flags: --org (required), --team-slug (required)
+  - orgs set-immutable-releases-settings - Set immutable releases settings for an organization [intent=reverse_etl availability=implemented write=orgs_set_immutable_releases_settings]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set immutable releases settings for an organization.; flags: --org (required), --enforced-repositories (required)
+  - orgs set-immutable-releases-settings-repositories - Set selected repositories for immutable releases enforcement [intent=reverse_etl availability=implemented write=orgs_set_immutable_releases_settings_repositories]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for immutable releases enforcement.; flags: --org (required), --selected-repository-ids (required)
+  - orgs enable-selected-repository-immutable-releases-organization - Enable a selected repository for immutable releases in an organization [intent=reverse_etl availability=implemented write=orgs_enable_selected_repository_immutable_releases_organization]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Enable a selected repository for immutable releases in an organization.; flags: --org (required), --repository-id (required)
+  - orgs disable-selected-repository-immutable-releases-organization - Disable a selected repository for immutable releases in an organization [intent=reverse_etl availability=implemented write=orgs_disable_selected_repository_immutable_releases_organization]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Disable a selected repository for immutable releases in an organization. Removes provider-side state.; flags: --org (required), --repository-id (required)
+  - hosted-compute create-network-configuration-for-org - Create a hosted compute network configuration for an organization [intent=reverse_etl availability=implemented write=hosted_compute_create_network_configuration_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a hosted compute network configuration for an organization.; flags: --org (required), --name (required), --network-settings-ids (required), --compute-service, --failover-network-settings-ids, --failover-network-enabled
+  - hosted-compute update-network-configuration-for-org - Update a hosted compute network configuration for an organization [intent=reverse_etl availability=implemented write=hosted_compute_update_network_configuration_for_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a hosted compute network configuration for an organization.; flags: --org (required), --network-configuration-id (required), --name, --compute-service, --network-settings-ids, --failover-network-settings-ids, --failover-network-enabled
+  - hosted-compute delete-network-configuration-from-org - Delete a hosted compute network configuration from an organization [intent=reverse_etl availability=implemented write=hosted_compute_delete_network_configuration_from_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a hosted compute network configuration from an organization. Removes provider-side state.; flags: --org (required), --network-configuration-id (required)
+  - teams create - Create a team [intent=reverse_etl availability=implemented write=teams_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a team.; flags: --org (required), --name (required), --description, --maintainers, --repo-names, --privacy, --notification-setting, --permission, --parent-team-id, --parent-team-slug
+  - teams update-in-org - Update a team [intent=reverse_etl availability=implemented write=teams_update_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a team.; flags: --org (required), --team-slug (required), --name, --description, --privacy, --notification-setting, --permission, --parent-team-id, --parent-team-slug
+  - teams delete-in-org - Delete a team [intent=reverse_etl availability=implemented write=teams_delete_in_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a team. Removes provider-side state.; flags: --org (required), --team-slug (required)
+  - teams add-or-update-membership-for-user-in-org - Add or update team membership for a user [intent=reverse_etl availability=implemented write=teams_add_or_update_membership_for_user_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add or update team membership for a user.; flags: --org (required), --team-slug (required), --username (required), --role
+  - teams remove-membership-for-user-in-org - Remove team membership for a user [intent=reverse_etl availability=implemented write=teams_remove_membership_for_user_in_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team membership for a user. Removes provider-side state.; flags: --org (required), --team-slug (required), --username (required)
+  - teams add-or-update-repo-permissions-in-org - Add or update team repository permissions [intent=reverse_etl availability=implemented write=teams_add_or_update_repo_permissions_in_org]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add or update team repository permissions.; flags: --org (required), --team-slug (required), --permission
+  - teams remove-repo-in-org - Remove a repository from a team [intent=reverse_etl availability=implemented write=teams_remove_repo_in_org]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a repository from a team. Removes provider-side state.; flags: --org (required), --team-slug (required)
+  - orgs enable-or-disable-security-product-on-all-org-repos - Enable or disable a security feature for an organization (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=orgs_enable_or_disable_security_product_on_all_org_repos]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Enable or disable a security feature for an organization (deprecated by GitHub, still documented).; flags: --org (required), --security-product (required), --enablement (required), --query-suite
+  - interactions update-pull-request-creation-cap-for-repo - Update pull request creation cap for a repository [intent=reverse_etl availability=implemented write=interactions_update_pull_request_creation_cap_for_repo]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update pull request creation cap for a repository.; flags: --enabled (required), --max-open-pull-requests
+  - issues approve-suggestion - Approve an issue suggestion [intent=reverse_etl availability=implemented write=issues_approve_suggestion]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Approve an issue suggestion.; flags: --issue-number (required), --suggestion-id (required)
+  - issues dismiss-suggestion - Dismiss an issue suggestion [intent=reverse_etl availability=implemented write=issues_dismiss_suggestion]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Dismiss an issue suggestion.; flags: --issue-number (required), --suggestion-id (required)
+  - pulls merge-async - Merge a pull request asynchronously [intent=reverse_etl availability=implemented write=pulls_merge_async]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Merge a pull request asynchronously.; flags: --pull-number (required), --commit-title, --commit-message, --sha, --merge-method, --merge-action
+  - secret-scanning bulk-create-repo-custom-patterns - Bulk create repository custom patterns [intent=reverse_etl availability=implemented write=secret_scanning_bulk_create_repo_custom_patterns]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk create repository custom patterns.; flags: --patterns (required)
+  - secret-scanning bulk-delete-repo-custom-patterns - Bulk delete repository custom patterns [intent=reverse_etl availability=implemented write=secret_scanning_bulk_delete_repo_custom_patterns]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Bulk delete repository custom patterns. Removes provider-side state.; flags: --patterns (required), --post-delete-action
+  - pull-request-stacks create - Create a pull request stack [intent=reverse_etl availability=implemented write=pull_request_stacks_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a pull request stack.; flags: --pull-requests (required)
+  - pull-request-stacks add - Add pull requests to a pull request stack [intent=reverse_etl availability=implemented write=pull_request_stacks_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add pull requests to a pull request stack.; flags: --pull-requests (required), --stack-number (required)
+  - pull-request-stacks unstack - Remove pull requests from a pull request stack [intent=reverse_etl availability=implemented write=pull_request_stacks_unstack]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Remove pull requests from a pull request stack.; flags: --stack-number (required)
+  - repos create-using-template - Create a repository using a template [intent=reverse_etl availability=implemented write=repos_create_using_template]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a repository using a template.; flags: --template-owner (required), --template-repo (required), --name (required), --owner, --description, --include-all-branches, --private
+  - teams update-legacy - Update a team (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_update_legacy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a team (Legacy) (deprecated by GitHub, still documented).; flags: --team-id (required), --name (required), --description, --privacy, --notification-setting, --permission, --parent-team-id, --parent-team-slug
+  - teams delete-legacy - Delete a team (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_delete_legacy]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.; flags: --team-id (required)
+  - teams add-member-legacy - Add team member (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_add_member_legacy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add team member (Legacy) (deprecated by GitHub, still documented).; flags: --team-id (required), --username (required)
+  - teams remove-member-legacy - Remove team member (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_remove_member_legacy]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team member (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.; flags: --team-id (required), --username (required)
+  - teams add-or-update-membership-for-user-legacy - Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_add_or_update_membership_for_user_legacy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented).; flags: --team-id (required), --username (required), --role
+  - teams remove-membership-for-user-legacy - Remove team membership for a user (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_remove_membership_for_user_legacy]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team membership for a user (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.; flags: --team-id (required), --username (required)
+  - teams add-or-update-repo-permissions-legacy - Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_add_or_update_repo_permissions_legacy]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented).; flags: --team-id (required), --permission
+  - teams remove-repo-legacy - Remove a repository from a team (Legacy) (deprecated by GitHub, still documented) [intent=reverse_etl availability=implemented write=teams_remove_repo_legacy]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a repository from a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.; flags: --team-id (required)
+  - users update-authenticated - Update the authenticated user [intent=reverse_etl availability=implemented write=users_update_authenticated]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update the authenticated user.; flags: --name, --email, --blog, --twitter-username, --company, --location, --hireable, --bio
+  - users block - Block a user [intent=reverse_etl availability=implemented write=users_block]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Block a user.; flags: --username (required)
+  - users unblock - Unblock a user [intent=reverse_etl availability=implemented write=users_unblock]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unblock a user. Removes provider-side state.; flags: --username (required)
+  - codespaces create-or-update-secret-for-authenticated-user - Create or update a secret for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_create_or_update_secret_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update a secret for the authenticated user.; flags: --secret-name (required), --key-id (required), --encrypted-value, --selected-repository-ids
+  - codespaces delete-secret-for-authenticated-user - Delete a secret for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_delete_secret_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a secret for the authenticated user. Removes provider-side state.; flags: --secret-name (required)
+  - codespaces set-repositories-for-secret-for-authenticated-user - Set selected repositories for a user secret [intent=reverse_etl availability=implemented write=codespaces_set_repositories_for_secret_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for a user secret.; flags: --secret-name (required), --selected-repository-ids (required)
+  - codespaces add-repository-for-secret-for-authenticated-user - Add a selected repository to a user secret [intent=reverse_etl availability=implemented write=codespaces_add_repository_for_secret_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add a selected repository to a user secret.; flags: --secret-name (required), --repository-id (required)
+  - codespaces remove-repository-for-secret-for-authenticated-user - Remove a selected repository from a user secret [intent=reverse_etl availability=implemented write=codespaces_remove_repository_for_secret_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a selected repository from a user secret. Removes provider-side state.; flags: --secret-name (required), --repository-id (required)
+  - codespaces update-for-authenticated-user - Update a codespace for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_update_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update a codespace for the authenticated user.; flags: --codespace-name (required), --machine, --display-name, --recent-folders
+  - codespaces delete-for-authenticated-user - Delete a codespace for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_delete_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a codespace for the authenticated user. Removes provider-side state.; flags: --codespace-name (required)
+  - codespaces export-for-authenticated-user - Export a codespace for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_export_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Export a codespace for the authenticated user.; flags: --codespace-name (required)
+  - codespaces publish-for-authenticated-user - Create a repository from an unpublished codespace [intent=reverse_etl availability=implemented write=codespaces_publish_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a repository from an unpublished codespace.; flags: --codespace-name (required), --name, --private
+  - codespaces start-for-authenticated-user - Start a codespace for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_start_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Start a codespace for the authenticated user.; flags: --codespace-name (required)
+  - codespaces stop-for-authenticated-user - Stop a codespace for the authenticated user [intent=reverse_etl availability=implemented write=codespaces_stop_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Stop a codespace for the authenticated user.; flags: --codespace-name (required)
+  - users set-primary-email-visibility-for-authenticated-user - Set primary email visibility for the authenticated user [intent=reverse_etl availability=implemented write=users_set_primary_email_visibility_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set primary email visibility for the authenticated user.; flags: --visibility (required)
+  - users follow - Follow a user [intent=reverse_etl availability=implemented write=users_follow]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Follow a user.; flags: --username (required)
+  - users unfollow - Unfollow a user [intent=reverse_etl availability=implemented write=users_unfollow]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unfollow a user. Removes provider-side state.; flags: --username (required)
+  - users create-gpg-key-for-authenticated-user - Create a GPG key for the authenticated user [intent=reverse_etl availability=implemented write=users_create_gpg_key_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a GPG key for the authenticated user.; flags: --armored-public-key (required), --name
+  - users delete-gpg-key-for-authenticated-user - Delete a GPG key for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_gpg_key_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a GPG key for the authenticated user. Removes provider-side state.; flags: --gpg-key-id (required)
+  - apps add-repo-to-installation-for-authenticated-user - Add a repository to an app installation [intent=reverse_etl availability=implemented write=apps_add_repo_to_installation_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add a repository to an app installation.; flags: --installation-id (required), --repository-id (required)
+  - apps remove-repo-from-installation-for-authenticated-user - Remove a repository from an app installation [intent=reverse_etl availability=implemented write=apps_remove_repo_from_installation_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a repository from an app installation. Removes provider-side state.; flags: --installation-id (required), --repository-id (required)
+  - interactions set-restrictions-for-authenticated-user - Set interaction restrictions for your public repositories [intent=reverse_etl availability=implemented write=interactions_set_restrictions_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set interaction restrictions for your public repositories.; flags: --limit (required), --expiry
+  - interactions remove-restrictions-for-authenticated-user - Remove interaction restrictions from your public repositories [intent=reverse_etl availability=implemented write=interactions_remove_restrictions_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove interaction restrictions from your public repositories. Removes provider-side state.
+  - users create-public-ssh-key-for-authenticated-user - Create a public SSH key for the authenticated user [intent=reverse_etl availability=implemented write=users_create_public_ssh_key_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a public SSH key for the authenticated user.; flags: --key (required), --title
+  - users delete-public-ssh-key-for-authenticated-user - Delete a public SSH key for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_public_ssh_key_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a public SSH key for the authenticated user. Removes provider-side state.; flags: --key-id (required)
+  - orgs update-membership-for-authenticated-user - Update an organization membership for the authenticated user [intent=reverse_etl availability=implemented write=orgs_update_membership_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization membership for the authenticated user.; flags: --org (required), --state (required)
+  - migrations start-for-authenticated-user - Start a user migration [intent=reverse_etl availability=implemented write=migrations_start_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Start a user migration.; flags: --repositories (required), --lock-repositories, --exclude-metadata, --exclude-git-data, --exclude-attachments, --exclude-releases, --exclude-owner-projects, --org-metadata-only, --exclude
+  - migrations delete-archive-for-authenticated-user - Delete a user migration archive [intent=reverse_etl availability=implemented write=migrations_delete_archive_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a user migration archive. Removes provider-side state.; flags: --migration-id (required)
+  - migrations unlock-repo-for-authenticated-user - Unlock a user repository [intent=reverse_etl availability=implemented write=migrations_unlock_repo_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unlock a user repository. Removes provider-side state.; flags: --migration-id (required), --repo-name (required)
+  - packages delete-package-for-authenticated-user - Delete a package for the authenticated user [intent=reverse_etl availability=implemented write=packages_delete_package_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a package for the authenticated user. Removes provider-side state.; flags: --package-type (required), --package-name (required)
+  - packages restore-package-for-authenticated-user - Restore a package for the authenticated user [intent=reverse_etl availability=implemented write=packages_restore_package_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore a package for the authenticated user.; flags: --package-type (required), --package-name (required)
+  - packages delete-package-version-for-authenticated-user - Delete a package version for the authenticated user [intent=reverse_etl availability=implemented write=packages_delete_package_version_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a package version for the authenticated user. Removes provider-side state.; flags: --package-type (required), --package-name (required), --package-version-id (required)
+  - packages restore-package-version-for-authenticated-user - Restore a package version for the authenticated user [intent=reverse_etl availability=implemented write=packages_restore_package_version_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore a package version for the authenticated user.; flags: --package-type (required), --package-name (required), --package-version-id (required)
+  - repos create-for-authenticated-user - Create a repository for the authenticated user [intent=reverse_etl availability=implemented write=repos_create_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a repository for the authenticated user.; flags: --name (required), --description, --homepage, --private, --has-issues, --has-projects, --has-wiki, --has-discussions, --team-id, --auto-init, --gitignore-template, --license-template, --allow-squash-merge, --allow-merge-commit, --allow-rebase-merge, --allow-auto-merge, --delete-branch-on-merge, --squash-merge-commit-title, --squash-merge-commit-message, --merge-commit-title, --merge-commit-message, --has-downloads, --is-template
+  - repos accept-invitation-for-authenticated-user - Accept a repository invitation [intent=reverse_etl availability=implemented write=repos_accept_invitation_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Accept a repository invitation.; flags: --invitation-id (required)
+  - repos decline-invitation-for-authenticated-user - Decline a repository invitation [intent=reverse_etl availability=implemented write=repos_decline_invitation_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Decline a repository invitation. Removes provider-side state.; flags: --invitation-id (required)
+  - users add-social-account-for-authenticated-user - Add social accounts for the authenticated user [intent=reverse_etl availability=implemented write=users_add_social_account_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add social accounts for the authenticated user.; flags: --account-urls (required)
+  - users delete-social-account-for-authenticated-user - Delete social accounts for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_social_account_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete social accounts for the authenticated user. Removes provider-side state.; flags: --account-urls (required)
+  - users create-ssh-signing-key-for-authenticated-user - Create a SSH signing key for the authenticated user [intent=reverse_etl availability=implemented write=users_create_ssh_signing_key_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a SSH signing key for the authenticated user.; flags: --key (required), --title
+  - users delete-ssh-signing-key-for-authenticated-user - Delete an SSH signing key for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_ssh_signing_key_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an SSH signing key for the authenticated user. Removes provider-side state.; flags: --ssh-signing-key-id (required)
+  - activity star-repo-for-authenticated-user - Star a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_star_repo_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Star a repository for the authenticated user.
+  - activity unstar-repo-for-authenticated-user - Unstar a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_unstar_repo_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
+  - projects create-draft-item-for-authenticated-user - Create a draft item in a user-owned project through fixed GitHub GraphQL [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-v2-draft-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - projects create-view-for-user - Create a view for a user-owned project [intent=reverse_etl availability=implemented write=projects_create_view_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a view for a user-owned project.; flags: --user-id (required), --project-number (required), --name (required), --layout (required), --filter
+  - users list-attestations-bulk - List attestations by bulk subject digests [intent=direct_read availability=implemented operation=github.users_list_attestations_bulk]; flags: --username (required), --subject-digests (required), --predicate-type, --page, --page-cursor
+  - users delete-attestations-by-subject-digest - Delete attestations by subject digest [intent=reverse_etl availability=implemented write=users_delete_attestations_by_subject_digest]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by subject digest. Removes provider-side state.; flags: --username (required), --subject-digest (required)
+  - users delete-attestations-by-id - Delete attestations by ID [intent=reverse_etl availability=implemented write=users_delete_attestations_by_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by ID. Removes provider-side state.; flags: --username (required), --attestation-id (required)
+  - copilot-spaces create-for-user - Create a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_create_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a Copilot Space for a user.; flags: --username (required), --name (required), --description, --general-instructions, --base-role
+  - copilot-spaces update-for-user - Set a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_update_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a Copilot Space for a user.; flags: --username (required), --space-number (required), --name, --description, --general-instructions, --base-role
+  - copilot-spaces delete-for-user - Delete a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_delete_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a Copilot Space for a user. Removes provider-side state.; flags: --username (required), --space-number (required)
+  - copilot-spaces add-collaborator-for-user - Add a collaborator to a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_add_collaborator_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add a collaborator to a Copilot Space for a user.; flags: --username (required), --space-number (required), --actor-type (required), --actor-identifier (required), --role (required)
+  - copilot-spaces update-collaborator-for-user - Set a collaborator role for a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_update_collaborator_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user.; flags: --username (required), --space-number (required), --actor-type (required), --actor-identifier (required), --role (required)
+  - copilot-spaces remove-collaborator-for-user - Remove a collaborator from a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_remove_collaborator_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove a collaborator from a Copilot Space for a user. Removes provider-side state.; flags: --username (required), --space-number (required), --actor-type (required), --actor-identifier (required)
+  - copilot-spaces create-resource-for-user - Create a resource for a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_create_resource_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a resource for a Copilot Space for a user.; flags: --metadata (required), --resource-type (required), --space-number (required), --username (required)
+  - copilot-spaces update-resource-for-user - Set a resource for a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_update_resource_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set a resource for a Copilot Space for a user.; flags: --username (required), --space-number (required), --space-resource-id (required)
+  - copilot-spaces delete-resource-for-user - Delete a resource from a Copilot Space for a user [intent=reverse_etl availability=implemented write=copilot_spaces_delete_resource_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a resource from a Copilot Space for a user. Removes provider-side state.; flags: --username (required), --space-number (required), --space-resource-id (required)
+  - packages delete-package-for-user - Delete a package for a user [intent=reverse_etl availability=implemented write=packages_delete_package_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete a package for a user. Removes provider-side state.; flags: --username (required), --package-type (required), --package-name (required)
+  - packages restore-package-for-user - Restore a package for a user [intent=reverse_etl availability=implemented write=packages_restore_package_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore a package for a user.; flags: --username (required), --package-type (required), --package-name (required)
+  - packages delete-package-version-for-user - Delete package version for a user [intent=reverse_etl availability=implemented write=packages_delete_package_version_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete package version for a user. Removes provider-side state.; flags: --username (required), --package-type (required), --package-name (required), --package-version-id (required)
+  - packages restore-package-version-for-user - Restore package version for a user [intent=reverse_etl availability=implemented write=packages_restore_package_version_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Restore package version for a user.; flags: --username (required), --package-type (required), --package-name (required), --package-version-id (required)
+  - projects update-item-for-user - Update project item for user [intent=reverse_etl availability=implemented write=projects_update_item_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update project item for user.; flags: --fields (required), --item-id (required), --project-number (required), --username (required)
+  - projects delete-item-for-user - Delete project item for user [intent=reverse_etl availability=implemented write=projects_delete_item_for_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete project item for user. Removes provider-side state.; flags: --username (required), --project-number (required), --item-id (required)
+  - gists star check - Read /gists/{gist_id}/star [intent=direct_read availability=implemented operation=github.gists_gist_id_star]; flags: --gist-id (required), --page, --page-cursor
+  - meta octocat view - Read /octocat [intent=direct_read availability=implemented operation=github.octocat]; flags: --s, --page, --page-cursor
+  - orgs blocks check - Read /orgs/{org}/blocks/{username} [intent=direct_read availability=implemented operation=github.orgs_org_blocks_username]; flags: --org (required), --username (required), --page, --page-cursor
+  - orgs members check - Read /orgs/{org}/members/{username} [intent=direct_read availability=implemented operation=github.orgs_org_members_username]; flags: --org (required), --username (required), --page, --page-cursor
+  - orgs public-members check - Read /orgs/{org}/public_members/{username} [intent=direct_read availability=implemented operation=github.orgs_org_public_members_username]; flags: --org (required), --username (required), --page, --page-cursor
+  - teams members check - Read /teams/{team_id}/members/{username} [intent=direct_read availability=implemented operation=github.teams_team_id_members_username]; flags: --team-id (required), --username (required), --page, --page-cursor
+  - user blocks check - Read /user/blocks/{username} [intent=direct_read availability=implemented operation=github.user_blocks_username]; flags: --username (required), --page, --page-cursor
+  - user following check - Read /user/following/{username} [intent=direct_read availability=implemented operation=github.user_following_username]; flags: --username (required), --page, --page-cursor
+  - user starred check - Read /user/starred/{owner}/{repo} [intent=direct_read availability=implemented operation=github.user_starred_owner_repo]; flags: --owner (required), --repo (required), --page, --page-cursor
+  - users following check - Read /users/{username}/following/{target_user} [intent=direct_read availability=implemented operation=github.users_username_following_target_user]; flags: --username (required), --target-user (required), --page, --page-cursor
+  - meta zen view - Read /zen [intent=direct_read availability=implemented operation=github.zen]; flags: --page, --page-cursor
+  - markdown render - Read /markdown [intent=direct_read availability=implemented operation=github.markdown]; flags: --text (required), --mode, --context, --page, --page-cursor
+  - markdown raw render - Read /markdown/raw [intent=direct_read availability=implemented operation=github.markdown_raw]; flags: --text (required), --page, --page-cursor
+  - orgs attestations delete-by-subject-digests - POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_subject_digests) [intent=reverse_etl availability=implemented write=orgs_attestations_delete_request_by_subject_digests]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --org (required), --subject-digests (required)
+  - orgs attestations delete-by-attestation-ids - POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_attestation_ids) [intent=reverse_etl availability=implemented write=orgs_attestations_delete_request_by_attestation_ids]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --org (required), --attestation-ids (required)
+  - orgs campaigns create-code-scanning - POST /orgs/{org}/campaigns (orgs_campaigns_create_code_scanning) [intent=reverse_etl availability=implemented write=orgs_campaigns_create_code_scanning]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --name (required), --description (required), --managers, --team-managers, --ends-at (required), --contact-link, --generate-issues, --code-scanning-alerts (required)
+  - orgs campaigns create-secret-scanning - POST /orgs/{org}/campaigns (orgs_campaigns_create_secret_scanning) [intent=reverse_etl availability=implemented write=orgs_campaigns_create_secret_scanning]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --name (required), --description (required), --managers, --team-managers, --ends-at (required), --contact-link, --generate-issues, --secret-scanning-alerts (required)
+  - orgs projects fields create-existing-issue-field - POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_existing_issue_field) [intent=reverse_etl availability=implemented write=orgs_projectsv2_fields_create_existing_issue_field]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --issue-field-id (required)
+  - orgs projects fields create-new-field - POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_new_field) [intent=reverse_etl availability=implemented write=orgs_projectsv2_fields_create_new_field]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --name (required), --data-type (required)
+  - orgs projects fields create-single-select - POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_single_select) [intent=reverse_etl availability=implemented write=orgs_projectsv2_fields_create_single_select]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --name (required), --data-type (required), --single-select-options (required)
+  - orgs projects fields create-iteration - POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_iteration) [intent=reverse_etl availability=implemented write=orgs_projectsv2_fields_create_iteration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --name (required), --data-type (required), --iteration-configuration (required)
+  - orgs projects items create-by-id - POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_id) [intent=reverse_etl availability=implemented write=orgs_projectsv2_items_create_by_id]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --type (required), --id (required), --owner, --repo, --number
+  - orgs projects items create-by-repo-number - POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_repo_number) [intent=reverse_etl availability=implemented write=orgs_projectsv2_items_create_by_repo_number]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --org (required), --project-number (required), --type (required), --id, --owner (required), --repo (required), --number (required)
+  - codespaces create-from-repository - POST /user/codespaces (user_codespaces_create_from_repository) [intent=reverse_etl availability=implemented write=user_codespaces_create_from_repository]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --repository-id (required), --ref, --location, --geo, --client-ip, --machine, --devcontainer-path, --multi-repo-permissions-opt-out, --working-directory, --idle-timeout-minutes, --display-name, --retention-period-minutes
+  - codespaces create-from-pull-request - POST /user/codespaces (user_codespaces_create_from_pull_request) [intent=reverse_etl availability=implemented write=user_codespaces_create_from_pull_request]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pull-request (required), --location, --geo, --machine, --devcontainer-path, --working-directory, --idle-timeout-minutes
+  - users attestations delete-by-subject-digests - POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_subject_digests) [intent=reverse_etl availability=implemented write=users_attestations_delete_request_by_subject_digests]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --username (required), --subject-digests (required)
+  - users attestations delete-by-attestation-ids - POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_attestation_ids) [intent=reverse_etl availability=implemented write=users_attestations_delete_request_by_attestation_ids]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --username (required), --attestation-ids (required)
+  - users projects fields create-new-field - POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_new_field) [intent=reverse_etl availability=implemented write=users_projectsv2_fields_create_new_field]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --username (required), --project-number (required), --name (required), --data-type (required)
+  - users projects fields create-single-select - POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_single_select) [intent=reverse_etl availability=implemented write=users_projectsv2_fields_create_single_select]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --username (required), --project-number (required), --name (required), --data-type (required), --single-select-options (required)
+  - users projects fields create-iteration - POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_iteration) [intent=reverse_etl availability=implemented write=users_projectsv2_fields_create_iteration]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --username (required), --project-number (required), --name (required), --data-type (required), --iteration-configuration (required)
+  - users projects items create-by-id - POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_id) [intent=reverse_etl availability=implemented write=users_projectsv2_items_create_by_id]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --username (required), --project-number (required), --type (required), --id (required), --owner, --repo, --number
+  - users projects items create-by-repo-number - POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_repo_number) [intent=reverse_etl availability=implemented write=users_projectsv2_items_create_by_repo_number]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --username (required), --project-number (required), --type (required), --id, --owner (required), --repo (required), --number (required)
+  - app access_tokens create - POST /app/installations/{installation_id}/access_tokens [intent=reverse_etl availability=implemented write=app_installations_installation_id_access_tokens]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --installation-id (required), --permissions, --repositories, --repository-ids
+  - actions artifacts delete - DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id} [intent=reverse_etl availability=implemented write=actions_artifacts_artifact_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --artifact-id (required)
+  - artifact download-2 - Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id} [intent=direct_read availability=implemented operation=github.actions_artifacts_artifact_id2]; flags: --artifact-id (required), --page, --page-cursor
+  - actions runs view - Read /repos/{owner}/{repo}/actions/runs/{run_id} [intent=direct_read availability=implemented operation=github.actions_runs_run_id]; flags: --run-id (required), --exclude-pull-requests, --page, --page-cursor
+  - artifact download-3 - Read /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts [intent=direct_read availability=implemented operation=github.actions_runs_run_id_artifacts]; flags: --run-id (required), --per-page, --page, --name, --direction, --page-cursor
+  - actions force-cancel create - POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel [intent=reverse_etl availability=implemented write=actions_runs_run_id_force_cancel]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --run-id (required)
+  - actions rerun-failed-jobs create - POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs [intent=reverse_etl availability=implemented write=actions_runs_run_id_rerun_failed_jobs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --run-id (required), --enable-debug-logging
+  - actions workflows view - Read /repos/{owner}/{repo}/actions/workflows/{workflow_id} [intent=direct_read availability=implemented operation=github.actions_workflows_workflow_id]; flags: --workflow-id (required), --page, --page-cursor
+  - actions runs view-2 - Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs [intent=direct_read availability=implemented operation=github.actions_workflows_workflow_id_runs]; flags: --workflow-id (required), --actor, --branch, --event, --status, --per-page, --page, --created, --exclude-pull-requests, --check-suite-id, --head-sha, --page-cursor
+  - activity view - Read /repos/{owner}/{repo}/activity [intent=direct_read availability=implemented operation=github.activity]; flags: --direction, --per-page, --ref, --actor, --time-period, --activity-type, --page, --page-cursor
+  - agents organization-secrets view - Read /repos/{owner}/{repo}/agents/organization-secrets [intent=direct_read availability=implemented operation=github.agents_organization_secrets]; flags: --per-page, --page, --page-cursor
+  - agents organization-variables view - Read /repos/{owner}/{repo}/agents/organization-variables [intent=direct_read availability=implemented operation=github.agents_organization_variables]; flags: --per-page, --page, --page-cursor
+  - agents secrets view - Read /repos/{owner}/{repo}/agents/secrets [intent=direct_read availability=implemented operation=github.agents_secrets]; flags: --per-page, --page, --page-cursor
+  - agents public-key view - Read /repos/{owner}/{repo}/agents/secrets/public-key [intent=direct_read availability=implemented operation=github.agents_secrets_public_key]; flags: --page, --page-cursor
+  - agents secrets view-2 - Read /repos/{owner}/{repo}/agents/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.agents_secrets_secret_name2]; flags: --secret-name (required), --page, --page-cursor
+  - agents variables view - Read /repos/{owner}/{repo}/agents/variables [intent=direct_read availability=implemented operation=github.agents_variables]; flags: --per-page, --page, --page-cursor
+  - agents variables view-2 - Read /repos/{owner}/{repo}/agents/variables/{name} [intent=direct_read availability=implemented operation=github.agents_variables_name2]; flags: --name (required), --page, --page-cursor
+  - assignees view-2 - Read /repos/{owner}/{repo}/assignees [intent=direct_read availability=implemented operation=github.assignees]; flags: --per-page, --page, --page-cursor
+  - autolinks view - Read /repos/{owner}/{repo}/autolinks/{autolink_id} [intent=direct_read availability=implemented operation=github.autolinks_autolink_id2]; flags: --autolink-id (required), --page, --page-cursor
+  - branches view - Read /repos/{owner}/{repo}/branches/{branch} [intent=direct_read availability=implemented operation=github.branches_branch]; flags: --branch (required), --page, --page-cursor
+  - code-scanning alerts view - Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number} [intent=direct_read availability=implemented operation=github.code_scanning_alerts_alert_number]; flags: --alert-number (required), --page, --page-cursor
+  - collaborators view - Read /repos/{owner}/{repo}/collaborators/{username} [intent=direct_read availability=implemented operation=github.collaborators_username]; flags: --username (required), --page, --page-cursor
+  - collaborators permission view - Read /repos/{owner}/{repo}/collaborators/{username}/permission [intent=direct_read availability=implemented operation=github.collaborators_username_permission]; flags: --username (required), --page, --page-cursor
+  - comments view - Read /repos/{owner}/{repo}/comments/{comment_id} [intent=direct_read availability=implemented operation=github.comments_comment_id]; flags: --comment-id (required), --page, --page-cursor
+  - commits comments view - Read /repos/{owner}/{repo}/commits/{commit_sha}/comments [intent=direct_read availability=implemented operation=github.commits_commit_sha_comments]; flags: --commit-sha (required), --per-page, --page, --page-cursor
+  - commits view - Read /repos/{owner}/{repo}/commits/{ref} [intent=direct_read availability=implemented operation=github.commits_ref]; flags: --page, --per-page, --ref (required), --page-cursor
+  - dependabot alerts view - Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number} [intent=direct_read availability=implemented operation=github.dependabot_alerts_alert_number]; flags: --alert-number (required), --page, --page-cursor
+  - deployments view - Read /repos/{owner}/{repo}/deployments/{deployment_id} [intent=direct_read availability=implemented operation=github.deployments_deployment_id2]; flags: --deployment-id (required), --page, --page-cursor
+  - deployments statuses view-2 - Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id} [intent=direct_read availability=implemented operation=github.deployments_deployment_id_statuses_status_id]; flags: --deployment-id (required), --status-id (required), --page, --page-cursor
+  - environments view - Read /repos/{owner}/{repo}/environments/{environment_name} [intent=direct_read availability=implemented operation=github.environments_environment_name]; flags: --environment-name (required), --page, --page-cursor
+  - events view - Read /repos/{owner}/{repo}/events [intent=direct_read availability=implemented operation=github.events]; flags: --per-page, --page, --page-cursor
+  - git commits view - Read /repos/{owner}/{repo}/git/commits/{commit_sha} [intent=direct_read availability=implemented operation=github.git_commits_commit_sha]; flags: --commit-sha (required), --page, --page-cursor
+  - git matching-refs view - Read /repos/{owner}/{repo}/git/matching-refs/{ref} [intent=direct_read availability=implemented operation=github.git_matching_refs_ref]; flags: --ref (required), --page, --page-cursor
+  - git tags create - POST /repos/{owner}/{repo}/git/tags [intent=reverse_etl availability=implemented write=git_tags]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --message (required), --object (required), --tag (required), --tagger, --type (required)
+  - hooks view - Read /repos/{owner}/{repo}/hooks/{hook_id} [intent=direct_read availability=implemented operation=github.hooks_hook_id]; flags: --hook-id (required), --page, --page-cursor
+  - hooks config view - Read /repos/{owner}/{repo}/hooks/{hook_id}/config [intent=direct_read availability=implemented operation=github.hooks_hook_id_config]; flags: --hook-id (required), --page, --page-cursor
+  - webhook update - PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config [intent=reverse_etl availability=implemented write=hooks_hook_id_config2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --hook-id (required), --content-type, --insecure-ssl, --secret, --url
+  - issues comments view - Read /repos/{owner}/{repo}/issues/comments/{comment_id} [intent=direct_read availability=implemented operation=github.issues_comments_comment_id]; flags: --comment-id (required), --page, --page-cursor
+  - issues events view - Read /repos/{owner}/{repo}/issues/events/{event_id} [intent=direct_read availability=implemented operation=github.issues_events_event_id]; flags: --event-id (required), --page, --page-cursor
+  - issues view - Read /repos/{owner}/{repo}/issues/{issue_number} [intent=direct_read availability=implemented operation=github.issues_issue_number]; flags: --issue-number (required), --page, --page-cursor
+  - issues comments view-2 - Read /repos/{owner}/{repo}/issues/{issue_number}/comments [intent=direct_read availability=implemented operation=github.issues_issue_number_comments]; flags: --issue-number (required), --since, --per-page, --page, --page-cursor
+  - issues events view-2 - Read /repos/{owner}/{repo}/issues/{issue_number}/events [intent=direct_read availability=implemented operation=github.issues_issue_number_events]; flags: --issue-number (required), --per-page, --page, --page-cursor
+  - issues labels delete - DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels [intent=reverse_etl availability=implemented write=issues_issue_number_labels]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --issue-number (required)
+  - issues labels view - Read /repos/{owner}/{repo}/issues/{issue_number}/labels [intent=direct_read availability=implemented operation=github.issues_issue_number_labels2]; flags: --issue-number (required), --per-page, --page, --page-cursor
+  - issues timeline view - Read /repos/{owner}/{repo}/issues/{issue_number}/timeline [intent=direct_read availability=implemented operation=github.issues_issue_number_timeline]; flags: --issue-number (required), --per-page, --page, --exclude, --page-cursor
+  - keys view - Read /repos/{owner}/{repo}/keys/{key_id} [intent=direct_read availability=implemented operation=github.keys_key_id]; flags: --key-id (required), --page, --page-cursor
+  - labels view - Read /repos/{owner}/{repo}/labels/{name} [intent=direct_read availability=implemented operation=github.labels_name]; flags: --name (required), --page, --page-cursor
+  - milestones view - Read /repos/{owner}/{repo}/milestones/{milestone_number} [intent=direct_read availability=implemented operation=github.milestones_milestone_number]; flags: --milestone-number (required), --page, --page-cursor
+  - pulls comments view-2 - Read /repos/{owner}/{repo}/pulls/comments/{comment_id} [intent=direct_read availability=implemented operation=github.pulls_comments_comment_id]; flags: --comment-id (required), --page, --page-cursor
+  - pulls view - Read /repos/{owner}/{repo}/pulls/{pull_number} [intent=direct_read availability=implemented operation=github.pulls_pull_number]; flags: --pull-number (required), --page, --page-cursor
+  - pulls comments view-3 - Read /repos/{owner}/{repo}/pulls/{pull_number}/comments [intent=direct_read availability=implemented operation=github.pulls_pull_number_comments]; flags: --pull-number (required), --sort, --direction, --since, --per-page, --page, --page-cursor
+  - pulls replies create - POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies [intent=reverse_etl availability=implemented write=pulls_pull_number_comments_comment_id_replies]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pull-number (required), --comment-id (required), --body (required)
+  - pulls requested_reviewers view - Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers [intent=direct_read availability=implemented operation=github.pulls_pull_number_requested_reviewers2]; flags: --pull-number (required), --page, --page-cursor
+  - pulls reviews delete - DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id} [intent=reverse_etl availability=implemented write=pulls_pull_number_reviews_review_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --pull-number (required), --review-id (required)
+  - pulls reviews view-2 - Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id} [intent=direct_read availability=implemented operation=github.pulls_pull_number_reviews_review_id2]; flags: --pull-number (required), --review-id (required), --page, --page-cursor
+  - pulls reviews set - PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id} [intent=reverse_etl availability=implemented write=pulls_pull_number_reviews_review_id3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --pull-number (required), --review-id (required), --body (required)
+  - releases latest view - Read /repos/{owner}/{repo}/releases/latest [intent=direct_read availability=implemented operation=github.releases_latest]; flags: --page, --page-cursor
+  - releases tags view - Read /repos/{owner}/{repo}/releases/tags/{tag} [intent=direct_read availability=implemented operation=github.releases_tags_tag]; flags: --tag (required), --page, --page-cursor
+  - releases view - Read /repos/{owner}/{repo}/releases/{release_id} [intent=direct_read availability=implemented operation=github.releases_release_id]; flags: --release-id (required), --page, --page-cursor
+  - rules branches view - Read /repos/{owner}/{repo}/rules/branches/{branch} [intent=direct_read availability=implemented operation=github.rules_branches_branch]; flags: --branch (required), --per-page, --page, --page-cursor
+  - rulesets view - Read /repos/{owner}/{repo}/rulesets/{ruleset_id} [intent=direct_read availability=implemented operation=github.rulesets_ruleset_id]; flags: --ruleset-id (required), --includes-parents, --page, --page-cursor
+  - secret-scanning alerts view - Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number} [intent=direct_read availability=implemented operation=github.secret_scanning_alerts_alert_number]; flags: --alert-number (required), --hide-secret, --page, --page-cursor
+  - security-advisories view - Read /repos/{owner}/{repo}/security-advisories/{ghsa_id} [intent=direct_read availability=implemented operation=github.security_advisories_ghsa_id2]; flags: --ghsa-id (required), --page, --page-cursor
+  - topics view - Read /repos/{owner}/{repo}/topics [intent=direct_read availability=implemented operation=github.topics]; flags: --page, --per-page, --page-cursor
+  - applications grant delete - DELETE /applications/{client_id}/grant [intent=reverse_etl availability=implemented write=applications_client_id_grant]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --client-id (required), --access-token (required)
+  - applications token create - POST /applications/{client_id}/token [intent=reverse_etl availability=implemented write=applications_client_id_token]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --client-id (required), --access-token (required)
+  - applications token update - PATCH /applications/{client_id}/token [intent=reverse_etl availability=implemented write=applications_client_id_token2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --client-id (required), --access-token (required)
+  - applications token delete - DELETE /applications/{client_id}/token [intent=reverse_etl availability=implemented write=applications_client_id_token3]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --client-id (required), --access-token (required)
+  - user emails add - POST /user/emails (user_emails_add_object) [intent=reverse_etl availability=implemented write=user_emails_add_object]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --emails (required)
+  - user emails add-array - POST /user/emails (user_emails_add_array) [intent=reverse_etl availability=implemented write=user_emails_add_array]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --emails (required)
+  - user emails delete - DELETE /user/emails (user_emails_delete_object) [intent=reverse_etl availability=implemented write=user_emails_delete_object]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --emails (required)
+  - user emails delete-array - DELETE /user/emails (user_emails_delete_array) [intent=reverse_etl availability=implemented write=user_emails_delete_array]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: low; flags: --emails (required)
+  - graphql query code-of-conduct - Run fixed GitHub GraphQL query codeOfConduct. [intent=direct_read availability=implemented operation=github.graphql.query.code-of-conduct]; flags: --key (required), --page, --page-cursor
+  - graphql query codes-of-conduct - Run fixed GitHub GraphQL query codesOfConduct. [intent=direct_read availability=implemented operation=github.graphql.query.codes-of-conduct]; flags: --page, --page-cursor
+  - graphql query enterprise - Run fixed GitHub GraphQL query enterprise. [intent=direct_read availability=implemented operation=github.graphql.query.enterprise]; flags: --invitation-token, --slug (required), --page, --page-cursor
+  - graphql query enterprise-administrator-invitation - Run fixed GitHub GraphQL query enterpriseAdministratorInvitation. [intent=direct_read availability=implemented operation=github.graphql.query.enterprise-administrator-invitation]; flags: --enterprise-slug (required), --role (required), --user-login (required), --page, --page-cursor
+  - graphql query enterprise-administrator-invitation-by-token - Run fixed GitHub GraphQL query enterpriseAdministratorInvitationByToken. [intent=direct_read availability=implemented operation=github.graphql.query.enterprise-administrator-invitation-by-token]; flags: --invitation-token (required), --page, --page-cursor
+  - graphql query enterprise-member-invitation - Run fixed GitHub GraphQL query enterpriseMemberInvitation. [intent=direct_read availability=implemented operation=github.graphql.query.enterprise-member-invitation]; flags: --enterprise-slug (required), --user-login (required), --page, --page-cursor
+  - graphql query enterprise-member-invitation-by-token - Run fixed GitHub GraphQL query enterpriseMemberInvitationByToken. [intent=direct_read availability=implemented operation=github.graphql.query.enterprise-member-invitation-by-token]; flags: --invitation-token (required), --page, --page-cursor
+  - graphql query id - Run fixed GitHub GraphQL query id. [intent=direct_read availability=implemented operation=github.graphql.query.id]; flags: --page, --page-cursor
+  - graphql query license - Run fixed GitHub GraphQL query license. [intent=direct_read availability=implemented operation=github.graphql.query.license]; flags: --key (required), --page, --page-cursor
+  - graphql query licenses - Run fixed GitHub GraphQL query licenses. [intent=direct_read availability=implemented operation=github.graphql.query.licenses]; flags: --page, --page-cursor
+  - graphql query marketplace-categories - Run fixed GitHub GraphQL query marketplaceCategories. [intent=direct_read availability=implemented operation=github.graphql.query.marketplace-categories]; flags: --exclude-empty, --exclude-subcategories, --include-categories, --page, --page-cursor
+  - graphql query marketplace-category - Run fixed GitHub GraphQL query marketplaceCategory. [intent=direct_read availability=implemented operation=github.graphql.query.marketplace-category]; flags: --slug (required), --use-topic-aliases, --page, --page-cursor
+  - graphql query marketplace-listing - Run fixed GitHub GraphQL query marketplaceListing. [intent=direct_read availability=implemented operation=github.graphql.query.marketplace-listing]; flags: --slug (required), --page, --page-cursor
+  - graphql query marketplace-listings - Run fixed GitHub GraphQL query marketplaceListings. [intent=direct_read availability=implemented operation=github.graphql.query.marketplace-listings]; flags: --admin-id, --all-states, --category-slug, --first (required), --organization-id, --primary-category-only, --slugs, --use-topic-aliases, --viewer-can-admin, --with-free-trials-only, --page, --page-cursor
+  - graphql query meta - Run fixed GitHub GraphQL query meta. [intent=direct_read availability=implemented operation=github.graphql.query.meta]; flags: --page, --page-cursor
+  - graphql query node - Run fixed GitHub GraphQL query node. [intent=direct_read availability=implemented operation=github.graphql.query.node]; flags: --id (required), --page, --page-cursor
+  - graphql query nodes - Run fixed GitHub GraphQL query nodes. [intent=direct_read availability=implemented operation=github.graphql.query.nodes]; flags: --ids (required), --page, --page-cursor
+  - graphql query organization - Run fixed GitHub GraphQL query organization. [intent=direct_read availability=implemented operation=github.graphql.query.organization]; flags: --login (required), --page, --page-cursor
+  - graphql query rate-limit - Run fixed GitHub GraphQL query rateLimit. [intent=direct_read availability=implemented operation=github.graphql.query.rate-limit]; flags: --dry-run, --page, --page-cursor
+  - graphql query relay - Run fixed GitHub GraphQL query relay. [intent=direct_read availability=implemented operation=github.graphql.query.relay]; flags: --page, --page-cursor
+  - graphql query repository - Run fixed GitHub GraphQL query repository. [intent=direct_read availability=implemented operation=github.graphql.query.repository]; flags: --follow-renames, --name (required), --owner (required), --page, --page-cursor
+  - graphql query repository-owner - Run fixed GitHub GraphQL query repositoryOwner. [intent=direct_read availability=implemented operation=github.graphql.query.repository-owner]; flags: --login (required), --page, --page-cursor
+  - graphql query resource - Run fixed GitHub GraphQL query resource. [intent=direct_read availability=implemented operation=github.graphql.query.resource]; flags: --url (required), --page, --page-cursor
+  - graphql query search - Run fixed GitHub GraphQL query search. [intent=direct_read availability=implemented operation=github.graphql.query.search]; flags: --first (required), --query (required), --type (required), --page, --page-cursor
+  - graphql query security-advisories - Run fixed GitHub GraphQL query securityAdvisories. [intent=direct_read availability=implemented operation=github.graphql.query.security-advisories]; flags: --classifications, --epss-percentage, --epss-percentile, --first (required), --identifier, --order-by, --published-since, --updated-since, --page, --page-cursor
+  - graphql query security-advisory - Run fixed GitHub GraphQL query securityAdvisory. [intent=direct_read availability=implemented operation=github.graphql.query.security-advisory]; flags: --ghsa-id (required), --page, --page-cursor
+  - graphql query security-vulnerabilities - Run fixed GitHub GraphQL query securityVulnerabilities. [intent=direct_read availability=implemented operation=github.graphql.query.security-vulnerabilities]; flags: --classifications, --ecosystem, --first (required), --order-by, --package, --severities, --page, --page-cursor
+  - graphql query sponsorables - Run fixed GitHub GraphQL query sponsorables. [intent=direct_read availability=implemented operation=github.graphql.query.sponsorables]; flags: --dependency-ecosystem, --ecosystem, --first (required), --only-dependencies, --order-by, --org-login-for-dependencies, --page, --page-cursor
+  - graphql query topic - Run fixed GitHub GraphQL query topic. [intent=direct_read availability=implemented operation=github.graphql.query.topic]; flags: --name (required), --page, --page-cursor
+  - graphql query user - Run fixed GitHub GraphQL query user. [intent=direct_read availability=implemented operation=github.graphql.query.user]; flags: --login (required), --page, --page-cursor
+  - graphql query viewer - Run fixed GitHub GraphQL query viewer. [intent=direct_read availability=implemented operation=github.graphql.query.viewer]; flags: --page, --page-cursor
+  - graphql mutation abort-queued-migrations - Prepare fixed GitHub GraphQL mutation abortQueuedMigrations. [intent=direct_write availability=implemented operation=github.graphql.mutation.abort-queued-migrations]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation abort-repository-migration - Prepare fixed GitHub GraphQL mutation abortRepositoryMigration. [intent=direct_write availability=implemented operation=github.graphql.mutation.abort-repository-migration]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation accept-enterprise-administrator-invitation - Prepare fixed GitHub GraphQL mutation acceptEnterpriseAdministratorInvitation. [intent=direct_write availability=implemented operation=github.graphql.mutation.accept-enterprise-administrator-invitation]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation accept-enterprise-member-invitation - Prepare fixed GitHub GraphQL mutation acceptEnterpriseMemberInvitation. [intent=direct_write availability=implemented operation=github.graphql.mutation.accept-enterprise-member-invitation]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation accept-topic-suggestion - Prepare fixed GitHub GraphQL mutation acceptTopicSuggestion. [intent=direct_write availability=implemented operation=github.graphql.mutation.accept-topic-suggestion]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation access-user-namespace-repository - Prepare fixed GitHub GraphQL mutation accessUserNamespaceRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.access-user-namespace-repository]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation add-assignees-to-assignable - Prepare fixed GitHub GraphQL mutation addAssigneesToAssignable. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-assignees-to-assignable]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-blocked-by - Prepare fixed GitHub GraphQL mutation addBlockedBy. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-blocked-by]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-comment - Prepare fixed GitHub GraphQL mutation addComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-discussion-comment - Prepare fixed GitHub GraphQL mutation addDiscussionComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-discussion-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-discussion-poll-vote - Prepare fixed GitHub GraphQL mutation addDiscussionPollVote. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-discussion-poll-vote]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-enterprise-organization-member - Prepare fixed GitHub GraphQL mutation addEnterpriseOrganizationMember. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-enterprise-organization-member]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-enterprise-support-entitlement - Prepare fixed GitHub GraphQL mutation addEnterpriseSupportEntitlement. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-enterprise-support-entitlement]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-labels-to-labelable - Prepare fixed GitHub GraphQL mutation addLabelsToLabelable. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-labels-to-labelable]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-project-card - Prepare fixed GitHub GraphQL mutation addProjectCard. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-card]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-project-column - Prepare fixed GitHub GraphQL mutation addProjectColumn. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-column]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-project-v2-draft-issue - Prepare fixed GitHub GraphQL mutation addProjectV2DraftIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-v2-draft-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-project-v2-item-by-id - Prepare fixed GitHub GraphQL mutation addProjectV2ItemById. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-v2-item-by-id]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-pull-request-creation-cap-bypass-users - Prepare fixed GitHub GraphQL mutation addPullRequestCreationCapBypassUsers. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-pull-request-creation-cap-bypass-users]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-pull-request-review - Prepare fixed GitHub GraphQL mutation addPullRequestReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-pull-request-review]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-pull-request-review-comment - Prepare fixed GitHub GraphQL mutation addPullRequestReviewComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-pull-request-review-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-pull-request-review-thread - Prepare fixed GitHub GraphQL mutation addPullRequestReviewThread. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-pull-request-review-thread]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-pull-request-review-thread-reply - Prepare fixed GitHub GraphQL mutation addPullRequestReviewThreadReply. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-pull-request-review-thread-reply]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-reaction - Prepare fixed GitHub GraphQL mutation addReaction. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-reaction]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-star - Prepare fixed GitHub GraphQL mutation addStar. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-star]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-sub-issue - Prepare fixed GitHub GraphQL mutation addSubIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-sub-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-upvote - Prepare fixed GitHub GraphQL mutation addUpvote. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-upvote]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation add-verifiable-domain - Prepare fixed GitHub GraphQL mutation addVerifiableDomain. [intent=direct_write availability=implemented operation=github.graphql.mutation.add-verifiable-domain]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation apply-pending-issue-suggestions - Prepare fixed GitHub GraphQL mutation applyPendingIssueSuggestions. [intent=direct_write availability=implemented operation=github.graphql.mutation.apply-pending-issue-suggestions]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation approve-deployments - Prepare fixed GitHub GraphQL mutation approveDeployments. [intent=direct_write availability=implemented operation=github.graphql.mutation.approve-deployments]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation approve-verifiable-domain - Prepare fixed GitHub GraphQL mutation approveVerifiableDomain. [intent=direct_write availability=implemented operation=github.graphql.mutation.approve-verifiable-domain]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation archive-project-v2-item - Prepare fixed GitHub GraphQL mutation archiveProjectV2Item. [intent=direct_write availability=implemented operation=github.graphql.mutation.archive-project-v2-item]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation archive-pull-request - Prepare fixed GitHub GraphQL mutation archivePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.archive-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation archive-repository - Prepare fixed GitHub GraphQL mutation archiveRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.archive-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation cancel-enterprise-admin-invitation - Prepare fixed GitHub GraphQL mutation cancelEnterpriseAdminInvitation. [intent=direct_write availability=implemented operation=github.graphql.mutation.cancel-enterprise-admin-invitation]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation cancel-enterprise-member-invitation - Prepare fixed GitHub GraphQL mutation cancelEnterpriseMemberInvitation. [intent=direct_write availability=implemented operation=github.graphql.mutation.cancel-enterprise-member-invitation]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation cancel-sponsorship - Prepare fixed GitHub GraphQL mutation cancelSponsorship. [intent=direct_write availability=implemented operation=github.graphql.mutation.cancel-sponsorship]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation change-user-status - Prepare fixed GitHub GraphQL mutation changeUserStatus. [intent=direct_write availability=implemented operation=github.graphql.mutation.change-user-status]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation clear-labels-from-labelable - Prepare fixed GitHub GraphQL mutation clearLabelsFromLabelable. [intent=direct_write availability=implemented operation=github.graphql.mutation.clear-labels-from-labelable]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation clear-project-v2-item-field-value - Prepare fixed GitHub GraphQL mutation clearProjectV2ItemFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.clear-project-v2-item-field-value]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation clone-project - Prepare fixed GitHub GraphQL mutation cloneProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.clone-project]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation clone-template-repository - Prepare fixed GitHub GraphQL mutation cloneTemplateRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.clone-template-repository]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation close-discussion - Prepare fixed GitHub GraphQL mutation closeDiscussion. [intent=direct_write availability=implemented operation=github.graphql.mutation.close-discussion]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation close-issue - Prepare fixed GitHub GraphQL mutation closeIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.close-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation close-pull-request - Prepare fixed GitHub GraphQL mutation closePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.close-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation convert-project-card-note-to-issue - Prepare fixed GitHub GraphQL mutation convertProjectCardNoteToIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.convert-project-card-note-to-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation convert-project-v2-draft-issue-item-to-issue - Prepare fixed GitHub GraphQL mutation convertProjectV2DraftIssueItemToIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.convert-project-v2-draft-issue-item-to-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation convert-pull-request-to-draft - Prepare fixed GitHub GraphQL mutation convertPullRequestToDraft. [intent=direct_write availability=implemented operation=github.graphql.mutation.convert-pull-request-to-draft]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation copy-project-v2 - Prepare fixed GitHub GraphQL mutation copyProjectV2. [intent=direct_write availability=implemented operation=github.graphql.mutation.copy-project-v2]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation create-attribution-invitation - Prepare fixed GitHub GraphQL mutation createAttributionInvitation. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-attribution-invitation]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-branch-protection-rule - Prepare fixed GitHub GraphQL mutation createBranchProtectionRule. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-branch-protection-rule]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-check-run - Prepare fixed GitHub GraphQL mutation createCheckRun. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-check-run]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-check-suite - Prepare fixed GitHub GraphQL mutation createCheckSuite. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-check-suite]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-commit-on-branch - Prepare fixed GitHub GraphQL mutation createCommitOnBranch. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-commit-on-branch]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-deployment - Prepare fixed GitHub GraphQL mutation createDeployment. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-deployment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-deployment-status - Prepare fixed GitHub GraphQL mutation createDeploymentStatus. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-deployment-status]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-discussion - Prepare fixed GitHub GraphQL mutation createDiscussion. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-discussion]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-enterprise-organization - Prepare fixed GitHub GraphQL mutation createEnterpriseOrganization. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-enterprise-organization]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-environment - Prepare fixed GitHub GraphQL mutation createEnvironment. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-environment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-ip-allow-list-entry - Prepare fixed GitHub GraphQL mutation createIpAllowListEntry. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-ip-allow-list-entry]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-issue - Prepare fixed GitHub GraphQL mutation createIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-issue-field - Prepare fixed GitHub GraphQL mutation createIssueField. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-issue-field]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-issue-field-value - Prepare fixed GitHub GraphQL mutation createIssueFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-issue-field-value]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-issue-type - Prepare fixed GitHub GraphQL mutation createIssueType. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-issue-type]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-label - Prepare fixed GitHub GraphQL mutation createLabel. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-label]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-linked-branch - Prepare fixed GitHub GraphQL mutation createLinkedBranch. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-linked-branch]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-migration-source - Prepare fixed GitHub GraphQL mutation createMigrationSource. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-migration-source]; approval: plan, preview, approval, execute (typed destructive confirmation; input via --from-env); risk: high; notes: The source-derived input contains a secret field. Supply its complete typed JSON value only through --from-env input=ENV; it is withheld from persisted plans.; flags: --input (required)
+  - graphql mutation create-project - Prepare fixed GitHub GraphQL mutation createProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-project-v2 - Prepare fixed GitHub GraphQL mutation createProjectV2. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-project-v2-field - Prepare fixed GitHub GraphQL mutation createProjectV2Field. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2-field]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-project-v2-issue-field - Prepare fixed GitHub GraphQL mutation createProjectV2IssueField. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2-issue-field]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-project-v2-status-update - Prepare fixed GitHub GraphQL mutation createProjectV2StatusUpdate. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2-status-update]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-project-v2-view - Prepare fixed GitHub GraphQL mutation createProjectV2View. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-project-v2-view]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-pull-request - Prepare fixed GitHub GraphQL mutation createPullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-ref - Prepare fixed GitHub GraphQL mutation createRef. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-ref]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-repository - Prepare fixed GitHub GraphQL mutation createRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-repository-custom-property - Prepare fixed GitHub GraphQL mutation createRepositoryCustomProperty. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-repository-custom-property]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-repository-ruleset - Prepare fixed GitHub GraphQL mutation createRepositoryRuleset. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-repository-ruleset]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-sponsors-listing - Prepare fixed GitHub GraphQL mutation createSponsorsListing. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-sponsors-listing]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-sponsors-tier - Prepare fixed GitHub GraphQL mutation createSponsorsTier. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-sponsors-tier]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-sponsorship - Prepare fixed GitHub GraphQL mutation createSponsorship. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-sponsorship]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-sponsorships - Prepare fixed GitHub GraphQL mutation createSponsorships. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-sponsorships]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation create-user-list - Prepare fixed GitHub GraphQL mutation createUserList. [intent=direct_write availability=implemented operation=github.graphql.mutation.create-user-list]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation decline-topic-suggestion - Prepare fixed GitHub GraphQL mutation declineTopicSuggestion. [intent=direct_write availability=implemented operation=github.graphql.mutation.decline-topic-suggestion]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-branch-protection-rule - Prepare fixed GitHub GraphQL mutation deleteBranchProtectionRule. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-branch-protection-rule]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-deployment - Prepare fixed GitHub GraphQL mutation deleteDeployment. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-deployment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-discussion - Prepare fixed GitHub GraphQL mutation deleteDiscussion. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-discussion]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-discussion-comment - Prepare fixed GitHub GraphQL mutation deleteDiscussionComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-discussion-comment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-environment - Prepare fixed GitHub GraphQL mutation deleteEnvironment. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-environment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-ip-allow-list-entry - Prepare fixed GitHub GraphQL mutation deleteIpAllowListEntry. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-ip-allow-list-entry]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-issue - Prepare fixed GitHub GraphQL mutation deleteIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-issue-comment - Prepare fixed GitHub GraphQL mutation deleteIssueComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue-comment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-issue-field - Prepare fixed GitHub GraphQL mutation deleteIssueField. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue-field]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-issue-field-value - Prepare fixed GitHub GraphQL mutation deleteIssueFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue-field-value]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-issue-type - Prepare fixed GitHub GraphQL mutation deleteIssueType. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-issue-type]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-label - Prepare fixed GitHub GraphQL mutation deleteLabel. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-label]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-linked-branch - Prepare fixed GitHub GraphQL mutation deleteLinkedBranch. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-linked-branch]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-package-version - Prepare fixed GitHub GraphQL mutation deletePackageVersion. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-package-version]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project - Prepare fixed GitHub GraphQL mutation deleteProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-card - Prepare fixed GitHub GraphQL mutation deleteProjectCard. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-card]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-column - Prepare fixed GitHub GraphQL mutation deleteProjectColumn. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-column]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2 - Prepare fixed GitHub GraphQL mutation deleteProjectV2. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2-field - Prepare fixed GitHub GraphQL mutation deleteProjectV2Field. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2-field]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2-item - Prepare fixed GitHub GraphQL mutation deleteProjectV2Item. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2-item]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2-status-update - Prepare fixed GitHub GraphQL mutation deleteProjectV2StatusUpdate. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2-status-update]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2-view - Prepare fixed GitHub GraphQL mutation deleteProjectV2View. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2-view]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-project-v2-workflow - Prepare fixed GitHub GraphQL mutation deleteProjectV2Workflow. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-project-v2-workflow]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-pull-request-review - Prepare fixed GitHub GraphQL mutation deletePullRequestReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-pull-request-review]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-pull-request-review-comment - Prepare fixed GitHub GraphQL mutation deletePullRequestReviewComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-pull-request-review-comment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-ref - Prepare fixed GitHub GraphQL mutation deleteRef. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-ref]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-repository-custom-property - Prepare fixed GitHub GraphQL mutation deleteRepositoryCustomProperty. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-repository-custom-property]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-repository-ruleset - Prepare fixed GitHub GraphQL mutation deleteRepositoryRuleset. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-repository-ruleset]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-user-list - Prepare fixed GitHub GraphQL mutation deleteUserList. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-user-list]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation delete-verifiable-domain - Prepare fixed GitHub GraphQL mutation deleteVerifiableDomain. [intent=direct_write availability=implemented operation=github.graphql.mutation.delete-verifiable-domain]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation dequeue-pull-request - Prepare fixed GitHub GraphQL mutation dequeuePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.dequeue-pull-request]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation disable-pull-request-auto-merge - Prepare fixed GitHub GraphQL mutation disablePullRequestAutoMerge. [intent=direct_write availability=implemented operation=github.graphql.mutation.disable-pull-request-auto-merge]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation dismiss-pull-request-review - Prepare fixed GitHub GraphQL mutation dismissPullRequestReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.dismiss-pull-request-review]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation dismiss-repository-vulnerability-alert - Prepare fixed GitHub GraphQL mutation dismissRepositoryVulnerabilityAlert. [intent=direct_write availability=implemented operation=github.graphql.mutation.dismiss-repository-vulnerability-alert]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation enable-pull-request-auto-merge - Prepare fixed GitHub GraphQL mutation enablePullRequestAutoMerge. [intent=direct_write availability=implemented operation=github.graphql.mutation.enable-pull-request-auto-merge]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation enqueue-pull-request - Prepare fixed GitHub GraphQL mutation enqueuePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.enqueue-pull-request]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation follow-organization - Prepare fixed GitHub GraphQL mutation followOrganization. [intent=direct_write availability=implemented operation=github.graphql.mutation.follow-organization]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation follow-user - Prepare fixed GitHub GraphQL mutation followUser. [intent=direct_write availability=implemented operation=github.graphql.mutation.follow-user]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation grant-enterprise-organizations-migrator-role - Prepare fixed GitHub GraphQL mutation grantEnterpriseOrganizationsMigratorRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.grant-enterprise-organizations-migrator-role]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation grant-migrator-role - Prepare fixed GitHub GraphQL mutation grantMigratorRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.grant-migrator-role]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation import-project - Prepare fixed GitHub GraphQL mutation importProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.import-project]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation invite-enterprise-admin - Prepare fixed GitHub GraphQL mutation inviteEnterpriseAdmin. [intent=direct_write availability=implemented operation=github.graphql.mutation.invite-enterprise-admin]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation invite-enterprise-member - Prepare fixed GitHub GraphQL mutation inviteEnterpriseMember. [intent=direct_write availability=implemented operation=github.graphql.mutation.invite-enterprise-member]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation link-project-v2-to-repository - Prepare fixed GitHub GraphQL mutation linkProjectV2ToRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.link-project-v2-to-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation link-project-v2-to-team - Prepare fixed GitHub GraphQL mutation linkProjectV2ToTeam. [intent=direct_write availability=implemented operation=github.graphql.mutation.link-project-v2-to-team]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation link-repository-to-project - Prepare fixed GitHub GraphQL mutation linkRepositoryToProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.link-repository-to-project]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation lock-lockable - Prepare fixed GitHub GraphQL mutation lockLockable. [intent=direct_write availability=implemented operation=github.graphql.mutation.lock-lockable]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation mark-discussion-comment-as-answer - Prepare fixed GitHub GraphQL mutation markDiscussionCommentAsAnswer. [intent=direct_write availability=implemented operation=github.graphql.mutation.mark-discussion-comment-as-answer]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation mark-file-as-viewed - Prepare fixed GitHub GraphQL mutation markFileAsViewed. [intent=direct_write availability=implemented operation=github.graphql.mutation.mark-file-as-viewed]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation mark-project-v2-as-template - Prepare fixed GitHub GraphQL mutation markProjectV2AsTemplate. [intent=direct_write availability=implemented operation=github.graphql.mutation.mark-project-v2-as-template]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation mark-pull-request-ready-for-review - Prepare fixed GitHub GraphQL mutation markPullRequestReadyForReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.mark-pull-request-ready-for-review]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation merge-branch - Prepare fixed GitHub GraphQL mutation mergeBranch. [intent=direct_write availability=implemented operation=github.graphql.mutation.merge-branch]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation merge-pull-request - Prepare fixed GitHub GraphQL mutation mergePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.merge-pull-request]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation minimize-comment - Prepare fixed GitHub GraphQL mutation minimizeComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.minimize-comment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation move-project-card - Prepare fixed GitHub GraphQL mutation moveProjectCard. [intent=direct_write availability=implemented operation=github.graphql.mutation.move-project-card]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation move-project-column - Prepare fixed GitHub GraphQL mutation moveProjectColumn. [intent=direct_write availability=implemented operation=github.graphql.mutation.move-project-column]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation pin-environment - Prepare fixed GitHub GraphQL mutation pinEnvironment. [intent=direct_write availability=implemented operation=github.graphql.mutation.pin-environment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation pin-issue - Prepare fixed GitHub GraphQL mutation pinIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.pin-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation pin-issue-comment - Prepare fixed GitHub GraphQL mutation pinIssueComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.pin-issue-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation promote-repository-custom-property - Prepare fixed GitHub GraphQL mutation promoteRepositoryCustomProperty. [intent=direct_write availability=implemented operation=github.graphql.mutation.promote-repository-custom-property]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation publish-sponsors-tier - Prepare fixed GitHub GraphQL mutation publishSponsorsTier. [intent=direct_write availability=implemented operation=github.graphql.mutation.publish-sponsors-tier]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation regenerate-enterprise-identity-provider-recovery-codes - Prepare fixed GitHub GraphQL mutation regenerateEnterpriseIdentityProviderRecoveryCodes. [intent=direct_write availability=implemented operation=github.graphql.mutation.regenerate-enterprise-identity-provider-recovery-codes]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation regenerate-verifiable-domain-token - Prepare fixed GitHub GraphQL mutation regenerateVerifiableDomainToken. [intent=direct_write availability=implemented operation=github.graphql.mutation.regenerate-verifiable-domain-token]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation reject-deployments - Prepare fixed GitHub GraphQL mutation rejectDeployments. [intent=direct_write availability=implemented operation=github.graphql.mutation.reject-deployments]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation reject-pending-issue-suggestions - Prepare fixed GitHub GraphQL mutation rejectPendingIssueSuggestions. [intent=direct_write availability=implemented operation=github.graphql.mutation.reject-pending-issue-suggestions]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-assignees-from-assignable - Prepare fixed GitHub GraphQL mutation removeAssigneesFromAssignable. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-assignees-from-assignable]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-blocked-by - Prepare fixed GitHub GraphQL mutation removeBlockedBy. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-blocked-by]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-enterprise-admin - Prepare fixed GitHub GraphQL mutation removeEnterpriseAdmin. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-enterprise-admin]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-enterprise-identity-provider - Prepare fixed GitHub GraphQL mutation removeEnterpriseIdentityProvider. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-enterprise-identity-provider]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-enterprise-member - Prepare fixed GitHub GraphQL mutation removeEnterpriseMember. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-enterprise-member]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-enterprise-organization - Prepare fixed GitHub GraphQL mutation removeEnterpriseOrganization. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-enterprise-organization]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-enterprise-support-entitlement - Prepare fixed GitHub GraphQL mutation removeEnterpriseSupportEntitlement. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-enterprise-support-entitlement]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-labels-from-labelable - Prepare fixed GitHub GraphQL mutation removeLabelsFromLabelable. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-labels-from-labelable]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-outside-collaborator - Prepare fixed GitHub GraphQL mutation removeOutsideCollaborator. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-outside-collaborator]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-pull-request-creation-cap-bypass-users - Prepare fixed GitHub GraphQL mutation removePullRequestCreationCapBypassUsers. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-pull-request-creation-cap-bypass-users]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-reaction - Prepare fixed GitHub GraphQL mutation removeReaction. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-reaction]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-star - Prepare fixed GitHub GraphQL mutation removeStar. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-star]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-sub-issue - Prepare fixed GitHub GraphQL mutation removeSubIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-sub-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation remove-upvote - Prepare fixed GitHub GraphQL mutation removeUpvote. [intent=direct_write availability=implemented operation=github.graphql.mutation.remove-upvote]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation reopen-discussion - Prepare fixed GitHub GraphQL mutation reopenDiscussion. [intent=direct_write availability=implemented operation=github.graphql.mutation.reopen-discussion]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation reopen-issue - Prepare fixed GitHub GraphQL mutation reopenIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.reopen-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation reopen-pull-request - Prepare fixed GitHub GraphQL mutation reopenPullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.reopen-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation reorder-environment - Prepare fixed GitHub GraphQL mutation reorderEnvironment. [intent=direct_write availability=implemented operation=github.graphql.mutation.reorder-environment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation replace-actors-for-assignable - Prepare fixed GitHub GraphQL mutation replaceActorsForAssignable. [intent=direct_write availability=implemented operation=github.graphql.mutation.replace-actors-for-assignable]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation reprioritize-sub-issue - Prepare fixed GitHub GraphQL mutation reprioritizeSubIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.reprioritize-sub-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation request-reviews - Prepare fixed GitHub GraphQL mutation requestReviews. [intent=direct_write availability=implemented operation=github.graphql.mutation.request-reviews]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation request-reviews-by-login - Prepare fixed GitHub GraphQL mutation requestReviewsByLogin. [intent=direct_write availability=implemented operation=github.graphql.mutation.request-reviews-by-login]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation rerequest-check-suite - Prepare fixed GitHub GraphQL mutation rerequestCheckSuite. [intent=direct_write availability=implemented operation=github.graphql.mutation.rerequest-check-suite]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation resolve-review-thread - Prepare fixed GitHub GraphQL mutation resolveReviewThread. [intent=direct_write availability=implemented operation=github.graphql.mutation.resolve-review-thread]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation retire-sponsors-tier - Prepare fixed GitHub GraphQL mutation retireSponsorsTier. [intent=direct_write availability=implemented operation=github.graphql.mutation.retire-sponsors-tier]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation revert-pull-request - Prepare fixed GitHub GraphQL mutation revertPullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.revert-pull-request]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation revoke-enterprise-organizations-migrator-role - Prepare fixed GitHub GraphQL mutation revokeEnterpriseOrganizationsMigratorRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.revoke-enterprise-organizations-migrator-role]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation revoke-migrator-role - Prepare fixed GitHub GraphQL mutation revokeMigratorRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.revoke-migrator-role]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation set-enterprise-identity-provider - Prepare fixed GitHub GraphQL mutation setEnterpriseIdentityProvider. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-enterprise-identity-provider]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation set-issue-field-value - Prepare fixed GitHub GraphQL mutation setIssueFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-issue-field-value]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation set-organization-interaction-limit - Prepare fixed GitHub GraphQL mutation setOrganizationInteractionLimit. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-organization-interaction-limit]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation set-repository-custom-property-values - Prepare fixed GitHub GraphQL mutation setRepositoryCustomPropertyValues. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-repository-custom-property-values]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation set-repository-interaction-limit - Prepare fixed GitHub GraphQL mutation setRepositoryInteractionLimit. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-repository-interaction-limit]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation set-user-interaction-limit - Prepare fixed GitHub GraphQL mutation setUserInteractionLimit. [intent=direct_write availability=implemented operation=github.graphql.mutation.set-user-interaction-limit]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation start-organization-migration - Prepare fixed GitHub GraphQL mutation startOrganizationMigration. [intent=direct_write availability=implemented operation=github.graphql.mutation.start-organization-migration]; approval: plan, preview, approval, execute (typed destructive confirmation; input via --from-env); risk: high; notes: The source-derived input contains a secret field. Supply its complete typed JSON value only through --from-env input=ENV; it is withheld from persisted plans.; flags: --input (required)
+  - graphql mutation start-repository-migration - Prepare fixed GitHub GraphQL mutation startRepositoryMigration. [intent=direct_write availability=implemented operation=github.graphql.mutation.start-repository-migration]; approval: plan, preview, approval, execute (typed destructive confirmation; input via --from-env); risk: high; notes: The source-derived input contains a secret field. Supply its complete typed JSON value only through --from-env input=ENV; it is withheld from persisted plans.; flags: --input (required)
+  - graphql mutation submit-pull-request-review - Prepare fixed GitHub GraphQL mutation submitPullRequestReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.submit-pull-request-review]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation transfer-enterprise-organization - Prepare fixed GitHub GraphQL mutation transferEnterpriseOrganization. [intent=direct_write availability=implemented operation=github.graphql.mutation.transfer-enterprise-organization]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation transfer-issue - Prepare fixed GitHub GraphQL mutation transferIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.transfer-issue]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation unarchive-project-v2-item - Prepare fixed GitHub GraphQL mutation unarchiveProjectV2Item. [intent=direct_write availability=implemented operation=github.graphql.mutation.unarchive-project-v2-item]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unarchive-pull-request - Prepare fixed GitHub GraphQL mutation unarchivePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.unarchive-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unarchive-repository - Prepare fixed GitHub GraphQL mutation unarchiveRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.unarchive-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unfollow-organization - Prepare fixed GitHub GraphQL mutation unfollowOrganization. [intent=direct_write availability=implemented operation=github.graphql.mutation.unfollow-organization]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation unfollow-user - Prepare fixed GitHub GraphQL mutation unfollowUser. [intent=direct_write availability=implemented operation=github.graphql.mutation.unfollow-user]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation unlink-project-v2-from-repository - Prepare fixed GitHub GraphQL mutation unlinkProjectV2FromRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.unlink-project-v2-from-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unlink-project-v2-from-team - Prepare fixed GitHub GraphQL mutation unlinkProjectV2FromTeam. [intent=direct_write availability=implemented operation=github.graphql.mutation.unlink-project-v2-from-team]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unlink-repository-from-project - Prepare fixed GitHub GraphQL mutation unlinkRepositoryFromProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.unlink-repository-from-project]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unlock-lockable - Prepare fixed GitHub GraphQL mutation unlockLockable. [intent=direct_write availability=implemented operation=github.graphql.mutation.unlock-lockable]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unmark-discussion-comment-as-answer - Prepare fixed GitHub GraphQL mutation unmarkDiscussionCommentAsAnswer. [intent=direct_write availability=implemented operation=github.graphql.mutation.unmark-discussion-comment-as-answer]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unmark-file-as-viewed - Prepare fixed GitHub GraphQL mutation unmarkFileAsViewed. [intent=direct_write availability=implemented operation=github.graphql.mutation.unmark-file-as-viewed]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unmark-issue-as-duplicate - Prepare fixed GitHub GraphQL mutation unmarkIssueAsDuplicate. [intent=direct_write availability=implemented operation=github.graphql.mutation.unmark-issue-as-duplicate]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unmark-project-v2-as-template - Prepare fixed GitHub GraphQL mutation unmarkProjectV2AsTemplate. [intent=direct_write availability=implemented operation=github.graphql.mutation.unmark-project-v2-as-template]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unminimize-comment - Prepare fixed GitHub GraphQL mutation unminimizeComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.unminimize-comment]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation unpin-issue - Prepare fixed GitHub GraphQL mutation unpinIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.unpin-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unpin-issue-comment - Prepare fixed GitHub GraphQL mutation unpinIssueComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.unpin-issue-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation unresolve-review-thread - Prepare fixed GitHub GraphQL mutation unresolveReviewThread. [intent=direct_write availability=implemented operation=github.graphql.mutation.unresolve-review-thread]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+  - graphql mutation update-branch-protection-rule - Prepare fixed GitHub GraphQL mutation updateBranchProtectionRule. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-branch-protection-rule]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-check-run - Prepare fixed GitHub GraphQL mutation updateCheckRun. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-check-run]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-check-suite-preferences - Prepare fixed GitHub GraphQL mutation updateCheckSuitePreferences. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-check-suite-preferences]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-discussion - Prepare fixed GitHub GraphQL mutation updateDiscussion. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-discussion]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-discussion-comment - Prepare fixed GitHub GraphQL mutation updateDiscussionComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-discussion-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-administrator-role - Prepare fixed GitHub GraphQL mutation updateEnterpriseAdministratorRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-administrator-role]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-allow-private-repository-forking-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseAllowPrivateRepositoryForkingSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-allow-private-repository-forking-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-default-repository-permission-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseDefaultRepositoryPermissionSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-default-repository-permission-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-deploy-key-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseDeployKeySetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-deploy-key-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-change-repository-visibility-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanChangeRepositoryVisibilitySetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-change-repository-visibility-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-create-repositories-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanCreateRepositoriesSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-create-repositories-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-delete-issues-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanDeleteIssuesSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-delete-issues-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-delete-repositories-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanDeleteRepositoriesSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-delete-repositories-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-invite-collaborators-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanInviteCollaboratorsSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-invite-collaborators-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-make-purchases-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanMakePurchasesSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-make-purchases-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-update-protected-branches-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanUpdateProtectedBranchesSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-update-protected-branches-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-members-can-view-dependency-insights-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseMembersCanViewDependencyInsightsSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-members-can-view-dependency-insights-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-organization-projects-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseOrganizationProjectsSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-organization-projects-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-owner-organization-role - Prepare fixed GitHub GraphQL mutation updateEnterpriseOwnerOrganizationRole. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-owner-organization-role]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-profile - Prepare fixed GitHub GraphQL mutation updateEnterpriseProfile. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-profile]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-proof-of-presence-required-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseProofOfPresenceRequiredSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-proof-of-presence-required-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-repository-projects-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseRepositoryProjectsSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-repository-projects-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-two-factor-authentication-disallowed-methods-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseTwoFactorAuthenticationDisallowedMethodsSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-two-factor-authentication-disallowed-methods-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-enterprise-two-factor-authentication-required-setting - Prepare fixed GitHub GraphQL mutation updateEnterpriseTwoFactorAuthenticationRequiredSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-enterprise-two-factor-authentication-required-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-environment - Prepare fixed GitHub GraphQL mutation updateEnvironment. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-environment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-ip-allow-list-enabled-setting - Prepare fixed GitHub GraphQL mutation updateIpAllowListEnabledSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-ip-allow-list-enabled-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-ip-allow-list-entry - Prepare fixed GitHub GraphQL mutation updateIpAllowListEntry. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-ip-allow-list-entry]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-ip-allow-list-for-installed-apps-enabled-setting - Prepare fixed GitHub GraphQL mutation updateIpAllowListForInstalledAppsEnabledSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-ip-allow-list-for-installed-apps-enabled-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-ip-allow-list-user-level-enforcement-enabled-setting - Prepare fixed GitHub GraphQL mutation updateIpAllowListUserLevelEnforcementEnabledSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-ip-allow-list-user-level-enforcement-enabled-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue - Prepare fixed GitHub GraphQL mutation updateIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue-comment - Prepare fixed GitHub GraphQL mutation updateIssueComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue-field - Prepare fixed GitHub GraphQL mutation updateIssueField. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue-field]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue-field-value - Prepare fixed GitHub GraphQL mutation updateIssueFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue-field-value]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue-issue-type - Prepare fixed GitHub GraphQL mutation updateIssueIssueType. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue-issue-type]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-issue-type - Prepare fixed GitHub GraphQL mutation updateIssueType. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-issue-type]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-label - Prepare fixed GitHub GraphQL mutation updateLabel. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-label]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-notification-restriction-setting - Prepare fixed GitHub GraphQL mutation updateNotificationRestrictionSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-notification-restriction-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-organization-allow-private-repository-forking-setting - Prepare fixed GitHub GraphQL mutation updateOrganizationAllowPrivateRepositoryForkingSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-organization-allow-private-repository-forking-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-organization-web-commit-signoff-setting - Prepare fixed GitHub GraphQL mutation updateOrganizationWebCommitSignoffSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-organization-web-commit-signoff-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-patreon-sponsorability - Prepare fixed GitHub GraphQL mutation updatePatreonSponsorability. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-patreon-sponsorability]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project - Prepare fixed GitHub GraphQL mutation updateProject. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-card - Prepare fixed GitHub GraphQL mutation updateProjectCard. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-card]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-column - Prepare fixed GitHub GraphQL mutation updateProjectColumn. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-column]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2 - Prepare fixed GitHub GraphQL mutation updateProjectV2. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-collaborators - Prepare fixed GitHub GraphQL mutation updateProjectV2Collaborators. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-collaborators]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-draft-issue - Prepare fixed GitHub GraphQL mutation updateProjectV2DraftIssue. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-draft-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-field - Prepare fixed GitHub GraphQL mutation updateProjectV2Field. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-field]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-item-field-value - Prepare fixed GitHub GraphQL mutation updateProjectV2ItemFieldValue. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-item-field-value]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-item-position - Prepare fixed GitHub GraphQL mutation updateProjectV2ItemPosition. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-item-position]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-status-update - Prepare fixed GitHub GraphQL mutation updateProjectV2StatusUpdate. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-status-update]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-project-v2-view - Prepare fixed GitHub GraphQL mutation updateProjectV2View. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-project-v2-view]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-pull-request - Prepare fixed GitHub GraphQL mutation updatePullRequest. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-pull-request]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-pull-request-branch - Prepare fixed GitHub GraphQL mutation updatePullRequestBranch. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-pull-request-branch]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-pull-request-review - Prepare fixed GitHub GraphQL mutation updatePullRequestReview. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-pull-request-review]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-pull-request-review-comment - Prepare fixed GitHub GraphQL mutation updatePullRequestReviewComment. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-pull-request-review-comment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-ref - Prepare fixed GitHub GraphQL mutation updateRef. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-ref]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-refs - Prepare fixed GitHub GraphQL mutation updateRefs. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-refs]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-repository - Prepare fixed GitHub GraphQL mutation updateRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-repository-custom-property - Prepare fixed GitHub GraphQL mutation updateRepositoryCustomProperty. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-repository-custom-property]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-repository-ruleset - Prepare fixed GitHub GraphQL mutation updateRepositoryRuleset. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-repository-ruleset]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-repository-web-commit-signoff-setting - Prepare fixed GitHub GraphQL mutation updateRepositoryWebCommitSignoffSetting. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-repository-web-commit-signoff-setting]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-sponsorship-preferences - Prepare fixed GitHub GraphQL mutation updateSponsorshipPreferences. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-sponsorship-preferences]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-subscription - Prepare fixed GitHub GraphQL mutation updateSubscription. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-subscription]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-team-review-assignment - Prepare fixed GitHub GraphQL mutation updateTeamReviewAssignment. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-team-review-assignment]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-teams-repository - Prepare fixed GitHub GraphQL mutation updateTeamsRepository. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-teams-repository]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-topics - Prepare fixed GitHub GraphQL mutation updateTopics. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-topics]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-user-list - Prepare fixed GitHub GraphQL mutation updateUserList. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-user-list]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation update-user-lists-for-item - Prepare fixed GitHub GraphQL mutation updateUserListsForItem. [intent=direct_write availability=implemented operation=github.graphql.mutation.update-user-lists-for-item]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
+  - graphql mutation verify-verifiable-domain - Prepare fixed GitHub GraphQL mutation verifyVerifiableDomain. [intent=direct_write availability=implemented operation=github.graphql.mutation.verify-verifiable-domain]; approval: plan, preview, approval, execute (typed destructive confirmation); risk: critical; flags: --input (required)
+- Help topics:
+  - authentication - Use pm credentials for public, token, or GitHub App repository access. Never print stored tokens.
+  - execution-model - ETL commands map to streams. Reverse ETL commands map to approved write actions and keep plan, preview, approval, execute.
+  - local-workflows - Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched.
+  - known-gaps - Generic raw API, local-workflow, and unsupported provider operations remain non-executable; inspect each command's declared availability.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: declared
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+- Destination executor: declarative_api/issue_label_destination
 
 ## Commands
 
@@ -480,20 +4183,20 @@ pm connectors inspect github --json
 ### Public repository credential
 
 ```bash
-pm credentials add github-public --connector github --config repository=octocat/Hello-World
+pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config public_access=true
 ```
 
 ### Token credential
 
 ```bash
 export GITHUB_TOKEN=...
-pm credentials add github-token --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 ```
 
 ### GitHub App credential
 
 ```bash
-pm credentials add github-app --connector github --config repository=OWNER/REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem
+pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem
 ```
 
 ### Pull request ETL
@@ -508,7 +4211,7 @@ pm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-s
 ```bash
 pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Agent Rules

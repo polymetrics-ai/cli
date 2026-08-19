@@ -11,6 +11,7 @@ Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and u
 
 ## Icon
 
+- id: aha
 - asset: icons/aha.svg
 - source: official
 - review_status: official_verified
@@ -28,41 +29,41 @@ Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and u
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - features:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), due_date(), id(), name(), reference_num(), resource(), start_date(), updated_at(), url(), workflow_status()
+  - fields: created_at(string), due_date(string), id(string), name(string), reference_num(string), resource(string), start_date(string), updated_at(string), url(string), workflow_status(object)
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), product_line(), reference_prefix(), resource(), updated_at(), url()
+  - fields: created_at(string), id(string), name(string), product_line(boolean), reference_prefix(string), resource(string), updated_at(string), url(string)
 - ideas:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), reference_num(), resource(), score(), updated_at(), url(), votes(), workflow_status()
+  - fields: created_at(string), id(string), name(string), reference_num(string), resource(string), score(number), updated_at(string), url(string), votes(integer), workflow_status(object)
 - releases:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), reference_num(), release_date(), released(), resource(), start_date(), updated_at(), url()
+  - fields: created_at(string), id(string), name(string), reference_num(string), release_date(string), released(boolean), resource(string), start_date(string), updated_at(string), url(string)
 - initiatives:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), reference_num(), resource(), updated_at(), url(), workflow_status()
+  - fields: created_at(string), id(string), name(string), reference_num(string), resource(string), updated_at(string), url(string), workflow_status(object)
 - goals:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), reference_num(), resource(), updated_at(), url(), workflow_status()
+  - fields: created_at(string), id(string), name(string), reference_num(string), resource(string), updated_at(string), url(string), workflow_status(object)
 - epics:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), due_date(), id(), name(), reference_num(), resource(), start_date(), updated_at(), url(), workflow_status()
+  - fields: created_at(string), due_date(string), id(string), name(string), reference_num(string), resource(string), start_date(string), updated_at(string), url(string), workflow_status(object)
 - users:
   - primary key: id
-  - fields: administrator(), email(), enabled(), id(), name(), resource()
+  - fields: administrator(boolean), email(string), enabled(boolean), id(string), name(string), resource(string)
 
 ## Sync Modes
 

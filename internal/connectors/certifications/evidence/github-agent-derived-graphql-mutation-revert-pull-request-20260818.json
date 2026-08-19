@@ -1,0 +1,174 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_revert_pull_request",
+  "provider": "github",
+  "executed_at": "2026-08-18T06:37:13.351362000Z",
+  "run_id": "rrun_33a285ed2be4c112",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:cefa312b7ba4f9c5709adfa366a72e40743c53f0e0062dc9d14654a63b8781e0}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_revert_pull_request",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:ac05703ebcd53807932d8850c8baf29dda7360437ca6195819c356cea9575f16}}",
+              "query": "{{pmcertfp:v1:09e8b9a248bff5e8a9bdcf0d979f663573b2b2b65fc92fa3dcfe18c6f7f0e5e4}}",
+              "variables": {
+                "input": {
+                  "pullRequestId": "{{pmcertfp:v1:c9783d29893420c86ad3a92b0955c79cb2dba03aa397769b924c9d71c0db0e0a}}",
+                  "title": "{{pmcertfp:v1:a081057294f812a8f36532bc7024f85bdc2c2812f13cf4ffd760aa5441da1b5f}}",
+                  "body": "{{pmcertfp:v1:9d69a1440e65cbd01233b606bcd869a89a494c830f5395a3cf07f99c3e96a43a}}",
+                  "draft": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+                }
+              }
+            },
+            "original_bytes": 337,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "revertPullRequest": {
+                "__typename": "{{pmcertfp:v1:f1307423d3fc3e82542817b85d5ce3e6abe432b4e99208bef868f36ac047d60c}}"
+              }
+            },
+            "original_bytes": 63,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_exact_revert_pr_title_open_nondraft_wrong_absent_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:ca93e2836bf65760bbff9e04239b51a640ea4b0cc6538ab8f9e04b729a451b75}}",
+              "variables": {
+                "name": "{{pmcertfp:v1:7ed00f4cd2d0f7a984d0e8ae2b48120f0b7c6a14c74418fcfffa602e5b44a91d}}"
+              }
+            },
+            "original_bytes": 232,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "repository": {
+                  "id": "{{pmcertfp:v1:0a1a7317c48faa593c5d35e4ec3bad59263cfba990ddadcb26b6a84a884854a9}}",
+                  "pullRequests": {
+                    "nodes": [
+                      {
+                        "id": "{{pmcertfp:v1:4b738310cb6896659e32f7a3211133e40e5e8c541e10bc33828733dcf25187f4}}",
+                        "title": "{{pmcertfp:v1:a081057294f812a8f36532bc7024f85bdc2c2812f13cf4ffd760aa5441da1b5f}}",
+                        "state": "{{pmcertfp:v1:66dc6fbb3f73fe00194e74c8ad71106c5c19ee3ee541d31baa1e98385f752dbb}}",
+                        "isDraft": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+                      },
+                      {
+                        "id": "{{pmcertfp:v1:c9783d29893420c86ad3a92b0955c79cb2dba03aa397769b924c9d71c0db0e0a}}",
+                        "title": "{{pmcertfp:v1:f0b742794f2214b6e201c4b21a745238b09aa5417f85c67ad40637700cbae657}}",
+                        "state": "{{pmcertfp:v1:9bf1a62a6a870931b77bd9b78585eb62518d3632b0952605c5e6d3751ac94191}}",
+                        "isDraft": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "original_bytes": 274,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_repository_container",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:18ea3cb915155da702e04b2b419633fd15b0980a6e849348f1db2f7dbe09b975}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {},
+            "original_bytes": 2,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "delete_status": "{{pmcertfp:v1:2637ce8c2aa3953d9ad0ade055a5d6f68763190f4da6beade1d94f12718d9873}}",
+              "readback_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "verified_absent": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+            },
+            "original_bytes": 70,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:18ea3cb915155da702e04b2b419633fd15b0980a6e849348f1db2f7dbe09b975}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {},
+            "original_bytes": 2,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "delete_status": "{{pmcertfp:v1:2637ce8c2aa3953d9ad0ade055a5d6f68763190f4da6beade1d94f12718d9873}}",
+              "readback_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "verified_absent": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+            },
+            "original_bytes": 70,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

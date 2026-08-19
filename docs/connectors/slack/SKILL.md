@@ -11,6 +11,7 @@ Reads Slack workspace users, channels, and channel messages through the Slack We
 
 ## Icon
 
+- id: slack
 - asset: icons/slack.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -38,17 +39,17 @@ Reads Slack workspace users, channels, and channel messages through the Slack We
 
 - users:
   - primary key: id
-  - fields: deleted(), display_name(), email(), id(), is_admin(), is_bot(), name(), real_name(), team_id(), tz(), updated()
+  - fields: deleted(boolean), display_name(string), email(string), id(string), is_admin(boolean), is_bot(boolean), name(string), real_name(string), team_id(string), tz(string), updated(integer)
 - channels:
   - primary key: id
-  - fields: created(), creator(), id(), is_archived(), is_channel(), is_general(), is_group(), is_private(), name(), num_members(), purpose(), topic()
+  - fields: created(integer), creator(string), id(string), is_archived(boolean), is_channel(boolean), is_general(boolean), is_group(boolean), is_private(boolean), name(string), num_members(integer), purpose(string), topic(string)
 - channel_messages:
   - primary key: ts
-  - fields: reply_count(), subtype(), team(), text(), thread_ts(), ts(), type(), user()
+  - fields: reply_count(integer), subtype(string), team(string), text(string), thread_ts(string), ts(string), type(string), user(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

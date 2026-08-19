@@ -1,0 +1,23 @@
+{
+  "record": {
+    "external_product_id": "fixture_external_product_id",
+    "plan_id": "fixture_plan_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/external_products/fixture_external_product_id",
+    "body": {
+      "plan_id": "fixture_plan_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "name": "fixture_name",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

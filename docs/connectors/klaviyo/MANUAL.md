@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.
 
 ICON
+  id: klaviyo
   asset: icons/klaviyo.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -29,33 +30,33 @@ CONFIGURATION
   base_url
   mode
   revision
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   profiles:
     primary key: id
     cursor: updated
-    fields: created(), email(), external_id(), first_name(), id(), last_name(), organization(), phone_number(), type(), updated()
+    fields: created(string), email(string), external_id(string), first_name(string), id(string), last_name(string), organization(string), phone_number(string), type(string), updated(string)
   events:
     primary key: id
     cursor: datetime
-    fields: datetime(), id(), timestamp(), type(), uuid()
+    fields: datetime(string), id(string), timestamp(integer), type(string), uuid(string)
   campaigns:
     primary key: id
     cursor: updated_at
-    fields: archived(), channel(), created_at(), id(), name(), scheduled_at(), send_time(), status(), type(), updated_at()
+    fields: archived(boolean), channel(string), created_at(string), id(string), name(string), scheduled_at(string), send_time(string), status(string), type(string), updated_at(string)
   lists:
     primary key: id
     cursor: updated
-    fields: created(), id(), name(), type(), updated()
+    fields: created(string), id(string), name(string), type(string), updated(string)
   metrics:
     primary key: id
     cursor: updated
-    fields: created(), id(), integration_name(), name(), type(), updated()
+    fields: created(string), id(string), integration_name(string), name(string), type(string), updated(string)
   segments:
     primary key: id
     cursor: updated
-    fields: created(), id(), is_active(), is_processing(), name(), type(), updated()
+    fields: created(string), id(string), is_active(boolean), is_processing(boolean), name(string), type(string), updated(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -47,6 +48,61 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 	if body["name"] != "README.md" {
 		t.Fatalf("body name = %v, want README.md", body["name"])
+	}
+}
+
+func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/repos/octo/hello/git/ref/heads/main" {
+			t.Fatalf("path = %s, want slash-bearing Git ref path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ref":"heads/main"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/git/ref/{ref}"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/repos/{owner}/{repo}/git/ref/{ref}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"owner": "octo",
+			"repo":  "hello",
+		}},
+		PathParams:   map[string]string{"ref": "heads/main"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want 200", result.Status)
+	}
+}
+
+func TestDirectReadPreservesHTTPErrorText(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {
+			t.Fatalf("trace = %q, want %q", got, want)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"diagnostic":"direct-read-fixture-body"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/items/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/items/{id}",
+		PathParams:   map[string]string{"id": "fixture-item"},
+		Query:        map[string]string{"trace": "direct-read-fixture"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want HTTP failure")
+	}
+	for _, want := range []string{"trace=direct-read-fixture", `{"diagnostic":"direct-read-fixture-body"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("DirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+		}
 	}
 }
 
@@ -112,6 +168,30 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "GET") {
 		t.Fatalf("DirectRead error = %q, want GET", err.Error())
+	}
+}
+
+func TestDirectReadRejectsOperationOnlyResponsePoliciesBeforeNetwork(t *testing.T) {
+	for _, policy := range []string{"none", "text"} {
+		t.Run(policy, func(t *testing.T) {
+			var hits int
+			srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				hits++
+			}))
+			defer srv.Close()
+
+			_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/items"), connectors.DirectReadRequest{
+				Method:       http.MethodGet,
+				Path:         "/items",
+				OutputPolicy: policy,
+			}, nil)
+			if err == nil || !strings.Contains(err.Error(), "operation-backed") {
+				t.Fatalf("DirectRead error = %v, want operation-backed policy refusal", err)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
 	}
 }
 
@@ -600,6 +680,255 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadSupportsBoundedStatusAndTextResponses(t *testing.T) {
+	t.Run("status only accepts an empty success body", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != http.MethodGet || r.URL.Path != "/membership" {
+				t.Fatalf("request = %s %s, want GET /membership", r.Method, r.URL.Path)
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+		defer srv.Close()
+
+		result, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.membership", http.MethodGet, "/membership", "none", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.membership",
+			MaxBytes:  1024,
+		}, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectRead: %v", err)
+		}
+		if result.Status != http.StatusNoContent {
+			t.Fatalf("status = %d, want %d", result.Status, http.StatusNoContent)
+		}
+		if result.Body != nil {
+			t.Fatalf("body = %#v, want nil for a status-only response", result.Body)
+		}
+	})
+
+	t.Run("status only rejects a nonempty success body", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("unexpected"))
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.membership", http.MethodGet, "/membership", "none", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.membership",
+			MaxBytes:  1024,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "status-only response must be empty") {
+			t.Fatalf("OperationDirectRead error = %v, want nonempty status-only response rejection", err)
+		}
+	})
+
+	t.Run("text response is bounded and valid UTF-8", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path != "/zen" {
+				t.Fatalf("path = %q, want /zen", r.URL.Path)
+			}
+			w.Header().Set("Content-Type", "text/plain")
+			_, _ = w.Write([]byte("keep it simple"))
+		}))
+		defer srv.Close()
+
+		result, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.zen", http.MethodGet, "/zen", "text", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.zen",
+			MaxBytes:  1024,
+		}, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectRead: %v", err)
+		}
+		if got, want := result.Body, any("keep it simple"); got != want {
+			t.Fatalf("body = %#v, want %#v", got, want)
+		}
+	})
+
+	t.Run("text response rejects invalid UTF-8", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte{0xff, 0xfe})
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.octets", http.MethodGet, "/octets", "text", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.octets",
+			MaxBytes:  1024,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "valid UTF-8") {
+			t.Fatalf("OperationDirectRead error = %v, want UTF-8 rejection", err)
+		}
+	})
+
+	t.Run("text response retains its declared cap", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("five!"))
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.short", http.MethodGet, "/short", "text", "", 4), connectors.OperationDirectReadRequest{
+			Operation: "acme.short",
+			MaxBytes:  4,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "response too large") {
+			t.Fatalf("OperationDirectRead error = %v, want response cap rejection", err)
+		}
+	})
+}
+
+func statusTextReadBundle(baseURL, id, method, endpointPath, outputPolicy, contentType string, maxBytes int) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL},
+		Operations: []OperationSpec{{
+			ID:           id,
+			Kind:         "rest_read",
+			Summary:      "bounded fixture read",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: outputPolicy,
+			REST: &RESTOperationSpec{
+				Method:      method,
+				Path:        endpointPath,
+				ContentType: contentType,
+				MaxBytes:    maxBytes,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: method,
+			Path:   endpointPath,
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+}
+
+func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
+	source := "# rendered from a declared plain-text body"
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issued++
+		if r.Method != http.MethodPost || r.URL.Path != "/markdown/raw" {
+			t.Fatalf("request = %s %s, want POST /markdown/raw", r.Method, r.URL.Path)
+		}
+		if got, want := r.Header.Get("Content-Type"), "text/plain"; got != want {
+			t.Fatalf("Content-Type = %q, want %q", got, want)
+		}
+		raw, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Fatalf("read request body: %v", err)
+		}
+		if got := string(raw); got != source {
+			t.Fatalf("request body = %q, want literal source %q", got, source)
+		}
+		_, _ = w.Write([]byte("<h1>rendered</h1>"))
+	}))
+	defer srv.Close()
+
+	b := statusTextReadBundle(srv.URL, "github.markdown_raw", http.MethodPost, "/markdown/raw", "text", "text/plain", 1024)
+	b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string"}`)
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "github.markdown_raw",
+		RawBody:   &source,
+		MaxBytes:  1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got, want := result.Body, any("<h1>rendered</h1>"); got != want {
+		t.Fatalf("body = %#v, want %#v", got, want)
+	}
+	if issued != 1 {
+		t.Fatalf("requests = %d, want 1", issued)
+	}
+}
+
+func TestOperationDirectReadRejectsUndeclaredOrInvalidPlainTextBodiesBeforeNetwork(t *testing.T) {
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer srv.Close()
+
+	plainBundle := func() Bundle {
+		b := statusTextReadBundle(srv.URL, "github.markdown_raw", http.MethodPost, "/markdown/raw", "text", "text/plain", 4)
+		b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string"}`)
+		return b
+	}
+	tests := []struct {
+		name   string
+		bundle func() Bundle
+		req    connectors.OperationDirectReadRequest
+		want   string
+	}{
+		{
+			name:   "missing raw body",
+			bundle: plainBundle,
+			req:    connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", MaxBytes: 4},
+			want:   "requires a raw body",
+		},
+		{
+			name:   "mixed raw and JSON fields",
+			bundle: plainBundle,
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", Body: map[string]any{"context": "octo/example"}, RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "cannot mix a raw body with JSON body fields",
+		},
+		{
+			name:   "body exceeds declared cap",
+			bundle: plainBundle,
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "five!"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "request body too large",
+		},
+		{
+			name: "static JSON body is not silently discarded",
+			bundle: func() Bundle {
+				b := plainBundle()
+				b.Operations[0].REST.Body = map[string]any{"context": "octo/example"}
+				return b
+			},
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "must not declare rest.body",
+		},
+		{
+			name: "JSON operation cannot opt into raw input",
+			bundle: func() Bundle {
+				b := statusTextReadBundle(srv.URL, "github.markdown", http.MethodPost, "/markdown", "text", "application/json", 4)
+				b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"object"}`)
+				return b
+			},
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "requires declared text/plain",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			before := issued
+			_, err := OperationDirectRead(context.Background(), tt.bundle(), tt.req, nil)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("OperationDirectRead error = %v, want %q", err, tt.want)
+			}
+			if issued != before {
+				t.Fatalf("requests = %d, want no request for rejected body", issued)
+			}
+		})
+	}
+}
+
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {
@@ -637,5 +966,244 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 				},
 			},
 		},
+	}
+}
+
+func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.search",
+			Kind:         "rest_read",
+			Summary:      "Search",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v1/search",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"required": ["ids"],
+					"properties": {"ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}}
+				}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v1/search",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.search",
+		Body:      map[string]any{"ids": []any{}},
+	}, nil)
+	if err == nil {
+		t.Fatal("empty documented array: want body_schema error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if issued {
+		t.Fatal("request must not be issued for an invalid body")
+	}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.search",
+		Body:      map[string]any{"ids": []any{"a"}},
+	}, nil); err != nil {
+		t.Fatalf("non-empty array: unexpected error: %v", err)
+	}
+}
+
+func TestOperationDirectReadPreservesHTTPErrorText(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Query().Get("trace"), "operation-read-fixture"; got != want {
+			t.Fatalf("trace = %q, want %q", got, want)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"diagnostic":"operation-read-fixture-body"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.lookup",
+		Query:     map[string]string{"trace": "operation-read-fixture"},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want HTTP failure")
+	}
+	for _, want := range []string{"trace=operation-read-fixture", `{"diagnostic":"operation-read-fixture-body"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("OperationDirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+		}
+	}
+}
+
+// --- required_query any-of groups ------------------------------------------
+//
+// Airtable's ledger blocks GET /v0/meta/enterpriseAccounts/{id}/users until the
+// engine can "require at least one documented email[] or id[] query value
+// without claiming an unfiltered executable stream". Nothing in the rule below
+// mentions email, id, or Airtable.
+
+func requiredQueryBundle(srv *httptest.Server, issued *bool) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.list_users",
+			Kind:         "rest_read",
+			Summary:      "List users by filter",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:        http.MethodGet,
+				Path:          "/v1/users",
+				MaxBytes:      1024,
+				RequiredQuery: []RequiredQueryGroup{{AnyOf: []string{"email", "id"}}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodGet,
+			Path:      "/v1/users",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+}
+
+func TestOperationDirectReadRequiredQueryAnyOf(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"users":[]}`))
+	}))
+	defer srv.Close()
+	b := requiredQueryBundle(srv, &issued)
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+	}, nil)
+	if err == nil {
+		t.Fatal("unfiltered request: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "email") || !strings.Contains(err.Error(), "id") {
+		t.Fatalf("error should name the group's parameters, got %v", err)
+	}
+	if issued {
+		t.Fatal("the unfiltered request must never reach the provider")
+	}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"id": "usr123"},
+	}, nil); err != nil {
+		t.Fatalf("one member supplied: unexpected error: %v", err)
+	}
+	if !issued {
+		t.Fatal("a satisfied request must be issued")
+	}
+}
+
+func TestOperationDirectReadRequiredQueryRejectsBlankValue(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	// A present-but-empty parameter is exactly the unfiltered request the
+	// constraint exists to prevent, so presence alone must not satisfy it.
+	_, err := OperationDirectRead(context.Background(), requiredQueryBundle(srv, &issued), connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"email": "   "},
+	}, nil)
+	if err == nil {
+		t.Fatal("blank value: want error, got nil")
+	}
+	if issued {
+		t.Fatal("blank value must not reach the provider")
+	}
+}
+
+func TestOperationDirectReadRequiredQuerySatisfiedByDeclaredQuery(t *testing.T) {
+	// The constraint is about the request that goes on the wire, not about who
+	// supplied the value: a value hardcoded in the operation's own rest.query
+	// satisfies the group.
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issued = true
+		if got := r.URL.Query().Get("email"); got != "ops@example.com" {
+			t.Fatalf("email = %q, want the declared value", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	b := requiredQueryBundle(srv, &issued)
+	b.Operations[0].REST.Query = map[string]string{"email": "ops@example.com"}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+	}, nil); err != nil {
+		t.Fatalf("declared query value: unexpected error: %v", err)
+	}
+	if !issued {
+		t.Fatal("request should have been issued")
+	}
+}
+
+func TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	b := requiredQueryBundle(srv, &issued)
+	b.Operations[0].REST.RequiredQuery = []RequiredQueryGroup{
+		{AnyOf: []string{"email", "id"}},
+		{AnyOf: []string{"since"}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"id": "usr123"},
+	}, nil)
+	if err == nil {
+		t.Fatal("second group unsatisfied: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "since") {
+		t.Fatalf("error should name the unsatisfied group, got %v", err)
+	}
+	if issued {
+		t.Fatal("request must not be issued while a group is unsatisfied")
 	}
 }

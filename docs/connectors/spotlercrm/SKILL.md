@@ -11,9 +11,11 @@ Reads Spotler CRM contacts, accounts, opportunities, and tasks, and (via the rea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -35,29 +37,29 @@ Reads Spotler CRM contacts, accounts, opportunities, and tasks, and (via the rea
 
 - contacts:
   - primary key: id
-  - fields: email(), firstName(), id(), lastName()
+  - fields: email(string), firstName(string), id(string), lastName(string)
 - accounts:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - opportunities:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - tasks:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - activities:
   - primary key: id
-  - fields: createddate(), id(), modifieddate(), ownerid()
+  - fields: createddate(string), id(integer), modifieddate(string), ownerid(integer)
 - campaigns:
   - primary key: id
-  - fields: createddate(), id(), modifieddate(), name(), ownerid()
+  - fields: createddate(string), id(integer), modifieddate(string), name(string), ownerid(integer)
 - cases:
   - primary key: id
-  - fields: createddate(), id(), modifieddate(), ownerid()
+  - fields: createddate(string), id(integer), modifieddate(string), ownerid(integer)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

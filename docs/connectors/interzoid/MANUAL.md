@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity keys, plus organization-name standardization, via the Interzoid REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -32,24 +34,24 @@ CONFIGURATION
   company_match_algorithm
   fullname
   org
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   company_name_matching:
     primary key: SimKey
-    fields: Code(), Credits(), SimKey(), query_company()
+    fields: Code(string), Credits(string), SimKey(string), query_company(string)
   individual_name_matching:
     primary key: SimKey
-    fields: Code(), Credits(), SimKey(), query_fullname()
+    fields: Code(string), Credits(string), SimKey(string), query_fullname(string)
   street_address_matching:
     primary key: SimKey
-    fields: Code(), Credits(), SimKey(), query_address()
+    fields: Code(string), Credits(string), SimKey(string), query_address(string)
   standardize_company_names:
     primary key: Standard
-    fields: Code(), Credits(), Standard(), query_org()
+    fields: Code(string), Credits(string), Standard(string), query_org(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Interzoid API single-lookup read; each read spends an API credit

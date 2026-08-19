@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -27,27 +29,27 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   members:
     primary key: id
-    fields: boardIds(), createdAt(), email(), familyName(), fullName(), givenName(), id(), isActive(), lastSeenAt()
+    fields: boardIds(array), createdAt(number), email(string), familyName(string), fullName(string), givenName(string), id(string), isActive(boolean), lastSeenAt(number)
   candidates:
     primary key: id
-    fields: email(), firstName(), id(), lastName(), memberId()
+    fields: email(string), firstName(string), id(string), lastName(string), memberId(string)
   activities:
     primary key: id
-    fields: activityCategory(), completed(), completedAt(), createdAt(), id(), startAt(), title()
+    fields: activityCategory(string), completed(boolean), completedAt(number), createdAt(number), id(string), startAt(number), title(string)
   notes:
     primary key: id
-    fields: htmlText(), id(), memberId(), text()
+    fields: htmlText(string), id(string), memberId(string), text(string)
   actions:
     primary key: id
-    fields: actionType(), activityId(), candidateId(), createdAt(), date(), id(), memberId()
+    fields: actionType(string), activityId(string), candidateId(string), createdAt(number), date(number), id(string), memberId(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Huntr organization API read of member, candidate, activity, note, and action data

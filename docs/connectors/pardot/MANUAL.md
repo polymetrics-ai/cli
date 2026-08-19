@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes documented Salesforce Account Engagement (Pardot) API v5 JSON resources.
 
 ICON
+  id: salesforcepardot
   asset: icons/salesforcepardot.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -27,230 +28,230 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  business_unit_id
+  business_unit_id (required)
   id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   prospects:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), lastName(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(integer), lastName(string), updatedAt(string)
   prospect:
     primary key: id
-    fields: createdAt(), email(), firstName(), id(), lastName(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(integer), lastName(string), updatedAt(string)
   campaigns:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   campaign:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   lists:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   list:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   users:
     primary key: id
-    fields: createdAt(), createdById(), email(), firstName(), id(), isDeleted(), jobTitle(), lastName(), role(), roleName(), salesforceId(), tagReplacementLanguage(), updatedAt(), updatedById(), username()
+    fields: createdAt(string), createdById(integer), email(string), firstName(string), id(integer), isDeleted(boolean), jobTitle(string), lastName(string), role(string), roleName(string), salesforceId(integer), tagReplacementLanguage(string), updatedAt(string), updatedById(integer), username(string)
   user:
     primary key: id
-    fields: createdAt(), createdById(), email(), firstName(), id(), isDeleted(), jobTitle(), lastName(), role(), roleName(), salesforceId(), tagReplacementLanguage(), updatedAt(), updatedById(), username()
+    fields: createdAt(string), createdById(integer), email(string), firstName(string), id(integer), isDeleted(boolean), jobTitle(string), lastName(string), role(string), roleName(string), salesforceId(integer), tagReplacementLanguage(string), updatedAt(string), updatedById(integer), username(string)
   custom_fields:
     primary key: id
-    fields: createdAt(), createdById(), fieldId(), id(), isAnalyticsSynced(), isRecordMultipleResponses(), isRequired(), isUseValues(), name(), salesforceId(), type(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), fieldId(integer), id(integer), isAnalyticsSynced(boolean), isRecordMultipleResponses(boolean), isRequired(boolean), isUseValues(boolean), name(string), salesforceId(integer), type(integer), updatedAt(string), updatedById(integer)
   custom_field:
     primary key: id
-    fields: createdAt(), createdById(), fieldId(), id(), isAnalyticsSynced(), isRecordMultipleResponses(), isRequired(), isUseValues(), name(), salesforceId(), type(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), fieldId(integer), id(integer), isAnalyticsSynced(boolean), isRecordMultipleResponses(boolean), isRequired(boolean), isUseValues(boolean), name(string), salesforceId(integer), type(integer), updatedAt(string), updatedById(integer)
   custom_redirects:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), destinationUrl(), folderId(), id(), isDeleted(), name(), trackerDomainId(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), destinationUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   custom_redirect:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), destinationUrl(), folderId(), id(), isDeleted(), name(), trackerDomainId(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), destinationUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   dynamic_contents:
     primary key: id
-    fields: baseContent(), basedOn(), basedOnProspectApiFieldId(), createdAt(), createdById(), embedCode(), embedUrl(), folderId(), id(), isDeleted(), name(), tagReplacementLanguage(), trackerDomainId(), updatedAt(), updatedById()
+    fields: baseContent(string), basedOn(string), basedOnProspectApiFieldId(integer), createdAt(string), createdById(integer), embedCode(string), embedUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), tagReplacementLanguage(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   dynamic_content:
     primary key: id
-    fields: baseContent(), basedOn(), basedOnProspectApiFieldId(), createdAt(), createdById(), embedCode(), embedUrl(), folderId(), id(), isDeleted(), name(), tagReplacementLanguage(), trackerDomainId(), updatedAt(), updatedById()
+    fields: baseContent(string), basedOn(string), basedOnProspectApiFieldId(integer), createdAt(string), createdById(integer), embedCode(string), embedUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), tagReplacementLanguage(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   emails:
     primary key: id
-    fields: campaignId(), clientType(), createdById(), emailTemplateId(), folderId(), id(), listEmailId(), name(), prospectId(), salesforceCmsId(), sentAt(), subject(), trackerDomainId(), type()
+    fields: campaignId(integer), clientType(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), listEmailId(integer), name(string), prospectId(integer), salesforceCmsId(integer), sentAt(string), subject(string), trackerDomainId(integer), type(integer)
   email:
     primary key: id
-    fields: campaignId(), clientType(), createdById(), emailTemplateId(), folderId(), id(), listEmailId(), name(), prospectId(), salesforceCmsId(), sentAt(), subject(), trackerDomainId(), type()
+    fields: campaignId(integer), clientType(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), listEmailId(integer), name(string), prospectId(integer), salesforceCmsId(integer), sentAt(string), subject(string), trackerDomainId(integer), type(integer)
   email_templates:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), folderId(), id(), isAutoResponderEmail(), isDeleted(), isDripEmail(), isListEmail(), isOneToOneEmail(), name(), subject(), tagReplacementLanguage(), trackerDomainId(), type(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isAutoResponderEmail(boolean), isDeleted(boolean), isDripEmail(boolean), isListEmail(boolean), isOneToOneEmail(boolean), name(string), subject(string), tagReplacementLanguage(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
   email_template:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), folderId(), id(), isAutoResponderEmail(), isDeleted(), isDripEmail(), isListEmail(), isOneToOneEmail(), name(), subject(), tagReplacementLanguage(), trackerDomainId(), type(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isAutoResponderEmail(boolean), isDeleted(boolean), isDripEmail(boolean), isListEmail(boolean), isOneToOneEmail(boolean), name(string), subject(string), tagReplacementLanguage(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
   list_emails:
     primary key: id
-    fields: campaignId(), clientType(), createdAt(), createdById(), emailTemplateId(), folderId(), id(), isDeleted(), isOperational(), isPaused(), isSent(), name(), sentAt(), subject(), trackerDomainId(), type(), updatedAt(), updatedById()
+    fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
   list_email:
     primary key: id
-    fields: campaignId(), clientType(), createdAt(), createdById(), emailTemplateId(), folderId(), id(), isDeleted(), isOperational(), isPaused(), isSent(), name(), sentAt(), subject(), trackerDomainId(), type(), updatedAt(), updatedById()
+    fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
   list_email_stats:
     primary key: id
-    fields: campaignId(), clientType(), createdAt(), createdById(), emailTemplateId(), folderId(), id(), isDeleted(), isOperational(), isPaused(), isSent(), name(), sentAt(), subject(), trackerDomainId(), type(), updatedAt(), updatedById()
+    fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
   files:
     primary key: id
-    fields: bitlyIsPersonalized(), bitlyShortUrl(), campaignId(), createdAt(), createdById(), folderId(), id(), isTracked(), name(), salesforceCmsId(), salesforceId(), size(), trackerDomainId(), updatedAt(), updatedById(), url(), vanityUrl(), vanityUrlPath()
+    fields: bitlyIsPersonalized(string), bitlyShortUrl(string), campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isTracked(boolean), name(string), salesforceCmsId(integer), salesforceId(integer), size(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string), vanityUrl(string), vanityUrlPath(string)
   file:
     primary key: id
-    fields: bitlyIsPersonalized(), bitlyShortUrl(), campaignId(), createdAt(), createdById(), folderId(), id(), isTracked(), name(), salesforceCmsId(), salesforceId(), size(), trackerDomainId(), updatedAt(), updatedById(), url(), vanityUrl(), vanityUrlPath()
+    fields: bitlyIsPersonalized(string), bitlyShortUrl(string), campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isTracked(boolean), name(string), salesforceCmsId(integer), salesforceId(integer), size(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string), vanityUrl(string), vanityUrlPath(string)
   folders:
     primary key: id
-    fields: createdAt(), createdById(), id(), name(), parentFolderId(), path(), updatedAt(), updatedById(), usePermissions()
+    fields: createdAt(string), createdById(integer), id(integer), name(string), parentFolderId(integer), path(string), updatedAt(string), updatedById(integer), usePermissions(string)
   folder:
     primary key: id
-    fields: createdAt(), createdById(), id(), name(), parentFolderId(), path(), updatedAt(), updatedById(), usePermissions()
+    fields: createdAt(string), createdById(integer), id(integer), name(string), parentFolderId(integer), path(string), updatedAt(string), updatedById(integer), usePermissions(string)
   folder_contents:
     primary key: id
-    fields: createdAt(), createdById(), folderId(), folderRef(), id(), objectId(), objectName(), objectRef(), objectType(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), folderId(integer), folderRef(string), id(integer), objectId(integer), objectName(string), objectRef(string), objectType(string), updatedAt(string), updatedById(integer)
   folder_content:
     primary key: id
-    fields: createdAt(), createdById(), folderId(), folderRef(), id(), objectId(), objectName(), objectRef(), objectType(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), folderId(integer), folderRef(string), id(integer), objectId(integer), objectName(string), objectRef(string), objectType(string), updatedAt(string), updatedById(integer)
   forms:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), embedCode(), folderId(), id(), isDeleted(), isUseRedirectLocation(), layoutTemplateId(), name(), salesforceCmsId(), salesforceId(), trackerDomainId(), updatedAt(), updatedById(), url()
+    fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isDeleted(boolean), isUseRedirectLocation(boolean), layoutTemplateId(integer), name(string), salesforceCmsId(integer), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string)
   form:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), embedCode(), folderId(), id(), isDeleted(), isUseRedirectLocation(), layoutTemplateId(), name(), salesforceCmsId(), salesforceId(), trackerDomainId(), updatedAt(), updatedById(), url()
+    fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isDeleted(boolean), isUseRedirectLocation(boolean), layoutTemplateId(integer), name(string), salesforceCmsId(integer), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string)
   form_fields:
     primary key: id
-    fields: createdAt(), createdById(), cssClasses(), dataFormat(), description(), errorMessage(), formId(), hasDependents(), hasProgressives(), hasValues(), id(), isAlwaysDisplay(), isDoNotPrefill(), isMaintainInitialValue(), isRequired(), label(), prospectApiFieldId(), sortOrder(), type(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), cssClasses(string), dataFormat(string), description(string), errorMessage(string), formId(integer), hasDependents(boolean), hasProgressives(boolean), hasValues(boolean), id(integer), isAlwaysDisplay(boolean), isDoNotPrefill(boolean), isMaintainInitialValue(boolean), isRequired(boolean), label(string), prospectApiFieldId(integer), sortOrder(string), type(integer), updatedAt(string), updatedById(integer)
   form_field:
     primary key: id
-    fields: createdAt(), createdById(), cssClasses(), dataFormat(), description(), errorMessage(), formId(), hasDependents(), hasProgressives(), hasValues(), id(), isAlwaysDisplay(), isDoNotPrefill(), isMaintainInitialValue(), isRequired(), label(), prospectApiFieldId(), sortOrder(), type(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), cssClasses(string), dataFormat(string), description(string), errorMessage(string), formId(integer), hasDependents(boolean), hasProgressives(boolean), hasValues(boolean), id(integer), isAlwaysDisplay(boolean), isDoNotPrefill(boolean), isMaintainInitialValue(boolean), isRequired(boolean), label(string), prospectApiFieldId(integer), sortOrder(string), type(integer), updatedAt(string), updatedById(integer)
   form_handlers:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), embedCode(), folderId(), id(), isCookieless(), isDataForwarded(), isDeleted(), name(), salesforceId(), trackerDomainId(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isCookieless(boolean), isDataForwarded(boolean), isDeleted(boolean), name(string), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   form_handler:
     primary key: id
-    fields: campaignId(), createdAt(), createdById(), embedCode(), folderId(), id(), isCookieless(), isDataForwarded(), isDeleted(), name(), salesforceId(), trackerDomainId(), updatedAt(), updatedById()
+    fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isCookieless(boolean), isDataForwarded(boolean), isDeleted(boolean), name(string), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer)
   form_handler_fields:
     primary key: id
-    fields: createdAt(), createdById(), dataFormat(), fieldLabel(), formHandlerId(), id(), isRequired(), name(), prospectApiFieldId(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), dataFormat(string), fieldLabel(string), formHandlerId(integer), id(integer), isRequired(boolean), name(string), prospectApiFieldId(integer), updatedAt(string), updatedById(integer)
   form_handler_field:
     primary key: id
-    fields: createdAt(), createdById(), dataFormat(), fieldLabel(), formHandlerId(), id(), isRequired(), name(), prospectApiFieldId(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), dataFormat(string), fieldLabel(string), formHandlerId(integer), id(integer), isRequired(boolean), name(string), prospectApiFieldId(integer), updatedAt(string), updatedById(integer)
   landing_pages:
     primary key: id
-    fields: archiveDate(), campaignId(), createdAt(), createdById(), description(), folderId(), formId(), id(), isDeleted(), isDoNotIndex(), layoutTemplateId(), name(), redirectLocation(), salesforceCmsId(), title(), trackerDomainId(), updatedAt(), updatedById(), vanityUrlPath()
+    fields: archiveDate(string), campaignId(integer), createdAt(string), createdById(integer), description(string), folderId(integer), formId(integer), id(integer), isDeleted(boolean), isDoNotIndex(boolean), layoutTemplateId(integer), name(string), redirectLocation(string), salesforceCmsId(integer), title(string), trackerDomainId(integer), updatedAt(string), updatedById(integer), vanityUrlPath(string)
   landing_page:
     primary key: id
-    fields: archiveDate(), campaignId(), createdAt(), createdById(), description(), folderId(), formId(), id(), isDeleted(), isDoNotIndex(), layoutTemplateId(), name(), redirectLocation(), salesforceCmsId(), title(), trackerDomainId(), updatedAt(), updatedById(), vanityUrlPath()
+    fields: archiveDate(string), campaignId(integer), createdAt(string), createdById(integer), description(string), folderId(integer), formId(integer), id(integer), isDeleted(boolean), isDoNotIndex(boolean), layoutTemplateId(integer), name(string), redirectLocation(string), salesforceCmsId(integer), title(string), trackerDomainId(integer), updatedAt(string), updatedById(integer), vanityUrlPath(string)
   layout_templates:
     primary key: id
-    fields: createdAt(), createdById(), folderId(), formContent(), id(), isDeleted(), isIncludeDefaultCss(), layoutContent(), name(), siteSearchContent(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), folderId(integer), formContent(string), id(integer), isDeleted(boolean), isIncludeDefaultCss(boolean), layoutContent(string), name(string), siteSearchContent(string), updatedAt(string), updatedById(integer)
   layout_template:
     primary key: id
-    fields: createdAt(), createdById(), folderId(), formContent(), id(), isDeleted(), isIncludeDefaultCss(), layoutContent(), name(), siteSearchContent(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), folderId(integer), formContent(string), id(integer), isDeleted(boolean), isIncludeDefaultCss(boolean), layoutContent(string), name(string), siteSearchContent(string), updatedAt(string), updatedById(integer)
   list_memberships:
     primary key: id
-    fields: createdAt(), createdById(), id(), isDeleted(), listId(), optedOut(), prospectId(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), id(integer), isDeleted(boolean), listId(integer), optedOut(boolean), prospectId(integer), updatedAt(string), updatedById(integer)
   list_membership:
     primary key: id
-    fields: createdAt(), createdById(), id(), isDeleted(), listId(), optedOut(), prospectId(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), id(integer), isDeleted(boolean), listId(integer), optedOut(boolean), prospectId(integer), updatedAt(string), updatedById(integer)
   opportunities:
     primary key: id
-    fields: campaignId(), closedAt(), createdAt(), createdById(), id(), isDeleted(), name(), probability(), stage(), status(), updatedAt(), updatedById(), value()
+    fields: campaignId(integer), closedAt(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), probability(number), stage(string), status(string), updatedAt(string), updatedById(integer), value(string)
   opportunity:
     primary key: id
-    fields: campaignId(), closedAt(), createdAt(), createdById(), id(), isDeleted(), name(), probability(), stage(), status(), updatedAt(), updatedById(), value()
+    fields: campaignId(integer), closedAt(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), probability(number), stage(string), status(string), updatedAt(string), updatedById(integer), value(string)
   prospect_accounts:
     primary key: id
-    fields: annualRevenue(), assignedToId(), billingCity(), billingCountry(), billingState(), billingZip(), createdAt(), createdById(), id(), isDeleted(), name(), phone(), salesforceId(), updatedAt(), updatedById(), website()
+    fields: annualRevenue(string), assignedToId(integer), billingCity(string), billingCountry(string), billingState(string), billingZip(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), phone(string), salesforceId(integer), updatedAt(string), updatedById(integer), website(string)
   prospect_account:
     primary key: id
-    fields: annualRevenue(), assignedToId(), billingCity(), billingCountry(), billingState(), billingZip(), createdAt(), createdById(), id(), isDeleted(), name(), phone(), salesforceId(), updatedAt(), updatedById(), website()
+    fields: annualRevenue(string), assignedToId(integer), billingCity(string), billingCountry(string), billingState(string), billingZip(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), phone(string), salesforceId(integer), updatedAt(string), updatedById(integer), website(string)
   tags:
     primary key: id
-    fields: createdAt(), createdById(), id(), name(), objectCount(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), id(integer), name(string), objectCount(integer), updatedAt(string), updatedById(integer)
   tag:
     primary key: id
-    fields: createdAt(), createdById(), id(), name(), objectCount(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), id(integer), name(string), objectCount(integer), updatedAt(string), updatedById(integer)
   tagged_objects:
     primary key: id
-    fields: createdAt(), createdById(), id(), objectId(), objectName(), objectType(), tagId()
+    fields: createdAt(string), createdById(integer), id(integer), objectId(integer), objectName(string), objectType(string), tagId(integer)
   tagged_object:
     primary key: id
-    fields: createdAt(), createdById(), id(), objectId(), objectName(), objectType(), tagId()
+    fields: createdAt(string), createdById(integer), id(integer), objectId(integer), objectName(string), objectType(string), tagId(integer)
   tracker_domains:
     primary key: id
-    fields: createdAt(), createdById(), defaultCampaignId(), domain(), httpsStatus(), id(), isDeleted(), isPrimary(), sslStatus(), updatedAt(), updatedById(), validatedAt(), validationStatus()
+    fields: createdAt(string), createdById(integer), defaultCampaignId(integer), domain(string), httpsStatus(string), id(integer), isDeleted(boolean), isPrimary(boolean), sslStatus(string), updatedAt(string), updatedById(integer), validatedAt(string), validationStatus(string)
   tracker_domain:
     primary key: id
-    fields: createdAt(), createdById(), defaultCampaignId(), domain(), httpsStatus(), id(), isDeleted(), isPrimary(), sslStatus(), updatedAt(), updatedById(), validatedAt(), validationStatus()
+    fields: createdAt(string), createdById(integer), defaultCampaignId(integer), domain(string), httpsStatus(string), id(integer), isDeleted(boolean), isPrimary(boolean), sslStatus(string), updatedAt(string), updatedById(integer), validatedAt(string), validationStatus(string)
   visitors:
     primary key: id
-    fields: campaignId(), campaignParameter(), contentParameter(), createdAt(), doNotSell(), hostname(), id(), ipAddress(), isIdentified(), mediumParameter(), pageViewCount(), prospectId(), sourceParameter(), termParameter(), updatedAt()
+    fields: campaignId(integer), campaignParameter(string), contentParameter(string), createdAt(string), doNotSell(boolean), hostname(string), id(integer), ipAddress(string), isIdentified(boolean), mediumParameter(string), pageViewCount(integer), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string)
   visitor:
     primary key: id
-    fields: campaignId(), campaignParameter(), contentParameter(), createdAt(), doNotSell(), hostname(), id(), ipAddress(), isIdentified(), mediumParameter(), pageViewCount(), prospectId(), sourceParameter(), termParameter(), updatedAt()
+    fields: campaignId(integer), campaignParameter(string), contentParameter(string), createdAt(string), doNotSell(boolean), hostname(string), id(integer), ipAddress(string), isIdentified(boolean), mediumParameter(string), pageViewCount(integer), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string)
   visits:
     primary key: id
-    fields: campaignParameter(), contentParameter(), createdAt(), durationInSeconds(), firstVisitorPageViewAt(), id(), lastVisitorPageViewAt(), mediumParameter(), prospectId(), sourceParameter(), termParameter(), updatedAt(), visitorId(), visitorPageViewCount()
+    fields: campaignParameter(string), contentParameter(string), createdAt(string), durationInSeconds(integer), firstVisitorPageViewAt(string), id(integer), lastVisitorPageViewAt(string), mediumParameter(string), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string), visitorId(integer), visitorPageViewCount(integer)
   visit:
     primary key: id
-    fields: campaignParameter(), contentParameter(), createdAt(), durationInSeconds(), firstVisitorPageViewAt(), id(), lastVisitorPageViewAt(), mediumParameter(), prospectId(), sourceParameter(), termParameter(), updatedAt(), visitorId(), visitorPageViewCount()
+    fields: campaignParameter(string), contentParameter(string), createdAt(string), durationInSeconds(integer), firstVisitorPageViewAt(string), id(integer), lastVisitorPageViewAt(string), mediumParameter(string), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string), visitorId(integer), visitorPageViewCount(integer)
   visitor_activities:
     primary key: id
-    fields: campaignId(), createdAt(), customRedirectId(), details(), emailId(), emailTemplateId(), fileId(), formHandlerId(), formId(), id(), landingPageId(), listEmailId(), opportunityId(), prospectId(), type(), typeName(), updatedAt(), visitId(), visitorId(), visitorPageViewId()
+    fields: campaignId(integer), createdAt(string), customRedirectId(integer), details(string), emailId(integer), emailTemplateId(integer), fileId(integer), formHandlerId(integer), formId(integer), id(integer), landingPageId(integer), listEmailId(integer), opportunityId(integer), prospectId(integer), type(integer), typeName(string), updatedAt(string), visitId(integer), visitorId(integer), visitorPageViewId(integer)
   visitor_activity:
     primary key: id
-    fields: campaignId(), createdAt(), customRedirectId(), details(), emailId(), emailTemplateId(), fileId(), formHandlerId(), formId(), id(), landingPageId(), listEmailId(), opportunityId(), prospectId(), type(), typeName(), updatedAt(), visitId(), visitorId(), visitorPageViewId()
+    fields: campaignId(integer), createdAt(string), customRedirectId(integer), details(string), emailId(integer), emailTemplateId(integer), fileId(integer), formHandlerId(integer), formId(integer), id(integer), landingPageId(integer), listEmailId(integer), opportunityId(integer), prospectId(integer), type(integer), typeName(string), updatedAt(string), visitId(integer), visitorId(integer), visitorPageViewId(integer)
   visitor_page_views:
     primary key: id
-    fields: campaignId(), createdAt(), durationInSeconds(), id(), salesforceId(), title(), url(), visitId(), visitorId()
+    fields: campaignId(integer), createdAt(string), durationInSeconds(integer), id(integer), salesforceId(integer), title(string), url(string), visitId(integer), visitorId(integer)
   visitor_page_view:
     primary key: id
-    fields: campaignId(), createdAt(), durationInSeconds(), id(), salesforceId(), title(), url(), visitId(), visitorId()
+    fields: campaignId(integer), createdAt(string), durationInSeconds(integer), id(integer), salesforceId(integer), title(string), url(string), visitId(integer), visitorId(integer)
   engagement_studio_programs:
     primary key: id
-    fields: createdAt(), createdById(), description(), folderId(), id(), isDeleted(), name(), recipientListIds(), salesforceId(), status(), suppressionListIds(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), description(string), folderId(integer), id(integer), isDeleted(boolean), name(string), recipientListIds(array), salesforceId(integer), status(string), suppressionListIds(array), updatedAt(string), updatedById(integer)
   engagement_studio_program:
     primary key: id
-    fields: createdAt(), createdById(), description(), folderId(), id(), isDeleted(), name(), recipientListIds(), salesforceId(), status(), suppressionListIds(), updatedAt(), updatedById()
+    fields: createdAt(string), createdById(integer), description(string), folderId(integer), id(integer), isDeleted(boolean), name(string), recipientListIds(array), salesforceId(integer), status(string), suppressionListIds(array), updatedAt(string), updatedById(integer)
   lifecycle_stages:
     primary key: id
-    fields: createdAt(), id(), isDeleted(), isLocked(), matchType(), name(), position(), updatedAt()
+    fields: createdAt(string), id(integer), isDeleted(boolean), isLocked(boolean), matchType(string), name(string), position(integer), updatedAt(string)
   lifecycle_stage:
     primary key: id
-    fields: createdAt(), id(), isDeleted(), isLocked(), matchType(), name(), position(), updatedAt()
+    fields: createdAt(string), id(integer), isDeleted(boolean), isLocked(boolean), matchType(string), name(string), position(integer), updatedAt(string)
   lifecycle_histories:
     primary key: id
-    fields: createdAt(), id(), lifecycleStageId(), prospectId(), updatedAt()
+    fields: createdAt(string), id(integer), lifecycleStageId(integer), prospectId(integer), updatedAt(string)
   lifecycle_history:
     primary key: id
-    fields: createdAt(), id(), lifecycleStageId(), prospectId(), updatedAt()
+    fields: createdAt(string), id(integer), lifecycleStageId(integer), prospectId(integer), updatedAt(string)
   account:
     primary key: id
-    fields: addressOne(), addressTwo(), adminId(), apiCallsUsed(), city(), company(), country(), createdAt(), createdById(), fax(), id(), level(), maximumDailyApiCalls(), phone(), pluginCampaignId(), state(), territory(), updatedAt(), updatedById(), website(), zip()
+    fields: addressOne(string), addressTwo(string), adminId(integer), apiCallsUsed(string), city(string), company(string), country(string), createdAt(string), createdById(integer), fax(string), id(integer), level(string), maximumDailyApiCalls(string), phone(string), pluginCampaignId(integer), state(string), territory(string), updatedAt(string), updatedById(integer), website(string), zip(string)
   bulk_actions:
     primary key: id
-    fields: bulkAction(), count(), createdAt(), createdById(), errorCount(), errorsRef(), fileName(), id(), object(), origin(), percentComplete(), processedCount(), status(), updatedAt(), updatedById()
+    fields: bulkAction(string), count(integer), createdAt(string), createdById(integer), errorCount(integer), errorsRef(string), fileName(string), id(integer), object(string), origin(string), percentComplete(integer), processedCount(integer), status(string), updatedAt(string), updatedById(integer)
   bulk_action:
     primary key: id
-    fields: bulkAction(), count(), createdAt(), createdById(), errorCount(), errorsRef(), fileName(), id(), object(), origin(), percentComplete(), processedCount(), status(), updatedAt(), updatedById()
+    fields: bulkAction(string), count(integer), createdAt(string), createdById(integer), errorCount(integer), errorsRef(string), fileName(string), id(integer), object(string), origin(string), percentComplete(integer), processedCount(integer), status(string), updatedAt(string), updatedById(integer)
   imports:
     primary key: id
-    fields: batchesRef(), createdAt(), createdById(), createdCount(), errorCount(), errorRef(), id(), isExpired(), object(), operation(), status(), updatedAt(), updatedById(), updatedCount()
+    fields: batchesRef(string), createdAt(string), createdById(integer), createdCount(integer), errorCount(integer), errorRef(string), id(integer), isExpired(boolean), object(string), operation(string), status(string), updatedAt(string), updatedById(integer), updatedCount(integer)
   import_job:
     primary key: id
-    fields: batchesRef(), createdAt(), createdById(), createdCount(), errorCount(), errorRef(), id(), isExpired(), object(), operation(), status(), updatedAt(), updatedById(), updatedCount()
+    fields: batchesRef(string), createdAt(string), createdById(integer), createdCount(integer), errorCount(integer), errorRef(string), id(integer), isExpired(boolean), object(string), operation(string), status(string), updatedAt(string), updatedById(integer), updatedCount(integer)
   external_activities:
     primary key: id
-    fields: activityDate(), createdAt(), email(), extension(), id(), type(), updatedAt(), value()
+    fields: activityDate(string), createdAt(string), email(string), extension(string), id(integer), type(integer), updatedAt(string), value(string)
   external_activity:
     primary key: id
-    fields: activityDate(), createdAt(), email(), extension(), id(), type(), updatedAt(), value()
+    fields: activityDate(string), createdAt(string), email(string), extension(string), id(integer), type(integer), updatedAt(string), value(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:commits_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:01:11.218Z",
+  "run_id": "github-direct-commits_view-1787004068468",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:5099f4ea550c5c2ebfafbbc413cf7380109e1f34c180146d094e01740978d45e}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:commits_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:8cded627f9c67370d6b62dda63391426391d7484f5fd7553b1bd85e75b8e9f09}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "author": {
+                "avatar_url": "{{pmcertfp:v1:ccc8aa2d3acbe327d00416c04ca96bf394ab9db6839c9a5dcd469ec5e85c7a27}}",
+                "events_url": "{{pmcertfp:v1:28173cc8678aff9d59edb4ef29787848dc61a37d0c27c9073dead058ed3f8205}}",
+                "followers_url": "{{pmcertfp:v1:7ec56be059c685a996a49485bc5fad944676fe8d775d48d0c670a0d291706f49}}",
+                "following_url": "{{pmcertfp:v1:acea58f70a295cc6de84c7d5bd78e6bd890aa3229e1ba40b7c6d02f46c0e57ff}}",
+                "gists_url": "{{pmcertfp:v1:d9f4df16a94ca0d0a024c2df3476c244b6bc757612fc6b692e922d73cd86cff9}}",
+                "gravatar_id": "{{pmcertfp:v1:f9fbad9d0bdd8f7e015b1efcd5b8dc35758fffa55a06bce8a9d036eeda416c62}}",
+                "html_url": "{{pmcertfp:v1:4ee05bfad5a1798d89dd84a7ad69ba558d11fd64031efaa7cbf242b9c9b6681a}}",
+                "id": "{{pmcertfp:v1:917fb9282f5fead30a7f5cf0c2a5da527cfdb03eafd7d7755a182fcaec563069}}",
+                "login": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}",
+                "node_id": "{{pmcertfp:v1:85d857ab814ede804cee192ee105d1199e5b5e8a784376738fbc1fdbe3a1a174}}",
+                "organizations_url": "{{pmcertfp:v1:84fc839cbb3b88979722405d10264d7994b26d769628ea3a95c25f2524bc6412}}",
+                "received_events_url": "{{pmcertfp:v1:746bde52e2718a603d4b20874eb77cc46b661bc461121eb50527f6a0a0153337}}",
+                "repos_url": "{{pmcertfp:v1:35cc798a22a675011240a1f113ec6da94907d3704d46886c861159425193def6}}",
+                "site_admin": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                "starred_url": "{{pmcertfp:v1:9ea89cfde13bac05dbc3c172b034d29b80301b46260812b9e6ce19802e241ede}}",
+                "subscriptions_url": "{{pmcertfp:v1:644b926bdb023562555d7bfcc1d0563c1a4ec6ead5704898460456f10dc15254}}",
+                "type": "{{pmcertfp:v1:6b0a948b3659d96b93abfcb36ebb01785370059116d87bff4db7bf96b5401907}}",
+                "url": "{{pmcertfp:v1:d9457844e40845b93766d2ada490b3a736878d03d75503997e9553bf846dacd2}}",
+                "user_view_type": "{{pmcertfp:v1:11d0fff76ea52e2439e7405152a4e001223c0f5f1b600b35ea77136b8fb9d3fb}}"
+              },
+              "comments_url": "{{pmcertfp:v1:6487ce8a9e7723bcf639b05f151bd75357d5c0a110a6941eb3202012ee76a0db}}",
+              "commit": {
+                "author": {
+                  "date": "{{pmcertfp:v1:2ab8257f28ee3df0c5f79d7d9be641cdde9ba8ed56dea9a7b31337ccb100b2fe}}",
+                  "email": "{{pmcertfp:v1:4c9c4be6931b841f9a28273f559aa4cd917f320c476fe31560225966addc0400}}",
+                  "name": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}"
+                },
+                "comment_count": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "committer": {
+                  "date": "{{pmcertfp:v1:2ab8257f28ee3df0c5f79d7d9be641cdde9ba8ed56dea9a7b31337ccb100b2fe}}",
+                  "email": "{{pmcertfp:v1:4c9c4be6931b841f9a28273f559aa4cd917f320c476fe31560225966addc0400}}",
+                  "name": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}"
+                },
+                "message": "{{pmcertfp:v1:dd74cfc1ff742336d6926509ad012812013eea928eb3cf7606a0b9f2fd765847}}",
+                "tree": {
+                  "sha": "{{pmcertfp:v1:ab5b16f96ae8801b93d770d5ce6b4696a34879c3c8602e19106efbd72c4b6aa6}}",
+                  "url": "{{pmcertfp:v1:0867047180ecd4b4e7daae95e6b7a83259debdef8753bdd3a420c026cbb021e3}}"
+                },
+                "url": "{{pmcertfp:v1:d3abf06d11b78d3e24db05bab7ec7feacf36a725d162c11dddea7dcf8ca77a55}}",
+                "verification": {
+                  "payload": null,
+                  "reason": "{{pmcertfp:v1:c7f5c45d0baa6315f9a455b969ca80d89e79fc5e437d4c150e1917b44262289d}}",
+                  "signature": null,
+                  "verified": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "verified_at": null
+                }
+              },
+              "committer": {
+                "avatar_url": "{{pmcertfp:v1:ccc8aa2d3acbe327d00416c04ca96bf394ab9db6839c9a5dcd469ec5e85c7a27}}",
+                "events_url": "{{pmcertfp:v1:28173cc8678aff9d59edb4ef29787848dc61a37d0c27c9073dead058ed3f8205}}",
+                "followers_url": "{{pmcertfp:v1:7ec56be059c685a996a49485bc5fad944676fe8d775d48d0c670a0d291706f49}}",
+                "following_url": "{{pmcertfp:v1:acea58f70a295cc6de84c7d5bd78e6bd890aa3229e1ba40b7c6d02f46c0e57ff}}",
+                "gists_url": "{{pmcertfp:v1:d9f4df16a94ca0d0a024c2df3476c244b6bc757612fc6b692e922d73cd86cff9}}",
+                "gravatar_id": "{{pmcertfp:v1:f9fbad9d0bdd8f7e015b1efcd5b8dc35758fffa55a06bce8a9d036eeda416c62}}",
+                "html_url": "{{pmcertfp:v1:4ee05bfad5a1798d89dd84a7ad69ba558d11fd64031efaa7cbf242b9c9b6681a}}",
+                "id": "{{pmcertfp:v1:917fb9282f5fead30a7f5cf0c2a5da527cfdb03eafd7d7755a182fcaec563069}}",
+                "login": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}",
+                "node_id": "{{pmcertfp:v1:85d857ab814ede804cee192ee105d1199e5b5e8a784376738fbc1fdbe3a1a174}}",
+                "organizations_url": "{{pmcertfp:v1:84fc839cbb3b88979722405d10264d7994b26d769628ea3a95c25f2524bc6412}}",
+                "received_events_url": "{{pmcertfp:v1:746bde52e2718a603d4b20874eb77cc46b661bc461121eb50527f6a0a0153337}}",
+                "repos_url": "{{pmcertfp:v1:35cc798a22a675011240a1f113ec6da94907d3704d46886c861159425193def6}}",
+                "site_admin": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                "starred_url": "{{pmcertfp:v1:9ea89cfde13bac05dbc3c172b034d29b80301b46260812b9e6ce19802e241ede}}",
+                "subscriptions_url": "{{pmcertfp:v1:644b926bdb023562555d7bfcc1d0563c1a4ec6ead5704898460456f10dc15254}}",
+                "type": "{{pmcertfp:v1:6b0a948b3659d96b93abfcb36ebb01785370059116d87bff4db7bf96b5401907}}",
+                "url": "{{pmcertfp:v1:d9457844e40845b93766d2ada490b3a736878d03d75503997e9553bf846dacd2}}",
+                "user_view_type": "{{pmcertfp:v1:11d0fff76ea52e2439e7405152a4e001223c0f5f1b600b35ea77136b8fb9d3fb}}"
+              },
+              "files": [
+                {
+                  "additions": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                  "blob_url": "{{pmcertfp:v1:d8853a48bdfc1ea8099396da63dd4d725cd11de028b72bb7b54fe0dee2d32cee}}",
+                  "changes": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}",
+                  "contents_url": "{{pmcertfp:v1:8064eeed5d94e3e2ff516f5b1d6ddacf392f09717f6e78b8d122f53f29f201b1}}",
+                  "deletions": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}",
+                  "filename": "{{pmcertfp:v1:9d9ce285445236e1790dfff47da70c39c3347fd05e49fddfc57582dfedf306ea}}",
+                  "patch": "{{pmcertfp:v1:93d64a1764bb788e79f989b4ecfd74416f87e03895ebd913a3e6d0c2bee43507}}",
+                  "raw_url": "{{pmcertfp:v1:de233a607f17c07fd154dc70ec0fd8fcdd60f14ab3095e17ab360b429b7651b2}}",
+                  "sha": "{{pmcertfp:v1:f1653ee819c82cbaff69b3a7dc693f215b2e06107f7f994f346f7356507ce413}}",
+                  "status": "{{pmcertfp:v1:479bc2b05e6803b3f2bed221dcf0254045d0ab573a9d53c47c4901b3186b3cbb}}"
+                }
+              ],
+              "html_url": "{{pmcertfp:v1:d3113083bbae7c3e94ac4711d7c49b42e99c18d6886b901fd4c939463195c0a1}}",
+              "node_id": "{{pmcertfp:v1:fdf5a1f341afedd796861719b45645d166bd811ec5d1f10a075ba0c3e4b02b26}}",
+              "parents": [
+                {
+                  "html_url": "{{pmcertfp:v1:c888205db8e3df2dcc05b516db234eef5c99c4e64741c49d551af67a1ad982c1}}",
+                  "sha": "{{pmcertfp:v1:1faccfd6df5d1d5bd35e87677aa5da84c928447db069add9d32118b09a2a828a}}",
+                  "url": "{{pmcertfp:v1:87757232a86a9a9556d46e82a3b28c449509a20783b54eb2ffd7ea8bf0954ee3}}"
+                }
+              ],
+              "sha": "{{pmcertfp:v1:fdf702c6506a803e77372f064c5268c2cf586063395ba9a8c5621be7794cea27}}",
+              "stats": {
+                "additions": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "deletions": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}",
+                "total": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}"
+              },
+              "url": "{{pmcertfp:v1:cc96f6f04b50e724c5a00a3c7b31f6047e010417ea79a641498ff9a3ee1fa932}}"
+            },
+            "original_bytes": 4960,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

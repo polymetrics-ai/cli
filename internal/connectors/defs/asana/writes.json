@@ -9,84 +9,181 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
             "type": "object",
-            "required": ["name", "workspace"],
+            "required": [
+              "name",
+              "workspace"
+            ],
             "properties": {
-              "name": { "type": "string" },
-              "notes": { "type": "string" },
-              "html_notes": { "type": "string" },
-              "completed": { "type": "boolean" },
-              "due_at": { "type": "string" },
-              "due_on": { "type": "string" },
-              "start_on": { "type": "string" },
-              "assignee": { "type": "string" },
-              "assignee_section": { "type": "string" },
-              "parent": { "type": "string" },
-              "workspace": { "type": "string" },
-              "projects": { "type": "array", "items": { "type": "string" } },
-              "tags": { "type": "array", "items": { "type": "string" } },
-              "followers": { "type": "array", "items": { "type": "string" } },
-              "custom_fields": { "type": "object" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "due_at": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": "string"
+              },
+              "start_on": {
+                "type": "string"
+              },
+              "assignee": {
+                "type": "string"
+              },
+              "assignee_section": {
+                "type": "string"
+              },
+              "parent": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              },
+              "projects": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; creates a new task visible to the whole team/project; low risk, no approval required"
+      "risk": "external mutation; creates a new task visible to the configured workspace/project; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
       "name": "update_task",
       "kind": "update",
       "method": "PUT",
       "path": "/tasks/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid", "data"],
+        "required": [
+          "gid",
+          "data"
+        ],
         "properties": {
-          "gid": { "type": "string" },
+          "gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
-              "notes": { "type": "string" },
-              "html_notes": { "type": "string" },
-              "completed": { "type": "boolean" },
-              "due_at": { "type": "string" },
-              "due_on": { "type": "string" },
-              "start_on": { "type": "string" },
-              "assignee": { "type": "string" },
-              "assignee_section": { "type": "string" },
-              "parent": { "type": "string" },
-              "custom_fields": { "type": "object" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "due_at": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": "string"
+              },
+              "start_on": {
+                "type": "string"
+              },
+              "assignee": {
+                "type": "string"
+              },
+              "assignee_section": {
+                "type": "string"
+              },
+              "parent": {
+                "type": "string"
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; overwrites task fields (e.g. can mark completed, reassign, reschedule); approval required"
+      "risk": "external mutation; overwrites task fields such as completion, assignee, or due dates; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "delete_task",
       "kind": "delete",
       "method": "DELETE",
       "path": "/tasks/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid"],
+        "required": [
+          "gid"
+        ],
         "properties": {
-          "gid": { "type": "string" }
-        }
+          "gid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
-      "delete": { "missing_ok_status": [404] },
-      "risk": "irreversible external deletion of a task; approval required",
-      "confirm": "destructive"
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; deletes a task; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "create_project",
@@ -97,146 +194,269 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name",
+              "workspace"
+            ],
             "properties": {
-              "name": { "type": "string" },
-              "notes": { "type": "string" },
-              "html_notes": { "type": "string" },
-              "color": { "type": "string" },
-              "due_on": { "type": "string" },
-              "start_on": { "type": "string" },
-              "public": { "type": "boolean" },
-              "privacy_setting": { "type": "string" },
-              "team": { "type": "string" },
-              "workspace": { "type": "string" },
-              "owner": { "type": "string" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": "string"
+              },
+              "start_on": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "privacy_setting": {
+                "type": "string"
+              },
+              "team": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; creates a new project visible to the team/workspace; low risk, no approval required"
+      "risk": "external mutation; creates a new project visible to the team/workspace; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
       "name": "update_project",
       "kind": "update",
       "method": "PUT",
       "path": "/projects/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid", "data"],
+        "required": [
+          "gid",
+          "data"
+        ],
         "properties": {
-          "gid": { "type": "string" },
+          "gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
-              "notes": { "type": "string" },
-              "archived": { "type": "boolean" },
-              "color": { "type": "string" },
-              "due_on": { "type": "string" },
-              "start_on": { "type": "string" },
-              "public": { "type": "boolean" },
-              "owner": { "type": "string" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "archived": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": "string"
+              },
+              "start_on": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "owner": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; overwrites project fields (can archive, reassign owner); approval required"
+      "risk": "external mutation; overwrites project fields such as archived state or owner; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "delete_project",
       "kind": "delete",
       "method": "DELETE",
       "path": "/projects/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid"],
+        "required": [
+          "gid"
+        ],
         "properties": {
-          "gid": { "type": "string" }
-        }
+          "gid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
-      "delete": { "missing_ok_status": [404] },
-      "risk": "irreversible external deletion of a project and its association with its tasks; approval required",
-      "confirm": "destructive"
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; deletes a project; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "create_section",
       "kind": "create",
       "method": "POST",
       "path": "/projects/{{ record.project_gid }}/sections",
-      "path_fields": ["project_gid"],
+      "path_fields": [
+        "project_gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["project_gid", "data"],
+        "required": [
+          "project_gid",
+          "data"
+        ],
         "properties": {
-          "project_gid": { "type": "string" },
+          "project_gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
-              "name": { "type": "string" },
-              "insert_before": { "type": "string" },
-              "insert_after": { "type": "string" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "insert_after": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; creates a new section in a project's board/list view; low risk, no approval required"
+      "risk": "external mutation; creates a new section in a project; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "project_gid"
+      ]
     },
     {
       "name": "update_section",
       "kind": "update",
       "method": "PUT",
       "path": "/sections/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid", "data"],
+        "required": [
+          "gid",
+          "data"
+        ],
         "properties": {
-          "gid": { "type": "string" },
+          "gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
-              "name": { "type": "string" }
-            }
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; renames a section; low risk, no approval required"
+      "risk": "external mutation; renames a section; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "delete_section",
       "kind": "delete",
       "method": "DELETE",
       "path": "/sections/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid"],
+        "required": [
+          "gid"
+        ],
         "properties": {
-          "gid": { "type": "string" }
-        }
+          "gid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
-      "delete": { "missing_ok_status": [404] },
-      "risk": "irreversible external deletion of a section (Asana requires the section be empty of tasks first); approval required",
-      "confirm": "destructive"
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; deletes an empty section; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "create_tag",
@@ -247,93 +467,3468 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name",
+              "workspace"
+            ],
             "properties": {
-              "name": { "type": "string" },
-              "color": { "type": "string" },
-              "notes": { "type": "string" },
-              "workspace": { "type": "string" },
-              "followers": { "type": "array", "items": { "type": "string" } }
-            }
+              "name": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; creates a new workspace-visible tag; low risk, no approval required"
+      "risk": "external mutation; creates a workspace-visible tag; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
       "name": "update_tag",
       "kind": "update",
       "method": "PUT",
       "path": "/tags/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid", "data"],
+        "required": [
+          "gid",
+          "data"
+        ],
         "properties": {
-          "gid": { "type": "string" },
+          "gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
-              "color": { "type": "string" },
-              "notes": { "type": "string" }
-            }
+              "name": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; renames/recolors a tag visible workspace-wide; low risk, no approval required"
+      "risk": "external mutation; renames or recolors a workspace-visible tag; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "delete_tag",
       "kind": "delete",
       "method": "DELETE",
       "path": "/tags/{{ record.gid }}",
-      "path_fields": ["gid"],
+      "path_fields": [
+        "gid"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["gid"],
+        "required": [
+          "gid"
+        ],
         "properties": {
-          "gid": { "type": "string" }
-        }
+          "gid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
-      "delete": { "missing_ok_status": [404] },
-      "risk": "irreversible external deletion of a tag, removed from every task that carries it; approval required",
-      "confirm": "destructive"
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; deletes a tag and removes it from tasks; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "gid"
+      ]
     },
     {
       "name": "add_comment",
       "kind": "create",
       "method": "POST",
       "path": "/tasks/{{ record.task_gid }}/stories",
-      "path_fields": ["task_gid"],
+      "path_fields": [
+        "task_gid"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["task_gid", "data"],
+        "required": [
+          "task_gid",
+          "data"
+        ],
         "properties": {
-          "task_gid": { "type": "string" },
+          "task_gid": {
+            "type": "string"
+          },
           "data": {
             "type": "object",
-            "required": ["text"],
+            "required": [
+              "text"
+            ],
             "properties": {
-              "text": { "type": "string" },
-              "html_text": { "type": "string" },
-              "is_pinned": { "type": "boolean" },
-              "sticker_name": { "type": "string" }
-            }
+              "text": {
+                "type": "string"
+              },
+              "html_text": {
+                "type": "string"
+              },
+              "is_pinned": {
+                "type": "boolean"
+              },
+              "sticker_name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "risk": "external mutation; posts a comment visible to everyone with access to the task; approval required"
+      "risk": "external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "task_gid"
+      ]
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "currency_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "custom_label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "custom_label_position": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "date_value": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "date_time": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "enum_options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "color": {
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "enum_value": {
+                "type": "object",
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "format": {
+                "type": "string"
+              },
+              "has_notifications_enabled": {
+                "type": "boolean"
+              },
+              "id_prefix": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "input_restrictions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "is_formula_field": {
+                "type": "boolean"
+              },
+              "multi_enum_values": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "color": {
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "name": {
+                "type": "string"
+              },
+              "number_value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "owned_by_app": {
+                "type": "boolean"
+              },
+              "people_value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "precision": {
+                "type": "integer"
+              },
+              "reference_value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "resource_subtype": {
+                "type": "string"
+              },
+              "text_value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "resource_subtype",
+              "workspace"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /custom_fields; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/custom_fields/{{ record.custom_field_gid }}",
+      "path_fields": [
+        "custom_field_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_field_gid",
+          "data"
+        ],
+        "properties": {
+          "custom_field_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "currency_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "custom_label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "custom_label_position": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "date_value": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "date_time": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "enum_options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "color": {
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "enum_value": {
+                "type": "object",
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "format": {
+                "type": "string"
+              },
+              "has_notifications_enabled": {
+                "type": "boolean"
+              },
+              "id_prefix": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "input_restrictions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "is_formula_field": {
+                "type": "boolean"
+              },
+              "multi_enum_values": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "color": {
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "name": {
+                "type": "string"
+              },
+              "number_value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "owned_by_app": {
+                "type": "boolean"
+              },
+              "people_value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "precision": {
+                "type": "integer"
+              },
+              "reference_value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "text_value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "workspace"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /custom_fields/{custom_field_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_enum_option_for_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options",
+      "path_fields": [
+        "custom_field_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_field_gid",
+          "data"
+        ],
+        "properties": {
+          "custom_field_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "insert_enum_option_for_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options/insert",
+      "path_fields": [
+        "custom_field_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_field_gid",
+          "data"
+        ],
+        "properties": {
+          "custom_field_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "after_enum_option": {
+                "type": "string"
+              },
+              "before_enum_option": {
+                "type": "string"
+              },
+              "enum_option": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "enum_option"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options/insert; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_enum_option",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/enum_options/{{ record.enum_option_gid }}",
+      "path_fields": [
+        "enum_option_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "enum_option_gid",
+          "data"
+        ],
+        "properties": {
+          "enum_option_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /enum_options/{enum_option_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_graph_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/exports/graph",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "parent": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /exports/graph; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_resource_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/exports/resource",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "export_request_parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "filters": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "resource_type": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /exports/resource; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_goal_relationship",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/goal_relationships/{{ record.goal_relationship_gid }}",
+      "path_fields": [
+        "goal_relationship_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_relationship_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_relationship_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "contribution_weight": {
+                "type": "number"
+              },
+              "supported_goal": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "supporting_resource": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /goal_relationships/{goal_relationship_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_supporting_relationship",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/addSupportingRelationship",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "contribution_weight": {
+                "type": "number"
+              },
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "supporting_resource": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "supporting_resource"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addSupportingRelationship; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_goal",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/goals/{{ record.goal_gid }}",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "is_workspace_level": {
+                "type": "boolean"
+              },
+              "liked": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "time_period": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /goals/{goal_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_goal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "is_workspace_level": {
+                "type": "boolean"
+              },
+              "liked": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "time_period": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_goal_metric",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/setMetric",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "currency_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "current_number_value": {
+                "type": "number"
+              },
+              "initial_number_value": {
+                "type": "number"
+              },
+              "is_custom_weight": {
+                "type": "boolean"
+              },
+              "precision": {
+                "type": "integer"
+              },
+              "progress_source": {
+                "type": "string"
+              },
+              "target_number_value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetric; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_goal_metric",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/setMetricCurrentValue",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "current_number_value": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetricCurrentValue; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_followers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/addFollowers",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "followers"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_custom_field_setting_for_goal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/addCustomFieldSetting",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_field": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "is_important": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_ooo_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ooo_entries/{{ record.ooo_entry_gid }}",
+      "path_fields": [
+        "ooo_entry_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ooo_entry_gid",
+          "data"
+        ],
+        "properties": {
+          "ooo_entry_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "end_date": {
+                "type": "string"
+              },
+              "start_date": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /ooo_entries/{ooo_entry_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_ooo_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ooo_entries",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "end_date": {
+                "type": "string"
+              },
+              "start_date": {
+                "type": "string"
+              },
+              "user": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "end_date",
+              "start_date",
+              "user",
+              "workspace"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /ooo_entries; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portfolios",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "archived": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string"
+              },
+              "default_access_level": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /portfolios; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_portfolio",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/portfolios/{{ record.portfolio_gid }}",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "portfolio_gid",
+          "data"
+        ],
+        "properties": {
+          "portfolio_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "archived": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string"
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "default_access_level": {
+                "type": "string"
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /portfolios/{portfolio_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_item_for_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/addItem",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "portfolio_gid",
+          "data"
+        ],
+        "properties": {
+          "portfolio_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "item": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addItem; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_custom_field_setting_for_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/addCustomFieldSetting",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "portfolio_gid",
+          "data"
+        ],
+        "properties": {
+          "portfolio_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_field": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "is_important": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_members_for_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/addMembers",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "portfolio_gid",
+          "data"
+        ],
+        "properties": {
+          "portfolio_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "members": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "members"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addMembers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "duplicate_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/duplicate",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "portfolio_gid",
+          "data"
+        ],
+        "properties": {
+          "portfolio_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "include": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_project_brief",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/project_briefs/{{ record.project_brief_gid }}",
+      "path_fields": [
+        "project_brief_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_brief_gid",
+          "data"
+        ],
+        "properties": {
+          "project_brief_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "html_text": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /project_briefs/{project_brief_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_project_brief",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/project_briefs",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "html_text": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_briefs; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_project_portfolio_setting",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/project_portfolio_settings/{{ record.project_portfolio_setting_gid }}",
+      "path_fields": [
+        "project_portfolio_setting_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_portfolio_setting_gid",
+          "data"
+        ],
+        "properties": {
+          "project_portfolio_setting_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "is_access_control_inherited": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /project_portfolio_settings/{project_portfolio_setting_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_project_status_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/project_statuses",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "html_text": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "instantiate_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project_templates/{{ record.project_template_gid }}/instantiateProject",
+      "path_fields": [
+        "project_template_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_template_gid",
+          "data"
+        ],
+        "properties": {
+          "project_template_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "is_strict": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "privacy_setting": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "requested_dates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "gid": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "requested_roles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "gid": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "team": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /project_templates/{project_template_gid}/instantiateProject; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "duplicate_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/duplicate",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "include": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "schedule_dates": {
+                "type": "object",
+                "properties": {
+                  "due_on": {
+                    "type": "string"
+                  },
+                  "should_skip_weekends": {
+                    "type": "boolean"
+                  },
+                  "start_on": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_project_for_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_gid }}/projects",
+      "path_fields": [
+        "team_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_gid",
+          "data"
+        ],
+        "properties": {
+          "team_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "archived": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "current_status": {
+                "type": "object",
+                "properties": {
+                  "author": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "color": {
+                    "type": "string"
+                  },
+                  "created_by": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "html_text": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "current_status_update": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "default_access_level": {
+                "type": "string"
+              },
+              "default_view": {
+                "type": "string"
+              },
+              "due_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "followers": {
+                "type": "string"
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "icon": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "minimum_access_level_for_customization": {
+                "type": "string"
+              },
+              "minimum_access_level_for_sharing": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "privacy_setting": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/projects; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_project_for_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_gid }}/projects",
+      "path_fields": [
+        "workspace_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_gid",
+          "data"
+        ],
+        "properties": {
+          "workspace_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "archived": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "current_status": {
+                "type": "object",
+                "properties": {
+                  "author": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "color": {
+                    "type": "string"
+                  },
+                  "created_by": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "html_text": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "current_status_update": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "default_access_level": {
+                "type": "string"
+              },
+              "default_view": {
+                "type": "string"
+              },
+              "due_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "followers": {
+                "type": "string"
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "icon": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "minimum_access_level_for_customization": {
+                "type": "string"
+              },
+              "minimum_access_level_for_sharing": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "privacy_setting": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/projects; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_custom_field_setting_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/addCustomFieldSetting",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_field": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "is_important": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_members_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/addMembers",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "members": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "members"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addMembers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_followers_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/addFollowers",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "followers": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "followers"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "project_save_as_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/saveAsTemplate",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "team": {
+                "type": "string"
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "public"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/saveAsTemplate; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "trigger_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rule_triggers/{{ record.rule_trigger_gid }}/run",
+      "path_fields": [
+        "rule_trigger_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_trigger_gid",
+          "data"
+        ],
+        "properties": {
+          "rule_trigger_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "action_data": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "resource": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "resource"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /rule_triggers/{rule_trigger_gid}/run; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_task_for_section",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sections/{{ record.section_gid }}/addTask",
+      "path_fields": [
+        "section_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "section_gid",
+          "data"
+        ],
+        "properties": {
+          "section_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "task": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "task"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /sections/{section_gid}/addTask; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "insert_section_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/sections/insert",
+      "path_fields": [
+        "project_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_gid",
+          "data"
+        ],
+        "properties": {
+          "project_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "after_section": {
+                "type": "string"
+              },
+              "before_section": {
+                "type": "string"
+              },
+              "section": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "section"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/sections/insert; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_status_for_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/status_updates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "html_text": {
+                "type": "string"
+              },
+              "parent": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "status_type": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "status_type",
+              "text"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /status_updates; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_story",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/stories/{{ record.story_gid }}",
+      "path_fields": [
+        "story_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "story_gid",
+          "data"
+        ],
+        "properties": {
+          "story_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "html_text": {
+                "type": "string"
+              },
+              "is_pinned": {
+                "type": "boolean"
+              },
+              "sticker_name": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /stories/{story_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_story_for_goal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/stories",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_gid",
+          "data"
+        ],
+        "properties": {
+          "goal_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "html_text": {
+                "type": "string"
+              },
+              "is_pinned": {
+                "type": "boolean"
+              },
+              "sticker_name": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/stories; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_tag_for_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_gid }}/tags",
+      "path_fields": [
+        "workspace_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_gid",
+          "data"
+        ],
+        "properties": {
+          "workspace_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/tags; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "instantiate_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/task_templates/{{ record.task_template_gid }}/instantiateTask",
+      "path_fields": [
+        "task_template_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_template_gid",
+          "data"
+        ],
+        "properties": {
+          "task_template_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /task_templates/{task_template_gid}/instantiateTask; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "duplicate_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/duplicate",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "include": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_subtask_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/subtasks",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "approval_status": {
+                "type": "string"
+              },
+              "assigned_by": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "assignee": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "assignee_section": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "assignee_status": {
+                "type": "string"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "completed_by": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "due_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "due_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "external": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string"
+                  },
+                  "gid": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "html_notes": {
+                "type": "string"
+              },
+              "liked": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "parent": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "projects": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "resource_subtype": {
+                "type": "string"
+              },
+              "start_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "start_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "workspace": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/subtasks; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "set_parent_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/setParent",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "insert_after": {
+                "type": "string"
+              },
+              "insert_before": {
+                "type": "string"
+              },
+              "parent": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "parent"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/setParent; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_dependencies_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/addDependencies",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependencies; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_dependents_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/addDependents",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "dependents": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependents; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_project_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/addProject",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "insert_after": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "insert_before": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "project": {
+                "type": "string"
+              },
+              "section": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "project"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addProject; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_tag_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/addTag",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "tag": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "tag"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addTag; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_followers_for_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/addFollowers",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "followers"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "edit_team_name_or_description_access_level": {
+                "type": "string"
+              },
+              "edit_team_visibility_or_trash_team_access_level": {
+                "type": "string"
+              },
+              "endorsed": {
+                "type": "boolean"
+              },
+              "guest_invite_management_access_level": {
+                "type": "string"
+              },
+              "html_description": {
+                "type": "string"
+              },
+              "join_request_management_access_level": {
+                "type": "string"
+              },
+              "member_invite_management_access_level": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "organization": {
+                "type": "string"
+              },
+              "team_content_management_access_level": {
+                "type": "string"
+              },
+              "team_member_removal_access_level": {
+                "type": "string"
+              },
+              "visibility": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /teams; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/teams/{{ record.team_gid }}",
+      "path_fields": [
+        "team_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_gid",
+          "data"
+        ],
+        "properties": {
+          "team_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "edit_team_name_or_description_access_level": {
+                "type": "string"
+              },
+              "edit_team_visibility_or_trash_team_access_level": {
+                "type": "string"
+              },
+              "endorsed": {
+                "type": "boolean"
+              },
+              "guest_invite_management_access_level": {
+                "type": "string"
+              },
+              "html_description": {
+                "type": "string"
+              },
+              "join_request_management_access_level": {
+                "type": "string"
+              },
+              "member_invite_management_access_level": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "organization": {
+                "type": "string"
+              },
+              "team_content_management_access_level": {
+                "type": "string"
+              },
+              "team_member_removal_access_level": {
+                "type": "string"
+              },
+              "visibility": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /teams/{team_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_user_for_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_gid }}/addUser",
+      "path_fields": [
+        "team_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_gid",
+          "data"
+        ],
+        "properties": {
+          "team_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_time_tracking_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/time_tracking_entries",
+      "path_fields": [
+        "task_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_gid",
+          "data"
+        ],
+        "properties": {
+          "task_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "attributable_to": {
+                "type": "string"
+              },
+              "billable_status": {
+                "type": "string"
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "duration_minutes": {
+                "type": "integer"
+              },
+              "entered_on": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/time_tracking_entries; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_time_tracking_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/time_tracking_entries/{{ record.time_tracking_entry_gid }}",
+      "path_fields": [
+        "time_tracking_entry_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "time_tracking_entry_gid",
+          "data"
+        ],
+        "properties": {
+          "time_tracking_entry_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "attributable_to": {
+                "type": "string"
+              },
+              "billable_status": {
+                "type": "string"
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "duration_minutes": {
+                "type": "integer"
+              },
+              "entered_on": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /time_tracking_entries/{time_tracking_entry_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_gid }}",
+      "path_fields": [
+        "user_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_gid",
+          "data"
+        ],
+        "properties": {
+          "user_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /users/{user_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_user_for_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ record.workspace_gid }}/users/{{ record.user_gid }}",
+      "path_fields": [
+        "workspace_gid",
+        "user_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_gid",
+          "user_gid",
+          "data"
+        ],
+        "properties": {
+          "workspace_gid": {
+            "type": "string"
+          },
+          "user_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "custom_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}/users/{user_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ record.workspace_gid }}",
+      "path_fields": [
+        "workspace_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_gid",
+          "data"
+        ],
+        "properties": {
+          "workspace_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "add_user_for_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_gid }}/addUser",
+      "path_fields": [
+        "workspace_gid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_gid",
+          "data"
+        ],
+        "properties": {
+          "workspace_gid": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute"
     }
   ]
 }

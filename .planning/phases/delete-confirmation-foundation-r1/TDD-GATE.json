@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "delete-confirmation-foundation-r1",
+  "planRefs": [
+    ".planning/phases/delete-confirmation-foundation-r1/PLAN.md",
+    ".planning/phases/delete-confirmation-foundation-r1/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/delete-confirmation-foundation-r1/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [
+    {
+      "id": "tdd-plan-schema",
+      "text": "task:tdd-plan-schema type:tdd — RED then GREEN the closed confirmation schema and normalized destructive target policy for writes and future operations.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview",
+      "text": "task:tdd-preview type:tdd — RED then GREEN mandatory persisted preview digest before a destructive plan becomes approvable/executable.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-approval",
+      "text": "task:tdd-approval type:tdd — RED then GREEN typed approval evidence and closed confirmation parsing at the engine/app boundary.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-execute-seam",
+      "text": "task:tdd-execute-seam type:tdd — RED then GREEN the generic pre-dispatch wrapper and demonstrate a future `rest_write` executor closure can use it unchanged.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-bypass",
+      "text": "task:tdd-bypass type:tdd — RED then GREEN direct-engine, connector-command, generic reverse-ETL, state-tamper, digest-mismatch, and bulk bypass resistance while preserving `batchable:false`.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-authenticated-grant-hardening",
+      "text": "task:tdd-authenticated-grant-hardening type:tdd — RED then GREEN an external-key authenticated, target-bound, expiring, atomically consumed execution grant; canonical prepared-request digests; native SQS gate adoption; shared previewability; and real app approval fixtures.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-trusted-input-hardening",
+      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN App-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic project consumption; complete the trusted-input sweep.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview-execution-identity-review",
+      "text": "task:tdd-preview-execution-identity-review type:tdd — RED then GREEN App-private production authority, monotonic fixture grants, redirect refusal, hook-identical native preparation, and unsigned-plan expiry.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "docs-verification",
+      "text": "task:docs-verification type:docs — update lifecycle help/docs only where observable behavior changes, complete phase evidence, run separated local gates, and record 623/171/452 coverage.",
+      "docsOnly": true,
+      "behavior": false
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "tdd-plan-schema",
+      "text": "task:tdd-plan-schema type:tdd — RED then GREEN the closed confirmation schema and normalized destructive target policy for writes and future operations.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview",
+      "text": "task:tdd-preview type:tdd — RED then GREEN mandatory persisted preview digest before a destructive plan becomes approvable/executable.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-approval",
+      "text": "task:tdd-approval type:tdd — RED then GREEN typed approval evidence and closed confirmation parsing at the engine/app boundary.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-execute-seam",
+      "text": "task:tdd-execute-seam type:tdd — RED then GREEN the generic pre-dispatch wrapper and demonstrate a future `rest_write` executor closure can use it unchanged.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-bypass",
+      "text": "task:tdd-bypass type:tdd — RED then GREEN direct-engine, connector-command, generic reverse-ETL, state-tamper, digest-mismatch, and bulk bypass resistance while preserving `batchable:false`.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-authenticated-grant-hardening",
+      "text": "task:tdd-authenticated-grant-hardening type:tdd — RED then GREEN an external-key authenticated, target-bound, expiring, atomically consumed execution grant; canonical prepared-request digests; native SQS gate adoption; shared previewability; and real app approval fixtures.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-trusted-input-hardening",
+      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN App-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic project consumption; complete the trusted-input sweep.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview-execution-identity-review",
+      "text": "task:tdd-preview-execution-identity-review type:tdd — RED then GREEN App-private production authority, monotonic fixture grants, redirect refusal, hook-identical native preparation, and unsigned-plan expiry.",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "failures": [],
+  "updatedAt": "2026-08-05T01:13:51Z"
+}

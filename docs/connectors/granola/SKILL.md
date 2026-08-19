@@ -11,6 +11,7 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 
 ## Icon
 
+- id: source-granola
 - asset: icons/source-granola.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -31,18 +32,18 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - notes:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), object(), owner_email(), owner_name(), title(), updated_at()
+  - fields: created_at(string), id(string), object(string), owner_email(string), owner_name(string), title(string), updated_at(string)
 - detailed_notes:
   - primary key: id
   - cursor: created_at
-  - fields: attendees(), calendar_event(), created_at(), folders(), id(), object(), owner_email(), owner_name(), summary(), title(), transcript(), updated_at()
+  - fields: attendees(array), calendar_event(object), created_at(string), folders(array), id(string), object(string), owner_email(string), owner_name(string), summary(string), title(string), transcript(array), updated_at(string)
 
 ## Sync Modes
 

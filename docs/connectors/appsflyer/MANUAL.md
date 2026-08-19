@@ -13,6 +13,7 @@ DESCRIPTION
   Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 
 ICON
+  id: appsflyer
   asset: icons/appsflyer.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -26,19 +27,19 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  app_id
+  app_id (required)
   base_url
   end_date
   mode
   start_date
   timezone
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   installs_report:
-    fields: appsflyer_id(), campaign(), event_time(), media_source()
+    fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
   in_app_events_report:
-    fields: appsflyer_id(), campaign(), event_time(), media_source()
+    fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite

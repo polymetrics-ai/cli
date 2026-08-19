@@ -11,6 +11,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 
 ## Icon
 
+- id: bamboohr
 - asset: icons/bamboohr.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -50,7 +51,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - scheduling_get_schedule_id
 - scheduling_get_shift_id
 - shift_differential_id
-- subdomain
+- subdomain (required)
 - table
 - task_id
 - time_off_requests_end
@@ -59,276 +60,276 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - timesheet_entries_end
 - timesheet_entries_start
 - webhook_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
 - employees:
   - primary key: id
-  - fields: department(), display_name(), division(), first_name(), id(), job_title(), last_name(), location(), mobile_phone(), photo_url(), preferred_name(), supervisor(), work_email(), work_phone()
+  - fields: department(string), display_name(string), division(string), first_name(string), id(string), job_title(string), last_name(string), location(string), mobile_phone(string), photo_url(string), preferred_name(string), supervisor(string), work_email(string), work_phone(string)
 - meta_fields:
   - primary key: id
-  - fields: alias(), deprecated(), id(), name(), type()
+  - fields: alias(string), deprecated(boolean), id(string), name(string), type(string)
 - meta_lists:
   - primary key: field_id
-  - fields: alias(), field_id(), manageable(), multiple(), name(), options()
+  - fields: alias(string), field_id(string), manageable(boolean), multiple(boolean), name(string), options(array)
 - time_off_types:
   - primary key: id
-  - fields: color(), icon(), id(), name(), units()
+  - fields: color(string), icon(string), id(string), name(string), units(string)
 - applications:
   - primary key: id
-  - fields: applicant(), appliedDate(), id(), job(), rating(), status()
+  - fields: applicant(object), appliedDate(string), id(integer), job(object), rating(integer), status(object)
 - application_details:
   - primary key: id
-  - fields: answer(), archivedDate(), editedDate(), editedEndDate(), hasRevisions(), id(), isArchived(), question()
+  - fields: answer(object), archivedDate(string), editedDate(string), editedEndDate(string), hasRevisions(boolean), id(string), isArchived(boolean), question(object)
 - hiring_leads:
   - primary key: employeeId
-  - fields: employeeId(), preferredFullName()
+  - fields: employeeId(integer), preferredFullName(string)
 - job_summaries:
   - primary key: id
-  - fields: activeApplicantsCount(), department(), hiringLead(), id(), location(), newApplicantsCount(), postedDate(), postingUrl(), status(), title(), totalApplicantsCount()
+  - fields: activeApplicantsCount(integer), department(object), hiringLead(object), id(integer), location(object), newApplicantsCount(integer), postedDate(string), postingUrl(string), status(object), title(object), totalApplicantsCount(integer)
 - company_locations:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), description(), id(), name(), phone(), state(), zipcode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(object), description(string), id(integer), name(string), phone(string), state(object), zipcode(string)
 - statuses:
   - primary key: id
-  - fields: code(), description(), enabled(), id(), manageable(), name(), translatedName()
+  - fields: code(string), description(string), enabled(boolean), id(string), manageable(boolean), name(string), translatedName(string)
 - company_benefits:
   - primary key: id
-  - fields: allowsCatchUp(), allowsSuperCatchUp(), benefitVendorId(), companyDeductionId(), deductionTypeId(), endDate(), id(), name(), startDate(), type()
+  - fields: allowsCatchUp(boolean), allowsSuperCatchUp(boolean), benefitVendorId(string), companyDeductionId(string), deductionTypeId(string), endDate(string), id(string), name(string), startDate(string), type(string)
 - company_benefit_types:
   - primary key: id
-  - fields: canBeAcaPlan(), canCoExistEnrollment(), id(), isReimbursementPlan(), name(), slug()
+  - fields: canBeAcaPlan(boolean), canCoExistEnrollment(boolean), id(string), isReimbursementPlan(boolean), name(string), slug(string)
 - company_benefit:
   - primary key: benefitVendorId
-  - fields: benefitType(), benefitVendorId(), deductionTypeId(), description(), endDate(), meetAcaMin(), minEssentialCoverage(), name(), planUrl(), reimbursementAmount(), reimbursementFrequency(), safeHarbor(), ssoLoginUrl(), ssoLoginUrlLinkText(), startDate()
+  - fields: benefitType(string), benefitVendorId(string), deductionTypeId(integer), description(string), endDate(string), meetAcaMin(string), minEssentialCoverage(string), name(string), planUrl(string), reimbursementAmount(number), reimbursementFrequency(string), safeHarbor(string), ssoLoginUrl(string), ssoLoginUrlLinkText(string), startDate(string)
 - employee_benefits:
   - primary key: employeeId
-  - fields: employeeBenefit(), employeeId(), payFrequency()
+  - fields: employeeBenefit(array), employeeId(integer), payFrequency(string)
 - member_benefit_events:
   - primary key: memberId
-  - fields: coverages(), memberId()
+  - fields: coverages(array), memberId(string)
 - benefit_coverages:
   - primary key: id
-  - fields: benefitPlanId(), description(), id(), shortName(), sortOrder()
+  - fields: benefitPlanId(string), description(string), id(string), shortName(string), sortOrder(string)
 - member_benefits:
   - primary key: memberId
-  - fields: memberId(), plans(), subscriberId()
+  - fields: memberId(string), plans(array), subscriberId(string)
 - benefit_deduction_types:
   - primary key: id
-  - fields: additionalDescription(), allowableBenefitTypes(), canBeCollectedByTrax(), deductionNote(), deductionNoteLink(), deductionNoteLinkText(), deductionTypeName(), defaultDeductionCode(), hideAnnualMax(), id(), managedDeductionType(), nonBenefitDeductionType(), subTypeText(), subTypes()
+  - fields: additionalDescription(string), allowableBenefitTypes(array), canBeCollectedByTrax(boolean), deductionNote(string), deductionNoteLink(string), deductionNoteLinkText(string), deductionTypeName(string), defaultDeductionCode(string), hideAnnualMax(boolean), id(integer), managedDeductionType(string), nonBenefitDeductionType(boolean), subTypeText(string), subTypes(array)
 - company_profile_integrations:
   - primary key: id
-  - fields: id(), integrations()
+  - fields: id(string), integrations(array)
 - company_eins:
   - primary key: id
-  - fields: eins(), id()
+  - fields: eins(array), id(string)
 - company_information:
   - primary key: id
-  - fields: address(), displayName(), id(), legalName(), phone()
+  - fields: address(object), displayName(string), id(string), legalName(string), phone(string)
 - reports:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - report_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - datasets_v1:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - fields_from_dataset_v1:
   - primary key: id
-  - fields: entityName(), id(), label(), name(), parentName(), parentType()
+  - fields: entityName(string), id(string), label(string), name(string), parentName(string), parentType(string)
 - employee_dependents:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), dateOfBirth(), employeeId(), firstName(), gender(), homePhone(), id(), isStudent(), isUsCitizen(), lastName(), maskedSIN(), maskedSSN(), middleName(), relationship(), state(), zipCode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(string), dateOfBirth(string), employeeId(string), firstName(string), gender(string), homePhone(string), id(string), isStudent(string), isUsCitizen(string), lastName(string), maskedSIN(string), maskedSSN(string), middleName(string), relationship(string), state(string), zipCode(string)
 - employee_dependent:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), dateOfBirth(), employeeId(), firstName(), gender(), homePhone(), id(), isStudent(), isUsCitizen(), lastName(), maskedSIN(), maskedSSN(), middleName(), relationship(), state(), zipCode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(string), dateOfBirth(string), employeeId(string), firstName(string), gender(string), homePhone(string), id(string), isStudent(string), isUsCitizen(string), lastName(string), maskedSIN(string), maskedSSN(string), middleName(string), relationship(string), state(string), zipCode(string)
 - employee_roster:
   - primary key: employeeId
-  - fields: _restrictedFields(), addressLine1(), addressLine2(), age(), allergies(), bestEmail(), birthDate(), birthplace(), citizenship(), citizenshipId(), city(), compensationChangeReason(), compensationChangeReasonId(), compensationComment(), compensationEffectiveDate(), compensationEndDate(), contractEndDate(), country(), countryId(), departmentId(), departmentName(), dietaryRestrictions(), displayName(), divisionId(), divisionName(), eeoJobCategory(), eeoJobCategoryId(), ein(), eligibleForRehire(), eligibleForRehireId(), employeeId(), employeeName(), employeeNumber(), employmentStatusComment(), employmentStatusEffectiveDate(), employmentStatusId(), employmentStatusName(), employmentType(), employmentTypeId(), ethnicity(), ethnicityId(), facebookUrl(), finalDoseAdministrationDate(), finalPayDate(), firstName(), firstNameLastName(), firstNameMiddleInitial(), flsaCode(), flsaCodeId(), gender(), genderIdentity(), genderIdentityId(), hireDate(), homeEmail(), homePhone(), hoursPerPayCycle(), instagramUrl(), isManager(), jacketSize(), jacketSizeId(), jobInformationEffectiveDate(), jobTitleId(), jobTitleName(), lastName(), linkedinUrl(), locationId(), locationName(), maritalStatus(), middleInitial(), middleName(), mobilePhone(), nationalId(), nationalInsuranceCategory(), nationalInsuranceCategoryId(), nationality(), nationalityId(), nickName(), nin(), noticePeriod(), noticePeriodId(), originalHireDate(), overtime(), overtimeRate(), paidPer(), payRate(), paySchedule(), payScheduleId(), payType(), photoUrl(), pinterestUrl(), preferredName(), preferredNameLastName(), probationEndDate(), pronouns(), pronounsId(), proofOfVaccination(), reportsToId(), reportsToName(), secondaryLanguage(), shirtSize(), shirtSizeId(), sin(), skypeUsername(), ssn(), state(), stateId(), status(), tShirtSize(), tShirtSizeId(), taxTypeId(), teams(), tenure(), terminationDate(), terminationReason(), terminationReasonId(), terminationRegrettable(), terminationRegrettableId(), terminationType(), terminationTypeId(), twitterUrl(), userId(), vaccinationStatus(), vaccinationStatusId(), vaccineReceived(), vaccineReceivedId(), veteranStatus(), veteranStatusId(), workEmail(), workPhone(), workPhoneExtension(), zipcode()
+  - fields: _restrictedFields(array), addressLine1(string), addressLine2(string), age(string), allergies(string), bestEmail(string), birthDate(string), birthplace(string), citizenship(string), citizenshipId(string), city(string), compensationChangeReason(string), compensationChangeReasonId(string), compensationComment(string), compensationEffectiveDate(string), compensationEndDate(string), contractEndDate(string), country(string), countryId(string), departmentId(string), departmentName(string), dietaryRestrictions(string), displayName(string), divisionId(string), divisionName(string), eeoJobCategory(string), eeoJobCategoryId(string), ein(string), eligibleForRehire(string), eligibleForRehireId(string), employeeId(string), employeeName(string), employeeNumber(string), employmentStatusComment(string), employmentStatusEffectiveDate(string), employmentStatusId(string), employmentStatusName(string), employmentType(string), employmentTypeId(string), ethnicity(string), ethnicityId(string), facebookUrl(string), finalDoseAdministrationDate(string), finalPayDate(string), firstName(string), firstNameLastName(string), firstNameMiddleInitial(string), flsaCode(string), flsaCodeId(string), gender(string), genderIdentity(string), genderIdentityId(array), hireDate(string), homeEmail(string), homePhone(string), hoursPerPayCycle(string), instagramUrl(string), isManager(boolean), jacketSize(string), jacketSizeId(string), jobInformationEffectiveDate(string), jobTitleId(string), jobTitleName(string), lastName(string), linkedinUrl(string), locationId(string), locationName(string), maritalStatus(string), middleInitial(string), middleName(string), mobilePhone(string), nationalId(string), nationalInsuranceCategory(string), nationalInsuranceCategoryId(string), nationality(string), nationalityId(string), nickName(string), nin(string), noticePeriod(string), noticePeriodId(string), originalHireDate(string), overtime(string), overtimeRate(object), paidPer(string), payRate(object), paySchedule(string), payScheduleId(string), payType(string), photoUrl(string), pinterestUrl(string), preferredName(string), preferredNameLastName(string), probationEndDate(string), pronouns(string), pronounsId(string), proofOfVaccination(boolean), reportsToId(string), reportsToName(string), secondaryLanguage(string), shirtSize(string), shirtSizeId(string), sin(string), skypeUsername(string), ssn(string), state(string), stateId(string), status(string), tShirtSize(string), tShirtSizeId(string), taxTypeId(string), teams(array), tenure(string), terminationDate(string), terminationReason(string), terminationReasonId(string), terminationRegrettable(string), terminationRegrettableId(string), terminationType(string), terminationTypeId(string), twitterUrl(string), userId(string), vaccinationStatus(string), vaccinationStatusId(string), vaccineReceived(string), vaccineReceivedId(string), veteranStatus(string), veteranStatusId(array), workEmail(string), workPhone(string), workPhoneExtension(string), zipcode(string)
 - changed_employee_ids:
   - primary key: id
-  - fields: employees(), id(), latest()
+  - fields: employees(object), id(string), latest(string)
 - changed_employee_table_data:
   - primary key: id
-  - fields: employees(), id(), table()
+  - fields: employees(object), id(string), table(string)
 - time_off_balance:
   - primary key: id
-  - fields: balance(), end(), id(), name(), policyType(), timeOffType(), units(), usedYearToDate()
+  - fields: balance(string), end(string), id(string), name(string), policyType(string), timeOffType(string), units(string), usedYearToDate(string)
 - employee_time_off_policies:
   - primary key: timeOffPolicyId
-  - fields: accrualStartDate(), timeOffPolicyId(), timeOffTypeId()
+  - fields: accrualStartDate(string), timeOffPolicyId(string), timeOffTypeId(integer)
 - employee_table_data:
   - primary key: id
-  - fields: employeeId(), id()
+  - fields: employeeId(string), id(string)
 - all_currency_types:
   - primary key: id
-  - fields: code(), id(), name(), symbol(), symbolPosition()
+  - fields: code(string), id(integer), name(string), symbol(string), symbolPosition(integer)
 - states_by_country_id:
   - primary key: id
-  - fields: id(), iso(), label(), name()
+  - fields: id(integer), iso(string), label(string), name(string)
 - tabular_fields:
   - primary key: id
-  - fields: alias(), fields(), id()
+  - fields: alias(string), fields(array), id(string)
 - time_off_policies:
   - primary key: id
-  - fields: effectiveDate(), id(), name(), timeOffTypeId(), type()
+  - fields: effectiveDate(string), id(integer), name(string), timeOffTypeId(integer), type(string)
 - users:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - goals:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_aggregate_v1:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - alignable_goal_options:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(string), title(string)
 - goal_creation_permission:
   - primary key: id
-  - fields: canCreateGoals(), id()
+  - fields: canCreateGoals(boolean), id(string)
 - goals_filters_v1:
   - primary key: id
-  - fields: count(), id(), name()
+  - fields: count(integer), id(string), name(string)
 - goal_share_options:
   - primary key: employeeId
-  - fields: displayFirstName(), employeeId(), lastName(), photoUrl(), userId()
+  - fields: displayFirstName(string), employeeId(integer), lastName(string), photoUrl(string), userId(integer)
 - goal_aggregate:
   - primary key: id
-  - fields: authorUserId(), canDelete(), canEdit(), createdAt(), id(), text()
+  - fields: authorUserId(integer), canDelete(boolean), canEdit(boolean), createdAt(string), id(string), text(string)
 - goal_comments:
   - primary key: id
-  - fields: authorUserId(), canDelete(), canEdit(), createdAt(), id(), text()
+  - fields: authorUserId(integer), canDelete(boolean), canEdit(boolean), createdAt(string), id(string), text(string)
 - company_report:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - scheduling_list_schedules:
   - primary key: id
-  - fields: createdAt(), deletedAt(), earlyClockInThreshold(), employeeIds(), id(), locationId(), managerUserIds(), name(), startOfWeek(), timezone(), updatedAt()
+  - fields: createdAt(string), deletedAt(string), earlyClockInThreshold(integer), employeeIds(array), id(string), locationId(integer), managerUserIds(array), name(string), startOfWeek(string), timezone(string), updatedAt(string)
 - scheduling_get_schedule:
   - primary key: id
-  - fields: createdAt(), deletedAt(), earlyClockInThreshold(), employeeIds(), id(), locationId(), managerUserIds(), name(), startOfWeek(), timezone(), updatedAt()
+  - fields: createdAt(string), deletedAt(string), earlyClockInThreshold(integer), employeeIds(array), id(string), locationId(integer), managerUserIds(array), name(string), startOfWeek(string), timezone(string), updatedAt(string)
 - scheduling_list_shift_assessments:
   - primary key: id
-  - fields: createdAt(), date(), employeeId(), id(), result(), shiftId(), updatedAt(), violations()
+  - fields: createdAt(string), date(string), employeeId(integer), id(string), result(), shiftId(string), updatedAt(string), violations(array)
 - scheduling_list_shifts:
   - primary key: id
-  - fields: capacity(), color(), createdAt(), deletedAt(), employeeIds(), end(), id(), name(), recurrenceDtend(), recurrenceDtstart(), recurrenceId(), recurrenceRule(), recurrenceUntil(), scheduleId(), start(), status(), timezone(), unpublishedChanges(), updatedAt()
+  - fields: capacity(integer), color(string), createdAt(string), deletedAt(string), employeeIds(array), end(string), id(string), name(string), recurrenceDtend(string), recurrenceDtstart(string), recurrenceId(string), recurrenceRule(string), recurrenceUntil(string), scheduleId(string), start(string), status(), timezone(string), unpublishedChanges(object), updatedAt(string)
 - scheduling_get_shift:
   - primary key: id
-  - fields: capacity(), color(), createdAt(), deletedAt(), employeeIds(), end(), id(), name(), recurrenceDtend(), recurrenceDtstart(), recurrenceId(), recurrenceRule(), recurrenceUntil(), scheduleId(), start(), status(), timezone(), unpublishedChanges(), updatedAt()
+  - fields: capacity(integer), color(string), createdAt(string), deletedAt(string), employeeIds(array), end(string), id(string), name(string), recurrenceDtend(string), recurrenceDtstart(string), recurrenceId(string), recurrenceRule(string), recurrenceUntil(string), scheduleId(string), start(string), status(), timezone(string), unpublishedChanges(object), updatedAt(string)
 - scheduling_list_timezones:
   - primary key: id
-  - fields: id(), name(), offset()
+  - fields: id(string), name(string), offset(string)
 - break_assessments:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policies:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policy:
   - primary key: id
-  - fields: allEmployeesAssigned(), createdAt(), deletedAt(), description(), id(), name(), updatedAt()
+  - fields: allEmployeesAssigned(boolean), createdAt(string), deletedAt(string), description(string), id(string), name(string), updatedAt(string)
 - break_policy_breaks:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policy_employees:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break:
   - primary key: id
-  - fields: availabilityEndTime(), availabilityMaxHoursWorked(), availabilityMinHoursWorked(), availabilityStartTime(), availabilityType(), createdAt(), deletedAt(), duration(), id(), name(), paid(), policyId(), updatedAt()
+  - fields: availabilityEndTime(string), availabilityMaxHoursWorked(number), availabilityMinHoursWorked(number), availabilityStartTime(string), availabilityType(), createdAt(string), deletedAt(string), duration(integer), id(string), name(string), paid(boolean), policyId(string), updatedAt(string)
 - employee_break_availabilities:
   - primary key: id
-  - fields: availabilityType(), available(), availableAfterMinutesWorked(), availableAt(), availableIn(), calculatedAt(), duration(), effectiveAt(), id(), name(), paid(), policyId(), recordedDuration(), timezone(), unavailableAt(), unavailableIn()
+  - fields: availabilityType(), available(boolean), availableAfterMinutesWorked(integer), availableAt(string), availableIn(integer), calculatedAt(string), duration(integer), effectiveAt(string), id(string), name(string), paid(boolean), policyId(string), recordedDuration(integer), timezone(string), unavailableAt(string), unavailableIn(integer)
 - employee_break_policies:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - projects:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - project:
   - primary key: id
-  - fields: allEmployeesAssigned(), archived(), billable(), createdAt(), deletedAt(), employeeIds(), hasTasks(), id(), includeInPayroll(), name(), updatedAt()
+  - fields: allEmployeesAssigned(boolean), archived(boolean), billable(boolean), createdAt(string), deletedAt(string), employeeIds(array), hasTasks(boolean), id(integer), includeInPayroll(boolean), name(string), updatedAt(string)
 - project_tasks:
   - primary key: id
-  - fields: billable(), createdAt(), deletedAt(), id(), name(), projectId(), updatedAt()
+  - fields: billable(boolean), createdAt(string), deletedAt(string), id(integer), name(string), projectId(integer), updatedAt(string)
 - shift_differentials:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - shift_differential:
   - primary key: id
-  - fields: end(), endDay(), id(), start(), startDay()
+  - fields: end(string), endDay(string), id(integer), start(string), startDay(string)
 - task:
   - primary key: id
-  - fields: billable(), createdAt(), deletedAt(), id(), name(), projectId(), updatedAt()
+  - fields: billable(boolean), createdAt(string), deletedAt(string), id(integer), name(string), projectId(integer), updatedAt(string)
 - time_off_requests:
   - primary key: id
-  - fields: actions(), amount(), created(), dates(), employeeId(), end(), id(), name(), notes(), start(), status(), type()
+  - fields: actions(object), amount(object), created(string), dates(object), employeeId(string), end(string), id(string), name(string), notes(object), start(string), status(object), type(object)
 - whos_out:
   - primary key: id
-  - fields: employeeId(), end(), id(), name(), start(), type()
+  - fields: employeeId(integer), end(string), id(integer), name(string), start(string), type(string)
 - timesheet_entries:
   - primary key: id
-  - fields: approved(), approvedAt(), createdAt(), date(), employeeId(), end(), hours(), id(), note(), projectInfo(), start(), timezone(), type(), updatedAt()
+  - fields: approved(boolean), approvedAt(string), createdAt(string), date(string), employeeId(integer), end(string), hours(number), id(integer), note(string), projectInfo(object), start(string), timezone(string), type(string), updatedAt(string)
 - time_tracking_record:
   - primary key: employeeId
-  - fields: adjustedHours(), dateAdjusted(), dateHoursWorked(), departmentId(), divisionId(), employeeId(), holidayId(), hoursWorked(), jobCode(), jobData(), jobTitleId(), payCode(), payRate(), project(), projectId(), rateType(), shiftDifferential(), shiftDifferentialId(), taskId(), timeTrackingId(), type()
+  - fields: adjustedHours(string), dateAdjusted(string), dateHoursWorked(string), departmentId(string), divisionId(string), employeeId(string), holidayId(string), hoursWorked(string), jobCode(string), jobData(string), jobTitleId(string), payCode(string), payRate(string), project(object), projectId(string), rateType(string), shiftDifferential(object), shiftDifferentialId(string), taskId(string), timeTrackingId(string), type(string)
 - training_categories:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - training_types:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - webhooks:
   - primary key: id
-  - fields: created(), id(), lastSent(), name(), url()
+  - fields: created(string), id(string), lastSent(string), name(string), url(string)
 - monitor_fields:
   - primary key: id
-  - fields: alias(), id(), name()
+  - fields: alias(string), id(string), name(string)
 - post_fields:
   - primary key: id
-  - fields: alias(), id(), name(), pageId(), tableId(), type()
+  - fields: alias(string), id(integer), name(string), pageId(integer), tableId(integer), type(string)
 - webhook:
   - primary key: id
-  - fields: duplicatePostString(), error(), id(), monitorFields(), postFields(), unknownFields()
+  - fields: duplicatePostString(array), error(string), id(string), monitorFields(array), postFields(array), unknownFields(array)
 - employee_time_off_policies_v1_1:
   - primary key: timeOffPolicyId
-  - fields: accrualStartDate(), timeOffPolicyId(), timeOffTypeId()
+  - fields: accrualStartDate(string), timeOffPolicyId(string), timeOffTypeId(integer)
 - goals_aggregate_v1_1:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_filters_v1_1:
   - primary key: id
-  - fields: actions(), count(), id(), name()
+  - fields: actions(object), count(integer), id(string), name(string)
 - datasets_v1_2:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - fields_from_dataset_v1_2:
   - primary key: id
-  - fields: entityName(), id(), label(), name(), parentName(), parentType()
+  - fields: entityName(string), id(string), label(string), name(string), parentName(string), parentType(string)
 - goals_aggregate_v1_2:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_filters_v1_2:
   - primary key: id
-  - fields: actions(), count(), id(), name()
+  - fields: actions(object), count(integer), id(string), name(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
 - create_application_comment:
   - endpoint: POST /api/v1/applicant_tracking/applications/{{ record.application_id }}/comments
-  - required fields: application_id
+  - required fields: application_id, comment
   - risk: Create Job Application Comment through the BambooHR API.
 - update_applicant_status:
   - endpoint: POST /api/v1/applicant_tracking/applications/{{ record.application_id }}/status
-  - required fields: application_id
+  - required fields: application_id, status
   - risk: Update Applicant Status through the BambooHR API.
 - add_new_company_benefit:
   - endpoint: POST /api/v1/benefit/company_benefit
@@ -379,18 +380,19 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Add an employee's default withholdings through the BambooHR API.
 - create_employee_dependent:
   - endpoint: POST /api/v1/employeedependents
+  - required fields: employeeId
   - risk: Create Employee Dependent through the BambooHR API.
 - update_employee_dependent:
   - endpoint: PUT /api/v1/employeedependents/{{ record.id }}
-  - required fields: id
+  - required fields: id, employeeId
   - risk: Update Employee Dependent through the BambooHR API.
 - adjust_time_off_balance:
   - endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/balance_adjustment
-  - required fields: employee_id
+  - required fields: employee_id, amount, date, timeOffTypeId
   - risk: Adjust Time Off Balance through the BambooHR API.
 - create_time_off_history:
   - endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/history
-  - required fields: employee_id
+  - required fields: employee_id, date
   - risk: Create Time Off History Item through the BambooHR API.
 - assign_time_off_policies:
   - endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/policies
@@ -398,7 +400,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Assign Time Off Policies through the BambooHR API.
 - create_time_off_request:
   - endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/request
-  - required fields: employee_id
+  - required fields: employee_id, status, start, end, timeOffTypeId
   - risk: Create Time Off Request through the BambooHR API.
 - create_table_row:
   - endpoint: POST /api/v1/employees/{{ record.id }}/tables/{{ record.table }}
@@ -418,7 +420,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update List Field Values through the BambooHR API.
 - create_goal:
   - endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals
-  - required fields: employee_id
+  - required fields: employee_id, title, dueDate, sharedWithEmployeeIds
   - risk: Create Goal through the BambooHR API.
 - delete_goal:
   - endpoint: DELETE /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
@@ -426,7 +428,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Deletes BambooHR data: Delete Goal.
 - update_goal_v1:
   - endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
-  - required fields: employee_id, goal_id
+  - required fields: employee_id, goal_id, dueDate, sharedWithEmployeeIds, title
   - risk: Update Goal (v1) through the BambooHR API.
 - close_goal:
   - endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/close
@@ -434,7 +436,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Close Goal through the BambooHR API.
 - create_goal_comment:
   - endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments
-  - required fields: employee_id, goal_id
+  - required fields: employee_id, goal_id, text
   - risk: Create Goal Comment through the BambooHR API.
 - delete_goal_comment:
   - endpoint: DELETE /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}
@@ -442,15 +444,15 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Deletes BambooHR data: Delete Goal Comment.
 - update_goal_comment:
   - endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}
-  - required fields: employee_id, goal_id, comment_id
+  - required fields: employee_id, goal_id, comment_id, text
   - risk: Update Goal Comment through the BambooHR API.
 - update_goal_milestone_progress:
   - endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/milestones/{{ record.milestone_id }}/progress
-  - required fields: employee_id, goal_id, milestone_id
+  - required fields: employee_id, goal_id, milestone_id, complete
   - risk: Update Milestone Progress through the BambooHR API.
 - update_goal_progress:
   - endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/progress
-  - required fields: employee_id, goal_id
+  - required fields: employee_id, goal_id, percentComplete
   - risk: Update Goal Progress through the BambooHR API.
 - reopen_goal:
   - endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/reopen
@@ -462,6 +464,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Goal Sharing through the BambooHR API.
 - create_scheduling_create_schedule:
   - endpoint: POST /api/v1/scheduling/schedules
+  - required fields: name, locationId, startOfWeek
   - risk: Create Schedule through the BambooHR API.
 - delete_scheduling_delete_schedule:
   - endpoint: DELETE /api/v1/scheduling/schedules/{{ record.id }}
@@ -473,9 +476,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Schedule through the BambooHR API.
 - create_scheduling_create_shift:
   - endpoint: POST /api/v1/scheduling/shifts
+  - required fields: scheduleId, status, color, timezone, start, end
   - risk: Create Shift through the BambooHR API.
 - create_scheduling_publish_shifts:
   - endpoint: POST /api/v1/scheduling/shifts/publish
+  - required fields: shiftIds
   - risk: Publish Shifts through the BambooHR API.
 - delete_scheduling_delete_shift:
   - endpoint: DELETE /api/v1/scheduling/shifts/{{ record.id }}
@@ -487,6 +492,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Shift through the BambooHR API.
 - create_break_policy:
   - endpoint: POST /api/v1/time-tracking/break-policies
+  - required fields: name
   - risk: Create Break Policy through the BambooHR API.
 - delete_break_policy:
   - endpoint: DELETE /api/v1/time-tracking/break-policies/{{ record.id }}
@@ -498,11 +504,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Break Policy through the BambooHR API.
 - assign_employees_to_break_policy:
   - endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/assign
-  - required fields: id
+  - required fields: id, employeeIds
   - risk: Assign Employees to Break Policy through the BambooHR API.
 - set_break_policy_employees:
   - endpoint: PUT /api/v1/time-tracking/break-policies/{{ record.id }}/assign
-  - required fields: id
+  - required fields: id, employeeIds
   - risk: Set Employees for Break Policy through the BambooHR API.
 - create_break:
   - endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/breaks
@@ -518,7 +524,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Sync Break Policy through the BambooHR API.
 - create_unassign_employees_from_break_policy:
   - endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/unassign
-  - required fields: id
+  - required fields: id, employeeIds
   - risk: Unassign Employees from Break Policy through the BambooHR API.
 - delete_break:
   - endpoint: DELETE /api/v1/time-tracking/breaks/{{ record.id }}
@@ -530,6 +536,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Break through the BambooHR API.
 - create_project:
   - endpoint: POST /api/v1/time-tracking/projects
+  - required fields: name
   - risk: Create Time Tracking Project through the BambooHR API.
 - delete_project:
   - endpoint: DELETE /api/v1/time-tracking/projects/{{ record.id }}
@@ -541,10 +548,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Time Tracking Project through the BambooHR API.
 - create_project_task:
   - endpoint: POST /api/v1/time-tracking/projects/{{ record.project_id }}/tasks
-  - required fields: project_id
+  - required fields: project_id, name
   - risk: Create Time Tracking Project Task through the BambooHR API.
 - create_shift_differential:
   - endpoint: POST /api/v1/time-tracking/shift-differentials
+  - required fields: name, rate, rateType, times
   - risk: Create Time Tracking Shift Differential through the BambooHR API.
 - delete_shift_differential:
   - endpoint: DELETE /api/v1/time-tracking/shift-differentials/{{ record.id }}
@@ -564,7 +572,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Time Tracking Task through the BambooHR API.
 - update_time_off_request_status:
   - endpoint: PUT /api/v1/time_off/requests/{{ record.request_id }}/status
-  - required fields: request_id
+  - required fields: request_id, status
   - risk: Update Time Off Request Status through the BambooHR API.
 - delete_clock_entries:
   - endpoint: DELETE /api/v1/time_tracking/clock_entries
@@ -574,9 +582,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Store clock entries through the BambooHR API.
 - delete_timesheet_clock_entries_via_post:
   - endpoint: POST /api/v1/time_tracking/clock_entries/delete
+  - required fields: clockEntryIds
   - risk: Delete Timesheet Clock Entries through the BambooHR API.
 - create_or_update_timesheet_clock_entries:
   - endpoint: POST /api/v1/time_tracking/clock_entries/store
+  - required fields: entries
   - risk: Create or Update Timesheet Clock Entries through the BambooHR API.
 - clock_in:
   - endpoint: POST /api/v1/time_tracking/clock_in/{{ record.employee_id }}
@@ -607,24 +617,30 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Create Timesheet Clock-Out Entry through the BambooHR API.
 - delete_timesheet_hour_entries_via_post:
   - endpoint: POST /api/v1/time_tracking/hour_entries/delete
+  - required fields: hourEntryIds
   - risk: Delete Timesheet Hour Entries through the BambooHR API.
 - create_or_update_timesheet_hour_entries:
   - endpoint: POST /api/v1/time_tracking/hour_entries/store
+  - required fields: hours
   - risk: Create or Update Timesheet Hour Entries through the BambooHR API.
 - create_time_tracking_project:
   - endpoint: POST /api/v1/time_tracking/projects
+  - required fields: name
   - risk: Create Time Tracking Project through the BambooHR API.
 - approve_employee_timesheets:
   - endpoint: POST /api/v1/time_tracking/timesheets/approve
+  - required fields: lastChanged, timesheets
   - risk: Approve employee timesheets through the BambooHR API.
 - clock_out_and_approve_employee_timesheets:
   - endpoint: POST /api/v1/time_tracking/timesheets/clock_out_and_approve
   - risk: Approve timesheets for employees that are currently clocked in through the BambooHR API.
 - create_time_tracking_hour_record:
   - endpoint: POST /api/v1/timetracking/add
+  - required fields: dateHoursWorked, employeeId, hoursWorked, rateType, timeTrackingId
   - risk: Create Hour Record through the BambooHR API.
 - update_time_tracking_record:
   - endpoint: PUT /api/v1/timetracking/adjust
+  - required fields: timeTrackingId, hoursWorked
   - risk: Update Hour Record through the BambooHR API.
 - delete_time_tracking_hour_record:
   - endpoint: DELETE /api/v1/timetracking/delete/{{ record.id }}
@@ -635,6 +651,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Create or Update Hour Records through the BambooHR API.
 - create_training_category:
   - endpoint: POST /api/v1/training/category
+  - required fields: name
   - risk: Create Training Category through the BambooHR API.
 - delete_training_category:
   - endpoint: DELETE /api/v1/training/category/{{ record.training_category_id }}
@@ -642,11 +659,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Deletes BambooHR data: Delete Training Category.
 - update_training_category:
   - endpoint: PUT /api/v1/training/category/{{ record.training_category_id }}
-  - required fields: training_category_id
+  - required fields: training_category_id, name
   - risk: Update Training Category through the BambooHR API.
 - create_employee_training_record:
   - endpoint: POST /api/v1/training/record/employee/{{ record.employee_id }}
-  - required fields: employee_id
+  - required fields: employee_id, completed, type
   - risk: Create Employee Training Record through the BambooHR API.
 - delete_employee_training_record:
   - endpoint: DELETE /api/v1/training/record/{{ record.employee_training_record_id }}
@@ -654,10 +671,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Deletes BambooHR data: Delete Employee Training Record.
 - update_employee_training_record:
   - endpoint: PUT /api/v1/training/record/{{ record.employee_training_record_id }}
-  - required fields: employee_training_record_id
+  - required fields: employee_training_record_id, completed
   - risk: Update Employee Training Record through the BambooHR API.
 - create_training_type:
   - endpoint: POST /api/v1/training/type
+  - required fields: name
   - risk: Create Training Type through the BambooHR API.
 - delete_training_type:
   - endpoint: DELETE /api/v1/training/type/{{ record.training_type_id }}
@@ -669,6 +687,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Training Type through the BambooHR API.
 - create_webhook:
   - endpoint: POST /api/v1/webhooks
+  - required fields: name, url, format
   - risk: Create Webhook through the BambooHR API.
 - delete_webhook:
   - endpoint: DELETE /api/v1/webhooks/{{ record.id }}
@@ -676,7 +695,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Deletes BambooHR data: Delete Webhook.
 - update_webhook:
   - endpoint: PUT /api/v1/webhooks/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, url, format
   - risk: Update Webhook through the BambooHR API.
 - assign_time_off_policies_v1_1:
   - endpoint: PUT /api/v1_1/employees/{{ record.employee_id }}/time_off/policies
@@ -692,7 +711,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
   - risk: Update Table Row v1.1 through the BambooHR API.
 - update_goal_v1_1:
   - endpoint: PUT /api/v1_1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
-  - required fields: employee_id, goal_id
+  - required fields: employee_id, goal_id, title, dueDate, sharedWithEmployeeIds
   - risk: Update Goal (v1.1) through the BambooHR API.
 - update_company_benefit_properties:
   - endpoint: POST /api/v1_2/benefit/company_benefit/{{ record.id }}

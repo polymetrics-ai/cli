@@ -11,6 +11,7 @@ Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange
 
 ## Icon
 
+- id: exchangeratesapi
 - asset: icons/exchangeratesapi.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -38,26 +39,26 @@ Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange
 - mode
 - timeseries_end_date
 - timeseries_start_date
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 
 - latest:
   - primary key: date
-  - fields: base(), date(), historical(), rates(), success(), timestamp()
+  - fields: base(string), date(string), historical(boolean), rates(object), success(boolean), timestamp(integer)
 - convert:
   - primary key: date
-  - fields: date(), historical(), info(), query(), result(), success()
+  - fields: date(string), historical(string), info(object), query(object), result(number), success(boolean)
 - timeseries:
   - primary key: start_date, end_date
-  - fields: base(), end_date(), rates(), start_date(), success(), timeseries()
+  - fields: base(string), end_date(string), rates(object), start_date(string), success(boolean), timeseries(boolean)
 - fluctuation:
   - primary key: start_date, end_date
-  - fields: base(), end_date(), fluctuation(), rates(), start_date(), success()
+  - fields: base(string), end_date(string), fluctuation(boolean), rates(object), start_date(string), success(boolean)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

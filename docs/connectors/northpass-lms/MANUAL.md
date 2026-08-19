@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -26,24 +28,24 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   people:
     primary key: id
-    fields: created_at(), email(), first_name(), id(), last_name(), status(), type(), updated_at()
+    fields: created_at(string), email(string), first_name(string), id(string), last_name(string), status(string), type(string), updated_at(string)
   courses:
     primary key: id
-    fields: created_at(), id(), name(), slug(), status(), type(), updated_at()
+    fields: created_at(string), id(string), name(string), slug(string), status(string), type(string), updated_at(string)
   course_enrollments:
     primary key: id
-    fields: completed_at(), course_id(), created_at(), id(), learner_id(), percentage(), status(), type(), updated_at()
+    fields: completed_at(string), course_id(string), created_at(string), id(string), learner_id(string), percentage(integer), status(string), type(string), updated_at(string)
   groups:
     primary key: id
-    fields: created_at(), id(), name(), slug(), type(), updated_at()
+    fields: created_at(string), id(string), name(string), slug(string), type(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Northpass LMS API read of learner and course data

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflows, groups, stages, pipelines, persons, currencies, custom-field types, and email data sources, and writes CRM lifecycle mutations, through the Salesflare REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -27,58 +29,59 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   accounts:
     primary key: id
-    fields: city(), country(), created_at(), domain(), email(), id(), name(), phone_number(), updated_at()
+    fields: city(string), country(string), created_at(string), domain(string), email(string), id(integer), name(string), phone_number(string), updated_at(string)
   contacts:
     primary key: id
-    fields: account_id(), created_at(), email(), first_name(), id(), last_name(), name(), phone_number(), updated_at()
+    fields: account_id(integer), created_at(string), email(string), first_name(string), id(integer), last_name(string), name(string), phone_number(string), updated_at(string)
   opportunities:
     primary key: id
-    fields: account_id(), created_at(), currency(), email(), id(), name(), stage_id(), updated_at(), value()
+    fields: account_id(integer), created_at(string), currency(string), email(string), id(integer), name(string), stage_id(integer), updated_at(string), value(number)
   users:
     primary key: id
-    fields: email(), enabled(), id(), name()
+    fields: email(string), enabled(boolean), id(integer), name(string)
   tags:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   tasks:
     primary key: id
-    fields: account_id(), assignee_id(), completed(), description(), due_date(), id(), name()
+    fields: account_id(integer), assignee_id(integer), completed(boolean), description(string), due_date(string), id(integer), name(string)
   workflows:
     primary key: id
-    fields: id(), name(), state()
+    fields: id(integer), name(string), state(string)
   groups:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   stages:
     primary key: id
-    fields: id(), name(), pipeline_id()
+    fields: id(integer), name(string), pipeline_id(integer)
   pipelines:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   persons:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(integer), name(string)
   currencies:
     primary key: code
-    fields: code(), name()
+    fields: code(string), name(string)
   custom_field_types:
     primary key: type
-    fields: name(), type()
+    fields: name(string), type(string)
   email_data_sources:
     primary key: id
-    fields: email(), id()
+    fields: email(string), id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_account:
     endpoint: POST /accounts
+    required fields: name
     risk: creates a new CRM account; low-risk external mutation, no approval required
   update_account:
     endpoint: PUT /accounts/{{ record.id }}
@@ -90,6 +93,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM account; approval required
   create_contact:
     endpoint: POST /contacts
+    required fields: name
     risk: creates a new CRM contact; low-risk external mutation, no approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.id }}
@@ -101,6 +105,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM contact; approval required
   create_opportunity:
     endpoint: POST /opportunities
+    required fields: name
     risk: creates a new CRM opportunity/deal; low-risk external mutation, no approval required
   update_opportunity:
     endpoint: PUT /opportunities/{{ record.id }}
@@ -112,6 +117,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name
     risk: creates a new CRM tag; low-risk external mutation, no approval required
   update_tag:
     endpoint: PUT /tags/{{ record.id }}
@@ -123,6 +129,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required
   create_task:
     endpoint: POST /tasks
+    required fields: name
     risk: creates a new CRM task; low-risk external mutation, no approval required
   update_task:
     endpoint: PUT /tasks/{{ record.id }}
@@ -134,6 +141,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM task; approval required
   create_meeting:
     endpoint: POST /meetings
+    required fields: title, start_date, end_date
     risk: creates a new CRM meeting/calendar entry; low-risk external mutation, no approval required
   update_meeting:
     endpoint: PUT /meetings/{{ record.meeting_id }}
@@ -145,9 +153,11 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required
   create_call:
     endpoint: POST /calls
+    required fields: account_id
     risk: logs a new call activity against a CRM account; low-risk external mutation, no approval required
   create_internal_note:
     endpoint: POST /messages
+    required fields: content
     risk: creates a new internal note on a CRM record; low-risk external mutation, no approval required
   update_internal_note:
     endpoint: PUT /messages/{{ record.message_id }}

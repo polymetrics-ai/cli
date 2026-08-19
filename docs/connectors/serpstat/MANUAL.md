@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serpstat JSON-RPC-over-HTTP API. Read-only.
 
 ICON
+  id: serpstat
   asset: icons/serpstat.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -30,21 +31,21 @@ CONFIGURATION
   page_size
   pages_to_fetch
   region_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   domain_keywords:
     primary key: keyword, url
-    fields: keyword(), position(), updated_at(), url()
+    fields: keyword(string), position(integer), updated_at(string), url(string)
   domain_competitors:
     primary key: domain
-    fields: domain(), visibility()
+    fields: domain(string), visibility(number)
   domain_urls:
     primary key: url
-    fields: keywords(), url()
+    fields: keywords(integer), url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Serpstat API read of domain keyword/competitor/top-URL SEO metrics

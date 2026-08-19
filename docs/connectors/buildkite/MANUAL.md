@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and clusters through the Buildkite REST API v2.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-buildkite
+  asset: icons/simple-icons/buildkite.svg
+  title: Buildkite
+  simple_icon_slug: buildkite
+  simple_icon_hex: 14CC80
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Buildkite
+  match: exact-name-or-slug
+  matched_by: buildkite
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -29,31 +37,31 @@ CONFIGURATION
   mode
   organization
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   organizations:
     primary key: id
     cursor: created_at
-    fields: agents_url(), created_at(), graphql_id(), id(), name(), pipelines_url(), slug(), url(), web_url()
+    fields: agents_url(string), created_at(string), graphql_id(string), id(string), name(string), pipelines_url(string), slug(string), url(string), web_url(string)
   pipelines:
     primary key: id
     cursor: created_at
-    fields: archived_at(), builds_url(), created_at(), default_branch(), description(), graphql_id(), id(), name(), repository(), slug(), url(), visibility(), web_url()
+    fields: archived_at(string), builds_url(string), created_at(string), default_branch(string), description(string), graphql_id(string), id(string), name(string), repository(string), slug(string), url(string), visibility(string), web_url(string)
   builds:
     primary key: id
     cursor: created_at
-    fields: blocked(), branch(), commit(), created_at(), finished_at(), graphql_id(), id(), message(), number(), scheduled_at(), source(), started_at(), state(), url(), web_url()
+    fields: blocked(boolean), branch(string), commit(string), created_at(string), finished_at(string), graphql_id(string), id(string), message(string), number(integer), scheduled_at(string), source(string), started_at(string), state(string), url(string), web_url(string)
   agents:
     primary key: id
     cursor: created_at
-    fields: connection_state(), created_at(), graphql_id(), hostname(), id(), ip_address(), last_job_finished_at(), name(), priority(), url(), user_agent(), version(), web_url()
+    fields: connection_state(string), created_at(string), graphql_id(string), hostname(string), id(string), ip_address(string), last_job_finished_at(string), name(string), priority(integer), url(string), user_agent(string), version(string), web_url(string)
   teams:
     primary key: id
-    fields: created_at(), default(), description(), graphql_id(), id(), name(), privacy(), slug()
+    fields: created_at(string), default(boolean), description(string), graphql_id(string), id(string), name(string), privacy(string), slug(string)
   clusters:
     primary key: id
-    fields: color(), created_at(), default_queue_id(), description(), emoji(), graphql_id(), id(), name(), url(), web_url()
+    fields: color(string), created_at(string), default_queue_id(string), description(string), emoji(string), graphql_id(string), id(string), name(string), url(string), web_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -61,6 +69,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_pipeline:
     endpoint: POST /organizations/{{ config.organization }}/pipelines
+    required fields: name, cluster_id, repository
     risk: creates a new CI/CD pipeline scoped to a cluster and repository; low-risk external mutation, no approval required
   update_pipeline:
     endpoint: PATCH /organizations/{{ config.organization }}/pipelines/{{ record.slug }}
@@ -80,7 +89,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a pipeline and its build history; irreversible
   create_build:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds
-    required fields: pipeline_slug
+    required fields: pipeline_slug, commit, branch
     risk: immediately triggers a new CI/CD build on the target pipeline/branch; consumes agent capacity and may run arbitrary pipeline-defined commands
   cancel_build:
     endpoint: PUT /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.number }}/cancel
@@ -92,7 +101,7 @@ REVERSE ETL ACTIONS
     risk: triggers a full re-run of a completed build on new agent capacity; may run arbitrary pipeline-defined commands again
   create_annotation:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.build_number }}/annotations
-    required fields: pipeline_slug, build_number
+    required fields: pipeline_slug, build_number, body
     risk: posts a visible HTML/Markdown annotation onto a build's detail page; low-risk external mutation, no approval required
   retry_job:
     endpoint: PUT /organizations/{{ config.organization }}/jobs/{{ record.job_id }}/retry
@@ -119,6 +128,7 @@ REVERSE ETL ACTIONS
     risk: resumes a previously paused agent so it can pick up new jobs again
   create_team:
     endpoint: POST /organizations/{{ config.organization }}/teams
+    required fields: name
     risk: creates a new team; low-risk external mutation, no approval required
   update_team:
     endpoint: PATCH /organizations/{{ config.organization }}/teams/{{ record.id }}

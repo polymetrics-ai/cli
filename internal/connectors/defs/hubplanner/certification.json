@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "resources",
+    "live_unavailable": [
+      {
+        "kind": "credentials_required",
+        "contains": [
+          "Hubplanner live certification requires approved credentials and is not performed by fixture-only parity work"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

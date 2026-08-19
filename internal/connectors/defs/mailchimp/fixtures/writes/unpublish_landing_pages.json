@@ -1,0 +1,15 @@
+{
+  "record": {
+    "page_id": "fixture_page_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/landing-pages/fixture_page_id/actions/unpublish"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_unpublish_landing_pages"
+    }
+  }
+}

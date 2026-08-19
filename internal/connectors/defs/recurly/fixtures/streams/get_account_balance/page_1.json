@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/balance",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": {
+      "account": {
+        "id": "fixture_id"
+      },
+      "object": "fixture_object"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "webhook_id": "fixture_webhook_id",
+    "url": "https://example.invalid/mailchimp-fixture",
+    "events": {},
+    "sources": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/lists/fixture_list_id/webhooks/fixture_webhook_id",
+    "body": {
+      "url": "https://example.invalid/mailchimp-fixture",
+      "events": {},
+      "sources": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_lists_webhooks"
+    }
+  }
+}

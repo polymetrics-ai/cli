@@ -11,6 +11,7 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 
 ## Icon
 
+- id: searxng
 - asset: icons/searxng.svg
 - source: official_site
 - review_status: manual_override
@@ -27,7 +28,7 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - query
 - api_key (secret)
 
@@ -36,11 +37,11 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 - search:
   - primary key: url
   - cursor: published_date
-  - fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+  - fields: category(string), content(string), engine(string), engines(string), published_date(string), score(number), stream(string), thumbnail(string), title(string), url(string)
 - reddit:
   - primary key: url
   - cursor: published_date
-  - fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+  - fields: category(string), content(string), engine(string), engines(string), published_date(string), score(number), stream(string), thumbnail(string), title(string), url(string)
 
 ## Sync Modes
 
