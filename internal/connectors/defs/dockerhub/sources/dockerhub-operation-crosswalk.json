@@ -600,14 +600,10 @@
         "api_surface": {
           "method": "GET",
           "path": "/v2/auditlogs/{account}",
-          "operation": {
-            "model": "disallowed",
-            "status": "blocked",
-            "risk": "medium",
-            "blocked_by_default": true,
-            "reason": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle"
-          },
-          "covered_by": null
+          "operation": null,
+          "covered_by": {
+            "direct_read": "audit logs list"
+          }
         },
         "inventory": {
           "state": "materialized",
@@ -1170,7 +1166,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; no response body to stream"
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
           },
           "covered_by": null
         },
@@ -1304,7 +1300,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; no response body to stream"
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
           },
           "covered_by": null
         },
@@ -1780,7 +1776,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; no response body to stream"
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
           },
           "covered_by": null
         },
@@ -1935,13 +1931,13 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "org member CSV export; authenticated org-admin session required"
+            "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation block validation does not yet admit text_export."
           },
           "covered_by": null
         },
         "inventory": {
           "state": "not_materialized",
-          "reason": "requires-elevated-scope"
+          "reason": "foundation-gap"
         }
       }
     },
@@ -3234,14 +3230,10 @@
         "api_surface": {
           "method": "GET",
           "path": "/v2/scim/2.0/Users",
-          "operation": {
-            "model": "disallowed",
-            "status": "blocked",
-            "risk": "medium",
-            "blocked_by_default": true,
-            "reason": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope"
-          },
-          "covered_by": null
+          "operation": null,
+          "covered_by": {
+            "direct_read": "scim users list"
+          }
         },
         "inventory": {
           "state": "materialized",
@@ -3291,7 +3283,7 @@
             "status": "blocked",
             "risk": "high",
             "blocked_by_default": true,
-            "reason": "SCIM user provisioning; same SCIM-token gate"
+            "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
           },
           "covered_by": null
         },
@@ -3407,7 +3399,7 @@
             "status": "blocked",
             "risk": "high",
             "blocked_by_default": true,
-            "reason": "SCIM user update; same SCIM-token gate"
+            "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
           },
           "covered_by": null
         },

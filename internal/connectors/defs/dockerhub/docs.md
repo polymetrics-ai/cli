@@ -1,9 +1,10 @@
 # Overview
 
 Docker Hub exposes four public ETL streams plus source-backed organization,
-SCIM, and access-token-metadata reads. It also declares 20 ordinary mutations
-as typed reverse-ETL actions, including six deletes. Every runnable endpoint is bound
-to the pinned public OpenAPI description at
+SCIM, audit-log, and access-token-metadata reads. It also declares 20 ordinary
+mutations as typed reverse-ETL actions, including six deletes, and two
+approval-gated SCIM direct writes. Every runnable endpoint is bound to the
+pinned public OpenAPI description at
 `sources/dockerhub-operation-source-lock.json`.
 
 Service API documentation: https://docs.docker.com/reference/api/hub/latest/.
@@ -22,8 +23,8 @@ Connection fields:
   sends it as the pinned Docker Hub bearer scheme. Never pass it inline.
 - `password`, `login_2fa_token`, `code`, and `secret` are optional `x-secret`
   fields that exactly name pinned credential-minting request material. The
-  corresponding routes remain declared-but-disabled until the engine can
-  execute a `sensitive_policy` and safely handle a returned credential.
+  corresponding routes remain declared-but-disabled until their exact pinned
+  response-secret field and encrypted-store declarations are completed.
 
 Public repository and tag reads do not require a token. Organization and SCIM
 commands require a bearer token with the provider's applicable role or scope;
@@ -35,10 +36,11 @@ The public ETL streams are `repositories`, `tags`, `repository_detail`, and
 `tag_detail`. `repositories` and `tags` follow the source response's `next`
 URL; the detail streams are single-object responses.
 
-Direct reads expose audit action catalog, organization settings, members,
-invites, groups, group members, personal access-token metadata, organization
-access-token metadata, and the declared SCIM discovery and individual resource
-endpoints. Their flags are derived from the pinned operation contract.
+Direct reads expose the audit action catalog and paginated audit logs,
+organization settings, members, invites, groups, group members, personal
+access-token metadata, organization access-token metadata, and the declared
+SCIM discovery, individual-resource, and paginated-user endpoints. Their
+flags are derived from the pinned operation contract.
 Paging stays on the direct-read `--page` / `--page-cursor` contract; no raw
 source cursor flag is exposed.
 
@@ -55,28 +57,38 @@ the required plan, preview, approval, and execute lifecycle:
 - personal access-token update and delete; organization access-token update
   and delete.
 
+SCIM user create and update use the source-declared `application/scim+json`
+media type through the same typed direct-write plan, preview, approval, and
+execute lifecycle. They are direct writes, not reverse-ETL destination
+bindings.
+
 The six delete actions carry typed destructive confirmation. These ordinary
 provider-authorized mutations are not disabled merely because a user's token
 may lack the necessary role.
 
 Access-token list, detail, update, and delete operations are runnable: their
 pinned responses expose metadata, not a token secret. The two access-token
-create operations remain declared as `foundation-gap` because their pinned
-responses return `token`. Login, 2FA login, and auth-token exchange likewise
-remain declared as `foundation-gap`: they require the named `sensitive_policy`
-live path and safe secret response handling. None is classified
-`unsafe-to-exercise`.
+create operations remain `declaration-pending` because their pinned responses
+return `token`. Login, 2FA login, and auth-token exchange likewise remain
+`declaration-pending` until their exact response-secret field and encrypted
+store declaration is complete. None is classified `unsafe-to-exercise`.
 
 ## Known limits
 
-- The pinned document accounts for 54 operations. Forty-one are runnable
-  (four ETL commands, 17 direct reads, and 20 reverse-ETL commands); 13 have
-  evidence-backed disabled dispositions in
+- The pinned document accounts for 54 operations. Forty-five are runnable
+  (four ETL commands, 19 direct reads, two direct writes, and 20 reverse-ETL
+  commands); nine have evidence-backed disabled dispositions in
   `sources/dockerhub-declaration-disposition.json`.
-- Three pinned `HEAD` operations need a response-less operation executor.
-  Audit-log and SCIM-user collection paging need operation-scoped pagination.
-  The SCIM writes use `application/scim+json`, which the typed JSON write
-  executor does not accept. These are recoverable foundation/schema gaps.
-- `sync_transport.json` is absent under recoverable foundation issue #4093.
+- PR #4297 made operation-scoped pagination and the closed
+  `application/scim+json` write type executable, so the audit-log, SCIM-user,
+  and SCIM-write contracts are now runnable. Three `HEAD` status checks and
+  the bounded members CSV export remain disabled only because
+  `internal/connectors/engine/bundle.go:2467-2485` omits the otherwise
+  implemented `rest_status` and `text_export` kinds from its operation-block
+  mapping. This is a recoverable foundation integration gap, not a provider or
+  connector schema limitation.
+- `sync_transport.json` declares the definition-owned ETL source transport.
+  Reverse-ETL eligibility remains blocked on the connector-neutral typed
+  destination executor.
 - `certification-sweep.json` records non-live declaration status. Live
   credentialed certification remains pending and is not attempted here.

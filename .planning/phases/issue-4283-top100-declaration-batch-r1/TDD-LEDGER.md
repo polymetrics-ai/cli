@@ -325,3 +325,32 @@ remains a primary endpoint class where its source transport is declared.
 Keep the map taxonomy independent of legacy command lifecycle intent: no typed
 write action, create/update/upsert/delete kind, or CLI binding can imply a
 reverse-ETL destination. Only the definition-owned destination contract can.
+
+## PR #4297 Docker Hub repair loop — observed result
+
+### Red
+
+`connectorgen validate internal/connectors/defs` initially rejects a Docker
+Hub `rest_status` declaration with `has unsupported kind "rest_status"`.
+The executor itself is present, so the red result identifies an integration
+gap in loader admission rather than a missing status executor.
+
+### Green
+
+The four contracts that PR #4297 can load without a further shared change now
+pass `connectorgen validate`, `surface-sync --check`,
+`TestEveryImplementedCommandPassesRuntimePreflight`, and the non-live sweep:
+`GET /v2/auditlogs/{account}`, `GET /v2/scim/2.0/Users`,
+`POST /v2/scim/2.0/Users`, and `PUT /v2/scim/2.0/Users/{id}`. Each reaches
+`error: missing --credential` in an isolated initialized project, proving
+dispatch without provider I/O. Docker Hub moves from 41 / 54 to 45 / 54.
+
+### Refactor
+
+The three HEAD checks and CSV export remain disabled as
+`operation-execution-block-registration`. The minimal shared fix is to map
+`rest_status` to `rest` and `text_export` to `binary` in
+`expectedOperationBlock` (`internal/connectors/engine/bundle.go:2467-2488`),
+then add a loader regression test. This definitions-only repair does not make
+that foundation edit, and it does not repurpose the five secret-response rows
+as unsafe-operation refusals.

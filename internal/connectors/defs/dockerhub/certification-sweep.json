@@ -2,9 +2,9 @@
   "schema_version": 1,
   "connector": "dockerhub",
   "source": "connector declarations",
-  "declared_commands": 41,
-  "declared_rows": 44,
-  "status_total": 44,
+  "declared_commands": 45,
+  "declared_rows": 48,
+  "status_total": 48,
   "commands": [
     {
       "summary": "List audit log actions",
@@ -25,6 +25,63 @@
         {
           "method": "GET",
           "path": "/v2/auditlogs/{account}/actions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --account",
+      "required_flags": [
+        "--account"
+      ]
+    },
+    {
+      "summary": "List audit log events",
+      "path": "audit logs list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "account",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.account"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.action"
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.actor"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.from"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.name"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.to"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}"
         }
       ],
       "status": "fixture_required",
@@ -1355,6 +1412,106 @@
       "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
+      "summary": "Create user",
+      "path": "scim user create",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "family-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.familyName"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.schemas"
+        },
+        {
+          "name": "user-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.userName"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --schemas, --user-name",
+      "required_flags": [
+        "--schemas",
+        "--user-name"
+      ]
+    },
+    {
+      "summary": "Update a user",
+      "path": "scim user update",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.enabled"
+        },
+        {
+          "name": "family-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.familyName"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.schemas"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/scim/2.0/Users/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id, --schemas",
+      "required_flags": [
+        "--id",
+        "--schemas"
+      ]
+    },
+    {
       "summary": "Get a user",
       "path": "scim user view",
       "intent": "direct_read",
@@ -1380,6 +1537,52 @@
       "required_flags": [
         "--id"
       ]
+    },
+    {
+      "summary": "List users",
+      "path": "scim users list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "attributes",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.attributes"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.filter"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.sortBy"
+        },
+        {
+          "name": "sortOrder",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "ascending",
+            "descending"
+          ],
+          "maps_to": "query.sortOrder"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Run the tag detail ETL stream",

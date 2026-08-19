@@ -349,7 +349,7 @@
       "id": "dockerhub.auditlogs_listauditlogs",
       "kind": "rest_read",
       "summary": "List audit log events",
-      "description": "Enabled source-backed contract inventory; provider authorization is runtime-enforced. Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.AuditLogs_ListAuditLogs; source location: paths[\"/v2/auditlogs/{account}\"].get; provider server: https://hub.docker.com.",
+      "description": "Enabled source-backed runnable Docker Hub paginated read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.AuditLogs_ListAuditLogs; source location: paths[\"/v2/auditlogs/{account}\"].get; provider server: https://hub.docker.com.",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "risk": "medium",
       "approval": "none",
@@ -395,7 +395,29 @@
             "type": "string",
             "summary": "End of the time window you wish to query audit events for."
           }
-        ]
+        ],
+        "pagination": {
+          "type": "page_number",
+          "page_param": "page",
+          "size_param": "page_size",
+          "start_page": 1,
+          "page_size": 25
+        },
+        "pagination_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number to get."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of events to return per page."
+          }
+        ],
+        "max_bytes": 1048576
       },
       "auth_scopes": [
         "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
@@ -1927,7 +1949,7 @@
       "id": "dockerhub.get__v2_scim_2.0_users",
       "kind": "rest_read",
       "summary": "List users",
-      "description": "Enabled source-backed contract inventory; provider authorization is runtime-enforced. Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].get; provider server: https://hub.docker.com.",
+      "description": "Enabled source-backed runnable Docker Hub paginated SCIM read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].get; provider server: https://hub.docker.com.",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "risk": "medium",
       "approval": "none",
@@ -1962,7 +1984,29 @@
             "type": "string",
             "summary": "User attribute to sort by."
           }
-        ]
+        ],
+        "pagination": {
+          "type": "start_index",
+          "start_index_param": "startIndex",
+          "count_param": "count",
+          "start_index_base": 1,
+          "start_index_path": "startIndex",
+          "total_path": "totalResults",
+          "page_size": 10
+        },
+        "pagination_parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "max_bytes": 1048576
       },
       "auth_scopes": [
         "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
@@ -1972,7 +2016,7 @@
       "id": "dockerhub.post__v2_scim_2.0_users",
       "kind": "rest_write",
       "summary": "Create user",
-      "description": "Enabled source-backed contract inventory; provider authorization is runtime-enforced. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].post; provider server: https://hub.docker.com.",
+      "description": "Enabled source-backed runnable Docker Hub SCIM write contract. The declared application/scim+json body is executed through the approval-gated direct-write lifecycle. Source operation: dockerhub.rest.post_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].post; provider server: https://hub.docker.com.",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "risk": "high",
       "approval": "plan-preview-confirm-execute",
@@ -1982,6 +2026,7 @@
         "path": "/v2/scim/2.0/Users",
         "parameters": [],
         "content_type": "application/scim+json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "required": [
@@ -2054,7 +2099,7 @@
       "id": "dockerhub.put__v2_scim_2.0_users__id_",
       "kind": "rest_write",
       "summary": "Update a user",
-      "description": "Enabled source-backed contract inventory; provider authorization is runtime-enforced. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.put_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].put; provider server: https://hub.docker.com.",
+      "description": "Enabled source-backed runnable Docker Hub SCIM write contract. The declared application/scim+json body is executed through the approval-gated direct-write lifecycle. Source operation: dockerhub.rest.put_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].put; provider server: https://hub.docker.com.",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
       "risk": "high",
       "approval": "plan-preview-confirm-execute",
@@ -2072,6 +2117,7 @@
           }
         ],
         "content_type": "application/scim+json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "required": [
@@ -2087,24 +2133,18 @@
               }
             },
             "name": {
-              "allOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "givenName": {
-                      "type": "string",
-                      "example": "Jon"
-                    },
-                    "familyName": {
-                      "type": "string",
-                      "example": "Snow"
-                    }
-                  }
+              "type": "object",
+              "description": "Pinned source normalizes an allOf containing this object shape plus this annotation; when omitted, Docker Hub skips the name update and never clears it.",
+              "properties": {
+                "givenName": {
+                  "type": "string",
+                  "example": "Jon"
                 },
-                {
-                  "description": "If this is omitted from the request, the update will skip the update on it. We will only ever change the name, but not clear it."
+                "familyName": {
+                  "type": "string",
+                  "example": "Snow"
                 }
-              ]
+              }
             },
             "enabled": {
               "type": "boolean",

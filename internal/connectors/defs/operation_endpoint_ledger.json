@@ -1097,6 +1097,12 @@
     },
     {
       "method": "GET",
+      "path": "/v2/auditlogs/{account}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/auditlogs/{account}/actions",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -1176,6 +1182,12 @@
     {
       "method": "GET",
       "path": "/v2/scim/2.0/ServiceProviderConfig",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users",
       "kind": "rest_read",
       "max_bytes": 1048576
     },

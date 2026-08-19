@@ -11685,92 +11685,6 @@
       ]
     },
     {
-      "reason": "Docker Hub documents three response-less HEAD existence checks. The declarative operation model rejects HEAD for rest_read before dispatch, so the routes remain explicitly disabled rather than being misrepresented as JSON reads.",
-      "evidence": [
-        "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request.",
-        "internal/connectors/defs/dockerhub/sources/dockerhub-operation-crosswalk.json records the pinned OpenAPI HEAD method and absence of a response-body content contract."
-      ],
-      "minimal_change": "Add a typed bounded HEAD/status operation executor and a terminal command contract that is distinct from JSON direct-read output.",
-      "recoverability": "Enable after the bounded HEAD/status executor and connector-local terminal evidence are available.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "reason": "Docker Hub source pagination is operation-scoped for the audit-log and SCIM-user collections, but direct-read pagination is currently read only from streams.json base.pagination.",
-      "evidence": [
-        "internal/connectors/engine/direct_read_paginate.go:126-130 (builds from bundle.HTTP.Pagination only)",
-        "internal/connectors/engine/direct_read_paginate.go:181-183 (rejects conflicting raw pagination parameters)"
-      ],
-      "recoverability": "Add a source-derived per-rest-operation PaginationSpec and have direct reads use it before deriving a command for these collections.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "GET",
-            "path": "/v2/auditlogs/{account}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "GET",
-            "path": "/v2/scim/2.0/Users"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "reason": "Docker Hub SCIM writes declare application/scim+json, while the typed direct-write executor supports only application/json and application/x-www-form-urlencoded.",
-      "evidence": [
-        "internal/connectors/engine/direct_write.go:639-672"
-      ],
-      "recoverability": "Add a closed application/scim+json media-type branch to the typed executor, then retain the pinned request schemas and add non-live proof.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/scim/2.0/Users"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "PUT",
-            "path": "/v2/scim/2.0/Users/{id}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
       "reason": "params-import reads operation parameters but does not merge OpenAPI path-item parameters; Docker Hub command parameter contracts retain the exact inherited parameters from the pinned document.",
       "evidence": [
         "cmd/connectorgen/paramsimport.go:161-203 (reads only operation.Parameters)",
@@ -11788,63 +11702,12 @@
       ]
     },
     {
-      "reason": "Docker Hub credential-minting routes are live-safe only after secret-response handling and sensitive_policy live execution are implemented; their source contracts are declared but disabled as recoverable foundation gaps.",
+      "reason": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
       "evidence": [
-        "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy schema and validation exist, but live secret writes remain blocked.",
-        "internal/connectors/defs/dockerhub/sources/dockerhub-declaration-disposition.json: pinned response secret fields token/access_token and secret request fields are marked on each affected source row."
+        "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
       ],
-      "minimal_change": "Build the live secret-sensitive direct-write path and a typed secret-response contract that redacts output/logs/warehouse and routes returned credentials to OS keychain storage.",
-      "recoverability": "Enable after the bounded secret execution and response-redaction contracts, then add connector-local non-live proof.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/access-tokens"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/orgs/{name}/access-tokens"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/users/login"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/users/2fa-login"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/auth/token"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    }
-  ],
-  "complete_map_foundation_gaps": [
-    {
-      "id": "head-response-less-operation-executor",
-      "reason": "The engine refuses response-less HEAD operations as rest_read.",
-      "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read.",
-      "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract.",
+      "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds.",
+      "recoverability": "Enable after Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds.",
       "operations": [
         {
           "connector": "dockerhub",
@@ -11869,20 +11732,46 @@
             "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "operation-scoped-rest-pagination",
-      "reason": "The direct-read paginator cannot express operation-specific pagination.",
-      "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 consumes only streams.json base pagination.",
-      "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator.",
-      "operations": [
+        },
         {
           "connector": "dockerhub",
           "operation": {
             "method": "GET",
-            "path": "/v2/auditlogs/{account}"
+            "path": "/v2/orgs/{org_name}/members/export"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
+    }
+  ],
+  "complete_map_foundation_gaps": [
+    {
+      "id": "operation-execution-block-registration",
+      "reason": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+      "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+      "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         },
@@ -11890,7 +11779,7 @@
           "connector": "dockerhub",
           "operation": {
             "method": "GET",
-            "path": "/v2/scim/2.0/Users"
+            "path": "/v2/orgs/{org_name}/members/export"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }

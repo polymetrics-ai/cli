@@ -251,3 +251,35 @@ Change only the failing test assertion and its delivery evidence. Do not alter
 the source-factory selection, connector declarations, or conformance data to
 make GitHub happen to sort first. Re-run the exact failing test before the
 affected package and static declaration gates.
+
+## PR #4297 repair loop — observed Docker Hub outcome
+
+### Red
+
+Docker Hub reported 41 of 54 enabled before the repair. The proof must traverse
+the full bundle loader and command surface, rather than trusting an executor
+unit test alone.
+
+### Green
+
+PR #4297 enabled the two source-derived paginators and two closed-SCIM JSON
+direct writes. `connectorgen validate`, `surface-sync --check`, sweep
+generation, and four real no-credential preflight calls agree that Docker Hub
+is now 45 of 54 enabled. The SCIM update's source `allOf` object plus
+description is mechanically normalized to its exact object-plus-annotation
+shape for the engine's closed schema dialect; no field is invented.
+
+The other four intended flips do not load: the `rest_status` and `text_export`
+executors exist, but `internal/connectors/engine/bundle.go:2431-2436` rejects
+them because `expectedOperationBlock` at lines 2467-2488 omits both kinds. The
+rows remain a recoverable shared
+`operation-execution-block-registration` foundation gap. This definitions-only
+shard records the exact minimal shared change and does not alter engine code.
+
+### Refactor
+
+Remove the four resolved rejection records and the retired pagination and SCIM
+media-type gap IDs. Retain the five secret-response pending rows,
+`generic-typed-destination-executor`, all source-lock counts, and the
+live-certification-pending boundary. Do not misclassify the missing operation
+block mapping as a Docker Hub or provider-schema limitation.

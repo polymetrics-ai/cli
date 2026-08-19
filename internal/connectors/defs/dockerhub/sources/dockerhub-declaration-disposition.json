@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "connector": "dockerhub",
-  "generated_at": "2026-08-19T00:00:00Z",
+  "generated_at": "2026-08-19T16:53:31.151Z",
   "source_basis": {
     "source_lock": "sources/dockerhub-operation-source-lock.json",
     "crosswalk": "sources/dockerhub-operation-crosswalk.json",
@@ -11,13 +11,13 @@
     "api_surface_rows": 54,
     "exact_source_rows": 54,
     "declared_operations": 54,
-    "enabled_operations": 41,
-    "enabled_percent": 75.93,
-    "disabled_operations": 13,
+    "enabled_operations": 45,
+    "enabled_percent": 83.33,
+    "disabled_operations": 9,
     "enabled_deletes": 6,
     "documented_deletes": 6,
     "stream_bindings": 4,
-    "disabled_api_surface_rows": 13,
+    "disabled_api_surface_rows": 9,
     "operation_inventory_entries": 50,
     "operation_inventory_by_kind": [
       {
@@ -30,29 +30,25 @@
       }
     ],
     "delete_operation_inventory_entries": 6,
-    "terminal_commands": 41,
+    "terminal_commands": 45,
     "writes_actions": 20,
     "live_certification": "pending",
     "rejected_by_reason": [
-      {
-        "key": "foundation-gap",
-        "count": 5
-      },
       {
         "key": "declaration-pending",
         "count": 5
       },
       {
-        "key": "schema-incompatible",
-        "count": 3
+        "key": "foundation-gap",
+        "count": 4
       }
     ],
-    "direct_read_commands": 17,
+    "direct_read_commands": 19,
     "reverse_etl_commands": 0,
     "parity_class_counts": [
       {
         "key": "direct_read",
-        "count": 23
+        "count": 22
       },
       {
         "key": "direct_write",
@@ -64,7 +60,7 @@
       },
       {
         "key": "binary_read",
-        "count": 0
+        "count": 1
       },
       {
         "key": "binary_write",
@@ -72,18 +68,13 @@
       }
     ],
     "gap_ids": [
-      "head-response-less-operation-executor",
-      "operation-scoped-rest-pagination",
+      "operation-execution-block-registration",
       "generic-typed-destination-executor"
     ],
     "foundation_gaps": [
       {
-        "id": "head-response-less-operation-executor",
-        "count": 3
-      },
-      {
-        "id": "operation-scoped-rest-pagination",
-        "count": 2
+        "id": "operation-execution-block-registration",
+        "count": 4
       },
       {
         "id": "generic-typed-destination-executor",
@@ -137,7 +128,7 @@
         "recoverable": true
       }
     },
-    "direct_write_commands": 20,
+    "direct_write_commands": 22,
     "reverse_etl_eligibility": {
       "state": "foundation-gap",
       "foundation_gap_id": "generic-typed-destination-executor",
@@ -852,12 +843,8 @@
       "method": "GET",
       "path": "/v2/auditlogs/{account}",
       "api_surface": {
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle"
+        "covered_by": {
+          "direct_read": "audit logs list"
         }
       },
       "source": {
@@ -934,26 +921,12 @@
           ]
         }
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The pinned source declares page/page_size query parameters but no source-backed next URL field; the bundle has only a global next_url direct-read paginator. Per-operation pagination is not expressible.",
-        "foundation_gap": {
-          "id": "operation-scoped-rest-pagination",
-          "evidence": [
-            "internal/connectors/engine/direct_read_paginate.go:126-130 reads pagination only from b.HTTP.Pagination.",
-            "internal/connectors/engine/direct_read_paginate.go:181-183 rejects conflicting caller paging parameters rather than inventing a second channel."
-          ],
-          "minimal_change": "Add a source-derived per-rest-operation PaginationSpec that direct reads use instead of the bundle-global base pagination, then materialize the documented page/page_size or startIndex/count strategy."
-        },
-        "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared."
-      },
+      "state": "enabled",
+      "rejection": null,
       "declaration": {
         "kind": "rest_read",
         "id": "dockerhub.auditlogs_listauditlogs",
-        "status": "disabled; operation-scoped pagination is not representable by the current direct-read executor",
-        "mutation_class": "update",
+        "status": "enabled; runnable direct_read command \"audit logs list\" uses the source-derived page/page_size operation pagination contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -963,12 +936,9 @@
       },
       "parity_class": "direct_read",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
-          "id": "operation-scoped-rest-pagination",
-          "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared.",
-          "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator."
-        }
+        "state": "present",
+        "evidence": "PR #4297 supplies per-operation REST pagination; surface-sync derives the non-pagination command flags from the pinned contract.",
+        "contract": "PR #4297"
       }
     },
     {
@@ -1587,7 +1557,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; no response body to stream"
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
         }
       },
       "source": {
@@ -1633,18 +1603,18 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
+          "id": "operation-execution-block-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
           ],
-          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         },
-        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
+        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
       },
       "declaration": {
-        "status": "disabled; no typed operation inventory emitted",
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1656,9 +1626,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
-          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
-          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
+          "id": "operation-execution-block-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         }
       }
     },
@@ -1743,7 +1713,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; no response body to stream"
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
         }
       },
       "source": {
@@ -1795,18 +1765,18 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
+          "id": "operation-execution-block-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
           ],
-          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         },
-        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
+        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
       },
       "declaration": {
-        "status": "disabled; no typed operation inventory emitted",
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1818,9 +1788,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
-          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
-          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
+          "id": "operation-execution-block-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         }
       }
     },
@@ -2301,7 +2271,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; no response body to stream"
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
         }
       },
       "source": {
@@ -2349,18 +2319,18 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
+          "id": "operation-execution-block-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
           ],
-          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         },
-        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
+        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
       },
       "declaration": {
-        "status": "disabled; no typed operation inventory emitted",
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2372,9 +2342,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "head-response-less-operation-executor",
-          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
-          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
+          "id": "operation-execution-block-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
         }
       }
     },
@@ -2487,7 +2457,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "org member CSV export; authenticated org-admin session required"
+          "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation block validation does not yet admit text_export."
         }
       },
       "source": {
@@ -2526,47 +2496,20 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "schema-incompatible",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The pinned source exposes a text/csv success response but no bounded byte contract. The available binary_download contract requires a positive max_bytes (internal/connectors/engine/bundle.go:2733-2739), so no executable binary declaration is inferred.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+        "foundation_gap": {
+          "id": "operation-execution-block-registration",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
           ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "org_name",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json",
-              "text/csv"
-            ],
-            "schema_references": [
-              "#/components/schemas/error"
-            ]
-          },
-          "engine_evidence": "internal/connectors/engine/bundle.go:2733-2739"
-        }
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+        },
+        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
       },
       "declaration": {
-        "status": "disabled; source-backed CSV response lacks the bounded binary transfer contract required by the engine",
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2574,10 +2517,14 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "direct_read",
+      "parity_class": "binary_read",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-execution-block-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+        }
       }
     },
     {
@@ -3945,12 +3892,8 @@
       "method": "GET",
       "path": "/v2/scim/2.0/Users",
       "api_surface": {
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope"
+        "covered_by": {
+          "direct_read": "scim users list"
         }
       },
       "source": {
@@ -4012,26 +3955,12 @@
           "schema_references": []
         }
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The pinned source declares SCIM startIndex/count pagination, while the bundle has only a global next_url direct-read paginator. Per-operation pagination is not expressible.",
-        "foundation_gap": {
-          "id": "operation-scoped-rest-pagination",
-          "evidence": [
-            "internal/connectors/engine/direct_read_paginate.go:126-130 reads pagination only from b.HTTP.Pagination.",
-            "internal/connectors/engine/direct_read_paginate.go:181-183 rejects conflicting caller paging parameters rather than inventing a second channel."
-          ],
-          "minimal_change": "Add a source-derived per-rest-operation PaginationSpec that direct reads use instead of the bundle-global base pagination, then materialize the documented page/page_size or startIndex/count strategy."
-        },
-        "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared."
-      },
+      "state": "enabled",
+      "rejection": null,
       "declaration": {
         "kind": "rest_read",
         "id": "dockerhub.get__v2_scim_2.0_users",
-        "status": "disabled; operation-scoped pagination is not representable by the current direct-read executor",
-        "mutation_class": "update",
+        "status": "enabled; runnable direct_read command \"scim users list\" uses the source-derived SCIM startIndex/count operation pagination contract",
         "authorization": {
           "required_security_schemes": [
             "bearerSCIMAuth"
@@ -4041,12 +3970,9 @@
       },
       "parity_class": "direct_read",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
-          "id": "operation-scoped-rest-pagination",
-          "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared.",
-          "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator."
-        }
+        "state": "present",
+        "evidence": "PR #4297 supplies per-operation REST pagination; surface-sync derives the non-pagination command flags from the pinned contract.",
+        "contract": "PR #4297"
       }
     },
     {
@@ -4058,7 +3984,7 @@
           "status": "blocked",
           "risk": "high",
           "blocked_by_default": true,
-          "reason": "SCIM user provisioning; same SCIM-token gate"
+          "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
         }
       },
       "source": {
@@ -4089,45 +4015,12 @@
           ]
         }
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "schema-incompatible",
-        "recoverable": true,
-        "detail": "The pinned source requires application/scim+json. The typed direct-write executor admits application/json and application/x-www-form-urlencoded only (internal/connectors/engine/direct_write.go:639-672), so this content type cannot be executed without a foundation extension.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
-          "security_requirements": [
-            {
-              "bearerSCIMAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/scim+json"
-            ],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/scim+json"
-            ],
-            "schema_references": [
-              "#/components/schemas/scim_user"
-            ]
-          },
-          "engine_evidence": "internal/connectors/engine/direct_write.go:639-672"
-        }
-      },
+      "state": "enabled",
+      "rejection": null,
       "declaration": {
         "kind": "rest_write",
         "id": "dockerhub.post__v2_scim_2.0_users",
-        "status": "disabled; source-required application/scim+json is unsupported by the typed direct-write executor",
+        "status": "enabled; approval-gated direct_write command \"scim user create\" executes the source-declared application/scim+json contract",
         "mutation_class": "create",
         "authorization": {
           "required_security_schemes": [
@@ -4139,7 +4032,8 @@
       "parity_class": "direct_write",
       "foundation": {
         "state": "present",
-        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
+        "evidence": "PR #4297 supplies the closed application/scim+json direct-write media type. The request body remains the pinned provider contract.",
+        "contract": "PR #4297"
       },
       "reverse_etl_eligibility": {
         "state": "foundation-gap",
@@ -4219,7 +4113,7 @@
           "status": "blocked",
           "risk": "high",
           "blocked_by_default": true,
-          "reason": "SCIM user update; same SCIM-token gate"
+          "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
         }
       },
       "source": {
@@ -4257,52 +4151,12 @@
           ]
         }
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "schema-incompatible",
-        "recoverable": true,
-        "detail": "The pinned source requires application/scim+json. The typed direct-write executor admits application/json and application/x-www-form-urlencoded only (internal/connectors/engine/direct_write.go:639-672), so this content type cannot be executed without a foundation extension.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
-          "security_requirements": [
-            {
-              "bearerSCIMAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "id",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/scim+json"
-            ],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/scim+json"
-            ],
-            "schema_references": [
-              "#/components/schemas/scim_user"
-            ]
-          },
-          "engine_evidence": "internal/connectors/engine/direct_write.go:639-672"
-        }
-      },
+      "state": "enabled",
+      "rejection": null,
       "declaration": {
         "kind": "rest_write",
         "id": "dockerhub.put__v2_scim_2.0_users__id_",
-        "status": "disabled; source-required application/scim+json is unsupported by the typed direct-write executor",
+        "status": "enabled; approval-gated direct_write command \"scim user update\" executes the source-declared application/scim+json contract",
         "mutation_class": "update",
         "authorization": {
           "required_security_schemes": [
@@ -4314,7 +4168,8 @@
       "parity_class": "direct_write",
       "foundation": {
         "state": "present",
-        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
+        "evidence": "PR #4297 supplies the closed application/scim+json direct-write media type. The source allOf annotation is mechanically normalized to the same object shape the engine can validate.",
+        "contract": "PR #4297"
       },
       "reverse_etl_eligibility": {
         "state": "foundation-gap",

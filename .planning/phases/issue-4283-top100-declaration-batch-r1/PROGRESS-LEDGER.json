@@ -3,7 +3,7 @@
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
   "scope": "public-source declarations plus complete endpoint-class mapping; source completeness is reported as operations_found plus confidence and basis, never a self-referential declaration percentage; reverse-ETL is an eligibility attribute, not a write endpoint class; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
-  "generated_at": "2026-08-19T00:00:00Z",
+  "generated_at": "2026-08-19T16:53:31.151Z",
   "connectors": [
     {
       "connector": "asana",
@@ -541,20 +541,20 @@
       "operations": {
         "documented": 54,
         "declared": 54,
-        "runnable_commands": 41,
-        "surface_unblocked": 41,
-        "disabled": 13,
-        "enabled_percent": 75.93,
+        "runnable_commands": 45,
+        "surface_unblocked": 45,
+        "disabled": 9,
+        "enabled_percent": 83.33,
         "operation_ledger_entries": 50,
         "typed_source_contracts": 50,
         "typed_source_contracts_by_kind": {
-          "rest_read": 23,
-          "rest_write": 27
+          "rest_write": 27,
+          "rest_read": 23
         },
         "delete_source_contracts": 6,
         "enabled_deletes": 6,
         "documented_deletes": 6,
-        "terminal_commands": 41,
+        "terminal_commands": 45,
         "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
         "operations_found": 54,
         "operations_mapped": 54,
@@ -604,12 +604,12 @@
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/dockerhub/certification-sweep.json",
-        "declared_rows": 44,
-        "cli_commands": 41,
+        "declared_rows": 48,
+        "cli_commands": 45,
         "statuses": {
-          "fixture_required": 44
+          "fixture_required": 48
         },
-        "static_contract_validation": "connectorgen validate and surface-sync --check pass locally; fixture or live proof remains pending.",
+        "static_contract_validation": "connectorgen validate and surface-sync --check pass locally. Four PR #4297 repair commands reach the runtime credential gate without provider I/O; four remaining source rows are held by operation-execution-block-registration.",
         "live_certification": "pending",
         "certification_json": {
           "state": "not_emitted",
@@ -627,7 +627,7 @@
       ],
       "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
+      "resume_pointer": "PR #4297 enabled operation-scoped pagination and SCIM JSON writes: audit logs, SCIM users, SCIM create, and SCIM update are now runnable. The three HEAD checks and members CSV export remain disabled only until expectedOperationBlock registers rest_status and text_export; reverse-ETL eligibility remains pending generic-typed-destination-executor. Live certification remains pending.",
       "writes": {
         "actions": 20,
         "kinds": {
@@ -644,7 +644,7 @@
         "primary_classes": [
           {
             "key": "direct_read",
-            "count": 23
+            "count": 22
           },
           {
             "key": "direct_write",
@@ -656,7 +656,7 @@
           },
           {
             "key": "binary_read",
-            "count": 0
+            "count": 1
           },
           {
             "key": "binary_write",
@@ -664,8 +664,7 @@
           }
         ],
         "gap_ids": [
-          "head-response-less-operation-executor",
-          "operation-scoped-rest-pagination",
+          "operation-execution-block-registration",
           "generic-typed-destination-executor"
         ],
         "live_certification": "pending",

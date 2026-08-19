@@ -15,7 +15,7 @@ only destination factory remains the issue-label-specific one.
 
 | Connector | Operations found / mapped | Input confidence | Enabled | Disabled | ENABLED% | Deletes | Endpoint classes: DR / DW / ETL / BR / BW | ETL source | Reverse-ETL eligibility | gap_ids | declaration_pending_ids |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | --- | --- | --- | --- | --- |
-| Docker Hub | 54 / 54 | high — OpenAPI | 41 | 13 | 75.93 | 6 / 6 | 23 / 27 / 4 / 0 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `head-response-less-operation-executor`, `operation-scoped-rest-pagination`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
+| Docker Hub | 54 / 54 | high — OpenAPI | 45 | 9 | 83.33 | 6 / 6 | 22 / 27 / 4 / 1 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `operation-execution-block-registration`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
 | Notion | 49 / 49 | high — OpenAPI | 43 | 6 | 87.76 | 4 / 4 | 18 / 25 / 5 / 0 / 1 | declared (6 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `command-availability-notion`, `cli-command-contract-notion` |
 | Stripe | 589 / 589 | high — OpenAPI | 8 | 581 | 1.36 | 1 / 32 | 254 / 326 / 5 / 4 / 0 | declared (5 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-stripe` |
 | Bitbucket | 331 / 331 | high — OpenAPI | 3 | 328 | 0.91 | 1 / 54 | 21 / 148 / 143 / 15 / 4 | declared (143 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-command-contract-bitbucket`, `typed-operation-contract-bitbucket` |
@@ -28,11 +28,11 @@ only destination factory remains the issue-label-specific one.
 
 Totals: 4,378 operations found in complete provider-published OpenAPI documents
 and 4,378 mapped connector-locally; input confidence is high for every row.
-This is not expressed as a declaration percentage. There are 476 command-backed
+This is not expressed as a declaration percentage. There are 480 command-backed
 enabled operations,
-3,902 source operations disabled (3,894 declaration-pending, five
-operation-level engine gaps, and three schema-incompatible). There are 2,370
-direct-write endpoints and 118 enabled direct-write bindings. Reverse-ETL
+3,898 source operations disabled (3,894 declaration-pending and four
+operation-level engine gaps). There are 2,370 direct-write endpoints and 120
+enabled direct-write bindings. Reverse-ETL
 eligibility is zero of 2,370 because
 `generic-typed-destination-executor` is the remaining shared foundation gap.
 
@@ -44,3 +44,11 @@ connector-neutral typed destination `DefinitionFactory` selected by the
 definition, with per-connector evidence, explicit source bindings,
 acknowledgement, and per-mode apply strategies. No `transport_binding` action
 or destination declaration is fabricated.
+
+Docker Hub repair after PR #4297: operation-scoped REST pagination enabled
+`GET /v2/auditlogs/{account}` and `GET /v2/scim/2.0/Users`; the closed SCIM
+media type enabled `POST /v2/scim/2.0/Users` and `PUT /v2/scim/2.0/Users/{id}`.
+The three HEAD checks and CSV export do not flip yet: the executors exist, but
+`internal/connectors/engine/bundle.go:2467-2488` does not map `rest_status` or
+`text_export` to their `rest`/`binary` execution blocks. This is recorded as
+recoverable `operation-execution-block-registration`, not as a connector gap.

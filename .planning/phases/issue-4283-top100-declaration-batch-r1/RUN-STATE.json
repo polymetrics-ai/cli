@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "ci-verify-repair-verified-local",
+  "state": "dockerhub-pr-4297-repair-partial-foundation-gap-recorded",
   "delivery_mode": "declarations-and-complete-map; non-live-certification-only",
   "connectors": [
     "dockerhub",
@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Push the source-completeness audit, provider-surface audit, generated documentation, and CI verify assertion repair; then wait for the required Verify check. Do not use provider credentials or provider I/O.",
+  "next": "Four PR-4297 repairs are validated at 45/54. Do not claim the remaining HEAD and CSV rows enabled until expectedOperationBlock registers rest_status and text_export; then re-run this repair from the pinned OpenAPI. Do not use provider credentials or provider I/O.",
   "updated_at": "2026-08-19T00:00:00Z"
 }
