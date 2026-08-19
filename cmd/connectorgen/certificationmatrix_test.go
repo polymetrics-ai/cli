@@ -1380,10 +1380,15 @@ func TestCertificationStatusArtifactRemediationUsesAll(t *testing.T) {
 }
 
 func TestCertificationStatusArtifactUsesAllGenerator(t *testing.T) {
-	artifact := buildCertificationStatusArtifact(flowMatrix{ConnectorStatuses: []connectorCertificationStatus{
-		{Connector: "github", Label: "COMMUNITY BUILD, UNCERTIFIED", Warning: "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."},
-		{Connector: "postgres", Label: "COMMUNITY BUILD, UNCERTIFIED", Warning: "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."},
-	}})
+	statuses := make([]connectorCertificationStatus, 0, len(certificationConnectorAllowlist))
+	for _, connector := range certificationConnectorAllowlist {
+		statuses = append(statuses, connectorCertificationStatus{
+			Connector: connector,
+			Label:     "COMMUNITY BUILD, UNCERTIFIED",
+			Warning:   "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED.",
+		})
+	}
+	artifact := buildCertificationStatusArtifact(flowMatrix{ConnectorStatuses: statuses})
 	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --all" {
 		t.Fatalf("status generated command = %q, want --all", artifact.GeneratedCommand)
 	}

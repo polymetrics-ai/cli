@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "issue": 4276,
+  "phase": "issue-4276-zoom-certification-scope-r1",
+  "state": "verified",
+  "delivery": "direct-PR",
+  "base_branch": "main",
+  "working_branch": "fm/cli-zoom-certification-scope-r1",
+  "lifecycle": {
+    "discuss_phase": "inline-complete",
+    "plan_phase_tdd": "inline-complete",
+    "execute_phase": "inline-complete",
+    "verify_work": "complete: make verify exit 0",
+    "code_review": "inline-complete"
+  }
+}
