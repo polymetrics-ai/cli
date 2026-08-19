@@ -95,10 +95,10 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   `pm gorgias tickets messages list --ticket-id 1 --json` and `pm gorgias tickets update --id 1
   --status open --json`; each stopped at expected `error: missing --credential`, never an unknown
   command. No credential or provider request was used.
-- **PENDING FOUNDATION:** This is declaration/fixture proof only. Per the captain update, #4304
-  still needs persisted App/CLI generic-destination dispatch. Do not mark application-level
-  reverse-ETL deployable until the final foundation merge is an ancestor and the real App/CLI path
-  exercises the declared destination.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` is now an
+  ancestor and supplies generic persisted App/CLI dispatch plus exact action selection. The bound
+  Gorgias action remains declaration/fixture proof until this connector's installed App/CLI fixture
+  path is exercised; its 59 other typed actions are declaration-pending exact mappings/conformance.
 
 ## Chatwoot connector-owned destination increment — 2026-08-20
 
@@ -108,15 +108,16 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` now declares all seven source streams and the concrete
   `contacts(id,blocked) → update_contact` proof for all closed modes, keyed delivery, durable
   acknowledgement, and fixture/dry conformance. The source disposition distinguishes the bound
-  action from 59 eligible actions awaiting #4304 exact selection. Its 60 existing approval-governed
+  action from 59 eligible actions now declaration-pending exact source mappings and conformance. Its 60 existing approval-governed
   write commands remain user-reachable; no provider credential or call was used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** persisted App/CLI generic-destination dispatch remains #4304 work; this
-  connector declares a fixture/dry route only and does not claim application-level deployment.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  generic persisted App/CLI dispatch and exact action selection. Chatwoot still needs its installed
+  App/CLI fixture path; provider-live certification remains pending.
 
 ## Customer.io connector-owned destination increment — 2026-08-20
 
@@ -126,17 +127,17 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` declares all 16 sources and the exact
   `snippets(name,value) → update_snippet` typed-destination proof, including keyed delivery,
   durable acknowledgement, all three mode strategies, and fixture/dry conformance. All ten typed
-  actions explicitly carry eligibility: `update_snippet` is the bound proof; the other nine await
-  #4304 closed exact-action selection. The remaining mutations are correctly `declaration-pending`,
+  actions explicitly carry eligibility: `update_snippet` is the bound proof; the other nine are
+  declaration-pending exact source mappings and conformance. The remaining mutations are correctly `declaration-pending`,
   never safety-excluded. No credentials or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
-  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
-  not claimed.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. Customer.io still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## Close connector-owned destination increment — 2026-08-20
 
@@ -146,17 +147,17 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` declares all 14 sources and the exact
   `leads(id,name,description,url,status_id) → update_lead` typed-destination proof, including keyed
   delivery, durable acknowledgement, all three mode strategies, and fixture/dry conformance. All 12
-  typed actions explicitly carry eligibility: `update_lead` is the bound proof and the other 11
-  await #4304 closed exact-action selection. The remaining mutations are correctly
+  typed actions explicitly carry eligibility: `update_lead` is the bound proof and the other 11 are
+  declaration-pending exact source mappings and conformance. The remaining mutations are correctly
   `declaration-pending`, never safety-excluded. No credentials or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
-  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
-  not claimed.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. Close still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## Outreach connector-owned destination increment — 2026-08-20
 
@@ -166,16 +167,16 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` declares all 96 sources and the exact
   `sequences(id) → activate_sequence` typed-destination proof, including keyed delivery, durable
   acknowledgement, all three mode strategies, and fixture/dry conformance. All 163 typed actions
-  explicitly carry eligibility: `activate_sequence` is the bound proof and the other 162 await
-  #4304 closed exact-action selection. No credentials or provider calls were used.
+  explicitly carry eligibility: `activate_sequence` is the bound proof and the other 162 are
+  declaration-pending exact source mappings and conformance. No credentials or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
-  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
-  not claimed.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. Outreach still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## Zoho Bigin connector-owned destination increment — 2026-08-20
 
@@ -186,7 +187,7 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   `records(id) → delete_record` typed-destination proof, including keyed delivery, durable
   acknowledgement, all three mode strategies, and fixture/dry conformance. All six typed actions
   explicitly carry eligibility: `delete_record` is the destructive bound proof and the other five
-  await #4304 closed exact-action selection. The remaining mutations are correctly
+  are declaration-pending exact source mappings and conformance. The remaining mutations are correctly
   `declaration-pending`; destructive safety remains confirmation/approval metadata. No credentials
   or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
@@ -194,9 +195,9 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
-  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
-  not claimed.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. Zoho Bigin still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## Chargebee connector-owned destination increment — 2026-08-20
 
@@ -206,17 +207,17 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` declares all 32 sources and the exact
   `customers(id) → update_customer` typed-destination proof, including keyed delivery, durable
   acknowledgement, all three mode strategies, and fixture/dry conformance. All 36 typed actions
-  explicitly carry eligibility: `update_customer` is the bound proof and the other 35 await #4304
-  closed exact-action selection. The remaining mutations are correctly `declaration-pending`;
+  explicitly carry eligibility: `update_customer` is the bound proof and the other 35 are
+  declaration-pending exact source mappings and conformance. The remaining mutations are correctly `declaration-pending`;
   finance and destructive safety remain approval metadata. No credentials or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
-  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
-  not claimed.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. Chargebee still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## ServiceNow connector-owned destination increment — 2026-08-20
 
@@ -225,16 +226,17 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   invented provider evidence; only two existing source-action projections were visible in the map.
 - **GREEN:** `sync_transport.json` declares all three fixture streams and the exact
   `incidents(sys_id) → update_incident` proof with keyed delivery, durable acknowledgement, closed
-  modes, and fixture/dry conformance. `typed_action_eligibility` explicitly accounts for all six
-  typed actions (one bound and five pending closed selection) without fabricating dynamic table
-  source identities. No credentials or provider calls were used.
+  modes, and fixture/dry conformance. `typed_action_eligibility` explicitly accounts for every
+  source-backed typed action (one bound and one declaration-pending exact source mapping/conformance)
+  without fabricating dynamic table source identities. No credentials or provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING FOUNDATION:** persisted App/CLI generic-destination dispatch remains #4304 work; this
-  connector claims fixture/dry proof only, never application-level reverse-ETL deployment.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  persisted App/CLI dispatch and exact action selection. ServiceNow still needs its installed App/CLI
+  fixture path; provider-live certification remains pending.
 
 ## Braze connector-owned destination increment — 2026-08-20
 
@@ -244,27 +246,47 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **GREEN:** `sync_transport.json` declares the existing streams and exact
   `content_blocks(content_block_id) → update_content_block` proof with keyed delivery, durable
   acknowledgement, closed strategies, and fixture/dry conformance. All 29 typed actions carry an
-  eligibility disposition (one bound; 28 pending #4304 closed action selection). No credentials or
+  eligibility disposition (one bound; 28 declaration-pending exact source mapping/conformance). No credentials or
   provider calls were used.
 - **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
   `go test -timeout 20m ./internal/connectors/commandrunner -run
   TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
   ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
   -count=1` passed.
-- **PENDING:** #4304 App/CLI dispatch and Braze provider-inventory recovery are independent open
-  requirements; this declaration makes neither a false deployment nor a completeness claim.
+- **FOUNDATION RECONCILIATION:** foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies
+  App/CLI dispatch and exact action selection. Braze still needs its installed App/CLI fixture path,
+  and its provider-inventory recovery remains independently open; neither is a completeness claim.
 
-## Help Scout connector-owned destination increment — 2026-08-20
+## Help Scout foundation reconciliation — 2026-08-20
 
-- **RED — current:** `go run ./cmd/connectorgen validate` refuses the draft source mapping with
-  `help-scout: ... sync_transport.json: destination transport: destination source binding:
-  input_fields source record mapping requires concrete input and field names`. The exact action input
-  `conversationId` is camelCase; `internal/connectors/sync_transport.go:673-687` rejects uppercase
-  identifiers before it can validate the selected `writes.json` action field.
-- **PENDING FOUNDATION:** the captain approved a common, schema-validated camelCase declaration
-  rule—not a Help Scout exception. This lane must wait for #4304's published implementation and App/CLI
-  dispatch integration, merge it, then rerun the binding and all focused/generated gates. The draft
-  cannot be committed or counted as a declared transport before that green run.
+- **RED:** Before foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`, `go run
+  ./cmd/connectorgen validate` refused the exact `conversationId` source binding. The old common
+  validator rejected camelCase before checking the selected `writes.json` action schema, and the
+  persisted App/CLI destination route was not available.
+- **GREEN:** The merged #4304 head validates the closed-schema
+  `conversations(id) → update_conversation(conversationId)` declaration. These focused checks passed:
+  `go run ./cmd/connectorgen validate`; `go run ./cmd/connectorgen surface-sync --check`; `go test
+  -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`; `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1`; `go test -timeout 20m ./internal/app -run
+  'Test.*(DeclarativeTypedDestination|TypedDestination)' -count=1`; `go test -timeout 20m
+  ./internal/cli -run 'Test.*DeclarativeTypedDestination|TestETLTransport' -count=1`; `go test
+  -timeout 20m ./internal/connectors -run 'Test.*Destination.*Action|Test.*Camel' -count=1`; and
+  `npm --prefix website run gen:website-data`.
+- **Installed binary evidence:** a fresh built `pm` accepted `pm etl transport
+  declarative-typed-destination --help`, and `pm connectors inspect help-scout --json` reports the
+  declared source, exact destination action, closed modes, keyed delivery, and durable acknowledgement.
+  The real `pm connections create ... --destination-action update_conversation` route parsed the
+  persisted destination selection and stopped at `credential "credential-free-proof" not found`, before
+  provider I/O. No credentials, provider request, provider write, or live certification was used.
+- **OPEN FOUNDATION GAP:** `PATCH /v2/customers/{customerId}` / `update_customer` remains not enabled.
+  `internal/connectors/sync_transport.go:436-445` rejects a second binding for the same declarative
+  source executor at line 443, while `internal/app/issue_label_warehouse_transport.go:349-359` resolves
+  the only conversation binding and rejects its `conversationId` input for `update_customer`. The
+  machine-readable `declarative-typed-destination-action-specific-source-bindings` row records the
+  source URL/revision/hash, fan-out, owner #4304, and exact closure verification. No connector-specific
+  workaround was added.
 
 ## Captain zero-omission pre-merge gate — 2026-08-20
 
@@ -275,8 +297,9 @@ binary upload are independent cells. `N/A` requires provider evidence that the c
 scope, tier, destructive, and safety controls are typed runtime/confirmation metadata, never omission
 reasons.
 
-`FOUNDATION-GAPS.json` is the required machine-readable complement: it deduplicates three shared
-provider-neutral gap IDs while retaining one provenance-rich row per affected operation, explicit
-fan-out rollups, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
-`merge_ready: false`; rows with an open foundation gap are not enabled and cannot contribute to a
-merge-ready verdict.
+`FOUNDATION-GAPS.json` is the required machine-readable complement: it retains four stable
+provider-neutral gap IDs (three resolved by foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` and
+one open) with one provenance-rich row per affected operation, explicit per-batch and portfolio
+fan-out, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
+`merge_ready: false`; the `update_customer` row with the open foundation gap is not enabled and cannot
+contribute to a merge-ready verdict.

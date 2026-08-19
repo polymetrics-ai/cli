@@ -50,11 +50,11 @@
     "terminal_commands": 50,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "declarative-typed-destination-action-specific-source-bindings"
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
+        "id": "declarative-typed-destination-action-specific-source-bindings",
         "count": 1
       }
     ],
@@ -67,26 +67,21 @@
     "transport": {
       "contract": "docs/sync-transport-definition.md",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-help-scout",
-          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/help-scout/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
-        }
+        "state": "declared",
+        "declaration": "sync_transport.json",
+        "conformance": "declarative_stream_transport/help_scout_fixture_source_v1"
       },
       "destination_transport": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
+        "state": "declared_fixture_preflight_proven",
+        "declaration": "sync_transport.json",
+        "action": "update_conversation",
+        "foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57",
+        "provider_live_certification": "pending"
       }
     },
     "declaration_pending_ids": [
       "runnable-command-binding-help-scout",
-      "typed-operation-contract-help-scout",
-      "sync-transport-source-definition-help-scout"
+      "typed-operation-contract-help-scout"
     ],
     "declaration_pending": [
       {
@@ -107,7 +102,8 @@
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
-    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is separate; declared source mappings and conformance evidence decide destination readiness without inventing a transport binding or action.",
+    "2026-08-20 reconciliation: source transport declares all 24 current fixture streams; #4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 validates conversations.id -> update_conversation.conversationId through the closed declarative destination contract. update_customer is not enabled because one executor cannot yet hold a second exact action-specific customers.id -> customerId binding; this is the shared declarative-typed-destination-action-specific-source-bindings foundation gap. All other typed actions are explicitly eligible but declaration-pending their exact stream/input mapping and conformance evidence. Provider-live certification remains pending."
   ],
   "ledger_dispositions": [
     {
@@ -187,12 +183,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -232,12 +224,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -313,12 +301,9 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "bound_fixture_preflight_proven",
+          "evidence": "#4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 validates the selected camelCase conversationId input against update_conversation; connector declaration maps conversations.id; no credential/provider call was made.",
+          "provider_live_certification": "pending"
         }
       }
     },
@@ -358,12 +343,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -475,12 +456,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -520,12 +497,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -565,12 +538,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -610,12 +579,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -655,12 +620,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -700,12 +661,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -745,12 +702,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -790,12 +743,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -835,12 +784,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -921,12 +866,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -966,12 +907,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1047,12 +984,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1092,12 +1025,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1137,12 +1066,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1223,12 +1148,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1268,12 +1189,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1354,12 +1271,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1399,12 +1312,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1480,11 +1389,11 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
+          "state": "not_enabled_foundation_gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "declarative-typed-destination-action-specific-source-bindings",
+            "evidence": "The selected update_conversation binding maps conversations.id to conversationId. A second customers.id to customerId binding for the same declarative source executor is rejected by internal/connectors/sync_transport.go:443 before I/O.",
+            "minimal_change": "Support definition-owned action-specific source bindings for one selected declarative source executor, retaining closed schema validation before I/O."
           }
         }
       }
@@ -1525,12 +1434,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1570,12 +1475,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1651,12 +1552,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1696,12 +1593,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1782,12 +1675,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1827,12 +1716,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1872,12 +1757,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1958,12 +1839,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2003,12 +1880,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2048,12 +1921,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2134,12 +2003,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2179,12 +2044,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2224,12 +2085,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2269,12 +2126,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2355,12 +2208,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2400,12 +2249,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2445,12 +2290,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2531,12 +2372,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2576,12 +2413,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2621,12 +2454,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2861,12 +2690,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2947,12 +2772,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -2992,12 +2813,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3073,12 +2890,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3159,12 +2972,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3245,12 +3054,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3290,12 +3095,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3371,12 +3172,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3416,12 +3213,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3497,12 +3290,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3624,12 +3413,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -3669,12 +3454,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5061,12 +4842,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5147,12 +4924,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5269,12 +5042,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5386,12 +5155,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5467,12 +5232,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5553,12 +5314,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5598,12 +5355,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5679,12 +5432,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5765,12 +5514,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5810,12 +5555,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs an exact source stream, closed input-field mapping, fixture, and conformance evidence."
         }
       }
     },

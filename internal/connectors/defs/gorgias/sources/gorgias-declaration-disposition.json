@@ -4301,8 +4301,8 @@
   "notes": [
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 114 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
-    "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
-    "Reverse-ETL eligibility is explicit for all 61 typed actions: update_ticket is the connector one source-bound declarative_typed_destination proof; 59 ordinary typed actions await #4304 exact declaration-owned action-selection multiplicity; upload_file is a named multipart/binary semantic exclusion and remains CLI-reachable.",
-    "The current proof is declaration- and fixture-backed only. Do not claim application-level reverse-ETL deployability until #4304 persisted App/CLI dispatch integration is merged and exercised."
+    "Direct writes remain direct_write operations. Reverse-ETL eligibility is separate and depends on each connector-owned source mapping and conformance record.",
+    "Reverse-ETL eligibility is explicit for all 61 typed actions: update_ticket is the connector one source-bound declarative_typed_destination proof; 59 ordinary typed actions are declaration-pending exact source mappings and conformance; upload_file is a named multipart/binary semantic exclusion and remains CLI-reachable.",
+    "Foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted App/CLI dispatch; this connector still needs its installed App/CLI fixture path, and provider-live certification remains pending."
   ]
 }

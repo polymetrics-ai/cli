@@ -107,8 +107,18 @@ mailbox, team, tag, webhook, workflow, and user data.
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 24 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are blocked in the
-  operation ledger as direct_read=5.
+- `sync_transport.json` declares the 24 current fixture streams and
+  `conversations(id) → update_conversation(conversationId)` as a typed-destination proof. It has
+  keyed delivery, durable acknowledgement, all closed modes, and fixture/preflight evidence against
+  the persisted App/CLI typed-destination foundation at
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`. Provider-live certification remains pending.
+- The source inventory remains unproven. Every declared typed action has an explicit eligibility
+  disposition. `update_customer` is not reverse-ETL enabled while the shared
+  `declarative-typed-destination-action-specific-source-bindings` foundation gap remains open: the
+  closed contract currently allows only one source binding for the declarative source executor, so
+  its required `customers(id) → customerId` mapping cannot be added beside the conversation mapping
+  without a connector-specific workaround. Other typed actions are declaration-pending their exact
+  source mapping and conformance evidence. Direct-read gaps and source-inventory recovery remain
+  connector work, not a safety or certification exclusion.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
   certification run were used.

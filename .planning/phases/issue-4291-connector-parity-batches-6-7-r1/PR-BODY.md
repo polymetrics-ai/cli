@@ -4,8 +4,9 @@ Refs #4291
 
 Reconciliation is in progress; do not merge. This PR now depends on
 `fm/cli-reverse-etl-destination-r1` / PR #4304, merged into this branch as
-`d27d4bb64`. The base has been verified through the GitHub API as
-`fm/cli-reverse-etl-destination-r1`.
+`3c50ae3cda9bb04944a660f9c8793fac6ae3ef16`, including foundation
+`609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`. The base has been verified through
+the GitHub API as `fm/cli-reverse-etl-destination-r1`.
 
 ## Twenty-connector seven-surface baseline
 
@@ -17,24 +18,24 @@ certification never make an operation unreachable.
 
 | Connector | Inventory | Read | Typed write | Write CLI | ETL | Reverse | Binary | Deletes |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| close-com | complete | 0 / 123 | 12 / 163 | 0 | 1 / 14 | 1 (App dispatch pending) | 0 / 0 | 52 |
-| outreach | complete | 0 / 0 | 163 / 163 | 0 | 1 / 96 | 1 (App dispatch pending) | 0 / 0 | 36 |
+| close-com | complete | 0 / 123 | 12 / 163 | 0 | 1 / 14 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 52 |
+| outreach | complete | 0 / 0 | 163 / 163 | 0 | 1 / 96 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 36 |
 | salesloft | complete | 0 / 115 | 0 / 91 | 0 | 0 / 5 | 0 | 0 / 0 | 18 |
 | copper | complete | 0 / 32 | 0 / 52 | 0 | 0 / 5 | 0 | 0 / 0 | 11 |
-| zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 1 / 13 | 1 (App dispatch pending) | 0 / 0 | 11 |
+| zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 1 / 13 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 11 |
 | klaviyo | complete | 0 / 198 | 0 / 141 | 0 | 0 / 6 | 0 | 0 / 0 | 30 |
-| braze | unproven | 0 / 21 | 29 / 53 | 0 | 1 / 21 | 1 (App dispatch pending) | 0 / 0 | 4 |
-| customer-io | complete | 0 / 82 | 10 / 68 | 10 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 |
+| braze | unproven | 0 / 21 | 29 / 53 | 0 | 1 / 21 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 4 |
+| customer-io | complete | 0 / 82 | 10 / 68 | 10 | 1 / 16 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 14 |
 | intercom | complete | 0 / 103 | 0 / 123 | 0 | 0 / 5 | 0 | 0 / 0 | 31 |
 | freshdesk | complete | 0 / 73 | 0 / 92 | 0 | 0 / 5 | 0 | 0 / 0 | 22 |
 | segment | complete | 0 / 97 | 0 / 101 | 0 | 0 / 3 | 0 | 0 / 0 | 28 |
 | activecampaign | complete | 0 / 128 | 0 / 157 | 0 | 0 / 11 | 0 | 0 / 0 | 50 |
 | iterable | complete | 0 / 49 | 0 / 96 | 0 | 0 / 3 | 0 | 0 / 0 | 12 |
-| help-scout | unproven | 50 / 55 | 65 / 65 | 65 | 0 / 24 | 0 (camelCase foundation pending) | 1 / 0 | 18 |
-| gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 |
-| service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 1 / 3 | 1 (App dispatch pending) | 0 / 0 | 1 |
-| chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 |
-| chargebee | complete | 0 / 128 | 36 / 367 | 0 | 1 / 32 | 1 (App dispatch pending) | 0 / 0 | 0 |
+| help-scout | unproven | 50 / 55 | 65 / 65 | 65 | 1 / 24 | 1 (fixture/preflight proven; action-specific gap open) | 1 / 0 | 18 |
+| gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (foundation merged; connector App proof pending) | 1 / 1 | 18 |
+| service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 1 / 3 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 1 |
+| chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 18 |
+| chargebee | complete | 0 / 128 | 36 / 367 | 0 | 1 / 32 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 0 |
 | square | complete | 0 / 117 | 0 / 213 | 0 | 0 / 4 | 0 | 0 / 0 | 27 |
 | braintree | unproven | 0 / 18 | 0 / 45 | 0 | 0 / 10 | 0 | 0 / 0 | 6 |
 
@@ -50,14 +51,20 @@ certification never make an operation unreachable.
   `records → delete_record`, `customers → update_customer`, `incidents → update_incident`, and
   `content_blocks → update_content_block`) with
   keyed delivery, durable acknowledgement, per-mode strategies, and fixture/dry conformance
-  evidence. None is application-level deployable yet: #4304 must land persisted App/CLI
-  generic-destination dispatch integration. The remaining typed actions are explicitly eligible but
-  await closed exact-action selection; un-authored direct writes are correctly declaration-pending,
-  and Gorgias multipart `upload_file` has a named binary/multipart semantic exclusion while
-  remaining CLI-reachable.
-- Help Scout has an exact candidate `conversations(id) → update_conversation(conversationId)`, but
-  the unmerged common #4304 camelCase source-binding validation refuses it before I/O. It is not
-  counted as declared until foundation integration and focused/generated gates pass.
+  evidence. Foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` now supplies persisted App/CLI
+  dispatch and exact action selection; each connector still needs an installed App/CLI fixture path
+  for its declaration. The remaining typed actions are explicitly eligible but declaration-pending
+  their exact source mappings and conformance evidence; un-authored direct writes remain
+  declaration-pending, and Gorgias multipart `upload_file` has a named binary/multipart semantic
+  exclusion while remaining CLI-reachable.
+- Help Scout now declares and fixture/preflight proves
+  `conversations(id) → update_conversation(conversationId)`. The common camelCase rule and persisted
+  App/CLI route are present at `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`; the installed connection
+  route correctly stops at missing credentials before provider I/O. Its `update_customer` operation
+  is not enabled because the current closed model permits only one source binding per executor.
+  `FOUNDATION-GAPS.json` records the exact source-traced
+  `declarative-typed-destination-action-specific-source-bindings` dependency; no connector-specific
+  workaround was added.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.
@@ -75,6 +82,9 @@ certification never make an operation unreachable.
   `golang-testing`, `golang-cli`, and `golang-documentation`.
 - Red/green evidence and exact commands are in
   `.planning/phases/issue-4291-connector-parity-batches-6-7-r1/VERIFICATION.md`.
-- Current checks: Gorgias ledger test, `connectorgen validate`, `surface-sync --check`, and
-  website data generation pass. Full repository gates will be recorded after the connector-owned
-  increments complete.
+- Current foundation-reconciliation checks all pass: `go run ./cmd/connectorgen validate`,
+  `go run ./cmd/connectorgen surface-sync --check`, Help Scout commandrunner/engine/App/CLI/
+  connectors focused tests, `npm --prefix website run gen:website-data`, and `git diff --check`.
+  The installed, fresh-built binary exposes the closed declarative transport command and Help Scout
+  inspection; the connection path stops at missing credentials before provider I/O. Full repository
+  gates will be recorded after the connector-owned increments complete.

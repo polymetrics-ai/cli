@@ -424,13 +424,19 @@
       },
       "etl": {
         "streams": 24,
-        "source_transport": false
+        "source_transport": true
       },
       "reverse_etl": {
-        "destination_action_bindings": 0,
+        "destination_action_bindings": 1,
         "cli_commands": 65,
         "deployable_application_dispatch": false,
-        "pending_foundation": "#4304 camelCase source-binding validation and persisted App/CLI dispatch integration"
+        "pending_foundation": "#4304 declarative-typed-destination-action-specific-source-bindings for update_customer; provider-live certification remains credential-restricted",
+        "fixture_preflight_proven_actions": [
+          "update_conversation"
+        ],
+        "open_foundation_gap_operations": [
+          "PATCH /v2/customers/{customerId}"
+        ]
       },
       "binary": {
         "ledger_rows": 0,

@@ -5,7 +5,7 @@
 - Issue: Refs #4291 — chore(connectors): map parity batches 6 and 7
 - Base branch: fm/cli-reverse-etl-destination-r1
 - Merges into: fm/cli-reverse-etl-destination-r1 → main
-- Delivery: PR #4296 remains open against `fm/cli-reverse-etl-destination-r1`; its twenty connector definitions, generated CLI/manual/website data, and required local gates are green.
+- Delivery: PR #4296 remains open against `fm/cli-reverse-etl-destination-r1`; the batch is still reconciling its twenty connector definitions, generated CLI/manual/website data, and required local gates. It is not merge-ready while any open foundation-gap row remains.
 - Working branch: fm/cli-map-batch67-r1
 - Task: Reconcile the credential-free, public-source-locked inventory for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree` against all seven delivery surfaces. Every documented operation must be faithfully modeled and user-reachable through the installed CLI when the existing closed contract supports it. Destructive, privileged, uncommon, binary, and non-certified operations remain reachable with their established safety/approval metadata; only a named technical contract gap can make an operation unsupported.
 - Verification: Run the readiness-baseline invariant, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, generated docs/website data checks, focused connector and CLI tests, `connector-boundary` through a bounded poll, and the non-suite `make verify` gates individually.
@@ -16,7 +16,7 @@
 | --- | --- | --- |
 | Each in-scope connector has a pinned, public-source lock | live | The source-lock file names every `api_surface.json` endpoint and records public document URL/hash/bytes; removing a lock makes the checker fail. |
 | Every documented operation has one six-class disposition | live | The checker compares endpoint identities to ledger rows, rejects duplicates/missing rows, and counts every documented DELETE. |
-| Reasons describe present engine capability accurately | live | The checker rejects a typed write action classified as `reverse_etl`, an enabled operation without a command/action binding, and verifies the separate reverse-ETL foundation-gap attribute against the supplied destination-executor evidence/minimal change. |
+| Reasons describe present engine capability accurately | live | The checker rejects a typed write action classified as `reverse_etl`, an enabled operation without a command/action binding, and verifies every open reverse-ETL foundation-gap attribute against the supplied provider-neutral capability, evidence, owner, and minimal closure proof. |
 | Generator and connector surfaces remain valid | live | `connectorgen validate` and `surface-sync --check` operate on the real changed definition directories. |
 | Every documented provider operation remains user-reachable unless a precise technical contract is absent | live | The seven-surface readiness ledger compares every source-locked direct-read/write/binary row against an exact command or typed action and rejects safety or certification as an unreachability reason. |
 | Reverse-ETL declarations use the merged typed-destination contract | live | Bundle validation and runtime preflight load each connector-owned `sync_transport.json`, select only a named `writes.json` action, and reject an absent source binding, acknowledgement, or per-mode strategy before I/O. |
@@ -49,9 +49,13 @@
 ## Relaunch reconciliation — 2026-08-20
 
 The preceding map is retained as provenance, but its prior generic destination gap and `main`
-base are superseded. PR #4304 was merged locally as commit `d27d4bb64` and PR #4296 was retargeted
-to `fm/cli-reverse-etl-destination-r1`; its declarative typed-destination factory is now the
-available foundation. `READINESS-BASELINE.{json,md}` is the before-state for this reconciliation.
+base are superseded. PR #4304 was merged locally as `3c50ae3cda9bb04944a660f9c8793fac6ae3ef16`,
+including foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`, and PR #4296 was retargeted to
+`fm/cli-reverse-etl-destination-r1`. The available foundation now includes persisted App/CLI
+dispatch, exact action selection, and schema-validated camelCase input names. The remaining
+action-specific source-binding multiplicity limitation is recorded only in the machine-readable
+foundation-gap register; no connector workaround is permitted. `READINESS-BASELINE.{json,md}` is the
+before-state for this reconciliation.
 
 1. **RED — seven-surface baseline:** confirm the source-locked denominator has no source or
    destination transport claims, 1,465 direct-read rows have only 122 current exact command
