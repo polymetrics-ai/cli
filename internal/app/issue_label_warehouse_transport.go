@@ -17,6 +17,7 @@ import (
 
 const (
 	declarativeStreamSourceExecutorID          = "declarative_stream_source"
+	declarativeTypedDestinationExecutorID      = "declarative_typed_destination"
 	issueLabelDestinationExecutorID            = "issue_label_destination"
 	issueLabelTransportSourceIssueConfig       = "transport_source_issue_number"
 	issueLabelTransportTargetIssueConfig       = "transport_target_issue_number"
@@ -33,11 +34,44 @@ var (
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     declarativeStreamSourceExecutorID,
 	}
+	declarativeTypedDestinationReference = connectors.TransportExecutorReference{
+		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
+		ID:     declarativeTypedDestinationExecutorID,
+	}
 	issueLabelDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     issueLabelDestinationExecutorID,
 	}
 )
+
+// declarativeDestinationAdapters is a closed set of destination adapters.
+// Definitions choose an exact reference; the collection below never chooses a
+// connector by name. The issue-label executor remains its own typed adapter
+// because its contract includes provider-state read-back, while the generic
+// typed destination accepts ordinary schema-backed write actions.
+var declarativeDestinationAdapters = []struct {
+	reference connectors.TransportExecutorReference
+	build     func(*App, connectors.Connector) (synctransport.DestinationExecutor, error)
+}{
+	{
+		reference: issueLabelDestinationReference,
+		build: func(app *App, connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+			if _, _, err := issueLabelTransportConnectorContract(connector); err != nil {
+				return nil, err
+			}
+			return &issueLabelDestinationExecutor{app: app}, nil
+		},
+	},
+	{
+		reference: declarativeTypedDestinationReference,
+		build: func(_ *App, connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+			if _, err := declarativeTypedDestinationContractFor(connector); err != nil {
+				return nil, err
+			}
+			return &declarativeTypedDestinationExecutor{}, nil
+		},
+	},
+}
 
 // definitionTransportDefinitionFactories supplies the reusable declarative
 // source and closed typed-action destination adapters from definitions already
@@ -51,7 +85,8 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 	if registry == nil {
 		return nil, fmt.Errorf("definition transport factories require a connector registry")
 	}
-	var sourceEvidences, destinationEvidences []connectors.ConformanceEvidenceReference
+	var sourceEvidences []connectors.ConformanceEvidenceReference
+	destinationEvidences := make(map[connectors.TransportExecutorReference][]connectors.ConformanceEvidenceReference, len(declarativeDestinationAdapters))
 	for _, metadata := range registry.List() {
 		connector, ok := registry.Get(metadata.Name)
 		if !ok {
@@ -64,11 +99,15 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 		if descriptor.Source != nil && descriptor.Source.Executor == declarativeStreamSourceReference {
 			sourceEvidences = appendDefinitionTransportEvidence(sourceEvidences, descriptor.Source.Conformance)
 		}
-		if descriptor.Destination != nil && descriptor.Destination.Executor == issueLabelDestinationReference {
-			destinationEvidences = appendDefinitionTransportEvidence(destinationEvidences, descriptor.Destination.Conformance)
+		if descriptor.Destination != nil {
+			for _, adapter := range declarativeDestinationAdapters {
+				if descriptor.Destination.Executor == adapter.reference {
+					destinationEvidences[adapter.reference] = appendDefinitionTransportEvidence(destinationEvidences[adapter.reference], descriptor.Destination.Conformance)
+				}
+			}
 		}
 	}
-	factories := make([]synctransport.DefinitionFactory, 0, 2)
+	factories := make([]synctransport.DefinitionFactory, 0, 1+len(declarativeDestinationAdapters))
 	if len(sourceEvidences) != 0 {
 		factories = append(factories, synctransport.DefinitionFactory{
 			Reference:               declarativeStreamSourceReference,
@@ -82,16 +121,18 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 			},
 		})
 	}
-	if len(destinationEvidences) != 0 {
+	for _, adapter := range declarativeDestinationAdapters {
+		evidences := destinationEvidences[adapter.reference]
+		if len(evidences) == 0 {
+			continue
+		}
+		build := adapter.build
 		factories = append(factories, synctransport.DefinitionFactory{
-			Reference:                    issueLabelDestinationReference,
-			DestinationEvidence:          destinationEvidences[0],
-			AcceptedDestinationEvidences: append([]connectors.ConformanceEvidenceReference(nil), destinationEvidences[1:]...),
+			Reference:                    adapter.reference,
+			DestinationEvidence:          evidences[0],
+			AcceptedDestinationEvidences: append([]connectors.ConformanceEvidenceReference(nil), evidences[1:]...),
 			BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
-				if _, _, err := issueLabelTransportConnectorContract(connector); err != nil {
-					return nil, err
-				}
-				return &issueLabelDestinationExecutor{app: a}, nil
+				return build(a, connector)
 			},
 		})
 	}
@@ -105,6 +146,225 @@ func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceRe
 		}
 	}
 	return append(values, evidence)
+}
+
+// declarativeTypedDestinationExecutor applies one named writes.json action
+// selected by the destination declaration. It receives neither a method, URL,
+// body template, nor an action name from the caller: those stay owned by the
+// connector bundle and its source binding.
+type declarativeTypedDestinationExecutor struct{}
+
+type declarativeTypedDestinationContract struct {
+	connector  *engine.Connector
+	descriptor connectors.DestinationTransportDescriptor
+	actions    map[string]connectors.WriteActionInfo
+}
+
+func (*declarativeTypedDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
+	return declarativeTypedDestinationReference
+}
+
+func (e *declarativeTypedDestinationExecutor) PlanDestination(_ context.Context, request synctransport.DestinationPlanRequest) (synctransport.DestinationPlan, error) {
+	if e == nil {
+		return synctransport.DestinationPlan{}, fmt.Errorf("declarative typed destination is unavailable")
+	}
+	if err := validateDeclarativeTypedDestinationApproval(request.Approval); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	contract, err := declarativeTypedDestinationContractFor(request.Connector)
+	if err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.ApplyStrategy); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+}
+
+func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if e == nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination is unavailable")
+	}
+	if err := validateDeclarativeTypedDestinationApproval(request.Approval); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	contract, err := declarativeTypedDestinationContractFor(request.Destination)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	binding, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if err := validateDeclarativeTypedDestinationWorkset(request); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	records, err := declarativeTypedDestinationRecords(request.Workset.Records, binding)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	writeRequest := connectors.WriteRequest{
+		Stream:   request.Stream,
+		Table:    "sync_transport",
+		Action:   request.Plan.ApplyStrategy.Action,
+		Config:   request.Runtime,
+		Approval: request.Approval.Evidence,
+	}
+	if err := contract.connector.ValidateWrite(ctx, writeRequest, records); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("validate declarative typed destination action %q: %w", writeRequest.Action, err)
+	}
+	result, err := contract.connector.Write(ctx, writeRequest, records)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply declarative typed destination action %q: %w", writeRequest.Action, err)
+	}
+	if result.RecordsWritten != len(records) || result.RecordsFailed != 0 {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records))
+	}
+	return synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
+}
+
+// validateDeclarativeTypedDestinationApproval keeps the generic adapter on
+// the existing plan -> preview -> approval path even when the selected action
+// has no per-action destructive confirmation. The plan-owned target and
+// digest are established before source I/O by PlanDestination; the
+// orchestrator rechecks AuthorizeNextUnit before every apply unit.
+func validateDeclarativeTypedDestinationApproval(approval synctransport.DestinationApproval) error {
+	if approval.Evidence == nil {
+		return fmt.Errorf("declarative typed destination requires approved write evidence")
+	}
+	if approval.AuthorizeNextUnit == nil {
+		return fmt.Errorf("declarative typed destination requires a per-unit approval authorization")
+	}
+	if err := approval.Evidence.Validate(approval.Target, approval.PreviewDigest, time.Now().UTC()); err != nil {
+		return fmt.Errorf("declarative typed destination approval: %w", err)
+	}
+	return nil
+}
+
+func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Context, request synctransport.DestinationReadBackRequest) error {
+	if e == nil {
+		return fmt.Errorf("declarative typed destination is unavailable")
+	}
+	contract, err := declarativeTypedDestinationContractFor(request.Destination)
+	if err != nil {
+		return err
+	}
+	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy); err != nil {
+		return err
+	}
+	if request.Workset.ID == "" {
+		return fmt.Errorf("declarative typed destination read-back requires a reopened workset")
+	}
+	if request.Acknowledgement.Sink != contract.connector.Name() || request.Acknowledgement.AcknowledgedAt.IsZero() {
+		return fmt.Errorf("declarative typed destination read-back requires its durable acknowledgement")
+	}
+	return nil
+}
+
+func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
+	candidate, ok := connector.(*engine.Connector)
+	if !ok || candidate == nil {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires an engine connector")
+	}
+	definition := candidate.Definition()
+	if definition.SyncTransport == nil || definition.SyncTransport.Destination == nil {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a destination declaration")
+	}
+	descriptor := *definition.SyncTransport.Destination
+	if descriptor.Executor != declarativeTypedDestinationReference {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires its exact executor")
+	}
+	if err := descriptor.Validate(); err != nil {
+		return declarativeTypedDestinationContract{}, err
+	}
+	if descriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires durable_warehouse acknowledgement")
+	}
+	if descriptor.Delivery.Idempotency != connectors.DeliveryIdempotencyKeyed || descriptor.Delivery.Deletes != connectors.DeliveryDeletesUnavailable {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires keyed idempotency and unavailable deletes")
+	}
+	if len(descriptor.SourceBindings) == 0 {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires explicit source bindings")
+	}
+	for _, binding := range descriptor.SourceBindings {
+		if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
+		}
+	}
+	actions := make(map[string]connectors.WriteActionInfo, len(definition.WriteActions))
+	for _, action := range definition.WriteActions {
+		actions[action.Name] = action
+	}
+	for _, strategy := range descriptor.ApplyStrategies {
+		action, found := actions[strategy.Action]
+		if !found || action.Name == "" || strings.TrimSpace(action.Method) == "" || strings.TrimSpace(action.Path) == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination strategy %q names unavailable typed action %q", strategy.Mode, strategy.Action)
+		}
+		if action.TransportBinding != nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q selects a different closed adapter", action.Name)
+		}
+	}
+	return declarativeTypedDestinationContract{connector: candidate, descriptor: descriptor, actions: actions}, nil
+}
+
+func (c declarativeTypedDestinationContract) plan(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
+	expected, err := c.descriptor.ApplyStrategyFor(mode)
+	if err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	if expected != strategy {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q is not the declared strategy for mode %q", strategy.Action, mode)
+	}
+	if _, found := c.actions[strategy.Action]; !found {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q is unavailable", strategy.Action)
+	}
+	sourceDescriptor, declared := connectors.SourceTransportDescriptorOf(source)
+	if !declared {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination source has no transport declaration")
+	}
+	binding, admitted := c.descriptor.SourceBindingFor(sourceDescriptor.Executor, stream)
+	if !admitted {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination does not admit source executor %q for stream %q", sourceDescriptor.Executor.ID, stream)
+	}
+	if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
+	}
+	return binding, nil
+}
+
+func validateDeclarativeTypedDestinationWorkset(request synctransport.DestinationApplyRequest) error {
+	if err := request.Receipt.Validate(); err != nil {
+		return fmt.Errorf("declarative typed destination receipt: %w", err)
+	}
+	if request.ConnectionID == "" || request.Receipt.Owner != request.ConnectionID || request.Receipt.ID != request.Workset.ID {
+		return fmt.Errorf("declarative typed destination receipt does not bind the reopened workset")
+	}
+	if len(request.Workset.Records) == 0 || request.Receipt.Records != len(request.Workset.Records) {
+		return fmt.Errorf("declarative typed destination requires a non-empty reopened workset")
+	}
+	if len(request.Workset.Tombstones) != 0 || request.Receipt.Tombstones != 0 {
+		return fmt.Errorf("declarative typed destination does not support tombstone deletes")
+	}
+	return nil
+}
+
+func declarativeTypedDestinationRecords(source []connectors.Record, binding connectors.DestinationSourceBinding) ([]connectors.Record, error) {
+	records := make([]connectors.Record, 0, len(source))
+	for index, row := range source {
+		if row == nil {
+			return nil, fmt.Errorf("declarative typed destination source row %d is absent", index)
+		}
+		record := make(connectors.Record, len(binding.RecordMapping.Inputs))
+		for _, input := range binding.RecordMapping.Inputs {
+			value, found := row[input.Field]
+			if !found || value == nil {
+				return nil, fmt.Errorf("declarative typed destination source row %d has no value for action input %q", index, input.Input)
+			}
+			record[input.Input] = value
+		}
+		records = append(records, record)
+	}
+	return records, nil
 }
 
 func declarativeStreamTransportConnector(connector connectors.Connector) (*engine.Connector, connectors.SourceTransportDescriptor, error) {
