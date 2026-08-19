@@ -112,6 +112,21 @@
 - The focused checker, real `connectorgen validate`, and `surface-sync --check`
   pass.
 
+### Seven-surface declaration proof — sixth increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check
+  adobe-commerce-magento commercetools recharge docuseal eventbrite` failed
+  with `adobe-commerce-magento: source transport declaration missing`.
+- **Green:** generated the final five connector-owned source declarations and
+  exact-record destination proofs for Adobe Commerce and DocuSeal. The three
+  bundles without typed actions receive source-only declarations; no generic
+  request or fabricated destination action was introduced. This completes the
+  all-30 declaration pass, while the machine ledger remains explicit that
+  direct CLI action binding and foundation dispatch/multiplicity work are not
+  complete.
+- The focused checker, real `connectorgen validate`, and `surface-sync --check`
+  pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

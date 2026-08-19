@@ -84,6 +84,18 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Sixth five-connector declaration increment
+
+- [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check adobe-commerce-magento commercetools recharge docuseal eventbrite` failed before declarations with `adobe-commerce-magento: source transport declaration missing`.
+- [x] Green: wrote only connector-owned `sync_transport.json` declarations
+  for Adobe Commerce, commercetools, Recharge, DocuSeal, and Eventbrite;
+  source-only bundles retain no invented destination action.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check adobe-commerce-magento commercetools recharge docuseal eventbrite`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

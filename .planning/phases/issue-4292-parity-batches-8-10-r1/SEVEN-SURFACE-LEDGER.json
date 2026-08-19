@@ -24461,10 +24461,10 @@
             "store_websites",
             "store_views"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "update_product",
           "exact_record_driven_actions": [
             "update_product",
@@ -24581,7 +24581,7 @@
             "orders",
             "products"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -24614,7 +24614,7 @@
             "subscriptions",
             "orders"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -24648,10 +24648,10 @@
             "submitters",
             "template_detail"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "archive_submission",
           "exact_record_driven_actions": [
             "archive_submission",
@@ -24820,7 +24820,7 @@
             "orders",
             "ticket_classes"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
