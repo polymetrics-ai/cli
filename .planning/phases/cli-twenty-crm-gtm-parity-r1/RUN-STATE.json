@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "reconciling_typed_destinations",
+  "status": "preparing_refreshed_multi_action_destination",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -12,5 +12,11 @@
   "inline_manual_fallback": "No compatible isolated Pi worker runtime is available; execute the resolved GSD prompts inline.",
   "target_connector": "twenty",
   "base_branch": "fm/cli-reverse-etl-destination-r1",
-  "working_branch": "fm/cli-twenty-crm-gtm-parity-r1"
+  "working_branch": "fm/cli-twenty-crm-gtm-parity-r1",
+  "foundation_dependency": {
+    "issue": 4304,
+    "current_observed_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
+    "required_state": "published persisted multi-action selection with exact per-action bindings",
+    "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
+  }
 }

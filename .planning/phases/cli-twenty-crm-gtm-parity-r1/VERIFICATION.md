@@ -6,17 +6,22 @@
 - [x] Focused structural generator and conformance checks: `go run ./cmd/connectorgen validate internal/connectors/defs/twenty`, `go run ./cmd/connectorgen surface-sync --check`, and `go test -timeout 20m ./internal/connectors/conformance -run 'TestConformance/twenty'`.
 - [x] Structural generator, runtime preflight, conformance, boundary, docs/golden,
   lint, build, and verification results recorded with exact commands.
-- [x] Built-binary live read, pagination, create, update, round-trip, delete,
-  and post-delete absence evidence recorded without secret material.
+- [x] Historical built-binary live read, pagination, create, update, round-trip,
+  delete, and post-delete absence evidence is retained without secret material.
 - [x] PR #4298 was retargeted through the GitHub API to
   `fm/cli-reverse-etl-destination-r1`.
 - [x] Typed-action eligibility red/green evidence is recorded in
   `TDD-LEDGER.md` and covers every action in `writes.json`.
-- [ ] Final #4304 refresh: fetch, merge without rewriting history, prove the
-  refreshed foundation SHA is an ancestor, and exercise the installed App/CLI
-  generic-destination dispatch path before final push.
+- [ ] Final #4304 refresh: fetch and normally merge the updated foundation
+  without rewriting history; prove its refreshed SHA is an ancestor; bind all
+  55 required eligible actions (56 record-shaped bindings total); and exercise
+  persisted App/CLI per-action dispatch before final push.
+- [ ] Fresh dedicated-instance certification after that merge: built-binary
+  authenticated list/get with pagination, lane-owned create/read-back/update/
+  delete/verified cleanup, ETL source, reverse-ETL plan/apply/acknowledgement
+  plus independent API read-back, and binary transfer only if documented.
 
-## Live proof — passed
+## Historical live proof — superseded for final acceptance
 
 The disposable published-Compose stack used the pinned image
 `twentycrm/twenty@sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24`.
@@ -25,11 +30,11 @@ disabled, so the current image's supported `workspace:seed:dev --light` command
 created the disposable workspace instead; no UI and no captain-owned instance
 were used.
 
-Firstmate's decision removed Keychain from this proof after the red 128-byte
-truncation observation. The current image's seeded API-key emitter was piped
-directly to `pm credentials add twenty-live --connector twenty --value-stdin
-api_key`. The pipe boundary measured 444 bytes; no key entered argv, a file, a
-prompt, output, commit, or this evidence. The immediate built-binary
+Firstmate's former direct-stream decision avoided a Keychain truncation
+observation. This historical proof is not reused for the current acceptance
+gate. The refreshed proof must source the registered `pm-twenty`
+Keychain/secret-store reference only at stdin injection, never from argv,
+output, a file, a prompt, commit, or evidence. The immediate built-binary
 `pm twenty companies list --credential twenty-live --limit 3 --json` returned
 three real seeded records, proving the whole stored credential authenticated.
 

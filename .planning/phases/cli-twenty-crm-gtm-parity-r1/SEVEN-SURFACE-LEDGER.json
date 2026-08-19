@@ -77,7 +77,7 @@
         "conformance": "twenty_typed_destination/companies_name_append_v1",
         "boundary": "The adapter cannot transport tombstones and cannot form a required batch records array from one source record. Those transport semantic limits do not remove, disable, or reclassify any typed delete or batch CLI command.",
         "application_dispatch": "Not deployable until the refreshed #4304 foundation proves persisted App/CLI dispatch selects declarative_typed_destination.",
-        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need #4304 to select exact independent action mappings; no connector workaround is present."
+        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need the refreshed #4304 persisted per-action selection model. Final acceptance requires 56 record-shaped bindings with exact provider-sourced input fields; no connector workaround is present."
       }
     },
     "executable_cli": {
@@ -97,6 +97,6 @@
     "documented_operations_accounted_for": 168,
     "declared_or_disabled": "168 declared, 0 disabled",
     "dependency": "PR #4304 / fm/cli-reverse-etl-destination-r1",
-    "verification_contract": "connector-local red/green destination and all-action eligibility tests; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; built-binary read/write/delete proof."
+    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; and fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof against the dedicated instance."
   }
 }

@@ -41,3 +41,9 @@
   no-tombstone contract. These are transport semantics, never safety,
   privilege, or destructive exclusions. Every action remains directly
   CLI-reachable through its implemented reverse-ETL command.
+- Captain decision (2026-08-20): keep all 55 eligible actions required. Wait
+  for #4304's persisted multi-action selection and exact per-action bindings;
+  do not introduce a Twenty-local workaround. The final live gate must use the
+  dedicated credentialed instance through the registered `pm-twenty`
+  Keychain/secret-store reference, test the built CLI and persisted App path,
+  and treat the prior direct-stream run as historical evidence only.

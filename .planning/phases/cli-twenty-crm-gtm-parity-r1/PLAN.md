@@ -20,7 +20,7 @@
 | Stream and direct-read runtime dispatch | `commandrunner.Preflight`, targeted command tests, and built CLI reach the Twenty request contract | Any required executor is missing: record `needs-decision` and do not alter foundation code. |
 | Typed reverse ETL and delete safety | Generator/conformance tests plus live plan-preview-approval-execute proof | Any bypass of the typed lifecycle: stop. |
 | Certification artifacts | `certification-sweep --check` passes for current allowed scope; assess whether Twenty is allowlisted | Adding Twenty to the allowlist would require a foundation decision. |
-| Live provider | Published Docker Compose starts a disposable local Twenty; the image's seeded API-key emitter is piped directly into `pm credentials add --value-stdin`, then the built CLI proves read/page/write/read-back/delete | After a genuine start attempt, document exact blocker and remain uncertified. Keychain is intentionally out of scope because it truncates this image's long JWT-style key. |
+| Live provider | A dedicated disposable Twenty instance and its registered `pm-twenty` Keychain/secret-store reference authenticate the freshly built binary. The secret is read only in a direct stdin pipe to the CLI credential option; no argv, output, evidence, file, or App state may contain it. | After a genuine start and credential-reference attempt, document the exact missing service/reference or runtime failure and remain uncertified. Never substitute fixture proof or the captain's instance. |
 
 ## Reconciliation slice — typed destinations
 
@@ -30,15 +30,15 @@
    `direct_read`, `direct_write`, `etl`, `reverse_etl`, and executable CLI
    commands. The ledger must account for all 168 published REST operations;
    privileged or destructive operations remain reachable and safety-gated.
-3. Bind each record-driven action that the closed destination contract can
-   represent through a connector-owned typed destination with an exact declared
-   strategy, `input_fields`, delivery/acknowledgement facts, and conformance
-   evidence. `write_eligibility.json` must give each of the 112 typed actions
-   an explicit disposition. A batch array envelope or a tombstone workset may
-   be a semantic exclusion; safety, privilege, and destructive classification
-   may not. If #4304 cannot select all independently typed record actions,
-   record its exact multiplicity gap rather than inventing a connector
-   workaround or making a command unreachable.
+3. After the refreshed #4304 head is merged, bind all 56 record-shaped actions
+   (the existing `create_companies` proof plus all 55 eligible actions) through
+   its persisted per-action selection model. Every binding must retain the
+   provider-owned action name, `full_append`/`append` strategy, exact
+   `input_fields`, delivery/acknowledgement facts, and conformance evidence.
+   `write_eligibility.json` must give each of the 112 typed actions an explicit
+   disposition. A batch array envelope or a tombstone workset may be a semantic
+   exclusion; safety, privilege, and destructive classification may not. No
+   connector workaround, action omission, or command demotion is permitted.
 4. Add red/green tests for declared destination coverage, an invalid/missing
    input binding, and the binary-file boundary. Regenerate connector-owned
    projections and run focused generator, binary, and live reversible proof.
@@ -58,10 +58,13 @@
    write validation, typed deletes, invalid inputs, and edge pagination/output
    cases. Make each red result durable in `TDD-LEDGER.md` before its green fix.
 4. Regenerate only connector-owned derived files and run targeted gates.
-5. Build `pm`; establish a disposable self-hosted Twenty, stream the image's
-   seeded API key directly into the CLI encrypted credential store with
-   `--value-stdin`, and use it for bounded live read/write/delete and round-trip
-   evidence. Never route the key through Keychain, argv, a file, or a prompt.
+5. Build `pm`; establish or use the dedicated disposable self-hosted Twenty;
+   obtain the registered `pm-twenty` secret only at process execution and pipe
+   it to the CLI stdin-secret option. Prove authenticated pagination/list/get,
+   lane-owned create/read-back/update/delete/cleanup, ETL execution,
+   reverse-ETL plan/apply/acknowledgement with independent API read-back, and
+   a binary round-trip only if Twenty documents a binary endpoint. The old
+   live run is historical only and does not satisfy this post-#4304 gate.
 6. Run the required verification and review workflow. Before the final push,
    fetch and merge the latest #4304 head without rewriting history, prove that
    exact SHA is an ancestor, exercise its installed App/CLI dispatch path, push
