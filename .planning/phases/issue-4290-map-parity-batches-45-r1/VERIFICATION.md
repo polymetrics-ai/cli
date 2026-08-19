@@ -10,7 +10,7 @@
 - [ ] Foundation dependency: before final push, fetch and merge the current `origin/fm/cli-reverse-etl-destination-r1`, prove it is an ancestor, and exercise the real installed App/CLI generic destination dispatch. At SHA `c6f03c937`, that dispatch remains pending; no connector claims deployment.
 - [x] `go run ./cmd/connectorgen validate` is green (552 connectors, 0 findings; final run).
 - [x] `go run ./cmd/connectorgen surface-sync --check` is green (552 connectors, 0 fields corrected; final run).
-- [x] `make connector-boundary` is green (final detached run, exit 0; log: `connector-boundary-final.log`).
+- [x] `make connector-boundary` is green: harness-tracked foreground session 26536 exited 0 with 552 connectors loaded, 293 files checked, and zero findings.
 - [x] Focused tests are green: `go test -timeout 20m ./cmd/connectorgen`, `go test -timeout 20m ./internal/connectors/engine`, and `make connector-runtime-preflight`.
 - [ ] Local limitation: `go test -timeout 20m ./internal/cli` timed out after 20m while concurrent full CLI suites were active. It timed out during `TestScheduleCLI_Create_InvalidName` while loading the all-connector registry (`engine.loadOperationEndpointLedgers`); no assertion failure was reported. Log: `/tmp/cli-map-batch45-cli-test.log`. It is left to CI rather than retried concurrently.
 - [x] Repository generated/docs and compile checks are green: `go vet ./...`; `go build ./cmd/pm`; `make tidy-check`; `make lint` (0 issues); `make docs-check`; `make smoke-no-build`; `make agent-contract-check`; and `make release-workflow-check`.
