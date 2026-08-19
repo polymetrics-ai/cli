@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "connector": "twenty",
+  "issue": 277,
+  "source_lock": {
+    "api_surface": "internal/connectors/defs/twenty/api_surface.json",
+    "operations": "internal/connectors/defs/twenty/operations.json",
+    "streams": "internal/connectors/defs/twenty/streams.json",
+    "writes": "internal/connectors/defs/twenty/writes.json",
+    "cli_surface": "internal/connectors/defs/twenty/cli_surface.json",
+    "rule": "Each of the 168 source-locked api_surface endpoints has exactly one covered_by projection; the listed artifacts are the non-duplicated operation manifest."
+  },
+  "source_operation_count": 168,
+  "surfaces": {
+    "binary_read": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The recovered published contract has only JSON REST resource endpoints. Attachment resource CRUD is not a documented binary transfer operation."
+    },
+    "binary_write": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The recovered published contract has no documented upload or other binary transfer endpoint; no REST write is recast as binary."
+    },
+    "direct_read": {
+      "count": 28,
+      "status": "implemented",
+      "operation_manifest": "operations.json",
+      "cli_intent": "direct_read",
+      "evidence": "One operation-backed get command per Twenty object with exact REST path and json_redacted output policy."
+    },
+    "direct_write": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The recovered published REST mutations are schema-backed typed reverse-ETL actions, not direct-write operation contracts."
+    },
+    "etl": {
+      "count": 28,
+      "status": "implemented",
+      "stream_manifest": "streams.json",
+      "cli_intent": "etl",
+      "transport": {
+        "executor": "declarative_api/declarative_stream_source",
+        "modes": ["full_append"],
+        "eligible_streams": 28,
+        "delivery": "keyed, source_ordered, no tombstones"
+      }
+    },
+    "reverse_etl": {
+      "count": 112,
+      "status": "implemented",
+      "action_manifest": "writes.json",
+      "cli_intent": "reverse_etl",
+      "kinds": {
+        "create": 56,
+        "update": 28,
+        "delete": 28
+      },
+      "safety": "Every action uses plan, preview, approval, and execute; all 28 delete actions retain typed destructive confirmation.",
+      "typed_destination": {
+        "status": "declared_pending_application_dispatch",
+        "eligible_actions": ["create_companies"],
+        "strategy": {"mode": "full_append", "strategy": "append", "action": "create_companies"},
+        "input_fields": [{"input": "name", "field": "name"}],
+        "acknowledgement": "durable_warehouse",
+        "delivery": "keyed, source_ordered, no tombstones",
+        "conformance": "twenty_typed_destination/companies_name_append_v1",
+        "boundary": "The adapter cannot transport tombstones; this limits transport execution only. It does not remove, disable, or reclassify typed delete CLI commands.",
+        "application_dispatch": "Not deployable until the refreshed #4304 foundation proves persisted App/CLI dispatch selects declarative_typed_destination."
+      }
+    },
+    "executable_cli": {
+      "count": 168,
+      "status": "implemented",
+      "availability": "all commands implemented",
+      "distribution": {
+        "etl": 28,
+        "direct_read": 28,
+        "reverse_etl": 112
+      },
+      "evidence": "TestAllProviderOperationsHaveExecutableCommands runs the actual commandrunner preflight for every command; connectorgen surface-sync verifies endpoint ownership."
+    }
+  },
+  "excluded_operations": [],
+  "reconciliation": {
+    "documented_operations_accounted_for": 168,
+    "declared_or_disabled": "168 declared, 0 disabled",
+    "dependency": "PR #4304 / fm/cli-reverse-etl-destination-r1",
+    "verification_contract": "connector-local red/green destination declaration test; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; built-binary read/write/delete proof."
+  }
+}

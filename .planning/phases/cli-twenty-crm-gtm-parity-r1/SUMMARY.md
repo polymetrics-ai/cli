@@ -35,3 +35,24 @@ rebased-head full `internal/cli` package run passed in 596.926s, golden transcri
 the freshly rebuilt binary completed a count-only authenticated live read of
 three records. Manual code review found no actionable issues; automatic Claude
 review is requested by opening the non-draft PR.
+
+## Typed-destination reconciliation
+
+PR #4304's `declarative_typed_destination` foundation is merged into this
+branch and PR #4298 now targets
+`fm/cli-reverse-etl-destination-r1`. `sync_transport.json` is a
+connector-owned declaration: all 28 REST streams are eligible as a bounded
+full-append source and `create_companies` is the only destination action. Its
+closed mapping copies only a company's `name` into the action's `name` field;
+the declaration names durable acknowledgement and never provides a
+caller-selected endpoint or body template. This is not yet an
+application-deployable reverse-ETL path: persisted App/CLI dispatch must be
+supplied and exercised from the refreshed #4304 head before final push.
+
+`SEVEN-SURFACE-LEDGER.json` is the machine-readable reconciliation. It records
+all 168 source-locked REST operations as declared with zero exclusions: 28 ETL
+reads, 28 operation-backed direct reads, and 112 typed reverse-ETL actions.
+The published source contract exposes neither file-transfer nor direct-write
+operations, so both binary surfaces and direct write are truthfully zero.
+The no-tombstone destination does not weaken CLI reachability: 28 destructive
+delete actions remain implemented, approval-gated, and typed-confirmed.

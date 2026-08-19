@@ -37,6 +37,9 @@
 4. Add red/green tests for declared destination coverage, an invalid/missing
    input binding, and the binary-file boundary. Regenerate connector-owned
    projections and run focused generator, binary, and live reversible proof.
+   The declaration test is not application-dispatch proof: before final push,
+   fetch and merge the latest #4304 head, prove it is an ancestor, and exercise
+   the installed App/CLI path that selects the generic destination.
 5. Record the seven-surface ledger, the exact PR dependency, command results,
    and the API read-back of PR #4298's base.
 

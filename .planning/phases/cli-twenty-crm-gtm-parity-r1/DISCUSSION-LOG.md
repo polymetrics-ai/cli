@@ -16,3 +16,14 @@
   API/seed route. The captain's standing requirement remains a real-instance,
   real-data proof before merge. This distinction must be retained in the PR
   body and all delivery evidence.
+- Reconciliation decision: PR #4304 is the temporary typed-destination
+  foundation. It was merged without history rewrite and PR #4298 was retargeted
+  through the GitHub API to `fm/cli-reverse-etl-destination-r1`.
+- Reconciliation decision: declare all 28 Twenty streams as the closed
+  declarative source and the reversible `create_companies` action as the one
+  executable typed destination. The adapter rejects tombstones, so delete
+  propagation is not claimed; all destructive Twenty delete commands remain
+  implemented and user-reachable through their existing typed confirmation.
+- Reconciliation decision: attachment resource CRUD is JSON REST metadata, not
+  a documented file-transfer contract. The seven-surface ledger records zero
+  binary read/write and direct-write operations rather than inventing them.

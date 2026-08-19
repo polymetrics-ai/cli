@@ -127,3 +127,65 @@ func TestOperationReadAndStructuredWriteSafetyContracts(t *testing.T) {
 		}
 	}
 }
+
+// TestTypedDestinationDeclaration pins the one reversible CRM projection that
+// the closed declarative typed-destination adapter can execute. All Twenty
+// operations remain CLI-reachable; deletes deliberately stay outside this
+// no-tombstone transport and retain their typed destructive CLI contract.
+func TestTypedDestinationDeclaration(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(".."), twentyBundleName)
+	if err != nil {
+		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
+	}
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
+		t.Fatalf("SyncTransport = %#v, want declared source and typed destination", bundle.SyncTransport)
+	}
+
+	source := bundle.SyncTransport.Source
+	if source.Executor.Family != "declarative_api" || source.Executor.ID != "declarative_stream_source" {
+		t.Fatalf("source executor = %#v, want declarative stream source", source.Executor)
+	}
+	if got, want := len(source.EligibleStreams), len(bundle.Streams); got != want {
+		t.Fatalf("source eligible streams = %d, want every %d Twenty stream", got, want)
+	}
+	seenStreams := make(map[string]bool, len(source.EligibleStreams))
+	for _, stream := range source.EligibleStreams {
+		if seenStreams[stream] {
+			t.Fatalf("source eligible streams repeats %q", stream)
+		}
+		seenStreams[stream] = true
+	}
+	for _, stream := range bundle.Streams {
+		if !seenStreams[stream.Name] {
+			t.Errorf("source transport omits executable stream %q", stream.Name)
+		}
+	}
+
+	destination := bundle.SyncTransport.Destination
+	if destination.Executor.Family != "declarative_api" || destination.Executor.ID != "declarative_typed_destination" {
+		t.Fatalf("destination executor = %#v, want declarative typed destination", destination.Executor)
+	}
+	if destination.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
+		t.Fatalf("destination acknowledgement = %q, want durable warehouse", destination.Acknowledgement)
+	}
+	if destination.Delivery.Idempotency != connectors.DeliveryIdempotencyKeyed || destination.Delivery.Deletes != connectors.DeliveryDeletesUnavailable {
+		t.Fatalf("destination delivery = %#v, want keyed no-tombstone delivery", destination.Delivery)
+	}
+	if got := destination.EligibleActions; len(got) != 1 || got[0] != "create_companies" {
+		t.Fatalf("destination eligible actions = %#v, want only reversible create_companies", got)
+	}
+	if got := destination.ApplyStrategies; len(got) != 1 || got[0].Action != "create_companies" || string(got[0].Mode) != "full_append" || string(got[0].Strategy) != "append" {
+		t.Fatalf("destination apply strategies = %#v, want full_append create_companies", got)
+	}
+	if got := destination.SourceBindings; len(got) != 1 || len(got[0].EligibleStreams) != 1 || got[0].EligibleStreams[0] != "companies" {
+		t.Fatalf("destination source bindings = %#v, want only companies", got)
+	} else if got := got[0].RecordMapping; got.Kind != connectors.SourceRecordMappingKindInputFields || len(got.Inputs) != 1 || got.Inputs[0].Input != "name" || got.Inputs[0].Field != "name" {
+		t.Fatalf("destination record mapping = %#v, want closed name-to-name input mapping", got)
+	}
+
+	for _, action := range bundle.Writes {
+		if action.Name == "delete_companies" && action.Confirmation == nil {
+			t.Fatal("delete_companies must retain its destructive CLI confirmation outside the no-tombstone destination")
+		}
+	}
+}

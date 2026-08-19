@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "attachments",
+      "blocklists",
+      "calendar_channel_event_associations",
+      "calendar_event_participants",
+      "calendar_events",
+      "call_recordings",
+      "companies",
+      "dashboards",
+      "message_campaigns",
+      "message_channel_message_association_message_folders",
+      "message_channel_message_associations",
+      "message_list_members",
+      "message_lists",
+      "message_participants",
+      "message_threads",
+      "messages",
+      "note_targets",
+      "notes",
+      "opportunities",
+      "people",
+      "task_targets",
+      "tasks",
+      "timeline_activities",
+      "workflow_automated_triggers",
+      "workflow_runs",
+      "workflow_versions",
+      "workflows",
+      "workspace_members"
+    ],
+    "modes": ["full_append"],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "twenty_declarative_stream_transport",
+      "run_id": "all_streams_full_append_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": ["create_companies"],
+    "modes": ["full_append"],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "twenty_typed_destination",
+      "run_id": "companies_name_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_append", "strategy": "append", "action": "create_companies"}
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": ["companies"],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {"input": "name", "field": "name"}
+          ]
+        }
+      }
+    ]
+  }
+}
