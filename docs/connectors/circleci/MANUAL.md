@@ -113,11 +113,30 @@ SECURITY
   write risk: external mutation of CircleCI project configuration: schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a live CI run
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Read CircleCI streams and plan declared schedule updates through reverse ETL.
+  Usage: pm circleci <command> [flags]
+  Source CLI: CircleCI API v2 (PATCH /schedule/{id})
+  Global flags:
+    --credential (string): Credential name to use for the CircleCI request.
+    --connection (string): Credential alias used only when --credential is omitted.
+    --config (string_array): Connector config override as key=value; never pass secret values here.
+    --json (boolean): Emit machine-readable JSON output.
+    --plan (string): Execute an approved reverse-ETL plan by id.
+    --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+  Schedules
+    schedules list - Read CircleCI schedules through the declared ETL stream. [intent=etl availability=implemented stream=schedules]
+    schedules update - Plan an update to a CircleCI schedule through reverse ETL. [intent=reverse_etl availability=implemented write=update_schedule]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Updates a CircleCI schedule; requires reverse-ETL plan, preview, explicit approval, then execute.; flags: --id (required), --name, --description, --timetable, --parameters
+  Help topics:
+    execution-model - Reverse ETL uses plan, preview, approval, and execute; provider-live certification remains pending.
+
 SYNC TRANSPORT
   Source transport: declared
-  Destination transport: unsupported
+  Destination transport: declared
   A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
   Source executor: declarative_api/declarative_stream_source
+  Destination executor: declarative_api/declarative_typed_destination
 
 EXAMPLES
   # Inspect as a manual

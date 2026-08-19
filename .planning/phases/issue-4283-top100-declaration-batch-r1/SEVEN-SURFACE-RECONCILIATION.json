@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "issue": 4283,
+  "generated_at": "2026-08-19T19:16:23Z",
+  "scope": "Reconciliation of the ten connector directories already on PR #4294; this supersedes the earlier top-100 expansion scope.",
+  "upstream_dependency": {
+    "pull_request": 4304,
+    "branch": "fm/cli-reverse-etl-destination-r1",
+    "state": "pending-app-cli-dispatch-integration",
+    "required_before_final_push": "Fetch and merge the current branch head, prove it is an ancestor, then exercise the installed application/CLI reverse-ETL path without provider credentials."
+  },
+  "foundation_gap": {
+    "id": "action-scoped-source-binding",
+    "reason": "A destination declaration has one source binding per executor and its mapping is resolved only by executor and stream; it is not selected by apply-strategy action. Distinct action payloads for the same declarative source therefore cannot each carry an exact source-to-input mapping in one destination declaration.",
+    "evidence": "internal/connectors/sync_transport.go:147-150,431-456; internal/app/issue_label_warehouse_transport.go:310-332,351-365",
+    "minimal_change": "Make source bindings action-scoped (or permit separately named destination declarations) and resolve the mapping with the selected action.",
+    "recoverable": true
+  },
+  "rows": [
+    {
+      "connector": "dockerhub",
+      "documented_operations": 54,
+      "api_surface_endpoints": 54,
+      "surfaces": {
+        "binary_read": {"documented": 1, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 22, "cli_implemented": 19},
+        "direct_write": {"documented": 27, "cli_implemented": 2},
+        "etl": {"documented": 4, "cli_implemented": 4},
+        "reverse_etl": {"typed_actions": 20, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 45, "implemented": 45}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/dockerhub/writes.json",
+        "action_set_sha256": "0c1b4371e96cdf4630413e3818161d2798d2e2a12c9d5ed651654f91898637a2",
+        "action_count": 20,
+        "selector": "Every typed action in this pinned action set has a CLI command but no source stream fixture proves a target-object mapping that preserves the required organization/repository/member identity.",
+        "state": "schema-incompatible",
+        "evidence": "internal/connectors/defs/dockerhub/fixtures/streams/repositories/page_1.json; internal/connectors/defs/dockerhub/writes.json",
+        "recoverability": "Add a source stream whose schema and fixture prove each target action's required identity and request fields."
+      }
+    },
+    {
+      "connector": "notion",
+      "documented_operations": 49,
+      "api_surface_endpoints": 55,
+      "surfaces": {
+        "binary_read": {"documented": 0, "cli_implemented": 0},
+        "binary_write": {"documented": 1, "cli_implemented": 0},
+        "direct_read": {"documented": 18, "cli_implemented": 18},
+        "direct_write": {"documented": 25, "cli_implemented": 0},
+        "etl": {"documented": 5, "cli_implemented": 6},
+        "reverse_etl": {"typed_actions": 24, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 49, "implemented": 45}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/notion/writes.json",
+        "action_set_sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606",
+        "action_count": 24,
+        "bound_actions": [{"action": "update_view", "stream": "views", "fixture": "fixtures/streams/views/page_1.json", "inputs": {"view_id": "id", "name": "name"}}],
+        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "remaining_state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding"
+      }
+    },
+    {
+      "connector": "stripe",
+      "documented_operations": 589,
+      "api_surface_endpoints": 589,
+      "surfaces": {
+        "binary_read": {"documented": 4, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 254, "cli_implemented": 0},
+        "direct_write": {"documented": 326, "cli_implemented": 0},
+        "etl": {"documented": 5, "cli_implemented": 5},
+        "reverse_etl": {"typed_actions": 3, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 8, "implemented": 8}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/stripe/writes.json",
+        "action_set_sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f",
+        "action_count": 3,
+        "bound_actions": [{"action": "update_customer", "stream": "customers", "fixture": "fixtures/streams/customers/page_1.json", "inputs": {"id": "id", "email": "email", "name": "name", "description": "description", "phone": "phone"}}],
+        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "remaining_state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding"
+      }
+    },
+    {
+      "connector": "bitbucket",
+      "documented_operations": 331,
+      "api_surface_endpoints": 331,
+      "surfaces": {
+        "binary_read": {"documented": 15, "cli_implemented": 0},
+        "binary_write": {"documented": 4, "cli_implemented": 0},
+        "direct_read": {"documented": 21, "cli_implemented": 0},
+        "direct_write": {"documented": 148, "cli_implemented": 0},
+        "etl": {"documented": 143, "cli_implemented": 1},
+        "reverse_etl": {"typed_actions": 54, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 5, "implemented": 3}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/bitbucket/writes.json",
+        "action_set_sha256": "855f5ed7991ca20f35ad88a29c6a340dab6f522bc4703cfd493fb3fa9107ffbf",
+        "action_count": 54,
+        "selector": "Every typed action in this pinned action set.",
+        "state": "schema-incompatible",
+        "evidence": "The repositories fixture supplies slug but not the required target workspace identity for the declared repository actions; no current stream fixture proves the path/body identity for a typed write.",
+        "recoverability": "Declare a source stream and fixture with the required target workspace/path fields, then bind the record fields exactly."
+      }
+    },
+    {
+      "connector": "gitlab",
+      "documented_operations": 1755,
+      "api_surface_endpoints": 1755,
+      "surfaces": {
+        "binary_read": {"documented": 46, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 699, "cli_implemented": 0},
+        "direct_write": {"documented": 1006, "cli_implemented": 0},
+        "etl": {"documented": 4, "cli_implemented": 4},
+        "reverse_etl": {"typed_actions": 0, "destination_actions": 0, "state": "not-applicable"},
+        "cli": {"declared": 4, "implemented": 4}
+      },
+      "typed_action_disposition": {"source": "internal/connectors/defs/gitlab/writes.json", "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a", "action_count": 0, "state": "not-applicable"}
+    },
+    {
+      "connector": "circleci",
+      "documented_operations": 111,
+      "api_surface_endpoints": 111,
+      "surfaces": {
+        "binary_read": {"documented": 0, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 52, "cli_implemented": 0},
+        "direct_write": {"documented": 50, "cli_implemented": 0},
+        "etl": {"documented": 9, "cli_implemented": 1},
+        "reverse_etl": {"typed_actions": 7, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 2, "implemented": 2}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/circleci/writes.json",
+        "action_set_sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d",
+        "action_count": 7,
+        "bound_actions": [{"action": "update_schedule", "stream": "schedules", "fixture": "fixtures/streams/schedules/page_1.json", "inputs": {"id": "id", "name": "name", "description": "description", "timetable": "timetable", "parameters": "parameters"}}],
+        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "remaining_state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding"
+      }
+    },
+    {
+      "connector": "sentry",
+      "documented_operations": 223,
+      "api_surface_endpoints": 223,
+      "surfaces": {
+        "binary_read": {"documented": 0, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 117, "cli_implemented": 0},
+        "direct_write": {"documented": 103, "cli_implemented": 0},
+        "etl": {"documented": 3, "cli_implemented": 0},
+        "reverse_etl": {"typed_actions": 0, "destination_actions": 0, "state": "not-applicable"},
+        "cli": {"declared": 0, "implemented": 0}
+      },
+      "typed_action_disposition": {"source": "internal/connectors/defs/sentry/writes.json", "action_set_sha256": "2cf641402aafa3a886b44f72b227d16df42447685ab6558e9f2dd7a0b1da4a4a", "action_count": 0, "state": "not-applicable"}
+    },
+    {
+      "connector": "vercel",
+      "documented_operations": 400,
+      "api_surface_endpoints": 400,
+      "surfaces": {
+        "binary_read": {"documented": 0, "cli_implemented": 0},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 156, "cli_implemented": 0},
+        "direct_write": {"documented": 237, "cli_implemented": 0},
+        "etl": {"documented": 7, "cli_implemented": 1},
+        "reverse_etl": {"typed_actions": 18, "destination_actions": 1, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 2, "implemented": 2}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/vercel/writes.json",
+        "action_set_sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e",
+        "action_count": 18,
+        "bound_actions": [{"action": "update_project", "stream": "projects", "fixture": "fixtures/streams/projects/page_1.json", "inputs": {"id": "id", "name": "name"}}],
+        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "remaining_state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding"
+      }
+    },
+    {
+      "connector": "asana",
+      "documented_operations": 249,
+      "api_surface_endpoints": 249,
+      "surfaces": {
+        "binary_read": {"documented": 0, "cli_implemented": 0},
+        "binary_write": {"documented": 1, "cli_implemented": 0},
+        "direct_read": {"documented": 10, "cli_implemented": 0},
+        "direct_write": {"documented": 129, "cli_implemented": 0},
+        "etl": {"documented": 109, "cli_implemented": 9},
+        "reverse_etl": {"typed_actions": 73, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 249, "implemented": 82}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/asana/writes.json",
+        "action_set_sha256": "ede5ebf6c8002f71885c10270256b513abf9dfc13e26e54ca96a05e0f93d3d00",
+        "action_count": 73,
+        "selector": "Every typed action in this pinned action set.",
+        "state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding",
+        "additional_evidence": "The current generic input_fields mapping copies only one flat source field per input; Asana update actions commonly require a nested data object, which it cannot construct. See internal/connectors/sync_transport.go:175-199,351-365."
+      }
+    },
+    {
+      "connector": "jira",
+      "documented_operations": 617,
+      "api_surface_endpoints": 617,
+      "surfaces": {
+        "binary_read": {"documented": 3, "cli_implemented": 3},
+        "binary_write": {"documented": 0, "cli_implemented": 0},
+        "direct_read": {"documented": 292, "cli_implemented": 292},
+        "direct_write": {"documented": 319, "cli_implemented": 0},
+        "etl": {"documented": 3, "cli_implemented": 3},
+        "reverse_etl": {"typed_actions": 292, "destination_actions": 0, "app_cli_dispatch": "pending-upstream-4304"},
+        "cli": {"declared": 590, "implemented": 584}
+      },
+      "typed_action_disposition": {
+        "source": "internal/connectors/defs/jira/writes.json",
+        "action_set_sha256": "96cdd9a49b649ad6bbf7000ccfaf64fe1448219cf887795c2b5cf3f01910e368",
+        "action_count": 292,
+        "selector": "Every typed action in this pinned action set.",
+        "state": "foundation-gap",
+        "foundation_gap_id": "action-scoped-source-binding",
+        "additional_evidence": "Representative project_update_project requires input projectIdOrKey, but destination input identifiers reject upper-case characters: internal/connectors/sync_transport.go:673-690."
+      }
+    }
+  ],
+  "certification": {
+    "non_live": "Schema and generator validation are in scope; fixture proofs are recorded for the five static destination mappings.",
+    "provider_live": "pending; no provider credentials were requested or used."
+  }
+}

@@ -115,9 +115,10 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 ## Sync Transport
 
 - Source transport: declared
-- Destination transport: unsupported
+- Destination transport: declared
 - A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
 - Source executor: declarative_api/declarative_stream_source
+- Destination executor: declarative_api/declarative_typed_destination
 
 ## Commands
 

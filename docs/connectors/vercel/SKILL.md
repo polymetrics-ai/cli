@@ -156,12 +156,32 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 - approval: read: none; write: required for every action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Read Vercel streams and plan declared project updates through reverse ETL.
+- Usage: pm vercel <command> [flags]
+- Source CLI: Vercel REST API (PATCH /v9/projects/{id})
+- Global flags:
+  - --credential (string): Credential name to use for the Vercel request.
+  - --connection (string): Credential alias used only when --credential is omitted.
+  - --config (string_array): Connector config override as key=value; never pass secret values here.
+  - --json (boolean): Emit machine-readable JSON output.
+  - --plan (string): Execute an approved reverse-ETL plan by id.
+  - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Projects
+  - projects list - Read Vercel projects through the declared ETL stream. [intent=etl availability=implemented stream=projects]
+  - projects update - Plan an update to a Vercel project through reverse ETL. [intent=reverse_etl availability=implemented write=update_project]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Updates a Vercel project; requires reverse-ETL plan, preview, explicit approval, then execute.; flags: --id (required), --name, --build-command
+- Help topics:
+  - execution-model - Reverse ETL uses plan, preview, approval, and execute; provider-live certification remains pending.
+
 ## Sync Transport
 
 - Source transport: declared
-- Destination transport: unsupported
+- Destination transport: declared
 - A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
 - Source executor: declarative_api/declarative_stream_source
+- Destination executor: declarative_api/declarative_typed_destination
 
 ## Commands
 

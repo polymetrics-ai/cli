@@ -11742,6 +11742,36 @@
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "foundation_gap_id": "action-scoped-source-binding",
+      "reason": "A destination declaration stores one source binding for an executor and resolves it by source stream, rather than by the selected typed action. Distinct source-to-input mappings therefore cannot be declared for every record-driven action in a connector's one destination declaration.",
+      "evidence": "internal/connectors/sync_transport.go:147-150,431-456; internal/app/issue_label_warehouse_transport.go:310-332,351-365",
+      "minimal_change": "Make source bindings action-scoped (or permit separately named destination declarations) and resolve the mapping with the selected apply-strategy action.",
+      "recoverability": "Bind each remaining typed action after action-scoped source mappings are available; no provider credential or live certification is required for this declaration step.",
+      "operations": [
+        {"connector": "dockerhub", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"},
+        {"connector": "notion", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"},
+        {"connector": "stripe", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"},
+        {"connector": "bitbucket", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"},
+        {"connector": "circleci", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"},
+        {"connector": "vercel", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"},
+        {"connector": "asana", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"},
+        {"connector": "jira", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"}
+      ]
+    },
+    {
+      "foundation_gap_id": "app-cli-declarative-destination-dispatch",
+      "reason": "The definition factory composes declarative typed destinations, but the persisted application/CLI reverse-ETL dispatch integration is still in the upstream #4304 lane. Connector declarations must not claim deployment before that head is merged and exercised.",
+      "evidence": "Captain coordination update 2026-08-20; internal/app/issue_label_warehouse_transport.go:66-72",
+      "minimal_change": "Merge the current origin/fm/cli-reverse-etl-destination-r1 head and exercise the installed application/CLI path against these declared destination contracts without provider credentials.",
+      "recoverability": "Upstream #4304 integration is in progress; this is not a connector-local workaround request.",
+      "operations": [
+        {"connector": "notion", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_view"}, "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"},
+        {"connector": "stripe", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_customer"}, "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"},
+        {"connector": "circleci", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_schedule"}, "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"},
+        {"connector": "vercel", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_project"}, "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"}
+      ]
     }
   ],
   "complete_map_foundation_gaps": [

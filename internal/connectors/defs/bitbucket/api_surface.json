@@ -31,7 +31,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /addon/{addon_key}/client-key.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -596,7 +596,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/downloads.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -980,7 +980,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1011,7 +1011,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1290,7 +1290,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1302,7 +1302,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1314,7 +1314,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1582,7 +1582,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/activity.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1613,7 +1613,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1708,7 +1708,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1720,7 +1720,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1756,7 +1756,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1780,7 +1780,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2168,7 +2168,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /snippets/{workspace}/{encoded_id}/watch.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2306,7 +2306,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "reason": "No reachable direct-read command declares GET /teams/{username}/search/code.",
         "risk": "low",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2326,7 +2326,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
+        "reason": "No reachable direct-read command declares GET /user/emails.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2338,7 +2338,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
+        "reason": "No reachable direct-read command declares GET /user/emails/{email}.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2495,7 +2495,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "reason": "No reachable direct-read command declares GET /users/{selected_user}/search/code.",
         "risk": "low",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2646,7 +2646,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2658,7 +2658,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace}/pipelines-config/identity/oidc/keys.json.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2970,7 +2970,7 @@
       "operation": {
         "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace}/search/code.",
         "risk": "low",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"

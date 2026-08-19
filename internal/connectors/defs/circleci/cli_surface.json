@@ -1,0 +1,136 @@
+{
+  "tagline": "Read CircleCI streams and plan declared schedule updates through reverse ETL.",
+  "usage": "pm circleci <command> [flags]",
+  "source_cli": {
+    "name": "CircleCI API v2",
+    "docs": "https://circleci.com/docs/api/v2/",
+    "reference": "PATCH /schedule/{id}",
+    "source": "sources/circleci-operation-source-lock.json"
+  },
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the CircleCI request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential alias used only when --credential is omitted."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    }
+  ],
+  "groups": [
+    {
+      "id": "schedules",
+      "title": "Schedules",
+      "commands": [
+        "schedules"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "schedules list",
+      "summary": "Read CircleCI schedules through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schedules",
+      "source_cli_path": "GET /project/{project-slug}/schedule",
+      "source_url": "https://circleci.com/docs/api/v2/index.html#tag/Schedule/operation/listSchedulesForProject",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ],
+      "examples": [
+        "pm circleci schedules list --credential circleci-prod --json"
+      ]
+    },
+    {
+      "path": "schedules update",
+      "summary": "Plan an update to a CircleCI schedule through reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_schedule",
+      "source_cli_path": "PATCH /schedule/{id}",
+      "source_url": "https://circleci.com/docs/api/v2/index.html#tag/Schedule/operation/updateSchedule",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Schedule identifier.",
+          "maps_to": "record.id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Schedule name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Schedule description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "timetable",
+          "type": "json",
+          "summary": "Schedule timetable JSON object.",
+          "maps_to": "record.timetable"
+        },
+        {
+          "name": "parameters",
+          "type": "json",
+          "summary": "Schedule parameter JSON object.",
+          "maps_to": "record.parameters"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "Updates a CircleCI schedule; requires reverse-ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm circleci schedules update --credential circleci-prod --id sched_fixture_1 --name nightly-build --preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "execution-model",
+      "summary": "Reverse ETL uses plan, preview, approval, and execute; provider-live certification remains pending."
+    }
+  ]
+}

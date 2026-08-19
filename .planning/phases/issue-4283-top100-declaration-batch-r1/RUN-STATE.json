@@ -2,8 +2,8 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "dockerhub-pr-4297-repair-partial-foundation-gap-recorded",
-  "delivery_mode": "declarations-and-complete-map; non-live-certification-only",
+  "state": "reconciliation-slice-1-verified-pending-next-reachability-slice",
+  "delivery_mode": "connector-local declarations; non-live certification only; stacked on PR-4304",
   "connectors": [
     "dockerhub",
     "gitlab",
@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Four PR-4297 repairs are validated at 45/54. Do not claim the remaining HEAD and CSV rows enabled until the operation-kind loader/validation path registers rest_status and text_export; then re-run this repair from the pinned OpenAPI. Do not use provider credentials or provider I/O.",
-  "updated_at": "2026-08-19T00:00:00Z"
+  "next": "Continue source-operation command reachability and exact typed-action dispositions in bounded connector commits. Before any final push, fetch and merge the latest origin/fm/cli-reverse-etl-destination-r1, prove that head is an ancestor, and exercise the installed persisted App/CLI destination path. Do not claim application-level reverse-ETL deployment until that upstream dispatch integration lands. Do not use provider credentials or provider I/O.",
+  "updated_at": "2026-08-20T00:00:00Z"
 }

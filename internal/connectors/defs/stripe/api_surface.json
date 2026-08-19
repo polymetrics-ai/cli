@@ -13,7 +13,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/account.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetAccount; summary=Retrieve account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -52,7 +52,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccounts; summary=List all connected accounts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -91,7 +91,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccount; summary=Retrieve account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -143,7 +143,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/bank_accounts/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountBankAccountsId; summary=Retrieve an external account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -169,7 +169,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/capabilities.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountCapabilities; summary=List all account capabilities; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -182,7 +182,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/capabilities/{capability}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountCapabilitiesCapability; summary=Retrieve an Account Capability; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -208,7 +208,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/external_accounts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountExternalAccounts; summary=List all external accounts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -247,7 +247,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/external_accounts/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountExternalAccountsId; summary=Retrieve an external account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -286,7 +286,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/people.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountPeople; summary=List all persons; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -325,7 +325,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/people/{person}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountPeoplePerson; summary=Retrieve a person; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -351,7 +351,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/persons.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountPersons; summary=List all persons; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -390,7 +390,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/accounts/{account}/persons/{person}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAccountsAccountPersonsPerson; summary=Retrieve a person; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -442,7 +442,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/apple_pay/domains.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplePayDomains; summary=<p>List apple pay domains.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -481,7 +481,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/apple_pay/domains/{domain}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplePayDomainsDomain; summary=<p>Retrieve an apple pay domain.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -494,7 +494,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/application_fees.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplicationFees; summary=List all application fees; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -507,7 +507,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/application_fees/{fee}/refunds/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplicationFeesFeeRefundsId; summary=Retrieve an application fee refund; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -533,7 +533,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/application_fees/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplicationFeesId; summary=Retrieve an application fee; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -559,7 +559,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/application_fees/{id}/refunds.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetApplicationFeesIdRefunds; summary=List all application fee refunds; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -585,7 +585,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/apps/secrets.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAppsSecrets; summary=List secrets; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -624,7 +624,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/apps/secrets/find.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetAppsSecretsFind; summary=Find a Secret; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -637,7 +637,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetBalance; summary=Retrieve balance; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -650,7 +650,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance/history.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBalanceHistory; summary=List all balance transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -663,7 +663,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance/history/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBalanceHistoryId; summary=Retrieve a balance transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -676,7 +676,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance_settings.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBalanceSettings; summary=Retrieve balance settings; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -702,7 +702,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance_transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBalanceTransactions; summary=List all balance transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -715,7 +715,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/balance_transactions/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBalanceTransactionsId; summary=Retrieve a balance transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -728,7 +728,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/alerts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingAlerts; summary=List billing alerts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -754,7 +754,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/alerts/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingAlertsId; summary=Retrieve a billing alert; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -806,7 +806,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/credit_balance_summary.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingCreditBalanceSummary; summary=Retrieve the credit balance summary for a customer; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -819,7 +819,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/credit_balance_transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingCreditBalanceTransactions; summary=List credit balance transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -832,7 +832,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/credit_balance_transactions/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingCreditBalanceTransactionsId; summary=Retrieve a credit balance transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -845,7 +845,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/credit_grants.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingCreditGrants; summary=List credit grants; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -871,7 +871,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/credit_grants/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingCreditGrantsId; summary=Retrieve a credit grant; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -949,7 +949,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/meters.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingMeters; summary=List billing meters; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -975,7 +975,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/meters/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingMetersId; summary=Retrieve a billing meter; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1014,7 +1014,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing/meters/{id}/event_summaries.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingMetersIdEventSummaries; summary=List billing meter event summaries; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1040,7 +1040,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing_portal/configurations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingPortalConfigurations; summary=List portal configurations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1066,7 +1066,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/billing_portal/configurations/{configuration}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetBillingPortalConfigurationsConfiguration; summary=Retrieve a portal configuration; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1125,7 +1125,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/charges/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetChargesSearch; summary=Search charges; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1138,7 +1138,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/charges/{charge}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetChargesCharge; summary=Retrieve a charge; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1177,7 +1177,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/charges/{charge}/dispute.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetChargesChargeDispute; summary=<p>Retrieve a dispute for a specified charge.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1229,7 +1229,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/charges/{charge}/refunds.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetChargesChargeRefunds; summary=List all refunds; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1255,7 +1255,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/charges/{charge}/refunds/{refund}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetChargesChargeRefundsRefund; summary=<p>Retrieves the details of an existing refund.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1281,7 +1281,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/checkout/sessions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCheckoutSessions; summary=List all Checkout Sessions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1307,7 +1307,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/checkout/sessions/{session}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCheckoutSessionsSession; summary=Retrieve a Checkout Session; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1346,7 +1346,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/checkout/sessions/{session}/line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCheckoutSessionsSessionLineItems; summary=Retrieve a Checkout Session's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1359,7 +1359,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/orders.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateOrders; summary=List orders; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1385,7 +1385,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/orders/{order}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateOrdersOrder; summary=Retrieve an order; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1424,7 +1424,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/products.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateProducts; summary=List products; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1437,7 +1437,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/products/{product}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateProductsProduct; summary=Retrieve a product; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1450,7 +1450,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/suppliers.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateSuppliers; summary=List suppliers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1463,7 +1463,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/climate/suppliers/{supplier}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetClimateSuppliersSupplier; summary=Retrieve a supplier; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1489,7 +1489,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/country_specs.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCountrySpecs; summary=List Country Specs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1502,7 +1502,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/country_specs/{country}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCountrySpecsCountry; summary=Retrieve a Country Spec; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1515,7 +1515,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/coupons.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCoupons; summary=List all coupons; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1554,7 +1554,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/coupons/{coupon}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCouponsCoupon; summary=Retrieve a coupon; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1580,7 +1580,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/credit_notes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCreditNotes; summary=List all credit notes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1606,7 +1606,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/credit_notes/preview.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCreditNotesPreview; summary=Preview a credit note; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1619,7 +1619,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/credit_notes/preview/lines.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCreditNotesPreviewLines; summary=Retrieve a credit note preview's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1632,7 +1632,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/credit_notes/{credit_note}/lines.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCreditNotesCreditNoteLines; summary=Retrieve a credit note's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1645,7 +1645,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/credit_notes/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCreditNotesId; summary=Retrieve a credit note; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1711,7 +1711,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetCustomersSearch; summary=Search customers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1731,7 +1731,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomer; summary=Retrieve a customer; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1751,7 +1751,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/balance_transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerBalanceTransactions; summary=List customer balance transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1777,7 +1777,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/balance_transactions/{transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerBalanceTransactionsTransaction; summary=Retrieve a customer balance transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1946,7 +1946,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/cash_balance.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerCashBalance; summary=Retrieve a cash balance; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1972,7 +1972,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/cash_balance_transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerCashBalanceTransactions; summary=List cash balance transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -1985,7 +1985,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/cash_balance_transactions/{transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerCashBalanceTransactionsTransaction; summary=Retrieve a cash balance transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2011,7 +2011,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/discount.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerDiscount; summary=Stripe operation; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2037,7 +2037,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/payment_methods.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerPaymentMethods; summary=List a Customer's PaymentMethods; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2050,7 +2050,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/payment_methods/{payment_method}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerPaymentMethodsPaymentMethod; summary=Retrieve a Customer's PaymentMethod; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2063,7 +2063,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/sources.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerSources; summary=<p>List sources for a specified customer.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2102,7 +2102,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/sources/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerSourcesId; summary=<p>Retrieve a specified source for a given customer.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2141,7 +2141,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/subscriptions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerSubscriptions; summary=List active subscriptions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2180,7 +2180,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/subscriptions/{subscription_exposed_id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerSubscriptionsSubscriptionExposedId; summary=Retrieve a subscription; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2219,7 +2219,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/subscriptions/{subscription_exposed_id}/discount.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerSubscriptionsSubscriptionExposedIdDiscount; summary=Stripe operation; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2232,7 +2232,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/tax_ids.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerTaxIds; summary=List all Customer tax IDs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2271,7 +2271,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/customers/{customer}/tax_ids/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetCustomersCustomerTaxIdsId; summary=Retrieve a Customer tax ID; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2284,7 +2284,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/disputes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetDisputes; summary=List all disputes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2297,7 +2297,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/disputes/{dispute}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetDisputesDispute; summary=Retrieve a dispute; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2336,7 +2336,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/entitlements/active_entitlements.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetEntitlementsActiveEntitlements; summary=List all active entitlements; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2349,7 +2349,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/entitlements/active_entitlements/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetEntitlementsActiveEntitlementsId; summary=Retrieve an active entitlement; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2362,7 +2362,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/entitlements/features.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetEntitlementsFeatures; summary=List all features; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2388,7 +2388,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/entitlements/features/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetEntitlementsFeaturesId; summary=Retrieve a feature; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2440,7 +2440,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe events/webhook read is in scope for changefeed parity but blocked/planned until CDC/changefeed semantics and fixtures are authored connector-locally",
+        "reason": "No reachable direct-read command declares GET /v1/events.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=cdc_changefeed; operation_id=GetEvents; summary=List all events; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2453,7 +2453,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe events/webhook read is in scope for changefeed parity but blocked/planned until CDC/changefeed semantics and fixtures are authored connector-locally",
+        "reason": "No reachable direct-read command declares GET /v1/events/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=cdc_changefeed; operation_id=GetEventsId; summary=Retrieve an event; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2466,7 +2466,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/exchange_rates.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetExchangeRates; summary=List all exchange rates; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2479,7 +2479,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/exchange_rates/{rate_id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetExchangeRatesRateId; summary=Retrieve an exchange rate; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2596,7 +2596,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/accounts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsAccounts; summary=List Accounts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2609,7 +2609,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/accounts/{account}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsAccountsAccount; summary=Retrieve an Account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2635,7 +2635,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/accounts/{account}/owners.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsAccountsAccountOwners; summary=List Account Owners; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2700,7 +2700,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/sessions/{session}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsSessionsSession; summary=Retrieve a Session; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2713,7 +2713,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsTransactions; summary=List Transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2726,7 +2726,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/financial_connections/transactions/{transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetFinancialConnectionsTransactionsTransaction; summary=Retrieve a Transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2739,7 +2739,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/forwarding/requests.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetForwardingRequests; summary=List all ForwardingRequests; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2765,7 +2765,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/forwarding/requests/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetForwardingRequestsId; summary=Retrieve a ForwardingRequest; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2778,7 +2778,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/identity/verification_reports.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIdentityVerificationReports; summary=List VerificationReports; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2791,7 +2791,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/identity/verification_reports/{report}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIdentityVerificationReportsReport; summary=Retrieve a VerificationReport; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2804,7 +2804,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/identity/verification_sessions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIdentityVerificationSessions; summary=List VerificationSessions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2830,7 +2830,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/identity/verification_sessions/{session}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIdentityVerificationSessionsSession; summary=Retrieve a VerificationSession; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2882,7 +2882,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoice_payments.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoicePayments; summary=List all payments for an invoice; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2895,7 +2895,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoice_payments/{invoice_payment}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoicePaymentsInvoicePayment; summary=Retrieve an InvoicePayment; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2908,7 +2908,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoice_rendering_templates.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoiceRenderingTemplates; summary=List all invoice rendering templates; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2921,7 +2921,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoice_rendering_templates/{template}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoiceRenderingTemplatesTemplate; summary=Retrieve an invoice rendering template; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2960,7 +2960,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoiceitems.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoiceitems; summary=List all invoice items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -2999,7 +2999,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoiceitems/{invoiceitem}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoiceitemsInvoiceitem; summary=Retrieve an invoice item; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3058,7 +3058,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoices/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetInvoicesSearch; summary=Search invoices; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3084,7 +3084,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoices/{invoice}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoicesInvoice; summary=Retrieve an invoice; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3149,7 +3149,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/invoices/{invoice}/lines.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetInvoicesInvoiceLines; summary=Retrieve an invoice's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3253,7 +3253,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/authorizations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingAuthorizations; summary=List all authorizations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3266,7 +3266,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/authorizations/{authorization}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingAuthorizationsAuthorization; summary=Retrieve an authorization; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3318,7 +3318,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/cardholders.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingCardholders; summary=List all cardholders; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3344,7 +3344,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/cardholders/{cardholder}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingCardholdersCardholder; summary=Retrieve a cardholder; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3370,7 +3370,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/cards.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingCards; summary=List all cards; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3396,7 +3396,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/cards/{card}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingCardsCard; summary=Retrieve a card; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3422,7 +3422,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/disputes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingDisputes; summary=List all disputes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3448,7 +3448,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/disputes/{dispute}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingDisputesDispute; summary=Retrieve a dispute; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3487,7 +3487,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/personalization_designs.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingPersonalizationDesigns; summary=List all personalization designs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3513,7 +3513,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/personalization_designs/{personalization_design}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingPersonalizationDesignsPersonalizationDesign; summary=Retrieve a personalization design; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3539,7 +3539,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/physical_bundles.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingPhysicalBundles; summary=List all physical bundles; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3552,7 +3552,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/physical_bundles/{physical_bundle}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingPhysicalBundlesPhysicalBundle; summary=Retrieve a physical bundle; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3565,7 +3565,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/settlements/{settlement}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingSettlementsSettlement; summary=Retrieve a settlement; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3630,7 +3630,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingTransactions; summary=List all transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3643,7 +3643,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/issuing/transactions/{transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetIssuingTransactionsTransaction; summary=Retrieve a transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3682,7 +3682,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/link_account_sessions/{session}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetLinkAccountSessionsSession; summary=Retrieve a Session; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3695,7 +3695,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/linked_accounts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetLinkedAccounts; summary=List Accounts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3708,7 +3708,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/linked_accounts/{account}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetLinkedAccountsAccount; summary=Retrieve an Account; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3734,7 +3734,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/linked_accounts/{account}/owners.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetLinkedAccountsAccountOwners; summary=List Account Owners; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3760,7 +3760,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/mandates/{mandate}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetMandatesMandate; summary=Retrieve a Mandate; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3773,7 +3773,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_attempt_records.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentAttemptRecords; summary=List Payment Attempt Records; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3786,7 +3786,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_attempt_records/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentAttemptRecordsId; summary=Retrieve a Payment Attempt Record; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3799,7 +3799,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_intents.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentIntents; summary=List all PaymentIntents; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3825,7 +3825,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_intents/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetPaymentIntentsSearch; summary=Search PaymentIntents; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3838,7 +3838,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_intents/{intent}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentIntentsIntent; summary=Retrieve a PaymentIntent; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3864,7 +3864,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_intents/{intent}/amount_details_line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentIntentsIntentAmountDetailsLineItems; summary=List all PaymentIntent LineItems; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3955,7 +3955,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_links.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentLinks; summary=List all payment links; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -3981,7 +3981,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_links/{payment_link}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentLinksPaymentLink; summary=Retrieve payment link; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4007,7 +4007,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_links/{payment_link}/line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentLinksPaymentLinkLineItems; summary=Retrieve a payment link's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4020,7 +4020,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_method_configurations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethodConfigurations; summary=List payment method configurations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4046,7 +4046,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_method_configurations/{configuration}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethodConfigurationsConfiguration; summary=Retrieve payment method configuration; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4072,7 +4072,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_method_domains.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethodDomains; summary=List payment method domains; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4098,7 +4098,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_method_domains/{payment_method_domain}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethodDomainsPaymentMethodDomain; summary=Retrieve a payment method domain; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4137,7 +4137,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_methods.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethods; summary=List PaymentMethods; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4163,7 +4163,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_methods/{payment_method}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentMethodsPaymentMethod; summary=Retrieve a PaymentMethod; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4215,7 +4215,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_records.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentRecords; summary=List Payment Records; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4241,7 +4241,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payment_records/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPaymentRecordsId; summary=Retrieve a Payment Record; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4332,7 +4332,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payouts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPayouts; summary=List all payouts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4358,7 +4358,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/payouts/{payout}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPayoutsPayout; summary=Retrieve a payout; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4410,7 +4410,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/plans.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPlans; summary=List all plans; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4449,7 +4449,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/plans/{plan}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPlansPlan; summary=Retrieve a plan; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4475,7 +4475,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/prices.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPrices; summary=List all prices; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4501,7 +4501,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/prices/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetPricesSearch; summary=Search prices; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4514,7 +4514,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/prices/{price}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPricesPrice; summary=Retrieve a price; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4560,7 +4560,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/products/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetProductsSearch; summary=Search products; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4586,7 +4586,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/products/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetProductsId; summary=Retrieve a product; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4612,7 +4612,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/products/{product}/features.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetProductsProductFeatures; summary=List all features attached to a product; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4651,7 +4651,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/products/{product}/features/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetProductsProductFeaturesId; summary=Retrieve a product_feature; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4664,7 +4664,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/promotion_codes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPromotionCodes; summary=List all promotion codes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4690,7 +4690,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/promotion_codes/{promotion_code}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetPromotionCodesPromotionCode; summary=Retrieve a promotion code; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4716,7 +4716,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/quotes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetQuotes; summary=List all quotes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4742,7 +4742,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/quotes/{quote}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetQuotesQuote; summary=Retrieve a quote; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4794,7 +4794,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/quotes/{quote}/computed_upfront_line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetQuotesQuoteComputedUpfrontLineItems; summary=Retrieve a quote's upfront line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4820,7 +4820,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/quotes/{quote}/line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetQuotesQuoteLineItems; summary=Retrieve a quote's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4833,7 +4833,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/quotes/{quote}/pdf.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetQuotesQuotePdf; summary=Download quote PDF; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4846,7 +4846,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/early_fraud_warnings.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarEarlyFraudWarnings; summary=List all early fraud warnings; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4859,7 +4859,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/early_fraud_warnings/{early_fraud_warning}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarEarlyFraudWarningsEarlyFraudWarning; summary=Retrieve an early fraud warning; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4885,7 +4885,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/value_list_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarValueListItems; summary=List all value list items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4924,7 +4924,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/value_list_items/{item}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarValueListItemsItem; summary=Retrieve a value list item; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4937,7 +4937,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/value_lists.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarValueLists; summary=List all value lists; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -4976,7 +4976,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/radar/value_lists/{value_list}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRadarValueListsValueList; summary=Retrieve a value list; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5002,7 +5002,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/refunds.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRefunds; summary=List all refunds; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5028,7 +5028,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/refunds/{refund}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetRefundsRefund; summary=Retrieve a refund; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5067,7 +5067,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reporting/report_runs.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReportingReportRuns; summary=List all Report Runs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5093,7 +5093,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reporting/report_runs/{report_run}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReportingReportRunsReportRun; summary=Retrieve a Report Run; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5106,7 +5106,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reporting/report_types.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReportingReportTypes; summary=List all Report Types; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5119,7 +5119,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reporting/report_types/{report_type}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReportingReportTypesReportType; summary=Retrieve a Report Type; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5132,7 +5132,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reviews.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReviews; summary=List all open reviews; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5145,7 +5145,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/reviews/{review}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetReviewsReview; summary=Retrieve a review; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5171,7 +5171,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/setup_attempts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSetupAttempts; summary=List all SetupAttempts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5184,7 +5184,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/setup_intents.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSetupIntents; summary=List all SetupIntents; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5210,7 +5210,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/setup_intents/{intent}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSetupIntentsIntent; summary=Retrieve a SetupIntent; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5275,7 +5275,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/shipping_rates.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetShippingRates; summary=List all shipping rates; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5340,7 +5340,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sigma/scheduled_query_runs.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSigmaScheduledQueryRuns; summary=List all scheduled query runs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5353,7 +5353,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sigma/scheduled_query_runs/{scheduled_query_run}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSigmaScheduledQueryRunsScheduledQueryRun; summary=Retrieve a scheduled query run; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5379,7 +5379,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sources/{source}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSourcesSource; summary=Retrieve a source; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5405,7 +5405,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sources/{source}/mandate_notifications/{mandate_notification}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSourcesSourceMandateNotificationsMandateNotification; summary=Retrieve a Source MandateNotification; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5418,7 +5418,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sources/{source}/source_transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSourcesSourceSourceTransactions; summary=<p>List source transactions for a given source.</p>; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5431,7 +5431,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/sources/{source}/source_transactions/{source_transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSourcesSourceSourceTransactionsSourceTransaction; summary=Retrieve a source transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5457,7 +5457,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscription_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSubscriptionItems; summary=List all subscription items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5496,7 +5496,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscription_items/{item}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSubscriptionItemsItem; summary=Retrieve a subscription item; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5522,7 +5522,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscription_schedules.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSubscriptionSchedules; summary=List all schedules; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5548,7 +5548,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscription_schedules/{schedule}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSubscriptionSchedulesSchedule; summary=Retrieve a schedule; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5620,7 +5620,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe direct/search read is in scope but blocked/planned until a fixed-target bounded provider command with schema-gated query flags, max response bytes, and redaction policy is authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscriptions/search.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=direct_read_query_search; operation_id=GetSubscriptionsSearch; summary=Search subscriptions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5646,7 +5646,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/subscriptions/{subscription_exposed_id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetSubscriptionsSubscriptionExposedId; summary=Retrieve a subscription; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5711,7 +5711,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/associations/find.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxAssociationsFind; summary=Find a Tax Association; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5737,7 +5737,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/calculations/{calculation}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxCalculationsCalculation; summary=Retrieve a Calculation; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5750,7 +5750,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/calculations/{calculation}/line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxCalculationsCalculationLineItems; summary=Retrieve a Calculation's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5763,7 +5763,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/registrations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxRegistrations; summary=List registrations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5789,7 +5789,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/registrations/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxRegistrationsId; summary=Retrieve a registration; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5815,7 +5815,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/settings.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxSettings; summary=Retrieve settings; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5867,7 +5867,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/transactions/{transaction}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxTransactionsTransaction; summary=Retrieve a Transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5880,7 +5880,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax/transactions/{transaction}/line_items.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxTransactionsTransactionLineItems; summary=Retrieve a Transaction's line items; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5893,7 +5893,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_codes.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxCodes; summary=List all tax codes; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5906,7 +5906,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_codes/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxCodesId; summary=Retrieve a tax code; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5919,7 +5919,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_ids.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxIds; summary=List all tax IDs; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5958,7 +5958,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_ids/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxIdsId; summary=Retrieve a tax ID; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5971,7 +5971,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_rates.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxRates; summary=List all tax rates; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -5997,7 +5997,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tax_rates/{tax_rate}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTaxRatesTaxRate; summary=Retrieve a tax rate; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6023,7 +6023,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/configurations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalConfigurations; summary=List all Configurations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6062,7 +6062,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/configurations/{configuration}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalConfigurationsConfiguration; summary=Retrieve a Configuration; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6101,7 +6101,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/locations.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalLocations; summary=List all Locations; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6140,7 +6140,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/locations/{location}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalLocationsLocation; summary=Retrieve a Location; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6179,7 +6179,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/readers.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalReaders; summary=List all Readers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6218,7 +6218,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/terminal/readers/{reader}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTerminalReadersReader; summary=Retrieve a Reader; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6699,7 +6699,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/test_helpers/test_clocks.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTestHelpersTestClocks; summary=List all test clocks; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6738,7 +6738,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/test_helpers/test_clocks/{test_clock}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTestHelpersTestClocksTestClock; summary=Retrieve a test clock; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6946,7 +6946,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/tokens/{token}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTokensToken; summary=Retrieve a token; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6959,7 +6959,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/topups.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTopups; summary=List all top-ups; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -6985,7 +6985,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/topups/{topup}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTopupsTopup; summary=Retrieve a top-up; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7024,7 +7024,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/transfers.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTransfers; summary=List all transfers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7050,7 +7050,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/transfers/{id}/reversals.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTransfersIdReversals; summary=List all reversals; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7076,7 +7076,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/transfers/{transfer}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTransfersTransfer; summary=Retrieve a transfer; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7102,7 +7102,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/transfers/{transfer}/reversals/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTransfersTransferReversalsId; summary=Retrieve a reversal; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7128,7 +7128,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/credit_reversals.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryCreditReversals; summary=List all CreditReversals; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7154,7 +7154,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/credit_reversals/{credit_reversal}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryCreditReversalsCreditReversal; summary=Retrieve a CreditReversal; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7167,7 +7167,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/debit_reversals.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryDebitReversals; summary=List all DebitReversals; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7193,7 +7193,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/debit_reversals/{debit_reversal}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryDebitReversalsDebitReversal; summary=Retrieve a DebitReversal; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7206,7 +7206,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/financial_accounts.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryFinancialAccounts; summary=List all FinancialAccounts; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7232,7 +7232,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/financial_accounts/{financial_account}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryFinancialAccountsFinancialAccount; summary=Retrieve a FinancialAccount; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7271,7 +7271,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/financial_accounts/{financial_account}/features.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryFinancialAccountsFinancialAccountFeatures; summary=Retrieve FinancialAccount Features; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7297,7 +7297,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/inbound_transfers.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryInboundTransfers; summary=List all InboundTransfers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7323,7 +7323,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/inbound_transfers/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryInboundTransfersId; summary=Retrieve an InboundTransfer; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7349,7 +7349,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/outbound_payments.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryOutboundPayments; summary=List all OutboundPayments; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7375,7 +7375,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/outbound_payments/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryOutboundPaymentsId; summary=Retrieve an OutboundPayment; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7401,7 +7401,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/outbound_transfers.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryOutboundTransfers; summary=List all OutboundTransfers; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7427,7 +7427,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/outbound_transfers/{outbound_transfer}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryOutboundTransfersOutboundTransfer; summary=Retrieve an OutboundTransfer; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7453,7 +7453,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/received_credits.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryReceivedCredits; summary=List all ReceivedCredits; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7466,7 +7466,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/received_credits/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryReceivedCreditsId; summary=Retrieve a ReceivedCredit; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7479,7 +7479,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/received_debits.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryReceivedDebits; summary=List all ReceivedDebits; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7492,7 +7492,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/received_debits/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryReceivedDebitsId; summary=Retrieve a ReceivedDebit; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7505,7 +7505,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/transaction_entries.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryTransactionEntries; summary=List all TransactionEntries; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7518,7 +7518,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/transaction_entries/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryTransactionEntriesId; summary=Retrieve a TransactionEntry; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7531,7 +7531,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/transactions.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryTransactions; summary=List all Transactions; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7544,7 +7544,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "reason": "No reachable direct-read command declares GET /v1/treasury/transactions/{id}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=etl_read; operation_id=GetTreasuryTransactionsId; summary=Retrieve a Transaction; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7557,7 +7557,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe events/webhook read is in scope for changefeed parity but blocked/planned until CDC/changefeed semantics and fixtures are authored connector-locally",
+        "reason": "No reachable direct-read command declares GET /v1/webhook_endpoints.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=cdc_changefeed; operation_id=GetWebhookEndpoints; summary=List all webhook endpoints; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }
@@ -7596,7 +7596,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "official Stripe events/webhook read is in scope for changefeed parity but blocked/planned until CDC/changefeed semantics and fixtures are authored connector-locally",
+        "reason": "No reachable direct-read command declares GET /v1/webhook_endpoints/{webhook_endpoint}.",
         "source_url": "https://stripe.com/docs/api",
         "notes": "official_lane=cdc_changefeed; operation_id=GetWebhookEndpointsWebhookEndpoint; summary=Retrieve a webhook endpoint; source=https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json; spec_version=2026-07-29.dahlia"
       }

@@ -1,12 +1,12 @@
 ## Task Delivery Header
 
 - Issue: Refs #4283 — chore(connectors): pin and declare daily-use public API cohort
-- Base branch: main
-- Merges into: main
-- Delivery: One PR against `main` containing sequential declaration-only increments of 10–20 connectors. This lane makes no live-certification claim and uses no provider credentials; each connector remains live-certification-pending.
+- Base branch: fm/cli-reverse-etl-destination-r1
+- Merges into: fm/cli-reverse-etl-destination-r1 → main
+- Delivery: Existing PR #4294 is open against `fm/cli-reverse-etl-destination-r1`; it is complete only after all ten in-scope bundles have a source-backed, installed-binary-reachable command disposition for every documented operation and each eligible typed action has a definition-owned reverse-ETL destination. No provider credential or live request is permitted; live certification remains pending.
 - Working branch: fm/cli-top100-declaration-batch-r1
-- Task: Pin only publicly retrievable provider API descriptions and derive connector-local, source-backed declarations. Exclude `github` and `zoom`; do not use provider credentials or change foundation code. Increment 1 targets Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana.
-- Verification: `scripts/gsd doctor`; `go run ./cmd/agentcontractgen check`; per-connector foundation checks; `connectorgen validate`; `surface-sync`; credential-free fixture/contract proofs; generated docs checks.
+- Task: Reconcile only Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana after the #4303 typed-destination foundation. Preserve their pinned public artifacts and derive every command/transport declaration from them. Exclude `github`, `zoom`, all other connectors, shared runtime changes, credentials, and live provider I/O.
+- Verification: `scripts/gsd doctor`; `go run ./cmd/agentcontractgen check`; targeted red/green integrity assertions; per-connector `connectorgen validate`, `surface-sync --check`, and certification-sweep checks; fixture/conformance and commandrunner preflight; generated manual/website checks; `make connector-runtime-preflight`, `make connector-canon-check`, `go run ./cmd/connectorgen boundary . --json`, and `make verify`.
 
 ## Evidence Table
 
@@ -305,3 +305,79 @@ targets; and two SCIM writes require a typed-action request-content-type
 extension because `writes.json` currently emits `application/json`. Record the
 two-operation `typed-action-content-type` foundation gap with source and engine
 evidence, and do not fabricate a destination or `transport_binding` entry.
+
+## Reconciliation relaunch — 2026-08-20 (supersedes prior destination-gap completion claims)
+
+PR #4304 (`fm/cli-reverse-etl-destination-r1`) is now merged into this branch
+as commit `192180675`. PR #4294 is API-retargeted to that exact branch and
+must retain this stack; it does not target `main` directly. The scope is fixed
+to the ten existing Batch-1 connector directories: `dockerhub`, `notion`,
+`stripe`, `bitbucket`, `gitlab`, `circleci`, `sentry`, `vercel`, `asana`, and
+`jira`.
+
+### Completion contract
+
+For every source-lock operation, reconcile the seven surfaces: `binary_read`,
+`binary_write`, `direct_read`, `direct_write`, `etl`, `reverse_etl`, and its
+actual `pm <connector> ...` command. Every documented operation remains in the
+source map and has either a real installed-binary command or a precise engine
+incapability with the refusing file, line, and minimal missing hook. Privilege,
+destruction, expense, rarity, or lack of live credentials is not a reason to
+omit or disable a representable operation; safety metadata and the existing
+plan → preview → approval → execute boundary govern mutations.
+
+Every eligible typed `writes.json` action must be matched by an exact
+`sync_transport.json` destination declaration: definition-owned action binding,
+allowed input fields, per-mode apply strategies, acknowledgement/delivery
+facts, conformance evidence, and no tombstone claim unless its source-backed
+contract proves it. Binary transfer remains a distinct binary surface and is
+never relabelled as a REST write or reverse destination.
+
+### TDD reconciliation slices
+
+1. **Red — surface audit.** A read-only seven-surface audit of the ten source
+   maps must fail while a documented endpoint has no command or an eligible
+   typed action has no exact destination binding. It records individual rows,
+   not an aggregate availability percentage.
+2. **Green — connector-local declarations.** In bounded connector commits,
+   derive only supported declarations from the pinned source evidence; run the
+   matching focused generator, conformance, preflight, and generated-document
+   checks. A represented destructive or privileged mutation remains reachable
+   through its canonical command and the existing approval boundary.
+3. **Refactor/evidence.** Regenerate connector-owned artifacts only, update
+   the machine-readable seven-surface ledger and human summary, retain every
+   live-provider check as `pending`, and record every genuine engine refusal in
+   the existing foundation-gap log. Never add a generic writer or edit shared
+   engine code in this connector lane.
+
+### Required parity checklist
+
+- [ ] Source lock, operation crosswalk, and declaration disposition still
+  account for every provider operation in each of the ten bundles.
+- [ ] Every eligible typed action has an exact destination declaration and
+  reverse-ETL remains warehouse-mediated and approval-gated.
+- [ ] Every source operation has an installed-binary command or an exact,
+  source-backed engine refusal; no safety/premium/scope-only omission remains.
+- [ ] `sync_transport.json` distinguishes binary from REST and supplies exact
+  source/destination evidence, input fields, strategies, acknowledgement, and
+  delivery facts.
+- [ ] Generated manuals/catalog/website data and runtime command help are
+  regenerated or explicitly verified unchanged for every affected connector.
+- [ ] Live provider certification remains pending without credentials; fixture,
+  structural, and generated-artifact checks are recorded separately.
+
+### Lifecycle and ownership
+
+- Inline/manual GSD fallback: prompts for `discuss-phase`, `plan-phase --tdd`,
+  `execute-phase`, `verify-work`, and `code-review` were resolved through
+  `scripts/gsd`; compatible isolated Pi workers are unavailable and the
+  single-worker connector contract forbids role spawning.
+- Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, and
+  `golang-documentation`.
+- CLI help/manual/website parity is in scope because the task changes connector
+  command surfaces. The project handoff, current connector canon,
+  implementation procedure, remote reproducibility guidance, migration
+  conventions, architecture v2, and certification design were reviewed before
+  declaration edits.

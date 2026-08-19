@@ -4,6 +4,70 @@
   "generated_at": "2026-08-19T16:56:04.430Z",
   "entries": [
     {
+      "connector": "dockerhub",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "0c1b4371e96cdf4630413e3818161d2798d2e2a12c9d5ed651654f91898637a2"},
+      "reason": "foundation-gap",
+      "evidence": "The seven-surface ledger records no fixture-qualified source mapping that preserves Docker Hub target identity for these actions; action names remain declared in writes.json and command paths remain reachable.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverability": "Add a source stream and fixture that prove each target identity and request field, then declare exact input_fields mappings."
+    },
+    {
+      "connector": "notion",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606", "except": ["update_view"]},
+      "reason": "foundation-gap",
+      "evidence": "A destination binding is resolved only by declarative source executor and stream, not by selected typed action; update_view is the static fixture proof and all other action mappings need action-scoped selection.",
+      "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+      "recoverability": "Implement action-scoped destination source bindings."
+    },
+    {
+      "connector": "stripe",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f", "except": ["update_customer"]},
+      "reason": "foundation-gap",
+      "evidence": "The customer update mapping is static-fixture qualified; create and delete require different source payload semantics that the action-invariant binding cannot select.",
+      "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+      "recoverability": "Implement action-scoped destination source bindings."
+    },
+    {
+      "connector": "bitbucket",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "855f5ed7991ca20f35ad88a29c6a340dab6f522bc4703cfd493fb3fa9107ffbf"},
+      "reason": "schema-incompatible",
+      "evidence": "The repositories fixture supplies slug but not the required target workspace identity; no source stream fixture proves a complete target path/body mapping for a typed action.",
+      "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+      "recoverability": "Add a source stream and fixture with the target workspace/path fields, then declare exact input_fields mappings."
+    },
+    {
+      "connector": "circleci",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d", "except": ["update_schedule"]},
+      "reason": "foundation-gap",
+      "evidence": "The schedules update mapping is static-fixture qualified; remaining actions require their own action-specific mapping selection.",
+      "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+      "recoverability": "Implement action-scoped destination source bindings."
+    },
+    {
+      "connector": "vercel",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e", "except": ["update_project"]},
+      "reason": "foundation-gap",
+      "evidence": "The projects update mapping is static-fixture qualified; remaining actions require their own action-specific mapping selection.",
+      "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+      "recoverability": "Implement action-scoped destination source bindings."
+    },
+    {
+      "connector": "asana",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "ede5ebf6c8002f71885c10270256b513abf9dfc13e26e54ca96a05e0f93d3d00"},
+      "reason": "foundation-gap",
+      "evidence": "The closed input_fields mapper cannot construct the nested data objects commonly required by Asana actions, and it cannot select different mappings per action.",
+      "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+      "recoverability": "Add action-scoped mappings with closed nested-object construction."
+    },
+    {
+      "connector": "jira",
+      "operation": {"kind": "typed_action_set", "source": "writes.json", "sha256": "96cdd9a49b649ad6bbf7000ccfaf64fe1448219cf887795c2b5cf3f01910e368"},
+      "reason": "foundation-gap",
+      "evidence": "Representative project_update_project input projectIdOrKey is refused by the mapping identifier grammar, which accepts only lowercase letters, digits, underscores and hyphens.",
+      "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+      "recoverability": "Permit exact action-schema input names in source mappings and make bindings action-scoped."
+    },
+    {
       "connector": "asana",
       "operation": {
         "method": "GET",

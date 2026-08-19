@@ -2,10 +2,80 @@
   "schema_version": 1,
   "connector": "circleci",
   "source": "connector declarations",
-  "declared_commands": 0,
-  "declared_rows": 3,
-  "status_total": 3,
+  "declared_commands": 2,
+  "declared_rows": 6,
+  "status_total": 6,
   "commands": [
+    {
+      "summary": "Read CircleCI schedules through the declared ETL stream.",
+      "path": "schedules list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "schedules",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Plan an update to a CircleCI schedule through reverse ETL.",
+      "path": "schedules update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "parameters",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.parameters"
+        },
+        {
+          "name": "timetable",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.timetable"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
     {
       "summary": "Declared read capability",
       "path": "capability read",
@@ -41,6 +111,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared source transport requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared managed destination transport",
+      "path": "transport destination",
+      "intent": "transport_destination",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared managed destination transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

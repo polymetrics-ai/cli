@@ -178,3 +178,40 @@
 - [x] A read-only local reconciliation independently checks each pinned lock's
   total/per-method/inventory counts and its source method/path set against its
   `api_surface.json`: 4,378 found, zero missing.
+
+## Reconciliation slice 1 — declaration-owned typed destination proof (2026-08-20)
+
+- [x] Merged the then-current `fm/cli-reverse-etl-destination-r1` stack at
+  `192180675`; PR #4294 is retargeted to that stack. Its later persisted
+  App/CLI dispatch work remains an explicit pre-push dependency.
+- [x] The ten-row machine-readable seven-surface ledger records a disposition
+  for every typed action, including a stable action-set SHA-256 selector,
+  source mapping, acknowledgement/delivery facts, and a semantic exclusion or
+  exact foundation dependency where the current closed contract cannot bind it.
+- [x] Definition-owned static destination mappings validate for Notion
+  `views -> update_view`, Stripe `customers -> update_customer`, CircleCI
+  `schedules -> update_schedule`, and Vercel `projects -> update_project`.
+  This is structural/fixture evidence only, not a provider-live deployment
+  claim.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/<each of
+  the ten connectors> --json` — zero findings for each connector.
+- [x] `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`
+  — 552 connectors scanned; zero fields filled or corrected.
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run
+  'TestEveryImplementedCommandPassesRuntimePreflight'` — pass.
+- [x] `go test -count=1 -timeout 20m ./internal/app -run
+  '^TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition$'` —
+  pass.
+- [x] Generated CircleCI and Vercel certification sweeps are current (six
+  rows/two CLI commands each); both have no `certification.json`, so a
+  fixture-backed certification candidate cannot be invoked and is recorded as
+  not applicable rather than failed.
+- [x] An isolated built binary reached credential preflight for the four new
+  CircleCI/Vercel list/update commands, each returning exactly
+  `error: missing --credential` without provider I/O.
+- [x] `make docs-check` passes after generated manuals, skills, and the
+  connector catalog were regenerated.
+- [ ] Complete documented-operation command reachability, the latest #4304
+  persisted App/CLI dispatch proof, `connector-boundary`, full `make verify`,
+  and provider-live certification remain outstanding. Live certification is
+  intentionally pending; no credentials are authorized.

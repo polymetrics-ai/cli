@@ -398,3 +398,50 @@ connector-neutral destination, two SCIM actions are held by the recoverable
 `typed-action-content-type` gap, and five credential lifecycle/session
 operations are not reverse-ETL targets. No destination or `transport_binding`
 is declared before #4303 supplies the generic typed destination factory.
+
+## Reconciliation relaunch — 2026-08-20
+
+| Slice | Red | Green | Refactor / evidence |
+| --- | --- | --- | --- |
+| Seven-surface audit | Existing Batch-1 maps record reverse ETL as a shared missing-destination gap, so an audit requiring exact destination/action/input/acknowledgement evidence fails. | Merge #4304, then make every eligible typed action pass the destination-factory declaration and real command preflight path. | Persist the audited ten-row ledger and keep only exact refusing engine file/line gaps. |
+| Connector-local command reachability | A documented row without a `cli_surface` binding produces `unknown command` or has no real command path. | Source-backed command declarations reach `missing --credential` (or their existing plan/preview approval boundary) without any provider request. | Regenerate command docs and retain operation-level source/crosswalk evidence. |
+| Typed destination conformance | A direct-write action without exact source fields, strategies, acknowledgement, and delivery evidence is rejected by the #4303 factory/preflight. | Each eligible action carries the complete definition-owned destination contract and is admitted structurally; no raw HTTP destination is introduced. | Retain binary operations as binary-only and list only true executor/schema refusals as recoverable gaps. |
+
+### Observed reconciliation slice — 2026-08-20
+
+**Red:** the seven-surface shell audit exited 1 before this slice: Docker Hub
+`54/45/20`, Stripe `589/8/3`, GitLab `1755/4/0`, CircleCI `111/0/7`, Sentry
+`223/0/0`, Vercel `400/0/18`, Asana `249/249/73`, and Jira `617/590/292` in
+`documented/CLI-command/typed-action` order; no connector had a declared
+destination transport. The first Jira attempt also failed structural loading:
+`projectIdOrKey` is not a concrete transport mapping identifier because its
+upper-case characters are refused at `internal/connectors/sync_transport.go:673-690`.
+
+**Green:** declared the fixture-backed update mappings that the closed contract
+can represent now: Notion `views -> update_view`, Stripe
+`customers -> update_customer`, CircleCI `schedules -> update_schedule`, and
+Vercel `projects -> update_project`. Added the two missing CircleCI/Vercel
+ETL and reverse-ETL command paths. The four installed-binary commands below
+all returned exactly `error: missing --credential` from an isolated initialized
+project, with exit 1 and no provider I/O:
+
+```
+pm circleci schedules list --json
+pm circleci schedules update --id sched_fixture_1 --name nightly-build --preview --json
+pm vercel projects list --json
+pm vercel projects update --id prj_fixture_1 --name fixture-app --preview --json
+```
+
+Structural green commands:
+
+```
+go run ./cmd/connectorgen validate internal/connectors/defs/<each of dockerhub,notion,stripe,bitbucket,gitlab,circleci,sentry,vercel,asana,jira> --json
+go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestEveryImplementedCommandPassesRuntimePreflight'
+go test -count=1 -timeout 20m ./internal/app -run '^TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition$'
+```
+
+All passed. `SEVEN-SURFACE-RECONCILIATION.json` contains the stable
+write-action-set SHA-256 selector and an explicit disposition for every typed
+action. The remaining exact foundation gap is
+`action-scoped-source-binding`; persisted App/CLI destination dispatch remains
+the pending upstream #4304 dependency, not a completed deployment claim.

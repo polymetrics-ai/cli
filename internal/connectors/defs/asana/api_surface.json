@@ -13,7 +13,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /access_requests.",
         "source_url": "https://developers.asana.com/reference/getaccessrequests",
         "notes": "official_operation_id=getAccessRequests; lane=etl_read"
       }
@@ -65,7 +65,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/agents.",
         "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
         "notes": "official_operation_id=getAgentsForWorkspace; lane=etl_read"
       }
@@ -78,7 +78,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /agents/{agent_gid}.",
         "source_url": "https://developers.asana.com/reference/getagent",
         "notes": "official_operation_id=getAgent; lane=etl_read"
       }
@@ -91,7 +91,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/ai_studio/runs.",
         "source_url": "https://developers.asana.com/reference/getaistudioruns",
         "notes": "official_operation_id=getAiStudioRuns; lane=etl_read"
       }
@@ -104,7 +104,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/ai_studio/seats.",
         "source_url": "https://developers.asana.com/reference/getaistudioseats",
         "notes": "official_operation_id=getAiStudioSeats; lane=etl_read"
       }
@@ -117,7 +117,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /allocations/{allocation_gid}.",
         "source_url": "https://developers.asana.com/reference/getallocation",
         "notes": "official_operation_id=getAllocation; lane=etl_read"
       }
@@ -156,7 +156,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /allocations.",
         "source_url": "https://developers.asana.com/reference/getallocations",
         "notes": "official_operation_id=getAllocations; lane=etl_read"
       }
@@ -182,7 +182,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
+        "reason": "No reachable direct-read command: \"attachments get-attachment\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getattachment",
         "notes": "official_operation_id=getAttachment; lane=etl_read"
       }
@@ -208,7 +208,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
+        "reason": "No reachable direct-read command: \"attachments get-attachments-for-object\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
         "notes": "official_operation_id=getAttachmentsForObject; lane=etl_read"
       }
@@ -234,7 +234,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "No reachable direct-read command: \"audit-log-api get-audit-log-events\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getauditlogevents",
         "notes": "official_operation_id=getAuditLogEvents; lane=cdc_changefeed"
       }
@@ -260,7 +260,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /budgets.",
         "source_url": "https://developers.asana.com/reference/getbudgets",
         "notes": "official_operation_id=getBudgets; lane=etl_read"
       }
@@ -286,7 +286,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /budgets/{budget_gid}.",
         "source_url": "https://developers.asana.com/reference/getbudget",
         "notes": "official_operation_id=getBudget; lane=etl_read"
       }
@@ -325,7 +325,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}/custom_field_settings.",
         "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforproject",
         "notes": "official_operation_id=getCustomFieldSettingsForProject; lane=etl_read"
       }
@@ -338,7 +338,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios/{portfolio_gid}/custom_field_settings.",
         "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforportfolio",
         "notes": "official_operation_id=getCustomFieldSettingsForPortfolio; lane=etl_read"
       }
@@ -351,7 +351,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goals/{goal_gid}/custom_field_settings.",
         "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforgoal",
         "notes": "official_operation_id=getCustomFieldSettingsForGoal; lane=etl_read"
       }
@@ -364,7 +364,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}/custom_field_settings.",
         "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforteam",
         "notes": "official_operation_id=getCustomFieldSettingsForTeam; lane=etl_read"
       }
@@ -384,7 +384,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /custom_fields/{custom_field_gid}.",
         "source_url": "https://developers.asana.com/reference/getcustomfield",
         "notes": "official_operation_id=getCustomField; lane=etl_read"
       }
@@ -445,7 +445,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /custom_types.",
         "source_url": "https://developers.asana.com/reference/getcustomtypes",
         "notes": "official_operation_id=getCustomTypes; lane=etl_read"
       }
@@ -458,7 +458,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /custom_types/{custom_type_gid}.",
         "source_url": "https://developers.asana.com/reference/getcustomtype",
         "notes": "official_operation_id=getCustomType; lane=etl_read"
       }
@@ -471,7 +471,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "No reachable direct-read command: \"events get-events\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getevents",
         "notes": "official_operation_id=getEvents; lane=cdc_changefeed"
       }
@@ -498,7 +498,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goal_relationships/{goal_relationship_gid}.",
         "source_url": "https://developers.asana.com/reference/getgoalrelationship",
         "notes": "official_operation_id=getGoalRelationship; lane=etl_read"
       }
@@ -518,7 +518,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goal_relationships.",
         "source_url": "https://developers.asana.com/reference/getgoalrelationships",
         "notes": "official_operation_id=getGoalRelationships; lane=etl_read"
       }
@@ -551,7 +551,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goals/{goal_gid}.",
         "source_url": "https://developers.asana.com/reference/getgoal",
         "notes": "official_operation_id=getGoal; lane=etl_read"
       }
@@ -584,7 +584,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goals.",
         "source_url": "https://developers.asana.com/reference/getgoals",
         "notes": "official_operation_id=getGoals; lane=etl_read"
       }
@@ -638,7 +638,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goals/{goal_gid}/parentGoals.",
         "source_url": "https://developers.asana.com/reference/getparentgoalsforgoal",
         "notes": "official_operation_id=getParentGoalsForGoal; lane=etl_read"
       }
@@ -671,7 +671,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "No reachable direct-read command: \"jobs get-job\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getjob",
         "notes": "official_operation_id=getJob; lane=cdc_changefeed"
       }
@@ -684,7 +684,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /memberships.",
         "source_url": "https://developers.asana.com/reference/getmemberships",
         "notes": "official_operation_id=getMemberships; lane=etl_read"
       }
@@ -710,7 +710,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /memberships/{membership_gid}.",
         "source_url": "https://developers.asana.com/reference/getmembership",
         "notes": "official_operation_id=getMembership; lane=etl_read"
       }
@@ -749,7 +749,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /ooo_entries/{ooo_entry_gid}.",
         "source_url": "https://developers.asana.com/reference/getoooentry",
         "notes": "official_operation_id=getOooEntry; lane=etl_read"
       }
@@ -782,7 +782,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /ooo_entries.",
         "source_url": "https://developers.asana.com/reference/getoooentries",
         "notes": "official_operation_id=getOooEntries; lane=etl_read"
       }
@@ -815,7 +815,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /organization_exports/{organization_export_gid}.",
         "source_url": "https://developers.asana.com/reference/getorganizationexport",
         "notes": "official_operation_id=getOrganizationExport; lane=etl_read"
       }
@@ -828,7 +828,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolio_memberships.",
         "source_url": "https://developers.asana.com/reference/getportfoliomemberships",
         "notes": "official_operation_id=getPortfolioMemberships; lane=etl_read"
       }
@@ -841,7 +841,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolio_memberships/{portfolio_membership_gid}.",
         "source_url": "https://developers.asana.com/reference/getportfoliomembership",
         "notes": "official_operation_id=getPortfolioMembership; lane=etl_read"
       }
@@ -854,7 +854,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios/{portfolio_gid}/portfolio_memberships.",
         "source_url": "https://developers.asana.com/reference/getportfoliomembershipsforportfolio",
         "notes": "official_operation_id=getPortfolioMembershipsForPortfolio; lane=etl_read"
       }
@@ -867,7 +867,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios.",
         "source_url": "https://developers.asana.com/reference/getportfolios",
         "notes": "official_operation_id=getPortfolios; lane=etl_read"
       }
@@ -887,7 +887,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios/{portfolio_gid}.",
         "source_url": "https://developers.asana.com/reference/getportfolio",
         "notes": "official_operation_id=getPortfolio; lane=etl_read"
       }
@@ -920,7 +920,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios/{portfolio_gid}/items.",
         "source_url": "https://developers.asana.com/reference/getitemsforportfolio",
         "notes": "official_operation_id=getItemsForPortfolio; lane=etl_read"
       }
@@ -1000,7 +1000,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_briefs/{project_brief_gid}.",
         "source_url": "https://developers.asana.com/reference/getprojectbrief",
         "notes": "official_operation_id=getProjectBrief; lane=etl_read"
       }
@@ -1040,7 +1040,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_memberships/{project_membership_gid}.",
         "source_url": "https://developers.asana.com/reference/getprojectmembership",
         "notes": "official_operation_id=getProjectMembership; lane=etl_read"
       }
@@ -1053,7 +1053,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}/project_memberships.",
         "source_url": "https://developers.asana.com/reference/getprojectmembershipsforproject",
         "notes": "official_operation_id=getProjectMembershipsForProject; lane=etl_read"
       }
@@ -1066,7 +1066,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_portfolio_settings/{project_portfolio_setting_gid}.",
         "source_url": "https://developers.asana.com/reference/getprojectportfoliosetting",
         "notes": "official_operation_id=getProjectPortfolioSetting; lane=etl_read"
       }
@@ -1086,7 +1086,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}/project_portfolio_settings.",
         "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforproject",
         "notes": "official_operation_id=getProjectPortfolioSettingsForProject; lane=etl_read"
       }
@@ -1099,7 +1099,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /portfolios/{portfolio_gid}/project_portfolio_settings.",
         "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforportfolio",
         "notes": "official_operation_id=getProjectPortfolioSettingsForPortfolio; lane=etl_read"
       }
@@ -1112,7 +1112,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_statuses/{project_status_gid}.",
         "source_url": "https://developers.asana.com/reference/getprojectstatus",
         "notes": "official_operation_id=getProjectStatus; lane=etl_read"
       }
@@ -1152,7 +1152,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_templates/{project_template_gid}.",
         "source_url": "https://developers.asana.com/reference/getprojecttemplate",
         "notes": "official_operation_id=getProjectTemplate; lane=etl_read"
       }
@@ -1178,7 +1178,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /project_templates.",
         "source_url": "https://developers.asana.com/reference/getprojecttemplates",
         "notes": "official_operation_id=getProjectTemplates; lane=etl_read"
       }
@@ -1191,7 +1191,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}/project_templates.",
         "source_url": "https://developers.asana.com/reference/getprojecttemplatesforteam",
         "notes": "official_operation_id=getProjectTemplatesForTeam; lane=etl_read"
       }
@@ -1225,7 +1225,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}.",
         "source_url": "https://developers.asana.com/reference/getproject",
         "notes": "official_operation_id=getProject; lane=etl_read"
       }
@@ -1259,7 +1259,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/projects.",
         "source_url": "https://developers.asana.com/reference/getprojectsfortask",
         "notes": "official_operation_id=getProjectsForTask; lane=etl_read"
       }
@@ -1272,7 +1272,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}/projects.",
         "source_url": "https://developers.asana.com/reference/getprojectsforteam",
         "notes": "official_operation_id=getProjectsForTeam; lane=etl_read"
       }
@@ -1292,7 +1292,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/projects.",
         "source_url": "https://developers.asana.com/reference/getprojectsforworkspace",
         "notes": "official_operation_id=getProjectsForWorkspace; lane=etl_read"
       }
@@ -1312,7 +1312,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+        "reason": "No reachable direct-read command: \"projects search-projects-for-workspace\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/searchprojectsforworkspace",
         "notes": "official_operation_id=searchProjectsForWorkspace; lane=direct_read_query_search"
       }
@@ -1345,7 +1345,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}/task_counts.",
         "source_url": "https://developers.asana.com/reference/gettaskcountsforproject",
         "notes": "official_operation_id=getTaskCountsForProject; lane=etl_read"
       }
@@ -1405,7 +1405,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /rates.",
         "source_url": "https://developers.asana.com/reference/getrates",
         "notes": "official_operation_id=getRates; lane=etl_read"
       }
@@ -1431,7 +1431,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /rates/{rate_gid}.",
         "source_url": "https://developers.asana.com/reference/getrate",
         "notes": "official_operation_id=getRate; lane=etl_read"
       }
@@ -1470,7 +1470,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /reactions.",
         "source_url": "https://developers.asana.com/reference/getreactionsonobject",
         "notes": "official_operation_id=getReactionsOnObject; lane=etl_read"
       }
@@ -1483,7 +1483,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /roles.",
         "source_url": "https://developers.asana.com/reference/getroles",
         "notes": "official_operation_id=getRoles; lane=etl_read"
       }
@@ -1509,7 +1509,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /roles/{role_gid}.",
         "source_url": "https://developers.asana.com/reference/getrole",
         "notes": "official_operation_id=getRole; lane=etl_read"
       }
@@ -1555,7 +1555,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /sections/{section_gid}.",
         "source_url": "https://developers.asana.com/reference/getsection",
         "notes": "official_operation_id=getSection; lane=etl_read"
       }
@@ -1610,7 +1610,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /status_updates/{status_update_gid}.",
         "source_url": "https://developers.asana.com/reference/getstatus",
         "notes": "official_operation_id=getStatus; lane=etl_read"
       }
@@ -1636,7 +1636,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /status_updates.",
         "source_url": "https://developers.asana.com/reference/getstatusesforobject",
         "notes": "official_operation_id=getStatusesForObject; lane=etl_read"
       }
@@ -1656,7 +1656,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /stories/{story_gid}.",
         "source_url": "https://developers.asana.com/reference/getstory",
         "notes": "official_operation_id=getStory; lane=etl_read"
       }
@@ -1703,7 +1703,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /goals/{goal_gid}/stories.",
         "source_url": "https://developers.asana.com/reference/getstoriesforgoal",
         "notes": "official_operation_id=getStoriesForGoal; lane=etl_read"
       }
@@ -1737,7 +1737,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tags/{tag_gid}.",
         "source_url": "https://developers.asana.com/reference/gettag",
         "notes": "official_operation_id=getTag; lane=etl_read"
       }
@@ -1764,7 +1764,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/tags.",
         "source_url": "https://developers.asana.com/reference/gettagsfortask",
         "notes": "official_operation_id=getTagsForTask; lane=etl_read"
       }
@@ -1777,7 +1777,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/tags.",
         "source_url": "https://developers.asana.com/reference/gettagsforworkspace",
         "notes": "official_operation_id=getTagsForWorkspace; lane=etl_read"
       }
@@ -1797,7 +1797,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /task_templates.",
         "source_url": "https://developers.asana.com/reference/gettasktemplates",
         "notes": "official_operation_id=getTaskTemplates; lane=etl_read"
       }
@@ -1810,7 +1810,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /task_templates/{task_template_gid}.",
         "source_url": "https://developers.asana.com/reference/gettasktemplate",
         "notes": "official_operation_id=getTaskTemplate; lane=etl_read"
       }
@@ -1857,7 +1857,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}.",
         "source_url": "https://developers.asana.com/reference/gettask",
         "notes": "official_operation_id=getTask; lane=etl_read"
       }
@@ -1891,7 +1891,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /projects/{project_gid}/tasks.",
         "source_url": "https://developers.asana.com/reference/gettasksforproject",
         "notes": "official_operation_id=getTasksForProject; lane=etl_read"
       }
@@ -1904,7 +1904,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /sections/{section_gid}/tasks.",
         "source_url": "https://developers.asana.com/reference/gettasksforsection",
         "notes": "official_operation_id=getTasksForSection; lane=etl_read"
       }
@@ -1917,7 +1917,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tags/{tag_gid}/tasks.",
         "source_url": "https://developers.asana.com/reference/gettasksfortag",
         "notes": "official_operation_id=getTasksForTag; lane=etl_read"
       }
@@ -1930,7 +1930,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /user_task_lists/{user_task_list_gid}/tasks.",
         "source_url": "https://developers.asana.com/reference/gettasksforusertasklist",
         "notes": "official_operation_id=getTasksForUserTaskList; lane=etl_read"
       }
@@ -1943,7 +1943,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/subtasks.",
         "source_url": "https://developers.asana.com/reference/getsubtasksfortask",
         "notes": "official_operation_id=getSubtasksForTask; lane=etl_read"
       }
@@ -1970,7 +1970,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/dependencies.",
         "source_url": "https://developers.asana.com/reference/getdependenciesfortask",
         "notes": "official_operation_id=getDependenciesForTask; lane=etl_read"
       }
@@ -2003,7 +2003,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/dependents.",
         "source_url": "https://developers.asana.com/reference/getdependentsfortask",
         "notes": "official_operation_id=getDependentsForTask; lane=etl_read"
       }
@@ -2096,7 +2096,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/tasks/custom_id/{custom_id}.",
         "source_url": "https://developers.asana.com/reference/gettaskforcustomid",
         "notes": "official_operation_id=getTaskForCustomID; lane=etl_read"
       }
@@ -2109,7 +2109,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+        "reason": "No reachable direct-read command: \"tasks search-tasks-for-workspace\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/searchtasksforworkspace",
         "notes": "official_operation_id=searchTasksForWorkspace; lane=direct_read_query_search"
       }
@@ -2122,7 +2122,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /team_memberships/{team_membership_gid}.",
         "source_url": "https://developers.asana.com/reference/getteammembership",
         "notes": "official_operation_id=getTeamMembership; lane=etl_read"
       }
@@ -2142,7 +2142,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}/team_memberships.",
         "source_url": "https://developers.asana.com/reference/getteammembershipsforteam",
         "notes": "official_operation_id=getTeamMembershipsForTeam; lane=etl_read"
       }
@@ -2155,7 +2155,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}/team_memberships.",
         "source_url": "https://developers.asana.com/reference/getteammembershipsforuser",
         "notes": "official_operation_id=getTeamMembershipsForUser; lane=etl_read"
       }
@@ -2175,7 +2175,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}.",
         "source_url": "https://developers.asana.com/reference/getteam",
         "notes": "official_operation_id=getTeam; lane=etl_read"
       }
@@ -2202,7 +2202,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}/teams.",
         "source_url": "https://developers.asana.com/reference/getteamsforuser",
         "notes": "official_operation_id=getTeamsForUser; lane=etl_read"
       }
@@ -2235,7 +2235,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_periods/{time_period_gid}.",
         "source_url": "https://developers.asana.com/reference/gettimeperiod",
         "notes": "official_operation_id=getTimePeriod; lane=etl_read"
       }
@@ -2248,7 +2248,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_periods.",
         "source_url": "https://developers.asana.com/reference/gettimeperiods",
         "notes": "official_operation_id=getTimePeriods; lane=etl_read"
       }
@@ -2261,7 +2261,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_tracking_categories/{time_tracking_category_gid}.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingcategory",
         "notes": "official_operation_id=getTimeTrackingCategory; lane=etl_read"
       }
@@ -2300,7 +2300,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortimetrackingcategory",
         "notes": "official_operation_id=getTimeTrackingEntriesForTimeTrackingCategory; lane=etl_read"
       }
@@ -2313,7 +2313,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_tracking_categories.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingcategories",
         "notes": "official_operation_id=getTimeTrackingCategories; lane=etl_read"
       }
@@ -2339,7 +2339,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /tasks/{task_gid}/time_tracking_entries.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortask",
         "notes": "official_operation_id=getTimeTrackingEntriesForTask; lane=etl_read"
       }
@@ -2359,7 +2359,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_tracking_entries/{time_tracking_entry_gid}.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingentry",
         "notes": "official_operation_id=getTimeTrackingEntry; lane=etl_read"
       }
@@ -2392,7 +2392,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /time_tracking_entries.",
         "source_url": "https://developers.asana.com/reference/gettimetrackingentries",
         "notes": "official_operation_id=getTimeTrackingEntries; lane=etl_read"
       }
@@ -2405,7 +2405,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /timesheet_approval_statuses/{timesheet_approval_status_gid}.",
         "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatus",
         "notes": "official_operation_id=getTimesheetApprovalStatus; lane=etl_read"
       }
@@ -2431,7 +2431,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /timesheet_approval_statuses.",
         "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatuses",
         "notes": "official_operation_id=getTimesheetApprovalStatuses; lane=etl_read"
       }
@@ -2457,7 +2457,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
+        "reason": "No reachable direct-read command: \"typeahead for-workspace\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/typeaheadforworkspace",
         "notes": "official_operation_id=typeaheadForWorkspace; lane=direct_read_query_search"
       }
@@ -2470,7 +2470,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /user_task_lists/{user_task_list_gid}.",
         "source_url": "https://developers.asana.com/reference/getusertasklist",
         "notes": "official_operation_id=getUserTaskList; lane=etl_read"
       }
@@ -2483,7 +2483,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}/user_task_list.",
         "source_url": "https://developers.asana.com/reference/getusertasklistforuser",
         "notes": "official_operation_id=getUserTaskListForUser; lane=etl_read"
       }
@@ -2503,7 +2503,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}.",
         "source_url": "https://developers.asana.com/reference/getuser",
         "notes": "official_operation_id=getUser; lane=etl_read"
       }
@@ -2523,7 +2523,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}/favorites.",
         "source_url": "https://developers.asana.com/reference/getfavoritesforuser",
         "notes": "official_operation_id=getFavoritesForUser; lane=etl_read"
       }
@@ -2536,7 +2536,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /teams/{team_gid}/users.",
         "source_url": "https://developers.asana.com/reference/getusersforteam",
         "notes": "official_operation_id=getUsersForTeam; lane=etl_read"
       }
@@ -2549,7 +2549,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/users.",
         "source_url": "https://developers.asana.com/reference/getusersforworkspace",
         "notes": "official_operation_id=getUsersForWorkspace; lane=etl_read"
       }
@@ -2562,7 +2562,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/users/{user_gid}.",
         "source_url": "https://developers.asana.com/reference/getuserforworkspace",
         "notes": "official_operation_id=getUserForWorkspace; lane=etl_read"
       }
@@ -2582,7 +2582,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "No reachable direct-read command: \"webhooks get-webhooks\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getwebhooks",
         "notes": "official_operation_id=getWebhooks; lane=cdc_changefeed"
       }
@@ -2608,7 +2608,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "No reachable direct-read command: \"webhooks get-webhook\" is declared planned, not implemented.",
         "source_url": "https://developers.asana.com/reference/getwebhook",
         "notes": "official_operation_id=getWebhook; lane=cdc_changefeed"
       }
@@ -2647,7 +2647,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspace_memberships/{workspace_membership_gid}.",
         "source_url": "https://developers.asana.com/reference/getworkspacemembership",
         "notes": "official_operation_id=getWorkspaceMembership; lane=etl_read"
       }
@@ -2660,7 +2660,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /users/{user_gid}/workspace_memberships.",
         "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforuser",
         "notes": "official_operation_id=getWorkspaceMembershipsForUser; lane=etl_read"
       }
@@ -2687,7 +2687,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}.",
         "source_url": "https://developers.asana.com/reference/getworkspace",
         "notes": "official_operation_id=getWorkspace; lane=etl_read"
       }
@@ -2727,7 +2727,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "reason": "No reachable direct-read command declares GET /workspaces/{workspace_gid}/events.",
         "source_url": "https://developers.asana.com/reference/getworkspaceevents",
         "notes": "official_operation_id=getWorkspaceEvents; lane=etl_read"
       }

@@ -5089,7 +5089,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
+        "reason": "No reachable direct-read command declares POST /rest/api/3/workflows/create/validation.",
         "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
         "notes": "Named dependency: cli_surface flag types are boolean, string, integer, number, enum and string_array (engine/schema/cli_surface.schema.json), so an object-valued required body field has no flag form; connectorgen validate's checkCLISurfaceOperationBodyMappings then refuses the 'implemented' claim, and covered_by.direct_read accepts only an implemented command. Unblocks when a structured-document flag type exists."
       }
@@ -5138,7 +5138,7 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
+        "reason": "No reachable direct-read command declares POST /rest/api/3/workflows/update/validation.",
         "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
         "notes": "Named dependency: cli_surface flag types are boolean, string, integer, number, enum and string_array (engine/schema/cli_surface.schema.json), so an object-valued required body field has no flag form; connectorgen validate's checkCLISurfaceOperationBodyMappings then refuses the 'implemented' claim, and covered_by.direct_read accepts only an implemented command. Unblocks when a structured-document flag type exists."
       }

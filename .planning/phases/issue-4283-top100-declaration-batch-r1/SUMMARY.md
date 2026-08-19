@@ -64,3 +64,21 @@ additional accepted record. The test now asserts the actual accepted-evidence
 contract, and both the targeted test and complete `internal/app` package pass
 locally. This is test-only; it does not change transport composition,
 connector declarations, credentials, or live-certification status.
+
+## Reconciliation relaunch — first connector-local proof slice
+
+The first bounded reconciliation slice declares four exact, fixture-backed
+destination mappings—Notion views, Stripe customers, CircleCI schedules, and
+Vercel projects—and supplies the missing CircleCI/Vercel ETL and reverse-ETL
+commands. The installed binary reaches credential preflight for those four
+commands without a provider request. The new seven-surface ledger gives all
+491 typed actions an explicit destination eligibility disposition and retains
+the source action-set hashes.
+
+This is deliberately not connector completion: source-operation command
+coverage remains well below the requested full-reachability bar for several
+providers. The generic destination descriptor also maps by executor and stream,
+not selected action, so `action-scoped-source-binding` remains a precise
+foundation dependency for differing action field maps. Persisted App/CLI
+destination dispatch is additionally pending in the #4304 foundation branch.
+No provider credential was used; live certification remains pending.

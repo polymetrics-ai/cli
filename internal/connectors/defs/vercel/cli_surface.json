@@ -1,0 +1,124 @@
+{
+  "tagline": "Read Vercel streams and plan declared project updates through reverse ETL.",
+  "usage": "pm vercel <command> [flags]",
+  "source_cli": {
+    "name": "Vercel REST API",
+    "docs": "https://vercel.com/docs/rest-api",
+    "reference": "PATCH /v9/projects/{id}",
+    "source": "sources/vercel-operation-source-lock.json"
+  },
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Vercel request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential alias used only when --credential is omitted."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
+    }
+  ],
+  "groups": [
+    {
+      "id": "projects",
+      "title": "Projects",
+      "commands": [
+        "projects"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "projects list",
+      "summary": "Read Vercel projects through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_cli_path": "GET /v10/projects",
+      "source_url": "https://vercel.com/docs/rest-api/reference/endpoints/projects/get-a-list-of-projects",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v10/projects"
+        }
+      ],
+      "examples": [
+        "pm vercel projects list --credential vercel-prod --json"
+      ]
+    },
+    {
+      "path": "projects update",
+      "summary": "Plan an update to a Vercel project through reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_project",
+      "source_cli_path": "PATCH /v9/projects/{id}",
+      "source_url": "https://vercel.com/docs/rest-api/reference/endpoints/projects/update-a-project",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Project identifier.",
+          "maps_to": "record.id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Project name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "build-command",
+          "type": "string",
+          "summary": "Build command.",
+          "maps_to": "record.buildCommand"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v9/projects/{idOrName}"
+        }
+      ],
+      "risk": "Updates a Vercel project; requires reverse-ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+      "examples": [
+        "pm vercel projects update --credential vercel-prod --id prj_fixture_1 --name fixture-app --preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "execution-model",
+      "summary": "Reverse ETL uses plan, preview, approval, and execute; provider-live certification remains pending."
+    }
+  ]
+}

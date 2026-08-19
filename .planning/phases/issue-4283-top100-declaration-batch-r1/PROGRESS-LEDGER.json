@@ -1695,5 +1695,20 @@
         "retained_non_source_entry_basis": "twenty-two legacy edge-config routes remain in addition to the current provider OpenAPI surface"
       }
     }
-  ]
+  ],
+  "reconciliation": {
+    "at": "2026-08-19T19:16:23Z",
+    "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json",
+    "summary": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.md",
+    "scope": "The existing ten PR #4294 connector directories only; excludes the obsolete top-100 expansion.",
+    "supersedes": "The per-connector generic-typed-destination-executor summaries above. #4304 composes the destination factory, while its persisted App/CLI dispatch integration remains an upstream prerequisite.",
+    "destination_static_mappings": {
+      "notion": "views -> update_view",
+      "stripe": "customers -> update_customer",
+      "circleci": "schedules -> update_schedule",
+      "vercel": "projects -> update_project"
+    },
+    "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
+    "resume_pointer": "Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
+  }
 }
