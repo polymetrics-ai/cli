@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "issue": 4292,
+  "state": "planned",
+  "delivery": "direct-pr",
+  "base_branch": "main",
+  "working_branch": "fm/cli-map-batch8910-r1",
+  "batches": {
+    "8": "pending",
+    "9": "pending",
+    "10": "pending"
+  },
+  "live_provider_calls": false,
+  "credentials": false,
+  "reverse_etl_disposition": "foundation-gap:generic-typed-destination-executor"
+}
