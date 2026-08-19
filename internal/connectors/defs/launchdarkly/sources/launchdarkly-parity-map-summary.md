@@ -5,9 +5,10 @@
 - Operations found in provider source: 397
 - Coverage confidence: machine-readable-spec — Official LaunchDarkly OpenAPI endpoint documents 397 HTTP method/path operations.
 - Enabled: 0
+- Foundation gap: 0
 - Declaration pending: 399
 - Disabled: 0
 - Documented DELETEs: 51; enabled DELETEs: 0
 - Parity classes: direct_read=189, direct_write=205, etl=5
-- Foundation gaps: generic-typed-destination-executor
+- Foundation gaps: none
 - Public source retrieval: undefined

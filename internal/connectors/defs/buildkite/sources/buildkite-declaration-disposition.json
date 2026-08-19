@@ -29,11 +29,11 @@
       "level": "complete-rendered-reference",
       "basis": "Official Buildkite rendered REST reference table has 129 unique HTTP method/path rows."
     },
-    "enabled_operations": 26,
+    "enabled_operations": 9,
     "declaration_pending_operations": 106,
     "disabled_operations": 0,
     "documented_deletes": 22,
-    "enabled_deletes": 4,
+    "enabled_deletes": 2,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -53,19 +53,26 @@
     "terminal_commands": 0,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "application-generic-destination-dispatch"
     ],
     "foundation_gaps": [
       {
         "id": "application-generic-destination-dispatch",
         "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
+        "count": 17,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
         "count": 106
+      },
+      {
+        "key": "foundation-gap",
+        "count": 17
       }
     ],
     "transport": {
@@ -81,7 +88,8 @@
           "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
-    }
+    },
+    "foundation_gap_operations": 17
   },
   "ledger_dispositions": [
     {
@@ -443,14 +451,23 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-pause-9",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"pause_agent\" binds PUT /v2/organizations/{org.slug}/agents/{id}/pause."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"pause_agent\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"pause_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -484,14 +501,23 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-resume-10",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"resume_agent\" binds PUT /v2/organizations/{org.slug}/agents/{id}/resume."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"resume_agent\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"resume_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -525,14 +551,23 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-stop-11",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"stop_agent\" binds PUT /v2/organizations/{org.slug}/agents/{id}/stop."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"stop_agent\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"stop_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2700,14 +2735,23 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-63",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"create_pipeline\" binds POST /v2/organizations/{org.slug}/pipelines."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_pipeline\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2784,14 +2828,23 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-65",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"create_build\" binds POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_build\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3035,14 +3088,23 @@
         "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-71",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"cancel_build\" binds PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/cancel."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"cancel_build\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"cancel_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3496,14 +3558,23 @@
         "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-82",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"rebuild_build\" binds PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/rebuild."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"rebuild_build\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"rebuild_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3537,14 +3608,23 @@
         "operation_id": "delete-v2-organizations-org-slug-pipelines-slug-83",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"delete_pipeline\" binds DELETE /v2/organizations/{org.slug}/pipelines/{slug}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_pipeline\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3620,14 +3700,23 @@
         "operation_id": "patch-v2-organizations-org-slug-pipelines-slug-85",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"update_pipeline\" binds PATCH /v2/organizations/{org.slug}/pipelines/{slug}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_pipeline\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3661,14 +3750,23 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-slug-archive-86",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"archive_pipeline\" binds POST /v2/organizations/{org.slug}/pipelines/{slug}/archive."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"archive_pipeline\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"archive_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3702,14 +3800,23 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-slug-unarchive-87",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"unarchive_pipeline\" binds POST /v2/organizations/{org.slug}/pipelines/{slug}/unarchive."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"unarchive_pipeline\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"unarchive_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4618,14 +4725,23 @@
         "operation_id": "post-v2-organizations-org-slug-teams-109",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"create_team\" binds POST /v2/organizations/{org.slug}/teams."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_team\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4659,14 +4775,23 @@
         "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-110",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"delete_team\" binds DELETE /v2/organizations/{org.slug}/teams/{team.uuid}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_team\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4742,14 +4867,23 @@
         "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-112",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"update_team\" binds PATCH /v2/organizations/{org.slug}/teams/{team.uuid}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_team\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5497,14 +5631,23 @@
         "operation_id": "put-organizations-org-slug-jobs-job-id-retry-130",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"retry_job\" binds PUT /organizations/{org.slug}/jobs/{job.id}/retry."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"retry_job\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"retry_job\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5538,14 +5681,23 @@
         "operation_id": "put-organizations-org-slug-jobs-job-id-unblock-131",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"unblock_job\" binds PUT /organizations/{org.slug}/jobs/{job.id}/unblock."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"unblock_job\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"unblock_job\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5579,14 +5731,23 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-132",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/buildkite/writes.json: typed direct-write action \"create_annotation\" binds POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_annotation\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_annotation\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,

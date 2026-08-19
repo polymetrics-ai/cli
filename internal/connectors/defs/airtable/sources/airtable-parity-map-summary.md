@@ -4,10 +4,11 @@
 - Mapped operation rows: 105
 - Operations found in provider source: 103
 - Coverage confidence: complete-rendered-reference — Official Airtable rendered Web API reference embeds its complete 3.1 schema with 103 HTTP method/path operations.
-- Enabled: 13
+- Enabled: 1
+- Foundation gap: 12
 - Declaration pending: 92
 - Disabled: 0
-- Documented DELETEs: 20; enabled DELETEs: 3
+- Documented DELETEs: 20; enabled DELETEs: 0
 - Parity classes: direct_read=26, direct_write=74, etl=5
-- Foundation gaps: generic-typed-destination-executor
+- Foundation gaps: application-generic-destination-dispatch
 - Public source retrieval: undefined

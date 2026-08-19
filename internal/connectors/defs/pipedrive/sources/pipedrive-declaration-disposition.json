@@ -29,11 +29,11 @@
       "level": "machine-readable-spec",
       "basis": "Official Pipedrive v1 OpenAPI document; count is HTTP method plus path."
     },
-    "enabled_operations": 17,
+    "enabled_operations": 0,
     "declaration_pending_operations": 201,
     "disabled_operations": 0,
     "documented_deletes": 35,
-    "enabled_deletes": 6,
+    "enabled_deletes": 0,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -53,19 +53,26 @@
     "terminal_commands": 0,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "application-generic-destination-dispatch"
     ],
     "foundation_gaps": [
       {
         "id": "application-generic-destination-dispatch",
         "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
+        "count": 17,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
         "count": 201
+      },
+      {
+        "key": "foundation-gap",
+        "count": 17
       }
     ],
     "transport": {
@@ -81,7 +88,8 @@
           "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
-    }
+    },
+    "foundation_gap_operations": 17
   },
   "ledger_dispositions": [
     {
@@ -190,14 +198,23 @@
         "operation_id": "addActivityType",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_activity_type\" binds POST /activityTypes."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_activity_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_activity_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -231,14 +248,23 @@
         "operation_id": "deleteActivityType",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_activity_type\" binds DELETE /activityTypes/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_activity_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_activity_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -272,14 +298,23 @@
         "operation_id": "updateActivityType",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"update_activity_type\" binds PUT /activityTypes/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_activity_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_activity_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2248,14 +2283,23 @@
         "operation_id": "addFilter",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_filter\" binds POST /filters."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_filter\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_filter\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2289,14 +2333,23 @@
         "operation_id": "deleteFilter",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_filter\" binds DELETE /filters/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_filter\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_filter\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2372,14 +2425,23 @@
         "operation_id": "updateFilter",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"update_filter\" binds PUT /filters/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_filter\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_filter\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2751,14 +2813,23 @@
         "operation_id": "addLeadLabel",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_lead_label\" binds POST /leadLabels."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_lead_label\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_lead_label\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2792,14 +2863,23 @@
         "operation_id": "deleteLeadLabel",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_lead_label\" binds DELETE /leadLabels/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_lead_label\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_lead_label\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2833,14 +2913,23 @@
         "operation_id": "updateLeadLabel",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"update_lead_label\" binds PATCH /leadLabels/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_lead_label\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_lead_label\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2917,14 +3006,23 @@
         "operation_id": "addLead",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_lead\" binds POST /leads."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_lead\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_lead\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -2958,14 +3056,23 @@
         "operation_id": "deleteLead",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_lead\" binds DELETE /leads/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_lead\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_lead\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -3041,14 +3148,23 @@
         "operation_id": "updateLead",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"update_lead\" binds PATCH /leads/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_lead\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_lead\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4009,14 +4125,23 @@
         "operation_id": "addNote",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_note\" binds POST /notes."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_note\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_note\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4050,14 +4175,23 @@
         "operation_id": "deleteNote",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_note\" binds DELETE /notes/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_note\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_note\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4133,14 +4267,23 @@
         "operation_id": "updateNote",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"update_note\" binds PUT /notes/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_note\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_note\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8968,14 +9111,23 @@
         "operation_id": "addWebhook",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"create_webhook\" binds POST /webhooks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_webhook\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_webhook\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9009,14 +9161,23 @@
         "operation_id": "deleteWebhook",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/pipedrive/writes.json: typed direct-write action \"delete_webhook\" binds DELETE /webhooks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_webhook\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_webhook\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,

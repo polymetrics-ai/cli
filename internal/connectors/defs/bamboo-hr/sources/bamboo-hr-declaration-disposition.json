@@ -29,11 +29,11 @@
       "level": "complete-rendered-reference",
       "basis": "Official BambooHR rendered API reference embeds its complete 3.1 schema; 319 HTTP method/path operations are extracted from it."
     },
-    "enabled_operations": 207,
+    "enabled_operations": 106,
     "declaration_pending_operations": 135,
     "disabled_operations": 3,
     "documented_deletes": 38,
-    "enabled_deletes": 33,
+    "enabled_deletes": 12,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -53,19 +53,26 @@
     "terminal_commands": 0,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "application-generic-destination-dispatch"
     ],
     "foundation_gaps": [
       {
         "id": "application-generic-destination-dispatch",
         "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
+        "count": 101,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
         "count": 135
+      },
+      {
+        "key": "foundation-gap",
+        "count": 101
       },
       {
         "key": "provider-does-not-expose",
@@ -85,7 +92,8 @@
           "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
-    }
+    },
+    "foundation_gap_operations": 101
   },
   "ledger_dispositions": [
     {
@@ -152,14 +160,23 @@
         "operation_id": "assign-time-off-policies-v1-1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"assign_time_off_policies_v1_1\" binds PUT /api/v1_1/employees/{employeeId}/time_off/policies."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"assign_time_off_policies_v1_1\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"assign_time_off_policies_v1_1\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -193,14 +210,23 @@
         "operation_id": "create-table-row-v1-1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_table_row_v1_1\" binds POST /api/v1_1/employees/{id}/tables/{table}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_table_row_v1_1\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_table_row_v1_1\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -234,14 +260,23 @@
         "operation_id": "update-table-row-v1-1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_table_row_v1_1\" binds POST /api/v1_1/employees/{id}/tables/{table}/{rowId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_table_row_v1_1\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_table_row_v1_1\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -275,14 +310,23 @@
         "operation_id": "update-goal-v1.1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_v1_1\" binds PUT /api/v1_1/performance/employees/{employeeId}/goals/{goalId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_v1_1\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_v1_1\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -944,14 +988,23 @@
         "operation_id": "create-application-comment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_application_comment\" binds POST /api/v1/applicant_tracking/applications/{applicationId}/comments."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_application_comment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_application_comment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -985,14 +1038,23 @@
         "operation_id": "update-applicant-status",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_applicant_status\" binds POST /api/v1/applicant_tracking/applications/{applicationId}/status."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_applicant_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_applicant_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4287,14 +4349,23 @@
         "operation_id": "create-employee-dependent",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_employee_dependent\" binds POST /api/v1/employeedependents."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_employee_dependent\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_employee_dependent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4371,14 +4442,23 @@
         "operation_id": "update-employee-dependent",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_employee_dependent\" binds PUT /api/v1/employeedependents/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_employee_dependent\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_employee_dependent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4701,14 +4781,23 @@
         "operation_id": "adjust-time-off-balance",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"adjust_time_off_balance\" binds PUT /api/v1/employees/{employeeId}/time_off/balance_adjustment."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"adjust_time_off_balance\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"adjust_time_off_balance\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4785,14 +4874,23 @@
         "operation_id": "create-time-off-history",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_time_off_history\" binds PUT /api/v1/employees/{employeeId}/time_off/history."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_time_off_history\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_time_off_history\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4869,14 +4967,23 @@
         "operation_id": "assign-time-off-policies-v1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"assign_time_off_policies\" binds PUT /api/v1/employees/{employeeId}/time_off/policies."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"assign_time_off_policies\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"assign_time_off_policies\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -4910,14 +5017,23 @@
         "operation_id": "create-time-off-request",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_time_off_request\" binds PUT /api/v1/employees/{employeeId}/time_off/request."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_time_off_request\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_time_off_request\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5328,14 +5444,23 @@
         "operation_id": "create-table-row-v1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_table_row\" binds POST /api/v1/employees/{id}/tables/{table}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_table_row\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_table_row\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5369,14 +5494,23 @@
         "operation_id": "delete-employee-table-row",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_employee_table_row\" binds DELETE /api/v1/employees/{id}/tables/{table}/{rowId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_employee_table_row\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_employee_table_row\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -5410,14 +5544,23 @@
         "operation_id": "update-table-row-v1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_table_row\" binds POST /api/v1/employees/{id}/tables/{table}/{rowId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_table_row\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_table_row\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -6821,14 +6964,23 @@
         "operation_id": "update-list-field-values",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_list_field_values\" binds PUT /api/v1/meta/lists/{listFieldId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_list_field_values\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_list_field_values\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8200,14 +8352,23 @@
         "operation_id": "create-goal",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_goal\" binds POST /api/v1/performance/employees/{employeeId}/goals."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_goal\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_goal\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8241,14 +8402,23 @@
         "operation_id": "delete-goal",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_goal\" binds DELETE /api/v1/performance/employees/{employeeId}/goals/{goalId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_goal\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_goal\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8282,14 +8452,23 @@
         "operation_id": "update-goal-v1",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_v1\" binds PUT /api/v1/performance/employees/{employeeId}/goals/{goalId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_v1\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_v1\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8366,14 +8545,23 @@
         "operation_id": "close-goal",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"close_goal\" binds POST /api/v1/performance/employees/{employeeId}/goals/{goalId}/close."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"close_goal\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"close_goal\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8450,14 +8638,23 @@
         "operation_id": "create-goal-comment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_goal_comment\" binds POST /api/v1/performance/employees/{employeeId}/goals/{goalId}/comments."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_goal_comment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_goal_comment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8491,14 +8688,23 @@
         "operation_id": "delete-goal-comment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_goal_comment\" binds DELETE /api/v1/performance/employees/{employeeId}/goals/{goalId}/comments/{commentId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_goal_comment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_goal_comment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8532,14 +8738,23 @@
         "operation_id": "update-goal-comment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_comment\" binds PUT /api/v1/performance/employees/{employeeId}/goals/{goalId}/comments/{commentId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_comment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_comment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8573,14 +8788,23 @@
         "operation_id": "update-goal-milestone-progress",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_milestone_progress\" binds PUT /api/v1/performance/employees/{employeeId}/goals/{goalId}/milestones/{milestoneId}/progress."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_milestone_progress\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_milestone_progress\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8614,14 +8838,23 @@
         "operation_id": "update-goal-progress",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_progress\" binds PUT /api/v1/performance/employees/{employeeId}/goals/{goalId}/progress."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_progress\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_progress\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8655,14 +8888,23 @@
         "operation_id": "reopen-goal",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"reopen_goal\" binds POST /api/v1/performance/employees/{employeeId}/goals/{goalId}/reopen."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"reopen_goal\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"reopen_goal\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -8696,14 +8938,23 @@
         "operation_id": "update-goal-sharing",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_goal_sharing\" binds PUT /api/v1/performance/employees/{employeeId}/goals/{goalId}/sharedWith."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_goal_sharing\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_goal_sharing\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9080,14 +9331,23 @@
         "operation_id": "scheduling-create-schedule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_scheduling_create_schedule\" binds POST /api/v1/scheduling/schedules."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_scheduling_create_schedule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_scheduling_create_schedule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9121,14 +9381,23 @@
         "operation_id": "scheduling-delete-schedule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_scheduling_delete_schedule\" binds DELETE /api/v1/scheduling/schedules/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_scheduling_delete_schedule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_scheduling_delete_schedule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9205,14 +9474,23 @@
         "operation_id": "scheduling-update-schedule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_scheduling_update_schedule\" binds PATCH /api/v1/scheduling/schedules/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_scheduling_update_schedule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_scheduling_update_schedule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9372,14 +9650,23 @@
         "operation_id": "scheduling-create-shift",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_scheduling_create_shift\" binds POST /api/v1/scheduling/shifts."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_scheduling_create_shift\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_scheduling_create_shift\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9413,14 +9700,23 @@
         "operation_id": "scheduling-delete-shift",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_scheduling_delete_shift\" binds DELETE /api/v1/scheduling/shifts/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_scheduling_delete_shift\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_scheduling_delete_shift\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9497,14 +9793,23 @@
         "operation_id": "scheduling-update-shift",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_scheduling_update_shift\" binds PATCH /api/v1/scheduling/shifts/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_scheduling_update_shift\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_scheduling_update_shift\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9538,14 +9843,23 @@
         "operation_id": "scheduling-publish-shifts",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_scheduling_publish_shifts\" binds POST /api/v1/scheduling/shifts/publish."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_scheduling_publish_shifts\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_scheduling_publish_shifts\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9665,14 +9979,23 @@
         "operation_id": "update-time-off-request-status",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_time_off_request_status\" binds PUT /api/v1/time_off/requests/{requestId}/status."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_time_off_request_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_time_off_request_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9749,14 +10072,23 @@
         "operation_id": "delete-timesheet-clock-entries-via-post",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_timesheet_clock_entries_via_post\" binds POST /api/v1/time_tracking/clock_entries/delete."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_timesheet_clock_entries_via_post\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_timesheet_clock_entries_via_post\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9790,14 +10122,23 @@
         "operation_id": "create-or-update-timesheet-clock-entries",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_or_update_timesheet_clock_entries\" binds POST /api/v1/time_tracking/clock_entries/store."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_or_update_timesheet_clock_entries\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_or_update_timesheet_clock_entries\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9831,14 +10172,23 @@
         "operation_id": "create-timesheet-clock-in-entry",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_timesheet_clock_in_entry\" binds POST /api/v1/time_tracking/employees/{employeeId}/clock_in."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_timesheet_clock_in_entry\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_timesheet_clock_in_entry\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9872,14 +10222,23 @@
         "operation_id": "create-timesheet-clock-out-entry",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_timesheet_clock_out_entry\" binds POST /api/v1/time_tracking/employees/{employeeId}/clock_out."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_timesheet_clock_out_entry\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_timesheet_clock_out_entry\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9913,14 +10272,23 @@
         "operation_id": "delete-timesheet-hour-entries-via-post",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_timesheet_hour_entries_via_post\" binds POST /api/v1/time_tracking/hour_entries/delete."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_timesheet_hour_entries_via_post\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_timesheet_hour_entries_via_post\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9954,14 +10322,23 @@
         "operation_id": "create-or-update-timesheet-hour-entries",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_or_update_timesheet_hour_entries\" binds POST /api/v1/time_tracking/hour_entries/store."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_or_update_timesheet_hour_entries\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_or_update_timesheet_hour_entries\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -9995,14 +10372,23 @@
         "operation_id": "create-time-tracking-project-legacy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_time_tracking_project\" binds POST /api/v1/time_tracking/projects."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_time_tracking_project\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_time_tracking_project\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10165,14 +10551,23 @@
         "operation_id": "create-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_break_policy\" binds POST /api/v1/time-tracking/break-policies."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10206,14 +10601,23 @@
         "operation_id": "delete-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_break_policy\" binds DELETE /api/v1/time-tracking/break-policies/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10290,14 +10694,23 @@
         "operation_id": "update-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_break_policy\" binds PATCH /api/v1/time-tracking/break-policies/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10331,14 +10744,23 @@
         "operation_id": "assign-employees-to-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"assign_employees_to_break_policy\" binds POST /api/v1/time-tracking/break-policies/{id}/assign."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"assign_employees_to_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"assign_employees_to_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10372,14 +10794,23 @@
         "operation_id": "set-break-policy-employees",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"set_break_policy_employees\" binds PUT /api/v1/time-tracking/break-policies/{id}/assign."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"set_break_policy_employees\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"set_break_policy_employees\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10456,14 +10887,23 @@
         "operation_id": "create-break",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_break\" binds POST /api/v1/time-tracking/break-policies/{id}/breaks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_break\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_break\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10497,14 +10937,23 @@
         "operation_id": "replace-breaks-for-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"replace_breaks_for_break_policy\" binds PUT /api/v1/time-tracking/break-policies/{id}/breaks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"replace_breaks_for_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"replace_breaks_for_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10581,14 +11030,23 @@
         "operation_id": "sync-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"sync_break_policy\" binds PUT /api/v1/time-tracking/break-policies/{id}/sync."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"sync_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"sync_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10622,14 +11080,23 @@
         "operation_id": "unassign-employees-from-break-policy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_unassign_employees_from_break_policy\" binds POST /api/v1/time-tracking/break-policies/{id}/unassign."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_unassign_employees_from_break_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_unassign_employees_from_break_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10705,14 +11172,23 @@
         "operation_id": "delete-break",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_break\" binds DELETE /api/v1/time-tracking/breaks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_break\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_break\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -10789,14 +11265,23 @@
         "operation_id": "update-break",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_break\" binds PATCH /api/v1/time-tracking/breaks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_break\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_break\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11463,14 +11948,23 @@
         "operation_id": "create-time-tracking-project",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_project\" binds POST /api/v1/time-tracking/projects."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_project\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_project\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11504,14 +11998,23 @@
         "operation_id": "delete-project",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_project\" binds DELETE /api/v1/time-tracking/projects/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_project\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_project\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11545,14 +12048,23 @@
         "operation_id": "update-project",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_project\" binds PATCH /api/v1/time-tracking/projects/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_project\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_project\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11672,14 +12184,23 @@
         "operation_id": "create-project-task",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_project_task\" binds POST /api/v1/time-tracking/projects/{projectId}/tasks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_project_task\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_project_task\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11756,14 +12277,23 @@
         "operation_id": "create-shift-differential",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_shift_differential\" binds POST /api/v1/time-tracking/shift-differentials."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_shift_differential\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_shift_differential\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11797,14 +12327,23 @@
         "operation_id": "delete-shift-differential",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_shift_differential\" binds DELETE /api/v1/time-tracking/shift-differentials/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_shift_differential\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_shift_differential\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11881,14 +12420,23 @@
         "operation_id": "update-shift-differential",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_shift_differential\" binds PATCH /api/v1/time-tracking/shift-differentials/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_shift_differential\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_shift_differential\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -11922,14 +12470,23 @@
         "operation_id": "delete-task",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_task\" binds DELETE /api/v1/time-tracking/tasks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_task\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_task\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12006,14 +12563,23 @@
         "operation_id": "update-task",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_task\" binds PATCH /api/v1/time-tracking/tasks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_task\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_task\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12215,14 +12781,23 @@
         "operation_id": "create-time-tracking-hour-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_time_tracking_hour_record\" binds POST /api/v1/timetracking/add."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_time_tracking_hour_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_time_tracking_hour_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12256,14 +12831,23 @@
         "operation_id": "update-time-tracking-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_time_tracking_record\" binds PUT /api/v1/timetracking/adjust."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_time_tracking_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_time_tracking_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12297,14 +12881,23 @@
         "operation_id": "delete-time-tracking-hour-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_time_tracking_hour_record\" binds DELETE /api/v1/timetracking/delete/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_time_tracking_hour_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_time_tracking_hour_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12338,14 +12931,23 @@
         "operation_id": "create-or-update-time-tracking-hour-records",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_or_update_time_tracking_hour_records\" binds POST /api/v1/timetracking/record."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_or_update_time_tracking_hour_records\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_or_update_time_tracking_hour_records\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12465,14 +13067,23 @@
         "operation_id": "create-training-category",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_training_category\" binds POST /api/v1/training/category."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_training_category\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_training_category\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12506,14 +13117,23 @@
         "operation_id": "delete-training-category",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_training_category\" binds DELETE /api/v1/training/category/{trainingCategoryId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_training_category\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_training_category\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12547,14 +13167,23 @@
         "operation_id": "update-training-category",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_training_category\" binds PUT /api/v1/training/category/{trainingCategoryId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_training_category\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_training_category\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12588,14 +13217,23 @@
         "operation_id": "delete-employee-training-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_employee_training_record\" binds DELETE /api/v1/training/record/{employeeTrainingRecordId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_employee_training_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_employee_training_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12629,14 +13267,23 @@
         "operation_id": "update-employee-training-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_employee_training_record\" binds PUT /api/v1/training/record/{employeeTrainingRecordId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_employee_training_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_employee_training_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12712,14 +13359,23 @@
         "operation_id": "create-employee-training-record",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_employee_training_record\" binds POST /api/v1/training/record/employee/{employeeId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_employee_training_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_employee_training_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12796,14 +13452,23 @@
         "operation_id": "create-training-type",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_training_type\" binds POST /api/v1/training/type."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_training_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_training_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12837,14 +13502,23 @@
         "operation_id": "delete-training-type",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_training_type\" binds DELETE /api/v1/training/type/{trainingTypeId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_training_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_training_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12878,14 +13552,23 @@
         "operation_id": "update-training-type",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_training_type\" binds PUT /api/v1/training/type/{trainingTypeId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_training_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_training_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -12962,14 +13645,23 @@
         "operation_id": "create-webhook",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_webhook\" binds POST /api/v1/webhooks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_webhook\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_webhook\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13003,14 +13695,23 @@
         "operation_id": "delete-webhook",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_webhook\" binds DELETE /api/v1/webhooks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_webhook\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_webhook\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13087,14 +13788,23 @@
         "operation_id": "update-webhook",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_webhook\" binds PUT /api/v1/webhooks/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_webhook\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_webhook\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13298,14 +14008,23 @@
         "operation_id": "post-api-v1-benefit-company-benefit-320",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_new_company_benefit\" binds POST /api/v1/benefit/company_benefit."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_new_company_benefit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_new_company_benefit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13382,14 +14101,23 @@
         "operation_id": "delete-api-v1-benefit-company-benefit-id-322",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_company_benefit\" binds DELETE /api/v1/benefit/company_benefit/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_company_benefit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_company_benefit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13466,14 +14194,23 @@
         "operation_id": "put-api-v1-benefit-company-benefit-id-324",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_company_benefit\" binds PUT /api/v1/benefit/company_benefit/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_company_benefit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_company_benefit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13507,14 +14244,23 @@
         "operation_id": "post-api-v1-benefit-employee-benefit-325",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"create_employee_benefit\" binds POST /api/v1/benefit/employee_benefit."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_employee_benefit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_employee_benefit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13548,14 +14294,23 @@
         "operation_id": "post-api-v1-benefitgroupemployees-326",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_benefit_group_employee\" binds POST /api/v1/benefitgroupemployees."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_benefit_group_employee\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_benefit_group_employee\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13632,14 +14387,23 @@
         "operation_id": "delete-api-v1-employee-direct-deposit-accounts-id-328",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clear_employee_deposit\" binds DELETE /api/v1/employee_direct_deposit_accounts/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clear_employee_deposit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clear_employee_deposit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13673,14 +14437,23 @@
         "operation_id": "post-api-v1-employee-direct-deposit-accounts-id-329",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_employee_deposit\" binds POST /api/v1/employee_direct_deposit_accounts/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_employee_deposit\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_employee_deposit\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13714,14 +14487,23 @@
         "operation_id": "post-api-v1-employee-pay-stub-330",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_employee_paystub\" binds POST /api/v1/employee_pay_stub."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_employee_paystub\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_employee_paystub\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13755,14 +14537,23 @@
         "operation_id": "delete-api-v1-employee-pay-stub-id-331",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clear_employee_paystub\" binds DELETE /api/v1/employee_pay_stub/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clear_employee_paystub\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clear_employee_paystub\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13796,14 +14587,23 @@
         "operation_id": "post-api-v1-employee-unpaid-pay-stubs-332",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_employee_unpaid_paystubs\" binds POST /api/v1/employee_unpaid_pay_stubs."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_employee_unpaid_paystubs\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_employee_unpaid_paystubs\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13837,14 +14637,23 @@
         "operation_id": "delete-api-v1-employee-unpaid-pay-stubs-id-333",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clear_employee_unpaid_paystubs\" binds DELETE /api/v1/employee_unpaid_pay_stubs/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clear_employee_unpaid_paystubs\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clear_employee_unpaid_paystubs\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13878,14 +14687,23 @@
         "operation_id": "delete-api-v1-employee-withholding-id-334",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clear_employee_withholding\" binds DELETE /api/v1/employee_withholding/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clear_employee_withholding\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clear_employee_withholding\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13919,14 +14737,23 @@
         "operation_id": "post-api-v1-employee-withholding-id-335",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"add_employee_withholding\" binds POST /api/v1/employee_withholding/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"add_employee_withholding\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"add_employee_withholding\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -13960,14 +14787,23 @@
         "operation_id": "delete-api-v1-time-tracking-clock-entries-336",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"delete_clock_entries\" binds DELETE /api/v1/time_tracking/clock_entries."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_clock_entries\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_clock_entries\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14001,14 +14837,23 @@
         "operation_id": "post-api-v1-time-tracking-clock-entries-337",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"store_clock_entries\" binds POST /api/v1/time_tracking/clock_entries."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"store_clock_entries\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"store_clock_entries\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14042,14 +14887,23 @@
         "operation_id": "post-api-v1-time-tracking-clock-in-employeeid-338",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clock_in\" binds POST /api/v1/time_tracking/clock_in/{employeeId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clock_in\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clock_in\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14083,14 +14937,23 @@
         "operation_id": "post-api-v1-time-tracking-clock-out-employeeid-339",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clock_out\" binds POST /api/v1/time_tracking/clock_out/{employeeId}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clock_out\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clock_out\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14124,14 +14987,23 @@
         "operation_id": "post-api-v1-time-tracking-daily-entries-340",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"store_daily_entries\" binds POST /api/v1/time_tracking/daily_entries."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"store_daily_entries\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"store_daily_entries\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14165,14 +15037,23 @@
         "operation_id": "post-api-v1-time-tracking-employee-employeeid-clock-in-data-341",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clock_in_data\" binds POST /api/v1/time_tracking/employee/{employeeId}/clock_in/data."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clock_in_data\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clock_in_data\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14206,14 +15087,23 @@
         "operation_id": "post-api-v1-time-tracking-employee-employeeid-clock-out-datetime-342",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clock_out_employee_at_specific_time\" binds POST /api/v1/time_tracking/employee/{employeeId}/clock_out/datetime."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clock_out_employee_at_specific_time\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clock_out_employee_at_specific_time\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14247,14 +15137,23 @@
         "operation_id": "post-api-v1-time-tracking-timesheets-approve-343",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"approve_employee_timesheets\" binds POST /api/v1/time_tracking/timesheets/approve."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"approve_employee_timesheets\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"approve_employee_timesheets\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14288,14 +15187,23 @@
         "operation_id": "post-api-v1-time-tracking-timesheets-clock-out-and-approve-344",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"clock_out_and_approve_employee_timesheets\" binds POST /api/v1/time_tracking/timesheets/clock_out_and_approve."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"clock_out_and_approve_employee_timesheets\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"clock_out_and_approve_employee_timesheets\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,
@@ -14329,14 +15237,23 @@
         "operation_id": "post-api-v1-2-benefit-company-benefit-id-345",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/bamboo-hr/writes.json: typed direct-write action \"update_company_benefit_properties\" binds POST /api/v1_2/benefit/company_benefit/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_company_benefit_properties\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_company_benefit_properties\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": null,
         "reverse_etl_eligibility": {
           "eligible": true,

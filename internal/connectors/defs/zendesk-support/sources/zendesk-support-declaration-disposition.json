@@ -29,11 +29,11 @@
       "level": "machine-readable-spec",
       "basis": "Official Zendesk Support OpenAPI document; count is HTTP method plus path."
     },
-    "enabled_operations": 122,
+    "enabled_operations": 33,
     "declaration_pending_operations": 513,
     "disabled_operations": 0,
     "documented_deletes": 87,
-    "enabled_deletes": 9,
+    "enabled_deletes": 0,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -53,19 +53,26 @@
     "terminal_commands": 95,
     "live_certification": "pending",
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "application-generic-destination-dispatch"
     ],
     "foundation_gaps": [
       {
         "id": "application-generic-destination-dispatch",
         "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
+        "count": 89,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
         "count": 513
+      },
+      {
+        "key": "foundation-gap",
+        "count": 89
       }
     ],
     "transport": {
@@ -81,7 +88,8 @@
           "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
-    }
+    },
+    "foundation_gap_operations": 89
   },
   "ledger_dispositions": [
     {
@@ -199,14 +207,23 @@
         "operation_id": "UpdateAccountEmailSettings",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_account_email_settings\" binds PUT /api/v2/account/email_settings."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_account_email_settings\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_account_email_settings\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_account_email_settings",
           "intent": "reverse_etl",
@@ -924,14 +941,23 @@
         "operation_id": "CreateApprovalRequest",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_approval_request\" binds POST /api/v2/approval_requests."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_approval_request\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_approval_request\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_approval_request",
           "intent": "reverse_etl",
@@ -1063,14 +1089,23 @@
         "operation_id": "UpdateAttachment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_attachment\" binds PUT /api/v2/attachments/{attachment_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_attachment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_attachment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_attachment",
           "intent": "reverse_etl",
@@ -1385,14 +1420,23 @@
         "operation_id": "CreateAutomation",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_automation\" binds POST /api/v2/automations."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_automation\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_automation\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_automation plan",
           "intent": "reverse_etl",
@@ -1430,14 +1474,23 @@
         "operation_id": "DeleteAutomation",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_automation\" binds DELETE /api/v2/automations/{automation_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_automation\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_automation\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_automation plan",
           "intent": "reverse_etl",
@@ -1522,14 +1575,23 @@
         "operation_id": "UpdateAutomation",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_automation\" binds PUT /api/v2/automations/{automation_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_automation\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_automation\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_automation plan",
           "intent": "reverse_etl",
@@ -1802,14 +1864,23 @@
         "operation_id": "CreateBookmark",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_bookmark\" binds POST /api/v2/bookmarks."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_bookmark\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_bookmark\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_bookmark",
           "intent": "reverse_etl",
@@ -2077,14 +2148,23 @@
         "operation_id": "CreateBrand",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_brand\" binds POST /api/v2/brands."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_brand\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_brand\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_brand",
           "intent": "reverse_etl",
@@ -2216,14 +2296,23 @@
         "operation_id": "UpdateBrand",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_brand\" binds PUT /api/v2/brands/{brand_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_brand\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_brand\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_brand",
           "intent": "reverse_etl",
@@ -2778,14 +2867,23 @@
         "operation_id": "CreateTicketOrVoicemailTicket",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket_or_voicemail_ticket\" binds POST /api/v2/channels/voice/tickets."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket_or_voicemail_ticket\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket_or_voicemail_ticket\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_ticket_or_voicemail_ticket",
           "intent": "reverse_etl",
@@ -3105,14 +3203,23 @@
         "operation_id": "CreateCustomObject",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_custom_object\" binds POST /api/v2/custom_objects."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_custom_object\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_custom_object\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_custom_object",
           "intent": "reverse_etl",
@@ -3338,14 +3445,23 @@
         "operation_id": "CreateAccessRule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_access_rule\" binds POST /api/v2/custom_objects/{custom_object_key}/access_rules."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_access_rule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_access_rule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_access_rule",
           "intent": "reverse_etl",
@@ -3477,14 +3593,23 @@
         "operation_id": "UpdateAccessRule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_access_rule\" binds PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_access_rule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_access_rule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_access_rule",
           "intent": "reverse_etl",
@@ -3616,14 +3741,23 @@
         "operation_id": "CreateCustomObjectField",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_custom_object_field\" binds POST /api/v2/custom_objects/{custom_object_key}/fields."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_custom_object_field\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_custom_object_field\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_custom_object_field",
           "intent": "reverse_etl",
@@ -3849,14 +3983,23 @@
         "operation_id": "CustomObjectRecordBulkJobs",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"custom_object_record_bulk_jobs\" binds POST /api/v2/custom_objects/{custom_object_key}/jobs."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"custom_object_record_bulk_jobs\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"custom_object_record_bulk_jobs\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations custom_object_record_bulk_jobs",
           "intent": "reverse_etl",
@@ -4035,14 +4178,23 @@
         "operation_id": "UpdatePermissionPolicy",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_permission_policy\" binds PATCH /api/v2/custom_objects/{custom_object_key}/permission_policies/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_permission_policy\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_permission_policy\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_permission_policy",
           "intent": "reverse_etl",
@@ -4174,14 +4326,23 @@
         "operation_id": "UpsertCustomObjectRecordByExternalIdOrName",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"upsert_custom_object_record_by_external_id_or_name\" binds PATCH /api/v2/custom_objects/{custom_object_key}/records."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"upsert_custom_object_record_by_external_id_or_name\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"upsert_custom_object_record_by_external_id_or_name\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations upsert_custom_object_record_by_external_id_or_name",
           "intent": "reverse_etl",
@@ -4219,14 +4380,23 @@
         "operation_id": "CreateCustomObjectRecord",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_custom_object_record\" binds POST /api/v2/custom_objects/{custom_object_key}/records."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_custom_object_record\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_custom_object_record\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_custom_object_record",
           "intent": "reverse_etl",
@@ -4546,14 +4716,23 @@
         "operation_id": "UpdateCustomObjectRecordAttachment",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_custom_object_record_attachment\" binds PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_custom_object_record_attachment\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_custom_object_record_attachment\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_custom_object_record_attachment",
           "intent": "reverse_etl",
@@ -4873,14 +5052,23 @@
         "operation_id": "CreateObjectTrigger",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_object_trigger\" binds POST /api/v2/custom_objects/{custom_object_key}/triggers."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_object_trigger\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_object_trigger\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_object_trigger",
           "intent": "reverse_etl",
@@ -5012,14 +5200,23 @@
         "operation_id": "UpdateObjectTrigger",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_object_trigger\" binds PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_object_trigger\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_object_trigger\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_object_trigger",
           "intent": "reverse_etl",
@@ -5245,14 +5442,23 @@
         "operation_id": "UpdateManyObjectTriggers",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_many_object_triggers\" binds PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_many_object_triggers\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_many_object_triggers\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_many_object_triggers",
           "intent": "reverse_etl",
@@ -5614,14 +5820,23 @@
         "operation_id": "BulkUpdateDefaultCustomStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"bulk_update_default_custom_status\" binds PUT /api/v2/custom_status/default."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"bulk_update_default_custom_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"bulk_update_default_custom_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations bulk_update_default_custom_status",
           "intent": "reverse_etl",
@@ -5706,14 +5921,23 @@
         "operation_id": "CreateCustomStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_custom_status\" binds POST /api/v2/custom_statuses."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_custom_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_custom_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_custom_status",
           "intent": "reverse_etl",
@@ -5845,14 +6069,23 @@
         "operation_id": "UpdateCustomStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_custom_status\" binds PUT /api/v2/custom_statuses/{custom_status_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_custom_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_custom_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_custom_status",
           "intent": "reverse_etl",
@@ -5890,14 +6123,23 @@
         "operation_id": "CreateTicketFormStatusesForCustomStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket_form_statuses_for_custom_status\" binds POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket_form_statuses_for_custom_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket_form_statuses_for_custom_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_ticket_form_statuses_for_custom_status",
           "intent": "reverse_etl",
@@ -6400,14 +6642,23 @@
         "operation_id": "CreateDeletionSchedule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_deletion_schedule\" binds POST /api/v2/deletion_schedules."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_deletion_schedule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_deletion_schedule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_deletion_schedule",
           "intent": "reverse_etl",
@@ -6539,14 +6790,23 @@
         "operation_id": "UpdateDeletionSchedule",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_deletion_schedule\" binds PUT /api/v2/deletion_schedules/{deletion_schedule_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_deletion_schedule\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_deletion_schedule\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_deletion_schedule",
           "intent": "reverse_etl",
@@ -7660,14 +7920,23 @@
         "operation_id": "CreateGroupMembership",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_group_membership\" binds POST /api/v2/group_memberships."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_group_membership\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_group_membership\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_group_membership",
           "intent": "reverse_etl",
@@ -7846,14 +8115,23 @@
         "operation_id": "GroupMembershipBulkCreate",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"group_membership_bulk_create\" binds POST /api/v2/group_memberships/create_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"group_membership_bulk_create\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"group_membership_bulk_create\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations group_membership_bulk_create",
           "intent": "reverse_etl",
@@ -8309,14 +8587,23 @@
         "operation_id": "CreateGroup",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_group\" binds POST /api/v2/groups."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_group\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_group\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_group plan",
           "intent": "reverse_etl",
@@ -8354,14 +8641,23 @@
         "operation_id": "DeleteGroup",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_group\" binds DELETE /api/v2/groups/{group_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_group\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_group\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_group plan",
           "intent": "reverse_etl",
@@ -8446,14 +8742,23 @@
         "operation_id": "UpdateGroup",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_group\" binds PUT /api/v2/groups/{group_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_group\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_group\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_group plan",
           "intent": "reverse_etl",
@@ -8914,14 +9219,23 @@
         "operation_id": "TicketImport",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"ticket_import\" binds POST /api/v2/imports/tickets."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"ticket_import\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"ticket_import\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations ticket_import",
           "intent": "reverse_etl",
@@ -8959,14 +9273,23 @@
         "operation_id": "TicketBulkImport",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"ticket_bulk_import\" binds POST /api/v2/imports/tickets/create_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"ticket_bulk_import\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"ticket_bulk_import\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations ticket_bulk_import",
           "intent": "reverse_etl",
@@ -9605,14 +9928,23 @@
         "operation_id": "CreateItamAssetType",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_itam_asset_type\" binds POST /api/v2/it_asset_management/asset_types."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_itam_asset_type\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_itam_asset_type\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_itam_asset_type",
           "intent": "reverse_etl",
@@ -9838,14 +10170,23 @@
         "operation_id": "CreateItamAssetTypeField",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_itam_asset_type_field\" binds POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_itam_asset_type_field\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_itam_asset_type_field\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_itam_asset_type_field",
           "intent": "reverse_etl",
@@ -10071,14 +10412,23 @@
         "operation_id": "CreateItamAsset",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_itam_asset\" binds POST /api/v2/it_asset_management/assets."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_itam_asset\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_itam_asset\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_itam_asset",
           "intent": "reverse_etl",
@@ -10257,14 +10607,23 @@
         "operation_id": "ItamAssetBulkJobs",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"itam_asset_bulk_jobs\" binds POST /api/v2/it_asset_management/assets/jobs."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"itam_asset_bulk_jobs\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"itam_asset_bulk_jobs\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations itam_asset_bulk_jobs",
           "intent": "reverse_etl",
@@ -10443,14 +10802,23 @@
         "operation_id": "CreateItamLocation",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_itam_location\" binds POST /api/v2/it_asset_management/locations."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_itam_location\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_itam_location\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_itam_location",
           "intent": "reverse_etl",
@@ -10676,14 +11044,23 @@
         "operation_id": "CreateItamStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_itam_status\" binds POST /api/v2/it_asset_management/statuses."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_itam_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_itam_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_itam_status",
           "intent": "reverse_etl",
@@ -10815,14 +11192,23 @@
         "operation_id": "UpdateItamStatus",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_itam_status\" binds PATCH /api/v2/it_asset_management/statuses/{status_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_itam_status\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_itam_status\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_itam_status",
           "intent": "reverse_etl",
@@ -11325,14 +11711,23 @@
         "operation_id": "CreateMacro",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_macro\" binds POST /api/v2/macros."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_macro\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_macro\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_macro plan",
           "intent": "reverse_etl",
@@ -11370,14 +11765,23 @@
         "operation_id": "DeleteMacro",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_macro\" binds DELETE /api/v2/macros/{macro_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_macro\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_macro\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_macro plan",
           "intent": "reverse_etl",
@@ -11462,14 +11866,23 @@
         "operation_id": "UpdateMacro",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_macro\" binds PUT /api/v2/macros/{macro_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_macro\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_macro\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_macro plan",
           "intent": "reverse_etl",
@@ -12071,14 +12484,23 @@
         "operation_id": "UpdateManyMacros",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_many_macros\" binds PUT /api/v2/macros/update_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_many_macros\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_many_macros\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_many_macros",
           "intent": "reverse_etl",
@@ -13469,14 +13891,23 @@
         "operation_id": "CreateOrganizationSubscription",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_organization_subscription\" binds POST /api/v2/organization_subscriptions."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_organization_subscription\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_organization_subscription\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_organization_subscription",
           "intent": "reverse_etl",
@@ -13650,14 +14081,23 @@
         "operation_id": "CreateOrganization",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_organization\" binds POST /api/v2/organizations."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_organization\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_organization\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_organization plan",
           "intent": "reverse_etl",
@@ -13695,14 +14135,23 @@
         "operation_id": "DeleteOrganization",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_organization\" binds DELETE /api/v2/organizations/{organization_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_organization\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_organization\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_organization plan",
           "intent": "reverse_etl",
@@ -13787,14 +14236,23 @@
         "operation_id": "UpdateOrganization",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_organization\" binds PUT /api/v2/organizations/{organization_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_organization\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_organization\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_organization plan",
           "intent": "reverse_etl",
@@ -16558,14 +17016,23 @@
         "operation_id": "BulkSetAgentAttributeValuesJob",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"bulk_set_agent_attribute_values_job\" binds POST /api/v2/routing/agents/instance_values/jobs."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"bulk_set_agent_attribute_values_job\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"bulk_set_agent_attribute_values_job\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations bulk_set_agent_attribute_values_job",
           "intent": "reverse_etl",
@@ -17528,14 +17995,23 @@
         "operation_id": "CreateSavedSearch",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_saved_search\" binds POST /api/v2/saved_searches."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_saved_search\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_saved_search\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_saved_search",
           "intent": "reverse_etl",
@@ -17620,14 +18096,23 @@
         "operation_id": "UpdateSavedSearch",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_saved_search\" binds PUT /api/v2/saved_searches/{id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_saved_search\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_saved_search\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_saved_search",
           "intent": "reverse_etl",
@@ -18783,14 +19268,23 @@
         "operation_id": "BulkRecoverSuspendedTickets",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"bulk_recover_suspended_tickets\" binds PUT /api/v2/suspended_tickets/bulk_recover."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"bulk_recover_suspended_tickets\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"bulk_recover_suspended_tickets\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations bulk_recover_suspended_tickets",
           "intent": "reverse_etl",
@@ -19434,14 +19928,23 @@
         "operation_id": "CreateTaskListTemplate",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_task_list_template\" binds POST /api/v2/task_list_templates."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_task_list_template\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_task_list_template\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_task_list_template",
           "intent": "reverse_etl",
@@ -19573,14 +20076,23 @@
         "operation_id": "UpdateTaskListTemplate",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_task_list_template\" binds PUT /api/v2/task_list_templates/{task_list_template_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_task_list_template\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_task_list_template\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_task_list_template",
           "intent": "reverse_etl",
@@ -19754,14 +20266,23 @@
         "operation_id": "CreateTicketContentPin",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket_content_pin\" binds POST /api/v2/ticket_content_pins."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket_content_pin\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket_content_pin\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_ticket_content_pin",
           "intent": "reverse_etl",
@@ -19888,14 +20409,23 @@
         "operation_id": "CreateTicketField",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket_field\" binds POST /api/v2/ticket_fields."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket_field\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket_field\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_ticket_field plan",
           "intent": "reverse_etl",
@@ -19933,14 +20463,23 @@
         "operation_id": "DeleteTicketField",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_ticket_field\" binds DELETE /api/v2/ticket_fields/{ticket_field_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_ticket_field\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_ticket_field\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_ticket_field plan",
           "intent": "reverse_etl",
@@ -20025,14 +20564,23 @@
         "operation_id": "UpdateTicketField",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_ticket_field\" binds PUT /api/v2/ticket_fields/{ticket_field_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_ticket_field\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_ticket_field\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_ticket_field plan",
           "intent": "reverse_etl",
@@ -20864,14 +21412,23 @@
         "operation_id": "CreateTicketFormStatuses",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket_form_statuses\" binds POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket_form_statuses\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket_form_statuses\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_ticket_form_statuses",
           "intent": "reverse_etl",
@@ -20909,14 +21466,23 @@
         "operation_id": "UpdateTicketFormStatuses",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_ticket_form_statuses\" binds PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_ticket_form_statuses\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_ticket_form_statuses\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_ticket_form_statuses",
           "intent": "reverse_etl",
@@ -21001,14 +21567,23 @@
         "operation_id": "UpdateTicketFormStatusById",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_ticket_form_status_by_id\" binds PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_ticket_form_status_by_id\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_ticket_form_status_by_id\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_ticket_form_status_by_id",
           "intent": "reverse_etl",
@@ -21276,14 +21851,23 @@
         "operation_id": "CreateTicket",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_ticket\" binds POST /api/v2/tickets."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_ticket\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_ticket\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_ticket plan",
           "intent": "reverse_etl",
@@ -21321,14 +21905,23 @@
         "operation_id": "DeleteTicket",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_ticket\" binds DELETE /api/v2/tickets/{ticket_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_ticket\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_ticket\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_ticket plan",
           "intent": "reverse_etl",
@@ -21413,14 +22006,23 @@
         "operation_id": "UpdateTicket",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_ticket\" binds PUT /api/v2/tickets/{ticket_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_ticket\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_ticket\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_ticket plan",
           "intent": "reverse_etl",
@@ -22680,14 +23282,23 @@
         "operation_id": "CreateTaskList",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_task_list\" binds POST /api/v2/tickets/{ticket_id}/task_lists."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_task_list\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_task_list\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_task_list",
           "intent": "reverse_etl",
@@ -22772,14 +23383,23 @@
         "operation_id": "TicketsCreateMany",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"tickets_create_many\" binds POST /api/v2/tickets/create_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"tickets_create_many\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"tickets_create_many\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations tickets_create_many",
           "intent": "reverse_etl",
@@ -23146,14 +23766,23 @@
         "operation_id": "CreateTriggerCategory",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_trigger_category\" binds POST /api/v2/trigger_categories."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_trigger_category\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_trigger_category\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_trigger_category",
           "intent": "reverse_etl",
@@ -23285,14 +23914,23 @@
         "operation_id": "UpdateTriggerCategory",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_trigger_category\" binds PATCH /api/v2/trigger_categories/{trigger_category_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_trigger_category\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_trigger_category\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_trigger_category",
           "intent": "reverse_etl",
@@ -23330,14 +23968,23 @@
         "operation_id": "BatchOperateTriggerCategories",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"batch_operate_trigger_categories\" binds POST /api/v2/trigger_categories/jobs."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"batch_operate_trigger_categories\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"batch_operate_trigger_categories\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations batch_operate_trigger_categories",
           "intent": "reverse_etl",
@@ -23417,14 +24064,23 @@
         "operation_id": "CreateTrigger",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_trigger\" binds POST /api/v2/triggers."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_trigger\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_trigger\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_trigger plan",
           "intent": "reverse_etl",
@@ -23462,14 +24118,23 @@
         "operation_id": "DeleteTrigger",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_trigger\" binds DELETE /api/v2/triggers/{trigger_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_trigger\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_trigger\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_trigger plan",
           "intent": "reverse_etl",
@@ -23554,14 +24219,23 @@
         "operation_id": "UpdateTrigger",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_trigger\" binds PUT /api/v2/triggers/{trigger_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_trigger\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_trigger\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_trigger plan",
           "intent": "reverse_etl",
@@ -23928,14 +24602,23 @@
         "operation_id": "UpdateManyTriggers",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_many_triggers\" binds PUT /api/v2/triggers/update_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_many_triggers\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_many_triggers\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_many_triggers",
           "intent": "reverse_etl",
@@ -24621,14 +25304,23 @@
         "operation_id": "CreateUser",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_user\" binds POST /api/v2/users."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_user\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_user\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_user plan",
           "intent": "reverse_etl",
@@ -24666,14 +25358,23 @@
         "operation_id": "DeleteUser",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_user\" binds DELETE /api/v2/users/{user_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_user\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_user\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_user plan",
           "intent": "reverse_etl",
@@ -24758,14 +25459,23 @@
         "operation_id": "UpdateUser",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_user\" binds PUT /api/v2/users/{user_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_user\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_user\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_user plan",
           "intent": "reverse_etl",
@@ -25038,14 +25748,23 @@
         "operation_id": "CreateUserGroupMembership",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_user_group_membership\" binds POST /api/v2/users/{user_id}/group_memberships."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_user_group_membership\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_user_group_membership\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_user_group_membership",
           "intent": "reverse_etl",
@@ -27292,14 +28011,23 @@
         "operation_id": "CreateManyUsers",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_many_users\" binds POST /api/v2/users/create_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_many_users\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_many_users\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_many_users",
           "intent": "reverse_etl",
@@ -27384,14 +28112,23 @@
         "operation_id": "CreateOrUpdateManyUsers",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_or_update_many_users\" binds POST /api/v2/users/create_or_update_many."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_or_update_many_users\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_or_update_many_users\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_or_update_many_users",
           "intent": "reverse_etl",
@@ -27805,14 +28542,23 @@
         "operation_id": "UpdateCurrentUserSettings",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_current_user_settings\" binds PUT /api/v2/users/me/settings."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_current_user_settings\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_current_user_settings\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_current_user_settings",
           "intent": "reverse_etl",
@@ -27850,14 +28596,23 @@
         "operation_id": "RequestUserCreate",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"request_user_create\" binds POST /api/v2/users/request_create."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"request_user_create\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"request_user_create\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations request_user_create",
           "intent": "reverse_etl",
@@ -28078,14 +28833,23 @@
         "operation_id": "CreateView",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_view\" binds POST /api/v2/views."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_view\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_view\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes create_view plan",
           "intent": "reverse_etl",
@@ -28123,14 +28887,23 @@
         "operation_id": "DeleteView",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"delete_view\" binds DELETE /api/v2/views/{view_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"delete_view\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"delete_view\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes delete_view plan",
           "intent": "reverse_etl",
@@ -28215,14 +28988,23 @@
         "operation_id": "UpdateView",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_view\" binds PUT /api/v2/views/{view_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_view\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_view\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "writes update_view plan",
           "intent": "reverse_etl",
@@ -29012,14 +29794,23 @@
         "operation_id": "CreateWorkspace",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"create_workspace\" binds POST /api/v2/workspaces."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"create_workspace\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"create_workspace\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations create_workspace",
           "intent": "reverse_etl",
@@ -29151,14 +29942,23 @@
         "operation_id": "UpdateWorkspace",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"update_workspace\" binds PUT /api/v2/workspaces/{workspace_id}."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"update_workspace\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"update_workspace\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations update_workspace",
           "intent": "reverse_etl",
@@ -29243,14 +30043,23 @@
         "operation_id": "ReorderWorkspaces",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/zendesk-support/writes.json: typed direct-write action \"reorder_workspaces\" binds PUT /api/v2/workspaces/reorder."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+      },
       "declaration": {
-        "status": "enabled; typed direct-write action \"reorder_workspaces\" binds the normalized source endpoint",
+        "status": "foundation-gap; typed direct-write action \"reorder_workspaces\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
         "command": {
           "path": "operations reorder_workspaces",
           "intent": "reverse_etl",

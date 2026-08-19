@@ -4,10 +4,11 @@
 - Mapped operation rows: 53
 - Operations found in provider source: 53
 - Coverage confidence: machine-readable-spec — Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations.
-- Enabled: 2
+- Enabled: 0
+- Foundation gap: 2
 - Declaration pending: 51
 - Disabled: 0
-- Documented DELETEs: 7; enabled DELETEs: 1
+- Documented DELETEs: 7; enabled DELETEs: 0
 - Parity classes: direct_read=15, direct_write=30, etl=8
-- Foundation gaps: generic-typed-destination-executor
+- Foundation gaps: application-generic-destination-dispatch
 - Public source retrieval: undefined

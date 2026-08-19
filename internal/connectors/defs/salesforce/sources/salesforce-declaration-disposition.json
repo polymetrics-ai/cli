@@ -52,16 +52,8 @@
     "writes_actions": 0,
     "terminal_commands": 0,
     "live_certification": "pending",
-    "gap_ids": [
-      "generic-typed-destination-executor"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "application-generic-destination-dispatch",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
@@ -81,7 +73,8 @@
           "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
-    }
+    },
+    "foundation_gap_operations": 0
   },
   "ledger_dispositions": [
     {

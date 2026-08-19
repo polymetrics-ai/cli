@@ -2,7 +2,9 @@
 
 The generic typed destination factory exists at this foundation SHA, but App dispatch integration is not yet merged; this ledger does not claim deployability.
 
-| Connector | Documented | Binary R/W | Direct R/W | ETL | Reverse ETL | CLI implemented/declared |
+The four numeric surface columns are canonical operation classifications, not capability-absence claims. `0` is never N/A: provider evidence must prove absence before a future gate can record N/A. `HARD-PREMERGE-GATE.json` carries the fail-closed per-operation reconciliation across ETL, reverse ETL, direct read/write, binary download, and binary upload.
+
+| Connector | Documented | Binary download/upload | Direct read/write | ETL | Reverse ETL | CLI implemented/declared |
 | --- | ---: | ---: | ---: | --- | --- | ---: |
 | salesforce | unknown | 0/0 | 3/3 | declaration-pending | declaration-pending | 0/0 |
 | hubspot | 3118 | 0/0 | 1217/1901 | declaration-pending | declaration-pending | 0/3118 |
