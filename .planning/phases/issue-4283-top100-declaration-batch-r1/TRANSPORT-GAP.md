@@ -1,5 +1,31 @@
 # Sync transport disposition — increment 001
 
+## 2026-08-19 complete-map supersession: definition-owned contract
+
+The earlier runtime evidence remains historical context, but the complete map
+is now assessed against the definition-owned contract published by PR #4286 in
+`docs/sync-transport-definition.md`, not the former GitHub-shaped descriptor.
+For each selected connector, the map carries two distinct recoverable gaps:
+`sync-transport-source-definition-<connector>` and
+`sync-transport-destination-definition-<connector>`.
+
+- Source evidence: `docs/sync-transport-definition.md:15-38` requires an
+  exact executor, positive eligible-stream allowlist, modes, delivery facts,
+  and connector-owned conformance evidence. None of the ten bundles has a
+  `sync_transport.json` declaring those facts.
+- Destination evidence: `docs/sync-transport-definition.md:39-75` additionally
+  requires eligible typed actions, durable acknowledgement, one closed
+  apply-strategy per mode, and connector-owned conformance evidence. None is
+  present in the ten bundles.
+- Smallest recovery: declare each direction only after its actual executor,
+  evidence, stream/action allowlists, delivery guarantees, typed bindings and
+  acknowledgement exist. The source documents must never be used to infer any
+  of those runtime facts.
+
+The exact source-operation dispositions and the full six-class summary are
+recorded in `COMPLETE-PARITY-MAP.md` and in each connector's
+`sources/<connector>-declaration-disposition.json`.
+
 ## Verdict: path (b), foundation gap
 
 No selected connector receives `sync_transport.json` in this increment. That omission is an explicit, recoverable declaration rather than a missing record: each of Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana has a `sync_transport` rejection with `reason: foundation-gap` and `recoverable: true` in `REJECTION-LIST.json`.

@@ -171,3 +171,29 @@ Retain the engine gap rather than inventing a response schema field or a secret
 write executor in the connector bundle. For later connectors, classify a
 secret hazard as a `foundation-gap` unless the live operation itself is truly
 destructive or irreversible without user intent.
+
+## Complete six-class source map
+
+### Red
+
+Before this checkpoint, batch-1 did not have a per-source-operation account of
+one primary parity class, user-reachable command binding, or definition-owned
+transport admission. Running certification at that point would certify a
+changing partial surface.
+
+### Green
+
+The map integrity assertion requires, for each of Notion, Stripe, Bitbucket,
+GitLab, CircleCI, Sentry, Vercel, Asana, and Jira: source disposition rows and
+crosswalk rows equal the pinned source denominator; primary class counts sum to
+that same denominator; each row has an enabled/disabled state plus foundation
+record; and both #4286 source and destination transport gaps are present.
+The assertion reports 49, 589, 331, 1,755, 111, 223, 400, 249, and 617 rows,
+respectively, with no missing class or transport record.
+
+### Refactor
+
+Keep the map connector-local and data-only. The absence of a command,
+transport, executor, acknowledgement, or conformance run is a named,
+recoverable gap; it is never filled from an unrelated connector or from an
+unstated provider behavior.

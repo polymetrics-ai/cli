@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
-  "scope": "public-source declarations plus non-live certification only",
+  "scope": "public-source declarations plus complete six-class mapping; non-live certification deferred until map stabilization",
   "generated_at": "2026-08-19T00:00:00Z",
   "connectors": [
     {
@@ -27,34 +27,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/asana-operation-crosswalk.json",
+        "sources/asana-declaration-disposition.json"
       ],
       "operations": {
         "documented": 249,
         "declared": 249,
-        "surface_unblocked": 85,
-        "disabled": 164,
+        "surface_unblocked": 82,
+        "disabled": 167,
         "coverage_percent": 100,
-        "operation_ledger_entries": 189
+        "operation_ledger_entries": 189,
+        "declared_percent": 100,
+        "runnable_commands": 82,
+        "enabled_percent": 32.93,
+        "enabled_deletes": 4,
+        "documented_deletes": 23,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-asana",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-asana",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -69,16 +74,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 73,
         "kinds": {
@@ -86,6 +92,42 @@
           "delete": 4,
           "update": 18
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/asana/sources/asana-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/asana/sources/asana-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 10
+          },
+          {
+            "key": "direct_write",
+            "count": 1
+          },
+          {
+            "key": "etl",
+            "count": 109
+          },
+          {
+            "key": "reverse_etl",
+            "count": 129
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "command-availability-asana",
+          "sync-transport-source-definition-asana",
+          "sync-transport-destination-definition-asana"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -110,34 +152,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/bitbucket-operation-crosswalk.json",
+        "sources/bitbucket-declaration-disposition.json"
       ],
       "operations": {
         "documented": 331,
         "declared": 331,
-        "surface_unblocked": 197,
-        "disabled": 134,
+        "surface_unblocked": 3,
+        "disabled": 328,
         "coverage_percent": 100,
-        "operation_ledger_entries": 134
+        "operation_ledger_entries": 134,
+        "declared_percent": 100,
+        "runnable_commands": 3,
+        "enabled_percent": 0.91,
+        "enabled_deletes": 1,
+        "documented_deletes": 54,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-bitbucket",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-bitbucket",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -152,22 +199,60 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 54,
         "kinds": {
           "create": 1,
           "delete": 53
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/bitbucket/sources/bitbucket-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 21
+          },
+          {
+            "key": "direct_write",
+            "count": 98
+          },
+          {
+            "key": "etl",
+            "count": 143
+          },
+          {
+            "key": "reverse_etl",
+            "count": 54
+          },
+          {
+            "key": "binary_read",
+            "count": 15
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "cli-command-contract-bitbucket",
+          "typed-operation-contract-bitbucket",
+          "sync-transport-source-definition-bitbucket",
+          "sync-transport-destination-definition-bitbucket"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -193,34 +278,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/circleci-operation-crosswalk.json",
+        "sources/circleci-declaration-disposition.json"
       ],
       "operations": {
         "documented": 111,
         "declared": 111,
-        "surface_unblocked": 16,
-        "disabled": 95,
+        "surface_unblocked": 0,
+        "disabled": 111,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 0,
+        "declared_percent": 100,
+        "runnable_commands": 0,
+        "enabled_percent": 0,
+        "enabled_deletes": 0,
+        "documented_deletes": 16,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-circleci",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-circleci",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -233,16 +323,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 7,
         "kinds": {
@@ -250,6 +341,42 @@
           "delete": 3,
           "update": 1
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/circleci/sources/circleci-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/circleci/sources/circleci-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 52
+          },
+          {
+            "key": "direct_write",
+            "count": 43
+          },
+          {
+            "key": "etl",
+            "count": 9
+          },
+          {
+            "key": "reverse_etl",
+            "count": 7
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "cli-surface-missing-circleci",
+          "sync-transport-source-definition-circleci",
+          "sync-transport-destination-definition-circleci"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -302,26 +429,24 @@
         "enabled_deletes": 6,
         "documented_deletes": 6,
         "terminal_commands": 41,
-        "coverage_basis": "54/54 pinned operations are explicitly crosswalked and dispositioned. 41 have a runnable CLI binding (4 ETL, 17 direct-read, 20 reverse-ETL); 13 are disabled only for named bounded-executor/pagination/secret-response foundation gaps or source-schema incompatibility. No Docker Hub operation is classified unsafe-to-exercise."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding.",
+        "coverage_percent": 100
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-dockerhub",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-dockerhub",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -339,17 +464,17 @@
         }
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "cli-surface",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "full-parity-runnable-commands-non-live-certification-pending",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Docker Hub secret-policy retrofit is generated and ready for non-live validation, boundary capture, and commit; no increment-2 connector work has begun.",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 20,
         "kinds": {
@@ -359,6 +484,29 @@
         },
         "enabled_deletes": 6,
         "lifecycle": "All actions use reverse-ETL plan, preview, approval, and execute."
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/dockerhub/sources/dockerhub-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 17
+          },
+          {
+            "key": "direct_write",
+            "count": 20
+          },
+          {
+            "key": "etl",
+            "count": 4
+          }
+        ],
+        "gap_ids": [
+          "sync-transport-source-definition-dockerhub",
+          "sync-transport-destination-definition-dockerhub"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -385,7 +533,9 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/gitlab-operation-crosswalk.json",
+        "sources/gitlab-declaration-disposition.json"
       ],
       "operations": {
         "documented": 1755,
@@ -393,26 +543,29 @@
         "surface_unblocked": 4,
         "disabled": 1751,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 0,
+        "declared_percent": 100,
+        "runnable_commands": 4,
+        "enabled_percent": 0.23,
+        "enabled_deletes": 0,
+        "documented_deletes": 212,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-gitlab",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-gitlab",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -425,19 +578,56 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 0,
         "kinds": {}
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/gitlab/sources/gitlab-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/gitlab/sources/gitlab-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 699
+          },
+          {
+            "key": "direct_write",
+            "count": 1006
+          },
+          {
+            "key": "etl",
+            "count": 4
+          },
+          {
+            "key": "reverse_etl",
+            "count": 0
+          },
+          {
+            "key": "binary_read",
+            "count": 46
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "typed-operation-contract-gitlab",
+          "sync-transport-source-definition-gitlab",
+          "sync-transport-destination-definition-gitlab"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -462,34 +652,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/jira-operation-crosswalk.json",
+        "sources/jira-declaration-disposition.json"
       ],
       "operations": {
         "documented": 617,
         "declared": 617,
-        "surface_unblocked": 590,
-        "disabled": 27,
+        "surface_unblocked": 295,
+        "disabled": 322,
         "coverage_percent": 100,
-        "operation_ledger_entries": 25
+        "operation_ledger_entries": 25,
+        "declared_percent": 100,
+        "runnable_commands": 295,
+        "enabled_percent": 47.81,
+        "enabled_deletes": 0,
+        "documented_deletes": 89,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-jira",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-jira",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -503,16 +698,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 292,
         "kinds": {
@@ -520,6 +716,42 @@
           "delete": 84,
           "update": 102
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/jira/sources/jira-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/jira/sources/jira-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 292
+          },
+          {
+            "key": "direct_write",
+            "count": 319
+          },
+          {
+            "key": "etl",
+            "count": 3
+          },
+          {
+            "key": "reverse_etl",
+            "count": 0
+          },
+          {
+            "key": "binary_read",
+            "count": 3
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "typed-operation-contract-jira",
+          "sync-transport-source-definition-jira",
+          "sync-transport-destination-definition-jira"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -544,34 +776,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/notion-operation-crosswalk.json",
+        "sources/notion-declaration-disposition.json"
       ],
       "operations": {
         "documented": 49,
         "declared": 49,
-        "surface_unblocked": 44,
-        "disabled": 5,
+        "surface_unblocked": 43,
+        "disabled": 6,
         "coverage_percent": 100,
-        "operation_ledger_entries": 19
+        "operation_ledger_entries": 19,
+        "declared_percent": 100,
+        "runnable_commands": 43,
+        "enabled_percent": 87.76,
+        "enabled_deletes": 4,
+        "documented_deletes": 4,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-notion",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-notion",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -586,16 +823,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 24,
         "kinds": {
@@ -603,6 +841,43 @@
           "delete": 4,
           "update": 12
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/notion/sources/notion-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/notion/sources/notion-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 18
+          },
+          {
+            "key": "direct_write",
+            "count": 3
+          },
+          {
+            "key": "etl",
+            "count": 5
+          },
+          {
+            "key": "reverse_etl",
+            "count": 23
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "command-availability-notion",
+          "cli-command-contract-notion",
+          "sync-transport-source-definition-notion",
+          "sync-transport-destination-definition-notion"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -628,34 +903,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/sentry-operation-crosswalk.json",
+        "sources/sentry-declaration-disposition.json"
       ],
       "operations": {
         "documented": 223,
         "declared": 223,
-        "surface_unblocked": 3,
-        "disabled": 220,
+        "surface_unblocked": 0,
+        "disabled": 223,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 0,
+        "declared_percent": 100,
+        "runnable_commands": 0,
+        "enabled_percent": 0,
+        "enabled_deletes": 0,
+        "documented_deletes": 35,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-sentry",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-sentry",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -668,19 +948,56 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 0,
         "kinds": {}
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/sentry/sources/sentry-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/sentry/sources/sentry-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 117
+          },
+          {
+            "key": "direct_write",
+            "count": 103
+          },
+          {
+            "key": "etl",
+            "count": 3
+          },
+          {
+            "key": "reverse_etl",
+            "count": 0
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "cli-surface-missing-sentry",
+          "sync-transport-source-definition-sentry",
+          "sync-transport-destination-definition-sentry"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -704,7 +1021,9 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/stripe-operation-crosswalk.json",
+        "sources/stripe-declaration-disposition.json"
       ],
       "operations": {
         "documented": 589,
@@ -712,26 +1031,29 @@
         "surface_unblocked": 8,
         "disabled": 581,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 0,
+        "declared_percent": 100,
+        "runnable_commands": 8,
+        "enabled_percent": 1.36,
+        "enabled_deletes": 1,
+        "documented_deletes": 32,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-stripe",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-stripe",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -744,16 +1066,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 3,
         "kinds": {
@@ -761,6 +1084,42 @@
           "delete": 1,
           "update": 1
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/stripe/sources/stripe-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/stripe/sources/stripe-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 254
+          },
+          {
+            "key": "direct_write",
+            "count": 323
+          },
+          {
+            "key": "etl",
+            "count": 5
+          },
+          {
+            "key": "reverse_etl",
+            "count": 3
+          },
+          {
+            "key": "binary_read",
+            "count": 4
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "typed-operation-contract-stripe",
+          "sync-transport-source-definition-stripe",
+          "sync-transport-destination-definition-stripe"
+        ],
+        "live_certification": "pending"
       }
     },
     {
@@ -787,34 +1146,39 @@
         "api_surface.json (source cross-check)",
         "operations.json",
         "writes.json",
-        "certification-sweep.json"
+        "certification-sweep.json",
+        "sources/vercel-operation-crosswalk.json",
+        "sources/vercel-declaration-disposition.json"
       ],
       "operations": {
         "documented": 400,
         "declared": 400,
-        "surface_unblocked": 22,
-        "disabled": 378,
+        "surface_unblocked": 0,
+        "disabled": 400,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 0,
+        "declared_percent": 100,
+        "runnable_commands": 0,
+        "enabled_percent": 0,
+        "enabled_deletes": 0,
+        "documented_deletes": 56,
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
       },
       "sync_transport": {
-        "state": "blocked",
+        "state": "mapped-gap",
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-source-definition-vercel",
+          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "blocked",
-          "reason": "foundation-gap"
+          "state": "gap",
+          "reason": "foundation-gap",
+          "gap_id": "sync-transport-destination-definition-vercel",
+          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
-        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
-        "evidence": [
-          "internal/synctransport/definition_composition.go:145-168",
-          "internal/app/issue_label_warehouse_transport.go:54-103",
-          "internal/app/issue_label_warehouse_transport.go:322-368",
-          "internal/connectors/certify/stages_transport_internal_test.go:89"
-        ],
-        "foundation_issue": 4093,
         "recoverable": true
       },
       "non_live_certification": {
@@ -827,16 +1191,17 @@
         "live_certification": "pending"
       },
       "parity_classes": [
-        "source-lock",
-        "api-surface",
-        "operations",
-        "writes",
-        "non-live-certification-sweep",
-        "sync-transport-blocked-foundation-gap"
+        "direct-read",
+        "direct-write",
+        "etl",
+        "reverse-etl",
+        "binary-read",
+        "binary-write",
+        "definition-owned-transport-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
       "writes": {
         "actions": 18,
         "kinds": {
@@ -844,6 +1209,42 @@
           "delete": 8,
           "update": 3
         }
+      },
+      "complete_parity_map": {
+        "artifact": "internal/connectors/defs/vercel/sources/vercel-declaration-disposition.json",
+        "crosswalk": "internal/connectors/defs/vercel/sources/vercel-operation-crosswalk.json",
+        "primary_classes": [
+          {
+            "key": "direct_read",
+            "count": 156
+          },
+          {
+            "key": "direct_write",
+            "count": 222
+          },
+          {
+            "key": "etl",
+            "count": 7
+          },
+          {
+            "key": "reverse_etl",
+            "count": 15
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
+          }
+        ],
+        "gap_ids": [
+          "cli-surface-missing-vercel",
+          "sync-transport-source-definition-vercel",
+          "sync-transport-destination-definition-vercel"
+        ],
+        "live_certification": "pending"
       }
     }
   ]

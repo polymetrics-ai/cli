@@ -362,9 +362,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "OAuth token issuance/refresh mints a caller credential rather than moving provider data. Exposing it as a CLI command would emit a token-derived value, which this repository forbids outright. Source: https://developers.notion.com/reference/create-a-token",
-        "source_url": "https://developers.notion.com/reference/create-a-token",
-        "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
+        "reason": "Pinned OAuth token exchange returns access_token and refresh_token. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and secret-response handling.",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {
@@ -375,9 +375,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "OAuth token introspection reports the caller credential's active status, scope and issue time. Its response is entirely token-derived, so it is never rendered. Source: https://developers.notion.com/reference/introspect-token",
-        "source_url": "https://developers.notion.com/reference/introspect-token",
-        "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
+        "reason": "Pinned OAuth introspection requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and safe token-derived response handling.",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {
@@ -388,9 +388,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "OAuth token revocation is credential lifecycle, not provider data, and is handled by pm credentials rather than a connector command. Source: https://developers.notion.com/reference/revoke-token",
-        "source_url": "https://developers.notion.com/reference/revoke-token",
-        "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
+        "reason": "Pinned OAuth revoke requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path.",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {

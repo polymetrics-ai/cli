@@ -162,3 +162,34 @@ For every later connector, use this criterion: only a live operation that is
 genuinely destructive or irreversible without user intent belongs in
 `unsafe-to-exercise`; a secret ingress/egress limitation is a named,
 recoverable foundation gap.
+
+## Captain complete-map order — before certification
+
+### Red
+
+The source locks and inventories alone did not prove a stable certification
+target: the ten bundles did not consistently show the user-facing CLI binding,
+binary route, transport admission, or exact foundation gap for every pinned
+method/path. The old GitHub-shaped sync descriptor was also not a valid basis
+for a new connector declaration.
+
+### Green
+
+Docker Hub `3ee815c01` is retained as the accepted reference. The other nine
+bundles receive a source-lock crosswalk and declaration-disposition map in
+`internal/connectors/defs/<connector>/sources/`. Each row names exactly one of
+direct read, direct write, ETL, reverse ETL, binary read, or binary write and
+records the present CLI foundation or a named recoverable gap with file/line
+evidence and minimal change. `COMPLETE-PARITY-MAP.md` records the batch
+denominators, command-derived enabled percentages, deletes and gap IDs.
+
+ETL and reverse ETL are assessed only using the definition-owned transport
+contract in `docs/sync-transport-definition.md` (PR #4286). Every connector is
+an explicit two-direction transport gap until it provides its own exact
+executor, delivery facts, typed action strategy/acknowledgement, and
+conformance evidence. No `sync_transport.json` is copied or invented.
+
+### Refactor
+
+Do not run certification until this map is stable. This definitions-only change
+does not add engine code, provider schemas, credentials, or live provider I/O.

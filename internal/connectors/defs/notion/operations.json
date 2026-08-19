@@ -340,6 +340,162 @@
         "direction": "upload",
         "max_bytes": 20971520
       }
+    },
+    {
+      "id": "notion.create_a_token",
+      "kind": "rest_write",
+      "summary": "Exchange an authorization code for an access and refresh token",
+      "description": "Disabled source-backed OAuth secret contract; source operation notion.create_a_token; /v1/oauth/token remains declared pending the sensitive_policy live execution and secret-response foundation gaps.",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "code",
+          "refresh_token",
+          "access_token",
+          "client_secret"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v1/oauth/token",
+        "content_type": "application/json",
+        "body_schema": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "grant_type": {
+                  "type": "string",
+                  "const": "authorization_code"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "redirect_uri": {
+                  "type": "string"
+                },
+                "external_account": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "name"
+                  ]
+                }
+              },
+              "required": [
+                "grant_type",
+                "code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "grant_type": {
+                  "type": "string",
+                  "const": "refresh_token"
+                },
+                "refresh_token": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "grant_type",
+                "refresh_token"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "notion.revoke_token",
+      "kind": "rest_write",
+      "summary": "Revoke a token",
+      "description": "Disabled source-backed OAuth secret contract; source operation notion.revoke_token; /v1/oauth/revoke remains declared pending the sensitive_policy live execution and secret-response foundation gaps.",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "token",
+          "client_secret"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v1/oauth/revoke",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "token"
+          ]
+        }
+      }
+    },
+    {
+      "id": "notion.introspect_token",
+      "kind": "rest_write",
+      "summary": "Introspect a token",
+      "description": "Disabled source-backed OAuth secret contract; source operation notion.introspect_token; /v1/oauth/introspect remains declared pending the sensitive_policy live execution and secret-response foundation gaps.",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "token",
+          "client_secret"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v1/oauth/introspect",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "token"
+          ]
+        }
+      }
     }
   ]
 }

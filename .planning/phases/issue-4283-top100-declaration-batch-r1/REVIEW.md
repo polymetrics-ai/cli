@@ -67,3 +67,25 @@ Hub OpenAPI and the runnable command contracts.
 
 No new Critical, Warning, or Info finding was identified. The pending boundary
 gate is preserved as a required merge check, not treated as a pass.
+
+## Complete six-class map review
+
+Reviewed the nine new source-lock crosswalk/disposition pairs and the Docker
+Hub reference summary against the captain's map contract.
+
+- Every pinned source operation is present once in its connector map; the
+  primary class totals equal the source-lock count for all nine bundles.
+- `ENABLED%` counts only operations with an implemented CLI binding. It does
+  not promote an operation inventory, elevated scope, stream, write action or
+  source URL into a runnable command.
+- Source and destination transport gaps are distinct. Both cite the
+  definition-owned #4286 contract and retain the minimum recovery; no
+  `sync_transport.json`, GitHub evidence constant or generic write transport
+  was invented.
+- The maps retain every documented DELETE and report enabled/documented delete
+  counts. No provider call, credential, engine edit, GitHub bundle or Zoom
+  bundle change was made.
+
+No Critical, Warning, or Info finding was identified in the complete-map
+artifact. Connector-boundary remains pending CI because detached worker capture
+still has no observable exit record.

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "full-parity-dockerhub-secret-policy-retrofit-verification",
-  "delivery_mode": "declaration-only-non-live-certification",
+  "state": "complete-six-class-map-static-validation",
+  "delivery_mode": "declarations-and-complete-map; non-live-certification-only",
   "connectors": [
     "dockerhub",
     "gitlab",
@@ -17,5 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Complete Docker Hub static and binary no-credential proof gates, capture connector-boundary detached output and exit status, regenerate connector documentation, update the ledger evidence, commit the full-parity retrofit, and report before selecting any next connector. Gitea is unavailable as a bundle and must be substituted or created first."
+  "next": "The complete map is stable. Run the permitted non-live/static certification gates only; do not use provider credentials or provider I/O. Rebase before a push, preserve connector-boundary as CI-gated unless its detached capture produces an exit record.",
+  "updated_at": "2026-08-19T00:00:00Z"
 }

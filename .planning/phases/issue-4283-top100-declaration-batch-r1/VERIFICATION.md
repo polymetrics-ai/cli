@@ -40,3 +40,39 @@
   unverified locally. Two detached capture attempts were killed by the worker
   process boundary before producing stdout, stderr, or an exit record; CI still
   gates this exact check. No check was weakened or silently skipped.
+
+## Complete six-class map checkpoint (before certification)
+
+- [x] Docker Hub `3ee815c01` retained as the accepted source-lock map template;
+  all nine other connectors now have both
+  `sources/<connector>-operation-crosswalk.json` and
+  `sources/<connector>-declaration-disposition.json`.
+- [x] Local map-integrity assertion: each crosswalk and disposition has exactly
+  its pinned source count, every operation has one primary class and a
+  foundation record, class counts sum to the source count, and both
+  definition-owned transport gaps are present.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/notion --json`
+  — 0 findings.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
+  --json` for Stripe, Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and
+  Jira — 0 findings for each.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connectors
+  scanned, 0 fields filled or corrected.
+- [x] No certification sweep, live credential test, or provider call was run
+  before the complete map existed. Live certification remains pending for all
+  ten connectors.
+- [x] After the map gate: `go run ./cmd/connectorgen certification-sweep .
+  --connector <connector> --check` passed for Docker Hub, Notion, Stripe,
+  Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and Jira. The respective
+  current row/CLI counts were 43/41, 51/49, 10/8, 7/5, 5/4, 2/0, 1/0, 2/0,
+  251/249, and 592/590.
+- [x] `go test -timeout 20m ./internal/connectors/conformance -run
+  'TestConformance/(dockerhub|gitlab|jira|vercel|notion|stripe|bitbucket|circleci|sentry|asana)$'
+  -count=1` — pass (3.861s), fixture-backed only.
+- [x] `go test -timeout 20m -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  ./internal/connectors/commandrunner -count=1` — pass (5.123s).
+- [ ] `go run ./cmd/connectorgen boundary . --json` was retried detached at
+  `.tmp/connector-boundary-map.JaA7HT` after fleet disk recovery. The child
+  again vanished before it wrote `result.txt`, stdout or stderr, so no exit
+  status exists to claim. This is the third observed worker-containment
+  failure; CI remains the required gate and no check was weakened.
