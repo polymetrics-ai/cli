@@ -1,0 +1,66 @@
+# Twenty CRM all-ops recovery plan
+
+## GSD and skills
+
+- Lifecycle: `discuss-phase` → `plan-phase --tdd` → `execute-phase` →
+  `verify-work` → `code-review`, each resolved through `scripts/gsd prompt`.
+- Inline/manual fallback: compatible isolated Pi workers are not available in
+  this environment; the single connector worker executes the generated workflow
+  inline and records evidence here.
+- Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`,
+  `golang-concurrency`, `golang-database`, `golang-graphql`, and
+  `golang-documentation`.
+
+## Foundation check
+
+| Need | Expected proof | Stop condition |
+| --- | --- | --- |
+| Stream and direct-read runtime dispatch | `commandrunner.Preflight`, targeted command tests, and built CLI reach the Twenty request contract | Any required executor is missing: record `needs-decision` and do not alter foundation code. |
+| Typed reverse ETL and delete safety | Generator/conformance tests plus live plan-preview-approval-execute proof | Any bypass of the typed lifecycle: stop. |
+| Certification artifacts | `certification-sweep --check` passes for current allowed scope; assess whether Twenty is allowlisted | Adding Twenty to the allowlist would require a foundation decision. |
+| Live provider | Published Docker Compose starts a disposable local Twenty; key stays only in Keychain and stdin | After a genuine start attempt, document exact blocker and remain uncertified. |
+
+## TDD slices
+
+1. Add a Twenty-local source contract test that fails while the recovered bundle
+   is absent and later asserts all 168 commands are executable/fully classified.
+2. Cherry-pick the recovered bundle only, run the red structural/generator tests,
+   and repair current-main declaration drift inside `defs/twenty`.
+3. Add or tighten connector-local tests for representative list/get/pagination,
+   write validation, typed deletes, invalid inputs, and edge pagination/output
+   cases. Make each red result durable in `TDD-LEDGER.md` before its green fix.
+4. Regenerate only connector-owned derived files and run targeted gates.
+5. Build `pm`; establish a disposable self-hosted Twenty, add no source-visible
+   secrets, and use stdin at point of use for bounded live read/write/delete and
+   round-trip evidence.
+6. Run the required verification and review workflow, rebase on current `main`,
+   push the branch, open a conventional-commit PR with `Refs #277`, then read
+   its base back through the GitHub API.
+
+## CLI/docs parity checklist
+
+- [ ] `pm twenty` contextual help exits successfully.
+- [ ] `pm help twenty` and representative `pm twenty <object> <action> --help`
+  reflect the recovered surface.
+- [ ] Generated CLI/manual/docs checks pass; any required non-definition output
+  is treated as a foundation/scope decision rather than silently omitted.
+- [ ] JSON output, credential safety, pagination, and reverse-ETL safety gates
+  are represented in connector documentation and live evidence.
+
+## Planned gates
+
+```text
+go test -timeout 20m ./internal/connectors/defs/twenty
+go test -timeout 20m ./internal/connectors/conformance -run 'TestConformance/twenty'
+go run ./cmd/connectorgen validate internal/connectors/defs
+go run ./cmd/connectorgen surface-sync --check
+go run ./cmd/connectorgen certification-sweep --connector twenty --check
+make connector-runtime-preflight
+make connector-canon-check
+make connector-boundary
+go build ./cmd/pm
+make lint
+make verify
+```
