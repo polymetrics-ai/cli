@@ -15,7 +15,7 @@ only destination factory remains the issue-label-specific one.
 
 | Connector | Operations found / mapped | Input confidence | Enabled | Disabled | ENABLED% | Deletes | Endpoint classes: DR / DW / ETL / BR / BW | ETL source | Reverse-ETL eligibility | gap_ids | declaration_pending_ids |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | --- | --- | --- | --- | --- |
-| Docker Hub | 54 / 54 | high — OpenAPI | 45 | 9 | 83.33 | 6 / 6 | 22 / 27 / 4 / 1 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `operation-kind-loader-registration`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
+| Docker Hub | 54 / 54 | high — OpenAPI | 45 | 9 | 83.33 | 6 / 6 | 22 / 27 / 4 / 1 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `operation-kind-loader-registration`, `typed-action-content-type`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
 | Notion | 49 / 49 | high — OpenAPI | 43 | 6 | 87.76 | 4 / 4 | 18 / 25 / 5 / 0 / 1 | declared (6 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `command-availability-notion`, `cli-command-contract-notion` |
 | Stripe | 589 / 589 | high — OpenAPI | 8 | 581 | 1.36 | 1 / 32 | 254 / 326 / 5 / 4 / 0 | declared (5 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-stripe` |
 | Bitbucket | 331 / 331 | high — OpenAPI | 3 | 328 | 0.91 | 1 / 54 | 21 / 148 / 143 / 15 / 4 | declared (143 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-command-contract-bitbucket`, `typed-operation-contract-bitbucket` |
@@ -44,6 +44,13 @@ connector-neutral typed destination `DefinitionFactory` selected by the
 definition, with per-connector evidence, explicit source bindings,
 acknowledgement, and per-mode apply strategies. No `transport_binding` action
 or destination declaration is fabricated.
+
+Docker Hub reverse-ETL preparation is recorded in
+`internal/connectors/defs/dockerhub/sources/dockerhub-reverse-etl-action-audit.json`:
+all 27 direct writes are identified, 20 already have source-backed typed
+actions, two SCIM writes require a typed-action request-content-type extension
+before they can be actions, and five credential lifecycle/session exchanges are
+not reverse-ETL targets. No destination declaration is implied or authored.
 
 Docker Hub repair after PR #4297: operation-scoped REST pagination enabled
 `GET /v2/auditlogs/{account}` and `GET /v2/scim/2.0/Users`; the closed SCIM

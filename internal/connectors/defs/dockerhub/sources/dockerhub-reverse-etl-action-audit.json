@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+  "purpose": "Prepares source-backed typed write actions for a connector-neutral reverse-ETL destination; no destination or transport_binding is declared before the shared executor exists.",
+  "summary": {
+    "direct_write_operations": 27,
+    "typed_action_ready": 20,
+    "typed_action_content_type_gap": 2,
+    "credential_lifecycle_or_session_excluded": 5,
+    "destination_declarations": 0,
+    "current_destination_gap": "generic-typed-destination-executor"
+  },
+  "write_operations": [
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/users/login",
+        "id": "dockerhub.postuserslogin"
+      },
+      "category": "not-reverse-etl-target",
+      "reason": "credential-lifecycle-or-session-exchange",
+      "evidence": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "id": "dockerhub.postusers2falogin"
+      },
+      "category": "not-reverse-etl-target",
+      "reason": "credential-lifecycle-or-session-exchange",
+      "evidence": "second-factor login continuation of the excluded /v2/users/login session exchange"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "id": "dockerhub.authcreateaccesstoken"
+      },
+      "category": "not-reverse-etl-target",
+      "reason": "credential-lifecycle-or-session-exchange",
+      "evidence": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/access-tokens",
+        "id": "dockerhub.post__v2_access-tokens"
+      },
+      "category": "not-reverse-etl-target",
+      "reason": "credential-lifecycle-or-session-exchange",
+      "evidence": "personal access token creation; authenticated-session-only"
+    },
+    {
+      "operation": {
+        "method": "PATCH",
+        "path": "/v2/access-tokens/{uuid}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_personal_access_token",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/access-tokens/{uuid}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_personal_access_token",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PUT",
+        "path": "/v2/orgs/{name}/settings",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_organization_settings",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "id": "dockerhub.post__v2_orgs__name__access-tokens"
+      },
+      "category": "not-reverse-etl-target",
+      "reason": "credential-lifecycle-or-session-exchange",
+      "evidence": "org-scoped access token creation; authenticated org-admin session required"
+    },
+    {
+      "operation": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_organization_access_token",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_organization_access_token",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PATCH",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_repository_immutable_tags",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "verify_repository_immutable_tags",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/repositories/{namespace}/{repository}/groups",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "create_repository_group",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "create_repository",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_organization_member",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_organization_member",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "create_organization_group",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "replace_organization_group",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "update_organization_group",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_organization_group",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "add_organization_group_member",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_organization_group_member",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "DELETE",
+        "path": "/v2/invites/{id}",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "delete_organization_invite",
+        "kind": "delete",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "PATCH",
+        "path": "/v2/invites/{id}/resend",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "resend_organization_invite",
+        "kind": "update",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/invites/bulk",
+        "id": null
+      },
+      "category": "typed-action-ready",
+      "typed_action": {
+        "name": "create_organization_invites",
+        "kind": "create",
+        "source_contract": "writes.json"
+      },
+      "destination_state": "pending-generic-typed-destination-executor"
+    },
+    {
+      "operation": {
+        "method": "POST",
+        "path": "/v2/scim/2.0/Users",
+        "id": "dockerhub.post__v2_scim_2.0_users"
+      },
+      "category": "foundation-gap",
+      "foundation_gap": {
+        "id": "typed-action-content-type",
+        "reason": "The pinned operation requires application/scim+json, but a writes.json typed action can declare only the existing body types and the JSON branch emits application/json.",
+        "evidence": "internal/connectors/engine/bundle.go:470; internal/connectors/engine/write_prepare.go:169,223-237",
+        "minimal_change": "allow a connector-owned typed write action to declare its source-required request content type and preserve it through write preparation"
+      }
+    },
+    {
+      "operation": {
+        "method": "PUT",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "id": "dockerhub.put__v2_scim_2.0_users__id_"
+      },
+      "category": "foundation-gap",
+      "foundation_gap": {
+        "id": "typed-action-content-type",
+        "reason": "The pinned operation requires application/scim+json, but a writes.json typed action can declare only the existing body types and the JSON branch emits application/json.",
+        "evidence": "internal/connectors/engine/bundle.go:470; internal/connectors/engine/write_prepare.go:169,223-237",
+        "minimal_change": "allow a connector-owned typed write action to declare its source-required request content type and preserve it through write preparation"
+      }
+    }
+  ]
+}

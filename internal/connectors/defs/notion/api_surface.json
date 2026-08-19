@@ -364,7 +364,7 @@
         "blocked_by_default": true,
         "reason": "Pinned OAuth token exchange returns access_token and refresh_token. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and secret-response handling.",
         "source_url": "https://developers.notion.com/openapi.json",
-        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        "notes": "named_dependency=sensitive_policy; foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {
@@ -377,7 +377,7 @@
         "blocked_by_default": true,
         "reason": "Pinned OAuth introspection requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and safe token-derived response handling.",
         "source_url": "https://developers.notion.com/openapi.json",
-        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        "notes": "named_dependency=sensitive_policy; foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {
@@ -390,7 +390,7 @@
         "blocked_by_default": true,
         "reason": "Pinned OAuth revoke requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path.",
         "source_url": "https://developers.notion.com/openapi.json",
-        "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        "notes": "named_dependency=sensitive_policy; foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
       }
     },
     {
@@ -417,22 +417,6 @@
         "reason": "Legacy 'Query a database' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/data_sources/{data_source_id}/query, which this bundle implements as the data-source query direct read. Source: https://developers.notion.com/reference/post-database-query",
         "source_url": "https://developers.notion.com/reference/post-database-query",
         "notes": "named_dependency=none - provider-deprecated, superseded by the data source query; artifact=https://developers.notion.com/openapi.json"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/search",
-      "provenance": {
-        "artifact": "notion-operation-source-lock-2026-08-19",
-        "source_url": "https://developers.notion.com/openapi.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
-        "source_url": "https://developers.notion.com/openapi.json"
       }
     }
   ]

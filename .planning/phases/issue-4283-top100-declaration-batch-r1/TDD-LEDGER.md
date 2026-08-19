@@ -355,3 +355,46 @@ The three HEAD checks and CSV export remain disabled as
 validation so a definition can declare them, then add a loader regression test.
 This definitions-only repair does not make that foundation edit, and it does
 not repurpose the five secret-response rows as unsafe-operation refusals.
+
+## Local verify recovery — Notion operation ledger
+
+### Red
+
+The detached local `make verify` run reached
+`TestNotionAPISurfaceOperationLedger` and failed: the surface had 55 rows
+where the checked provider ledger permits 54 (51 operations plus three
+source-qualified response arms). It also found that the three OAuth rows and a
+duplicate unqualified search row did not preserve the required
+`named_dependency=` disposition evidence.
+
+### Green plan
+
+Remove only the redundant unqualified `POST /v1/search` presentation row; the
+two existing source-qualified search rows remain the exhaustive operation
+declaration. Restore the dependency prefix on the three recoverable
+secret-policy rows, then re-run the exact ledger test and the full local gate.
+
+### Green
+
+`go test -timeout 20m ./cmd/connectorgen -run
+'^TestNotionAPISurfaceOperationLedger$' -count=1` now passes. The surface has
+54 rows and continues to represent all 51 provider actions through the two
+qualified search arms; no provider operation was removed.
+
+## Reverse-ETL preparation — Docker Hub typed actions
+
+### Red
+
+The completed map treated all 27 Docker Hub direct writes as equally available
+for a future destination. That would silently include five credential/session
+operations and would let a typed `json` action mislabel the two SCIM writes,
+whose pinned request media type is `application/scim+json`.
+
+### Green
+
+`sources/dockerhub-reverse-etl-action-audit.json` exhaustively classifies all
+27 source-backed writes: 20 existing typed actions are ready for a future
+connector-neutral destination, two SCIM actions are held by the recoverable
+`typed-action-content-type` gap, and five credential lifecycle/session
+operations are not reverse-ETL targets. No destination or `transport_binding`
+is declared before #4303 supplies the generic typed destination factory.

@@ -285,3 +285,23 @@ media-type gap IDs. Retain the five secret-response pending rows,
 `generic-typed-destination-executor`, all source-lock counts, and the
 live-certification-pending boundary. Do not misclassify the missing operation
 block mapping as a Docker Hub or provider-schema limitation.
+
+## Local verify recovery — Notion operation ledger
+
+The full repository gate exposes one stale Batch-1 audit representation:
+`POST /v1/search` already has two source-qualified response-arm rows and must
+not also have an unqualified third row. Preserve the source operation through
+those two rows, restore `named_dependency=sensitive_policy` to the three
+recoverable OAuth rows, and prove the exact ledger test before repeating
+`make verify`. This is an audit-artifact repair, not a change to a provider
+operation, runtime executor, or reverse-ETL declaration.
+
+## Reverse-ETL preparation — Docker Hub typed actions
+
+Before #4303 makes destinations declarable, keep the source-backed action
+inventory explicit: 20 of Docker Hub's 27 direct writes already bind exact
+typed actions; five credential lifecycle/session operations are not sync
+targets; and two SCIM writes require a typed-action request-content-type
+extension because `writes.json` currently emits `application/json`. Record the
+two-operation `typed-action-content-type` foundation gap with source and engine
+evidence, and do not fabricate a destination or `transport_binding` entry.

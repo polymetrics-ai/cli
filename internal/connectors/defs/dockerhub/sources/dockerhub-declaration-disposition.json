@@ -5,7 +5,8 @@
   "source_basis": {
     "source_lock": "sources/dockerhub-operation-source-lock.json",
     "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-    "api_surface": "api_surface.json"
+    "api_surface": "api_surface.json",
+    "reverse_etl_action_audit": "sources/dockerhub-reverse-etl-action-audit.json"
   },
   "summary": {
     "api_surface_rows": 54,
@@ -69,12 +70,17 @@
     ],
     "gap_ids": [
       "operation-kind-loader-registration",
+      "typed-action-content-type",
       "generic-typed-destination-executor"
     ],
     "foundation_gaps": [
       {
         "id": "operation-kind-loader-registration",
         "count": 4
+      },
+      {
+        "id": "typed-action-content-type",
+        "count": 2
       },
       {
         "id": "generic-typed-destination-executor",
@@ -137,6 +143,15 @@
       "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
       "recoverable": true
+    },
+    "reverse_etl_preparation": {
+      "action_audit": "sources/dockerhub-reverse-etl-action-audit.json",
+      "direct_write_operations_identified": 27,
+      "typed_actions_ready": 20,
+      "typed_action_content_type_gap": 2,
+      "credential_lifecycle_or_session_excluded": 5,
+      "destination_declarations": 0,
+      "note": "No transport_binding is authored before a connector-neutral typed destination factory exists."
     },
     "operations_found": 54,
     "operations_mapped": 54,

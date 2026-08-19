@@ -532,6 +532,7 @@
         "docs.md",
         "operations.json",
         "sources/dockerhub-declaration-disposition.json",
+        "sources/dockerhub-reverse-etl-action-audit.json",
         "sources/dockerhub-operation-crosswalk.json",
         "spec.json",
         "streams.json",
@@ -600,6 +601,15 @@
           "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
           "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
           "recoverable": true
+        },
+        "reverse_etl_preparation": {
+          "action_audit": "internal/connectors/defs/dockerhub/sources/dockerhub-reverse-etl-action-audit.json",
+          "direct_write_operations_identified": 27,
+          "typed_actions_ready": 20,
+          "typed_action_content_type_gap": 2,
+          "credential_lifecycle_or_session_excluded": 5,
+          "destination_declarations": 0,
+          "note": "No transport_binding is authored before a connector-neutral typed destination factory exists."
         }
       },
       "non_live_certification": {
@@ -665,6 +675,7 @@
         ],
         "gap_ids": [
           "operation-kind-loader-registration",
+          "typed-action-content-type",
           "generic-typed-destination-executor"
         ],
         "live_certification": "pending",

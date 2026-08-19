@@ -11786,6 +11786,32 @@
       ]
     },
     {
+      "id": "typed-action-content-type",
+      "reason": "The pinned SCIM writes require application/scim+json, but a writes.json typed action can declare only existing body types and the JSON path emits application/json.",
+      "evidence": "internal/connectors/engine/bundle.go:470; internal/connectors/engine/write_prepare.go:169,223-237",
+      "minimal_change": "allow a connector-owned typed write action to declare its source-required request content type and preserve it through write preparation",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/scim/2.0/Users"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+          "capability": "reverse_etl_typed_action"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "PUT",
+            "path": "/v2/scim/2.0/Users/{id}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+          "capability": "reverse_etl_typed_action"
+        }
+      ]
+    },
+    {
       "id": "generic-typed-destination-executor",
       "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
       "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
