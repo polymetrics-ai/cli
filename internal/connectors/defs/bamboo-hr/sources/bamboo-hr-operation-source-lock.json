@@ -1,0 +1,3448 @@
+{
+  "schema_version": 1,
+  "connector": "bamboo-hr",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://documentation.bamboohr.com/reference/getting-started",
+    "requested_url": "https://documentation.bamboohr.com/reference/getting-started",
+    "sha256": "07a39154e4b0eb8d71bf3f4570c8b20f9f5b8768ba9292aa4f17269ce80824d8",
+    "bytes": 530083,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "924d09604e5b59fd8e6560924c5aee981b088aa698eac0390475b8ae83d66508",
+    "bytes": 78397,
+    "source_operation_count": 340
+  },
+  "rest": {
+    "source_url": "https://documentation.bamboohr.com/reference/getting-started",
+    "sha256": "07a39154e4b0eb8d71bf3f4570c8b20f9f5b8768ba9292aa4f17269ce80824d8",
+    "bytes": 530083,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 35
+      },
+      {
+        "key": "GET",
+        "count": 163
+      },
+      {
+        "key": "PATCH",
+        "count": 8
+      },
+      {
+        "key": "POST",
+        "count": 88
+      },
+      {
+        "key": "PUT",
+        "count": 46
+      }
+    ],
+    "operations": [
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-alert-configurations-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/alert-configurations",
+        "operation_id": "get-api-v1-alert-configurations-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-alert-configurations-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/alert-configurations",
+        "operation_id": "post-api-v1-alert-configurations-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-alert-configurations-id-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/alert-configurations/{id}",
+        "operation_id": "get-api-v1-alert-configurations-id-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-alert-configurations-id-4",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/alert-configurations/{id}",
+        "operation_id": "put-api-v1-alert-configurations-id-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-alerts-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/alerts",
+        "operation_id": "get-api-v1-alerts-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-applicant-tracking-application-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/applicant_tracking/application",
+        "operation_id": "post-api-v1-applicant-tracking-application-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-applications-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/applications",
+        "operation_id": "get-api-v1-applicant-tracking-applications-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-applications-applicationid-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/applications/{applicationId}",
+        "operation_id": "get-api-v1-applicant-tracking-applications-applicationid-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-applicant-tracking-applications-applicationid-comments-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/applicant_tracking/applications/{applicationId}/comments",
+        "operation_id": "post-api-v1-applicant-tracking-applications-applicationid-comments-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-applicant-tracking-applications-applicationid-status-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/applicant_tracking/applications/{applicationId}/status",
+        "operation_id": "post-api-v1-applicant-tracking-applications-applicationid-status-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-hiring-leads-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/hiring_leads",
+        "operation_id": "get-api-v1-applicant-tracking-hiring-leads-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-applicant-tracking-job-opening-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/applicant_tracking/job_opening",
+        "operation_id": "post-api-v1-applicant-tracking-job-opening-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-jobs-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/jobs",
+        "operation_id": "get-api-v1-applicant-tracking-jobs-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-locations-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/locations",
+        "operation_id": "get-api-v1-applicant-tracking-locations-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-applicant-tracking-statuses-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/applicant_tracking/statuses",
+        "operation_id": "get-api-v1-applicant-tracking-statuses-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefit-company-benefit-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefit/company_benefit",
+        "operation_id": "get-api-v1-benefit-company-benefit-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-benefit-company-benefit-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/benefit/company_benefit",
+        "operation_id": "post-api-v1-benefit-company-benefit-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefit-company-benefit-type-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefit/company_benefit/type",
+        "operation_id": "get-api-v1-benefit-company-benefit-type-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-benefit-company-benefit-id-19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/benefit/company_benefit/{id}",
+        "operation_id": "delete-api-v1-benefit-company-benefit-id-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefit-company-benefit-id-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefit/company_benefit/{id}",
+        "operation_id": "get-api-v1-benefit-company-benefit-id-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-benefit-company-benefit-id-21",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/benefit/company_benefit/{id}",
+        "operation_id": "put-api-v1-benefit-company-benefit-id-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefit-employee-benefit-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefit/employee_benefit",
+        "operation_id": "get-api-v1-benefit-employee-benefit-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-benefit-employee-benefit-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/benefit/employee_benefit",
+        "operation_id": "post-api-v1-benefit-employee-benefit-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefit-member-benefit-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefit/member_benefit",
+        "operation_id": "get-api-v1-benefit-member-benefit-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitcoverages-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitcoverages",
+        "operation_id": "get-api-v1-benefitcoverages-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitgroupemployees-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitgroupemployees",
+        "operation_id": "get-api-v1-benefitgroupemployees-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-benefitgroupemployees-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/benefitgroupemployees",
+        "operation_id": "post-api-v1-benefitgroupemployees-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitgroupplancosts-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitgroupplancosts",
+        "operation_id": "get-api-v1-benefitgroupplancosts-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitgroupplans-29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitgroupplans",
+        "operation_id": "get-api-v1-benefitgroupplans-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitgroups-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitgroups",
+        "operation_id": "get-api-v1-benefitgroups-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitplancoverages-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitplancoverages",
+        "operation_id": "get-api-v1-benefitplancoverages-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefitplans-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefitplans",
+        "operation_id": "get-api-v1-benefitplans-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefits-member-benefits-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefits/member-benefits",
+        "operation_id": "get-api-v1-benefits-member-benefits-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-benefits-settings-deduction-types-all-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/benefits/settings/deduction_types/all",
+        "operation_id": "get-api-v1-benefits-settings-deduction-types-all-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-company-profile-data-company-information-35",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/company-profile-data/company-information",
+        "operation_id": "patch-api-v1-company-profile-data-company-information-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-company-profile-data-display-name-36",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/company-profile-data/display-name",
+        "operation_id": "put-api-v1-company-profile-data-display-name-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-company-profile-data-industry-codes-37",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/company-profile-data/industry-codes",
+        "operation_id": "put-api-v1-company-profile-data-industry-codes-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-company-profile-integrations-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/company-profile-integrations",
+        "operation_id": "get-api-v1-company-profile-integrations-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-company-eins-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/company_eins",
+        "operation_id": "get-api-v1-company-eins-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-company-information-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/company_information",
+        "operation_id": "get-api-v1-company-information-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-benchmarks-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/benchmarks",
+        "operation_id": "get-api-v1-compensation-benchmarks-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-benchmarks-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/benchmarks",
+        "operation_id": "post-api-v1-compensation-benchmarks-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-benchmarks-43",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/benchmarks",
+        "operation_id": "put-api-v1-compensation-benchmarks-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-benchmarks-details-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/benchmarks/details",
+        "operation_id": "get-api-v1-compensation-benchmarks-details-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-benchmarks-details-export-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/benchmarks/details/export",
+        "operation_id": "get-api-v1-compensation-benchmarks-details-export-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-benchmarks-import-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/benchmarks/import",
+        "operation_id": "post-api-v1-compensation-benchmarks-import-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-benchmarks-sources-47",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/benchmarks/sources",
+        "operation_id": "delete-api-v1-compensation-benchmarks-sources-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-benchmarks-sources-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/benchmarks/sources",
+        "operation_id": "get-api-v1-compensation-benchmarks-sources-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "api_surface_index": 47
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-benchmarks-sources-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/benchmarks/sources",
+        "operation_id": "post-api-v1-compensation-benchmarks-sources-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "api_surface_index": 48
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-benchmarks-sources-50",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/benchmarks/sources",
+        "operation_id": "put-api-v1-compensation-benchmarks-sources-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "api_surface_index": 49
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-benchmarks-id-51",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/benchmarks/{id}",
+        "operation_id": "delete-api-v1-compensation-benchmarks-id-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "api_surface_index": 50
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-equity-settings-52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/equity/settings",
+        "operation_id": "get-api-v1-compensation-equity-settings-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "api_surface_index": 51
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-equity-settings-53",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/equity/settings",
+        "operation_id": "put-api-v1-compensation-equity-settings-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "api_surface_index": 52
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles",
+        "operation_id": "get-api-v1-compensation-planning-cycles-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "api_surface_index": 53
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles",
+        "operation_id": "post-api-v1-compensation-planning-cycles-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "api_surface_index": 54
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-planning-cycles-id-56",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/planning_cycles/{id}",
+        "operation_id": "delete-api-v1-compensation-planning-cycles-id-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "api_surface_index": 55
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "api_surface_index": 56
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-58",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "api_surface_index": 57
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-admins-59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/admins",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-admins-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "api_surface_index": 58
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-admins-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/admins",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-admins-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "api_surface_index": 59
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-planning-cycles-id-admins-employeeid-61",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/planning_cycles/{id}/admins/{employeeId}",
+        "operation_id": "delete-api-v1-compensation-planning-cycles-id-admins-employeeid-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "api_surface_index": 60
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-approvals-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/approvals",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-approvals-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "api_surface_index": 61
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-planning-cycles-id-approvals-employee-employeeid-63",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/planning_cycles/{id}/approvals/employee/{employeeId}",
+        "operation_id": "delete-api-v1-compensation-planning-cycles-id-approvals-employee-employeeid-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "api_surface_index": 62
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-approvals-final-approver-employeeid-64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/approvals/final_approver/{employeeId}",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-approvals-final-approver-employeeid-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "api_surface_index": 63
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-approvals-templateid-65",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/approvals/{templateId}",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-approvals-templateid-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "api_surface_index": 64
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-budgets-66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/budgets",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-budgets-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "api_surface_index": 65
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-budgets-breakdown-67",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/budgets/breakdown",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-budgets-breakdown-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "api_surface_index": 66
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-budgets-guidelines-68",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/budgets/guidelines",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-budgets-guidelines-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "api_surface_index": 67
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-budgets-import-69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/budgets/import",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-budgets-import-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "api_surface_index": 68
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-change-comm-70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/change_comm",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-change-comm-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "api_surface_index": 69
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-change-comm-template-71",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/change_comm/template",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-change-comm-template-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "api_surface_index": 70
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-complete-72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/complete",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-complete-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "api_surface_index": 71
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-planning-cycles-id-employees-73",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/planning_cycles/{id}/employees",
+        "operation_id": "delete-api-v1-compensation-planning-cycles-id-employees-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "api_surface_index": 72
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-employees-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/employees",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-employees-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "api_surface_index": 73
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-employees-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/employees",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-employees-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "api_surface_index": 74
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-planning-cycles-id-launch-76",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/planning_cycles/{id}/launch",
+        "operation_id": "put-api-v1-compensation-planning-cycles-id-launch-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "api_surface_index": 75
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-recommendations-77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/recommendations",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-recommendations-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "api_surface_index": 76
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-planning-cycles-id-recommendations-send-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/planning_cycles/{id}/recommendations/send",
+        "operation_id": "post-api-v1-compensation-planning-cycles-id-recommendations-send-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "api_surface_index": 77
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-summary-79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/summary",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-summary-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "api_surface_index": 78
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-worksheet-80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/worksheet",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-worksheet-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "api_surface_index": 79
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-planning-cycles-id-worksheet-export-81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/planning_cycles/{id}/worksheet/export",
+        "operation_id": "get-api-v1-compensation-planning-cycles-id-worksheet-export-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "api_surface_index": 80
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-tools-82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/tools",
+        "operation_id": "get-api-v1-compensation-tools-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "api_surface_index": 81
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-total-rewards-custom-disclaimer-83",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
+        "operation_id": "delete-api-v1-compensation-total-rewards-custom-disclaimer-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "api_surface_index": 82
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-total-rewards-custom-disclaimer-84",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
+        "operation_id": "put-api-v1-compensation-total-rewards-custom-disclaimer-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "api_surface_index": 83
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-compensation-total-rewards-employees-85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/compensation/total_rewards/employees",
+        "operation_id": "delete-api-v1-compensation-total-rewards-employees-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "api_surface_index": 84
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-compensation-total-rewards-employees-86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/compensation/total_rewards/employees",
+        "operation_id": "post-api-v1-compensation-total-rewards-employees-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "api_surface_index": 85
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-compensation-total-rewards-onboarding-stepname-87",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/compensation/total_rewards/onboarding/{stepName}",
+        "operation_id": "put-api-v1-compensation-total-rewards-onboarding-stepname-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "api_surface_index": 86
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-total-rewards-employeeid-88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/total_rewards/{employeeId}",
+        "operation_id": "get-api-v1-compensation-total-rewards-employeeid-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "api_surface_index": 87
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-total-rewards-employeeid-printable-89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/total_rewards/{employeeId}/printable",
+        "operation_id": "get-api-v1-compensation-total-rewards-employeeid-printable-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "api_surface_index": 88
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-compensation-total-rewards-employeeid-statement-90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/compensation/total_rewards/{employeeId}/statement",
+        "operation_id": "get-api-v1-compensation-total-rewards-employeeid-statement-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "api_surface_index": 89
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-custom-reports-91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/custom-reports",
+        "operation_id": "get-api-v1-custom-reports-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "api_surface_index": 90
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-custom-reports-reportid-92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/custom-reports/{reportId}",
+        "operation_id": "get-api-v1-custom-reports-reportid-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "api_surface_index": 91
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-datasets-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/datasets",
+        "operation_id": "get-api-v1-datasets-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "api_surface_index": 92
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-datasets-datasetname-94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/datasets/{datasetName}",
+        "operation_id": "post-api-v1-datasets-datasetname-94",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[93]",
+        "api_surface_index": 93
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-datasets-datasetname-field-options-95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/datasets/{datasetName}/field-options",
+        "operation_id": "post-api-v1-datasets-datasetname-field-options-95",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[94]",
+        "api_surface_index": 94
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-datasets-datasetname-fields-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/datasets/{datasetName}/fields",
+        "operation_id": "get-api-v1-datasets-datasetname-fields-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "api_surface_index": 95
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-verifications-employees-employeeid-97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee-verifications/employees/{employeeId}",
+        "operation_id": "get-api-v1-employee-verifications-employees-employeeid-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "api_surface_index": 96
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employee-verifications-employees-employeeid-verificationid-98",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employee-verifications/employees/{employeeId}/{verificationId}",
+        "operation_id": "put-api-v1-employee-verifications-employees-employeeid-verificationid-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "api_surface_index": 97
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-verifications-integration-99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee-verifications/integration",
+        "operation_id": "get-api-v1-employee-verifications-integration-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "api_surface_index": 98
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employee-verifications-integration-100",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employee-verifications/integration",
+        "operation_id": "put-api-v1-employee-verifications-integration-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "api_surface_index": 99
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employee-verifications-users-userid-send-email-101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employee-verifications/users/{userId}/send-email",
+        "operation_id": "post-api-v1-employee-verifications-users-userid-send-email-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "api_surface_index": 100
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-deductions-id-102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee/deductions/{id}",
+        "operation_id": "get-api-v1-employee-deductions-id-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "api_surface_index": 101
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-plans-id-103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee/plans/{id}",
+        "operation_id": "get-api-v1-employee-plans-id-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "api_surface_index": 102
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employee-direct-deposit-accounts-id-104",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employee_direct_deposit_accounts/{id}",
+        "operation_id": "delete-api-v1-employee-direct-deposit-accounts-id-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "api_surface_index": 103
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-direct-deposit-accounts-id-105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee_direct_deposit_accounts/{id}",
+        "operation_id": "get-api-v1-employee-direct-deposit-accounts-id-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "api_surface_index": 104
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employee-direct-deposit-accounts-id-106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employee_direct_deposit_accounts/{id}",
+        "operation_id": "post-api-v1-employee-direct-deposit-accounts-id-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "api_surface_index": 105
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employee-pay-stub-107",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employee_pay_stub",
+        "operation_id": "post-api-v1-employee-pay-stub-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "api_surface_index": 106
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employee-pay-stub-id-108",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employee_pay_stub/{id}",
+        "operation_id": "delete-api-v1-employee-pay-stub-id-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "api_surface_index": 107
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-pay-stub-id-109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee_pay_stub/{id}",
+        "operation_id": "get-api-v1-employee-pay-stub-id-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "api_surface_index": 108
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employee-unpaid-pay-stubs-110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employee_unpaid_pay_stubs",
+        "operation_id": "post-api-v1-employee-unpaid-pay-stubs-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "api_surface_index": 109
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employee-unpaid-pay-stubs-id-111",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employee_unpaid_pay_stubs/{id}",
+        "operation_id": "delete-api-v1-employee-unpaid-pay-stubs-id-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "api_surface_index": 110
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-unpaid-pay-stubs-id-112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee_unpaid_pay_stubs/{id}",
+        "operation_id": "get-api-v1-employee-unpaid-pay-stubs-id-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "api_surface_index": 111
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employee-withholding-id-113",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employee_withholding/{id}",
+        "operation_id": "delete-api-v1-employee-withholding-id-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "api_surface_index": 112
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employee-withholding-id-114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employee_withholding/{id}",
+        "operation_id": "get-api-v1-employee-withholding-id-114",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "api_surface_index": 113
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employee-withholding-id-115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employee_withholding/{id}",
+        "operation_id": "post-api-v1-employee-withholding-id-115",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "api_surface_index": 114
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employeedependents-116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employeedependents",
+        "operation_id": "get-api-v1-employeedependents-116",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "api_surface_index": 115
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employeedependents-117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employeedependents",
+        "operation_id": "post-api-v1-employeedependents-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "api_surface_index": 116
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employeedependents-id-118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employeedependents/{id}",
+        "operation_id": "get-api-v1-employeedependents-id-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "api_surface_index": 117
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employeedependents-id-119",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employeedependents/{id}",
+        "operation_id": "put-api-v1-employeedependents-id-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "api_surface_index": 118
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees",
+        "operation_id": "get-api-v1-employees-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "api_surface_index": 119
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees",
+        "operation_id": "post-api-v1-employees-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "api_surface_index": 120
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-changed-122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/changed",
+        "operation_id": "get-api-v1-employees-changed-122",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "api_surface_index": 121
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-changed-tables-table-123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/changed/tables/{table}",
+        "operation_id": "get-api-v1-employees-changed-tables-table-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "api_surface_index": 122
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-directory-124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/directory",
+        "operation_id": "get-api-v1-employees-directory-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "api_surface_index": 123
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-files-categories-125",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/files/categories",
+        "operation_id": "post-api-v1-employees-files-categories-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "api_surface_index": 124
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-employeeid-onboarding-experiences-126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{employeeId}/onboarding-experiences",
+        "operation_id": "get-api-v1-employees-employeeid-onboarding-experiences-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "api_surface_index": 125
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-employeeid-onboarding-experiences-127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{employeeId}/onboarding-experiences",
+        "operation_id": "post-api-v1-employees-employeeid-onboarding-experiences-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "api_surface_index": 126
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-employeeid-onboarding-experiences-onboardingexperienceid-128",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{employeeId}/onboarding-experiences/{onboardingExperienceId}",
+        "operation_id": "get-api-v1-employees-employeeid-onboarding-experiences-onboardingexperienceid-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "api_surface_index": 127
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-employeeid-photo-129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{employeeId}/photo",
+        "operation_id": "post-api-v1-employees-employeeid-photo-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "api_surface_index": 128
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-employeeid-photo-size-130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{employeeId}/photo/{size}",
+        "operation_id": "get-api-v1-employees-employeeid-photo-size-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "api_surface_index": 129
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employees-employeeid-time-off-balance-adjustment-131",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employees/{employeeId}/time_off/balance_adjustment",
+        "operation_id": "put-api-v1-employees-employeeid-time-off-balance-adjustment-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "api_surface_index": 130
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-employeeid-time-off-calculator-132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{employeeId}/time_off/calculator",
+        "operation_id": "get-api-v1-employees-employeeid-time-off-calculator-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "api_surface_index": 131
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employees-employeeid-time-off-history-133",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employees/{employeeId}/time_off/history",
+        "operation_id": "put-api-v1-employees-employeeid-time-off-history-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "api_surface_index": 132
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-employeeid-time-off-policies-134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{employeeId}/time_off/policies",
+        "operation_id": "get-api-v1-employees-employeeid-time-off-policies-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "api_surface_index": 133
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employees-employeeid-time-off-policies-135",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employees/{employeeId}/time_off/policies",
+        "operation_id": "put-api-v1-employees-employeeid-time-off-policies-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "api_surface_index": 134
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-employees-employeeid-time-off-request-136",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/employees/{employeeId}/time_off/request",
+        "operation_id": "put-api-v1-employees-employeeid-time-off-request-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "api_surface_index": 135
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employees-id-137",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employees/{id}",
+        "operation_id": "delete-api-v1-employees-id-137",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "api_surface_index": 136
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-id-138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{id}",
+        "operation_id": "get-api-v1-employees-id-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "api_surface_index": 137
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-id-139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{id}",
+        "operation_id": "post-api-v1-employees-id-139",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "api_surface_index": 138
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-id-files-140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{id}/files",
+        "operation_id": "post-api-v1-employees-id-files-140",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "api_surface_index": 139
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-id-files-view-141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{id}/files/view",
+        "operation_id": "get-api-v1-employees-id-files-view-141",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "api_surface_index": 140
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employees-id-files-fileid-142",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employees/{id}/files/{fileId}",
+        "operation_id": "delete-api-v1-employees-id-files-fileid-142",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "api_surface_index": 141
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-id-files-fileid-143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{id}/files/{fileId}",
+        "operation_id": "get-api-v1-employees-id-files-fileid-143",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "api_surface_index": 142
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-id-files-fileid-144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{id}/files/{fileId}",
+        "operation_id": "post-api-v1-employees-id-files-fileid-144",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "api_surface_index": 143
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-employees-id-tables-table-145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/employees/{id}/tables/{table}",
+        "operation_id": "get-api-v1-employees-id-tables-table-145",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "api_surface_index": 144
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-id-tables-table-146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{id}/tables/{table}",
+        "operation_id": "post-api-v1-employees-id-tables-table-146",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "api_surface_index": 145
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-employees-id-tables-table-rowid-147",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/employees/{id}/tables/{table}/{rowId}",
+        "operation_id": "delete-api-v1-employees-id-tables-table-rowid-147",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "api_surface_index": 146
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-employees-id-tables-table-rowid-148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/employees/{id}/tables/{table}/{rowId}",
+        "operation_id": "post-api-v1-employees-id-tables-table-rowid-148",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "api_surface_index": 147
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-files-149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/files",
+        "operation_id": "post-api-v1-files-149",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "api_surface_index": 148
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-files-categories-150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/files/categories",
+        "operation_id": "post-api-v1-files-categories-150",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "api_surface_index": 149
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-files-view-151",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/files/view",
+        "operation_id": "get-api-v1-files-view-151",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "api_surface_index": 150
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-files-fileid-152",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/files/{fileId}",
+        "operation_id": "delete-api-v1-files-fileid-152",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "api_surface_index": 151
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-files-fileid-153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/files/{fileId}",
+        "operation_id": "get-api-v1-files-fileid-153",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "api_surface_index": 152
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-files-fileid-154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/files/{fileId}",
+        "operation_id": "post-api-v1-files-fileid-154",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "api_surface_index": 153
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-hris-org-locations-155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/hris/org/locations",
+        "operation_id": "get-api-v1-hris-org-locations-155",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "api_surface_index": 154
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-hris-org-locations-156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/hris/org/locations",
+        "operation_id": "post-api-v1-hris-org-locations-156",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "api_surface_index": 155
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-hris-org-locations-id-157",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/hris/org/locations/{id}",
+        "operation_id": "delete-api-v1-hris-org-locations-id-157",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "api_surface_index": 156
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-hris-org-locations-id-158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/hris/org/locations/{id}",
+        "operation_id": "get-api-v1-hris-org-locations-id-158",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "api_surface_index": 157
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-hris-org-locations-id-159",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/hris/org/locations/{id}",
+        "operation_id": "put-api-v1-hris-org-locations-id-159",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "api_surface_index": 158
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-login-160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/login",
+        "operation_id": "post-api-v1-login-160",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]",
+        "api_surface_index": 159
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-bank-holidays-161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/bank-holidays",
+        "operation_id": "get-api-v1-meta-bank-holidays-161",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]",
+        "api_surface_index": 160
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-company-162",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/company",
+        "operation_id": "get-api-v1-meta-company-162",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]",
+        "api_surface_index": 161
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-countries-options-163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/countries/options",
+        "operation_id": "get-api-v1-meta-countries-options-163",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]",
+        "api_surface_index": 162
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-countries-id-164",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/countries/{id}",
+        "operation_id": "get-api-v1-meta-countries-id-164",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]",
+        "api_surface_index": 163
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-currency-conversions-165",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/currency-conversions",
+        "operation_id": "get-api-v1-meta-currency-conversions-165",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]",
+        "api_surface_index": 164
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-currency-types-166",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/currency/types",
+        "operation_id": "get-api-v1-meta-currency-types-166",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]",
+        "api_surface_index": 165
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-fields-167",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/fields",
+        "operation_id": "get-api-v1-meta-fields-167",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]",
+        "api_surface_index": 166
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-industries-168",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/industries",
+        "operation_id": "get-api-v1-meta-industries-168",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]",
+        "api_surface_index": 167
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-lists-169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/lists",
+        "operation_id": "get-api-v1-meta-lists-169",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]",
+        "api_surface_index": 168
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-meta-lists-listfieldid-170",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/meta/lists/{listFieldId}",
+        "operation_id": "put-api-v1-meta-lists-listfieldid-170",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]",
+        "api_surface_index": 169
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-provinces-171",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/provinces",
+        "operation_id": "get-api-v1-meta-provinces-171",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]",
+        "api_surface_index": 170
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-provinces-countryid-172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/provinces/{countryId}",
+        "operation_id": "get-api-v1-meta-provinces-countryid-172",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]",
+        "api_surface_index": 171
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-tables-173",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/tables",
+        "operation_id": "get-api-v1-meta-tables-173",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]",
+        "api_surface_index": 172
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-time-off-policies-174",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/time_off/policies",
+        "operation_id": "get-api-v1-meta-time-off-policies-174",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]",
+        "api_surface_index": 173
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-time-off-types-175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/time_off/types",
+        "operation_id": "get-api-v1-meta-time-off-types-175",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]",
+        "api_surface_index": 174
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-timezones-176",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/timezones",
+        "operation_id": "get-api-v1-meta-timezones-176",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]",
+        "api_surface_index": 175
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-timezones-by-zip-zip-177",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/timezones/by-zip/{zip}",
+        "operation_id": "get-api-v1-meta-timezones-by-zip-zip-177",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]",
+        "api_surface_index": 176
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-timezones-id-178",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/timezones/{id}",
+        "operation_id": "get-api-v1-meta-timezones-id-178",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]",
+        "api_surface_index": 177
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-meta-users-179",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/meta/users",
+        "operation_id": "get-api-v1-meta-users-179",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]",
+        "api_surface_index": 178
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-new-hire-packets-180",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/new-hire-packets",
+        "operation_id": "get-api-v1-new-hire-packets-180",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]",
+        "api_surface_index": 179
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-new-hire-packets-181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/new-hire-packets",
+        "operation_id": "post-api-v1-new-hire-packets-181",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]",
+        "api_surface_index": 180
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-new-hire-packets-id-182",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/new-hire-packets/{id}",
+        "operation_id": "delete-api-v1-new-hire-packets-id-182",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]",
+        "api_surface_index": 181
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-new-hire-packets-id-183",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/new-hire-packets/{id}",
+        "operation_id": "get-api-v1-new-hire-packets-id-183",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]",
+        "api_surface_index": 182
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-new-hire-packets-id-184",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/new-hire-packets/{id}",
+        "operation_id": "put-api-v1-new-hire-packets-id-184",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]",
+        "api_surface_index": 183
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-new-hire-packets-id-cancel-185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/new-hire-packets/{id}/cancel",
+        "operation_id": "post-api-v1-new-hire-packets-id-cancel-185",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]",
+        "api_surface_index": 184
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-new-hire-packets-id-question-visibility-186",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/new-hire-packets/{id}/question-visibility",
+        "operation_id": "put-api-v1-new-hire-packets-id-question-visibility-186",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]",
+        "api_surface_index": 185
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-new-hire-packets-id-send-187",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/new-hire-packets/{id}/send",
+        "operation_id": "post-api-v1-new-hire-packets-id-send-187",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]",
+        "api_surface_index": 186
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-onboarding-new-hire-widget-188",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/onboarding/new-hire-widget",
+        "operation_id": "get-api-v1-onboarding-new-hire-widget-188",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]",
+        "api_surface_index": 187
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-189",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands",
+        "operation_id": "get-api-v1-pay-grades-and-bands-189",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[188]",
+        "api_surface_index": 188
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-pay-grades-and-bands-import-190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/pay-grades-and-bands/import",
+        "operation_id": "post-api-v1-pay-grades-and-bands-import-190",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[189]",
+        "api_surface_index": 189
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-job-titles-191",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/job-titles",
+        "operation_id": "get-api-v1-pay-grades-and-bands-job-titles-191",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[190]",
+        "api_surface_index": 190
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-pay-grades-and-bands-job-titles-192",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/pay-grades-and-bands/job-titles",
+        "operation_id": "put-api-v1-pay-grades-and-bands-job-titles-192",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[191]",
+        "api_surface_index": 191
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-job-titles-with-employees-193",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/job-titles-with-employees",
+        "operation_id": "get-api-v1-pay-grades-and-bands-job-titles-with-employees-193",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[192]",
+        "api_surface_index": 192
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-levels-194",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/levels",
+        "operation_id": "get-api-v1-pay-grades-and-bands-levels-194",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[193]",
+        "api_surface_index": 193
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-pay-grades-and-bands-levels-195",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/pay-grades-and-bands/levels",
+        "operation_id": "put-api-v1-pay-grades-and-bands-levels-195",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[194]",
+        "api_surface_index": 194
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-pay-grades-and-bands-levels-segment-196",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/pay-grades-and-bands/levels/{segment}",
+        "operation_id": "delete-api-v1-pay-grades-and-bands-levels-segment-196",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[195]",
+        "api_surface_index": 195
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-pay-bands-197",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/pay-bands",
+        "operation_id": "get-api-v1-pay-grades-and-bands-pay-bands-197",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[196]",
+        "api_surface_index": 196
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-pay-grades-and-bands-pay-bands-198",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/pay-grades-and-bands/pay-bands",
+        "operation_id": "put-api-v1-pay-grades-and-bands-pay-bands-198",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[197]",
+        "api_surface_index": 197
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-pay-grades-and-bands-publish-199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/pay-grades-and-bands/publish",
+        "operation_id": "post-api-v1-pay-grades-and-bands-publish-199",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[198]",
+        "api_surface_index": 198
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-review-200",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/review",
+        "operation_id": "get-api-v1-pay-grades-and-bands-review-200",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[199]",
+        "api_surface_index": 199
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-status-201",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/status",
+        "operation_id": "get-api-v1-pay-grades-and-bands-status-201",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[200]",
+        "api_surface_index": 200
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-pay-grades-and-bands-status-counts-202",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/pay-grades-and-bands/status-counts",
+        "operation_id": "get-api-v1-pay-grades-and-bands-status-counts-202",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[201]",
+        "api_surface_index": 201
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-payroll-deductions-id-203",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/payroll/deductions/{id}",
+        "operation_id": "get-api-v1-payroll-deductions-id-203",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[202]",
+        "api_surface_index": 202
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-204",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-204",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[203]",
+        "api_surface_index": 203
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-performance-employees-employeeid-goals-205",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/performance/employees/{employeeId}/goals",
+        "operation_id": "post-api-v1-performance-employees-employeeid-goals-205",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[204]",
+        "api_surface_index": 204
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-aggregate-206",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/aggregate",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-aggregate-206",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[205]",
+        "api_surface_index": 205
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-alignmentoptions-207",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/alignmentOptions",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-alignmentoptions-207",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[206]",
+        "api_surface_index": 206
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-cancreategoals-208",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/canCreateGoals",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-cancreategoals-208",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[207]",
+        "api_surface_index": 207
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-filters-209",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/filters",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-filters-209",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[208]",
+        "api_surface_index": 208
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-shareoptions-210",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/shareOptions",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-shareoptions-210",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[209]",
+        "api_surface_index": 209
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-performance-employees-employeeid-goals-goalid-211",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}",
+        "operation_id": "delete-api-v1-performance-employees-employeeid-goals-goalid-211",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[210]",
+        "api_surface_index": 210
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-performance-employees-employeeid-goals-goalid-212",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}",
+        "operation_id": "put-api-v1-performance-employees-employeeid-goals-goalid-212",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[211]",
+        "api_surface_index": 211
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-goalid-aggregate-213",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/aggregate",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-goalid-aggregate-213",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[212]",
+        "api_surface_index": 212
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-performance-employees-employeeid-goals-goalid-close-214",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/close",
+        "operation_id": "post-api-v1-performance-employees-employeeid-goals-goalid-close-214",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[213]",
+        "api_surface_index": 213
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-performance-employees-employeeid-goals-goalid-comments-215",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/comments",
+        "operation_id": "get-api-v1-performance-employees-employeeid-goals-goalid-comments-215",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[214]",
+        "api_surface_index": 214
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-performance-employees-employeeid-goals-goalid-comments-216",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/comments",
+        "operation_id": "post-api-v1-performance-employees-employeeid-goals-goalid-comments-216",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[215]",
+        "api_surface_index": 215
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-performance-employees-employeeid-goals-goalid-comments-commentid-217",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/comments/{commentId}",
+        "operation_id": "delete-api-v1-performance-employees-employeeid-goals-goalid-comments-commentid-217",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[216]",
+        "api_surface_index": 216
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-performance-employees-employeeid-goals-goalid-comments-commentid-218",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/comments/{commentId}",
+        "operation_id": "put-api-v1-performance-employees-employeeid-goals-goalid-comments-commentid-218",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[217]",
+        "api_surface_index": 217
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-performance-employees-employeeid-goals-goalid-milestones-milestoneid-progress-219",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/milestones/{milestoneId}/progress",
+        "operation_id": "put-api-v1-performance-employees-employeeid-goals-goalid-milestones-milestoneid-progress-219",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[218]",
+        "api_surface_index": 218
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-performance-employees-employeeid-goals-goalid-progress-220",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/progress",
+        "operation_id": "put-api-v1-performance-employees-employeeid-goals-goalid-progress-220",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[219]",
+        "api_surface_index": 219
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-performance-employees-employeeid-goals-goalid-reopen-221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/reopen",
+        "operation_id": "post-api-v1-performance-employees-employeeid-goals-goalid-reopen-221",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[220]",
+        "api_surface_index": 220
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-performance-employees-employeeid-goals-goalid-sharedwith-222",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/performance/employees/{employeeId}/goals/{goalId}/sharedWith",
+        "operation_id": "put-api-v1-performance-employees-employeeid-goals-goalid-sharedwith-222",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[221]",
+        "api_surface_index": 221
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-reports-custom-223",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/reports/custom",
+        "operation_id": "post-api-v1-reports-custom-223",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[222]",
+        "api_surface_index": 222
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-reports-id-224",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/reports/{id}",
+        "operation_id": "get-api-v1-reports-id-224",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[223]",
+        "api_surface_index": 223
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-schedules-225",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/schedules",
+        "operation_id": "get-api-v1-scheduling-schedules-225",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[224]",
+        "api_surface_index": 224
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-scheduling-schedules-226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/scheduling/schedules",
+        "operation_id": "post-api-v1-scheduling-schedules-226",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[225]",
+        "api_surface_index": 225
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-scheduling-schedules-id-227",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/scheduling/schedules/{id}",
+        "operation_id": "delete-api-v1-scheduling-schedules-id-227",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[226]",
+        "api_surface_index": 226
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-schedules-id-228",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/schedules/{id}",
+        "operation_id": "get-api-v1-scheduling-schedules-id-228",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[227]",
+        "api_surface_index": 227
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-scheduling-schedules-id-229",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/scheduling/schedules/{id}",
+        "operation_id": "patch-api-v1-scheduling-schedules-id-229",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[228]",
+        "api_surface_index": 228
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-schedules-id-pdf-230",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/schedules/{id}/pdf",
+        "operation_id": "get-api-v1-scheduling-schedules-id-pdf-230",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[229]",
+        "api_surface_index": 229
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-shift-assessments-231",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/shift-assessments",
+        "operation_id": "get-api-v1-scheduling-shift-assessments-231",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[230]",
+        "api_surface_index": 230
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-shifts-232",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/shifts",
+        "operation_id": "get-api-v1-scheduling-shifts-232",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[231]",
+        "api_surface_index": 231
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-scheduling-shifts-233",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/scheduling/shifts",
+        "operation_id": "post-api-v1-scheduling-shifts-233",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[232]",
+        "api_surface_index": 232
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-scheduling-shifts-publish-234",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/scheduling/shifts/publish",
+        "operation_id": "post-api-v1-scheduling-shifts-publish-234",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[233]",
+        "api_surface_index": 233
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-scheduling-shifts-id-235",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/scheduling/shifts/{id}",
+        "operation_id": "delete-api-v1-scheduling-shifts-id-235",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[234]",
+        "api_surface_index": 234
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-shifts-id-236",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/shifts/{id}",
+        "operation_id": "get-api-v1-scheduling-shifts-id-236",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[235]",
+        "api_surface_index": 235
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-scheduling-shifts-id-237",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/scheduling/shifts/{id}",
+        "operation_id": "patch-api-v1-scheduling-shifts-id-237",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[236]",
+        "api_surface_index": 236
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-scheduling-timezones-238",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/scheduling/timezones",
+        "operation_id": "get-api-v1-scheduling-timezones-238",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[237]",
+        "api_surface_index": 237
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-break-assessments-239",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/break-assessments",
+        "operation_id": "get-api-v1-time-tracking-break-assessments-239",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[238]",
+        "api_surface_index": 238
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-break-policies-240",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/break-policies",
+        "operation_id": "get-api-v1-time-tracking-break-policies-240",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[239]",
+        "api_surface_index": 239
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-break-policies-241",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies",
+        "operation_id": "post-api-v1-time-tracking-break-policies-241",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[240]",
+        "api_surface_index": 240
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-break-policies-suggestions-242",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies/suggestions",
+        "operation_id": "post-api-v1-time-tracking-break-policies-suggestions-242",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[241]",
+        "api_surface_index": 241
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-break-policies-id-243",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time-tracking/break-policies/{id}",
+        "operation_id": "delete-api-v1-time-tracking-break-policies-id-243",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[242]",
+        "api_surface_index": 242
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-break-policies-id-244",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/break-policies/{id}",
+        "operation_id": "get-api-v1-time-tracking-break-policies-id-244",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[243]",
+        "api_surface_index": 243
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-time-tracking-break-policies-id-245",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/time-tracking/break-policies/{id}",
+        "operation_id": "patch-api-v1-time-tracking-break-policies-id-245",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[244]",
+        "api_surface_index": 244
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-break-policies-id-assign-246",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies/{id}/assign",
+        "operation_id": "post-api-v1-time-tracking-break-policies-id-assign-246",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[245]",
+        "api_surface_index": 245
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-time-tracking-break-policies-id-assign-247",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/time-tracking/break-policies/{id}/assign",
+        "operation_id": "put-api-v1-time-tracking-break-policies-id-assign-247",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[246]",
+        "api_surface_index": 246
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-break-policies-id-breaks-248",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/break-policies/{id}/breaks",
+        "operation_id": "get-api-v1-time-tracking-break-policies-id-breaks-248",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[247]",
+        "api_surface_index": 247
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-break-policies-id-breaks-249",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies/{id}/breaks",
+        "operation_id": "post-api-v1-time-tracking-break-policies-id-breaks-249",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[248]",
+        "api_surface_index": 248
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-time-tracking-break-policies-id-breaks-250",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/time-tracking/break-policies/{id}/breaks",
+        "operation_id": "put-api-v1-time-tracking-break-policies-id-breaks-250",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[249]",
+        "api_surface_index": 249
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-break-policies-id-employees-251",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/break-policies/{id}/employees",
+        "operation_id": "get-api-v1-time-tracking-break-policies-id-employees-251",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[250]",
+        "api_surface_index": 250
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-time-tracking-break-policies-id-sync-252",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/time-tracking/break-policies/{id}/sync",
+        "operation_id": "put-api-v1-time-tracking-break-policies-id-sync-252",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[251]",
+        "api_surface_index": 251
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-break-policies-id-unassign-253",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies/{id}/unassign",
+        "operation_id": "post-api-v1-time-tracking-break-policies-id-unassign-253",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[252]",
+        "api_surface_index": 252
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-breaks-id-254",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time-tracking/breaks/{id}",
+        "operation_id": "delete-api-v1-time-tracking-breaks-id-254",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[253]",
+        "api_surface_index": 253
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-breaks-id-255",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/breaks/{id}",
+        "operation_id": "get-api-v1-time-tracking-breaks-id-255",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[254]",
+        "api_surface_index": 254
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-time-tracking-breaks-id-256",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/time-tracking/breaks/{id}",
+        "operation_id": "patch-api-v1-time-tracking-breaks-id-256",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[255]",
+        "api_surface_index": 255
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employees-id-break-availabilities-257",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/employees/{id}/break-availabilities",
+        "operation_id": "get-api-v1-time-tracking-employees-id-break-availabilities-257",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[256]",
+        "api_surface_index": 256
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employees-id-break-policies-258",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/employees/{id}/break-policies",
+        "operation_id": "get-api-v1-time-tracking-employees-id-break-policies-258",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[257]",
+        "api_surface_index": 257
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-projects-259",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/projects",
+        "operation_id": "get-api-v1-time-tracking-projects-259",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[258]",
+        "api_surface_index": 258
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-projects-260",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/projects",
+        "operation_id": "post-api-v1-time-tracking-projects-260",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[259]",
+        "api_surface_index": 259
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-projects-id-261",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time-tracking/projects/{id}",
+        "operation_id": "delete-api-v1-time-tracking-projects-id-261",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[260]",
+        "api_surface_index": 260
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-time-tracking-projects-id-262",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/time-tracking/projects/{id}",
+        "operation_id": "patch-api-v1-time-tracking-projects-id-262",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[261]",
+        "api_surface_index": 261
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-projects-projectid-263",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/projects/{projectId}",
+        "operation_id": "get-api-v1-time-tracking-projects-projectid-263",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[262]",
+        "api_surface_index": 262
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-projects-projectid-tasks-264",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/projects/{projectId}/tasks",
+        "operation_id": "get-api-v1-time-tracking-projects-projectid-tasks-264",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[263]",
+        "api_surface_index": 263
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-projects-projectid-tasks-265",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/projects/{projectId}/tasks",
+        "operation_id": "post-api-v1-time-tracking-projects-projectid-tasks-265",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[264]",
+        "api_surface_index": 264
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-shift-differentials-266",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/shift-differentials",
+        "operation_id": "get-api-v1-time-tracking-shift-differentials-266",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[265]",
+        "api_surface_index": 265
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-shift-differentials-267",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time-tracking/shift-differentials",
+        "operation_id": "post-api-v1-time-tracking-shift-differentials-267",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[266]",
+        "api_surface_index": 266
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-shift-differentials-id-268",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time-tracking/shift-differentials/{id}",
+        "operation_id": "delete-api-v1-time-tracking-shift-differentials-id-268",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[267]",
+        "api_surface_index": 267
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-shift-differentials-id-269",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/shift-differentials/{id}",
+        "operation_id": "get-api-v1-time-tracking-shift-differentials-id-269",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[268]",
+        "api_surface_index": 268
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-time-tracking-shift-differentials-id-270",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/time-tracking/shift-differentials/{id}",
+        "operation_id": "patch-api-v1-time-tracking-shift-differentials-id-270",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[269]",
+        "api_surface_index": 269
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-tasks-id-271",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time-tracking/tasks/{id}",
+        "operation_id": "delete-api-v1-time-tracking-tasks-id-271",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[270]",
+        "api_surface_index": 270
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-tasks-id-272",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time-tracking/tasks/{id}",
+        "operation_id": "get-api-v1-time-tracking-tasks-id-272",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[271]",
+        "api_surface_index": 271
+      },
+      {
+        "id": "bamboo-hr.api_surface.patch-api-v1-time-tracking-tasks-id-273",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/time-tracking/tasks/{id}",
+        "operation_id": "patch-api-v1-time-tracking-tasks-id-273",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[272]",
+        "api_surface_index": 272
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-off-requests-274",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_off/requests",
+        "operation_id": "get-api-v1-time-off-requests-274",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[273]",
+        "api_surface_index": 273
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-time-off-requests-requestid-status-275",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/time_off/requests/{requestId}/status",
+        "operation_id": "put-api-v1-time-off-requests-requestid-status-275",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[274]",
+        "api_surface_index": 274
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-off-whos-out-276",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_off/whos_out",
+        "operation_id": "get-api-v1-time-off-whos-out-276",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[275]",
+        "api_surface_index": 275
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-time-tracking-clock-entries-277",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/time_tracking/clock_entries",
+        "operation_id": "delete-api-v1-time-tracking-clock-entries-277",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[276]",
+        "api_surface_index": 276
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-clock-entries-278",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/clock_entries",
+        "operation_id": "post-api-v1-time-tracking-clock-entries-278",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[277]",
+        "api_surface_index": 277
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-clock-entries-delete-279",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/clock_entries/delete",
+        "operation_id": "post-api-v1-time-tracking-clock-entries-delete-279",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[278]",
+        "api_surface_index": 278
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-clock-entries-store-280",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/clock_entries/store",
+        "operation_id": "post-api-v1-time-tracking-clock-entries-store-280",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[279]",
+        "api_surface_index": 279
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-clock-in-employeeid-281",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/clock_in/{employeeId}",
+        "operation_id": "post-api-v1-time-tracking-clock-in-employeeid-281",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[280]",
+        "api_surface_index": 280
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-clock-out-employeeid-282",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/clock_out/{employeeId}",
+        "operation_id": "post-api-v1-time-tracking-clock-out-employeeid-282",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[281]",
+        "api_surface_index": 281
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-daily-entries-283",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/daily_entries",
+        "operation_id": "post-api-v1-time-tracking-daily-entries-283",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[282]",
+        "api_surface_index": 282
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-clock-entries-id-284",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/clock_entries/{id}",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-clock-entries-id-284",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[283]",
+        "api_surface_index": 283
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-employee-employeeid-clock-in-data-285",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/clock_in/data",
+        "operation_id": "post-api-v1-time-tracking-employee-employeeid-clock-in-data-285",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[284]",
+        "api_surface_index": 284
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-employee-employeeid-clock-out-datetime-286",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/clock_out/datetime",
+        "operation_id": "post-api-v1-time-tracking-employee-employeeid-clock-out-datetime-286",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[285]",
+        "api_surface_index": 285
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-daily-entries-id-287",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/daily_entries/{id}",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-daily-entries-id-287",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[286]",
+        "api_surface_index": 286
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-is-clocked-in-288",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/is_clocked_in",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-is-clocked-in-288",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[287]",
+        "api_surface_index": 287
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-projects-289",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/projects",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-projects-289",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[288]",
+        "api_surface_index": 288
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-projects-projectid-tasks-290",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/projects/{projectId}/tasks",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-projects-projectid-tasks-290",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[289]",
+        "api_surface_index": 289
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employee-employeeid-timesheet-timesheetid-291",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employee/{employeeId}/timesheet/{timesheetId}",
+        "operation_id": "get-api-v1-time-tracking-employee-employeeid-timesheet-timesheetid-291",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[290]",
+        "api_surface_index": 290
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-employees-employeeid-clock-in-292",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/employees/{employeeId}/clock_in",
+        "operation_id": "post-api-v1-time-tracking-employees-employeeid-clock-in-292",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[291]",
+        "api_surface_index": 291
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-employees-employeeid-clock-out-293",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/employees/{employeeId}/clock_out",
+        "operation_id": "post-api-v1-time-tracking-employees-employeeid-clock-out-293",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[292]",
+        "api_surface_index": 292
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-employees-employeeid-projects-294",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/employees/{employeeId}/projects",
+        "operation_id": "get-api-v1-time-tracking-employees-employeeid-projects-294",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[293]",
+        "api_surface_index": 293
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-hour-entries-delete-295",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/hour_entries/delete",
+        "operation_id": "post-api-v1-time-tracking-hour-entries-delete-295",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[294]",
+        "api_surface_index": 294
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-hour-entries-store-296",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/hour_entries/store",
+        "operation_id": "post-api-v1-time-tracking-hour-entries-store-296",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[295]",
+        "api_surface_index": 295
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-projects-297",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/projects",
+        "operation_id": "post-api-v1-time-tracking-projects-297",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[296]",
+        "api_surface_index": 296
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-timesheet-entries-298",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/timesheet_entries",
+        "operation_id": "get-api-v1-time-tracking-timesheet-entries-298",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[297]",
+        "api_surface_index": 297
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-time-tracking-timesheets-299",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/time_tracking/timesheets",
+        "operation_id": "get-api-v1-time-tracking-timesheets-299",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[298]",
+        "api_surface_index": 298
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-timesheets-approve-300",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/timesheets/approve",
+        "operation_id": "post-api-v1-time-tracking-timesheets-approve-300",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[299]",
+        "api_surface_index": 299
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-time-tracking-timesheets-clock-out-and-approve-301",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/time_tracking/timesheets/clock_out_and_approve",
+        "operation_id": "post-api-v1-time-tracking-timesheets-clock-out-and-approve-301",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[300]",
+        "api_surface_index": 300
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-timetracking-add-302",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/timetracking/add",
+        "operation_id": "post-api-v1-timetracking-add-302",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[301]",
+        "api_surface_index": 301
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-timetracking-adjust-303",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/timetracking/adjust",
+        "operation_id": "put-api-v1-timetracking-adjust-303",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[302]",
+        "api_surface_index": 302
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-timetracking-delete-id-304",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/timetracking/delete/{id}",
+        "operation_id": "delete-api-v1-timetracking-delete-id-304",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[303]",
+        "api_surface_index": 303
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-timetracking-record-305",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/timetracking/record",
+        "operation_id": "post-api-v1-timetracking-record-305",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[304]",
+        "api_surface_index": 304
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-timetracking-record-id-306",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/timetracking/record/{id}",
+        "operation_id": "get-api-v1-timetracking-record-id-306",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[305]",
+        "api_surface_index": 305
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-training-category-307",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/training/category",
+        "operation_id": "get-api-v1-training-category-307",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[306]",
+        "api_surface_index": 306
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-training-category-308",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/training/category",
+        "operation_id": "post-api-v1-training-category-308",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[307]",
+        "api_surface_index": 307
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-training-category-trainingcategoryid-309",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/training/category/{trainingCategoryId}",
+        "operation_id": "delete-api-v1-training-category-trainingcategoryid-309",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[308]",
+        "api_surface_index": 308
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-training-category-trainingcategoryid-310",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/training/category/{trainingCategoryId}",
+        "operation_id": "put-api-v1-training-category-trainingcategoryid-310",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[309]",
+        "api_surface_index": 309
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-training-record-employee-employeeid-311",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/training/record/employee/{employeeId}",
+        "operation_id": "get-api-v1-training-record-employee-employeeid-311",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[310]",
+        "api_surface_index": 310
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-training-record-employee-employeeid-312",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/training/record/employee/{employeeId}",
+        "operation_id": "post-api-v1-training-record-employee-employeeid-312",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[311]",
+        "api_surface_index": 311
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-training-record-employeetrainingrecordid-313",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/training/record/{employeeTrainingRecordId}",
+        "operation_id": "delete-api-v1-training-record-employeetrainingrecordid-313",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[312]",
+        "api_surface_index": 312
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-training-record-employeetrainingrecordid-314",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/training/record/{employeeTrainingRecordId}",
+        "operation_id": "put-api-v1-training-record-employeetrainingrecordid-314",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[313]",
+        "api_surface_index": 313
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-training-type-315",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/training/type",
+        "operation_id": "get-api-v1-training-type-315",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[314]",
+        "api_surface_index": 314
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-training-type-316",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/training/type",
+        "operation_id": "post-api-v1-training-type-316",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[315]",
+        "api_surface_index": 315
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-training-type-trainingtypeid-317",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/training/type/{trainingTypeId}",
+        "operation_id": "delete-api-v1-training-type-trainingtypeid-317",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[316]",
+        "api_surface_index": 316
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-training-type-trainingtypeid-318",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/training/type/{trainingTypeId}",
+        "operation_id": "put-api-v1-training-type-trainingtypeid-318",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[317]",
+        "api_surface_index": 317
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-webhooks-319",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/webhooks",
+        "operation_id": "get-api-v1-webhooks-319",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[318]",
+        "api_surface_index": 318
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-webhooks-320",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/webhooks",
+        "operation_id": "post-api-v1-webhooks-320",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[319]",
+        "api_surface_index": 319
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-webhooks-monitor-fields-321",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/webhooks/monitor_fields",
+        "operation_id": "get-api-v1-webhooks-monitor-fields-321",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[320]",
+        "api_surface_index": 320
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-webhooks-post-fields-322",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/webhooks/post-fields",
+        "operation_id": "get-api-v1-webhooks-post-fields-322",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[321]",
+        "api_surface_index": 321
+      },
+      {
+        "id": "bamboo-hr.api_surface.delete-api-v1-webhooks-id-323",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/webhooks/{id}",
+        "operation_id": "delete-api-v1-webhooks-id-323",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[322]",
+        "api_surface_index": 322
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-webhooks-id-324",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/webhooks/{id}",
+        "operation_id": "get-api-v1-webhooks-id-324",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[323]",
+        "api_surface_index": 323
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-webhooks-id-325",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/webhooks/{id}",
+        "operation_id": "put-api-v1-webhooks-id-325",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[324]",
+        "api_surface_index": 324
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-webhooks-id-log-326",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/webhooks/{id}/log",
+        "operation_id": "get-api-v1-webhooks-id-log-326",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[325]",
+        "api_surface_index": 325
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-1-employees-employeeid-time-off-policies-327",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+        "operation_id": "get-api-v1-1-employees-employeeid-time-off-policies-327",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[326]",
+        "api_surface_index": 326
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-1-employees-employeeid-time-off-policies-328",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+        "operation_id": "put-api-v1-1-employees-employeeid-time-off-policies-328",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[327]",
+        "api_surface_index": 327
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-1-employees-id-tables-table-329",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1_1/employees/{id}/tables/{table}",
+        "operation_id": "post-api-v1-1-employees-id-tables-table-329",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[328]",
+        "api_surface_index": 328
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-1-employees-id-tables-table-rowid-330",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1_1/employees/{id}/tables/{table}/{rowId}",
+        "operation_id": "post-api-v1-1-employees-id-tables-table-rowid-330",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[329]",
+        "api_surface_index": 329
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-1-performance-employees-employeeid-goals-aggregate-331",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_1/performance/employees/{employeeId}/goals/aggregate",
+        "operation_id": "get-api-v1-1-performance-employees-employeeid-goals-aggregate-331",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[330]",
+        "api_surface_index": 330
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-1-performance-employees-employeeid-goals-filters-332",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_1/performance/employees/{employeeId}/goals/filters",
+        "operation_id": "get-api-v1-1-performance-employees-employeeid-goals-filters-332",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[331]",
+        "api_surface_index": 331
+      },
+      {
+        "id": "bamboo-hr.api_surface.put-api-v1-1-performance-employees-employeeid-goals-goalid-333",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1_1/performance/employees/{employeeId}/goals/{goalId}",
+        "operation_id": "put-api-v1-1-performance-employees-employeeid-goals-goalid-333",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[332]",
+        "api_surface_index": 332
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-2-benefit-company-benefit-id-334",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1_2/benefit/company_benefit/{id}",
+        "operation_id": "post-api-v1-2-benefit-company-benefit-id-334",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[333]",
+        "api_surface_index": 333
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-2-datasets-335",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_2/datasets",
+        "operation_id": "get-api-v1-2-datasets-335",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[334]",
+        "api_surface_index": 334
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v1-2-datasets-datasetname-field-options-336",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1_2/datasets/{datasetName}/field-options",
+        "operation_id": "post-api-v1-2-datasets-datasetname-field-options-336",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[335]",
+        "api_surface_index": 335
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-2-datasets-datasetname-fields-337",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_2/datasets/{datasetName}/fields",
+        "operation_id": "get-api-v1-2-datasets-datasetname-fields-337",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[336]",
+        "api_surface_index": 336
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-2-performance-employees-employeeid-goals-aggregate-338",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_2/performance/employees/{employeeId}/goals/aggregate",
+        "operation_id": "get-api-v1-2-performance-employees-employeeid-goals-aggregate-338",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[337]",
+        "api_surface_index": 337
+      },
+      {
+        "id": "bamboo-hr.api_surface.get-api-v1-2-performance-employees-employeeid-goals-filters-339",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1_2/performance/employees/{employeeId}/goals/filters",
+        "operation_id": "get-api-v1-2-performance-employees-employeeid-goals-filters-339",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[338]",
+        "api_surface_index": 338
+      },
+      {
+        "id": "bamboo-hr.api_surface.post-api-v2-datasets-datasetname-data-340",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/datasets/{datasetName}/data",
+        "operation_id": "post-api-v2-datasets-datasetname-data-340",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[339]",
+        "api_surface_index": 339
+      }
+    ]
+  }
+}

@@ -1,0 +1,3028 @@
+{
+  "schema_version": 1,
+  "connector": "mailchimp",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
+    "requested_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
+    "sha256": "9b17c3c80104e6ca41ff3b65286640bf4d698793e832779901167a9a8e98a9a0",
+    "bytes": 73813,
+    "content_type": "application/json"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "bdcf71f1d9233f8b9bcccc2b4fb0f523678bc30f0aa3d2d5704dd66bfcb96525",
+    "bytes": 52108,
+    "source_operation_count": 298
+  },
+  "rest": {
+    "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
+    "sha256": "9b17c3c80104e6ca41ff3b65286640bf4d698793e832779901167a9a8e98a9a0",
+    "bytes": 73813,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 35
+      },
+      {
+        "key": "GET",
+        "count": 149
+      },
+      {
+        "key": "PATCH",
+        "count": 32
+      },
+      {
+        "key": "POST",
+        "count": 75
+      },
+      {
+        "key": "PUT",
+        "count": 7
+      }
+    ],
+    "operations": [
+      {
+        "id": "mailchimp.api_surface.get-root-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/",
+        "operation_id": "get-root-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "mailchimp.api_surface.get-account-exports-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/account-exports",
+        "operation_id": "get-account-exports-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "mailchimp.api_surface.post-account-exports-3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/account-exports",
+        "operation_id": "post-account-exports-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "mailchimp.api_surface.get-account-exports-export-id-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/account-exports/{export_id}",
+        "operation_id": "get-account-exports-export-id-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "mailchimp.api_surface.get-activity-feed-chimp-chatter-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity-feed/chimp-chatter",
+        "operation_id": "get-activity-feed-chimp-chatter-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "mailchimp.api_surface.get-audiences-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/audiences",
+        "operation_id": "get-audiences-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "mailchimp.api_surface.get-audiences-audience-id-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/audiences/{audience_id}",
+        "operation_id": "get-audiences-audience-id-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "mailchimp.api_surface.get-audiences-audience-id-contacts-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/audiences/{audience_id}/contacts",
+        "operation_id": "get-audiences-audience-id-contacts-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "mailchimp.api_surface.post-audiences-audience-id-contacts-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/audiences/{audience_id}/contacts",
+        "operation_id": "post-audiences-audience-id-contacts-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "mailchimp.api_surface.get-audiences-audience-id-contacts-contact-id-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/audiences/{audience_id}/contacts/{contact_id}",
+        "operation_id": "get-audiences-audience-id-contacts-contact-id-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "mailchimp.api_surface.patch-audiences-audience-id-contacts-contact-id-11",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/audiences/{audience_id}/contacts/{contact_id}",
+        "operation_id": "patch-audiences-audience-id-contacts-contact-id-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "mailchimp.api_surface.post-audiences-audience-id-contacts-contact-id-actions-archive-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/audiences/{audience_id}/contacts/{contact_id}/actions/archive",
+        "operation_id": "post-audiences-audience-id-contacts-contact-id-actions-archive-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "mailchimp.api_surface.post-audiences-audience-id-contacts-contact-id-actions-forget-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/audiences/{audience_id}/contacts/{contact_id}/actions/forget",
+        "operation_id": "post-audiences-audience-id-contacts-contact-id-actions-forget-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "mailchimp.api_surface.get-authorized-apps-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/authorized-apps",
+        "operation_id": "get-authorized-apps-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "mailchimp.api_surface.get-authorized-apps-app-id-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/authorized-apps/{app_id}",
+        "operation_id": "get-authorized-apps-app-id-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations",
+        "operation_id": "get-automations-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations",
+        "operation_id": "post-automations-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}",
+        "operation_id": "get-automations-workflow-id-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-actions-archive-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/actions/archive",
+        "operation_id": "post-automations-workflow-id-actions-archive-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-actions-pause-all-emails-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/actions/pause-all-emails",
+        "operation_id": "post-automations-workflow-id-actions-pause-all-emails-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-actions-start-all-emails-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/actions/start-all-emails",
+        "operation_id": "post-automations-workflow-id-actions-start-all-emails-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-emails-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/emails",
+        "operation_id": "get-automations-workflow-id-emails-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "mailchimp.api_surface.delete-automations-workflow-id-emails-workflow-email-id-23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+        "operation_id": "delete-automations-workflow-id-emails-workflow-email-id-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-emails-workflow-email-id-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+        "operation_id": "get-automations-workflow-id-emails-workflow-email-id-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "mailchimp.api_surface.patch-automations-workflow-id-emails-workflow-email-id-25",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+        "operation_id": "patch-automations-workflow-id-emails-workflow-email-id-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-emails-workflow-email-id-actions-pause-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/pause",
+        "operation_id": "post-automations-workflow-id-emails-workflow-email-id-actions-pause-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-emails-workflow-email-id-actions-start-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/start",
+        "operation_id": "post-automations-workflow-id-emails-workflow-email-id-actions-start-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-emails-workflow-email-id-queue-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
+        "operation_id": "get-automations-workflow-id-emails-workflow-email-id-queue-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-emails-workflow-email-id-queue-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
+        "operation_id": "post-automations-workflow-id-emails-workflow-email-id-queue-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-emails-workflow-email-id-queue-subscriber-hash-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}",
+        "operation_id": "get-automations-workflow-id-emails-workflow-email-id-queue-subscriber-hash-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-removed-subscribers-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/removed-subscribers",
+        "operation_id": "get-automations-workflow-id-removed-subscribers-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "mailchimp.api_surface.post-automations-workflow-id-removed-subscribers-32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{workflow_id}/removed-subscribers",
+        "operation_id": "post-automations-workflow-id-removed-subscribers-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "mailchimp.api_surface.get-automations-workflow-id-removed-subscribers-subscriber-hash-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}",
+        "operation_id": "get-automations-workflow-id-removed-subscribers-subscriber-hash-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "mailchimp.api_surface.get-batch-webhooks-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/batch-webhooks",
+        "operation_id": "get-batch-webhooks-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "mailchimp.api_surface.post-batch-webhooks-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batch-webhooks",
+        "operation_id": "post-batch-webhooks-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "mailchimp.api_surface.delete-batch-webhooks-batch-webhook-id-36",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/batch-webhooks/{batch_webhook_id}",
+        "operation_id": "delete-batch-webhooks-batch-webhook-id-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "mailchimp.api_surface.get-batch-webhooks-batch-webhook-id-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/batch-webhooks/{batch_webhook_id}",
+        "operation_id": "get-batch-webhooks-batch-webhook-id-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "mailchimp.api_surface.patch-batch-webhooks-batch-webhook-id-38",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/batch-webhooks/{batch_webhook_id}",
+        "operation_id": "patch-batch-webhooks-batch-webhook-id-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "mailchimp.api_surface.get-batches-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/batches",
+        "operation_id": "get-batches-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "mailchimp.api_surface.post-batches-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batches",
+        "operation_id": "post-batches-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "mailchimp.api_surface.delete-batches-batch-id-41",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/batches/{batch_id}",
+        "operation_id": "delete-batches-batch-id-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "mailchimp.api_surface.get-batches-batch-id-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/batches/{batch_id}",
+        "operation_id": "get-batches-batch-id-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaign-folders-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaign-folders",
+        "operation_id": "get-campaign-folders-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaign-folders-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaign-folders",
+        "operation_id": "post-campaign-folders-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "mailchimp.api_surface.delete-campaign-folders-folder-id-45",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/campaign-folders/{folder_id}",
+        "operation_id": "delete-campaign-folders-folder-id-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaign-folders-folder-id-46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaign-folders/{folder_id}",
+        "operation_id": "get-campaign-folders-folder-id-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "mailchimp.api_surface.patch-campaign-folders-folder-id-47",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/campaign-folders/{folder_id}",
+        "operation_id": "patch-campaign-folders-folder-id-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns",
+        "operation_id": "get-campaigns-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "api_surface_index": 47
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns",
+        "operation_id": "post-campaigns-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "api_surface_index": 48
+      },
+      {
+        "id": "mailchimp.api_surface.delete-campaigns-campaign-id-50",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/campaigns/{campaign_id}",
+        "operation_id": "delete-campaigns-campaign-id-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "api_surface_index": 49
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-campaign-id-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/{campaign_id}",
+        "operation_id": "get-campaigns-campaign-id-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "api_surface_index": 50
+      },
+      {
+        "id": "mailchimp.api_surface.patch-campaigns-campaign-id-52",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/campaigns/{campaign_id}",
+        "operation_id": "patch-campaigns-campaign-id-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "api_surface_index": 51
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-cancel-send-53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/cancel-send",
+        "operation_id": "post-campaigns-campaign-id-actions-cancel-send-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "api_surface_index": 52
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-create-resend-54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/create-resend",
+        "operation_id": "post-campaigns-campaign-id-actions-create-resend-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "api_surface_index": 53
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-pause-55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/pause",
+        "operation_id": "post-campaigns-campaign-id-actions-pause-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "api_surface_index": 54
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-replicate-56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/replicate",
+        "operation_id": "post-campaigns-campaign-id-actions-replicate-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "api_surface_index": 55
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-resume-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/resume",
+        "operation_id": "post-campaigns-campaign-id-actions-resume-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "api_surface_index": 56
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-schedule-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/schedule",
+        "operation_id": "post-campaigns-campaign-id-actions-schedule-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "api_surface_index": 57
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-send-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/send",
+        "operation_id": "post-campaigns-campaign-id-actions-send-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "api_surface_index": 58
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-test-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/test",
+        "operation_id": "post-campaigns-campaign-id-actions-test-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "api_surface_index": 59
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-actions-unschedule-61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/actions/unschedule",
+        "operation_id": "post-campaigns-campaign-id-actions-unschedule-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "api_surface_index": 60
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-campaign-id-content-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/{campaign_id}/content",
+        "operation_id": "get-campaigns-campaign-id-content-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "api_surface_index": 61
+      },
+      {
+        "id": "mailchimp.api_surface.put-campaigns-campaign-id-content-63",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/campaigns/{campaign_id}/content",
+        "operation_id": "put-campaigns-campaign-id-content-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "api_surface_index": 62
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-campaign-id-feedback-64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/{campaign_id}/feedback",
+        "operation_id": "get-campaigns-campaign-id-feedback-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "api_surface_index": 63
+      },
+      {
+        "id": "mailchimp.api_surface.post-campaigns-campaign-id-feedback-65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/{campaign_id}/feedback",
+        "operation_id": "post-campaigns-campaign-id-feedback-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "api_surface_index": 64
+      },
+      {
+        "id": "mailchimp.api_surface.delete-campaigns-campaign-id-feedback-feedback-id-66",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+        "operation_id": "delete-campaigns-campaign-id-feedback-feedback-id-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "api_surface_index": 65
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-campaign-id-feedback-feedback-id-67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+        "operation_id": "get-campaigns-campaign-id-feedback-feedback-id-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "api_surface_index": 66
+      },
+      {
+        "id": "mailchimp.api_surface.patch-campaigns-campaign-id-feedback-feedback-id-68",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/campaigns/{campaign_id}/feedback/{feedback_id}",
+        "operation_id": "patch-campaigns-campaign-id-feedback-feedback-id-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "api_surface_index": 67
+      },
+      {
+        "id": "mailchimp.api_surface.get-campaigns-campaign-id-send-checklist-69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/{campaign_id}/send-checklist",
+        "operation_id": "get-campaigns-campaign-id-send-checklist-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "api_surface_index": 68
+      },
+      {
+        "id": "mailchimp.api_surface.get-connected-sites-70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/connected-sites",
+        "operation_id": "get-connected-sites-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "api_surface_index": 69
+      },
+      {
+        "id": "mailchimp.api_surface.post-connected-sites-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/connected-sites",
+        "operation_id": "post-connected-sites-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "api_surface_index": 70
+      },
+      {
+        "id": "mailchimp.api_surface.delete-connected-sites-connected-site-id-72",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/connected-sites/{connected_site_id}",
+        "operation_id": "delete-connected-sites-connected-site-id-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "api_surface_index": 71
+      },
+      {
+        "id": "mailchimp.api_surface.get-connected-sites-connected-site-id-73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/connected-sites/{connected_site_id}",
+        "operation_id": "get-connected-sites-connected-site-id-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "api_surface_index": 72
+      },
+      {
+        "id": "mailchimp.api_surface.post-connected-sites-connected-site-id-actions-disable-pixel-74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/connected-sites/{connected_site_id}/actions/disable-pixel",
+        "operation_id": "post-connected-sites-connected-site-id-actions-disable-pixel-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "api_surface_index": 73
+      },
+      {
+        "id": "mailchimp.api_surface.post-connected-sites-connected-site-id-actions-enable-pixel-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/connected-sites/{connected_site_id}/actions/enable-pixel",
+        "operation_id": "post-connected-sites-connected-site-id-actions-enable-pixel-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "api_surface_index": 74
+      },
+      {
+        "id": "mailchimp.api_surface.post-connected-sites-connected-site-id-actions-verify-script-installation-76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/connected-sites/{connected_site_id}/actions/verify-script-installation",
+        "operation_id": "post-connected-sites-connected-site-id-actions-verify-script-installation-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "api_surface_index": 75
+      },
+      {
+        "id": "mailchimp.api_surface.get-conversations-77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations",
+        "operation_id": "get-conversations-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "api_surface_index": 76
+      },
+      {
+        "id": "mailchimp.api_surface.get-conversations-conversation-id-78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations/{conversation_id}",
+        "operation_id": "get-conversations-conversation-id-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "api_surface_index": 77
+      },
+      {
+        "id": "mailchimp.api_surface.get-conversations-conversation-id-messages-79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations/{conversation_id}/messages",
+        "operation_id": "get-conversations-conversation-id-messages-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "api_surface_index": 78
+      },
+      {
+        "id": "mailchimp.api_surface.get-conversations-conversation-id-messages-message-id-80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations/{conversation_id}/messages/{message_id}",
+        "operation_id": "get-conversations-conversation-id-messages-message-id-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "api_surface_index": 79
+      },
+      {
+        "id": "mailchimp.api_surface.post-customer-journeys-journeys-journey-id-steps-step-id-actions-trigger-81",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer-journeys/journeys/{journey_id}/steps/{step_id}/actions/trigger",
+        "operation_id": "post-customer-journeys-journeys-journey-id-steps-step-id-actions-trigger-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "api_surface_index": 80
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-orders-82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/orders",
+        "operation_id": "get-ecommerce-orders-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "api_surface_index": 81
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores",
+        "operation_id": "get-ecommerce-stores-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "api_surface_index": 82
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores",
+        "operation_id": "post-ecommerce-stores-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "api_surface_index": 83
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "api_surface_index": 84
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}",
+        "operation_id": "get-ecommerce-stores-store-id-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "api_surface_index": 85
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-87",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "api_surface_index": 86
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-carts-88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/carts",
+        "operation_id": "get-ecommerce-stores-store-id-carts-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "api_surface_index": 87
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-carts-89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/carts",
+        "operation_id": "post-ecommerce-stores-store-id-carts-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "api_surface_index": 88
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-carts-cart-id-90",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-carts-cart-id-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "api_surface_index": 89
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-carts-cart-id-91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+        "operation_id": "get-ecommerce-stores-store-id-carts-cart-id-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "api_surface_index": 90
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-carts-cart-id-92",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-carts-cart-id-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "api_surface_index": 91
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-carts-cart-id-lines-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines",
+        "operation_id": "get-ecommerce-stores-store-id-carts-cart-id-lines-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "api_surface_index": 92
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-carts-cart-id-lines-94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines",
+        "operation_id": "post-ecommerce-stores-store-id-carts-cart-id-lines-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "api_surface_index": 93
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-carts-cart-id-lines-line-id-95",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-carts-cart-id-lines-line-id-95",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "api_surface_index": 94
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-carts-cart-id-lines-line-id-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+        "operation_id": "get-ecommerce-stores-store-id-carts-cart-id-lines-line-id-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "api_surface_index": 95
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-carts-cart-id-lines-line-id-97",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-carts-cart-id-lines-line-id-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "api_surface_index": 96
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-customers-98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/customers",
+        "operation_id": "get-ecommerce-stores-store-id-customers-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "api_surface_index": 97
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-customers-99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/customers",
+        "operation_id": "post-ecommerce-stores-store-id-customers-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "api_surface_index": 98
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-customers-customer-id-100",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-customers-customer-id-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "api_surface_index": 99
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-customers-customer-id-101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+        "operation_id": "get-ecommerce-stores-store-id-customers-customer-id-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "api_surface_index": 100
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-customers-customer-id-102",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-customers-customer-id-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "api_surface_index": 101
+      },
+      {
+        "id": "mailchimp.api_surface.put-ecommerce-stores-store-id-customers-customer-id-103",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+        "operation_id": "put-ecommerce-stores-store-id-customers-customer-id-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "api_surface_index": 102
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-orders-104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/orders",
+        "operation_id": "get-ecommerce-stores-store-id-orders-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "api_surface_index": 103
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-orders-105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/orders",
+        "operation_id": "post-ecommerce-stores-store-id-orders-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "api_surface_index": 104
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-orders-order-id-106",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-orders-order-id-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "api_surface_index": 105
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-orders-order-id-107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+        "operation_id": "get-ecommerce-stores-store-id-orders-order-id-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "api_surface_index": 106
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-orders-order-id-108",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-orders-order-id-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "api_surface_index": 107
+      },
+      {
+        "id": "mailchimp.api_surface.put-ecommerce-stores-store-id-orders-order-id-109",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+        "operation_id": "put-ecommerce-stores-store-id-orders-order-id-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "api_surface_index": 108
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-orders-order-id-lines-110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines",
+        "operation_id": "get-ecommerce-stores-store-id-orders-order-id-lines-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "api_surface_index": 109
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-orders-order-id-lines-111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines",
+        "operation_id": "post-ecommerce-stores-store-id-orders-order-id-lines-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "api_surface_index": 110
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-orders-order-id-lines-line-id-112",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-orders-order-id-lines-line-id-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "api_surface_index": 111
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-orders-order-id-lines-line-id-113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+        "operation_id": "get-ecommerce-stores-store-id-orders-order-id-lines-line-id-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "api_surface_index": 112
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-orders-order-id-lines-line-id-114",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-orders-order-id-lines-line-id-114",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "api_surface_index": 113
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products",
+        "operation_id": "get-ecommerce-stores-store-id-products-115",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "api_surface_index": 114
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-products-116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/products",
+        "operation_id": "post-ecommerce-stores-store-id-products-116",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "api_surface_index": 115
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-products-product-id-117",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-products-product-id-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "api_surface_index": 116
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-product-id-118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+        "operation_id": "get-ecommerce-stores-store-id-products-product-id-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "api_surface_index": 117
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-products-product-id-119",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-products-product-id-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "api_surface_index": 118
+      },
+      {
+        "id": "mailchimp.api_surface.put-ecommerce-stores-store-id-products-product-id-120",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+        "operation_id": "put-ecommerce-stores-store-id-products-product-id-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "api_surface_index": 119
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-product-id-images-121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/images",
+        "operation_id": "get-ecommerce-stores-store-id-products-product-id-images-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "api_surface_index": 120
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-products-product-id-images-122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/images",
+        "operation_id": "post-ecommerce-stores-store-id-products-product-id-images-122",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "api_surface_index": 121
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-products-product-id-images-image-id-123",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-products-product-id-images-image-id-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "api_surface_index": 122
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-product-id-images-image-id-124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+        "operation_id": "get-ecommerce-stores-store-id-products-product-id-images-image-id-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "api_surface_index": 123
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-products-product-id-images-image-id-125",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-products-product-id-images-image-id-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "api_surface_index": 124
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-product-id-variants-126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants",
+        "operation_id": "get-ecommerce-stores-store-id-products-product-id-variants-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "api_surface_index": 125
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-products-product-id-variants-127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants",
+        "operation_id": "post-ecommerce-stores-store-id-products-product-id-variants-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "api_surface_index": 126
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-products-product-id-variants-variant-id-128",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-products-product-id-variants-variant-id-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "api_surface_index": 127
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-products-product-id-variants-variant-id-129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+        "operation_id": "get-ecommerce-stores-store-id-products-product-id-variants-variant-id-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "api_surface_index": 128
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-products-product-id-variants-variant-id-130",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-products-product-id-variants-variant-id-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "api_surface_index": 129
+      },
+      {
+        "id": "mailchimp.api_surface.put-ecommerce-stores-store-id-products-product-id-variants-variant-id-131",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+        "operation_id": "put-ecommerce-stores-store-id-products-product-id-variants-variant-id-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "api_surface_index": 130
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-promo-rules-132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/promo-rules",
+        "operation_id": "get-ecommerce-stores-store-id-promo-rules-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "api_surface_index": 131
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-promo-rules-133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/promo-rules",
+        "operation_id": "post-ecommerce-stores-store-id-promo-rules-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "api_surface_index": 132
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-promo-rules-promo-rule-id-134",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-promo-rules-promo-rule-id-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "api_surface_index": 133
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-promo-rules-promo-rule-id-135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+        "operation_id": "get-ecommerce-stores-store-id-promo-rules-promo-rule-id-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "api_surface_index": 134
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-promo-rules-promo-rule-id-136",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-promo-rules-promo-rule-id-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "api_surface_index": 135
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes",
+        "operation_id": "get-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-137",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "api_surface_index": 136
+      },
+      {
+        "id": "mailchimp.api_surface.post-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes",
+        "operation_id": "post-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "api_surface_index": 137
+      },
+      {
+        "id": "mailchimp.api_surface.delete-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-139",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+        "operation_id": "delete-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-139",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "api_surface_index": 138
+      },
+      {
+        "id": "mailchimp.api_surface.get-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+        "operation_id": "get-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-140",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "api_surface_index": 139
+      },
+      {
+        "id": "mailchimp.api_surface.patch-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-141",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}",
+        "operation_id": "patch-ecommerce-stores-store-id-promo-rules-promo-rule-id-promo-codes-promo-code-id-141",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "api_surface_index": 140
+      },
+      {
+        "id": "mailchimp.api_surface.get-facebook-ads-142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/facebook-ads",
+        "operation_id": "get-facebook-ads-142",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "api_surface_index": 141
+      },
+      {
+        "id": "mailchimp.api_surface.get-facebook-ads-outreach-id-143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/facebook-ads/{outreach_id}",
+        "operation_id": "get-facebook-ads-outreach-id-143",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "api_surface_index": 142
+      },
+      {
+        "id": "mailchimp.api_surface.get-file-manager-files-144",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/file-manager/files",
+        "operation_id": "get-file-manager-files-144",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "api_surface_index": 143
+      },
+      {
+        "id": "mailchimp.api_surface.post-file-manager-files-145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/file-manager/files",
+        "operation_id": "post-file-manager-files-145",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "api_surface_index": 144
+      },
+      {
+        "id": "mailchimp.api_surface.delete-file-manager-files-file-id-146",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/file-manager/files/{file_id}",
+        "operation_id": "delete-file-manager-files-file-id-146",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "api_surface_index": 145
+      },
+      {
+        "id": "mailchimp.api_surface.get-file-manager-files-file-id-147",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/file-manager/files/{file_id}",
+        "operation_id": "get-file-manager-files-file-id-147",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "api_surface_index": 146
+      },
+      {
+        "id": "mailchimp.api_surface.patch-file-manager-files-file-id-148",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/file-manager/files/{file_id}",
+        "operation_id": "patch-file-manager-files-file-id-148",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "api_surface_index": 147
+      },
+      {
+        "id": "mailchimp.api_surface.get-file-manager-folders-149",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/file-manager/folders",
+        "operation_id": "get-file-manager-folders-149",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "api_surface_index": 148
+      },
+      {
+        "id": "mailchimp.api_surface.post-file-manager-folders-150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/file-manager/folders",
+        "operation_id": "post-file-manager-folders-150",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "api_surface_index": 149
+      },
+      {
+        "id": "mailchimp.api_surface.delete-file-manager-folders-folder-id-151",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/file-manager/folders/{folder_id}",
+        "operation_id": "delete-file-manager-folders-folder-id-151",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "api_surface_index": 150
+      },
+      {
+        "id": "mailchimp.api_surface.get-file-manager-folders-folder-id-152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/file-manager/folders/{folder_id}",
+        "operation_id": "get-file-manager-folders-folder-id-152",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "api_surface_index": 151
+      },
+      {
+        "id": "mailchimp.api_surface.patch-file-manager-folders-folder-id-153",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/file-manager/folders/{folder_id}",
+        "operation_id": "patch-file-manager-folders-folder-id-153",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "api_surface_index": 152
+      },
+      {
+        "id": "mailchimp.api_surface.get-file-manager-folders-folder-id-files-154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/file-manager/folders/{folder_id}/files",
+        "operation_id": "get-file-manager-folders-folder-id-files-154",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "api_surface_index": 153
+      },
+      {
+        "id": "mailchimp.api_surface.get-landing-pages-155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/landing-pages",
+        "operation_id": "get-landing-pages-155",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "api_surface_index": 154
+      },
+      {
+        "id": "mailchimp.api_surface.post-landing-pages-156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/landing-pages",
+        "operation_id": "post-landing-pages-156",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "api_surface_index": 155
+      },
+      {
+        "id": "mailchimp.api_surface.delete-landing-pages-page-id-157",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/landing-pages/{page_id}",
+        "operation_id": "delete-landing-pages-page-id-157",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "api_surface_index": 156
+      },
+      {
+        "id": "mailchimp.api_surface.get-landing-pages-page-id-158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/landing-pages/{page_id}",
+        "operation_id": "get-landing-pages-page-id-158",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "api_surface_index": 157
+      },
+      {
+        "id": "mailchimp.api_surface.patch-landing-pages-page-id-159",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/landing-pages/{page_id}",
+        "operation_id": "patch-landing-pages-page-id-159",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "api_surface_index": 158
+      },
+      {
+        "id": "mailchimp.api_surface.post-landing-pages-page-id-actions-publish-160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/landing-pages/{page_id}/actions/publish",
+        "operation_id": "post-landing-pages-page-id-actions-publish-160",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]",
+        "api_surface_index": 159
+      },
+      {
+        "id": "mailchimp.api_surface.post-landing-pages-page-id-actions-unpublish-161",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/landing-pages/{page_id}/actions/unpublish",
+        "operation_id": "post-landing-pages-page-id-actions-unpublish-161",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]",
+        "api_surface_index": 160
+      },
+      {
+        "id": "mailchimp.api_surface.get-landing-pages-page-id-content-162",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/landing-pages/{page_id}/content",
+        "operation_id": "get-landing-pages-page-id-content-162",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]",
+        "api_surface_index": 161
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists",
+        "operation_id": "get-lists-163",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]",
+        "api_surface_index": 162
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists",
+        "operation_id": "post-lists-164",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]",
+        "api_surface_index": 163
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-165",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}",
+        "operation_id": "delete-lists-list-id-165",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]",
+        "api_surface_index": 164
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-166",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}",
+        "operation_id": "get-lists-list-id-166",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]",
+        "api_surface_index": 165
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-167",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}",
+        "operation_id": "patch-lists-list-id-167",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]",
+        "api_surface_index": 166
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}",
+        "operation_id": "post-lists-list-id-168",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]",
+        "api_surface_index": 167
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-abuse-reports-169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/abuse-reports",
+        "operation_id": "get-lists-list-id-abuse-reports-169",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]",
+        "api_surface_index": 168
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-abuse-reports-report-id-170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/abuse-reports/{report_id}",
+        "operation_id": "get-lists-list-id-abuse-reports-report-id-170",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]",
+        "api_surface_index": 169
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-activity-171",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/activity",
+        "operation_id": "get-lists-list-id-activity-171",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]",
+        "api_surface_index": 170
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-clients-172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/clients",
+        "operation_id": "get-lists-list-id-clients-172",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]",
+        "api_surface_index": 171
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-growth-history-173",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/growth-history",
+        "operation_id": "get-lists-list-id-growth-history-173",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]",
+        "api_surface_index": 172
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-growth-history-month-174",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/growth-history/{month}",
+        "operation_id": "get-lists-list-id-growth-history-month-174",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]",
+        "api_surface_index": 173
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-interest-categories-175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/interest-categories",
+        "operation_id": "get-lists-list-id-interest-categories-175",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]",
+        "api_surface_index": 174
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-interest-categories-176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/interest-categories",
+        "operation_id": "post-lists-list-id-interest-categories-176",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]",
+        "api_surface_index": 175
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-interest-categories-interest-category-id-177",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+        "operation_id": "delete-lists-list-id-interest-categories-interest-category-id-177",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]",
+        "api_surface_index": 176
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-interest-categories-interest-category-id-178",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+        "operation_id": "get-lists-list-id-interest-categories-interest-category-id-178",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]",
+        "api_surface_index": 177
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-interest-categories-interest-category-id-179",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}",
+        "operation_id": "patch-lists-list-id-interest-categories-interest-category-id-179",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]",
+        "api_surface_index": 178
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-interest-categories-interest-category-id-interests-180",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests",
+        "operation_id": "get-lists-list-id-interest-categories-interest-category-id-interests-180",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]",
+        "api_surface_index": 179
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-interest-categories-interest-category-id-interests-181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests",
+        "operation_id": "post-lists-list-id-interest-categories-interest-category-id-interests-181",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]",
+        "api_surface_index": 180
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-interest-categories-interest-category-id-interests-interest-id-182",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+        "operation_id": "delete-lists-list-id-interest-categories-interest-category-id-interests-interest-id-182",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]",
+        "api_surface_index": 181
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-interest-categories-interest-category-id-interests-interest-id-183",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+        "operation_id": "get-lists-list-id-interest-categories-interest-category-id-interests-interest-id-183",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]",
+        "api_surface_index": 182
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-interest-categories-interest-category-id-interests-interest-id-184",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}",
+        "operation_id": "patch-lists-list-id-interest-categories-interest-category-id-interests-interest-id-184",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]",
+        "api_surface_index": 183
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-locations-185",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/locations",
+        "operation_id": "get-lists-list-id-locations-185",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]",
+        "api_surface_index": 184
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-186",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members",
+        "operation_id": "get-lists-list-id-members-186",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]",
+        "api_surface_index": 185
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-members-187",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/members",
+        "operation_id": "post-lists-list-id-members-187",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]",
+        "api_surface_index": 186
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-members-subscriber-hash-188",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/members/{subscriber_hash}",
+        "operation_id": "delete-lists-list-id-members-subscriber-hash-188",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]",
+        "api_surface_index": 187
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-189",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-189",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[188]",
+        "api_surface_index": 188
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-members-subscriber-hash-190",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/members/{subscriber_hash}",
+        "operation_id": "patch-lists-list-id-members-subscriber-hash-190",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[189]",
+        "api_surface_index": 189
+      },
+      {
+        "id": "mailchimp.api_surface.put-lists-list-id-members-subscriber-hash-191",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/lists/{list_id}/members/{subscriber_hash}",
+        "operation_id": "put-lists-list-id-members-subscriber-hash-191",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[190]",
+        "api_surface_index": 190
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-members-subscriber-hash-actions-delete-permanent-192",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/actions/delete-permanent",
+        "operation_id": "post-lists-list-id-members-subscriber-hash-actions-delete-permanent-192",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[191]",
+        "api_surface_index": 191
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-activity-193",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/activity",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-activity-193",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[192]",
+        "api_surface_index": 192
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-activity-feed-194",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/activity-feed",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-activity-feed-194",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[193]",
+        "api_surface_index": 193
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-events-195",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/events",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-events-195",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[194]",
+        "api_surface_index": 194
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-members-subscriber-hash-events-196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/events",
+        "operation_id": "post-lists-list-id-members-subscriber-hash-events-196",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[195]",
+        "api_surface_index": 195
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-goals-197",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/goals",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-goals-197",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[196]",
+        "api_surface_index": 196
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-notes-198",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/notes",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-notes-198",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[197]",
+        "api_surface_index": 197
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-members-subscriber-hash-notes-199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/notes",
+        "operation_id": "post-lists-list-id-members-subscriber-hash-notes-199",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[198]",
+        "api_surface_index": 198
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-members-subscriber-hash-notes-note-id-200",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+        "operation_id": "delete-lists-list-id-members-subscriber-hash-notes-note-id-200",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[199]",
+        "api_surface_index": 199
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-notes-note-id-201",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-notes-note-id-201",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[200]",
+        "api_surface_index": 200
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-members-subscriber-hash-notes-note-id-202",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}",
+        "operation_id": "patch-lists-list-id-members-subscriber-hash-notes-note-id-202",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[201]",
+        "api_surface_index": 201
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-members-subscriber-hash-tags-203",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/tags",
+        "operation_id": "get-lists-list-id-members-subscriber-hash-tags-203",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[202]",
+        "api_surface_index": 202
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-members-subscriber-hash-tags-204",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/members/{subscriber_hash}/tags",
+        "operation_id": "post-lists-list-id-members-subscriber-hash-tags-204",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[203]",
+        "api_surface_index": 203
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-merge-fields-205",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/merge-fields",
+        "operation_id": "get-lists-list-id-merge-fields-205",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[204]",
+        "api_surface_index": 204
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-merge-fields-206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/merge-fields",
+        "operation_id": "post-lists-list-id-merge-fields-206",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[205]",
+        "api_surface_index": 205
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-merge-fields-merge-id-207",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/merge-fields/{merge_id}",
+        "operation_id": "delete-lists-list-id-merge-fields-merge-id-207",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[206]",
+        "api_surface_index": 206
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-merge-fields-merge-id-208",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/merge-fields/{merge_id}",
+        "operation_id": "get-lists-list-id-merge-fields-merge-id-208",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[207]",
+        "api_surface_index": 207
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-merge-fields-merge-id-209",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/merge-fields/{merge_id}",
+        "operation_id": "patch-lists-list-id-merge-fields-merge-id-209",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[208]",
+        "api_surface_index": 208
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-segments-210",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/segments",
+        "operation_id": "get-lists-list-id-segments-210",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[209]",
+        "api_surface_index": 209
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-segments-211",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/segments",
+        "operation_id": "post-lists-list-id-segments-211",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[210]",
+        "api_surface_index": 210
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-segments-segment-id-212",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/segments/{segment_id}",
+        "operation_id": "delete-lists-list-id-segments-segment-id-212",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[211]",
+        "api_surface_index": 211
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-segments-segment-id-213",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/segments/{segment_id}",
+        "operation_id": "get-lists-list-id-segments-segment-id-213",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[212]",
+        "api_surface_index": 212
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-segments-segment-id-214",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/segments/{segment_id}",
+        "operation_id": "patch-lists-list-id-segments-segment-id-214",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[213]",
+        "api_surface_index": 213
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-segments-segment-id-215",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/segments/{segment_id}",
+        "operation_id": "post-lists-list-id-segments-segment-id-215",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[214]",
+        "api_surface_index": 214
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-segments-segment-id-members-216",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/segments/{segment_id}/members",
+        "operation_id": "get-lists-list-id-segments-segment-id-members-216",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[215]",
+        "api_surface_index": 215
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-segments-segment-id-members-217",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/segments/{segment_id}/members",
+        "operation_id": "post-lists-list-id-segments-segment-id-members-217",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[216]",
+        "api_surface_index": 216
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-segments-segment-id-members-subscriber-hash-218",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/segments/{segment_id}/members/{subscriber_hash}",
+        "operation_id": "delete-lists-list-id-segments-segment-id-members-subscriber-hash-218",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[217]",
+        "api_surface_index": 217
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-signup-forms-219",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/signup-forms",
+        "operation_id": "get-lists-list-id-signup-forms-219",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[218]",
+        "api_surface_index": 218
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-signup-forms-220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/signup-forms",
+        "operation_id": "post-lists-list-id-signup-forms-220",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[219]",
+        "api_surface_index": 219
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-surveys-221",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/surveys",
+        "operation_id": "get-lists-list-id-surveys-221",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[220]",
+        "api_surface_index": 220
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-surveys-222",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/surveys",
+        "operation_id": "post-lists-list-id-surveys-222",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[221]",
+        "api_surface_index": 221
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-surveys-survey-id-223",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/surveys/{survey_id}",
+        "operation_id": "delete-lists-list-id-surveys-survey-id-223",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[222]",
+        "api_surface_index": 222
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-surveys-survey-id-224",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/surveys/{survey_id}",
+        "operation_id": "get-lists-list-id-surveys-survey-id-224",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[223]",
+        "api_surface_index": 223
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-surveys-survey-id-225",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/surveys/{survey_id}",
+        "operation_id": "patch-lists-list-id-surveys-survey-id-225",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[224]",
+        "api_surface_index": 224
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-surveys-survey-id-actions-create-email-226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/surveys/{survey_id}/actions/create-email",
+        "operation_id": "post-lists-list-id-surveys-survey-id-actions-create-email-226",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[225]",
+        "api_surface_index": 225
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-surveys-survey-id-actions-publish-227",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/surveys/{survey_id}/actions/publish",
+        "operation_id": "post-lists-list-id-surveys-survey-id-actions-publish-227",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[226]",
+        "api_surface_index": 226
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-surveys-survey-id-actions-replicate-228",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/surveys/{survey_id}/actions/replicate",
+        "operation_id": "post-lists-list-id-surveys-survey-id-actions-replicate-228",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[227]",
+        "api_surface_index": 227
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-surveys-survey-id-actions-unpublish-229",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/surveys/{survey_id}/actions/unpublish",
+        "operation_id": "post-lists-list-id-surveys-survey-id-actions-unpublish-229",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[228]",
+        "api_surface_index": 228
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-tag-search-230",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/tag-search",
+        "operation_id": "get-lists-list-id-tag-search-230",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[229]",
+        "api_surface_index": 229
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-webhooks-231",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/webhooks",
+        "operation_id": "get-lists-list-id-webhooks-231",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[230]",
+        "api_surface_index": 230
+      },
+      {
+        "id": "mailchimp.api_surface.post-lists-list-id-webhooks-232",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lists/{list_id}/webhooks",
+        "operation_id": "post-lists-list-id-webhooks-232",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[231]",
+        "api_surface_index": 231
+      },
+      {
+        "id": "mailchimp.api_surface.delete-lists-list-id-webhooks-webhook-id-233",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lists/{list_id}/webhooks/{webhook_id}",
+        "operation_id": "delete-lists-list-id-webhooks-webhook-id-233",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[232]",
+        "api_surface_index": 232
+      },
+      {
+        "id": "mailchimp.api_surface.get-lists-list-id-webhooks-webhook-id-234",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists/{list_id}/webhooks/{webhook_id}",
+        "operation_id": "get-lists-list-id-webhooks-webhook-id-234",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[233]",
+        "api_surface_index": 233
+      },
+      {
+        "id": "mailchimp.api_surface.patch-lists-list-id-webhooks-webhook-id-235",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/lists/{list_id}/webhooks/{webhook_id}",
+        "operation_id": "patch-lists-list-id-webhooks-webhook-id-235",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[234]",
+        "api_surface_index": 234
+      },
+      {
+        "id": "mailchimp.api_surface.get-ping-236",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ping",
+        "operation_id": "get-ping-236",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[235]",
+        "api_surface_index": 235
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-facebook-ads-237",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/facebook-ads",
+        "operation_id": "get-reporting-facebook-ads-237",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[236]",
+        "api_surface_index": 236
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-facebook-ads-outreach-id-238",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/facebook-ads/{outreach_id}",
+        "operation_id": "get-reporting-facebook-ads-outreach-id-238",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[237]",
+        "api_surface_index": 237
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-facebook-ads-outreach-id-ecommerce-product-activity-239",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/facebook-ads/{outreach_id}/ecommerce-product-activity",
+        "operation_id": "get-reporting-facebook-ads-outreach-id-ecommerce-product-activity-239",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[238]",
+        "api_surface_index": 238
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-landing-pages-240",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/landing-pages",
+        "operation_id": "get-reporting-landing-pages-240",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[239]",
+        "api_surface_index": 239
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-landing-pages-outreach-id-241",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/landing-pages/{outreach_id}",
+        "operation_id": "get-reporting-landing-pages-outreach-id-241",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[240]",
+        "api_surface_index": 240
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-242",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys",
+        "operation_id": "get-reporting-surveys-242",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[241]",
+        "api_surface_index": 241
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-243",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}",
+        "operation_id": "get-reporting-surveys-survey-id-243",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[242]",
+        "api_surface_index": 242
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-questions-244",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}/questions",
+        "operation_id": "get-reporting-surveys-survey-id-questions-244",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[243]",
+        "api_surface_index": 243
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-questions-question-id-245",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}/questions/{question_id}",
+        "operation_id": "get-reporting-surveys-survey-id-questions-question-id-245",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[244]",
+        "api_surface_index": 244
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-questions-question-id-answers-246",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}/questions/{question_id}/answers",
+        "operation_id": "get-reporting-surveys-survey-id-questions-question-id-answers-246",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[245]",
+        "api_surface_index": 245
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-responses-247",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}/responses",
+        "operation_id": "get-reporting-surveys-survey-id-responses-247",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[246]",
+        "api_surface_index": 246
+      },
+      {
+        "id": "mailchimp.api_surface.get-reporting-surveys-survey-id-responses-response-id-248",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reporting/surveys/{survey_id}/responses/{response_id}",
+        "operation_id": "get-reporting-surveys-survey-id-responses-response-id-248",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[247]",
+        "api_surface_index": 247
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-249",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports",
+        "operation_id": "get-reports-249",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[248]",
+        "api_surface_index": 248
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-250",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}",
+        "operation_id": "get-reports-campaign-id-250",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[249]",
+        "api_surface_index": 249
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-abuse-reports-251",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/abuse-reports",
+        "operation_id": "get-reports-campaign-id-abuse-reports-251",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[250]",
+        "api_surface_index": 250
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-abuse-reports-report-id-252",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/abuse-reports/{report_id}",
+        "operation_id": "get-reports-campaign-id-abuse-reports-report-id-252",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[251]",
+        "api_surface_index": 251
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-advice-253",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/advice",
+        "operation_id": "get-reports-campaign-id-advice-253",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[252]",
+        "api_surface_index": 252
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-click-details-254",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/click-details",
+        "operation_id": "get-reports-campaign-id-click-details-254",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[253]",
+        "api_surface_index": 253
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-click-details-link-id-255",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/click-details/{link_id}",
+        "operation_id": "get-reports-campaign-id-click-details-link-id-255",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[254]",
+        "api_surface_index": 254
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-click-details-link-id-members-256",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/click-details/{link_id}/members",
+        "operation_id": "get-reports-campaign-id-click-details-link-id-members-256",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[255]",
+        "api_surface_index": 255
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-click-details-link-id-members-subscriber-hash-257",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/click-details/{link_id}/members/{subscriber_hash}",
+        "operation_id": "get-reports-campaign-id-click-details-link-id-members-subscriber-hash-257",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[256]",
+        "api_surface_index": 256
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-domain-performance-258",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/domain-performance",
+        "operation_id": "get-reports-campaign-id-domain-performance-258",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[257]",
+        "api_surface_index": 257
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-ecommerce-product-activity-259",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/ecommerce-product-activity",
+        "operation_id": "get-reports-campaign-id-ecommerce-product-activity-259",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[258]",
+        "api_surface_index": 258
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-eepurl-260",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/eepurl",
+        "operation_id": "get-reports-campaign-id-eepurl-260",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[259]",
+        "api_surface_index": 259
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-email-activity-261",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/email-activity",
+        "operation_id": "get-reports-campaign-id-email-activity-261",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[260]",
+        "api_surface_index": 260
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-email-activity-subscriber-hash-262",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/email-activity/{subscriber_hash}",
+        "operation_id": "get-reports-campaign-id-email-activity-subscriber-hash-262",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[261]",
+        "api_surface_index": 261
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-locations-263",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/locations",
+        "operation_id": "get-reports-campaign-id-locations-263",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[262]",
+        "api_surface_index": 262
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-open-details-264",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/open-details",
+        "operation_id": "get-reports-campaign-id-open-details-264",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[263]",
+        "api_surface_index": 263
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-open-details-subscriber-hash-265",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/open-details/{subscriber_hash}",
+        "operation_id": "get-reports-campaign-id-open-details-subscriber-hash-265",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[264]",
+        "api_surface_index": 264
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-sent-to-266",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/sent-to",
+        "operation_id": "get-reports-campaign-id-sent-to-266",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[265]",
+        "api_surface_index": 265
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-sent-to-subscriber-hash-267",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/sent-to/{subscriber_hash}",
+        "operation_id": "get-reports-campaign-id-sent-to-subscriber-hash-267",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[266]",
+        "api_surface_index": 266
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-sub-reports-268",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/sub-reports",
+        "operation_id": "get-reports-campaign-id-sub-reports-268",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[267]",
+        "api_surface_index": 267
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-unsubscribed-269",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/unsubscribed",
+        "operation_id": "get-reports-campaign-id-unsubscribed-269",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[268]",
+        "api_surface_index": 268
+      },
+      {
+        "id": "mailchimp.api_surface.get-reports-campaign-id-unsubscribed-subscriber-hash-270",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/{campaign_id}/unsubscribed/{subscriber_hash}",
+        "operation_id": "get-reports-campaign-id-unsubscribed-subscriber-hash-270",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[269]",
+        "api_surface_index": 269
+      },
+      {
+        "id": "mailchimp.api_surface.get-search-campaigns-271",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search-campaigns",
+        "operation_id": "get-search-campaigns-271",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[270]",
+        "api_surface_index": 270
+      },
+      {
+        "id": "mailchimp.api_surface.get-search-members-272",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search-members",
+        "operation_id": "get-search-members-272",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[271]",
+        "api_surface_index": 271
+      },
+      {
+        "id": "mailchimp.api_surface.get-sms-campaigns-273",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms-campaigns",
+        "operation_id": "get-sms-campaigns-273",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[272]",
+        "api_surface_index": 272
+      },
+      {
+        "id": "mailchimp.api_surface.post-sms-campaigns-274",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms-campaigns",
+        "operation_id": "post-sms-campaigns-274",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[273]",
+        "api_surface_index": 273
+      },
+      {
+        "id": "mailchimp.api_surface.delete-sms-campaigns-sms-campaign-id-275",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sms-campaigns/{sms_campaign_id}",
+        "operation_id": "delete-sms-campaigns-sms-campaign-id-275",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[274]",
+        "api_surface_index": 274
+      },
+      {
+        "id": "mailchimp.api_surface.get-sms-campaigns-sms-campaign-id-276",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms-campaigns/{sms_campaign_id}",
+        "operation_id": "get-sms-campaigns-sms-campaign-id-276",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[275]",
+        "api_surface_index": 275
+      },
+      {
+        "id": "mailchimp.api_surface.patch-sms-campaigns-sms-campaign-id-277",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/sms-campaigns/{sms_campaign_id}",
+        "operation_id": "patch-sms-campaigns-sms-campaign-id-277",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[276]",
+        "api_surface_index": 276
+      },
+      {
+        "id": "mailchimp.api_surface.post-sms-campaigns-sms-campaign-id-actions-cancel-send-278",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms-campaigns/{sms_campaign_id}/actions/cancel-send",
+        "operation_id": "post-sms-campaigns-sms-campaign-id-actions-cancel-send-278",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[277]",
+        "api_surface_index": 277
+      },
+      {
+        "id": "mailchimp.api_surface.post-sms-campaigns-sms-campaign-id-actions-schedule-279",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms-campaigns/{sms_campaign_id}/actions/schedule",
+        "operation_id": "post-sms-campaigns-sms-campaign-id-actions-schedule-279",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[278]",
+        "api_surface_index": 278
+      },
+      {
+        "id": "mailchimp.api_surface.post-sms-campaigns-sms-campaign-id-actions-send-280",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms-campaigns/{sms_campaign_id}/actions/send",
+        "operation_id": "post-sms-campaigns-sms-campaign-id-actions-send-280",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[279]",
+        "api_surface_index": 279
+      },
+      {
+        "id": "mailchimp.api_surface.get-sms-campaigns-sms-campaign-id-content-281",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms-campaigns/{sms_campaign_id}/content",
+        "operation_id": "get-sms-campaigns-sms-campaign-id-content-281",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[280]",
+        "api_surface_index": 280
+      },
+      {
+        "id": "mailchimp.api_surface.put-sms-campaigns-sms-campaign-id-content-282",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sms-campaigns/{sms_campaign_id}/content",
+        "operation_id": "put-sms-campaigns-sms-campaign-id-content-282",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[281]",
+        "api_surface_index": 281
+      },
+      {
+        "id": "mailchimp.api_surface.get-template-folders-283",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/template-folders",
+        "operation_id": "get-template-folders-283",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[282]",
+        "api_surface_index": 282
+      },
+      {
+        "id": "mailchimp.api_surface.post-template-folders-284",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/template-folders",
+        "operation_id": "post-template-folders-284",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[283]",
+        "api_surface_index": 283
+      },
+      {
+        "id": "mailchimp.api_surface.delete-template-folders-folder-id-285",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/template-folders/{folder_id}",
+        "operation_id": "delete-template-folders-folder-id-285",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[284]",
+        "api_surface_index": 284
+      },
+      {
+        "id": "mailchimp.api_surface.get-template-folders-folder-id-286",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/template-folders/{folder_id}",
+        "operation_id": "get-template-folders-folder-id-286",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[285]",
+        "api_surface_index": 285
+      },
+      {
+        "id": "mailchimp.api_surface.patch-template-folders-folder-id-287",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/template-folders/{folder_id}",
+        "operation_id": "patch-template-folders-folder-id-287",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[286]",
+        "api_surface_index": 286
+      },
+      {
+        "id": "mailchimp.api_surface.get-templates-288",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates",
+        "operation_id": "get-templates-288",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[287]",
+        "api_surface_index": 287
+      },
+      {
+        "id": "mailchimp.api_surface.post-templates-289",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/templates",
+        "operation_id": "post-templates-289",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[288]",
+        "api_surface_index": 288
+      },
+      {
+        "id": "mailchimp.api_surface.delete-templates-template-id-290",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/templates/{template_id}",
+        "operation_id": "delete-templates-template-id-290",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[289]",
+        "api_surface_index": 289
+      },
+      {
+        "id": "mailchimp.api_surface.get-templates-template-id-291",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates/{template_id}",
+        "operation_id": "get-templates-template-id-291",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[290]",
+        "api_surface_index": 290
+      },
+      {
+        "id": "mailchimp.api_surface.patch-templates-template-id-292",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/templates/{template_id}",
+        "operation_id": "patch-templates-template-id-292",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[291]",
+        "api_surface_index": 291
+      },
+      {
+        "id": "mailchimp.api_surface.get-templates-template-id-default-content-293",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates/{template_id}/default-content",
+        "operation_id": "get-templates-template-id-default-content-293",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[292]",
+        "api_surface_index": 292
+      },
+      {
+        "id": "mailchimp.api_surface.get-verified-domains-294",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/verified-domains",
+        "operation_id": "get-verified-domains-294",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[293]",
+        "api_surface_index": 293
+      },
+      {
+        "id": "mailchimp.api_surface.post-verified-domains-295",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/verified-domains",
+        "operation_id": "post-verified-domains-295",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[294]",
+        "api_surface_index": 294
+      },
+      {
+        "id": "mailchimp.api_surface.delete-verified-domains-domain-name-296",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/verified-domains/{domain_name}",
+        "operation_id": "delete-verified-domains-domain-name-296",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[295]",
+        "api_surface_index": 295
+      },
+      {
+        "id": "mailchimp.api_surface.get-verified-domains-domain-name-297",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/verified-domains/{domain_name}",
+        "operation_id": "get-verified-domains-domain-name-297",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[296]",
+        "api_surface_index": 296
+      },
+      {
+        "id": "mailchimp.api_surface.post-verified-domains-domain-name-actions-verify-298",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/verified-domains/{domain_name}/actions/verify",
+        "operation_id": "post-verified-domains-domain-name-actions-verify-298",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[297]",
+        "api_surface_index": 297
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "connector": "woocommerce",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+    "requested_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+    "sha256": "a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e",
+    "bytes": 4400931,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "16e6c7b49c3c284e93d4598fbc407b38c7ff2718dbdebf08b1db84812f6e09f1",
+    "bytes": 2817,
+    "source_operation_count": 10
+  },
+  "rest": {
+    "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+    "sha256": "a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e",
+    "bytes": 4400931,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 1
+      },
+      {
+        "key": "GET",
+        "count": 7
+      },
+      {
+        "key": "POST",
+        "count": 1
+      },
+      {
+        "key": "PUT",
+        "count": 1
+      }
+    ],
+    "operations": [
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-orders-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/orders",
+        "operation_id": "get-wp-json-wc-v3-orders-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-products-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/products",
+        "operation_id": "get-wp-json-wc-v3-products-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-customers-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/customers",
+        "operation_id": "get-wp-json-wc-v3-customers-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-coupons-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/coupons",
+        "operation_id": "get-wp-json-wc-v3-coupons-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "woocommerce.api_surface.post-wp-json-wc-v3-orders-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/wp-json/wc/v3/orders",
+        "operation_id": "post-wp-json-wc-v3-orders-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "woocommerce.api_surface.put-wp-json-wc-v3-orders-id-6",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/wp-json/wc/v3/orders/{id}",
+        "operation_id": "put-wp-json-wc-v3-orders-id-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "woocommerce.api_surface.delete-wp-json-wc-v3-orders-id-7",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/wp-json/wc/v3/orders/{id}",
+        "operation_id": "delete-wp-json-wc-v3-orders-id-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-refunds-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/refunds",
+        "operation_id": "get-wp-json-wc-v3-refunds-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-reports-sales-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/reports/sales",
+        "operation_id": "get-wp-json-wc-v3-reports-sales-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "woocommerce.api_surface.get-wp-json-wc-v3-webhooks-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wp-json/wc/v3/webhooks",
+        "operation_id": "get-wp-json-wc-v3-webhooks-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      }
+    ]
+  }
+}

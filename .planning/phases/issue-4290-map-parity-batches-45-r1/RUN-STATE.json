@@ -1,15 +1,17 @@
 {
   "issue": 4290,
   "phase": "issue-4290-map-parity-batches-45-r1",
-  "state": "planned",
+  "state": "executing",
   "delivery": "direct-pr",
   "base_branch": "main",
   "working_branch": "fm/cli-map-batch45-r1",
   "batches": {
-    "4": "pending",
+    "4": "materialized-and-asserted",
     "5": "pending"
   },
   "credentials_used": false,
   "live_provider_calls": false,
+  "browser_documentation_failures": ["tiktok-marketing", "ebay-fulfillment"],
+  "reverse_etl_foundation": "generic-typed-destination-executor",
   "gsd_execution": "inline-manual-fallback"
 }

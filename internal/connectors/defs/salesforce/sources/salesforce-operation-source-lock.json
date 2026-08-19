@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "connector": "salesforce",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm",
+    "requested_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm",
+    "sha256": "ae837e22892d4164ce0bcb56edc4d5d07fe63a08f5d92697169bb6597266df9d",
+    "bytes": 17888,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "4c408db5bf497bfc2c0db31209cd7a7ceb76dbe440b75bff78d49f2ba6278126",
+    "bytes": 3460,
+    "source_operation_count": 10
+  },
+  "rest": {
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm",
+    "sha256": "ae837e22892d4164ce0bcb56edc4d5d07fe63a08f5d92697169bb6597266df9d",
+    "bytes": 17888,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 1
+      },
+      {
+        "key": "GET",
+        "count": 7
+      },
+      {
+        "key": "PATCH",
+        "count": 1
+      },
+      {
+        "key": "POST",
+        "count": 1
+      }
+    ],
+    "operations": [
+      {
+        "id": "salesforce.api_surface.get-services-data-version-sobjects-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/sobjects",
+        "operation_id": "get-services-data-version-sobjects-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-query-select-from-account-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Account)",
+        "operation_id": "get-services-data-version-query-select-from-account-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-query-select-from-contact-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Contact)",
+        "operation_id": "get-services-data-version-query-select-from-contact-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-query-select-from-lead-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Lead)",
+        "operation_id": "get-services-data-version-query-select-from-lead-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-query-arbitrary-soql-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/query (arbitrary SOQL)",
+        "operation_id": "get-services-data-version-query-arbitrary-soql-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-sobjects-sobject-describe-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/sobjects/{sObject}/describe",
+        "operation_id": "get-services-data-version-sobjects-sobject-describe-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "salesforce.api_surface.post-services-data-version-sobjects-sobject-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/services/data/{version}/sobjects/{sObject}",
+        "operation_id": "post-services-data-version-sobjects-sobject-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "salesforce.api_surface.patch-services-data-version-sobjects-sobject-id-8",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+        "operation_id": "patch-services-data-version-sobjects-sobject-id-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "salesforce.api_surface.delete-services-data-version-sobjects-sobject-id-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+        "operation_id": "delete-services-data-version-sobjects-sobject-id-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "salesforce.api_surface.get-services-data-version-jobs-query-bulk-api-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/services/data/{version}/jobs/query (Bulk API)",
+        "operation_id": "get-services-data-version-jobs-query-bulk-api-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      }
+    ]
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "connector": "airtable",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://airtable.com/developers/web/api/introduction",
+    "requested_url": "https://airtable.com/developers/web/api/introduction",
+    "sha256": "509d3bda03f969092d56fba8bf9e93ee6a841af1294ff4348cab879433b8a0da",
+    "bytes": 623469,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "874ba58795a9b43dafb8c3e250cc81340d329077595296ef68c946644d51ee67",
+    "bytes": 6602,
+    "source_operation_count": 30
+  },
+  "rest": {
+    "source_url": "https://airtable.com/developers/web/api/introduction",
+    "sha256": "509d3bda03f969092d56fba8bf9e93ee6a841af1294ff4348cab879433b8a0da",
+    "bytes": 623469,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 4
+      },
+      {
+        "key": "GET",
+        "count": 10
+      },
+      {
+        "key": "PATCH",
+        "count": 5
+      },
+      {
+        "key": "POST",
+        "count": 9
+      },
+      {
+        "key": "PUT",
+        "count": 2
+      }
+    ],
+    "operations": [
+      {
+        "id": "airtable.api_surface.get-v0-meta-bases-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases",
+        "operation_id": "get-v0-meta-bases-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "airtable.api_surface.get-v0-meta-bases-baseid-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}",
+        "operation_id": "get-v0-meta-bases-baseid-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "airtable.api_surface.post-v0-meta-bases-3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases",
+        "operation_id": "post-v0-meta-bases-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "airtable.api_surface.get-v0-meta-bases-baseid-tables-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/tables",
+        "operation_id": "get-v0-meta-bases-baseid-tables-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "airtable.api_surface.post-v0-meta-bases-baseid-tables-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/tables",
+        "operation_id": "post-v0-meta-bases-baseid-tables-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "airtable.api_surface.patch-v0-meta-bases-baseid-tables-tableidorname-6",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableIdOrName}",
+        "operation_id": "patch-v0-meta-bases-baseid-tables-tableidorname-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "airtable.api_surface.post-v0-meta-bases-baseid-tables-tableid-fields-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields",
+        "operation_id": "post-v0-meta-bases-baseid-tables-tableid-fields-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "airtable.api_surface.patch-v0-meta-bases-baseid-tables-tableid-fields-columnid-8",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}",
+        "operation_id": "patch-v0-meta-bases-baseid-tables-tableid-fields-columnid-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "airtable.api_surface.get-v0-baseid-tableidorname-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "get-v0-baseid-tableidorname-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "airtable.api_surface.get-v0-baseid-tableidorname-recordid-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "get-v0-baseid-tableidorname-recordid-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "airtable.api_surface.post-v0-baseid-tableidorname-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "post-v0-baseid-tableidorname-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "airtable.api_surface.patch-v0-baseid-tableidorname-12",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "patch-v0-baseid-tableidorname-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "airtable.api_surface.put-v0-baseid-tableidorname-13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "put-v0-baseid-tableidorname-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "airtable.api_surface.patch-v0-baseid-tableidorname-recordid-14",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "patch-v0-baseid-tableidorname-recordid-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "airtable.api_surface.put-v0-baseid-tableidorname-recordid-15",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "put-v0-baseid-tableidorname-recordid-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "airtable.api_surface.delete-v0-baseid-tableidorname-recordid-16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "delete-v0-baseid-tableidorname-recordid-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "airtable.api_surface.delete-v0-baseid-tableidorname-17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "delete-v0-baseid-tableidorname-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "airtable.api_surface.get-v0-baseid-tableidorname-recordid-comments-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+        "operation_id": "get-v0-baseid-tableidorname-recordid-comments-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "airtable.api_surface.post-v0-baseid-tableidorname-recordid-comments-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+        "operation_id": "post-v0-baseid-tableidorname-recordid-comments-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "airtable.api_surface.patch-v0-baseid-tableidorname-recordid-comments-commentid-20",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}",
+        "operation_id": "patch-v0-baseid-tableidorname-recordid-comments-commentid-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "airtable.api_surface.delete-v0-baseid-tableidorname-recordid-comments-commentid-21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}",
+        "operation_id": "delete-v0-baseid-tableidorname-recordid-comments-commentid-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "airtable.api_surface.get-v0-bases-baseid-webhooks-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/bases/{baseId}/webhooks",
+        "operation_id": "get-v0-bases-baseid-webhooks-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "airtable.api_surface.post-v0-bases-baseid-webhooks-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks",
+        "operation_id": "post-v0-bases-baseid-webhooks-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "airtable.api_surface.delete-v0-bases-baseid-webhooks-webhookid-24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}",
+        "operation_id": "delete-v0-bases-baseid-webhooks-webhookid-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "airtable.api_surface.post-v0-bases-baseid-webhooks-webhookid-enablenotifications-25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications",
+        "operation_id": "post-v0-bases-baseid-webhooks-webhookid-enablenotifications-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "airtable.api_surface.post-v0-bases-baseid-webhooks-webhookid-refresh-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/refresh",
+        "operation_id": "post-v0-bases-baseid-webhooks-webhookid-refresh-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "airtable.api_surface.get-v0-bases-baseid-webhooks-webhookid-payloads-27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/payloads",
+        "operation_id": "get-v0-bases-baseid-webhooks-webhookid-payloads-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "airtable.api_surface.post-v0-baseid-tableidorname-listrecords-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}/listRecords",
+        "operation_id": "post-v0-baseid-tableidorname-listrecords-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "airtable.api_surface.get-v0-meta-whoami-29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/whoami",
+        "operation_id": "get-v0-meta-whoami-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "airtable.api_surface.get-v0-meta-bases-baseid-tables-tableid-views-viewid-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableId}/views/{viewId}",
+        "operation_id": "get-v0-meta-bases-baseid-tables-tableid-views-viewid-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      }
+    ]
+  }
+}

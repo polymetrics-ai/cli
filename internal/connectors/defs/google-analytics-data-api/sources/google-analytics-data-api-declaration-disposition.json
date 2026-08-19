@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "connector": "google-analytics-data-api",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+    "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+    "source_sha256": "a9d2cce4db664d07375486e2b7cdd14ab90aa1f32d8cf99b3f4f93be2c0d986f",
+    "source_bytes": 329482,
+    "source_operation_count": 5,
+    "normalized_inventory_sha256": "d9c174e93b034d6dd8e4da712b20d0c7aa44d84b2d912b2d6777903f884b6727",
+    "source_retrieval": "fetched"
+  },
+  "summary": {
+    "api_surface_rows": 5,
+    "exact_source_rows": 5,
+    "declared_operations": 5,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "declaration_pending_operations": 5,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "etl",
+        "count": 5
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 5
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "daily_active_users"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-1",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api website_overview read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api website_overview read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "website_overview"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-website-overview-read-path-2",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-website-overview-read-path-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "traffic_sources"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-3",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api devices read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api devices read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "devices"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-devices-read-path-4",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-devices-read-path-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api pages read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api pages read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "pages"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-pages-read-path-5",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-pages-read-path-5",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    }
+  ]
+}
