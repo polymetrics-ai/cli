@@ -3,7 +3,7 @@
   "issue": 4299,
   "branch": "fm/cli-defs-embed-slim-r1",
   "base": "origin/main",
-  "status": "planned",
+  "status": "implemented_pending_repository_verification",
   "gsd": {
     "doctor": "passed",
     "mode": "manual_inline_fallback",
