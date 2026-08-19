@@ -1,0 +1,12 @@
+{
+  "phase": "issue-4273-surface-sweep-batches-r1",
+  "status": "planned",
+  "delivery": "direct-pr",
+  "base": "main",
+  "working_branch": "fm/cli-surface-sweep-batches-r1",
+  "gsd_mode": "inline_manual_fallback",
+  "reason": "Canonical delivery contract prohibits GSD role spawning; Firstmate task explicitly authorizes autonomous inline completion.",
+  "issue": 4273,
+  "batch": 1,
+  "resume": "create and commit the initial fleet progress ledger and foundation-gap log, then run batch plan"
+}

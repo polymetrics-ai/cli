@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "sweep": "cli-surface-sweep-batches-r1",
+  "issue": 4273,
+  "updated_at": "2026-08-19T00:00:00Z",
+  "gaps": [
+    {
+      "id": "G12",
+      "status": "open",
+      "missing": "The declarative `file_upload` operation kind has no engine executor, so binary upload cannot be certified.",
+      "connectors": ["all connectors declaring or requiring file_upload"],
+      "evidence": "Captain launch brief names G12; connector operation certification requires a real executor rather than a declaration.",
+      "smallest_fix": "Add one bounded, typed file-upload executor with commandrunner preflight and conformance coverage, then let connector-local operations opt in.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G13",
+      "status": "coordinating",
+      "missing": "Operation-backed DELETE commands did not carry the explicit write action kind required for correct direct-write classification.",
+      "connectors": ["all operation-backed DELETE command candidates"],
+      "evidence": "Captain launch brief identifies active lane `cli-delete-action-kind-fix-r1`.",
+      "smallest_fix": "Land the separate action-kind foundation change, then regenerate affected connector metadata through the existing surface-sync pipeline.",
+      "owner": "cli-delete-action-kind-fix-r1",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G14",
+      "status": "open",
+      "missing": "The batch materializer refuses to promote direct-read operations while available direct-read output policies redact returned content.",
+      "connectors": ["all public-artifact batch candidates with unmatched direct-read endpoints"],
+      "evidence": "docs/migration/connector-batch-pipeline.md: the no-redaction batch gate leaves direct reads provider-blocked until a non-redacting direct-read capability exists.",
+      "smallest_fix": "Provide a bounded, non-redacting direct-read output policy with real commandrunner preflight and redaction-safe proof, then re-materialize candidates.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G15",
+      "status": "open",
+      "missing": "The only shipped declarative API destination transport is GitHub's fixed `issue_label_destination`; a general provider-action destination route cannot be declared honestly for the other 550 bundles.",
+      "connectors": ["all connectors without sync_transport.json"],
+      "evidence": "internal/app/transport_dispatch.go recognizes the fixed issue-label destination; internal/connectors/defs/github/sync_transport.json is the only declarative API destination reference, while the baseline has 2 transport files total.",
+      "smallest_fix": "Add a definition-selected, plan-preview-approval-bound declarative API destination executor and conformance contract for named write actions; then author each connector's exact source/destination binding locally.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    }
+  ]
+}
