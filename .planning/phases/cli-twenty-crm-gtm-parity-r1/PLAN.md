@@ -63,6 +63,41 @@
 5. Record the seven-surface ledger, the exact PR dependency, command results,
    and the API read-back of PR #4298's base.
 
+## Captain hard certification gate — dynamic workspace inventory
+
+Static Twenty REST declarations remain necessary provenance but are not final
+certification evidence. After the non-empty credential foundation and final
+#4304/#4305 heads are integrated, dynamically inventory the existing dedicated
+Twenty workspace through documented authenticated provider surfaces. For every
+provider-defined object, field, operation, and executable application command
+that results from that inventory, record its provider source/schema trace and
+reconcile it to the checked-in declaration, generated CLI command, help/manual,
+and website documentation.
+
+The reconciliation ledger has these six mandatory capability surfaces:
+
+1. ETL source reads.
+2. Reverse-ETL typed actions.
+3. Direct reads.
+4. Direct writes.
+5. Binary downloads.
+6. Binary uploads.
+
+Every discovered operation must be enabled and remain reachable through the
+installed CLI and documentation surface, or be represented as an exact,
+provider-sourced capability fact where the provider has no operation for that
+surface. Scope, tier, privilege, destructive classification, confirmation, and
+authorization are execution metadata only; none may demote, hide, or disable a
+provider operation. The binary ledger must distinguish documented transfer
+operations from attachment JSON metadata and must never infer a transfer route.
+
+The live gate uses only records/resources created by this lane. It must prove
+the supported CRUD/application paths with independent provider read-back and
+cleanup, preserving ordinary provider output fields in retained local evidence
+while continuing to exclude credentials, transport secrets, session material,
+and identifiers from durable artifacts. No merge-ready claim is permitted until
+the dynamic inventory and all applicable six-surface proofs are complete.
+
 ## TDD slices
 
 1. Add a Twenty-local source contract test that fails while the recovered bundle
@@ -92,6 +127,14 @@
    key guards plus boolean-only self-host configuration. If the header path is
    connector-owned, add a failing focused test then fix it locally; if it is a
    shared-engine gap, record the provider-neutral dependency and stop.
+8. After the shared credential-input and final destination foundations publish,
+   run the captain hard gate: dynamically inventory the disposable Twenty
+   workspace schema, attach a provider source/schema trace for every discovered
+   operation, and reconcile all six capability surfaces to declarations,
+   executable CLI paths, help/manual output, and website docs. Exercise every
+   applicable supported CRUD/application command against lane-owned records
+   with independent provider read-back and cleanup. Safety/tier/scope metadata
+   governs execution but never removes a discovered provider operation.
 
 ## CLI/docs parity checklist
 
