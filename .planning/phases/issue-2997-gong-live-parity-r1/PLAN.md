@@ -82,6 +82,11 @@ credential reference for live certification. It is not safe to invent or request
 5. Run focused gates, repository static gates, generated artifacts, connector boundary, full
    verification where the command timeout permits, a source/diff review, and the no-mistakes
    pipeline when firstmate authorizes its final gate.
+6. Keep Gong's shared-foundation blockers in the Batch 2/3 machine-readable ledger at
+   `.planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json`.
+   Its stable gap rows retain the exact provider source, captured revision/hash, F2/F4 owner,
+   fan-out, status, and closure commands. An open row makes its operation non-enabled for
+   merge-ready accounting; it is not a connector-local exemption.
 
 ## Captain hard certification gate
 

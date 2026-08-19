@@ -10,6 +10,7 @@ const connectors = ["grafana", "trello", "slack", "n8n", "google-calendar", "gma
 const classes = new Set(["direct_read", "direct_write", "etl", "reverse_etl", "binary_read", "binary_write"]);
 const required = ["method", "path", "parity_class", "api_surface", "source", "state", "foundation", "rejection", "declaration"];
 const baselineRevision = "acb85dc03";
+const missingFoundationLedgerGenerator = path.join(phase, "traces", "generate-missing-foundation-gaps.mjs");
 
 function file(connector, name) {
   return path.join(root, "internal", "connectors", "defs", connector, "sources", name);
@@ -87,6 +88,10 @@ for (const connector of connectors) {
 }
 
 const total = checks.reduce((sum, check) => sum + check.operations_found, 0);
+// The portfolio gap ledger is generated solely from these captured locks and
+// dispositions. Make it part of the mapping gate so a later map edit cannot
+// silently drop a shared-runtime blocker from its fan-out or rollups.
+execFileSync(process.execPath, [missingFoundationLedgerGenerator, "--check"], { cwd: root, stdio: "pipe" });
 const markdown = [
   "# Source-accounted parity map — batches 2 and 3",
   "",

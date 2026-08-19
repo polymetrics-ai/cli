@@ -24,6 +24,10 @@
   locked by the focused Gong definition test. Multipart fixture replay remains outside this slice:
   the generic fixture approval helper cannot bind the payload digests required before a multipart
   request. Firstmate accepted that as `cli-closed-operation-runtime-r1` F2/F4 work.
+- The captain-required Batch 2/3 missing-foundation ledger records all three source-traced Gong
+  multipart operations under the deduplicated F4 gap with their source hashes, exact conformance
+  failure, owner, shared fan-out, and closure commands. They are not enabled for merge-ready
+  accounting while that gap remains open.
 
 ## Green evidence to record during execution
 

@@ -42,6 +42,10 @@
   credential reference, supported CRUD/application commands, cleanup, and bounded non-secret
   request/result fingerprints.
 - [ ] No merge-ready claim appears in PR #3552 until every applicable item above is green.
+- [x] Captain missing-foundation ledger is generated and drift-checked from Batch 2/3 source maps:
+  `.planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json`.
+  Gong's three multipart source operations are open F4 rows, non-enabled for merge-ready
+  accounting, and fan out with Xero without a connector-specific workaround.
 
 ## Live certification hold
 

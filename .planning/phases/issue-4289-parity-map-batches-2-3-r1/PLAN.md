@@ -15,6 +15,7 @@
 | Every selected connector has auditable public provenance | live | Its source lock has the official artifact URL, capture date, SHA-256, byte count, `counts.total`, per-kind/method counts, and explicit `coverage_confidence` with a basis. The local verifier checks that captured inventory against the ledger without refetching mutable provider pages or discovery documents. A partial source is a hold, not a complete-map claim. |
 | Every documented operation is accounted for exactly once | live | The integrity check proves source-inventory count equals disposition count and API-surface bindings, while primary parity-class totals equal that denominator. |
 | Disabled operations have an honest reason | live | The verifier rejects missing state/rejection fields, treats un-authored contracts as `declaration-pending`, and requires file/line plus a minimal change for every `foundation-gap`. |
+| Shared missing foundations remain source-traced delivery blockers | live | `traces/missing-foundation-gaps.json` emits one open row per exact provider operation, deduplicates stable gap IDs into cross-connector fan-out, and reports batch/portfolio rollups. An open row is `enabled: false` and `merge_ready_eligible: false`; it is never hidden as disabled or `not_applicable`. |
 | No credentialed or live provider execution is claimed | live | Every ledger reports `live_certification: pending`; all source artifacts are public descriptions and all validation is local structural/fixture evidence. |
 
 ## Scope and Ownership
@@ -64,3 +65,13 @@ Captain review found a fleet-wide defect: a source lock without `counts.total`, 
 ## Held-PR PayPal and Root-Count Repair — 2026-08-19
 
 **Red:** the initial `paypal-transaction` pin was the two-operation Transaction Search document, not the complete official PayPal REST specification corpus; batch-3 locks also omitted the root `counts.total` that makes a captured denominator auditable. **Green:** the generator now pins the official `paypal-rest-api-specifications` archive and parses all thirteen `openapi/*.json` documents, yielding 115 exact source operations and eight documented deletes. Its generated lock and every batch-3 lock carry the Batch-2-shaped root counts object (`rest`, `graphql_query`, `graphql_mutation`, `total`), while retaining detailed REST method counts. The integrity verifier rejects a missing root total as well as a malformed nested REST count. This repair changes no transport binding or reverse-ETL declaration.
+
+## Captain missing-foundation ledger — 2026-08-20
+
+The map now emits `traces/missing-foundation-gaps.json` from the same immutable source locks and
+dispositions. Every row carries a stable gap ID, exact source operation and source revision/hash,
+affected surfaces, recorded runtime/validator evidence, provider-neutral owner, status, and exact
+closure commands. `fanout` deduplicates the shared gap by ID while retaining every affected
+connector/operation; batch and portfolio rollups remain blockers, not completion percentages.
+`verify-parity-maps.mjs` runs the ledger's `--check` mode, so changing a lock, disposition, or
+Gong multipart action without regenerating the evidence fails the mapping gate.
