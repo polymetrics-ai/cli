@@ -2,11 +2,12 @@
 
 ## Verdict
 
-**Passed for the bounded declarative-surface batch.** Eight evidence-qualified
-connectors were materialized and gated; twelve candidates were skipped with an
-exact provider-artifact reason. This verifies declaration and preflight only.
-It does not certify live provider behavior or claim ETL/reverse-ETL transport
-where the connector has no executable transport declaration.
+**Passed for the bounded declarative-surface batch and parity-accounting
+revision.** Eight evidence-qualified connectors were materialized and gated;
+twelve candidates were skipped with an exact provider-artifact reason. This
+verifies declaration, preflight, and exhaustive non-delivery accounting only.
+It does not certify live provider behavior, claim ETL/reverse-ETL transport, or
+claim that any connector has met the >90% documented-operation parity bar.
 
 ## Batch evidence
 
@@ -26,6 +27,16 @@ where the connector has no executable transport declaration.
   [`traces/batch-001-gate.json`](traces/batch-001-gate.json).
 - The durable progress ledger has 552 unique rows. Batch 1 is 8 `gated`, 12
   `skipped`, and 532 `pending`; its explicit resume pointer starts batch 2.
+- The captain parity-bar revision measures 99 delivered operations of 780
+  documented batch-1 operations (12.69% across measured candidates). All 20
+  candidates have a coverage percentage; all 552 connectors have an explicit
+  coverage value or `null`-while-unmeasured. No candidate is over 90%.
+- [`docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-rejections.json`](../../../docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-rejections.json)
+  records all 681 undelivered operations: 282 exact provider method/path rows
+  and 12 exact source-ledger rows where materialization could not enumerate the
+  operation inventory. Each record has a fixed-vocabulary reason, evidence,
+  recoverability, and recovery path. G17--G19 are added to the foundation log;
+  G13 is resolved by `31bfe62eb`.
 
 ## Checks
 
@@ -49,6 +60,7 @@ where the connector has no executable transport declaration.
 | `make tidy-check`, `make lint`, `make docs-check-no-build`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connector-boundary`, `make release-workflow-check` | pass |
 | `make verify` | pass; full repository test, generated-artifact, snapshot, boundary, canon, and release gates |
 | `git diff --check` and 552-row ledger invariant | pass |
+| `jq` coverage/rejection invariant (all 552 coverage fields; each measured connector has documented = delivered + rejected; 99 + 681 = 780; all rejection reasons in the fixed vocabulary; every foundation-gap rejection names an open gap) | pass |
 
 ## CLI/help/manual/website parity
 
@@ -66,7 +78,7 @@ where the connector has no executable transport declaration.
 
 - All eight accepted records still truthfully declare no five-class transport
   coverage: their legacy stream/operation metadata is present, but no valid
-  `sync_transport.json` can be invented. G12--G16 in the foundation log name
-  the bounded fixes required before promotion.
+  `sync_transport.json` can be invented. G12, G14--G19 in the foundation log
+  name the bounded fixes required before promotion; G13 is resolved on main.
 - No credentials, provider API calls, reverse execution, or live certification
   were used. `gated` is not a certification or live-provider-success claim.

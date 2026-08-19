@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "sweep": "cli-surface-sweep-batches-r1",
   "issue": 4273,
-  "updated_at": "2026-08-19T00:00:00Z",
+  "updated_at": "2026-08-19T10:13:17Z",
   "gaps": [
     {
       "id": "G12",
@@ -16,11 +16,11 @@
     },
     {
       "id": "G13",
-      "status": "coordinating",
+      "status": "resolved",
       "missing": "Operation-backed DELETE commands did not carry the explicit write action kind required for correct direct-write classification.",
       "connectors": ["all operation-backed DELETE command candidates"],
-      "evidence": "Captain launch brief identifies active lane `cli-delete-action-kind-fix-r1`.",
-      "smallest_fix": "Land the separate action-kind foundation change, then regenerate affected connector metadata through the existing surface-sync pipeline.",
+      "evidence": "Resolved by `31bfe62eba72ea906a4fa152027db6af1f77908b` (`fix(certification): derive operation write action kinds (#4272)`); the sweep parent and batch-1 child were rebased onto that mainline commit.",
+      "smallest_fix": "Complete; regenerate affected connector metadata through the existing surface-sync pipeline when a batch contains DELETE operations.",
       "owner": "cli-delete-action-kind-fix-r1",
       "do_not_patch_in_this_lane": true
     },
@@ -51,6 +51,36 @@
       "connectors": ["all connector bundles with stale direct-read ledger classifications"],
       "evidence": "2026-08-19 `go run ./cmd/connectorgen surface-reconcile --check` reported 3,584 rows needing reclassification (0 covered, 3,584 blocked, 5,507 refused); it reported 0 covered changes for every accepted batch-1 survivor.",
       "smallest_fix": "Add a manifest- or connector-scoped reconcile mode that preserves the same deterministic classifier and emits a per-batch report, then rerun it for accepted candidates only.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G17",
+      "status": "open",
+      "missing": "The batch materializer has no declarative provider-callback/event operation shape, so it cannot inventory DocuSeal's top-level documented webhook operations alongside request paths.",
+      "connectors": ["docuseal", "any provider artifact whose documented callbacks are not request paths"],
+      "evidence": "Batch-1 materialize dropped DocuSeal at `artifact_inventory_unknown`: its 11 named top-level webhook callbacks cannot be represented as provider request paths. See `docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-rejections.json`.",
+      "smallest_fix": "Add a declarative provider-callback/event operation shape and coverage projection that distinguishes inbound events from callable request operations, with materializer conformance coverage.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G18",
+      "status": "open",
+      "missing": "The declarative engine has no bounded Server-Sent Events source executor, leaving Alpaca Broker account, journal, trade, and transfer status subscriptions unrepresentable.",
+      "connectors": ["alpaca-broker-api"],
+      "evidence": "Four `GET /v1/events/*` endpoints are recorded as persistent SSE subscriptions in the batch-1 rejection list and cannot be expressed by the poll-style HTTP source dialect.",
+      "smallest_fix": "Add a bounded declarative SSE source executor with cancellation, checkpointing, and commandrunner conformance coverage; then author the four connector-local subscription declarations.",
+      "owner": "foundation",
+      "do_not_patch_in_this_lane": true
+    },
+    {
+      "id": "G19",
+      "status": "open",
+      "missing": "The declarative operation schema cannot express several required caller-supplied nested query/body inputs or bounded fan-out plans, including DefiLlama coin batches, Alpaca's bounded corporate-action date window, and Pingdom transaction-check scripts.",
+      "connectors": ["defillama", "alpaca-broker-api", "pingdom"],
+      "evidence": "Eight exact operations are marked `foundation-gap` in `docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-rejections.json`; each generated operation reason identifies the absent parameter/body or fan-out expression.",
+      "smallest_fix": "Extend the declarative parameter/body schema and bounded fan-out contract with validation and conformance coverage, then add operation-specific connector declarations.",
       "owner": "foundation",
       "do_not_patch_in_this_lane": true
     }
