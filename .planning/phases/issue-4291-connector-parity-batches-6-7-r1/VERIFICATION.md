@@ -314,3 +314,18 @@ two open) with one provenance-rich row per affected operation, explicit per-batc
 fan-out, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
 `merge_ready: false`; `update_customer` and all five Help Scout v3 direct-read rows with open
 foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
+# Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
+
+- **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named
+  `generic-typed-destination-executor` even though foundation
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` provides the declaration-driven destination
+  factory. Salesloft, Copper, Klaviyo, Intercom, and Freshdesk have no typed `writes.json`
+  action, so the old shared foundation gap was false evidence.
+- **GREEN:** The five connector-owned disposition ledgers now give every direct write explicit
+  `declaration-pending` reverse-ETL status, name the missing typed action/CLI contract, and
+  declare the destination transport work as connector-owned. No safety, privilege, destructive,
+  or certification condition was used to exclude an operation.
+- **ASSERTION:** `jq` verifies no `generic-typed-destination-executor` record remains in those
+  five ledgers and no direct-write reverse-ETL state differs from `declaration-pending`. The
+  operation evidence retains exactly 612 stale rows in the five untouched ledgers as the next
+  bounded increment, plus five Help Scout route and one action-specific source-binding open rows.
