@@ -30,7 +30,7 @@
 | --- | --- | --- |
 | Every connector has a reproducible public-source lock | live | The lock records URL, SHA-256, byte count, capture time, method counts, and every source operation; its retained source bytes hash to the recorded value. |
 | Every documented operation has one map row and parity class | live | A JSON assertion compares unique source IDs from each lock, crosswalk, and ledger; all counts and six-class totals agree exactly. |
-| Missing declaration work is not misreported as an engine gap | live | Each disabled row names `declaration-pending` unless it carries concrete engine file/line evidence; the reverse-ETL rows all use the locked generic-destination gap. |
+| Missing declaration work is not misreported as an engine gap | live | Each disabled row names `declaration-pending` unless it carries concrete engine file/line evidence; direct-write rows carry the locked generic-destination gap only in their reverse-ETL eligibility attribute. |
 | Generated bundle metadata remains valid and synchronized | live | `connectorgen validate` accepts each changed bundle and `surface-sync --check` reports no drift. |
 
 ## Scope guard
@@ -47,9 +47,9 @@ or transport binding is guessed or synthesized.
 | Class | Mapping rule |
 | --- | --- |
 | Direct read | Existing runnable `rest_read` binding is enabled; a missing local contract/command is `declaration-pending`. |
-| Direct write | Existing typed `rest_write` binding, including documented DELETE, is enabled; missing connector-local work is `declaration-pending`. |
+| Direct write | An existing typed write action, including documented DELETE, is enabled; missing connector-local work is `declaration-pending`. Its `reverse_etl_eligibility` attribute is independently assessed and does not alter this primary class. |
 | ETL | Enabled only for existing stream/definition-owned declarative source transport evidence; otherwise retain the exact local declaration state. |
-| Reverse ETL | `foundation-gap` `generic-typed-destination-executor`, evidence `internal/app/issue_label_warehouse_transport.go:85-95`, with the locked minimal change from `CONTEXT.md`. |
+| Reverse ETL | Not a primary endpoint class. Every `direct_write` row records a `reverse_etl_eligibility` attribute: currently `foundation-gap` `generic-typed-destination-executor`, evidence `internal/app/issue_label_warehouse_transport.go:85-95`, with the locked minimal change from `CONTEXT.md`. |
 | Binary read/write | Enabled only for a bounded source-backed binary contract; otherwise disabled as `declaration-pending` or a source-backed schema/media limitation. |
 
 ## TDD implementation slices
@@ -59,9 +59,10 @@ or transport binding is guessed or synthesized.
 1. Assert that all ten target disposition ledgers, locks, and crosswalks exist.
    It must fail before production artifacts are added.
 2. Assert that every source operation is represented exactly once, that all
-   class totals sum to the source total, and that reverse-ETL rows retain the
-   locked generic-destination foundation gap. It must fail before the batch
-   map is complete.
+   class totals sum to the source total, that typed write actions are classified
+   `direct_write`, and that each direct-write row retains the locked
+   generic-destination gap in its reverse-ETL eligibility attribute. It must
+   fail before the batch map is complete.
 
 ### Green — source-backed mapping
 

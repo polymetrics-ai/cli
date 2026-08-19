@@ -14,8 +14,11 @@
   absence of a typed operation, command, or CLI binding is `declaration-pending`.
   Elevated permission is enabled runtime metadata, never a rejection reason.
 - ETL is declaration-capable only where the connector satisfies the definition
-  source contract. Reverse ETL is currently a foundation gap for every mapped
-  connector: `generic-typed-destination-executor`, evidenced by
+  source contract. A typed write action is a `direct_write` primary parity
+  class, including DELETE; it is never itself reverse ETL. Reverse-ETL is an
+  eligibility attribute on each direct-write operation. That attribute is
+  currently a foundation gap for every connector:
+  `generic-typed-destination-executor`, evidenced by
   `internal/app/issue_label_warehouse_transport.go:85-95` at `acb85dc03`.
   The required minimal change is: register a connector-neutral typed destination
   `DefinitionFactory` selected by the definition, with per-connector evidence,

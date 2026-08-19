@@ -5,8 +5,10 @@
 - [ ] Per-batch red map-integrity assertion fails before its source artifacts
   are added, then passes after the complete batch map is present.
 - [ ] JSON integrity assertion: source lock, crosswalk, and disposition IDs
-  agree exactly; every row has one class and class totals agree; every
-  reverse-ETL disposition uses the locked generic-destination foundation gap.
+  agree exactly; every row has one primary class and class totals agree; typed
+  write actions are `direct_write`; every direct-write row carries the locked
+  generic-destination foundation gap only in its reverse-ETL eligibility
+  attribute.
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/<connector> --json`
   for each changed connector.
 - [ ] `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`.
