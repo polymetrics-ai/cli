@@ -1,0 +1,29 @@
+{
+  "schema_version": 3,
+  "connector": "eventbrite",
+  "state": "skipped",
+  "captured_at": "2026-08-19T16:46:27.084Z",
+  "skip": {
+    "attempted_url": "https://www.eventbrite.com/platform/api",
+    "reason": "no-public-api-description",
+    "retrieval_method": "browser",
+    "detail": "The official rendered reference was requested in Chrome without credentials and returned the provider response {\"message\":\"Unauthorized\"} rather than a published API reference. Per issue #4292 source-lock rule, no source pin or operation ledger is fabricated."
+  },
+  "rest": {
+    "representation": "unavailable",
+    "retrieval_method": "browser",
+    "documents": [],
+    "counts": {
+      "total": null,
+      "by_method": {},
+      "by_kind": {
+        "rest": null
+      }
+    },
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The official rendered reference was requested in Chrome without credentials and returned the provider response {\"message\":\"Unauthorized\"} rather than a published API reference. Per issue #4292 source-lock rule, no source pin or operation ledger is fabricated."
+    },
+    "operations": []
+  }
+}

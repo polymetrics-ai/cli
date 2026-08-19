@@ -1,336 +1,651 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "calendly",
-  "captured_at": "2026-08-19T15:30:48.422Z",
+  "captured_at": "2026-08-19T16:45:23.176Z",
   "rest": {
-    "source_url": "https://developer.calendly.com/api-docs",
-    "requested_url": "https://developer.calendly.com/api-docs",
-    "sha256": "fd940783940c2cae6e7fe9b7e6feb96cb465cdbcb9940b2b5977efa6e59bcf74",
-    "bytes": 298140,
-    "content_type": "text/html",
-    "retrieval_method": "http",
-    "representation": "published-document",
-    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
-    "operation_counts": {
-      "DELETE": 3,
-      "GET": 25,
-      "POST": 7
+    "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+    "representation": "machine-readable-spec",
+    "documents": [
+      {
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "sha256": "d319cd0723b0aeefc986238792f37911d4dd10977777d90af88b320b9b029f01",
+        "bytes": 493981,
+        "content_type": "text/x-yaml; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "machine-readable-spec"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "b7a67e2a5c5e920bb346915710667cec4144e7c7ad0bac8f046397e86d922fe0",
+      "bytes": 493981
+    },
+    "counts": {
+      "total": 61,
+      "by_method": {
+        "DELETE": 6,
+        "GET": 39,
+        "PATCH": 4,
+        "POST": 12
+      },
+      "by_kind": {
+        "rest": 61
+      }
+    },
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "Calendly's official developer site publishes this Scheduling API OpenAPI document through its Stoplight project; every HTTP path item is extracted."
     },
     "operations": [
       {
-        "id": "calendly.rest.get-scheduled-events-api-surface-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/scheduled_events",
-        "operation_id": "calendly.rest.get-scheduled-events-api-surface-1",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]"
-      },
-      {
-        "id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
+        "id": "calendly.rest.create-contact-source-1",
         "protocol": "rest",
         "method": "POST",
-        "path": "/scheduled_events/{uuid}/cancellation",
-        "operation_id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
+        "path": "/contacts",
+        "operation_id": "create-contact",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]"
+        "source_location": "paths[\"/contacts\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.get-event-types-api-surface-3",
+        "id": "calendly.rest.create-event-type-source-1",
         "protocol": "rest",
-        "method": "GET",
+        "method": "POST",
         "path": "/event_types",
-        "operation_id": "calendly.rest.get-event-types-api-surface-3",
+        "operation_id": "create-event-type",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]"
+        "source_location": "paths[\"/event_types\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.get-organization-memberships-api-surface-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/organization_memberships",
-        "operation_id": "calendly.rest.get-organization-memberships-api-surface-4",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]"
-      },
-      {
-        "id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/organization_memberships/{uuid}",
-        "operation_id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]"
-      },
-      {
-        "id": "calendly.rest.get-groups-api-surface-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/groups",
-        "operation_id": "calendly.rest.get-groups-api-surface-6",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]"
-      },
-      {
-        "id": "calendly.rest.get-users-me-api-surface-7",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/me",
-        "operation_id": "calendly.rest.get-users-me-api-surface-7",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]"
-      },
-      {
-        "id": "calendly.rest.get-routing-forms-api-surface-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/routing_forms",
-        "operation_id": "calendly.rest.get-routing-forms-api-surface-8",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]"
-      },
-      {
-        "id": "calendly.rest.get-routing-form-submissions-api-surface-9",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/routing_form_submissions",
-        "operation_id": "calendly.rest.get-routing-form-submissions-api-surface-9",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]"
-      },
-      {
-        "id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/webhook_subscriptions",
-        "operation_id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]"
-      },
-      {
-        "id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
+        "id": "calendly.rest.create-invitee-no-show-source-1",
         "protocol": "rest",
         "method": "POST",
-        "path": "/webhook_subscriptions",
-        "operation_id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
+        "path": "/invitee_no_shows",
+        "operation_id": "create-invitee-no-show",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]"
+        "source_location": "paths[\"/invitee_no_shows\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/webhook_subscriptions/{uuid}",
-        "operation_id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]"
-      },
-      {
-        "id": "calendly.rest.get-user-availability-schedules-api-surface-13",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user_availability_schedules",
-        "operation_id": "calendly.rest.get-user-availability-schedules-api-surface-13",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[12]"
-      },
-      {
-        "id": "calendly.rest.get-group-relationships-api-surface-14",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/group_relationships",
-        "operation_id": "calendly.rest.get-group-relationships-api-surface-14",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[13]"
-      },
-      {
-        "id": "calendly.rest.get-activity-log-entries-api-surface-15",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/activity_log_entries",
-        "operation_id": "calendly.rest.get-activity-log-entries-api-surface-15",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]"
-      },
-      {
-        "id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/scheduled_events/{event_uuid}/invitees",
-        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]"
-      },
-      {
-        "id": "calendly.rest.post-invitees-api-surface-17",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/invitees",
-        "operation_id": "calendly.rest.post-invitees-api-surface-17",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]"
-      },
-      {
-        "id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/organizations/{uuid}/invitations",
-        "operation_id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]"
-      },
-      {
-        "id": "calendly.rest.post-one-off-event-types-api-surface-19",
+        "id": "calendly.rest.create-one-off-event-type-source-1",
         "protocol": "rest",
         "method": "POST",
         "path": "/one_off_event_types",
-        "operation_id": "calendly.rest.post-one-off-event-types-api-surface-19",
+        "operation_id": "create-one-off-event-type",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]"
+        "source_location": "paths[\"/one_off_event_types\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.post-shares-api-surface-20",
+        "id": "calendly.rest.create-organization-invitation-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organizations/{uuid}/invitations",
+        "operation_id": "create-organization-invitation",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{uuid}/invitations\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.create-scheduled-event-cancellation-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduled_events/{uuid}/cancellation",
+        "operation_id": "create-scheduled-event-cancellation",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduled_events/{uuid}/cancellation\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.create-scheduling-link-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduling_links",
+        "operation_id": "create-scheduling-link",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduling_links\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.create-share-source-1",
         "protocol": "rest",
         "method": "POST",
         "path": "/shares",
-        "operation_id": "calendly.rest.post-shares-api-surface-20",
+        "operation_id": "create-share",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]"
+        "source_location": "paths[\"/shares\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
+        "id": "calendly.rest.createwebhooks-source-1",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/scheduled_events/{uuid}",
-        "operation_id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
+        "method": "POST",
+        "path": "/webhook_subscriptions",
+        "operation_id": "createwebhooks",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]"
+        "source_location": "paths[\"/webhook_subscriptions\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.get-event-types-uuid-api-surface-22",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/event_types/{uuid}",
-        "operation_id": "calendly.rest.get-event-types-uuid-api-surface-22",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]"
-      },
-      {
-        "id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/organization_memberships/{uuid}",
-        "operation_id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[22]"
-      },
-      {
-        "id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/webhook_subscriptions/{uuid}",
-        "operation_id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[23]"
-      },
-      {
-        "id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user_availability_schedules/{uuid}",
-        "operation_id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[24]"
-      },
-      {
-        "id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/routing_forms/{uuid}",
-        "operation_id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[25]"
-      },
-      {
-        "id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/routing_form_submissions/{uuid}",
-        "operation_id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[26]"
-      },
-      {
-        "id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
-        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[27]"
-      },
-      {
-        "id": "calendly.rest.get-users-uuid-api-surface-29",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/{uuid}",
-        "operation_id": "calendly.rest.get-users-uuid-api-surface-29",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[28]"
-      },
-      {
-        "id": "calendly.rest.get-event-type-available-times-api-surface-30",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/event_type_available_times",
-        "operation_id": "calendly.rest.get-event-type-available-times-api-surface-30",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[29]"
-      },
-      {
-        "id": "calendly.rest.get-user-busy-times-api-surface-31",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user_busy_times",
-        "operation_id": "calendly.rest.get-user-busy-times-api-surface-31",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[30]"
-      },
-      {
-        "id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/organizations/{uuid}/invitations",
-        "operation_id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[31]"
-      },
-      {
-        "id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
-        "operation_id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[32]"
-      },
-      {
-        "id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
+        "id": "calendly.rest.delete-contacts-uuid-source-1",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
-        "operation_id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
+        "path": "/contacts/{uuid}",
+        "operation_id": "delete-contacts-uuid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[33]"
+        "source_location": "paths[\"/contacts/{uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       },
       {
-        "id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
+        "id": "calendly.rest.delete-invitee-data-source-1",
         "protocol": "rest",
         "method": "POST",
         "path": "/data_compliance/deletion/invitees",
-        "operation_id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
+        "operation_id": "delete-invitee-data",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[34]"
+        "source_location": "paths[\"/data_compliance/deletion/invitees\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.delete-invitee-no-show-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/invitee_no_shows/{uuid}",
+        "operation_id": "delete-invitee-no-show",
+        "deprecated": false,
+        "source_location": "paths[\"/invitee_no_shows/{uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.delete-meeting-recaps-uuid-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/meeting_recaps/{uuid}",
+        "operation_id": "delete-meeting-recaps-uuid",
+        "deprecated": false,
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.delete-organization-membership-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organization_memberships/{uuid}",
+        "operation_id": "delete-organization-membership",
+        "deprecated": false,
+        "source_location": "paths[\"/organization_memberships/{uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.delete-scheduled-event-data-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/data_compliance/deletion/events",
+        "operation_id": "delete-scheduled-event-data",
+        "deprecated": false,
+        "source_location": "paths[\"/data_compliance/deletion/events\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.delete-webhook-subscription-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhook_subscriptions/{webhook_uuid}",
+        "operation_id": "delete-webhook-subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-contact-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts/{uuid}",
+        "operation_id": "get-contact",
+        "deprecated": false,
+        "source_location": "paths[\"/contacts/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-current-user-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/me",
+        "operation_id": "get-current-user",
+        "deprecated": false,
+        "source_location": "paths[\"/users/me\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-event-type-availability-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_type_availability_schedules",
+        "operation_id": "get-event-type-availability",
+        "deprecated": false,
+        "source_location": "paths[\"/event_type_availability_schedules\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-event-type-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_types/{uuid}",
+        "operation_id": "get-event-type",
+        "deprecated": false,
+        "source_location": "paths[\"/event_types/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-group-relationship-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/group_relationships/{uuid}",
+        "operation_id": "get-group-relationship",
+        "deprecated": false,
+        "source_location": "paths[\"/group_relationships/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-group-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups/{uuid}",
+        "operation_id": "get-group",
+        "deprecated": false,
+        "source_location": "paths[\"/groups/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-groups-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups",
+        "operation_id": "get-groups",
+        "deprecated": false,
+        "source_location": "paths[\"/groups\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-invitee-no-show-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/invitee_no_shows/{uuid}",
+        "operation_id": "get-invitee-no-show",
+        "deprecated": false,
+        "source_location": "paths[\"/invitee_no_shows/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-meeting-recaps-uuid-recap-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/meeting_recaps/{uuid}",
+        "operation_id": "get-meeting-recaps-uuid-recap",
+        "deprecated": false,
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-organization-invitation-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org_uuid}/invitations/{uuid}",
+        "operation_id": "get-organization-invitation",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-organization-membership-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization_memberships/{uuid}",
+        "operation_id": "get-organization-membership",
+        "deprecated": false,
+        "source_location": "paths[\"/organization_memberships/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-organization-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{uuid}",
+        "operation_id": "get-organization",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-outgoing-communications-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outgoing_communications",
+        "operation_id": "get-outgoing-communications",
+        "deprecated": false,
+        "source_location": "paths[\"/outgoing_communications\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-routing-form-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_forms/{uuid}",
+        "operation_id": "get-routing-form",
+        "deprecated": false,
+        "source_location": "paths[\"/routing_forms/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-routing-form-submission-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_form_submissions/{uuid}",
+        "operation_id": "get-routing-form-submission",
+        "deprecated": false,
+        "source_location": "paths[\"/routing_form_submissions/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-sample-webhook-data-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sample_webhook_data",
+        "operation_id": "get-sample-webhook-data",
+        "deprecated": false,
+        "source_location": "paths[\"/sample_webhook_data\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-scheduled-event-invitees-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+        "operation_id": "get-scheduled-event-invitees",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduled_events/{event_uuid}/invitees/{invitee_uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-scheduled-event-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{uuid}",
+        "operation_id": "get-scheduled-event",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduled_events/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-transcript-meeting-recaps-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/meeting_recaps/{uuid}/transcript",
+        "operation_id": "get-transcript-meeting-recaps",
+        "deprecated": false,
+        "source_location": "paths[\"/meeting_recaps/{uuid}/transcript\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-user-availability-schedule-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_availability_schedules/{uuid}",
+        "operation_id": "get-user-availability-schedule",
+        "deprecated": false,
+        "source_location": "paths[\"/user_availability_schedules/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-user-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{uuid}",
+        "operation_id": "get-user",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.get-webhook-subscription-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook_subscriptions/{webhook_uuid}",
+        "operation_id": "get-webhook-subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-activity-log-entries-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity_log_entries",
+        "operation_id": "list-activity-log-entries",
+        "deprecated": false,
+        "source_location": "paths[\"/activity_log_entries\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-contacts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts",
+        "operation_id": "list-contacts",
+        "deprecated": false,
+        "source_location": "paths[\"/contacts\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-event-invitees-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{uuid}/invitees",
+        "operation_id": "list-event-invitees",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduled_events/{uuid}/invitees\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-event-type-available-times-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_type_available_times",
+        "operation_id": "list-event-type-available-times",
+        "deprecated": false,
+        "source_location": "paths[\"/event_type_available_times\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-event-type-memberships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_type_memberships",
+        "operation_id": "list-event-type-memberships",
+        "deprecated": false,
+        "source_location": "paths[\"/event_type_memberships\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-event-types-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_types",
+        "operation_id": "list-event-types",
+        "deprecated": false,
+        "source_location": "paths[\"/event_types\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-group-relationships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/group_relationships",
+        "operation_id": "list-group-relationships",
+        "deprecated": false,
+        "source_location": "paths[\"/group_relationships\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-meeting-recaps-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/meeting_recaps",
+        "operation_id": "list-meeting-recaps",
+        "deprecated": false,
+        "source_location": "paths[\"/meeting_recaps\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-organization-invitations-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{uuid}/invitations",
+        "operation_id": "list-organization-invitations",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{uuid}/invitations\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-organization-memberships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization_memberships",
+        "operation_id": "list-organization-memberships",
+        "deprecated": false,
+        "source_location": "paths[\"/organization_memberships\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-routing-form-submissions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_form_submissions",
+        "operation_id": "list-routing-form-submissions",
+        "deprecated": false,
+        "source_location": "paths[\"/routing_form_submissions\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-routing-forms-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_forms",
+        "operation_id": "list-routing-forms",
+        "deprecated": false,
+        "source_location": "paths[\"/routing_forms\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-scheduled-events-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events",
+        "operation_id": "list-scheduled-events",
+        "deprecated": false,
+        "source_location": "paths[\"/scheduled_events\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-user-availability-schedules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_availability_schedules",
+        "operation_id": "list-user-availability-schedules",
+        "deprecated": false,
+        "source_location": "paths[\"/user_availability_schedules\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-user-busy-times-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_busy_times",
+        "operation_id": "list-user-busy-times",
+        "deprecated": false,
+        "source_location": "paths[\"/user_busy_times\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-user-locations-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/locations",
+        "operation_id": "list-user-locations",
+        "deprecated": false,
+        "source_location": "paths[\"/locations\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.list-webhook-subscriptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook_subscriptions",
+        "operation_id": "list-webhook-subscriptions",
+        "deprecated": false,
+        "source_location": "paths[\"/webhook_subscriptions\"].get",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.patch-contacts-uuid-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/contacts/{uuid}",
+        "operation_id": "patch-contacts-uuid",
+        "deprecated": false,
+        "source_location": "paths[\"/contacts/{uuid}\"].patch",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.post-invitee-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/invitees",
+        "operation_id": "post-invitee",
+        "deprecated": false,
+        "source_location": "paths[\"/invitees\"].post",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.revoke-organization-invitation-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organizations/{org_uuid}/invitations/{uuid}",
+        "operation_id": "revoke-organization-invitation",
+        "deprecated": false,
+        "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].delete",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.update-event-type-availability-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/event_type_availability_schedules",
+        "operation_id": "update-event-type-availability",
+        "deprecated": false,
+        "source_location": "paths[\"/event_type_availability_schedules\"].patch",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.update-event-type-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/event_types/{uuid}",
+        "operation_id": "update-event-type",
+        "deprecated": false,
+        "source_location": "paths[\"/event_types/{uuid}\"].patch",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+      },
+      {
+        "id": "calendly.rest.update-meeting-recaps-uuid-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/meeting_recaps/{uuid}",
+        "operation_id": "update-meeting-recaps-uuid",
+        "deprecated": false,
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].patch",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
       }
     ]
   }

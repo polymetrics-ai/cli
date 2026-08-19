@@ -1,0 +1,3563 @@
+{
+  "schema_version": 2,
+  "connector": "recharge",
+  "source_lock": "sources/recharge-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:46:23.237Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-addresses-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-66517",
+      "operation_id": "delete-addresses-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/addresses/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/addresses/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-bundle-selections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-102505",
+      "operation_id": "delete-bundle-selections-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/bundle_selections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/bundle_selections/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-collections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272509",
+      "operation_id": "delete-collections-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/collections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/collections/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-collections-id-collection-products-bulk",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272796",
+      "operation_id": "delete-collections-id-collection-products-bulk",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/collections/{id}/collection_products-bulk",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/collections/{id}/collection_products-bulk",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-customer-entitlements-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-357240",
+      "operation_id": "delete-customer-entitlements-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/customer_entitlements/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/customer_entitlements/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-customers-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-308757",
+      "operation_id": "delete-customers-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/customers/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-discounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-333770",
+      "operation_id": "delete-discounts-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/discounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/discounts/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-metafields-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-366502",
+      "operation_id": "delete-metafields-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/metafields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/metafields/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-onetimes-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-384518",
+      "operation_id": "delete-onetimes-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/onetimes/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/onetimes/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-orders-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-402892",
+      "operation_id": "delete-orders-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/orders/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/orders/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-payment-methods-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-453911",
+      "operation_id": "delete-payment-methods-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/payment_methods/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/payment_methods/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-plans-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471284",
+      "operation_id": "delete-plans-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/plans/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/plans/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-products-external-product-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-499677",
+      "operation_id": "delete-products-external-product-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/products/{external_product_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/products/{external_product_id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-products-external-product-id-plans-bulk",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471581",
+      "operation_id": "delete-products-external-product-id-plans-bulk",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/products/{external_product_id}/plans-bulk",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-subscriptions-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532064",
+      "operation_id": "delete-subscriptions-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/subscriptions/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.delete-webhooks-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583372",
+      "operation_id": "delete-webhooks-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/webhooks/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-accounts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-639335",
+      "operation_id": "get-accounts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-accounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-639273",
+      "operation_id": "get-accounts-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-addresses",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60438",
+      "operation_id": "get-addresses",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/addresses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/addresses",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-addresses-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60455",
+      "operation_id": "get-addresses-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/addresses/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/addresses/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-api-orders",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-445745",
+      "operation_id": "get-api-orders",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/orders",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/orders",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-async-batches",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-609199",
+      "operation_id": "get-async-batches",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/async_batches",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/async_batches",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-async-batches-batch-id-tasks",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-621291",
+      "operation_id": "get-async-batches-batch-id-tasks",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/async_batches/{batch_id}/tasks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/async_batches/{batch_id}/tasks",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-async-batches-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-609132",
+      "operation_id": "get-async-batches-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/async_batches/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/async_batches/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-bundle-selections",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-102230",
+      "operation_id": "get-bundle-selections",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/bundle_selections",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/bundle_selections",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-bundle-selections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-102296",
+      "operation_id": "get-bundle-selections-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/bundle_selections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/bundle_selections/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-charges",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60642",
+      "operation_id": "get-charges",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/charges",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/charges",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-charges-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60657",
+      "operation_id": "get-charges-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/charges/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/charges/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-checkout",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-260064",
+      "operation_id": "get-checkout",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/checkout",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/checkout",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-checkouts-token",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-223277",
+      "operation_id": "get-checkouts-token",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/checkouts/{token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/checkouts/{token}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-checkouts-token-shipping-rates",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-223468",
+      "operation_id": "get-checkouts-token-shipping-rates",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/checkouts/{token}/shipping_rates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/checkouts/{token}/shipping_rates",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-collection-products",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272637",
+      "operation_id": "get-collection-products",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/collection_products",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/collection_products",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-collections",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272577",
+      "operation_id": "get-collections",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/collections",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/collections",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-collections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272379",
+      "operation_id": "get-collections-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/collections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/collections/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-credit-accounts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290252",
+      "operation_id": "get-credit-accounts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/credit_accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/credit_accounts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-credit-accounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290114",
+      "operation_id": "get-credit-accounts-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/credit_accounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/credit_accounts/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-credit-accounts-id-credit-adjustments",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290405",
+      "operation_id": "get-credit-accounts-id-credit-adjustments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/credit_accounts/{id}/credit_adjustments",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-credit-adjustments",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290493",
+      "operation_id": "get-credit-adjustments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/credit_adjustments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/credit_adjustments",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-customer-entitlements",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-357024",
+      "operation_id": "get-customer-entitlements",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/customer_entitlements",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/customer_entitlements",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-customers",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60981",
+      "operation_id": "get-customers",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/customers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/customers",
+          "covered_by": {
+            "stream": "customers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "customers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-customers-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-60998",
+      "operation_id": "get-customers-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/customers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/customers/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-customers-id-credit-summary",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-308962",
+      "operation_id": "get-customers-id-credit-summary",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/customers/{id}/credit_summary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/customers/{id}/credit_summary",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-customers-id-delivery-schedule",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-308881",
+      "operation_id": "get-customers-id-delivery-schedule",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/customers/{id}/delivery_schedule",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/customers/{id}/delivery_schedule",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-discounts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-333836",
+      "operation_id": "get-discounts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/discounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/discounts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-discounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-333644",
+      "operation_id": "get-discounts-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/discounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/discounts/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-events",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-643320",
+      "operation_id": "get-events",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/events",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-metafields",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-366569",
+      "operation_id": "get-metafields",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/metafields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/metafields",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-metafields-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-366374",
+      "operation_id": "get-metafields-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/metafields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/metafields/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-onetimes",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-384583",
+      "operation_id": "get-onetimes",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/onetimes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/onetimes",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-onetimes-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-384394",
+      "operation_id": "get-onetimes-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/onetimes/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/onetimes/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-orders",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61297",
+      "operation_id": "get-orders",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/orders",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/orders",
+          "covered_by": {
+            "stream": "orders"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "orders"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-orders-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61311",
+      "operation_id": "get-orders-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/orders/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/orders/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-payment-methods",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61568",
+      "operation_id": "get-payment-methods",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/payment_methods",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/payment_methods",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-payment-methods-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61591",
+      "operation_id": "get-payment-methods-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/payment_methods/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/payment_methods/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-plans",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471346",
+      "operation_id": "get-plans",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/plans",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/plans",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-products",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-499759",
+      "operation_id": "get-products",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/products",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/products",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-products-external-product-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-499519",
+      "operation_id": "get-products-external-product-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/products/{external_product_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/products/{external_product_id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-store",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-525125",
+      "operation_id": "get-store",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/store",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/store",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-subscriptions",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61674",
+      "operation_id": "get-subscriptions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/subscriptions",
+          "covered_by": {
+            "stream": "subscriptions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "subscriptions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-subscriptions-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-61695",
+      "operation_id": "get-subscriptions-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/subscriptions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/subscriptions/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-token-information",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-636431",
+      "operation_id": "get-token-information",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/token_information",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/token_information",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-webhooks",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583437",
+      "operation_id": "get-webhooks",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhooks",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.get-webhooks-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583248",
+      "operation_id": "get-webhooks-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhooks/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-addresses",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-66332",
+      "operation_id": "post-addresses",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/addresses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/addresses",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-addresses-id-charges-skip",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-66706",
+      "operation_id": "post-addresses-id-charges-skip",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/addresses/{id}/charges/skip",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/addresses/{id}/charges/skip",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-addresses-merge",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-66641",
+      "operation_id": "post-addresses-merge",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/addresses/merge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/addresses/merge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-async-batches",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-609069",
+      "operation_id": "post-async-batches",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/async_batches",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/async_batches",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-async-batches-batch-id-process",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-609261",
+      "operation_id": "post-async-batches-batch-id-process",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/process",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/async_batches/{batch_id}/process",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-async-batches-batch-id-tasks",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-621211",
+      "operation_id": "post-async-batches-batch-id-tasks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/tasks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/async_batches/{batch_id}/tasks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-bundle-selections",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-102367",
+      "operation_id": "post-bundle-selections",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/bundle_selections",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/bundle_selections",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-162969",
+      "operation_id": "post-charges",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-add-free-gift",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-121205",
+      "operation_id": "post-charges-id-add-free-gift",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/add_free_gift",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/add_free_gift",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-apply-discount",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-120697",
+      "operation_id": "post-charges-id-apply-discount",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/apply_discount",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/apply_discount",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-capture-payment",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-121127",
+      "operation_id": "post-charges-id-capture-payment",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/capture_payment",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/capture_payment",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-process",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-121057",
+      "operation_id": "post-charges-id-process",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/process",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/process",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-refund",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-120988",
+      "operation_id": "post-charges-id-refund",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/refund",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/refund",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-remove-discount",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-120774",
+      "operation_id": "post-charges-id-remove-discount",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/remove_discount",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/remove_discount",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-remove-free-gift",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-121281",
+      "operation_id": "post-charges-id-remove-free-gift",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/remove_free_gift",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/remove_free_gift",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-skip",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-120852",
+      "operation_id": "post-charges-id-skip",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/skip",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/skip",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-charges-id-unskip",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-120919",
+      "operation_id": "post-charges-id-unskip",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/charges/{id}/unskip",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/charges/{id}/unskip",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-checkouts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-223218",
+      "operation_id": "post-checkouts",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/checkouts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/checkouts",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-checkouts-token-charge",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-223549",
+      "operation_id": "post-checkouts-token-charge",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/checkouts/{token}/charge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/checkouts/{token}/charge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-collections",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272318",
+      "operation_id": "post-collections",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/collections",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/collections",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-collections-id-collection-products-bulk",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272705",
+      "operation_id": "post-collections-id-collection-products-bulk",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/collections/{id}/collection_products-bulk",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/collections/{id}/collection_products-bulk",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-credit-accounts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290049",
+      "operation_id": "post-credit-accounts",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/credit_accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/credit_accounts",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-credit-accounts-id-credit-adjustments",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290316",
+      "operation_id": "post-credit-accounts-id-credit-adjustments",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/credit_accounts/{id}/credit_adjustments",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-customer-entitlements",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-357094",
+      "operation_id": "post-customer-entitlements",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customer_entitlements",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customer_entitlements",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-customers",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-308572",
+      "operation_id": "post-customers",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customers",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-customers-id-notifications",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-382138",
+      "operation_id": "post-customers-id-notifications",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customers/{id}/notifications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customers/{id}/notifications",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-discounts",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-333585",
+      "operation_id": "post-discounts",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/discounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/discounts",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-metafields",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-366314",
+      "operation_id": "post-metafields",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/metafields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/metafields",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-onetimes",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-384336",
+      "operation_id": "post-onetimes",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/onetimes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/onetimes",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-orders-id-clone",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-402698",
+      "operation_id": "post-orders-id-clone",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/orders/{id}/clone",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/orders/{id}/clone",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-orders-id-delay",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-402765",
+      "operation_id": "post-orders-id-delay",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/orders/{id}/delay",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/orders/{id}/delay",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-payment-methods",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-453708",
+      "operation_id": "post-payment-methods",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/payment_methods",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/payment_methods",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-plans",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471170",
+      "operation_id": "post-plans",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/plans",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/plans",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-products",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-499461",
+      "operation_id": "post-products",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/products",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/products",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-products-external-product-id-plans-bulk",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471400",
+      "operation_id": "post-products-external-product-id-plans-bulk",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/products/{external_product_id}/plans-bulk",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-531867",
+      "operation_id": "post-subscriptions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions-id-activate",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532443",
+      "operation_id": "post-subscriptions-id-activate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions/{id}/activate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions/{id}/activate",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions-id-cancel",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532368",
+      "operation_id": "post-subscriptions-id-cancel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions/{id}/cancel",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions/{id}/cancel",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions-id-change-address",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532285",
+      "operation_id": "post-subscriptions-id-change-address",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions/{id}/change_address",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions/{id}/change_address",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions-id-set-next-charge-date",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532196",
+      "operation_id": "post-subscriptions-id-set-next-charge-date",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions/{id}/set_next_charge_date",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions/{id}/set_next_charge_date",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-subscriptions-skip-gift",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-532520",
+      "operation_id": "post-subscriptions-skip-gift",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions/skip_gift",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions/skip_gift",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-webhooks",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583190",
+      "operation_id": "post-webhooks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhooks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.post-webhooks-id-test",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583494",
+      "operation_id": "post-webhooks-id-test",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhooks/{id}/test",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhooks/{id}/test",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-addresses-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-66454",
+      "operation_id": "put-addresses-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/addresses/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/addresses/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-bundle-selections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-102434",
+      "operation_id": "put-bundle-selections-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/bundle_selections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/bundle_selections/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-checkouts-token",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-223402",
+      "operation_id": "put-checkouts-token",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/checkouts/{token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/checkouts/{token}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-collections-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-272444",
+      "operation_id": "put-collections-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/collections/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/collections/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-credit-accounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-290183",
+      "operation_id": "put-credit-accounts-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/credit_accounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/credit_accounts/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-customer-entitlements-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-357165",
+      "operation_id": "put-customer-entitlements-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/customer_entitlements/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/customer_entitlements/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-customers-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-308694",
+      "operation_id": "put-customers-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/customers/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-discounts-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-333707",
+      "operation_id": "put-discounts-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/discounts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/discounts/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-metafields-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-366438",
+      "operation_id": "put-metafields-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/metafields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/metafields/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-onetimes-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-384456",
+      "operation_id": "put-onetimes-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/onetimes/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/onetimes/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-orders-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-402832",
+      "operation_id": "put-orders-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/orders/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/orders/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-payment-methods-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-453842",
+      "operation_id": "put-payment-methods-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/payment_methods/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/payment_methods/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-plans-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471225",
+      "operation_id": "put-plans-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/plans/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/plans/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-products-external-product-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-499598",
+      "operation_id": "put-products-external-product-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/products/{external_product_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/products/{external_product_id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-products-external-product-id-plans-bulk",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-471491",
+      "operation_id": "put-products-external-product-id-plans-bulk",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/products/{external_product_id}/plans-bulk",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-subscriptions-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-531997",
+      "operation_id": "put-subscriptions-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/subscriptions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/subscriptions/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/recharge-operation-source-lock.json",
+      "source_id": "recharge.rendered.put-webhooks-id",
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "source_location": "rendered-document-byte-583310",
+      "operation_id": "put-webhooks-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/webhooks/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developer.getrecharge.com/2021-11"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

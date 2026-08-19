@@ -1,12 +1,29 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "testrail",
   "state": "skipped",
-  "captured_at": "2026-08-19T15:28:37.221Z",
+  "captured_at": "2026-08-19T16:47:01.132Z",
   "skip": {
     "attempted_url": "https://support.testrail.com/hc/en-us/categories/7076541806228",
     "reason": "no-public-api-description",
     "retrieval_method": "browser",
     "detail": "The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated."
+  },
+  "rest": {
+    "representation": "unavailable",
+    "retrieval_method": "browser",
+    "documents": [],
+    "counts": {
+      "total": null,
+      "by_method": {},
+      "by_kind": {
+        "rest": null
+      }
+    },
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated."
+    },
+    "operations": []
   }
 }

@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "connector": "adobe-commerce-magento",
+  "generated_at": "2026-08-19T16:46:17.504Z",
+  "source_basis": {
+    "state": "dynamic",
+    "source_lock": "sources/adobe-commerce-magento-operation-source-lock.json",
+    "reason": "dynamic-instance-dependent",
+    "coverage_confidence": {
+      "level": "dynamic-instance-dependent",
+      "basis": "Adobe Commerce REST routes and schemas are generated from the modules enabled on each configured Magento instance. The official reference documents that instance-specific contract; there is no provider-global static operation total to fabricate."
+    }
+  },
+  "summary": {
+    "state": "dynamic",
+    "old_api_surface_count": 76,
+    "operations_found": null,
+    "coverage_confidence": {
+      "level": "dynamic-instance-dependent",
+      "basis": "Adobe Commerce REST routes and schemas are generated from the modules enabled on each configured Magento instance. The official reference documents that instance-specific contract; there is no provider-global static operation total to fabricate."
+    },
+    "reason": "dynamic-instance-dependent",
+    "live_certification": "pending"
+  },
+  "ledger_dispositions": []
+}

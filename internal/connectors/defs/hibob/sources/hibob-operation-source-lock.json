@@ -1,74 +1,3768 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "hibob",
-  "captured_at": "2026-08-19T15:30:48.422Z",
+  "captured_at": "2026-08-19T16:45:52.312Z",
   "rest": {
     "source_url": "https://apidocs.hibob.com/",
-    "requested_url": "https://apidocs.hibob.com/",
-    "sha256": "a253db257b6f58cc325a8cdde495bbf4a665c49d1484f0052f3664576262c3cf",
-    "bytes": 298245,
-    "content_type": "text/html; charset=utf-8",
-    "retrieval_method": "http",
-    "representation": "published-document",
-    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
-    "operation_counts": {
-      "GET": 5,
-      "PUT": 1
+    "representation": "complete-rendered-reference",
+    "documents": [
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/sidebar?page_type=reference",
+        "sha256": "19c6d4931307a0f8d9996604db6260fddc352131df874372135373adabe526c4",
+        "bytes": 132408,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_attendance-entries-entryid?reduce=false",
+        "sha256": "b3ce2c39e2fe89bfc8ad1a977f6180de2c042d95c8f77bda9fe479dd77a962ac",
+        "bytes": 136071,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-named-lists-listname-itemid?reduce=false",
+        "sha256": "e8791e6c2f776c3cab6eb634ef09e843136b0a0f35bf159a2933ad24ca9015d7",
+        "bytes": 241316,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-people-fields-fieldid?reduce=false",
+        "sha256": "c73825f76cb879d4fd600f03b852c8f18270b71c4dcfa523ce9f7b6b197d41b4",
+        "bytes": 241272,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-confidential-docid?reduce=false",
+        "sha256": "a3117576571f263c5b0c1c9c1a0acc9afa2c01f0ae8b24ad997607bb1fbc0ae8",
+        "bytes": 30157,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-folders-folderid-docid?reduce=false",
+        "sha256": "3fa66c68c6c5efb0da7fab5a105705127578663ab05f0c9f09a92d008e8ebdf1",
+        "bytes": 30167,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-shared-docid?reduce=false",
+        "sha256": "bb9cc799db80310433c015e26ada6bbbb48152135a4f96ac6324fc5a7e353aed",
+        "bytes": 30115,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid-key-results-keyresultid?reduce=false",
+        "sha256": "4641b8a22093b81f6a52c89931f98f74bfb2c1e88bc6267cadc33ced1be04eed",
+        "bytes": 64451,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid?reduce=false",
+        "sha256": "eade7066b1cb954aface44c6d71735e153666daa9a0afb0d9c848127fcb52787",
+        "bytes": 64211,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_learning-lms-integrations-provider-identifier?reduce=false",
+        "sha256": "1a7c7573ad101702a31222e8baf06d6530cdf926919ecd0f04722d39d0ebbc99",
+        "bytes": 33043,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false",
+        "sha256": "3bfef97ff19ab7638853e1d0c7d25887ae44eb4f961907404c3ffebe4530a216",
+        "bytes": 241421,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-bank-accounts-entry-id?reduce=false",
+        "sha256": "1ef739fcdb507a342e5504d68d0e04f566e64e6ddecf8b000793a73c02888813",
+        "bytes": 241344,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-deduction-entry-id?reduce=false",
+        "sha256": "46ef70c1b827c8cc98f9bff56fb272e59e6a1d76a4142a0965c2441f87e44909",
+        "bytes": 241547,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-dependents-entry-id?reduce=false",
+        "sha256": "4ee945736fe328cc5ef5019d2a67500a80ea5a4a4f7c438b85f178219eb448ae",
+        "bytes": 241884,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-employment-entry-id?reduce=false",
+        "sha256": "610f85af8cde23f30a67e0ff2043356855aeac2b740f0f913a68989a4d062967",
+        "bytes": 241327,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-entitlement-entry-id?reduce=false",
+        "sha256": "e2024d75bf5e582cef10ade586d28f6dd386dbe075139a468ab4e6ccff9d1e24",
+        "bytes": 241565,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-equities-entry-id?reduce=false",
+        "sha256": "a8fd3e3fd574805ccc0aaa00a55e84629548e78d8db00abb2cfdf9a456012711",
+        "bytes": 241286,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-right-to-work-entry-id?reduce=false",
+        "sha256": "afb2aa433986a1c85f9aa2a4cd76361b7c25730847c9d9c5e26f73268b8b679a",
+        "bytes": 241815,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-salaries-entry-id?reduce=false",
+        "sha256": "6f4d4a43522f15b19a16609b99b9cfd8cfb5ca4de57ba63bc2ddbd2630c8bffc",
+        "bytes": 241294,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-training-entry-id?reduce=false",
+        "sha256": "7f1a2f11a69a7e2479aced50a57fc817a59f21fc18199366e399fdaca591e37a",
+        "bytes": 241291,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-variable-entry-id?reduce=false",
+        "sha256": "8e2e77637c560cf739669846683d15dc0bba77703945a846802ee52710a360b5",
+        "bytes": 241554,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-work-entry-id?reduce=false",
+        "sha256": "3fd0bdf1abcc9271b96b61d495679d95cba80175f1c9a822579780eff2176ff0",
+        "bytes": 241284,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_timeoff-employees-id-requests-requestid?reduce=false",
+        "sha256": "2e636b2a044c79fba137f502f392eba3df1935a94d0168a984f6a21cbc833327",
+        "bytes": 139632,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false",
+        "sha256": "20462067cd47645cf2ce82911e6030124e0266e1113809ee174b08c2a672a41b",
+        "bytes": 85712,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-clients-metadata?reduce=false",
+        "sha256": "d7a4bec342f7b9338e356b98c7225b8987b1d64b027e8079f0487abe507d1c1d",
+        "bytes": 136317,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-tasks-metadata?reduce=false",
+        "sha256": "7ed6ed5e46ca313cc442290d861f46e423db18f30e0f0c3ecdf4be26c443946b",
+        "bytes": 136274,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-projects-metadata?reduce=false",
+        "sha256": "dad68192e42606abbd712b477fd7b2f7a83bb6871d42ccfdaa3eb9d6c4294252",
+        "bytes": 136425,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars-employeeid?reduce=false",
+        "sha256": "d150e94d1e57ec39b0b75f4caf2a04d8fe6333c41c777ab3bdb1ba853b11cfc8",
+        "bytes": 241249,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars?reduce=false",
+        "sha256": "f4c5a30785d1a4a3babcde5056faa2f2e8827983db777f8186bf6ecbf159e021",
+        "bytes": 241194,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-deduction?reduce=false",
+        "sha256": "3e137cb4d6312641a86dc991647142e2f54e0e5d94adfcbb3ae77685b4677af3",
+        "bytes": 242648,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-dependents?reduce=false",
+        "sha256": "2e4f8c98143e3d841b508fd1704f50b1b270f643602e6f3fdcb5fac357581b76",
+        "bytes": 242280,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-employment?reduce=false",
+        "sha256": "43fa14676dcd5843b201f7de1580301124a8752458600e25f784be0cccb07b70",
+        "bytes": 242568,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-entitlement?reduce=false",
+        "sha256": "dc0506e0c1b8796d8356732bee5c6c792905645ccab70205e6cb5e157c4c5d1f",
+        "bytes": 242659,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-lifecycle?reduce=false",
+        "sha256": "d4dd9d115311d71866a692ed5f65529b708da548ead13e4eceb3709b01aa6fe7",
+        "bytes": 242281,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-right-to-work?reduce=false",
+        "sha256": "47b7a9b8e6abe0db49c61be5e1b63aa0c5c71975151a6c68541816be083b5574",
+        "bytes": 242193,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-salaries?reduce=false",
+        "sha256": "2c0f4adf99f6764ed8a47321506c6e11654bbb6786dedd13186e6492e73636cc",
+        "bytes": 242260,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-variable?reduce=false",
+        "sha256": "e21c1148f9e794d55434250cb867c287e1573cf31420c21d568e962660986dfd",
+        "bytes": 242485,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-work?reduce=false",
+        "sha256": "cac35846cf0923606162e49ecdbdabcc9ea84a130c49e8f259946089eae935bf",
+        "bytes": 242206,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists-listname?reduce=false",
+        "sha256": "6e5ed37d50e27cdde6c14017f919c0d155bba66fc8e2831348f9405bb3728ebc",
+        "bytes": 241262,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists?reduce=false",
+        "sha256": "6cc959e449bf460b410b0431692aa06bff4a244e77133042178985f0dae14a6a",
+        "bytes": 241200,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-people-fields?reduce=false",
+        "sha256": "b9c0ed5b5e2e9baa83d2e4de6b9f62bf3cbe8111b6aeddfbdb3c9121d1ee0063",
+        "bytes": 241707,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-download-reportname?reduce=false",
+        "sha256": "7f34ccb2f775a082d3baff683db930ad34d7ff15d4d0cee905c95802497d7799",
+        "bytes": 15278,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download-async?reduce=false",
+        "sha256": "969c48c9f0b99632dfb118d8e66d1c0c8560f54a4dc161abdbcb193bc38da4af",
+        "bytes": 15197,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download?reduce=false",
+        "sha256": "467ec152f0690a55204921084d9a7bea7afa3bf0276b659679b489de60c8bc6f",
+        "bytes": 14646,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports?reduce=false",
+        "sha256": "3d0387d7f577d241a3a8353e665258af815325b5c5f373c92167607a957f982a",
+        "bytes": 14654,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-folders-metadata?reduce=false",
+        "sha256": "1465b4bb7a2ad9e6d63f02159cad5024ae2f44ab255b02094492156a4a8d6ac4",
+        "bytes": 29830,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-people-id?reduce=false",
+        "sha256": "5ff4b2e72f94ab0fa2fc6867667401cd5586c5d1b3f099901357c53a83e317fd",
+        "bytes": 29702,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-cycles-metadata?reduce=false",
+        "sha256": "4425e4000bebdbec06d37a076c760083b95c05f686680eabd9adda5ad08613b3",
+        "bytes": 64200,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-types-metadata?reduce=false",
+        "sha256": "1823f25c0fde540bf35913aae068d129d3c7ca56d81572c5b64d91f8ab716d66",
+        "bytes": 64177,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-key-results-metadata?reduce=false",
+        "sha256": "df8ece80f9d7c807c81fbfd46ae7fe4861ed50b4c8bf714b2996b6f22ca1a9c1",
+        "bytes": 64215,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-metadata?reduce=false",
+        "sha256": "0f0bd158560f7bb98770c76428fe71af111a96fd10016091cbc0e400a4f60dcb",
+        "bytes": 64143,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_hiring-job-ads-id?reduce=false",
+        "sha256": "238f9c2aad13f140dbbbee315e47a9026cd49ff2e10c271730464fc700171b89",
+        "bytes": 17635,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families-metadata?reduce=false",
+        "sha256": "eac850ad45a9128acc9de40da892d0f515f8252065a661f6229eaf4c2ed78c66",
+        "bytes": 25861,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families?reduce=false",
+        "sha256": "3760aeaef3afc5398ee06dd9d9d3ba87f917c874f691b23edfc164d33df71a8d",
+        "bytes": 26047,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups-metadata?reduce=false",
+        "sha256": "dbfaff5435047ab124c3ac002dd0985c998c3a69092070735cf29737f614f7a3",
+        "bytes": 25898,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups?reduce=false",
+        "sha256": "1ba1ad0c86b331899adedacfbc32019526805a554a9d4534b1788f36a8b6fe15",
+        "bytes": 26083,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-profiles-metadata?reduce=false",
+        "sha256": "5e19c0e950b1043299f002d8a5127a96f58559b779897d8846a9ce2ddc573b83",
+        "bytes": 25864,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles-metadata?reduce=false",
+        "sha256": "c7ec7975f45da6ff70c25d1d6aedc70d874121bc2989697cf0e428c77bfc6476",
+        "bytes": 25842,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles?reduce=false",
+        "sha256": "ab21b7b198e624d23d807fec32cd0a7426e7b81b5c1ac962125e785fdceb3a46",
+        "bytes": 26027,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_metadata-objects-position?reduce=false",
+        "sha256": "4e92a2dff83a5fb8bf141fa61121864a4e2bdf954d47072976c0614f93e91df3",
+        "bytes": 85475,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_onboarding-wizards?reduce=false",
+        "sha256": "b67839dde852a327c2d1c1395959d75da7c88030586c5dda910501e116c36a16",
+        "bytes": 241310,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_payroll-history?reduce=false",
+        "sha256": "e9a6681ccfea7217f7de537ac6215f8a62097f8524e4aa97fe3cfb9220bd1e3c",
+        "bytes": 241380,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-employee-id-custom-table-id?reduce=false",
+        "sha256": "f4d3a3c2dd45af278d30b1a64c28baf731797d7be78bcdf397071f42b1db6571",
+        "bytes": 241375,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata-custom-table-id?reduce=false",
+        "sha256": "faf66e8d2acd3ef7a3ffa5fe930539408354ddf17dadae006d20fec09bf9dfed",
+        "bytes": 241355,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata?reduce=false",
+        "sha256": "ea28267a2d805b155a485ae5838bde9750965dc4f66b3af275cf11931b227c0a",
+        "bytes": 241272,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-bank-accounts?reduce=false",
+        "sha256": "11de8a78e50508a8ac776d94cc32c7536f381836874a8faf448b93d38a588e1d",
+        "bytes": 242425,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-employment?reduce=false",
+        "sha256": "bd545bd1bb2d5f18531efe500d078deabc7a1c12fa555f8d4931b52f3eafd591",
+        "bytes": 242106,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-equities?reduce=false",
+        "sha256": "7dca559ba3b9e5c2e2461954d25d1384a0423d29828c816d95c63c4d6c33bd93",
+        "bytes": 241268,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-lifecycle?reduce=false",
+        "sha256": "9beeabd39a5e1babc5e25d94f3cfed602fa99a35d542e1a350e1b660a372a706",
+        "bytes": 241848,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-salaries?reduce=false",
+        "sha256": "57b83f5ba1abe5ed62155b994b28f71100398c1a5acacec955fc0f8a6c63c370",
+        "bytes": 241832,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-training?reduce=false",
+        "sha256": "74b08dca27359308e9eca44695849132ee833d70cdc7533804fb2fc669feee81",
+        "bytes": 241310,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-variable?reduce=false",
+        "sha256": "d1ca1224772a89f68cb2319ea63b311ca8bc74c7effdd956e854697e3f007631",
+        "bytes": 241454,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-work?reduce=false",
+        "sha256": "211bfeb717938dca791a673710fd194901ffd61e64327b49562ead6011776e13",
+        "bytes": 241777,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-budget-metadata?reduce=false",
+        "sha256": "592d65dc5733307f2ac98827f01b37b3a16ff865654ac1b130fe87bc6e64f8c4",
+        "bytes": 85533,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-openings-metadata?reduce=false",
+        "sha256": "cc15ae6ba9c9010688492b81e19480ba9f330ea7c94b4204fe0aa9a4e76a1ab6",
+        "bytes": 85547,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_profiles?reduce=false",
+        "sha256": "20b56446b2df2e80d710e08082b89670ad669ff33310d9e0a581b51550d000b0",
+        "bytes": 241678,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_skills-proficiency-levels?reduce=false",
+        "sha256": "62aa8a559db340ec5fcad61923bbf64c666500bd5acf834d2a12a30e1b5c067c",
+        "bytes": 28664,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks-people-id?reduce=false",
+        "sha256": "a46a6b33c1893ff81fa7cc7886f7779be59a8793f07fec3a0cf52f769eb0c4f5",
+        "bytes": 13308,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks?reduce=false",
+        "sha256": "813eadea0f64fbd57e8bc577f8b8fd79fc450e1f3b6ced40099069cebf1ee9d6",
+        "bytes": 13706,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-balance?reduce=false",
+        "sha256": "c212e7a4215c16f0e4af05e934b2784de8fe3ffeeb57de5a739610dab8cee429",
+        "bytes": 139618,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-requests-requestid?reduce=false",
+        "sha256": "a799a5aba48723dbdda83f9f8c7f4fee8bfe7e7b39db9158a8e4562b73c6b5d5",
+        "bytes": 140984,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-outtoday?reduce=false",
+        "sha256": "27a815f899add809948fa7788b53a4b670cc6fae22bd5ddacb8b076773e830f9",
+        "bytes": 141890,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies-names?reduce=false",
+        "sha256": "9c1f0bbfa29966a7375cdb7f7312cc2f56aeebd54108faf08573ea938c7b855d",
+        "bytes": 139577,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies?reduce=false",
+        "sha256": "4a2c69b5bf36e9ef040a18b316fe8dab8123101feb55d69c16dd9d0ec9a12fe5",
+        "bytes": 139486,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype-reason-codes?reduce=false",
+        "sha256": "92e244364d9892d4bb13810f2fd799fcf6e44812e159f8f10e9015b2e90f3808",
+        "bytes": 139653,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype?reduce=false",
+        "sha256": "20b9442af9e429604d33140e69ef34ce95c9c09fec681f9f78ac75ad5cfa19bc",
+        "bytes": 139584,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types?reduce=false",
+        "sha256": "58a33db9e5b979dee526bd7065f597bb73e52c59f65252f91ee2f275f3c06577",
+        "bytes": 139517,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-requests-changes?reduce=false",
+        "sha256": "54bf56f59d824daa85aa319c5a4582df85d509de903b3ba398794b09ddb8d271",
+        "bytes": 140985,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-whosout?reduce=false",
+        "sha256": "55dd8c4d7fdfe08978e68b8c7a738ba18107d900e6acc61778780480117a88fd",
+        "bytes": 141963,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries-clock-out?reduce=false",
+        "sha256": "7f3ed5bf5db69612003bd91153e9b0aff2b5e928ba1a69738094fa2bc71a4125",
+        "bytes": 136311,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries?reduce=false",
+        "sha256": "878f3a1800bd694414eb317f279142c54ca2fa6d4dc0eb1f3388de1ed1c61986",
+        "bytes": 137309,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-archive?reduce=false",
+        "sha256": "c29932951e54c0205ccf63f00105f8f89e5229d53b23c9c9ed7e7a807d3c263b",
+        "bytes": 136269,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-restore?reduce=false",
+        "sha256": "7c18a7880c73f0544c966781e77b97b5e56f0861cf8f334bddbffeabd8d13ffd",
+        "bytes": 136231,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-archive?reduce=false",
+        "sha256": "762b2af0f91d472e0bcecbdc58a8d1221c012856d702e5332db357d8e5683560",
+        "bytes": 136250,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-restore?reduce=false",
+        "sha256": "fe3c0c436ea3cf8a0e3fd0b5f6abdcf7e75c598d0186159146726565fcbc47b0",
+        "bytes": 136212,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid?reduce=false",
+        "sha256": "47ff87761430865d06551343a8d0a5b9967b64eb2973f86f10fb76149a0f5084",
+        "bytes": 136803,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results-progress?reduce=false",
+        "sha256": "e3ceeb1834e3e602457dd42bf91d84fa425a9fbfd179817fd2e4b50c4f4e85ab",
+        "bytes": 64872,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results?reduce=false",
+        "sha256": "38bd9710130df4a85cd877b8811df50a10b0c8ed3c70e1f6bdef310c79ec8176",
+        "bytes": 64583,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-status?reduce=false",
+        "sha256": "039512b75cb85674b2eb17af4851960eed684f5a5fed06bd77488a9ce7035316",
+        "bytes": 64523,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid?reduce=false",
+        "sha256": "f3635603379074970a886293a037759aa9d5b59308b8f3ea1b397d096315c8b6",
+        "bytes": 64736,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content-archive?reduce=false",
+        "sha256": "f42f59236ef21e84bb6f5c9b63d6d6d9f2c51d2d0d2232d8a9825387092f3cec",
+        "bytes": 33687,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content?reduce=false",
+        "sha256": "62eb65ccfbe6b2536549179d75dce32b6c563bb24a49b45add8418001859ed10",
+        "bytes": 33850,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills-archive?reduce=false",
+        "sha256": "83f329ac2e1826f130f470ac22ff2463564c6ee6957f0c3918839ce5eeec1c5d",
+        "bytes": 29304,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills?reduce=false",
+        "sha256": "2273277afb410be51ca1ea655a429ed70eb3105ef5af2bb33114ace600306428",
+        "bytes": 29399,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-cancel?reduce=false",
+        "sha256": "266215d163922677b0761d4594d7855d37859732dfe2ca1cfcca665269ac00ef",
+        "bytes": 86017,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-budget-positionbudgetid?reduce=false",
+        "sha256": "807a372696703dba7237de7c588446101a6ca44bcabc38482fb86333e23483b8",
+        "bytes": 85716,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false",
+        "sha256": "5d96c8e27d3971c0ddc8fea6d57277ad31b8d453ab299bdbd9c120f2e2cd2329",
+        "bytes": 85941,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid?reduce=false",
+        "sha256": "dcdc5ee955c4db12e566272a3d4f50aa4457807ad1d51ffa146323a344da2457",
+        "bytes": 86203,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-daily-breakdown-search?reduce=false",
+        "sha256": "527e035297a95a07cd9edc5e0a0a1d73e9d214f4f66cac918522e90289c73bc3",
+        "bytes": 137324,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-employees-employeeid-entries-clock-in?reduce=false",
+        "sha256": "6b4bd1334ed68f0f0d75dfb3e60cddab7a0f2772f9684c16f2f48b12e8135334",
+        "bytes": 136246,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries-search?reduce=false",
+        "sha256": "4dd2720a22105d4ae8b470d56350ebb9badcd6b40ccd715d3a76b490aadbe5e6",
+        "bytes": 136859,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries?reduce=false",
+        "sha256": "c0b4b6eb155cade4518687f38c13b5e2c5752d64d0612869a5b19550fa50cbbb",
+        "bytes": 137917,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-import-importmethod?reduce=false",
+        "sha256": "ec4eaf8fe4bbf8bbbce6954dd9676940915528a3f9c8367cc335ea78d861618f",
+        "bytes": 136491,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-clients-search?reduce=false",
+        "sha256": "875957d0b3cf26e636ada4471e2f67f00e3ce31b1cee8075890043d3b4e7152e",
+        "bytes": 137318,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks-search?reduce=false",
+        "sha256": "6a311cbd475794f5d02dcf8c120aa74692f544a587f2c203eeee1f1f4561a525",
+        "bytes": 137389,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks?reduce=false",
+        "sha256": "74718b795889d0b80e00c1100b23caf92fc62d72919e6339fb775fc3e1631e5e",
+        "bytes": 136662,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects-search?reduce=false",
+        "sha256": "9370a724a207d037875d098bc5052d94aa25bce63913b886a44f3c889cf27907",
+        "bytes": 137247,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects?reduce=false",
+        "sha256": "64371e3986d136df041a44339093b8d52ac0377dd8bf5da230b1c58e2b887911",
+        "bytes": 136992,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-summaries-search?reduce=false",
+        "sha256": "0e38160c0cadcc5b9c52b70f41d12f90773c4e2a3bd533401b935fc552d88b8e",
+        "bytes": 137398,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-named-lists-listname?reduce=false",
+        "sha256": "95843ab214a579f7b87c43f9e13b571148bc30d0ecff010fa72ed2595f75735c",
+        "bytes": 241266,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-people-fields?reduce=false",
+        "sha256": "29ee2443af2abc60e91ed3f8a9d291d92adb197be86e508c81892f1a96766304",
+        "bytes": 241213,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential-upload?reduce=false",
+        "sha256": "b938ae817a4a9403a881afb4a227337d4e48e050ce22e81b9769a81c76b65e0b",
+        "bytes": 30138,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential?reduce=false",
+        "sha256": "1ad0cc52636bf5d05c41ba0c31a7231261fc3e88168c5067f16898bc54237643",
+        "bytes": 30135,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-custom-folderid?reduce=false",
+        "sha256": "0044f1749efdfb24f522cdf0407d3738d9a126bb077e515065ad14a92570eb75",
+        "bytes": 30149,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-folders-folderid-upload?reduce=false",
+        "sha256": "d0ec3592dcb014ac54a7814ca9ed71edece0717688b22eaa30f8120da12a8727",
+        "bytes": 30148,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared-upload?reduce=false",
+        "sha256": "0be3088a1c3ea19536769f8e4c3fbc4414298c4d0372e5550c2604f8fa72f798",
+        "bytes": 30096,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared?reduce=false",
+        "sha256": "69af61044ae379781320f85ea50d12662fcaa3d530882fa1dc663928406df469",
+        "bytes": 30093,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-invitations?reduce=false",
+        "sha256": "3aa8c35ffa79a618c802b24ad9ceb7ee690c5464a3689d62bbaac2318fb532d4",
+        "bytes": 241473,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-start-date?reduce=false",
+        "sha256": "a1f3a2b9123fbf349be89a2d29ba0cfd7e5bf60d793caf31a400f1a3f9ee5664",
+        "bytes": 241463,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-terminate?reduce=false",
+        "sha256": "ca4e4ee68cc53a7d5da3ec6b4b68b5e5bccfd70d5494b81305462a2af2c156fd",
+        "bytes": 241545,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-uninvite?reduce=false",
+        "sha256": "bae6c1b2cf3e52f322f0689b35dd08116df44308aabc3bff503afdaf03af62ed",
+        "bytes": 241451,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-employerid-work-locations-search?reduce=false",
+        "sha256": "fcfb7f75535f80488406fd49f0b5b2691ec9aa3b5968e6e6a7427bb4564ed380",
+        "bytes": 39740,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-metadata-search?reduce=false",
+        "sha256": "4069b4279ca7bd4391967248cdd0ca3742037d3d3f272e52d3f14d48dade027e",
+        "bytes": 39657,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-search?reduce=false",
+        "sha256": "4d21d19fed4cb037778cb52b9e3d2bebbb116e10e709b959ae5e3370fafb25f6",
+        "bytes": 39620,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-work-locations-metadata-search?reduce=false",
+        "sha256": "781149fa99911b479fcdfa873d8cc92750ead20904ccaf40ab2a04b26f3e46c4",
+        "bytes": 39747,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-cycles-search?reduce=false",
+        "sha256": "3754f3214b9e65fca8f6e63054155e5758a10ede6a6e1b8dfdde8eaf6cbaa310",
+        "bytes": 64622,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-types-search?reduce=false",
+        "sha256": "cb15d02461e940950f4c9fa5c8fbfb5a30792ff9e2fd94abe6c4aa18bf002d55",
+        "bytes": 64490,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-goalid-key-results?reduce=false",
+        "sha256": "c3edc806afdf33ce0019b32b08a5c4227c099677988b4528945a0342c97182af",
+        "bytes": 64920,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-key-results-search?reduce=false",
+        "sha256": "c59456469f2fcbd089d47ba404cf32cdc7a6884a8ff61ff908345c92ea7b192a",
+        "bytes": 64721,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-search?reduce=false",
+        "sha256": "8f601b1ff0eef480aed595735e0aa2e208bf536615ae6bc13fd5021ce8143fe2",
+        "bytes": 64749,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals?reduce=false",
+        "sha256": "a5feb085187387e5ebf4766ba68405384ed165308cf9a4a4f7bfa04821ea00fd",
+        "bytes": 64900,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-application-form-answers-search?reduce=false",
+        "sha256": "21684ad30a0912239b5576c9b92614a672783608d3004689d83521fcb4a02d97",
+        "bytes": 178539,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-applications-search?reduce=false",
+        "sha256": "221e40f993c3bcb7be4ce8cb4c1ec1c2f2176d81d40641e7ea0dbf4c4f07a83a",
+        "bytes": 178448,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-educations-search?reduce=false",
+        "sha256": "8fad163b17947e54a671420e1f1234f639aca55e20e60bded07a7aa79c484c78",
+        "bytes": 178509,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-experiences-search?reduce=false",
+        "sha256": "6ffb42b8c3d930919c78cadca612b7e913a77ba99d603c8894b86e6618d571c0",
+        "bytes": 178521,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-languages-search?reduce=false",
+        "sha256": "d14356981ea6ba23e4906f80f57861ed825e204fa2d0d587d9da9f4220101367",
+        "bytes": 178502,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-professional-associations-memberships-search?reduce=false",
+        "sha256": "61a78368ff74cddb5b23995053fa9e8126238e8fe5eff77b38dab29cfa08775b",
+        "bytes": 178697,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-qualifications-licenses-search?reduce=false",
+        "sha256": "c25155d3d9330a65b1a0a3bc04f81dde344954a217cb93dfe3a20bffcab33562",
+        "bytes": 178603,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-skills-search?reduce=false",
+        "sha256": "e661355967cda8407618354f80a93e99b9a56929f66a3876b807894f8d0c4d2b",
+        "bytes": 178481,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-volunteer-experiences-search?reduce=false",
+        "sha256": "cca0a448f8445927d6601202e2faf512825782bc340e3e5df102e3344d6e4147",
+        "bytes": 178586,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidates-search?reduce=false",
+        "sha256": "f1a3e27fae784410d1fafa9eaf20546d7fd4bc4c1156f5d47007dd36c0fa51fe",
+        "bytes": 178432,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluation-scorecard-templates-search?reduce=false",
+        "sha256": "9610e189f2dc5aba14c89105ea494ba1ae37e0e2fbb31adb55a8908b20881453",
+        "bytes": 178595,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluations-search?reduce=false",
+        "sha256": "2328b3f4691eca46274fa4ddeee05dbb640c9d82c9b058d2b1d3f08eb56a1a54",
+        "bytes": 178462,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-interviews-search?reduce=false",
+        "sha256": "d1c9a9a383d6a4d2999cb8515c9e322e206282b3a42291670acef34a2430aaaf",
+        "bytes": 178455,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-ads-search?reduce=false",
+        "sha256": "1fc4f0ed276ff761062c019d0f442e05a0f3e17c261637c15660e382222e5d61",
+        "bytes": 17763,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-openings-search?reduce=false",
+        "sha256": "ef483a51924d642ea6b53072d7dff57b7f688d241c18a416596a8d3975ff518c",
+        "bytes": 178448,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-offers-search?reduce=false",
+        "sha256": "76c81e655ed3d729d47861713b45f6f01b2831d0624f7ccf580c5b9868f839be",
+        "bytes": 178407,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_job-catalog-job-profiles-search?reduce=false",
+        "sha256": "8d119014518961d326118e0c72fb26d6fc290f4222f990212e5a761097c4bf70",
+        "bytes": 26421,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-training-content?reduce=false",
+        "sha256": "d09e018a439a7b023de7be833ff7418d87c33b88b66a7f8ba4a5aa8aa6af7067",
+        "bytes": 34209,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-xapi-statements?reduce=false",
+        "sha256": "35a1a2d9777b362e6002dd2fa3ca2b2c02a6541d922918a35b42aa2be717ed06",
+        "bytes": 34118,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations?reduce=false",
+        "sha256": "1442c2a97ab8d9fa7d28cb66dacf4d5a3eab9f2c3a192b20d7101328f60424ee",
+        "bytes": 33539,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_objects-position-search?reduce=false",
+        "sha256": "cc50a92314cedf6d685eed16325dec003015a465be4199c9115093b6a06595cb",
+        "bytes": 85851,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-actual-payments-search?reduce=false",
+        "sha256": "76ee283c4a3a3705b15c228ec6f39752e1b077631bb876e8703aec345507598a",
+        "bytes": 242459,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-custom-tables-employee-id-custom-table-id?reduce=false",
+        "sha256": "3fb48365724f39b5f4203277264d1e8599a6be8d44493234e6544a0e4fc05039",
+        "bytes": 241842,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-bank-accounts?reduce=false",
+        "sha256": "3e327804d852d2acca39614a3af1beec7973bc363cc8681e3e849f1db134ccc7",
+        "bytes": 241266,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-deduction?reduce=false",
+        "sha256": "cdb5072b0a4e946c05f3e759119bdde169eb2a7c7a9196a22c47d45280458bad",
+        "bytes": 242119,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-dependents?reduce=false",
+        "sha256": "ff8cc7f90dc88f31bb2563c88d0e51129d24f48e3be834f66e00653fa558f2ea",
+        "bytes": 241863,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-employment?reduce=false",
+        "sha256": "c1cf5d8423cbe35e9c688b6bc342db15ff96faa46bbded0358b8bdd74ca92f86",
+        "bytes": 241250,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-entitlement?reduce=false",
+        "sha256": "6d18fe8a6887925e314b050b0141c1f57b4f26bb6e528284cf35bf83d7bea6d9",
+        "bytes": 242036,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-equities?reduce=false",
+        "sha256": "c6819f84e278ff29cecac30ea1feccaed1ee453c864e2f16e31769c947090a70",
+        "bytes": 241236,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-right-to-work?reduce=false",
+        "sha256": "0a8dfcc99be1842ce098c75ff9948ef5f316d4948b77dfb7a61a4760f64bbad4",
+        "bytes": 241802,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-salaries?reduce=false",
+        "sha256": "d4de8c68861fbb5c6b73c1d1572c2c0e87ed95ae54ee41ffa803e37f04f0d506",
+        "bytes": 241236,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-training?reduce=false",
+        "sha256": "48510a3969550b26f424ce3b6a4698309d55d3829edf1560319ada8481b3390b",
+        "bytes": 241379,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-variable?reduce=false",
+        "sha256": "99c2acecdb0b313b4daa89603ae0ee92b657edcca0a02df04a807623f3389d19",
+        "bytes": 241679,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-work?reduce=false",
+        "sha256": "336b8d07228f826be82384b7ce41d0186ba70591229afa427c0441114ed845e2",
+        "bytes": 241213,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-identifier?reduce=false",
+        "sha256": "d08af047d8743232ea08d7dfe4cf99cdc758d904f6d5d3938840fe48169c66e0",
+        "bytes": 246037,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-search?reduce=false",
+        "sha256": "16e57948e957f32c6b5b4d37c993aef8479e055feebae53cd35140706c6fc6ed",
+        "bytes": 247201,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people?reduce=false",
+        "sha256": "2d5c74fc052968830cd323d2524a12f85758d318e57ddda9c7012061304893b4",
+        "bytes": 242155,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-budget-search?reduce=false",
+        "sha256": "5e00a4d5261ec12d89debdb60cd22197c6c7d872c74b58fc37dce36e85612eb8",
+        "bytes": 86438,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-openings-search?reduce=false",
+        "sha256": "e3f7156e014093deeffad4e6201213facacfeb2db2e53b96c61d4bab50c4cb32",
+        "bytes": 86450,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills-search?reduce=false",
+        "sha256": "6c159959a6023e1be64f630ea9d5c1dff7f0e4279963cdcacae45f9479610d75",
+        "bytes": 28604,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills?reduce=false",
+        "sha256": "34a0f5cc36cf82c94f8c15407e3f1d92f824d3105f1e035726d2ffc5e2ee129b",
+        "bytes": 29251,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_tasks-taskid-complete?reduce=false",
+        "sha256": "1fa9261431a64d90d7cf42f51ba06dae1541c0e08636ddf1289ef2e23fc9afea",
+        "bytes": 13332,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-employees-search?reduce=false",
+        "sha256": "f47e966b3f40f66b464a57a4b9dde4cd66f2869ed198cfb98d48511ae78df3fb",
+        "bytes": 32988,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-events-search?reduce=false",
+        "sha256": "3e0b1d55ffa2a30514be7192e585d9553b33b31316b2f53fb276e8507d9c61a8",
+        "bytes": 31966,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-adjustments?reduce=false",
+        "sha256": "82baa5acef4df5dfbaa11fcfe0884384eb09f08fdb1f7de1772440d81a52dd06",
+        "bytes": 139624,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-requests?reduce=false",
+        "sha256": "4426cd1a52d0ed2b3027015a8d474b7dc6446546d34eb021421503deb5b5fad1",
+        "bytes": 140184,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-policy-types-policytype-reason-codes?reduce=false",
+        "sha256": "e659a0e358c3a702a7f8aef568ed6a1038a8b94508dfd4ddb297ae99171f8ed2",
+        "bytes": 139720,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-budget?reduce=false",
+        "sha256": "3756d73b2a7a77fc3de61f8daad031aa63b290f85e0ba1df9cda939d151935ba",
+        "bytes": 85798,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-openings?reduce=false",
+        "sha256": "f47c11aca15158047a3899b9bcf9cc1409f224b7e02bd8e27c8784a6ec8b0a8e",
+        "bytes": 86044,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-schedule-cancellation?reduce=false",
+        "sha256": "9deb0bf20f099541fa915a6057553784416566387225fca6c0d9e1aca89f1d0e",
+        "bytes": 86482,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions?reduce=false",
+        "sha256": "87029c6dd1dd15723e6fe22257b246f38d0b87b9b4aa71b1b74721835c2803e8",
+        "bytes": 86761,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_attendance-project-tasks-taskid?reduce=false",
+        "sha256": "82e2b10628e21a509d0c7b1bbf5495f824dbbea14e1ffcf4a2f213d77e6f4d00",
+        "bytes": 136755,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_avatars-employeeid?reduce=false",
+        "sha256": "da818632e6fc97470ed3cbda1b26a85c40c62f751d6b6dc5f0d39588e7d1fb1f",
+        "bytes": 241285,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-named-lists-listname-itemid?reduce=false",
+        "sha256": "bb5ac9a5f98bbc8d7ed50cd34260afdc8b0358bab36976f149c75eb872e6f069",
+        "bytes": 241299,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-people-fields-fieldid?reduce=false",
+        "sha256": "44eb5bf3202a94536d3b3ffdf86c02e24dccc802c00ae8db6b6a5c35c4e4dcdb",
+        "bytes": 241255,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false",
+        "sha256": "dcc27067aefd61ae92925b665067226bf82ced8e16fd737a6e4fa1d6a57dbcb3",
+        "bytes": 241975,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-bank-accounts-entry-id?reduce=false",
+        "sha256": "e3e04b12d204650d50a1358bac1511ca6f7949fb52de5f272a268e38de0e7ab1",
+        "bytes": 241891,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-deduction-entry-id?reduce=false",
+        "sha256": "110d4095ad61f889be9ba41b49a4b8327e493f7d8f46384ba50f02db49ece781",
+        "bytes": 241582,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-dependents-entry-id?reduce=false",
+        "sha256": "1b6a198fab8891c53a89df85b431a2a40225c8723ff66ed045f9e85ddcc7f4c8",
+        "bytes": 241668,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-email?reduce=false",
+        "sha256": "c3ee3c3690ca42c8634371e147c2060f17025505c2a21062b5e311ca6e01d1c4",
+        "bytes": 241370,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-employment-entry-id?reduce=false",
+        "sha256": "2843d08f29622ace61150362aecafb52b4abe606e77927b88bcf99252303b0aa",
+        "bytes": 241572,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-entitlement-entry-id?reduce=false",
+        "sha256": "e80135a27cf311c6670db0d31198d1f8244036b1db0a84d7d3248db79d9817d5",
+        "bytes": 241599,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-equities-entry-id?reduce=false",
+        "sha256": "38d4ab1c1cbd70b45c07142d6eee41d48f4df34edf025653819a3afb136c5991",
+        "bytes": 241517,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-right-to-work-entry-id?reduce=false",
+        "sha256": "c45bf53f7b979ebc779d2f6adf0b0259a47cd4ede81e6e752886d007f3f3f4c4",
+        "bytes": 241654,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-variable-entry-id?reduce=false",
+        "sha256": "f086e84ac22a7e67697fcac1a94785a50770781441bccccb48d7b87c23b35c22",
+        "bytes": 241580,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-work-entry-id?reduce=false",
+        "sha256": "735b84d7fa351652d503a3f9b5039a15b424afb6db6ab5a682a02daa6d76ef16",
+        "bytes": 242231,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-identifier?reduce=false",
+        "sha256": "14b0596340629b7ab5d17e3bf1ace759bf5c5c3b694435c4a980be4d84941d9f",
+        "bytes": 242299,
+        "content_type": "application/json; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 208,
+      "sha256": "6d8b6bc4a3585c1820d6da9e62cce156564d928ab9c175d14cc1658d7bd7125a",
+      "bytes": 30586482
+    },
+    "counts": {
+      "total": 207,
+      "by_method": {
+        "DELETE": 23,
+        "GET": 65,
+        "PATCH": 19,
+        "POST": 84,
+        "PUT": 16
+      },
+      "by_kind": {
+        "rest": 207
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "HiBob's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."
     },
     "operations": [
       {
-        "id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "id": "hibob.rendered.delete_attendance-entries-entryid",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/profiles",
-        "operation_id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "method": "DELETE",
+        "path": "/attendance/entries/{entryId}",
+        "operation_id": "delete_attendance-entries-entryid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_attendance-entries-entryid?reduce=false"
       },
       {
-        "id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "id": "hibob.rendered.delete_company-named-lists-listname-itemid",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/company/named-lists",
-        "operation_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "method": "DELETE",
+        "path": "/company/named-lists/{listName}/{itemId}",
+        "operation_id": "delete_company-named-lists-listname-itemid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-named-lists-listname-itemid?reduce=false"
       },
       {
-        "id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "id": "hibob.rendered.delete_company-people-fields-fieldid",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/company/people/fields",
-        "operation_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "method": "DELETE",
+        "path": "/company/people/fields/{fieldId}",
+        "operation_id": "delete_company-people-fields-fieldid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-people-fields-fieldid?reduce=false"
       },
       {
-        "id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "id": "hibob.rendered.delete_docs-people-id-confidential-docid",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/timeoff/*",
-        "operation_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "method": "DELETE",
+        "path": "/docs/people/{id}/confidential/{docId}",
+        "operation_id": "delete_docs-people-id-confidential-docid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-confidential-docid?reduce=false"
       },
       {
-        "id": "hibob.rest.get-v1-docs-api-surface-5",
+        "id": "hibob.rendered.delete_docs-people-id-folders-folderid-docid",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/docs/*",
-        "operation_id": "hibob.rest.get-v1-docs-api-surface-5",
+        "method": "DELETE",
+        "path": "/docs/people/{id}/folders/{folderId}/{docId}",
+        "operation_id": "delete_docs-people-id-folders-folderid-docid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-folders-folderid-docid?reduce=false"
       },
       {
-        "id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "id": "hibob.rendered.delete_docs-people-id-shared-docid",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/people/{id}/shared/{docId}",
+        "operation_id": "delete_docs-people-id-shared-docid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-shared-docid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_goals-goals-goalid",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/goals/goals/{goalId}",
+        "operation_id": "delete_goals-goals-goalid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_goals-goals-goalid-key-results-keyresultid",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/goals/goals/{goalId}/key-results/{keyResultId}",
+        "operation_id": "delete_goals-goals-goalid-key-results-keyresultid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid-key-results-keyresultid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_learning-lms-integrations-provider-identifier",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/learning/lms-integrations/{provider-identifier}",
+        "operation_id": "delete_learning-lms-integrations-provider-identifier",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_learning-lms-integrations-provider-identifier?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-custom-tables-employee-id-custom-table-id-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/custom-tables/{employee_id}/{custom_table_id}/{entry_id}",
+        "operation_id": "delete_people-custom-tables-employee-id-custom-table-id-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-bank-accounts-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/bank-accounts/{entry_id}",
+        "operation_id": "delete_people-id-bank-accounts-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-bank-accounts-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-deduction-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/deduction/{entry_id}",
+        "operation_id": "delete_people-id-deduction-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-deduction-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-dependents-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/dependents/{entry_id}",
+        "operation_id": "delete_people-id-dependents-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-dependents-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-employment-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/employment/{entry_id}",
+        "operation_id": "delete_people-id-employment-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-employment-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-entitlement-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/entitlement/{entry_id}",
+        "operation_id": "delete_people-id-entitlement-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-entitlement-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-equities-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/equities/{entry_id}",
+        "operation_id": "delete_people-id-equities-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-equities-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-right-to-work-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/right-to-work/{entry_id}",
+        "operation_id": "delete_people-id-right-to-work-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-right-to-work-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-salaries-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/salaries/{entry_id}",
+        "operation_id": "delete_people-id-salaries-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-salaries-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-training-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/training/{entry_id}",
+        "operation_id": "delete_people-id-training-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-training-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-variable-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/variable/{entry_id}",
+        "operation_id": "delete_people-id-variable-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-variable-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_people-id-work-entry-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/people/{id}/work/{entry_id}",
+        "operation_id": "delete_people-id-work-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-work-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_timeoff-employees-id-requests-requestid",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/timeoff/employees/{id}/requests/{requestId}",
+        "operation_id": "delete_timeoff-employees-id-requests-requestid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_timeoff-employees-id-requests-requestid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.delete_workforce-planning-positions-positionid-position-openings-positionopeningid",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workforce-planning/positions/{positionId}/position-openings/{positionOpeningId}",
+        "operation_id": "delete_workforce-planning-positions-positionid-position-openings-positionopeningid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_attendance-project-clients-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/attendance/project-clients/metadata",
+        "operation_id": "get_attendance-project-clients-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-clients-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_attendance-project-tasks-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/attendance/project-tasks/metadata",
+        "operation_id": "get_attendance-project-tasks-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-tasks-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_attendance-projects-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/attendance/projects/metadata",
+        "operation_id": "get_attendance-projects-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-projects-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_avatars",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/avatars",
+        "operation_id": "get_avatars",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_avatars-employeeid",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/avatars/{employeeId}",
+        "operation_id": "get_avatars-employeeid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars-employeeid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-deduction",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/deduction",
+        "operation_id": "get_bulk-people-deduction",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-deduction?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-dependents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/dependents",
+        "operation_id": "get_bulk-people-dependents",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-dependents?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-employment",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/employment",
+        "operation_id": "get_bulk-people-employment",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-employment?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-entitlement",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/entitlement",
+        "operation_id": "get_bulk-people-entitlement",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-entitlement?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-lifecycle",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/lifecycle",
+        "operation_id": "get_bulk-people-lifecycle",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-lifecycle?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-right-to-work",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/right-to-work",
+        "operation_id": "get_bulk-people-right-to-work",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-right-to-work?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-salaries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/salaries",
+        "operation_id": "get_bulk-people-salaries",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-salaries?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-variable",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/variable",
+        "operation_id": "get_bulk-people-variable",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-variable?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_bulk-people-work",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk/people/work",
+        "operation_id": "get_bulk-people-work",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-work?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-named-lists",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/named-lists",
+        "operation_id": "get_company-named-lists",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-named-lists-listname",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/named-lists/{listName}",
+        "operation_id": "get_company-named-lists-listname",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists-listname?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-people-fields",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/people/fields",
+        "operation_id": "get_company-people-fields",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-people-fields?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-reports",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/reports",
+        "operation_id": "get_company-reports",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-reports-download-reportname",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/reports/download/{reportName}",
+        "operation_id": "get_company-reports-download-reportname",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-download-reportname?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-reports-reportid-download",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/reports/{reportId}/download",
+        "operation_id": "get_company-reports-reportid-download",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_company-reports-reportid-download-async",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company/reports/{reportId}/download-async",
+        "operation_id": "get_company-reports-reportid-download-async",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download-async?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_docs-folders-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/folders/metadata",
+        "operation_id": "get_docs-folders-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-folders-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_docs-people-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/people/{id}",
+        "operation_id": "get_docs-people-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-people-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_goals-goal-cycles-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/goal-cycles/metadata",
+        "operation_id": "get_goals-goal-cycles-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-cycles-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_goals-goal-types-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/goal-types/metadata",
+        "operation_id": "get_goals-goal-types-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-types-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_goals-goals-key-results-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/goals/key-results/metadata",
+        "operation_id": "get_goals-goals-key-results-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-key-results-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_goals-goals-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/goals/metadata",
+        "operation_id": "get_goals-goals-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_hiring-job-ads-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/hiring/job-ads/{id}",
+        "operation_id": "get_hiring-job-ads-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_hiring-job-ads-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-families",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-families",
+        "operation_id": "get_job-catalog-job-families",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-families-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-families/metadata",
+        "operation_id": "get_job-catalog-job-families-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-family-groups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-family-groups",
+        "operation_id": "get_job-catalog-job-family-groups",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-family-groups-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-family-groups/metadata",
+        "operation_id": "get_job-catalog-job-family-groups-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-profiles-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-profiles/metadata",
+        "operation_id": "get_job-catalog-job-profiles-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-profiles-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-roles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-roles",
+        "operation_id": "get_job-catalog-job-roles",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_job-catalog-job-roles-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job-catalog/job-roles/metadata",
+        "operation_id": "get_job-catalog-job-roles-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_metadata-objects-position",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/metadata/objects/position",
+        "operation_id": "get_metadata-objects-position",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_metadata-objects-position?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_onboarding-wizards",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/onboarding/wizards",
+        "operation_id": "get_onboarding-wizards",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_onboarding-wizards?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_payroll-history",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payroll/history",
+        "operation_id": "get_payroll-history",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_payroll-history?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-custom-tables-employee-id-custom-table-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/custom-tables/{employee_id}/{custom_table_id}",
+        "operation_id": "get_people-custom-tables-employee-id-custom-table-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-employee-id-custom-table-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-custom-tables-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/custom-tables/metadata",
+        "operation_id": "get_people-custom-tables-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-custom-tables-metadata-custom-table-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/custom-tables/metadata/{custom_table_id}",
+        "operation_id": "get_people-custom-tables-metadata-custom-table-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata-custom-table-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-bank-accounts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/bank-accounts",
+        "operation_id": "get_people-id-bank-accounts",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-bank-accounts?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-employment",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/employment",
+        "operation_id": "get_people-id-employment",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-employment?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-equities",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/equities",
+        "operation_id": "get_people-id-equities",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-equities?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-lifecycle",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/lifecycle",
+        "operation_id": "get_people-id-lifecycle",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-lifecycle?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-salaries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/salaries",
+        "operation_id": "get_people-id-salaries",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-salaries?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-training",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/training",
+        "operation_id": "get_people-id-training",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-training?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-variable",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/variable",
+        "operation_id": "get_people-id-variable",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-variable?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_people-id-work",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/people/{id}/work",
+        "operation_id": "get_people-id-work",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-work?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_positions-position-budget-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/positions/position-budget/metadata",
+        "operation_id": "get_positions-position-budget-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-budget-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_positions-position-openings-metadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/positions/position-openings/metadata",
+        "operation_id": "get_positions-position-openings-metadata",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-openings-metadata?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_profiles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/profiles",
+        "operation_id": "get_profiles",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_profiles?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_skills-proficiency-levels",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/skills/proficiency-levels",
+        "operation_id": "get_skills-proficiency-levels",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_skills-proficiency-levels?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_tasks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks",
+        "operation_id": "get_tasks",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_tasks-people-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/people/{id}",
+        "operation_id": "get_tasks-people-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks-people-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-employees-id-balance",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/employees/{id}/balance",
+        "operation_id": "get_timeoff-employees-id-balance",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-balance?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-employees-id-requests-requestid",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/employees/{id}/requests/{requestId}",
+        "operation_id": "get_timeoff-employees-id-requests-requestid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-requests-requestid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-outtoday",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/outtoday",
+        "operation_id": "get_timeoff-outtoday",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-outtoday?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-policies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/policies",
+        "operation_id": "get_timeoff-policies",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-policies-names",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/policies/names",
+        "operation_id": "get_timeoff-policies-names",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies-names?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-policy-types",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/policy-types",
+        "operation_id": "get_timeoff-policy-types",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-policy-types-policytype",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/policy-types/{policyType}",
+        "operation_id": "get_timeoff-policy-types-policytype",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-policy-types-policytype-reason-codes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/policy-types/{policyType}/reason-codes",
+        "operation_id": "get_timeoff-policy-types-policytype-reason-codes",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype-reason-codes?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-requests-changes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/requests/changes",
+        "operation_id": "get_timeoff-requests-changes",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-requests-changes?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.get_timeoff-whosout",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/whosout",
+        "operation_id": "get_timeoff-whosout",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-whosout?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-employees-employeeid-entries",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/employees/{employeeId}/entries",
+        "operation_id": "patch_attendance-employees-employeeid-entries",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-employees-employeeid-entries-clock-out",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/employees/{employeeId}/entries/clock-out",
+        "operation_id": "patch_attendance-employees-employeeid-entries-clock-out",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries-clock-out?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-project-tasks-taskid-archive",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/project-tasks/{taskId}/archive",
+        "operation_id": "patch_attendance-project-tasks-taskid-archive",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-archive?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-project-tasks-taskid-restore",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/project-tasks/{taskId}/restore",
+        "operation_id": "patch_attendance-project-tasks-taskid-restore",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-restore?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-projects-projectid",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/projects/{projectId}",
+        "operation_id": "patch_attendance-projects-projectid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-projects-projectid-archive",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/projects/{projectId}/archive",
+        "operation_id": "patch_attendance-projects-projectid-archive",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-archive?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_attendance-projects-projectid-restore",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/attendance/projects/{projectId}/restore",
+        "operation_id": "patch_attendance-projects-projectid-restore",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-restore?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_goals-goals-goalid",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/goals/goals/{goalId}",
+        "operation_id": "patch_goals-goals-goalid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_goals-goals-goalid-key-results",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/goals/goals/{goalId}/key-results",
+        "operation_id": "patch_goals-goals-goalid-key-results",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_goals-goals-goalid-key-results-progress",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/goals/goals/{goalId}/key-results/progress",
+        "operation_id": "patch_goals-goals-goalid-key-results-progress",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results-progress?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_goals-goals-goalid-status",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/goals/goals/{goalId}/status",
+        "operation_id": "patch_goals-goals-goalid-status",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-status?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_learning-lms-integrations-provider-identifier-training-content",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/learning/lms-integrations/{provider-identifier}/training-content",
+        "operation_id": "patch_learning-lms-integrations-provider-identifier-training-content",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_learning-lms-integrations-provider-identifier-training-content-archive",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/learning/lms-integrations/{provider-identifier}/training-content/archive",
+        "operation_id": "patch_learning-lms-integrations-provider-identifier-training-content-archive",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content-archive?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_skills",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/skills",
+        "operation_id": "patch_skills",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_skills-archive",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/skills/archive",
+        "operation_id": "patch_skills-archive",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills-archive?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_workforce-planning-positions-positionid",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/workforce-planning/positions/{positionId}",
+        "operation_id": "patch_workforce-planning-positions-positionid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_workforce-planning-positions-positionid-cancel",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/workforce-planning/positions/{positionId}/cancel",
+        "operation_id": "patch_workforce-planning-positions-positionid-cancel",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-cancel?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_workforce-planning-positions-positionid-position-budget-positionbudgetid",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/workforce-planning/positions/{positionId}/position-budget/{positionBudgetId}",
+        "operation_id": "patch_workforce-planning-positions-positionid-position-budget-positionbudgetid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-budget-positionbudgetid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.patch_workforce-planning-positions-positionid-position-openings-positionopeningid",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/workforce-planning/positions/{positionId}/position-openings/{positionOpeningId}",
+        "operation_id": "patch_workforce-planning-positions-positionid-position-openings-positionopeningid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-daily-breakdown-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/daily-breakdown/search",
+        "operation_id": "post_attendance-daily-breakdown-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-daily-breakdown-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-employees-employeeid-entries-clock-in",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/employees/{employeeId}/entries/clock-in",
+        "operation_id": "post_attendance-employees-employeeid-entries-clock-in",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-employees-employeeid-entries-clock-in?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-entries",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/entries",
+        "operation_id": "post_attendance-entries",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-entries-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/entries/search",
+        "operation_id": "post_attendance-entries-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-import-importmethod",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/import/{importMethod}",
+        "operation_id": "post_attendance-import-importmethod",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-import-importmethod?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-project-clients-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/project-clients/search",
+        "operation_id": "post_attendance-project-clients-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-clients-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-project-tasks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/project-tasks",
+        "operation_id": "post_attendance-project-tasks",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-project-tasks-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/project-tasks/search",
+        "operation_id": "post_attendance-project-tasks-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-projects",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/projects",
+        "operation_id": "post_attendance-projects",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-projects-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/projects/search",
+        "operation_id": "post_attendance-projects-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_attendance-summaries-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attendance/summaries/search",
+        "operation_id": "post_attendance-summaries-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-summaries-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_company-named-lists-listname",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/company/named-lists/{listName}",
+        "operation_id": "post_company-named-lists-listname",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-named-lists-listname?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_company-people-fields",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/company/people/fields",
+        "operation_id": "post_company-people-fields",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-people-fields?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-confidential",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/confidential",
+        "operation_id": "post_docs-people-id-confidential",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-confidential-upload",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/confidential/upload",
+        "operation_id": "post_docs-people-id-confidential-upload",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential-upload?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-custom-folderid",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/custom/{folderId}",
+        "operation_id": "post_docs-people-id-custom-folderid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-custom-folderid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-folders-folderid-upload",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/folders/{folderId}/upload",
+        "operation_id": "post_docs-people-id-folders-folderid-upload",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-folders-folderid-upload?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-shared",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/shared",
+        "operation_id": "post_docs-people-id-shared",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_docs-people-id-shared-upload",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/people/{id}/shared/upload",
+        "operation_id": "post_docs-people-id-shared-upload",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared-upload?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employees-employeeid-invitations",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employees/{employeeId}/invitations",
+        "operation_id": "post_employees-employeeid-invitations",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-invitations?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employees-employeeid-start-date",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employees/{employeeId}/start-date",
+        "operation_id": "post_employees-employeeid-start-date",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-start-date?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employees-identifier-terminate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employees/{identifier}/terminate",
+        "operation_id": "post_employees-identifier-terminate",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-terminate?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employees-identifier-uninvite",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employees/{identifier}/uninvite",
+        "operation_id": "post_employees-identifier-uninvite",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-uninvite?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employers-employerid-work-locations-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employers/{employerId}/work-locations/search",
+        "operation_id": "post_employers-employerid-work-locations-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-employerid-work-locations-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employers-metadata-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employers/metadata/search",
+        "operation_id": "post_employers-metadata-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-metadata-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employers-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employers/search",
+        "operation_id": "post_employers-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_employers-work-locations-metadata-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/employers/work-locations/metadata/search",
+        "operation_id": "post_employers-work-locations-metadata-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-work-locations-metadata-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goal-cycles-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goal-cycles/search",
+        "operation_id": "post_goals-goal-cycles-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-cycles-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goal-types-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goal-types/search",
+        "operation_id": "post_goals-goal-types-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-types-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goals",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goals",
+        "operation_id": "post_goals-goals",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goals-goalid-key-results",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goals/{goalId}/key-results",
+        "operation_id": "post_goals-goals-goalid-key-results",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-goalid-key-results?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goals-key-results-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goals/key-results/search",
+        "operation_id": "post_goals-goals-key-results-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-key-results-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_goals-goals-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/goals/search",
+        "operation_id": "post_goals-goals-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-application-form-answers-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/application-form-answers/search",
+        "operation_id": "post_hiring-application-form-answers-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-application-form-answers-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-applications-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/applications/search",
+        "operation_id": "post_hiring-applications-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-applications-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-educations-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-educations/search",
+        "operation_id": "post_hiring-candidate-educations-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-educations-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-experiences-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-experiences/search",
+        "operation_id": "post_hiring-candidate-experiences-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-experiences-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-languages-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-languages/search",
+        "operation_id": "post_hiring-candidate-languages-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-languages-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-professional-associations-memberships-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-professional-associations-memberships/search",
+        "operation_id": "post_hiring-candidate-professional-associations-memberships-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-professional-associations-memberships-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-qualifications-licenses-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-qualifications-licenses/search",
+        "operation_id": "post_hiring-candidate-qualifications-licenses-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-qualifications-licenses-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-skills-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-skills/search",
+        "operation_id": "post_hiring-candidate-skills-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-skills-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidate-volunteer-experiences-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidate-volunteer-experiences/search",
+        "operation_id": "post_hiring-candidate-volunteer-experiences-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-volunteer-experiences-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-candidates-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/candidates/search",
+        "operation_id": "post_hiring-candidates-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidates-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-evaluation-scorecard-templates-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/evaluation-scorecard-templates/search",
+        "operation_id": "post_hiring-evaluation-scorecard-templates-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluation-scorecard-templates-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-evaluations-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/evaluations/search",
+        "operation_id": "post_hiring-evaluations-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluations-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-interviews-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/interviews/search",
+        "operation_id": "post_hiring-interviews-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-interviews-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-job-ads-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/job-ads/search",
+        "operation_id": "post_hiring-job-ads-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-ads-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-job-openings-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/job-openings/search",
+        "operation_id": "post_hiring-job-openings-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-openings-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_hiring-offers-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiring/offers/search",
+        "operation_id": "post_hiring-offers-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-offers-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_job-catalog-job-profiles-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job-catalog/job-profiles/search",
+        "operation_id": "post_job-catalog-job-profiles-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_job-catalog-job-profiles-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_learning-lms-integrations",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/learning/lms-integrations",
+        "operation_id": "post_learning-lms-integrations",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_learning-lms-integrations-provider-identifier-training-content",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/learning/lms-integrations/{provider-identifier}/training-content",
+        "operation_id": "post_learning-lms-integrations-provider-identifier-training-content",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-training-content?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_learning-lms-integrations-provider-identifier-xapi-statements",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/learning/lms-integrations/{provider-identifier}/xapi/statements",
+        "operation_id": "post_learning-lms-integrations-provider-identifier-xapi-statements",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-xapi-statements?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_objects-position-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/objects/position/search",
+        "operation_id": "post_objects-position-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_objects-position-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people",
+        "operation_id": "post_people",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-actual-payments-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/actual-payments/search",
+        "operation_id": "post_people-actual-payments-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-actual-payments-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-custom-tables-employee-id-custom-table-id",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/custom-tables/{employee_id}/{custom_table_id}",
+        "operation_id": "post_people-custom-tables-employee-id-custom-table-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-custom-tables-employee-id-custom-table-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-bank-accounts",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/bank-accounts",
+        "operation_id": "post_people-id-bank-accounts",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-bank-accounts?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-deduction",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/deduction",
+        "operation_id": "post_people-id-deduction",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-deduction?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-dependents",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/dependents",
+        "operation_id": "post_people-id-dependents",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-dependents?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-employment",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/employment",
+        "operation_id": "post_people-id-employment",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-employment?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-entitlement",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/entitlement",
+        "operation_id": "post_people-id-entitlement",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-entitlement?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-equities",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/equities",
+        "operation_id": "post_people-id-equities",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-equities?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-right-to-work",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/right-to-work",
+        "operation_id": "post_people-id-right-to-work",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-right-to-work?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-salaries",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/salaries",
+        "operation_id": "post_people-id-salaries",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-salaries?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-training",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/training",
+        "operation_id": "post_people-id-training",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-training?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-variable",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/variable",
+        "operation_id": "post_people-id-variable",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-variable?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-id-work",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{id}/work",
+        "operation_id": "post_people-id-work",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-work?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-identifier",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/{identifier}",
+        "operation_id": "post_people-identifier",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-identifier?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_people-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/people/search",
+        "operation_id": "post_people-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_positions-position-budget-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/positions/position-budget/search",
+        "operation_id": "post_positions-position-budget-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-budget-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_positions-position-openings-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/positions/position-openings/search",
+        "operation_id": "post_positions-position-openings-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-openings-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_skills",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/skills",
+        "operation_id": "post_skills",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_skills-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/skills/search",
+        "operation_id": "post_skills-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_tasks-taskid-complete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{taskId}/complete",
+        "operation_id": "post_tasks-taskid-complete",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_tasks-taskid-complete?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_timeoff-calendars-employees-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timeoff/calendars/employees/search",
+        "operation_id": "post_timeoff-calendars-employees-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-employees-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_timeoff-calendars-events-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timeoff/calendars/events/search",
+        "operation_id": "post_timeoff-calendars-events-search",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-events-search?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_timeoff-employees-id-adjustments",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timeoff/employees/{id}/adjustments",
+        "operation_id": "post_timeoff-employees-id-adjustments",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-adjustments?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_timeoff-employees-id-requests",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timeoff/employees/{id}/requests",
+        "operation_id": "post_timeoff-employees-id-requests",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-requests?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_timeoff-policy-types-policytype-reason-codes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timeoff/policy-types/{policyType}/reason-codes",
+        "operation_id": "post_timeoff-policy-types-policytype-reason-codes",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-policy-types-policytype-reason-codes?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_workforce-planning-positions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workforce-planning/positions",
+        "operation_id": "post_workforce-planning-positions",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_workforce-planning-positions-positionid-position-budget",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workforce-planning/positions/{positionId}/position-budget",
+        "operation_id": "post_workforce-planning-positions-positionid-position-budget",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-budget?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_workforce-planning-positions-positionid-position-openings",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workforce-planning/positions/{positionId}/position-openings",
+        "operation_id": "post_workforce-planning-positions-positionid-position-openings",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-openings?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.post_workforce-planning-positions-schedule-cancellation",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workforce-planning/positions/schedule-cancellation",
+        "operation_id": "post_workforce-planning-positions-schedule-cancellation",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-schedule-cancellation?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_attendance-project-tasks-taskid",
         "protocol": "rest",
         "method": "PUT",
-        "path": "/v1/people/{id}",
-        "operation_id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "path": "/attendance/project-tasks/{taskId}",
+        "operation_id": "put_attendance-project-tasks-taskid",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]"
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_attendance-project-tasks-taskid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_avatars-employeeid",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/avatars/{employeeId}",
+        "operation_id": "put_avatars-employeeid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_avatars-employeeid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_company-named-lists-listname-itemid",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/company/named-lists/{listName}/{itemId}",
+        "operation_id": "put_company-named-lists-listname-itemid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-named-lists-listname-itemid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_company-people-fields-fieldid",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/company/people/fields/{fieldId}",
+        "operation_id": "put_company-people-fields-fieldid",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-people-fields-fieldid?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-custom-tables-employee-id-custom-table-id-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/custom-tables/{employee_id}/{custom_table_id}/{entry_id}",
+        "operation_id": "put_people-custom-tables-employee-id-custom-table-id-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-bank-accounts-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/bank-accounts/{entry_id}",
+        "operation_id": "put_people-id-bank-accounts-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-bank-accounts-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-deduction-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/deduction/{entry_id}",
+        "operation_id": "put_people-id-deduction-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-deduction-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-dependents-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/dependents/{entry_id}",
+        "operation_id": "put_people-id-dependents-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-dependents-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-email",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/email",
+        "operation_id": "put_people-id-email",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-email?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-employment-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/employment/{entry_id}",
+        "operation_id": "put_people-id-employment-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-employment-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-entitlement-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/entitlement/{entry_id}",
+        "operation_id": "put_people-id-entitlement-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-entitlement-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-equities-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/equities/{entry_id}",
+        "operation_id": "put_people-id-equities-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-equities-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-right-to-work-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/right-to-work/{entry_id}",
+        "operation_id": "put_people-id-right-to-work-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-right-to-work-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-variable-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/variable/{entry_id}",
+        "operation_id": "put_people-id-variable-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-variable-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-id-work-entry-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{id}/work/{entry_id}",
+        "operation_id": "put_people-id-work-entry-id",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-work-entry-id?reduce=false"
+      },
+      {
+        "id": "hibob.rendered.put_people-identifier",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/people/{identifier}",
+        "operation_id": "put_people-identifier",
+        "deprecated": false,
+        "source_location": "$data.api",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-identifier?reduce=false"
       }
     ]
   }

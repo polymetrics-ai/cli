@@ -1,28 +1,543 @@
 {
   "api": "FireHydrant API v1",
   "docs": "https://docs.firehydrant.com/reference/firehydrant-api",
-  "reviewed_at": "2026-07-04",
-  "scope": "PASS B expansion from the official FireHydrant API reference Markdown/OpenAPI fragments. JSON GET resource endpoints are streams; direct JSON/no-body POST/PUT/PATCH/DELETE endpoints are write actions. SCIM provisioning, multipart/file payloads, exports, connectivity checks, side-effecting GET refresh, deprecated endpoints, and required-query mutations are explicitly excluded.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Source-surface refresh 2026-08-19: 373 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.  103 legacy runtime-binding row(s) are retained only to preserve current conformance and are excluded from the provider operation total.",
   "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/v1/audiences/{audience_id}",
+      "covered_by": {
+        "write": "archive_audience"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/changes/{change_id}",
+      "covered_by": {
+        "write": "delete_change"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/changes/{change_id}/identities/{identity_id}",
+      "covered_by": {
+        "write": "delete_change_identity"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/changes/events/{change_event_id}",
+      "covered_by": {
+        "write": "delete_change_event"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/checklist_templates/{id}",
+      "covered_by": {
+        "write": "delete_checklist_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions/{reaction_id}",
+      "covered_by": {
+        "write": "delete_comment_reaction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/custom_fields/definitions/{field_id}",
+      "covered_by": {
+        "write": "delete_custom_field_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/environments/{environment_id}",
+      "covered_by": {
+        "write": "delete_environment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/functionalities/{functionality_id}",
+      "covered_by": {
+        "write": "delete_functionality"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incident_roles/{incident_role_id}",
+      "covered_by": {
+        "write": "delete_incident_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incident_types/{id}",
+      "covered_by": {
+        "write": "delete_incident_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}",
+      "covered_by": {
+        "write": "delete_incident"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}",
+      "covered_by": {
+        "write": "delete_incident_alert"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/events/{event_id}",
+      "covered_by": {
+        "write": "delete_incident_event"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
+      "covered_by": {
+        "write": "delete_incident_chat_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/impact/{type}/{id}",
+      "covered_by": {
+        "write": "delete_incident_impact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/links/{link_id}",
+      "covered_by": {
+        "write": "delete_incident_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/role_assignments/{role_assignment_id}",
+      "covered_by": {
+        "write": "delete_incident_role_assignment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/status_pages/{status_page_id}",
+      "covered_by": {
+        "write": "delete_incident_status_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "delete_incident_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/team_assignments/{team_assignment_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/incidents/{incident_id}/transcript/{transcript_id}",
+      "covered_by": {
+        "write": "delete_transcript_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
+      "covered_by": {
+        "write": "delete_slack_emoji_action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/integrations/statuspage/connections/{connection_id}",
+      "covered_by": {
+        "write": "delete_statuspage_connection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
+      "covered_by": {
+        "write": "delete_lifecycle_measurement_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/lifecycles/milestones/{milestone_id}",
+      "covered_by": {
+        "write": "delete_lifecycle_milestone"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc_connections/{nunc_connection_id}",
+      "covered_by": {
+        "write": "delete_nunc_connection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
+      "covered_by": {
+        "write": "delete_nunc_component_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
+      "covered_by": {
+        "write": "delete_nunc_image"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
+      "covered_by": {
+        "write": "delete_nunc_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/nunc/subscriptions/{unsubscribe_token}",
+      "covered_by": {
+        "write": "delete_nunc_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
+      "covered_by": {
+        "write": "delete_post_mortem_reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/priorities/{priority_slug}",
+      "covered_by": {
+        "write": "delete_priority"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/retrospective_templates/{retrospective_template_id}",
+      "covered_by": {
+        "write": "delete_retrospective_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/roles/{id}",
+      "covered_by": {
+        "write": "delete_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/runbooks/{runbook_id}",
+      "covered_by": {
+        "write": "delete_runbook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/runbooks/executions/{execution_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
+      "covered_by": {
+        "write": "delete_saved_search"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
+      "covered_by": {
+        "write": "delete_scheduled_maintenance"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/scim/v2/Groups/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/scim/v2/Users/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/service_dependencies/{service_dependency_id}",
+      "covered_by": {
+        "write": "delete_service_dependency"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/services/{service_id}",
+      "covered_by": {
+        "write": "delete_service"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/services/{service_id}/service_links/{remote_id}",
+      "covered_by": {
+        "write": "delete_service_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/severities/{severity_slug}",
+      "covered_by": {
+        "write": "delete_severity"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/severity_matrix/conditions/{condition_id}",
+      "covered_by": {
+        "write": "delete_severity_matrix_condition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/severity_matrix/impacts/{impact_id}",
+      "covered_by": {
+        "write": "delete_severity_matrix_impact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/call_routes/{id}",
+      "covered_by": {
+        "write": "delete_call_route"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/email_targets/{id}",
+      "covered_by": {
+        "write": "delete_signals_email_target"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/event_sources/{transposer_slug}",
+      "covered_by": {
+        "write": "delete_signals_event_source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/grouping/{id}",
+      "covered_by": {
+        "write": "delete_signals_alert_grouping_configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/heartbeat_endpoints/{id}",
+      "covered_by": {
+        "write": "delete_signals_heartbeat_endpoint_configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/notification_policy_items/{id}",
+      "covered_by": {
+        "write": "delete_notification_policy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/signals/webhook_targets/{id}",
+      "covered_by": {
+        "write": "delete_signals_webhook_target"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/status_update_templates/{status_update_template_id}",
+      "covered_by": {
+        "write": "delete_status_update_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/task_lists/{task_list_id}",
+      "covered_by": {
+        "write": "delete_task_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/escalation_policies/{id}",
+      "covered_by": {
+        "write": "delete_team_escalation_policy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
+      "covered_by": {
+        "write": "delete_team_on_call_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}",
+      "covered_by": {
+        "write": "delete_on_call_schedule_rotation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
+      "covered_by": {
+        "write": "delete_on_call_shift"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/signal_rules/{id}",
+      "covered_by": {
+        "write": "delete_team_signal_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/teams/{team_id}/support_hours_schedule",
+      "covered_by": {
+        "write": "delete_support_hours_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/custom_fields/definitions/{field_id}",
+      "covered_by": {
+        "write": "delete_ticketing_custom_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/priorities/{id}",
+      "covered_by": {
+        "write": "delete_ticketing_priority"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
+      "covered_by": {
+        "write": "delete_ticketing_field_map"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps/{map_id}",
+      "covered_by": {
+        "write": "delete_inbound_field_map"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
+      "covered_by": {
+        "write": "delete_ticketing_project_config"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ticketing/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
     {
       "method": "GET",
       "path": "/v1/ai/preferences",
       "covered_by": {
         "stream": "get_ai_preferences"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ai/preferences",
-      "covered_by": {
-        "write": "update_ai_preferences"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/vote",
-      "covered_by": {
-        "write": "vote_ai_incident_summary"
       }
     },
     {
@@ -54,38 +569,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/audiences",
-      "covered_by": {
-        "write": "create_audience"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/audiences/{audience_id}",
-      "covered_by": {
-        "write": "archive_audience"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/audiences/{audience_id}",
       "covered_by": {
         "stream": "get_audience"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/audiences/{audience_id}",
-      "covered_by": {
-        "write": "update_audience"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/audiences/{audience_id}/restore",
-      "covered_by": {
-        "write": "restore_audience"
       }
     },
     {
@@ -96,24 +583,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/audiences/{audience_id}/summaries/{incident_id}",
-      "covered_by": {
-        "write": "generate_audience_summary"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/audiences/member/{member_id}/default",
       "covered_by": {
         "stream": "get_member_default_audience"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/audiences/member/{member_id}/default",
-      "covered_by": {
-        "write": "set_member_default_audience"
       }
     },
     {
@@ -145,18 +618,15 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/catalogs/{catalog_id}/ingest",
-      "covered_by": {
-        "write": "ingest_catalog_data"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/catalogs/{catalog_id}/refresh",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Side-effecting refresh scheduler exposed as GET; not a read stream and not a JSON write action."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -174,52 +644,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/changes",
-      "covered_by": {
-        "write": "create_change"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/changes/{change_id}",
-      "covered_by": {
-        "write": "delete_change"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/changes/{change_id}",
-      "covered_by": {
-        "write": "update_change"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/changes/{change_id}/identities",
       "covered_by": {
         "stream": "list_change_identities"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/changes/{change_id}/identities",
-      "covered_by": {
-        "write": "create_change_identity"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/changes/{change_id}/identities/{identity_id}",
-      "covered_by": {
-        "write": "delete_change_identity"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/changes/{change_id}/identities/{identity_id}",
-      "covered_by": {
-        "write": "update_change_identity"
       }
     },
     {
@@ -230,31 +658,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/changes/events",
-      "covered_by": {
-        "write": "create_change_event"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/changes/events/{change_event_id}",
-      "covered_by": {
-        "write": "delete_change_event"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/changes/events/{change_event_id}",
       "covered_by": {
         "stream": "get_change_event"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/changes/events/{change_event_id}",
-      "covered_by": {
-        "write": "update_change_event"
       }
     },
     {
@@ -265,31 +672,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/checklist_templates",
-      "covered_by": {
-        "write": "create_checklist_template"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/checklist_templates/{id}",
-      "covered_by": {
-        "write": "delete_checklist_template"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/checklist_templates/{id}",
       "covered_by": {
         "stream": "get_checklist_template"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/checklist_templates/{id}",
-      "covered_by": {
-        "write": "update_checklist_template"
       }
     },
     {
@@ -300,20 +686,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/conversations/{conversation_id}/comments",
-      "covered_by": {
-        "write": "create_comment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
-      "covered_by": {
-        "write": "delete_comment"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
       "covered_by": {
@@ -321,31 +693,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
-      "covered_by": {
-        "write": "update_comment"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions",
       "covered_by": {
         "stream": "list_comment_reactions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions",
-      "covered_by": {
-        "write": "create_comment_reaction"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "delete_comment_reaction"
       }
     },
     {
@@ -360,27 +711,6 @@
       "path": "/v1/custom_fields/definitions",
       "covered_by": {
         "stream": "list_custom_field_definitions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/custom_fields/definitions",
-      "covered_by": {
-        "write": "create_custom_field_definition"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/custom_fields/definitions/{field_id}",
-      "covered_by": {
-        "write": "delete_custom_field_definition"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/custom_fields/definitions/{field_id}",
-      "covered_by": {
-        "write": "update_custom_field_definition"
       }
     },
     {
@@ -405,31 +735,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/environments",
-      "covered_by": {
-        "write": "create_environment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/environments/{environment_id}",
-      "covered_by": {
-        "write": "delete_environment"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/environments/{environment_id}",
       "covered_by": {
         "stream": "get_environment"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/environments/{environment_id}",
-      "covered_by": {
-        "write": "update_environment"
       }
     },
     {
@@ -468,31 +777,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/functionalities",
-      "covered_by": {
-        "write": "create_functionality"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/functionalities/{functionality_id}",
-      "covered_by": {
-        "write": "delete_functionality"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/functionalities/{functionality_id}",
       "covered_by": {
         "stream": "get_functionality"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/functionalities/{functionality_id}",
-      "covered_by": {
-        "write": "update_functionality"
       }
     },
     {
@@ -517,31 +805,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incident_roles",
-      "covered_by": {
-        "write": "create_incident_role"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incident_roles/{incident_role_id}",
-      "covered_by": {
-        "write": "delete_incident_role"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incident_roles/{incident_role_id}",
       "covered_by": {
         "stream": "get_incident_role"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incident_roles/{incident_role_id}",
-      "covered_by": {
-        "write": "update_incident_role"
       }
     },
     {
@@ -552,31 +819,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incident_tags/validate",
-      "covered_by": {
-        "write": "validate_incident_tags"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incident_types",
       "covered_by": {
         "stream": "list_incident_types"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incident_types",
-      "covered_by": {
-        "write": "create_incident_type"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incident_types/{id}",
-      "covered_by": {
-        "write": "delete_incident_type"
       }
     },
     {
@@ -587,31 +833,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/incident_types/{id}",
-      "covered_by": {
-        "write": "update_incident_type"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents",
       "covered_by": {
         "stream": "incidents"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents",
-      "covered_by": {
-        "write": "create_incident"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}",
-      "covered_by": {
-        "write": "delete_incident"
       }
     },
     {
@@ -622,38 +847,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}",
-      "covered_by": {
-        "write": "update_incident"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/alerts",
       "covered_by": {
         "stream": "list_incident_alerts"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/alerts",
-      "covered_by": {
-        "write": "create_incident_alert"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}",
-      "covered_by": {
-        "write": "delete_incident_alert"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}/primary",
-      "covered_by": {
-        "write": "update_incident_alert_primary"
       }
     },
     {
@@ -664,25 +861,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/attachments",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/channel",
       "covered_by": {
         "stream": "get_incident_channel"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/close",
-      "covered_by": {
-        "write": "close_incident"
       }
     },
     {
@@ -707,31 +889,10 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/events/{event_id}",
-      "covered_by": {
-        "write": "delete_incident_event"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/events/{event_id}",
       "covered_by": {
         "stream": "get_incident_event"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/events/{event_id}",
-      "covered_by": {
-        "write": "update_incident_event"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/events/{event_id}/votes",
-      "covered_by": {
-        "write": "update_vote"
       }
     },
     {
@@ -742,59 +903,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/generic_chat_messages",
-      "covered_by": {
-        "write": "create_incident_chat_message"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
-      "covered_by": {
-        "write": "delete_incident_chat_message"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
-      "covered_by": {
-        "write": "update_incident_chat_message"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/impact",
-      "covered_by": {
-        "write": "update_incident_impact_patch"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/impact",
-      "covered_by": {
-        "write": "update_incident_impact_put"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/impact/{type}",
       "covered_by": {
         "stream": "list_incident_impacts"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/impact/{type}",
-      "covered_by": {
-        "write": "create_incident_impact"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/impact/{type}/{id}",
-      "covered_by": {
-        "write": "delete_incident_impact"
       }
     },
     {
@@ -805,52 +917,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/links",
-      "covered_by": {
-        "write": "create_incident_link"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/links/{link_id}",
-      "covered_by": {
-        "write": "delete_incident_link"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/links/{link_id}",
-      "covered_by": {
-        "write": "update_incident_link"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/milestones",
       "covered_by": {
         "stream": "list_incident_milestones"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/milestones/bulk_update",
-      "covered_by": {
-        "write": "bulk_update_incident_milestones"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/notes",
-      "covered_by": {
-        "write": "create_incident_note"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/notes/{note_id}",
-      "covered_by": {
-        "write": "update_incident_note"
       }
     },
     {
@@ -861,31 +931,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/related_change_events",
-      "covered_by": {
-        "write": "create_incident_change_event"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/related_change_events/{related_change_event_id}",
-      "covered_by": {
-        "write": "update_incident_change_event"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/relationships",
       "covered_by": {
         "stream": "get_incident_relationships"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/resolve",
-      "covered_by": {
-        "write": "resolve_incident"
       }
     },
     {
@@ -896,27 +945,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/retrospectives",
-      "covered_by": {
-        "write": "create_incident_retrospective"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}",
-      "covered_by": {
-        "write": "update_incident_retrospective"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields",
-      "covered_by": {
-        "write": "create_incident_retrospective_field"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}",
       "covered_by": {
@@ -924,69 +952,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}",
-      "covered_by": {
-        "write": "update_incident_retrospective_field"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}/inputs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires query parameters (dynamic_input_field_id) on a mutation; writes.json has no query-parameter dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}/inputs",
-      "covered_by": {
-        "write": "create_incident_retrospective_dynamic_input"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/retrospectives/export",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/retrospectives/export_markdown",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/retrospectives/share",
-      "covered_by": {
-        "write": "share_incident_retrospectives"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/role_assignments",
       "covered_by": {
         "stream": "list_incident_role_assignments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/role_assignments",
-      "covered_by": {
-        "write": "create_incident_role_assignment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/role_assignments/{role_assignment_id}",
-      "covered_by": {
-        "write": "delete_incident_role_assignment"
       }
     },
     {
@@ -1004,45 +973,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/status_pages",
-      "covered_by": {
-        "write": "create_incident_status_page"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/status_pages/{status_page_id}",
-      "covered_by": {
-        "write": "delete_incident_status_page"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/task_lists",
-      "covered_by": {
-        "write": "create_incident_task_list"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/tasks",
       "covered_by": {
         "stream": "list_incident_tasks"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/tasks",
-      "covered_by": {
-        "write": "create_incident_task"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
-      "covered_by": {
-        "write": "delete_incident_task"
       }
     },
     {
@@ -1053,60 +987,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
-      "covered_by": {
-        "write": "update_incident_task"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/tasks/{task_id}/convert",
-      "covered_by": {
-        "write": "convert_incident_task"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/team_assignments",
-      "covered_by": {
-        "write": "create_incident_team_assignment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/team_assignments/{team_assignment_id}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/incidents/{incident_id}/transcript",
       "covered_by": {
         "stream": "list_transcript_entries"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/incidents/{incident_id}/transcript/{transcript_id}",
-      "covered_by": {
-        "write": "delete_transcript_entry"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/incidents/{incident_id}/transcript/attribution",
-      "covered_by": {
-        "write": "update_transcript_attribution"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/incidents/{incident_id}/unarchive",
-      "covered_by": {
-        "write": "unarchive_incident"
       }
     },
     {
@@ -1145,13 +1029,6 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/integrations/authed_providers/{integration_slug}/{connection_id}/{authed_provider_id}",
-      "covered_by": {
-        "write": "update_authed_provider"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/integrations/aws/cloudtrail_batches",
       "covered_by": {
@@ -1163,13 +1040,6 @@
       "path": "/v1/integrations/aws/cloudtrail_batches/{id}",
       "covered_by": {
         "stream": "get_aws_cloudtrail_batch"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/aws/cloudtrail_batches/{id}",
-      "covered_by": {
-        "write": "update_aws_cloudtrail_batch"
       }
     },
     {
@@ -1194,13 +1064,6 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/integrations/aws/connections/{id}",
-      "covered_by": {
-        "write": "update_aws_connection"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/integrations/confluence_cloud/connections/{id}/space/search",
       "covered_by": {
@@ -1212,34 +1075,6 @@
       "path": "/v1/integrations/connections",
       "covered_by": {
         "stream": "list_connections"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/integrations/connections/{slug}",
-      "covered_by": {
-        "write": "create_connection"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/connections/{slug}/{connection_id}",
-      "covered_by": {
-        "write": "update_connection"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/connections/{slug}/{connection_id}/refresh",
-      "covered_by": {
-        "write": "refresh_connection"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/field_maps/{field_map_id}",
-      "covered_by": {
-        "write": "update_field_map"
       }
     },
     {
@@ -1257,13 +1092,6 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/v1/integrations/slack/channels/{id}/test",
-      "covered_by": {
-        "write": "test_slack_channel"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions",
       "covered_by": {
@@ -1271,31 +1099,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions",
-      "covered_by": {
-        "write": "create_slack_emoji_action"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
-      "covered_by": {
-        "write": "delete_slack_emoji_action"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
       "covered_by": {
         "stream": "get_slack_emoji_action"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
-      "covered_by": {
-        "write": "update_slack_emoji_action"
       }
     },
     {
@@ -1341,24 +1148,10 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/integrations/statuspage/connections/{connection_id}",
-      "covered_by": {
-        "write": "delete_statuspage_connection"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/integrations/statuspage/connections/{connection_id}",
       "covered_by": {
         "stream": "get_statuspage_connection"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/integrations/statuspage/connections/{connection_id}",
-      "covered_by": {
-        "write": "update_statuspage_connection"
       }
     },
     {
@@ -1390,52 +1183,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/lifecycles/measurement_definitions",
-      "covered_by": {
-        "write": "create_lifecycle_measurement_definition"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
-      "covered_by": {
-        "write": "delete_lifecycle_measurement_definition"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
       "covered_by": {
         "stream": "get_lifecycle_measurement_definition"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
-      "covered_by": {
-        "write": "update_lifecycle_measurement_definition"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/lifecycles/milestones",
-      "covered_by": {
-        "write": "create_lifecycle_milestone"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/lifecycles/milestones/{milestone_id}",
-      "covered_by": {
-        "write": "delete_lifecycle_milestone"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/lifecycles/milestones/{milestone_id}",
-      "covered_by": {
-        "write": "update_lifecycle_milestone"
       }
     },
     {
@@ -1469,17 +1220,25 @@
     {
       "method": "GET",
       "path": "/v1/metrics/milestone_funnel",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/mttx",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -1492,9 +1251,13 @@
     {
       "method": "GET",
       "path": "/v1/metrics/ticket_funnel",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -1507,9 +1270,13 @@
     {
       "method": "GET",
       "path": "/v1/noauth/ping",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Connectivity health endpoint; connector health is covered by the declarative check request."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -1520,20 +1287,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/nunc_connections",
-      "covered_by": {
-        "write": "create_nunc_connection"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc_connections/{nunc_connection_id}",
-      "covered_by": {
-        "write": "delete_nunc_connection"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/nunc_connections/{nunc_connection_id}",
       "covered_by": {
@@ -1541,124 +1294,10 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/v1/nunc_connections/{nunc_connection_id}",
-      "covered_by": {
-        "write": "update_nunc_connection"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups",
-      "covered_by": {
-        "write": "create_nunc_component_group"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
-      "covered_by": {
-        "write": "delete_nunc_component_group"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
-      "covered_by": {
-        "write": "update_nunc_component_group"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
-      "covered_by": {
-        "write": "delete_nunc_image"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/links",
-      "covered_by": {
-        "write": "create_nunc_link"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
-      "covered_by": {
-        "write": "delete_nunc_link"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
-      "covered_by": {
-        "write": "update_nunc_link"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/publish",
-      "covered_by": {
-        "write": "publish_nunc_connection"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires query parameters (subscriber_ids) on a mutation; writes.json has no query-parameter dialect."
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
       "covered_by": {
         "stream": "list_email_subscribers"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
-      "covered_by": {
-        "write": "create_email_subscriber"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc_connections/{nunc_connection_id}/unpublish",
-      "covered_by": {
-        "write": "unpublish_nunc_connection"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/nunc/subscriptions",
-      "covered_by": {
-        "write": "create_nunc_subscription"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/nunc/subscriptions/{unsubscribe_token}",
-      "covered_by": {
-        "write": "delete_nunc_subscription"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/page/signals",
-      "covered_by": {
-        "write": "create_signals_page"
       }
     },
     {
@@ -1685,9 +1324,13 @@
     {
       "method": "GET",
       "path": "/v1/ping",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Connectivity health endpoint; connector health is covered by the declarative check request."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -1695,13 +1338,6 @@
       "path": "/v1/post_mortems/questions",
       "covered_by": {
         "stream": "list_post_mortem_questions"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/post_mortems/questions",
-      "covered_by": {
-        "write": "update_post_mortem_questions"
       }
     },
     {
@@ -1719,38 +1355,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/post_mortems/reports",
-      "covered_by": {
-        "write": "create_post_mortem_report"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/post_mortems/reports/{report_id}",
       "covered_by": {
         "stream": "get_post_mortem_report"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/post_mortems/reports/{report_id}",
-      "covered_by": {
-        "write": "update_post_mortem_report"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/post_mortems/reports/{report_id}/fields/{field_id}",
-      "covered_by": {
-        "write": "update_post_mortem_field"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/post_mortems/reports/{report_id}/publish",
-      "covered_by": {
-        "write": "publish_post_mortem_report"
       }
     },
     {
@@ -1761,34 +1369,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/post_mortems/reports/{report_id}/reasons",
-      "covered_by": {
-        "write": "create_post_mortem_reason"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
-      "covered_by": {
-        "write": "delete_post_mortem_reason"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
-      "covered_by": {
-        "write": "update_post_mortem_reason"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/post_mortems/reports/{report_id}/reasons/order",
-      "covered_by": {
-        "write": "reorder_post_mortem_reasons"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/priorities",
       "covered_by": {
@@ -1796,31 +1376,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/priorities",
-      "covered_by": {
-        "write": "create_priority"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/priorities/{priority_slug}",
-      "covered_by": {
-        "write": "delete_priority"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/priorities/{priority_slug}",
       "covered_by": {
         "stream": "get_priority"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/priorities/{priority_slug}",
-      "covered_by": {
-        "write": "update_priority"
       }
     },
     {
@@ -1845,31 +1404,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/retrospective_templates",
-      "covered_by": {
-        "write": "create_retrospective_template"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/retrospective_templates/{retrospective_template_id}",
-      "covered_by": {
-        "write": "delete_retrospective_template"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/retrospective_templates/{retrospective_template_id}",
       "covered_by": {
         "stream": "get_retrospective_template"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/retrospective_templates/{retrospective_template_id}",
-      "covered_by": {
-        "write": "update_retrospective_template"
       }
     },
     {
@@ -1887,20 +1425,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/roles",
-      "covered_by": {
-        "write": "create_role"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/roles/{id}",
-      "covered_by": {
-        "write": "delete_role"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/roles/{id}",
       "covered_by": {
@@ -1908,18 +1432,15 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/roles/{id}",
-      "covered_by": {
-        "write": "update_role"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/runbook_audits",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Documented as deprecated by FireHydrant; not exposed as a new connector capability."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -1930,31 +1451,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/runbooks",
-      "covered_by": {
-        "write": "create_runbook"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/runbooks/{runbook_id}",
-      "covered_by": {
-        "write": "delete_runbook"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/runbooks/{runbook_id}",
       "covered_by": {
         "stream": "get_runbook"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/runbooks/{runbook_id}",
-      "covered_by": {
-        "write": "update_runbook"
       }
     },
     {
@@ -1972,32 +1472,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/runbooks/executions",
-      "covered_by": {
-        "write": "create_runbook_execution"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/runbooks/executions/{execution_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires query parameters (reason) on a mutation; writes.json has no query-parameter dialect."
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/runbooks/executions/{execution_id}",
       "covered_by": {
         "stream": "get_runbook_execution"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}",
-      "covered_by": {
-        "write": "update_runbook_execution_step"
       }
     },
     {
@@ -2008,10 +1486,27 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/script/{state}",
-      "covered_by": {
-        "write": "update_runbook_execution_step_script"
+      "method": "GET",
+      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runbooks/executions/{execution_id}/votes/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -2029,31 +1524,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/saved_searches/{resource_type}",
-      "covered_by": {
-        "write": "create_saved_search"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
-      "covered_by": {
-        "write": "delete_saved_search"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
       "covered_by": {
         "stream": "get_saved_search"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
-      "covered_by": {
-        "write": "update_saved_search"
       }
     },
     {
@@ -2064,31 +1538,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/scheduled_maintenances",
-      "covered_by": {
-        "write": "create_scheduled_maintenance"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
-      "covered_by": {
-        "write": "delete_scheduled_maintenance"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
       "covered_by": {
         "stream": "get_scheduled_maintenance"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
-      "covered_by": {
-        "write": "update_scheduled_maintenance"
       }
     },
     {
@@ -2101,111 +1554,49 @@
     {
       "method": "GET",
       "path": "/v1/scim/v2/Groups",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/scim/v2/Groups",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/scim/v2/Groups/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
       "method": "GET",
       "path": "/v1/scim/v2/Groups/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/scim/v2/Groups/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/scim/v2/Groups/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
       "method": "GET",
       "path": "/v1/scim/v2/Users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/scim/v2/Users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/scim/v2/Users/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
       "method": "GET",
       "path": "/v1/scim/v2/Users/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/scim/v2/Users/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/scim/v2/Users/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/service_dependencies",
-      "covered_by": {
-        "write": "create_service_dependency"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/service_dependencies/{service_dependency_id}",
-      "covered_by": {
-        "write": "delete_service_dependency"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
       }
     },
     {
@@ -2216,13 +1607,6 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/service_dependencies/{service_dependency_id}",
-      "covered_by": {
-        "write": "update_service_dependency"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/services",
       "covered_by": {
@@ -2230,31 +1614,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/services",
-      "covered_by": {
-        "write": "create_service"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/services/{service_id}",
-      "covered_by": {
-        "write": "delete_service"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/services/{service_id}",
       "covered_by": {
         "stream": "get_service"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/services/{service_id}",
-      "covered_by": {
-        "write": "update_service"
       }
     },
     {
@@ -2272,13 +1635,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/services/{service_id}/checklist_response/{checklist_id}",
-      "covered_by": {
-        "write": "create_service_checklist_response"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/services/{service_id}/dependencies",
       "covered_by": {
@@ -2293,38 +1649,10 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/services/{service_id}/service_links/{remote_id}",
-      "covered_by": {
-        "write": "delete_service_link"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/services/service_links",
-      "covered_by": {
-        "write": "create_service_links"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/severities",
       "covered_by": {
         "stream": "list_severities"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/severities",
-      "covered_by": {
-        "write": "create_severity"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/severities/{severity_slug}",
-      "covered_by": {
-        "write": "delete_severity"
       }
     },
     {
@@ -2335,24 +1663,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/severities/{severity_slug}",
-      "covered_by": {
-        "write": "update_severity"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/severity_matrix",
       "covered_by": {
         "stream": "get_severity_matrix"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/severity_matrix",
-      "covered_by": {
-        "write": "update_severity_matrix"
       }
     },
     {
@@ -2363,31 +1677,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/severity_matrix/conditions",
-      "covered_by": {
-        "write": "create_severity_matrix_condition"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/severity_matrix/conditions/{condition_id}",
-      "covered_by": {
-        "write": "delete_severity_matrix_condition"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/severity_matrix/conditions/{condition_id}",
       "covered_by": {
         "stream": "get_severity_matrix_condition"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/severity_matrix/conditions/{condition_id}",
-      "covered_by": {
-        "write": "update_severity_matrix_condition"
       }
     },
     {
@@ -2398,38 +1691,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/severity_matrix/impacts",
-      "covered_by": {
-        "write": "create_severity_matrix_impact"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/severity_matrix/impacts/{impact_id}",
-      "covered_by": {
-        "write": "delete_severity_matrix_impact"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/severity_matrix/impacts/{impact_id}",
-      "covered_by": {
-        "write": "update_severity_matrix_impact"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals_on_call",
       "covered_by": {
         "stream": "list_organization_on_call_schedules"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/alerts/{id}",
-      "covered_by": {
-        "write": "update_signals_alert"
       }
     },
     {
@@ -2455,14 +1720,6 @@
     },
     {
       "method": "GET",
-      "path": "/v1/signals/analytics/shifts/export",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream."
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1/signals/analytics/timeseries",
       "covered_by": {
         "stream": "get_signals_timeseries_analytics"
@@ -2476,31 +1733,10 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/signals/call_routes/{id}",
-      "covered_by": {
-        "write": "delete_call_route"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/call_routes/{id}",
       "covered_by": {
         "stream": "get_call_route"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/call_routes/{id}",
-      "covered_by": {
-        "write": "update_call_route"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/signals/debugger",
-      "covered_by": {
-        "write": "debug_signals_expression"
       }
     },
     {
@@ -2511,20 +1747,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/signals/email_targets",
-      "covered_by": {
-        "write": "create_signals_email_target"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/email_targets/{id}",
-      "covered_by": {
-        "write": "delete_signals_email_target"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/email_targets/{id}",
       "covered_by": {
@@ -2532,31 +1754,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/signals/email_targets/{id}",
-      "covered_by": {
-        "write": "update_signals_email_target"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/event_sources",
       "covered_by": {
         "stream": "list_signals_event_sources"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/signals/event_sources",
-      "covered_by": {
-        "write": "create_signals_event_source"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/event_sources/{transposer_slug}",
-      "covered_by": {
-        "write": "delete_signals_event_source"
       }
     },
     {
@@ -2574,31 +1775,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/signals/grouping",
-      "covered_by": {
-        "write": "create_signals_alert_grouping_configuration"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/grouping/{id}",
-      "covered_by": {
-        "write": "delete_signals_alert_grouping_configuration"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/grouping/{id}",
       "covered_by": {
         "stream": "get_signals_alert_grouping_configuration"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/grouping/{id}",
-      "covered_by": {
-        "write": "update_signals_alert_grouping_configuration"
       }
     },
     {
@@ -2616,47 +1796,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/signals/heartbeat_endpoints",
-      "covered_by": {
-        "write": "create_signals_heartbeat_endpoint_configuration"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/heartbeat_endpoints/{id}",
-      "covered_by": {
-        "write": "delete_signals_heartbeat_endpoint_configuration"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/heartbeat_endpoints/{id}",
       "covered_by": {
         "stream": "get_signals_heartbeat_endpoint_configuration"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/heartbeat_endpoints/{id}",
-      "covered_by": {
-        "write": "update_signals_heartbeat_endpoint_configuration"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/signals/heartbeat_endpoints/addresses",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/signals/heartbeat_endpoints/statuses",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent."
       }
     },
     {
@@ -2674,31 +1817,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/signals/notification_policy_items",
-      "covered_by": {
-        "write": "create_notification_policy"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/notification_policy_items/{id}",
-      "covered_by": {
-        "write": "delete_notification_policy"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/notification_policy_items/{id}",
       "covered_by": {
         "stream": "get_notification_policy"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/notification_policy_items/{id}",
-      "covered_by": {
-        "write": "update_notification_policy"
       }
     },
     {
@@ -2723,31 +1845,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/signals/webhook_targets",
-      "covered_by": {
-        "write": "create_signals_webhook_target"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/signals/webhook_targets/{id}",
-      "covered_by": {
-        "write": "delete_signals_webhook_target"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/signals/webhook_targets/{id}",
       "covered_by": {
         "stream": "get_signals_webhook_target"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/signals/webhook_targets/{id}",
-      "covered_by": {
-        "write": "update_signals_webhook_target"
       }
     },
     {
@@ -2758,31 +1859,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/status_update_templates",
-      "covered_by": {
-        "write": "create_status_update_template"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/status_update_templates/{status_update_template_id}",
-      "covered_by": {
-        "write": "delete_status_update_template"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/status_update_templates/{status_update_template_id}",
       "covered_by": {
         "stream": "get_status_update_template"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/status_update_templates/{status_update_template_id}",
-      "covered_by": {
-        "write": "update_status_update_template"
       }
     },
     {
@@ -2793,31 +1873,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/task_lists",
-      "covered_by": {
-        "write": "create_task_list"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/task_lists/{task_list_id}",
-      "covered_by": {
-        "write": "delete_task_list"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/task_lists/{task_list_id}",
       "covered_by": {
         "stream": "get_task_list"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/task_lists/{task_list_id}",
-      "covered_by": {
-        "write": "update_task_list"
       }
     },
     {
@@ -2828,31 +1887,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/teams",
-      "covered_by": {
-        "write": "create_team"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}",
-      "covered_by": {
-        "write": "delete_team"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}",
       "covered_by": {
         "stream": "get_team"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}",
-      "covered_by": {
-        "write": "update_team"
       }
     },
     {
@@ -2863,31 +1901,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/call_routes",
-      "covered_by": {
-        "write": "create_team_call_route"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}/escalation_policies",
       "covered_by": {
         "stream": "list_team_escalation_policies"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/escalation_policies",
-      "covered_by": {
-        "write": "create_team_escalation_policy"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/escalation_policies/{id}",
-      "covered_by": {
-        "write": "delete_team_escalation_policy"
       }
     },
     {
@@ -2898,31 +1915,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/escalation_policies/{id}",
-      "covered_by": {
-        "write": "update_team_escalation_policy"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}/on_call_schedules",
       "covered_by": {
         "stream": "list_team_on_call_schedules"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules",
-      "covered_by": {
-        "write": "create_team_on_call_schedule"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
-      "covered_by": {
-        "write": "delete_team_on_call_schedule"
       }
     },
     {
@@ -2933,73 +1929,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
-      "covered_by": {
-        "write": "update_team_on_call_schedule"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations",
-      "covered_by": {
-        "write": "create_on_call_schedule_rotation"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}",
-      "covered_by": {
-        "write": "delete_on_call_schedule_rotation"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}",
       "covered_by": {
         "stream": "get_on_call_schedule_rotation"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}",
-      "covered_by": {
-        "write": "update_on_call_schedule_rotation"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}/copy",
-      "covered_by": {
-        "write": "copy_on_call_schedule_rotation"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}/overrides",
-      "covered_by": {
-        "write": "override_on_call_schedule_rotation_shifts"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/preview",
-      "covered_by": {
-        "write": "preview_on_call_schedule_rotation"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts",
-      "covered_by": {
-        "write": "create_on_call_shift"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
-      "covered_by": {
-        "write": "delete_on_call_shift"
       }
     },
     {
@@ -3010,38 +1943,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
-      "covered_by": {
-        "write": "update_on_call_shift"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/on_call_schedules/preview",
-      "covered_by": {
-        "write": "preview_team_on_call_schedule"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}/signal_rules",
       "covered_by": {
         "stream": "list_team_signal_rules"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/teams/{team_id}/signal_rules",
-      "covered_by": {
-        "write": "create_team_signal_rule"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/signal_rules/{id}",
-      "covered_by": {
-        "write": "delete_team_signal_rule"
       }
     },
     {
@@ -3052,20 +1957,6 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/signal_rules/{id}",
-      "covered_by": {
-        "write": "update_team_signal_rule"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/teams/{team_id}/support_hours_schedule",
-      "covered_by": {
-        "write": "delete_support_hours_schedule"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/teams/{team_id}/support_hours_schedule",
       "covered_by": {
@@ -3073,38 +1964,10 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/teams/{team_id}/support_hours_schedule",
-      "covered_by": {
-        "write": "update_support_hours_schedule"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/custom_fields/definitions",
       "covered_by": {
         "stream": "list_ticketing_custom_definitions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/ticketing/custom_fields/definitions",
-      "covered_by": {
-        "write": "create_ticketing_custom_definition"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/custom_fields/definitions/{field_id}",
-      "covered_by": {
-        "write": "delete_ticketing_custom_definition"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ticketing/custom_fields/definitions/{field_id}",
-      "covered_by": {
-        "write": "update_ticketing_custom_definition"
       }
     },
     {
@@ -3122,31 +1985,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/ticketing/priorities",
-      "covered_by": {
-        "write": "create_ticketing_priority"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/priorities/{id}",
-      "covered_by": {
-        "write": "delete_ticketing_priority"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/priorities/{id}",
       "covered_by": {
         "stream": "get_ticketing_priority"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ticketing/priorities/{id}",
-      "covered_by": {
-        "write": "update_ticketing_priority"
       }
     },
     {
@@ -3178,31 +2020,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps",
-      "covered_by": {
-        "write": "create_ticketing_field_map"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
-      "covered_by": {
-        "write": "delete_ticketing_field_map"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
       "covered_by": {
         "stream": "get_ticketing_field_map"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
-      "covered_by": {
-        "write": "update_ticketing_field_map"
       }
     },
     {
@@ -3220,31 +2041,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps",
-      "covered_by": {
-        "write": "create_inbound_field_map"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps/{map_id}",
-      "covered_by": {
-        "write": "delete_inbound_field_map"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps/{map_id}",
       "covered_by": {
         "stream": "get_inbound_field_map"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps/{map_id}",
-      "covered_by": {
-        "write": "update_inbound_field_map"
       }
     },
     {
@@ -3255,31 +2055,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations",
-      "covered_by": {
-        "write": "create_ticketing_project_config"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
-      "covered_by": {
-        "write": "delete_ticketing_project_config"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
       "covered_by": {
         "stream": "get_ticketing_project_config"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
-      "covered_by": {
-        "write": "update_ticketing_project_config"
       }
     },
     {
@@ -3297,31 +2076,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/ticketing/tickets",
-      "covered_by": {
-        "write": "create_ticket"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/ticketing/tickets/{ticket_id}",
-      "covered_by": {
-        "write": "delete_ticket"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/ticketing/tickets/{ticket_id}",
       "covered_by": {
         "stream": "get_ticket"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/ticketing/tickets/{ticket_id}",
-      "covered_by": {
-        "write": "update_ticket"
       }
     },
     {
@@ -3353,24 +2111,557 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/webhooks",
-      "covered_by": {
-        "write": "create_webhook"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/webhooks/{webhook_id}",
-      "covered_by": {
-        "write": "delete_webhook"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1/webhooks/{webhook_id}",
       "covered_by": {
         "stream": "get_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/{webhook_id}/deliveries",
+      "covered_by": {
+        "stream": "list_webhook_deliveries"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ai/preferences",
+      "covered_by": {
+        "write": "update_ai_preferences"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/audiences/{audience_id}",
+      "covered_by": {
+        "write": "update_audience"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/audiences/{audience_id}/restore",
+      "covered_by": {
+        "write": "restore_audience"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/changes/{change_id}",
+      "covered_by": {
+        "write": "update_change"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/changes/{change_id}/identities/{identity_id}",
+      "covered_by": {
+        "write": "update_change_identity"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/changes/events/{change_event_id}",
+      "covered_by": {
+        "write": "update_change_event"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/checklist_templates/{id}",
+      "covered_by": {
+        "write": "update_checklist_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/custom_fields/definitions/{field_id}",
+      "covered_by": {
+        "write": "update_custom_field_definition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/environments/{environment_id}",
+      "covered_by": {
+        "write": "update_environment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/functionalities/{functionality_id}",
+      "covered_by": {
+        "write": "update_functionality"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incident_roles/{incident_role_id}",
+      "covered_by": {
+        "write": "update_incident_role"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incident_types/{id}",
+      "covered_by": {
+        "write": "update_incident_type"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}",
+      "covered_by": {
+        "write": "update_incident"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}/primary",
+      "covered_by": {
+        "write": "update_incident_alert_primary"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/events/{event_id}",
+      "covered_by": {
+        "write": "update_incident_event"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/events/{event_id}/votes",
+      "covered_by": {
+        "write": "update_vote"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
+      "covered_by": {
+        "write": "update_incident_chat_message"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/impact",
+      "covered_by": {
+        "write": "update_incident_impact_patch"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/notes/{note_id}",
+      "covered_by": {
+        "write": "update_incident_note"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/related_change_events/{related_change_event_id}",
+      "covered_by": {
+        "write": "update_incident_change_event"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}",
+      "covered_by": {
+        "write": "update_incident_retrospective"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields",
+      "covered_by": {
+        "write": "create_incident_retrospective_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}",
+      "covered_by": {
+        "write": "update_incident_retrospective_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "update_incident_task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/authed_providers/{integration_slug}/{connection_id}/{authed_provider_id}",
+      "covered_by": {
+        "write": "update_authed_provider"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/aws/cloudtrail_batches/{id}",
+      "covered_by": {
+        "write": "update_aws_cloudtrail_batch"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/aws/connections/{id}",
+      "covered_by": {
+        "write": "update_aws_connection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/connections/{slug}/{connection_id}",
+      "covered_by": {
+        "write": "update_connection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/connections/{slug}/{connection_id}/refresh",
+      "covered_by": {
+        "write": "refresh_connection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/field_maps/{field_map_id}",
+      "covered_by": {
+        "write": "update_field_map"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
+      "covered_by": {
+        "write": "update_slack_emoji_action"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/integrations/statuspage/connections/{connection_id}",
+      "covered_by": {
+        "write": "update_statuspage_connection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
+      "covered_by": {
+        "write": "update_lifecycle_measurement_definition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/lifecycles/milestones/{milestone_id}",
+      "covered_by": {
+        "write": "update_lifecycle_milestone"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
+      "covered_by": {
+        "write": "update_nunc_component_group"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
+      "covered_by": {
+        "write": "update_nunc_link"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/post_mortems/reports/{report_id}",
+      "covered_by": {
+        "write": "update_post_mortem_report"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/post_mortems/reports/{report_id}/fields/{field_id}",
+      "covered_by": {
+        "write": "update_post_mortem_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
+      "covered_by": {
+        "write": "update_post_mortem_reason"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/priorities/{priority_slug}",
+      "covered_by": {
+        "write": "update_priority"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/retrospective_templates/{retrospective_template_id}",
+      "covered_by": {
+        "write": "update_retrospective_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/roles/{id}",
+      "covered_by": {
+        "write": "update_role"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/runbooks/executions/{execution_id}/votes",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
+      "covered_by": {
+        "write": "update_saved_search"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
+      "covered_by": {
+        "write": "update_scheduled_maintenance"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/scim/v2/Users/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/service_dependencies/{service_dependency_id}",
+      "covered_by": {
+        "write": "update_service_dependency"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/services/{service_id}",
+      "covered_by": {
+        "write": "update_service"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/severities/{severity_slug}",
+      "covered_by": {
+        "write": "update_severity"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/severity_matrix",
+      "covered_by": {
+        "write": "update_severity_matrix"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/severity_matrix/conditions/{condition_id}",
+      "covered_by": {
+        "write": "update_severity_matrix_condition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/severity_matrix/impacts/{impact_id}",
+      "covered_by": {
+        "write": "update_severity_matrix_impact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/alerts/{id}",
+      "covered_by": {
+        "write": "update_signals_alert"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/call_routes/{id}",
+      "covered_by": {
+        "write": "update_call_route"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/email_targets/{id}",
+      "covered_by": {
+        "write": "update_signals_email_target"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/grouping/{id}",
+      "covered_by": {
+        "write": "update_signals_alert_grouping_configuration"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/heartbeat_endpoints/{id}",
+      "covered_by": {
+        "write": "update_signals_heartbeat_endpoint_configuration"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/notification_policy_items/{id}",
+      "covered_by": {
+        "write": "update_notification_policy"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/signals/webhook_targets/{id}",
+      "covered_by": {
+        "write": "update_signals_webhook_target"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/status_update_templates/{status_update_template_id}",
+      "covered_by": {
+        "write": "update_status_update_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/task_lists/{task_list_id}",
+      "covered_by": {
+        "write": "update_task_list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/escalation_policies/{id}",
+      "covered_by": {
+        "write": "update_team_escalation_policy"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
+      "covered_by": {
+        "write": "update_team_on_call_schedule"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}",
+      "covered_by": {
+        "write": "update_on_call_schedule_rotation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
+      "covered_by": {
+        "write": "update_on_call_shift"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/signal_rules/{id}",
+      "covered_by": {
+        "write": "update_team_signal_rule"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/teams/{team_id}/support_hours_schedule",
+      "covered_by": {
+        "write": "update_support_hours_schedule"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ticketing/custom_fields/definitions/{field_id}",
+      "covered_by": {
+        "write": "update_ticketing_custom_definition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ticketing/priorities/{id}",
+      "covered_by": {
+        "write": "update_ticketing_priority"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
+      "covered_by": {
+        "write": "update_ticketing_field_map"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
+      "covered_by": {
+        "write": "update_ticketing_project_config"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/ticketing/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "update_ticket"
       }
     },
     {
@@ -3381,11 +2672,805 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/webhooks/{webhook_id}/deliveries",
+      "method": "POST",
+      "path": "/v1/audiences",
       "covered_by": {
-        "stream": "list_webhook_deliveries"
+        "write": "create_audience"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/audiences/{audience_id}/summaries/{incident_id}",
+      "covered_by": {
+        "write": "generate_audience_summary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/catalogs/{catalog_id}/ingest",
+      "covered_by": {
+        "write": "ingest_catalog_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/changes",
+      "covered_by": {
+        "write": "create_change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/changes/{change_id}/identities",
+      "covered_by": {
+        "write": "create_change_identity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/changes/events",
+      "covered_by": {
+        "write": "create_change_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/checklist_templates",
+      "covered_by": {
+        "write": "create_checklist_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/conversations/{conversation_id}/comments",
+      "covered_by": {
+        "write": "create_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions",
+      "covered_by": {
+        "write": "create_comment_reaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/custom_fields/definitions",
+      "covered_by": {
+        "write": "create_custom_field_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/environments",
+      "covered_by": {
+        "write": "create_environment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/functionalities",
+      "covered_by": {
+        "write": "create_functionality"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incident_roles",
+      "covered_by": {
+        "write": "create_incident_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incident_tags/validate",
+      "covered_by": {
+        "write": "validate_incident_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incident_types",
+      "covered_by": {
+        "write": "create_incident_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents",
+      "covered_by": {
+        "write": "create_incident"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/alerts",
+      "covered_by": {
+        "write": "create_incident_alert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/attachments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/generic_chat_messages",
+      "covered_by": {
+        "write": "create_incident_chat_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/impact/{type}",
+      "covered_by": {
+        "write": "create_incident_impact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/links",
+      "covered_by": {
+        "write": "create_incident_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/notes",
+      "covered_by": {
+        "write": "create_incident_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/related_change_events",
+      "covered_by": {
+        "write": "create_incident_change_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/retrospectives",
+      "covered_by": {
+        "write": "create_incident_retrospective"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}/inputs",
+      "covered_by": {
+        "write": "create_incident_retrospective_dynamic_input"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/retrospectives/share",
+      "covered_by": {
+        "write": "share_incident_retrospectives"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/role_assignments",
+      "covered_by": {
+        "write": "create_incident_role_assignment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/status_pages",
+      "covered_by": {
+        "write": "create_incident_status_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/task_lists",
+      "covered_by": {
+        "write": "create_incident_task_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/tasks",
+      "covered_by": {
+        "write": "create_incident_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/tasks/{task_id}/convert",
+      "covered_by": {
+        "write": "convert_incident_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/team_assignments",
+      "covered_by": {
+        "write": "create_incident_team_assignment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/incidents/{incident_id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_incident"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/connections/{slug}",
+      "covered_by": {
+        "write": "create_connection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions",
+      "covered_by": {
+        "write": "create_slack_emoji_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lifecycles/measurement_definitions",
+      "covered_by": {
+        "write": "create_lifecycle_measurement_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lifecycles/milestones",
+      "covered_by": {
+        "write": "create_lifecycle_milestone"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections",
+      "covered_by": {
+        "write": "create_nunc_connection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups",
+      "covered_by": {
+        "write": "create_nunc_component_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/links",
+      "covered_by": {
+        "write": "create_nunc_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/publish",
+      "covered_by": {
+        "write": "publish_nunc_connection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+      "covered_by": {
+        "write": "create_email_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/unpublish",
+      "covered_by": {
+        "write": "unpublish_nunc_connection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/nunc/subscriptions",
+      "covered_by": {
+        "write": "create_nunc_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/page/signals",
+      "covered_by": {
+        "write": "create_signals_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/post_mortems/reports",
+      "covered_by": {
+        "write": "create_post_mortem_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/post_mortems/reports/{report_id}/publish",
+      "covered_by": {
+        "write": "publish_post_mortem_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/post_mortems/reports/{report_id}/reasons",
+      "covered_by": {
+        "write": "create_post_mortem_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/priorities",
+      "covered_by": {
+        "write": "create_priority"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/retrospective_templates",
+      "covered_by": {
+        "write": "create_retrospective_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/roles",
+      "covered_by": {
+        "write": "create_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runbooks",
+      "covered_by": {
+        "write": "create_runbook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runbooks/executions",
+      "covered_by": {
+        "write": "create_runbook_execution"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/saved_searches/{resource_type}",
+      "covered_by": {
+        "write": "create_saved_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/scheduled_maintenances",
+      "covered_by": {
+        "write": "create_scheduled_maintenance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/scim/v2/Groups",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/scim/v2/Users",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/service_dependencies",
+      "covered_by": {
+        "write": "create_service_dependency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/services",
+      "covered_by": {
+        "write": "create_service"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/services/{service_id}/checklist_response/{checklist_id}",
+      "covered_by": {
+        "write": "create_service_checklist_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/services/service_links",
+      "covered_by": {
+        "write": "create_service_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/severities",
+      "covered_by": {
+        "write": "create_severity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/severity_matrix/conditions",
+      "covered_by": {
+        "write": "create_severity_matrix_condition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/severity_matrix/impacts",
+      "covered_by": {
+        "write": "create_severity_matrix_impact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/debugger",
+      "covered_by": {
+        "write": "debug_signals_expression"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/email_targets",
+      "covered_by": {
+        "write": "create_signals_email_target"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/grouping",
+      "covered_by": {
+        "write": "create_signals_alert_grouping_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/heartbeat_endpoints",
+      "covered_by": {
+        "write": "create_signals_heartbeat_endpoint_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/notification_policy_items",
+      "covered_by": {
+        "write": "create_notification_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/signals/webhook_targets",
+      "covered_by": {
+        "write": "create_signals_webhook_target"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/status_update_templates",
+      "covered_by": {
+        "write": "create_status_update_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/task_lists",
+      "covered_by": {
+        "write": "create_task_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/call_routes",
+      "covered_by": {
+        "write": "create_team_call_route"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/escalation_policies",
+      "covered_by": {
+        "write": "create_team_escalation_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules",
+      "covered_by": {
+        "write": "create_team_on_call_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations",
+      "covered_by": {
+        "write": "create_on_call_schedule_rotation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}/copy",
+      "covered_by": {
+        "write": "copy_on_call_schedule_rotation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/{rotation_id}/overrides",
+      "covered_by": {
+        "write": "override_on_call_schedule_rotation_shifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/rotations/preview",
+      "covered_by": {
+        "write": "preview_on_call_schedule_rotation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts",
+      "covered_by": {
+        "write": "create_on_call_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/on_call_schedules/preview",
+      "covered_by": {
+        "write": "preview_team_on_call_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/teams/{team_id}/signal_rules",
+      "covered_by": {
+        "write": "create_team_signal_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/custom_fields/definitions",
+      "covered_by": {
+        "write": "create_ticketing_custom_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/priorities",
+      "covered_by": {
+        "write": "create_ticketing_priority"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps",
+      "covered_by": {
+        "write": "create_ticketing_field_map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps",
+      "covered_by": {
+        "write": "create_inbound_field_map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations",
+      "covered_by": {
+        "write": "create_ticketing_project_config"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ticketing/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/vote",
+      "covered_by": {
+        "write": "vote_ai_incident_summary"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/audiences/member/{member_id}/default",
+      "covered_by": {
+        "write": "set_member_default_audience"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/close",
+      "covered_by": {
+        "write": "close_incident"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/impact",
+      "covered_by": {
+        "write": "update_incident_impact_put"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/links/{link_id}",
+      "covered_by": {
+        "write": "update_incident_link"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/milestones/bulk_update",
+      "covered_by": {
+        "write": "bulk_update_incident_milestones"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/resolve",
+      "covered_by": {
+        "write": "resolve_incident"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/incidents/{incident_id}/transcript/attribution",
+      "covered_by": {
+        "write": "update_transcript_attribution"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/integrations/slack/channels/{id}/test",
+      "covered_by": {
+        "write": "test_slack_channel"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/nunc_connections/{nunc_connection_id}",
+      "covered_by": {
+        "write": "update_nunc_connection"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/post_mortems/questions",
+      "covered_by": {
+        "write": "update_post_mortem_questions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/post_mortems/reports/{report_id}/reasons/order",
+      "covered_by": {
+        "write": "reorder_post_mortem_reasons"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/runbooks/{runbook_id}",
+      "covered_by": {
+        "write": "update_runbook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}",
+      "covered_by": {
+        "write": "update_runbook_execution_step"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/script/{state}",
+      "covered_by": {
+        "write": "update_runbook_execution_step_script"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/scim/v2/Groups/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/scim/v2/Users/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/signals/event_sources",
+      "covered_by": {
+        "write": "create_signals_event_source"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/ticketing/projects/{ticketing_project_id}/inbound_field_maps/{map_id}",
+      "covered_by": {
+        "write": "update_inbound_field_map"
       }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

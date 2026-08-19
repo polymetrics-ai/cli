@@ -1,0 +1,41 @@
+{
+  "schema_version": 3,
+  "connector": "adobe-commerce-magento",
+  "state": "dynamic",
+  "captured_at": "2026-08-19T16:46:17.504Z",
+  "dynamic": {
+    "reason": "dynamic-instance-dependent",
+    "detail": "Adobe Commerce REST routes and schemas are generated from the modules enabled on each configured Magento instance. The official reference documents that instance-specific contract; there is no provider-global static operation total to fabricate."
+  },
+  "rest": {
+    "source_url": "https://developer.adobe.com/commerce/webapi/rest/",
+    "representation": "complete-rendered-reference",
+    "documents": [
+      {
+        "source_url": "https://developer.adobe.com/commerce/webapi/rest/",
+        "sha256": "6012876bf8a0e4423f9dc151bf102d5b161f19da716e9cf3a1a6d25e950eeb42",
+        "bytes": 8292,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "5d3900b2ef9e871c82d27a4be94fe8bc4f3bc75881d5e8cd7be7348e7a3dad66",
+      "bytes": 8292
+    },
+    "counts": {
+      "total": null,
+      "by_method": {},
+      "by_kind": {
+        "rest": null
+      }
+    },
+    "coverage_confidence": {
+      "level": "dynamic-instance-dependent",
+      "basis": "Adobe Commerce REST routes and schemas are generated from the modules enabled on each configured Magento instance. The official reference documents that instance-specific contract; there is no provider-global static operation total to fabricate."
+    },
+    "operations": []
+  }
+}

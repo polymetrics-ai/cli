@@ -1,405 +1,15 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "coda",
   "source_lock": "sources/coda-operation-source-lock.json",
-  "generated_at": "2026-08-19T15:30:48.422Z",
+  "generated_at": "2026-08-19T16:45:19.029Z",
   "source_operations": [
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-api-surface-1",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[0]",
-      "operation_id": "coda.rest.get-docs-api-surface-1",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs",
-          "operation": null,
-          "covered_by": {
-            "stream": "docs"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "etl",
-          "id": "docs"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-api-surface-2",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[1]",
-      "operation_id": "coda.rest.post-docs-api-surface-2",
-      "deprecated": false,
-      "method": "POST",
-      "path": "/docs",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "POST",
-          "path": "/docs",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-api-surface-3",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[2]",
-      "operation_id": "coda.rest.get-docs-docid-api-surface-3",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-api-surface-4",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[3]",
-      "operation_id": "coda.rest.delete-docs-docid-api-surface-4",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}",
-          "operation": null,
-          "excluded": {
-            "category": "destructive_admin",
-            "reason": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.patch-docs-docid-api-surface-5",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[4]",
-      "operation_id": "coda.rest.patch-docs-docid-api-surface-5",
-      "deprecated": false,
-      "method": "PATCH",
-      "path": "/docs/{docId}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "PATCH",
-          "path": "/docs/{docId}",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[5]",
-      "operation_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/acl/metadata",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/acl/metadata",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "sharing/ACL metadata is workspace-permission surface, not doc content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[6]",
-      "operation_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/acl/permissions",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/acl/permissions",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "lists who has access to the doc; permission/sharing management is out of scope for a content connector"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[7]",
-      "operation_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
-      "deprecated": false,
-      "method": "POST",
-      "path": "/docs/{docId}/acl/permissions",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "POST",
-          "path": "/docs/{docId}/acl/permissions",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "grants doc access to a principal; access-control mutation, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[8]",
-      "operation_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/acl/permissions/{permissionId}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/acl/permissions/{permissionId}",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "revokes doc access; access-control mutation, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[9]",
-      "operation_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/acl/principals/search",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/acl/principals/search",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "searches workspace principals for sharing purposes; identity/directory surface, not doc content"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[10]",
-      "operation_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/acl/settings",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/acl/settings",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "doc-level sharing default settings; access-control configuration, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[11]",
-      "operation_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
-      "deprecated": false,
-      "method": "PATCH",
-      "path": "/docs/{docId}/acl/settings",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "PATCH",
-          "path": "/docs/{docId}/acl/settings",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "mutates doc-level sharing defaults; access-control configuration, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-controls-api-surface-13",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[12]",
-      "operation_id": "coda.rest.get-docs-docid-controls-api-surface-13",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/controls",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/controls",
-          "operation": null,
-          "covered_by": {
-            "stream": "controls"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "etl",
-          "id": "controls"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[13]",
-      "operation_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/controls/{controlIdOrName}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/controls/{controlIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-domains-api-surface-15",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[14]",
-      "operation_id": "coda.rest.get-docs-docid-domains-api-surface-15",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/${docId}/domains",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/${docId}/domains",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-domains-api-surface-16",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[15]",
-      "operation_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+      "source_id": "coda.rest.addcustomdocdomain-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/${docId}/domains\"].post",
+      "operation_id": "addCustomDocDomain",
       "deprecated": false,
       "method": "POST",
       "path": "/docs/${docId}/domains",
@@ -408,10 +18,13 @@
         "api_surface": {
           "method": "POST",
           "path": "/docs/${docId}/domains",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "binds a custom domain to the doc; domain-administration mutation, not content data"
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -422,126 +35,25 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[16]",
-      "operation_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/domains/{customDocDomain}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/domains/{customDocDomain}",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "unbinds a custom domain; domain-administration mutation, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[17]",
-      "operation_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
-      "deprecated": false,
-      "method": "PATCH",
-      "path": "/docs/{docId}/domains/{customDocDomain}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "PATCH",
-          "path": "/docs/{docId}/domains/{customDocDomain}",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "updates a custom domain binding; domain-administration mutation, not content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[18]",
-      "operation_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/formulas",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/formulas",
-          "operation": null,
-          "covered_by": {
-            "stream": "formulas"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "etl",
-          "id": "formulas"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[19]",
-      "operation_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/formulas/{formulaIdOrName}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/formulas/{formulaIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[20]",
-      "operation_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+      "source_id": "coda.rest.addgolink-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/organizations/{organizationId}/goLinks\"].post",
+      "operation_id": "addGoLink",
       "deprecated": false,
       "method": "POST",
-      "path": "/docs/{docId}/hooks/automation/{ruleId}",
+      "path": "/organizations/{organizationId}/goLinks",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "POST",
-          "path": "/docs/{docId}/hooks/automation/{ruleId}",
-          "operation": null,
-          "excluded": {
-            "category": "out_of_scope",
-            "reason": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract"
+          "path": "/organizations/{organizationId}/goLinks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -552,74 +64,25 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-pages-api-surface-22",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[21]",
-      "operation_id": "coda.rest.get-docs-docid-pages-api-surface-22",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/pages",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/pages",
-          "operation": null,
-          "covered_by": {
-            "stream": "pages"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "etl",
-          "id": "pages"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-pages-api-surface-23",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[22]",
-      "operation_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+      "source_id": "coda.rest.addpackcategory-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/category\"].post",
+      "operation_id": "addPackCategory",
       "deprecated": false,
       "method": "POST",
-      "path": "/docs/{docId}/pages",
+      "path": "/packs/{packId}/category",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "POST",
-          "path": "/docs/{docId}/pages",
-          "operation": null,
-          "covered_by": {
-            "write": "create_page"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "create_page"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[23]",
-      "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
-      "deprecated": false,
-      "method": "GET",
-      "path": "/docs/{docId}/pages/{pageIdOrName}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "GET",
-          "path": "/docs/{docId}/pages/{pageIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages"
+          "path": "/packs/{packId}/category",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -630,62 +93,97 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[24]",
-      "operation_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+      "source_id": "coda.rest.addpackmaker-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/maker\"].post",
+      "operation_id": "addPackMaker",
       "deprecated": false,
-      "method": "PUT",
-      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "method": "POST",
+      "path": "/packs/{packId}/maker",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
-          "method": "PUT",
-          "path": "/docs/{docId}/pages/{pageIdOrName}",
-          "operation": null,
-          "covered_by": {
-            "write": "update_page"
+          "method": "POST",
+          "path": "/packs/{packId}/maker",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "update_page"
+          "state": "not_materialized",
+          "reason": "declaration-pending"
         }
       }
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[25]",
-      "operation_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+      "source_id": "coda.rest.addpackpermission-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/permissions\"].post",
+      "operation_id": "addPackPermission",
       "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "method": "POST",
+      "path": "/packs/{packId}/permissions",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/pages/{pageIdOrName}",
-          "operation": null,
-          "covered_by": {
-            "write": "delete_page"
+          "method": "POST",
+          "path": "/packs/{packId}/permissions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "delete_page"
+          "state": "not_materialized",
+          "reason": "declaration-pending"
         }
       }
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[26]",
-      "operation_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+      "source_id": "coda.rest.addpermission-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/permissions\"].post",
+      "operation_id": "addPermission",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/acl/permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/acl/permissions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.beginpagecontentexport-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export\"].post",
+      "operation_id": "beginPageContentExport",
       "deprecated": false,
       "method": "POST",
       "path": "/docs/{docId}/pages/{pageIdOrName}/export",
@@ -694,10 +192,13 @@
         "api_surface": {
           "method": "POST",
           "path": "/docs/{docId}/pages/{pageIdOrName}/export",
-          "operation": null,
-          "excluded": {
-            "category": "binary_payload",
-            "reason": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write"
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -708,10 +209,1336 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[27]",
-      "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+      "source_id": "coda.rest.cancelpackreview-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/reviews/pending/cancel\"].post",
+      "operation_id": "cancelPackReview",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/reviews/pending/cancel",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/reviews/pending/cancel",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.changeuserrole-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/workspaces/{workspaceId}/users/role\"].post",
+      "operation_id": "changeUserRole",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/users/role",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/users/role",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createdoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs\"].post",
+      "operation_id": "createDoc",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createfolder-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/folders\"].post",
+      "operation_id": "createFolder",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/folders",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/folders",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createpack-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs\"].post",
+      "operation_id": "createPack",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createpackinvitation-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/invitations\"].post",
+      "operation_id": "createPackInvitation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/invitations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/invitations",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createpackrelease-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/releases\"].post",
+      "operation_id": "createPackRelease",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/releases",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/releases",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createpackreview-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/reviews\"].post",
+      "operation_id": "createPackReview",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/reviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/reviews",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.createpage-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages\"].post",
+      "operation_id": "createPage",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/pages",
+          "covered_by": {
+            "write": "create_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_page"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletecustomdocdomain-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].delete",
+      "operation_id": "deleteCustomDocDomain",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/domains/{customDocDomain}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletedoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}\"].delete",
+      "operation_id": "deleteDoc",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletefolder-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/folders/{folderId}\"].delete",
+      "operation_id": "deleteFolder",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/folders/{folderId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/folders/{folderId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepack-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}\"].delete",
+      "operation_id": "deletePack",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepackcategory-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/category/{categoryName}\"].delete",
+      "operation_id": "deletePackCategory",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/category/{categoryName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/category/{categoryName}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepackinvitation-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/invitations/{invitationId}\"].delete",
+      "operation_id": "deletePackInvitation",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/invitations/{invitationId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/invitations/{invitationId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepacklistingdraft-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/listingDraft\"].delete",
+      "operation_id": "deletePackListingDraft",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/listingDraft",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/listingDraft",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepackmaker-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/maker/{loginId}\"].delete",
+      "operation_id": "deletePackMaker",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/maker/{loginId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/maker/{loginId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepackpermission-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/permissions/{permissionId}\"].delete",
+      "operation_id": "deletePackPermission",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/permissions/{permissionId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/permissions/{permissionId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepage-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].delete",
+      "operation_id": "deletePage",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "covered_by": {
+            "write": "delete_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_page"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepagecontent-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].delete",
+      "operation_id": "deletePageContent",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deletepermission-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/permissions/{permissionId}\"].delete",
+      "operation_id": "deletePermission",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/acl/permissions/{permissionId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/acl/permissions/{permissionId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deleterow-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].delete",
+      "operation_id": "deleteRow",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "covered_by": {
+            "write": "delete_row"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_row"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deleterows-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].delete",
+      "operation_id": "deleteRows",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+          "covered_by": {
+            "write": "delete_rows"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_rows"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.deleteuserpackpermission-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/permissions\"].delete",
+      "operation_id": "deleteUserPackPermission",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/packs/{packId}/permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/packs/{packId}/permissions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getaclsettings-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/settings\"].get",
+      "operation_id": "getAclSettings",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/settings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/settings",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getagentpacklogdetails-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}\"].get",
+      "operation_id": "getAgentPackLogDetails",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getanalyticslastupdated-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/updated\"].get",
+      "operation_id": "getAnalyticsLastUpdated",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/updated",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/updated",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getcolumn-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}\"].get",
+      "operation_id": "getColumn",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getcontrol-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/controls/{controlIdOrName}\"].get",
+      "operation_id": "getControl",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/controls/{controlIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/controls/{controlIdOrName}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getcustomdocdomainprovider-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/domains/provider/{customDocDomain}\"].get",
+      "operation_id": "getCustomDocDomainProvider",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/domains/provider/{customDocDomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/domains/provider/{customDocDomain}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getdoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}\"].get",
+      "operation_id": "getDoc",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getfolder-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/folders/{folderId}\"].get",
+      "operation_id": "getFolder",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/folders/{folderId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/folders/{folderId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getformula-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/formulas/{formulaIdOrName}\"].get",
+      "operation_id": "getFormula",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getmutationstatus-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/mutationStatus/{requestId}\"].get",
+      "operation_id": "getMutationStatus",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/mutationStatus/{requestId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/mutationStatus/{requestId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getnextpackversion-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/nextVersion\"].post",
+      "operation_id": "getNextPackVersion",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/nextVersion",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/nextVersion",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpack-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}\"].get",
+      "operation_id": "getPack",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpackconfigurationschema-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/configurations/schema\"].get",
+      "operation_id": "getPackConfigurationSchema",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/configurations/schema",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/configurations/schema",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpacklisting-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/listing\"].get",
+      "operation_id": "getPackListing",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/listing",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/listing",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpacklistingdraft-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/listingDraft\"].get",
+      "operation_id": "getPackListingDraft",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/listingDraft",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/listingDraft",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpacklogdetails-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}\"].get",
+      "operation_id": "getPackLogDetails",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpackoauthconfig-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/oauthConfig\"].get",
+      "operation_id": "getPackOauthConfig",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/oauthConfig",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/oauthConfig",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpackpermissions-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/permissions\"].get",
+      "operation_id": "getPackPermissions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/permissions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpacksourcecode-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode\"].get",
+      "operation_id": "getPackSourceCode",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/versions/{packVersion}/sourceCode",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/versions/{packVersion}/sourceCode",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpacksystemconnection-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/systemConnection\"].get",
+      "operation_id": "getPackSystemConnection",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/systemConnection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/systemConnection",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpackversiondiffs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}\"].get",
+      "operation_id": "getPackVersionDiffs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpage-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].get",
+      "operation_id": "getPage",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getpagecontentexportstatus-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export/{requestId}\"].get",
+      "operation_id": "getPageContentExportStatus",
       "deprecated": false,
       "method": "GET",
       "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
@@ -720,10 +1547,13 @@
         "api_surface": {
           "method": "GET",
           "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
-          "operation": null,
-          "excluded": {
-            "category": "non_data_endpoint",
-            "reason": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource"
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -734,88 +1564,97 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.put-docs-docid-publish-api-surface-29",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[28]",
-      "operation_id": "coda.rest.put-docs-docid-publish-api-surface-29",
-      "deprecated": false,
-      "method": "PUT",
-      "path": "/docs/{docId}/publish",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "PUT",
-          "path": "/docs/{docId}/publish",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[29]",
-      "operation_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/publish",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/publish",
-          "operation": null,
-          "excluded": {
-            "category": "requires_elevated_scope",
-            "reason": "unpublishes the doc; a workspace-publishing action, not per-record content data"
-          }
-        },
-        "inventory": {
-          "state": "not_materialized",
-          "reason": "declaration-pending"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-api-surface-31",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[30]",
-      "operation_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+      "source_id": "coda.rest.getpermissions-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/permissions\"].get",
+      "operation_id": "getPermissions",
       "deprecated": false,
       "method": "GET",
-      "path": "/docs/{docId}/tables",
+      "path": "/docs/{docId}/acl/permissions",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "GET",
-          "path": "/docs/{docId}/tables",
-          "operation": null,
-          "covered_by": {
-            "stream": "tables"
+          "path": "/docs/{docId}/acl/permissions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
-          "state": "materialized",
-          "kind": "etl",
-          "id": "tables"
+          "state": "not_materialized",
+          "reason": "declaration-pending"
         }
       }
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[31]",
-      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+      "source_id": "coda.rest.getrow-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].get",
+      "operation_id": "getRow",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.getsharingmetadata-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/metadata\"].get",
+      "operation_id": "getSharingMetadata",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/metadata",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/metadata",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.gettable-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}\"].get",
+      "operation_id": "getTable",
       "deprecated": false,
       "method": "GET",
       "path": "/docs/{docId}/tables/{tableIdOrName}",
@@ -824,10 +1663,13 @@
         "api_surface": {
           "method": "GET",
           "path": "/docs/{docId}/tables/{tableIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables"
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -838,10 +1680,97 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[32]",
-      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+      "source_id": "coda.rest.listagentlogs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs\"].get",
+      "operation_id": "listAgentLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listagentsessionids-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds\"].get",
+      "operation_id": "listAgentSessionIds",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listcategories-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/categories\"].get",
+      "operation_id": "listCategories",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/categories",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listcolumns-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns\"].get",
+      "operation_id": "listColumns",
       "deprecated": false,
       "method": "GET",
       "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
@@ -850,7 +1779,6 @@
         "api_surface": {
           "method": "GET",
           "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
-          "operation": null,
           "covered_by": {
             "stream": "columns"
           }
@@ -864,22 +1792,50 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[33]",
-      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+      "source_id": "coda.rest.listcontrols-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/controls\"].get",
+      "operation_id": "listControls",
       "deprecated": false,
       "method": "GET",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "path": "/docs/{docId}/controls",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "GET",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns"
+          "path": "/docs/{docId}/controls",
+          "covered_by": {
+            "stream": "controls"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "controls"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listcustomdocdomains-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/${docId}/domains\"].get",
+      "operation_id": "listCustomDocDomains",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/${docId}/domains",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/${docId}/domains",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -890,10 +1846,752 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[34]",
-      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+      "source_id": "coda.rest.listdocanalytics-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/docs\"].get",
+      "operation_id": "listDocAnalytics",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/docs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/docs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listdocanalyticssummary-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/docs/summary\"].get",
+      "operation_id": "listDocAnalyticsSummary",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/docs/summary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/docs/summary",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listdocs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs\"].get",
+      "operation_id": "listDocs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs",
+          "covered_by": {
+            "stream": "docs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "docs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listfolders-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/folders\"].get",
+      "operation_id": "listFolders",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/folders",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/folders",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listformulas-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/formulas\"].get",
+      "operation_id": "listFormulas",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/formulas",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas",
+          "covered_by": {
+            "stream": "formulas"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "formulas"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listgroupedingestionlogs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs\"].get",
+      "operation_id": "listGroupedIngestionLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listgroupedpacklogs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/docs/{docId}/groupedLogs\"].get",
+      "operation_id": "listGroupedPackLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/docs/{docId}/groupedLogs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/docs/{docId}/groupedLogs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listingestionbatchexecutions-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions\"].get",
+      "operation_id": "listIngestionBatchExecutions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listingestionlogs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs\"].get",
+      "operation_id": "listIngestionLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listingestionparentitems-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems\"].get",
+      "operation_id": "listIngestionParentItems",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackanalytics-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/packs\"].get",
+      "operation_id": "listPackAnalytics",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/packs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/packs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackanalyticssummary-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/packs/summary\"].get",
+      "operation_id": "listPackAnalyticsSummary",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/packs/summary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/packs/summary",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackcategories-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/categories\"].get",
+      "operation_id": "listPackCategories",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/categories",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackfeatureddocs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/featuredDocs\"].get",
+      "operation_id": "listPackFeaturedDocs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/featuredDocs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/featuredDocs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackformulaanalytics-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/packs/{packId}/formulas\"].get",
+      "operation_id": "listPackFormulaAnalytics",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/packs/{packId}/formulas",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/packs/{packId}/formulas",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackinvitations-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/invitations\"].get",
+      "operation_id": "listPackInvitations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/invitations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/invitations",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpacklistings-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/listings\"].get",
+      "operation_id": "listPackListings",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/listings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/listings",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpacklogs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/docs/{docId}/logs\"].get",
+      "operation_id": "listPackLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/docs/{docId}/logs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/docs/{docId}/logs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackmakers-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/makers\"].get",
+      "operation_id": "listPackMakers",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/makers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/makers",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackreleases-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/releases\"].get",
+      "operation_id": "listPackReleases",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/releases",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/releases",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackreviews-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/reviews\"].get",
+      "operation_id": "listPackReviews",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/reviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/reviews",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpacks-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs\"].get",
+      "operation_id": "listPacks",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpackversions-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions\"].get",
+      "operation_id": "listPackVersions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/{packId}/versions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/{packId}/versions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpageanalytics-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/analytics/docs/{docId}/pages\"].get",
+      "operation_id": "listPageAnalytics",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/analytics/docs/{docId}/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/analytics/docs/{docId}/pages",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpagecontent-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].get",
+      "operation_id": "listPageContent",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listpages-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages\"].get",
+      "operation_id": "listPages",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages",
+          "covered_by": {
+            "stream": "pages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "pages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listrows-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].get",
+      "operation_id": "listRows",
       "deprecated": false,
       "method": "GET",
       "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
@@ -902,7 +2600,6 @@
         "api_surface": {
           "method": "GET",
           "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
-          "operation": null,
           "covered_by": {
             "stream": "rows"
           }
@@ -916,74 +2613,50 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[35]",
-      "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
-      "deprecated": false,
-      "method": "POST",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "POST",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
-          "operation": null,
-          "covered_by": {
-            "write": "upsert_rows"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "upsert_rows"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[36]",
-      "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
-          "operation": null,
-          "covered_by": {
-            "write": "delete_rows"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "delete_rows"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[37]",
-      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+      "source_id": "coda.rest.listtables-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables\"].get",
+      "operation_id": "listTables",
       "deprecated": false,
       "method": "GET",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "path": "/docs/{docId}/tables",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "GET",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
-          "operation": null,
-          "excluded": {
-            "category": "duplicate_of",
-            "reason": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows"
+          "path": "/docs/{docId}/tables",
+          "covered_by": {
+            "stream": "tables"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "tables"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listuserpackinvitations-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/invitations\"].get",
+      "operation_id": "listUserPackInvitations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/packs/invitations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/packs/invitations",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -994,62 +2667,213 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[38]",
-      "operation_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+      "source_id": "coda.rest.listworkspacemembers-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/workspaces/{workspaceId}/users\"].get",
+      "operation_id": "listWorkspaceMembers",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/users",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.listworkspaceroleactivity-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/workspaces/{workspaceId}/roles\"].get",
+      "operation_id": "listWorkspaceRoleActivity",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/roles",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/roles",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.packassetuploadcomplete-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete\"].post",
+      "operation_id": "packAssetUploadComplete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.packsourcecodeuploadcomplete-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete\"].post",
+      "operation_id": "packSourceCodeUploadComplete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.packversionuploadcomplete-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/uploadComplete\"].post",
+      "operation_id": "packVersionUploadComplete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/uploadComplete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/uploadComplete",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.patchpacksystemconnection-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/systemConnection\"].patch",
+      "operation_id": "patchPackSystemConnection",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/packs/{packId}/systemConnection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/packs/{packId}/systemConnection",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.publishdoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/publish\"].put",
+      "operation_id": "publishDoc",
       "deprecated": false,
       "method": "PUT",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "path": "/docs/{docId}/publish",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
           "method": "PUT",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
-          "operation": null,
-          "covered_by": {
-            "write": "update_row"
+          "path": "/docs/{docId}/publish",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "update_row"
+          "state": "not_materialized",
+          "reason": "declaration-pending"
         }
       }
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[39]",
-      "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
-      "deprecated": false,
-      "method": "DELETE",
-      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
-      "crosswalk": {
-        "state": "exact",
-        "api_surface": {
-          "method": "DELETE",
-          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
-          "operation": null,
-          "covered_by": {
-            "write": "delete_row"
-          }
-        },
-        "inventory": {
-          "state": "materialized",
-          "kind": "direct_write",
-          "id": "delete_row"
-        }
-      }
-    },
-    {
-      "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[40]",
-      "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+      "source_id": "coda.rest.pushbutton-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}\"].post",
+      "operation_id": "pushButton",
       "deprecated": false,
       "method": "POST",
       "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
@@ -1058,7 +2882,6 @@
         "api_surface": {
           "method": "POST",
           "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
-          "operation": null,
           "covered_by": {
             "write": "push_button"
           }
@@ -1066,28 +2889,33 @@
         "inventory": {
           "state": "materialized",
           "kind": "direct_write",
-          "id": "push_button"
+          "id": [
+            "push_button"
+          ]
         }
       }
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-categories-api-surface-42",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[41]",
-      "operation_id": "coda.rest.get-categories-api-surface-42",
+      "source_id": "coda.rest.registerpackversion-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/register\"].post",
+      "operation_id": "registerPackVersion",
       "deprecated": false,
-      "method": "GET",
-      "path": "/categories",
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/register",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
-          "method": "GET",
-          "path": "/categories",
-          "operation": null,
-          "excluded": {
-            "category": "out_of_scope",
-            "reason": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data"
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/register",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -1098,22 +2926,25 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[42]",
-      "operation_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+      "source_id": "coda.rest.replytopackinvitation-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/invitations/{invitationId}/reply\"].post",
+      "operation_id": "replyToPackInvitation",
       "deprecated": false,
-      "method": "GET",
-      "path": "/mutationStatus/{requestId}",
+      "method": "POST",
+      "path": "/packs/invitations/{invitationId}/reply",
       "crosswalk": {
         "state": "exact",
         "api_surface": {
-          "method": "GET",
-          "path": "/mutationStatus/{requestId}",
-          "operation": null,
-          "excluded": {
-            "category": "non_data_endpoint",
-            "reason": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)"
+          "method": "POST",
+          "path": "/packs/invitations/{invitationId}/reply",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -1124,10 +2955,10 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[43]",
-      "operation_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+      "source_id": "coda.rest.resolvebrowserlink-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/resolveBrowserLink\"].get",
+      "operation_id": "resolveBrowserLink",
       "deprecated": false,
       "method": "GET",
       "path": "/resolveBrowserLink",
@@ -1136,10 +2967,13 @@
         "api_surface": {
           "method": "GET",
           "path": "/resolveBrowserLink",
-          "operation": null,
-          "excluded": {
-            "category": "non_data_endpoint",
-            "reason": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource"
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {
@@ -1150,10 +2984,555 @@
     },
     {
       "source_lock": "sources/coda-operation-source-lock.json",
-      "source_id": "coda.rest.get-whoami-api-surface-45",
-      "source_url": "https://docs.superhuman.com/developers/apis/v1",
-      "source_location": "api_surface.json:endpoints[44]",
-      "operation_id": "coda.rest.get-whoami-api-surface-45",
+      "source_id": "coda.rest.searchprincipals-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/principals/search\"].get",
+      "operation_id": "searchPrincipals",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/principals/search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/principals/search",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.setpackoauthconfig-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/oauthConfig\"].put",
+      "operation_id": "setPackOauthConfig",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/oauthConfig",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/oauthConfig",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.setpacksystemconnection-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/systemConnection\"].put",
+      "operation_id": "setPackSystemConnection",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/systemConnection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/systemConnection",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.triggerwebhookautomation-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/hooks/automation/{ruleId}\"].post",
+      "operation_id": "triggerWebhookAutomation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/hooks/automation/{ruleId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/hooks/automation/{ruleId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.unpublishdoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/publish\"].delete",
+      "operation_id": "unpublishDoc",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/publish",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/publish",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updateaclsettings-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/acl/settings\"].patch",
+      "operation_id": "updateAclSettings",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}/acl/settings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}/acl/settings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatecustomdocdomain-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].patch",
+      "operation_id": "updateCustomDocDomain",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}/domains/{customDocDomain}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatedoc-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}\"].patch",
+      "operation_id": "updateDoc",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatefolder-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/folders/{folderId}\"].patch",
+      "operation_id": "updateFolder",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/folders/{folderId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/folders/{folderId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatepack-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}\"].patch",
+      "operation_id": "updatePack",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/packs/{packId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/packs/{packId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatepackfeatureddocs-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/featuredDocs\"].put",
+      "operation_id": "updatePackFeaturedDocs",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/featuredDocs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/featuredDocs",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatepackinvitation-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/invitations/{invitationId}\"].put",
+      "operation_id": "updatePackInvitation",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/invitations/{invitationId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/invitations/{invitationId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatepackrelease-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/releases/{packReleaseId}\"].put",
+      "operation_id": "updatePackRelease",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/releases/{packReleaseId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/releases/{packReleaseId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updatepage-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].put",
+      "operation_id": "updatePage",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "covered_by": {
+            "write": "update_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_page"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.updaterow-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].put",
+      "operation_id": "updateRow",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "covered_by": {
+            "write": "update_row"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_row"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.uploadpackasset-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/uploadAsset\"].post",
+      "operation_id": "uploadPackAsset",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/uploadAsset",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/uploadAsset",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.uploadpacksourcecode-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/uploadSourceCode\"].post",
+      "operation_id": "uploadPackSourceCode",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/packs/{packId}/uploadSourceCode",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/packs/{packId}/uploadSourceCode",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.upsertpacklistingdraft-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/packs/{packId}/listingDraft\"].put",
+      "operation_id": "upsertPackListingDraft",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/packs/{packId}/listingDraft",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/packs/{packId}/listingDraft",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.upsertrows-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].post",
+      "operation_id": "upsertRows",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+          "covered_by": {
+            "write": "upsert_rows"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "upsert_rows"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.whoami-source-1",
+      "source_url": "https://coda.io/apis/v1/openapi.json",
+      "source_location": "paths[\"/whoami\"].get",
+      "operation_id": "whoami",
       "deprecated": false,
       "method": "GET",
       "path": "/whoami",
@@ -1162,10 +3541,13 @@
         "api_surface": {
           "method": "GET",
           "path": "/whoami",
-          "operation": null,
-          "excluded": {
-            "category": "non_data_endpoint",
-            "reason": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content"
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://coda.io/apis/v1/openapi.json"
           }
         },
         "inventory": {

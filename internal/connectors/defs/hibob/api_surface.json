@@ -1,14 +1,2514 @@
 {
   "api": "HiBob REST API v1 (https://apidocs.hibob.com/)",
   "docs": "https://apidocs.hibob.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (profiles, named_lists, company_lists); HiBob is a read-only HR data source in the legacy connector (capabilities.write is false, no obviously-safe reverse-ETL writes).",
+  "reviewed_at": "2026-08-19",
+  "scope": "Source-surface refresh 2026-08-19: 207 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.  3 legacy runtime-binding row(s) are retained only to preserve current conformance and are excluded from the provider operation total.",
   "endpoints": [
-    { "method": "GET", "path": "/v1/profiles", "covered_by": { "stream": "profiles" } },
-    { "method": "GET", "path": "/v1/company/named-lists", "covered_by": { "stream": "named_lists" } },
-    { "method": "GET", "path": "/v1/company/people/fields", "covered_by": { "stream": "company_lists" } },
-    { "method": "GET", "path": "/v1/timeoff/*", "excluded": { "category": "out_of_scope", "reason": "time-off approval/request workflows are outside this bundle's HR profile, named-list, and people-field read scope" } },
-    { "method": "GET", "path": "/v1/docs/*", "excluded": { "category": "out_of_scope", "reason": "employee document endpoints expose file/document resources rather than the structured HR records modeled by this bundle" } },
-    { "method": "PUT", "path": "/v1/people/{id}", "excluded": { "category": "out_of_scope", "reason": "employee-profile mutation is not enabled for this read-only HR source bundle and has no reverse-ETL action contract here" } }
-  ]
+    {
+      "method": "DELETE",
+      "path": "/attendance/entries/{entryId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_attendance-entries-entryid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/company/named-lists/{listName}/{itemId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-named-lists-listname-itemid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/company/people/fields/{fieldId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_company-people-fields-fieldid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/people/{id}/confidential/{docId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-confidential-docid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/people/{id}/folders/{folderId}/{docId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-folders-folderid-docid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/people/{id}/shared/{docId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_docs-people-id-shared-docid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/goals/goals/{goalId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/goals/goals/{goalId}/key-results/{keyResultId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_goals-goals-goalid-key-results-keyresultid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/learning/lms-integrations/{provider-identifier}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_learning-lms-integrations-provider-identifier?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/bank-accounts/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-bank-accounts-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/deduction/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-deduction-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/dependents/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-dependents-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/employment/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-employment-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/entitlement/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-entitlement-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/equities/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-equities-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/right-to-work/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-right-to-work-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/salaries/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-salaries-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/training/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-training-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/variable/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-variable-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{id}/work/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-id-work-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/custom-tables/{employee_id}/{custom_table_id}/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/timeoff/employees/{id}/requests/{requestId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_timeoff-employees-id-requests-requestid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workforce-planning/positions/{positionId}/position-openings/{positionOpeningId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/delete_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attendance/project-clients/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-clients-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attendance/project-tasks/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-project-tasks-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attendance/projects/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_attendance-projects-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avatars",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avatars/{employeeId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_avatars-employeeid?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/deduction",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-deduction?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/dependents",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-dependents?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/employment",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-employment?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/entitlement",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-entitlement?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/lifecycle",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-lifecycle?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/right-to-work",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-right-to-work?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/salaries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-salaries?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/variable",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-variable?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/people/work",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_bulk-people-work?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/named-lists",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/named-lists/{listName}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-named-lists-listname?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/people/fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-people-fields?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/reports/{reportId}/download",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/reports/{reportId}/download-async",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-reportid-download-async?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/reports/download/{reportName}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_company-reports-download-reportname?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/folders/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-folders-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/people/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_docs-people-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/goal-cycles/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-cycles-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/goal-types/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goal-types-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/goals/key-results/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-key-results-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/goals/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_goals-goals-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hiring/job-ads/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_hiring-job-ads-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-families",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-families/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-families-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-family-groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-family-groups/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-family-groups-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-profiles/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-profiles-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-roles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job-catalog/job-roles/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_job-catalog-job-roles-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/objects/position",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_metadata-objects-position?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/onboarding/wizards",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_onboarding-wizards?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/history",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_payroll-history?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/bank-accounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-bank-accounts?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/employment",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-employment?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/equities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-equities?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/lifecycle",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-lifecycle?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/salaries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-salaries?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/training",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-training?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/variable",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-variable?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{id}/work",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-id-work?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/custom-tables/{employee_id}/{custom_table_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-employee-id-custom-table-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/custom-tables/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/custom-tables/metadata/{custom_table_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_people-custom-tables-metadata-custom-table-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/positions/position-budget/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-budget-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/positions/position-openings/metadata",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_positions-position-openings-metadata?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/profiles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_profiles?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/skills/proficiency-levels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_skills-proficiency-levels?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/people/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_tasks-people-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/employees/{id}/balance",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-balance?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/employees/{id}/requests/{requestId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-employees-id-requests-requestid?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/outtoday",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-outtoday?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/policies",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/policies/names",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policies-names?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/policy-types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/policy-types/{policyType}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/policy-types/{policyType}/reason-codes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-policy-types-policytype-reason-codes?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/requests/changes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-requests-changes?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/whosout",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/get_timeoff-whosout?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company/named-lists",
+      "covered_by": {
+        "stream": "named_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company/people/fields",
+      "covered_by": {
+        "stream": "company_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/profiles",
+      "covered_by": {
+        "stream": "profiles"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/employees/{employeeId}/entries",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/employees/{employeeId}/entries/clock-out",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-employees-employeeid-entries-clock-out?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/project-tasks/{taskId}/archive",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-archive?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/project-tasks/{taskId}/restore",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-project-tasks-taskid-restore?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/projects/{projectId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/projects/{projectId}/archive",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-archive?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/attendance/projects/{projectId}/restore",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_attendance-projects-projectid-restore?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/goals/goals/{goalId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/goals/goals/{goalId}/key-results",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/goals/goals/{goalId}/key-results/progress",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-key-results-progress?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/goals/goals/{goalId}/status",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_goals-goals-goalid-status?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/learning/lms-integrations/{provider-identifier}/training-content",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/learning/lms-integrations/{provider-identifier}/training-content/archive",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_learning-lms-integrations-provider-identifier-training-content-archive?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/skills",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/skills/archive",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_skills-archive?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workforce-planning/positions/{positionId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workforce-planning/positions/{positionId}/cancel",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-cancel?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workforce-planning/positions/{positionId}/position-budget/{positionBudgetId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-budget-positionbudgetid?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workforce-planning/positions/{positionId}/position-openings/{positionOpeningId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/patch_workforce-planning-positions-positionid-position-openings-positionopeningid?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/daily-breakdown/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-daily-breakdown-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/employees/{employeeId}/entries/clock-in",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-employees-employeeid-entries-clock-in?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/entries",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/entries/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-entries-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/import/{importMethod}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-import-importmethod?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/project-clients/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-clients-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/project-tasks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/project-tasks/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-project-tasks-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/projects",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/projects/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-projects-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attendance/summaries/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_attendance-summaries-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company/named-lists/{listName}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-named-lists-listname?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company/people/fields",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_company-people-fields?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/confidential",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/confidential/upload",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-confidential-upload?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/custom/{folderId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-custom-folderid?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/folders/{folderId}/upload",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-folders-folderid-upload?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/shared",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/people/{id}/shared/upload",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_docs-people-id-shared-upload?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees/{employeeId}/invitations",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-invitations?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees/{employeeId}/start-date",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-employeeid-start-date?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees/{identifier}/terminate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-terminate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees/{identifier}/uninvite",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employees-identifier-uninvite?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employers/{employerId}/work-locations/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-employerid-work-locations-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employers/metadata/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-metadata-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employers/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employers/work-locations/metadata/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_employers-work-locations-metadata-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goal-cycles/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-cycles-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goal-types/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goal-types-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goals",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goals/{goalId}/key-results",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-goalid-key-results?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goals/key-results/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-key-results-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/goals/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_goals-goals-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/application-form-answers/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-application-form-answers-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/applications/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-applications-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-educations/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-educations-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-experiences/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-experiences-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-languages/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-languages-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-professional-associations-memberships/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-professional-associations-memberships-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-qualifications-licenses/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-qualifications-licenses-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-skills/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-skills-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidate-volunteer-experiences/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidate-volunteer-experiences-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/candidates/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-candidates-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/evaluation-scorecard-templates/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluation-scorecard-templates-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/evaluations/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-evaluations-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/interviews/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-interviews-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/job-ads/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-ads-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/job-openings/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-job-openings-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hiring/offers/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_hiring-offers-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job-catalog/job-profiles/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_job-catalog-job-profiles-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/learning/lms-integrations",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/learning/lms-integrations/{provider-identifier}/training-content",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-training-content?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/learning/lms-integrations/{provider-identifier}/xapi/statements",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_learning-lms-integrations-provider-identifier-xapi-statements?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/objects/position/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_objects-position-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/bank-accounts",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-bank-accounts?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/deduction",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-deduction?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/dependents",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-dependents?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/employment",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-employment?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/entitlement",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-entitlement?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/equities",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-equities?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/right-to-work",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-right-to-work?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/salaries",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-salaries?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/training",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-training?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/variable",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-variable?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{id}/work",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-id-work?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{identifier}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-identifier?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/actual-payments/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-actual-payments-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/custom-tables/{employee_id}/{custom_table_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-custom-tables-employee-id-custom-table-id?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/positions/position-budget/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-budget-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/positions/position-openings/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_positions-position-openings-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/skills",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/skills/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_skills-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{taskId}/complete",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_tasks-taskid-complete?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/calendars/employees/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-employees-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/calendars/events/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-calendars-events-search?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/employees/{id}/adjustments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-adjustments?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/employees/{id}/requests",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-employees-id-requests?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/policy-types/{policyType}/reason-codes",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_timeoff-policy-types-policytype-reason-codes?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workforce-planning/positions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workforce-planning/positions/{positionId}/position-budget",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-budget?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workforce-planning/positions/{positionId}/position-openings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-positionid-position-openings?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workforce-planning/positions/schedule-cancellation",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_workforce-planning-positions-schedule-cancellation?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/attendance/project-tasks/{taskId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_attendance-project-tasks-taskid?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/avatars/{employeeId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_avatars-employeeid?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/company/named-lists/{listName}/{itemId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-named-lists-listname-itemid?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/company/people/fields/{fieldId}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_company-people-fields-fieldid?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/bank-accounts/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-bank-accounts-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/deduction/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-deduction-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/dependents/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-dependents-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/email",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-email?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/employment/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-employment-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/entitlement/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-entitlement-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/equities/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-equities-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/right-to-work/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-right-to-work-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/variable/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-variable-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{id}/work/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-id-work-entry-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{identifier}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-identifier?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/custom-tables/{employee_id}/{custom_table_id}/{entry_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/put_people-custom-tables-employee-id-custom-table-id-entry-id?reduce=false"
+      }
+    }
+  ],
+  "operation_ledger_version": 1
 }

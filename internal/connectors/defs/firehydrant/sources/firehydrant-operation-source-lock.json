@@ -1,0 +1,3773 @@
+{
+  "schema_version": 3,
+  "connector": "firehydrant",
+  "captured_at": "2026-08-19T16:46:16.830Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml",
+    "representation": "machine-readable-spec",
+    "documents": [
+      {
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml",
+        "sha256": "3a42dc753a908170e6d910c13feb87168855b35b40089abac6552607895b88f2",
+        "bytes": 704969,
+        "content_type": "text/plain; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "machine-readable-spec"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "96c323d63a044e93a5bb475c88f2b4fc2c29d6a10116adde1d7902fd10898c63",
+      "bytes": 704969
+    },
+    "counts": {
+      "total": 373,
+      "by_method": {
+        "DELETE": 60,
+        "GET": 169,
+        "PATCH": 60,
+        "POST": 69,
+        "PUT": 15
+      },
+      "by_kind": {
+        "rest": 373
+      }
+    },
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "FireHydrant publishes the current OpenAPI document in its official generated Go SDK repository; every HTTP path item is extracted."
+    },
+    "operations": [
+      {
+        "id": "firehydrant.rest.apiping-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ping",
+        "operation_id": "apiPing",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ping\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.apipingnoauth-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/noauth/ping",
+        "operation_id": "apiPingNoAuth",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/noauth/ping\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.archiveincident-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}",
+        "operation_id": "archiveIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.archiveincidenttype-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incident_types/{id}",
+        "operation_id": "archiveIncidentType",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_types/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.archiveteam-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/{team_id}",
+        "operation_id": "archiveTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.closeincident-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/incidents/{incident_id}/close",
+        "operation_id": "closeIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/close\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.convertincidenttasktofollowup-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/tasks/{task_id}/convert",
+        "operation_id": "convertIncidentTaskToFollowup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks/{task_id}/convert\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createchange-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/changes",
+        "operation_id": "createChange",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createchangeevent-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/changes/events",
+        "operation_id": "createChangeEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/events\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createchangeidentity-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/changes/{change_id}/identities",
+        "operation_id": "createChangeIdentity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}/identities\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createchecklisttemplate-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/checklist_templates",
+        "operation_id": "createChecklistTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/checklist_templates\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createconversationcomment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/conversations/{conversation_id}/comments",
+        "operation_id": "createConversationComment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createconversationcommentreaction-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions",
+        "operation_id": "createConversationCommentReaction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}/reactions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createcustomfielddefinition-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/custom_fields/definitions",
+        "operation_id": "createCustomFieldDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_fields/definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createenvironment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/environments",
+        "operation_id": "createEnvironment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/environments\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createfunctionality-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/functionalities",
+        "operation_id": "createFunctionality",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincident-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents",
+        "operation_id": "createIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentalerts-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/alerts",
+        "operation_id": "createIncidentAlerts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/alerts\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentattachment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/attachments",
+        "operation_id": "createIncidentAttachment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/attachments\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentgenericchatmessage-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/generic_chat_messages",
+        "operation_id": "createIncidentGenericChatMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/generic_chat_messages\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentimpact-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/impact/{type}",
+        "operation_id": "createIncidentImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/impact/{type}\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentlink-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/links",
+        "operation_id": "createIncidentLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/links\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentnote-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/notes",
+        "operation_id": "createIncidentNote",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/notes\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentrelatedchange-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/related_change_events",
+        "operation_id": "createIncidentRelatedChange",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/related_change_events\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentrole-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incident_roles",
+        "operation_id": "createIncidentRole",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_roles\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentroleassignment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/role_assignments",
+        "operation_id": "createIncidentRoleAssignment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/role_assignments\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentstatuspage-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/status_pages",
+        "operation_id": "createIncidentStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/status_pages\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidenttask-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/tasks",
+        "operation_id": "createIncidentTask",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidenttasklist-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/task_lists",
+        "operation_id": "createIncidentTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/task_lists\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidentteamassignment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/team_assignments",
+        "operation_id": "createIncidentTeamAssignment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/team_assignments\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createincidenttype-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incident_types",
+        "operation_id": "createIncidentType",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_types\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createintegrationconnection-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/integrations/connections/{slug}",
+        "operation_id": "createIntegrationConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/connections/{slug}\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createlifecyclemilestone-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/lifecycles/milestones",
+        "operation_id": "createLifecycleMilestone",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/milestones\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createmeasurementdefinition-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/lifecycles/measurement_definitions",
+        "operation_id": "createMeasurementDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/measurement_definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createpriority-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/priorities",
+        "operation_id": "createPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/priorities\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createretrospectivereport-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/post_mortems/reports",
+        "operation_id": "createRetrospectiveReport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createretrospectivereportreason-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/post_mortems/reports/{report_id}/reasons",
+        "operation_id": "createRetrospectiveReportReason",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/reasons\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createrunbook-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/runbooks",
+        "operation_id": "createRunbook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createrunbookexecution-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/runbooks/executions",
+        "operation_id": "createRunbookExecution",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createsavedsearch-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/saved_searches/{resource_type}",
+        "operation_id": "createSavedSearch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/saved_searches/{resource_type}\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createscheduledmaintenance-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/scheduled_maintenances",
+        "operation_id": "createScheduledMaintenance",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scheduled_maintenances\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createscimgroup-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/scim/v2/Groups",
+        "operation_id": "createScimGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Groups\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createscimuser-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/scim/v2/Users",
+        "operation_id": "createScimUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createservice-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/services",
+        "operation_id": "createService",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createservicechecklistresponse-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/services/{service_id}/checklist_response/{checklist_id}",
+        "operation_id": "createServiceChecklistResponse",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}/checklist_response/{checklist_id}\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createservicedependency-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/service_dependencies",
+        "operation_id": "createServiceDependency",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/service_dependencies\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createservicelinks-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/services/service_links",
+        "operation_id": "createServiceLinks",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/service_links\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createseverity-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/severities",
+        "operation_id": "createSeverity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severities\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createseveritymatrixcondition-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/severity_matrix/conditions",
+        "operation_id": "createSeverityMatrixCondition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/conditions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createseveritymatriximpact-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/severity_matrix/impacts",
+        "operation_id": "createSeverityMatrixImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/impacts\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createsignalemailtarget-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/signals/email_targets",
+        "operation_id": "createSignalEmailTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/email_targets\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createsignalwebhooktarget-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/signals/webhook_targets",
+        "operation_id": "createSignalWebhookTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/webhook_targets\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createslackemojiaction-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions",
+        "operation_id": "createSlackEmojiAction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/emoji_actions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatuspage-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/nunc_connections",
+        "operation_id": "createStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatuspagecomponentgroup-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups",
+        "operation_id": "createStatusPageComponentGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/component_groups\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatuspagelink-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/links",
+        "operation_id": "createStatusPageLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/links\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatuspagesubscribers-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+        "operation_id": "createStatusPageSubscribers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/subscribers\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatuspagesubscription-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/nunc/subscriptions",
+        "operation_id": "createStatusPageSubscription",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc/subscriptions\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createstatusupdatetemplate-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/status_update_templates",
+        "operation_id": "createStatusUpdateTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/status_update_templates\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createtasklist-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/task_lists",
+        "operation_id": "createTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/task_lists\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createteam-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams",
+        "operation_id": "createTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createteamescalationpolicy-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams/{team_id}/escalation_policies",
+        "operation_id": "createTeamEscalationPolicy",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/escalation_policies\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createteamoncallschedule-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams/{team_id}/on_call_schedules",
+        "operation_id": "createTeamOnCallSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createteamoncallscheduleshift-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts",
+        "operation_id": "createTeamOnCallScheduleShift",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createteamsignalrule-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams/{team_id}/signal_rules",
+        "operation_id": "createTeamSignalRule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/signal_rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createticket-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/ticketing/tickets",
+        "operation_id": "createTicket",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/tickets\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createticketingpriority-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/ticketing/priorities",
+        "operation_id": "createTicketingPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/priorities\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createticketingprojectconfiguration-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations",
+        "operation_id": "createTicketingProjectConfiguration",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createticketingprojectfieldmap-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps",
+        "operation_id": "createTicketingProjectFieldMap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/field_maps\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.createwebhook-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks",
+        "operation_id": "createWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.debugsignal-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/signals/debugger",
+        "operation_id": "debugSignal",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/debugger\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletechange-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/changes/{change_id}",
+        "operation_id": "deleteChange",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletechangeevent-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/changes/events/{change_event_id}",
+        "operation_id": "deleteChangeEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/events/{change_event_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletechangeidentity-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/changes/{change_id}/identities/{identity_id}",
+        "operation_id": "deleteChangeIdentity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}/identities/{identity_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletechecklisttemplate-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/checklist_templates/{id}",
+        "operation_id": "deleteChecklistTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/checklist_templates/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteconversationcomment-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
+        "operation_id": "deleteConversationComment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteconversationcommentreaction-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions/{reaction_id}",
+        "operation_id": "deleteConversationCommentReaction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}/reactions/{reaction_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletecustomfielddefinition-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/custom_fields/definitions/{field_id}",
+        "operation_id": "deleteCustomFieldDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_fields/definitions/{field_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteenvironment-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/environments/{environment_id}",
+        "operation_id": "deleteEnvironment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/environments/{environment_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletefunctionality-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/functionalities/{functionality_id}",
+        "operation_id": "deleteFunctionality",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities/{functionality_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentalert-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}",
+        "operation_id": "deleteIncidentAlert",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/alerts/{incident_alert_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentchatmessage-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
+        "operation_id": "deleteIncidentChatMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/generic_chat_messages/{message_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentevent-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/events/{event_id}",
+        "operation_id": "deleteIncidentEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events/{event_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentimpact-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/impact/{type}/{id}",
+        "operation_id": "deleteIncidentImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/impact/{type}/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentlink-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/links/{link_id}",
+        "operation_id": "deleteIncidentLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/links/{link_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentrole-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incident_roles/{incident_role_id}",
+        "operation_id": "deleteIncidentRole",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_roles/{incident_role_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentroleassignment-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/role_assignments/{role_assignment_id}",
+        "operation_id": "deleteIncidentRoleAssignment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/role_assignments/{role_assignment_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentstatuspage-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/status_pages/{status_page_id}",
+        "operation_id": "deleteIncidentStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/status_pages/{status_page_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidenttask-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
+        "operation_id": "deleteIncidentTask",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks/{task_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidentteamassignment-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/team_assignments/{team_assignment_id}",
+        "operation_id": "deleteIncidentTeamAssignment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/team_assignments/{team_assignment_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteincidenttranscript-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/transcript/{transcript_id}",
+        "operation_id": "deleteIncidentTranscript",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/transcript/{transcript_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletelifecyclemilestone-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/lifecycles/milestones/{milestone_id}",
+        "operation_id": "deleteLifecycleMilestone",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/milestones/{milestone_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletemeasurementdefinition-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
+        "operation_id": "deleteMeasurementDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/measurement_definitions/{measurement_definition_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletenuncsubscription-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc/subscriptions/{unsubscribe_token}",
+        "operation_id": "deleteNuncSubscription",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc/subscriptions/{unsubscribe_token}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletepriority-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/priorities/{priority_slug}",
+        "operation_id": "deletePriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/priorities/{priority_slug}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteretrospectivereason-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
+        "operation_id": "deleteRetrospectiveReason",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/reasons/{reason_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleterunbook-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/runbooks/{runbook_id}",
+        "operation_id": "deleteRunbook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/{runbook_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleterunbookexecution-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/runbooks/executions/{execution_id}",
+        "operation_id": "deleteRunbookExecution",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletesavedsearch-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
+        "operation_id": "deleteSavedSearch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/saved_searches/{resource_type}/{saved_search_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletescheduledmaintenance-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
+        "operation_id": "deleteScheduledMaintenance",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scheduled_maintenances/{scheduled_maintenance_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletescimgroup-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "operation_id": "deleteScimGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Groups/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletescimuser-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/scim/v2/Users/{id}",
+        "operation_id": "deleteScimUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteservice-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/services/{service_id}",
+        "operation_id": "deleteService",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteservicedependency-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/service_dependencies/{service_dependency_id}",
+        "operation_id": "deleteServiceDependency",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/service_dependencies/{service_dependency_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteservicelink-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/services/{service_id}/service_links/{remote_id}",
+        "operation_id": "deleteServiceLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}/service_links/{remote_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteseverity-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/severities/{severity_slug}",
+        "operation_id": "deleteSeverity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severities/{severity_slug}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteseveritymatrixcondition-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/severity_matrix/conditions/{condition_id}",
+        "operation_id": "deleteSeverityMatrixCondition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/conditions/{condition_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteseveritymatriximpact-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/severity_matrix/impacts/{impact_id}",
+        "operation_id": "deleteSeverityMatrixImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/impacts/{impact_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletesignalemailtarget-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/signals/email_targets/{id}",
+        "operation_id": "deleteSignalEmailTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/email_targets/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletesignalswebhooktarget-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/signals/webhook_targets/{id}",
+        "operation_id": "deleteSignalsWebhookTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/webhook_targets/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteslackemojiaction-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
+        "operation_id": "deleteSlackEmojiAction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspage-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}",
+        "operation_id": "deleteStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspagecomponentgroup-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
+        "operation_id": "deleteStatusPageComponentGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspageconnection-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/integrations/statuspage/connections/{connection_id}",
+        "operation_id": "deleteStatuspageConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuspage/connections/{connection_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspageimage-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
+        "operation_id": "deleteStatusPageImage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/images/{type}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspagelink-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
+        "operation_id": "deleteStatusPageLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/links/{link_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatuspagesubscribers-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+        "operation_id": "deleteStatusPageSubscribers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/subscribers\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletestatusupdatetemplate-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/status_update_templates/{status_update_template_id}",
+        "operation_id": "deleteStatusUpdateTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/status_update_templates/{status_update_template_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletetasklist-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/task_lists/{task_list_id}",
+        "operation_id": "deleteTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/task_lists/{task_list_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteteamescalationpolicy-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/{team_id}/escalation_policies/{id}",
+        "operation_id": "deleteTeamEscalationPolicy",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/escalation_policies/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteteamoncallschedule-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
+        "operation_id": "deleteTeamOnCallSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteteamscheduleshift-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
+        "operation_id": "deleteTeamScheduleShift",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteteamsignalrule-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/{team_id}/signal_rules/{id}",
+        "operation_id": "deleteTeamSignalRule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/signal_rules/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteticket-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/ticketing/tickets/{ticket_id}",
+        "operation_id": "deleteTicket",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/tickets/{ticket_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteticketingpriority-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/ticketing/priorities/{id}",
+        "operation_id": "deleteTicketingPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/priorities/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteticketingprojectconfig-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
+        "operation_id": "deleteTicketingProjectConfig",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deleteticketingprojectfieldmap-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
+        "operation_id": "deleteTicketingProjectFieldMap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.deletewebhook-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/webhooks/{webhook_id}",
+        "operation_id": "deleteWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks/{webhook_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getaipreferences-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ai/preferences",
+        "operation_id": "getAiPreferences",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ai/preferences\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getalert-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/alerts/{alert_id}",
+        "operation_id": "getAlert",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/alerts/{alert_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getawscloudtrailbatch-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/aws/cloudtrail_batches/{id}",
+        "operation_id": "getAwsCloudTrailBatch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/cloudtrail_batches/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getawscloudtrailbatchevents-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/aws/cloudtrail_batches/{id}/events",
+        "operation_id": "getAwsCloudtrailBatchEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/cloudtrail_batches/{id}/events\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getawsconnection-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/aws/connections/{id}",
+        "operation_id": "getAwsConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/connections/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getbootstrap-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/bootstrap",
+        "operation_id": "getBootstrap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/bootstrap\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getchangeevent-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/changes/events/{change_event_id}",
+        "operation_id": "getChangeEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/events/{change_event_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getchecklisttemplate-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/checklist_templates/{id}",
+        "operation_id": "getChecklistTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/checklist_templates/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getconversationcomment-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
+        "operation_id": "getConversationComment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getcurrentuser-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/current_user",
+        "operation_id": "getCurrentUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/current_user\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getcustomfieldselectoptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/custom_fields/definitions/{field_id}/select_options",
+        "operation_id": "getCustomFieldSelectOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_fields/definitions/{field_id}/select_options\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getenvironment-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/environments/{environment_id}",
+        "operation_id": "getEnvironment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/environments/{environment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getformconfiguration-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/form_configurations/{slug}",
+        "operation_id": "getFormConfiguration",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/form_configurations/{slug}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getfunctionality-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/functionalities/{functionality_id}",
+        "operation_id": "getFunctionality",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities/{functionality_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getfunctionalityservices-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/functionalities/{functionality_id}/services",
+        "operation_id": "getFunctionalityServices",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities/{functionality_id}/services\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincident-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}",
+        "operation_id": "getIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentaisummaryvotestatus-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/voted",
+        "operation_id": "getIncidentAiSummaryVoteStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/voted\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentchannel-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/channel",
+        "operation_id": "getIncidentChannel",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/channel\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentevent-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/events/{event_id}",
+        "operation_id": "getIncidentEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events/{event_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidenteventvotestatus-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/events/{event_id}/votes/status",
+        "operation_id": "getIncidentEventVoteStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events/{event_id}/votes/status\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentrelationships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/relationships",
+        "operation_id": "getIncidentRelationships",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/relationships\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentrole-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incident_roles/{incident_role_id}",
+        "operation_id": "getIncidentRole",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_roles/{incident_role_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidenttask-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
+        "operation_id": "getIncidentTask",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks/{task_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidenttranscript-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/transcript",
+        "operation_id": "getIncidentTranscript",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/transcript\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidenttype-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incident_types/{id}",
+        "operation_id": "getIncidentType",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_types/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getincidentuserrole-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/users/{user_id}",
+        "operation_id": "getIncidentUserRole",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/users/{user_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getinfrastructuremetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/{infra_type}/{infra_id}",
+        "operation_id": "getInfrastructureMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/{infra_type}/{infra_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getintegration-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/{integration_id}",
+        "operation_id": "getIntegration",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/{integration_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getintegrationfieldmapavailablefields-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/field_maps/{field_map_id}/available_fields",
+        "operation_id": "getIntegrationFieldMapAvailableFields",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/field_maps/{field_map_id}/available_fields\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getintegrationstatus-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/statuses/{slug}",
+        "operation_id": "getIntegrationStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuses/{slug}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getmeantimereport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/reports/mean_time",
+        "operation_id": "getMeanTimeReport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/reports/mean_time\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getmeasurementdefinition-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
+        "operation_id": "getMeasurementDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/measurement_definitions/{measurement_definition_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getmilestonefunnelmetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/milestone_funnel",
+        "operation_id": "getMilestoneFunnelMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/milestone_funnel\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getpostmortemreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/post_mortems/reports/{report_id}",
+        "operation_id": "getPostMortemReport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getpriority-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/priorities/{priority_slug}",
+        "operation_id": "getPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/priorities/{priority_slug}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getretrospectivequestion-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/post_mortems/questions/{question_id}",
+        "operation_id": "getRetrospectiveQuestion",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/questions/{question_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbook-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/{runbook_id}",
+        "operation_id": "getRunbook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/{runbook_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbookexecution-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/executions/{execution_id}",
+        "operation_id": "getRunbookExecution",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbookexecutionstepscript-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/script",
+        "operation_id": "getRunbookExecutionStepScript",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/steps/{step_id}/script\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbookexecutionvotestatus-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/executions/{execution_id}/votes/status",
+        "operation_id": "getRunbookExecutionVoteStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/votes/status\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbookselectoptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/select_options/{integration_slug}/{action_slug}/{field}",
+        "operation_id": "getRunbookSelectOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/select_options/{integration_slug}/{action_slug}/{field}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getrunbookstepvotestatus-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes/status",
+        "operation_id": "getRunbookStepVoteStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes/status\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsavedsearch-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
+        "operation_id": "getSavedSearch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/saved_searches/{resource_type}/{saved_search_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getscheduledmaintenance-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
+        "operation_id": "getScheduledMaintenance",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scheduled_maintenances/{scheduled_maintenance_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getscimgroup-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "operation_id": "getScimGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Groups/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getscimgroups-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scim/v2/Groups",
+        "operation_id": "getScimGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Groups\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getscimuser-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scim/v2/Users/{id}",
+        "operation_id": "getScimUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getscimusers-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scim/v2/Users",
+        "operation_id": "getScimUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getservice-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/services/{service_id}",
+        "operation_id": "getService",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getservicedependencies-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/services/{service_id}/dependencies",
+        "operation_id": "getServiceDependencies",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}/dependencies\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getservicedependency-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/service_dependencies/{service_dependency_id}",
+        "operation_id": "getServiceDependency",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/service_dependencies/{service_dependency_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getseverity-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severities/{severity_slug}",
+        "operation_id": "getSeverity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severities/{severity_slug}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getseveritymatrix-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severity_matrix",
+        "operation_id": "getSeverityMatrix",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getseveritymatrixcondition-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severity_matrix/conditions/{condition_id}",
+        "operation_id": "getSeverityMatrixCondition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/conditions/{condition_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalemailtarget-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/email_targets/{id}",
+        "operation_id": "getSignalEmailTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/email_targets/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalgroupedmetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/analytics/grouped_metrics",
+        "operation_id": "getSignalGroupedMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/analytics/grouped_metrics\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalingesturl-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/ingest_url",
+        "operation_id": "getSignalIngestUrl",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/ingest_url\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalsanalyticstimeseries-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/analytics/timeseries",
+        "operation_id": "getSignalsAnalyticsTimeseries",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/analytics/timeseries\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalsmttxanalytics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/analytics/mttx",
+        "operation_id": "getSignalsMttxAnalytics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/analytics/mttx\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsignalswebhooktarget-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/webhook_targets/{id}",
+        "operation_id": "getSignalsWebhookTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/webhook_targets/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getsimilarincidents-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/similar",
+        "operation_id": "getSimilarIncidents",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/similar\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getslackemojiaction-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
+        "operation_id": "getSlackEmojiAction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getslackworkspaces-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/slack/connections/{connection_id}/workspaces",
+        "operation_id": "getSlackWorkspaces",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/workspaces\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getstatuspage-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/nunc_connections/{nunc_connection_id}",
+        "operation_id": "getStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getstatuspageconnection-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/statuspage/connections/{connection_id}",
+        "operation_id": "getStatuspageConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuspage/connections/{connection_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getstatusupdatetemplate-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/status_update_templates/{status_update_template_id}",
+        "operation_id": "getStatusUpdateTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/status_update_templates/{status_update_template_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.gettasklist-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/task_lists/{task_list_id}",
+        "operation_id": "getTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/task_lists/{task_list_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getteam-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}",
+        "operation_id": "getTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getteamescalationpolicy-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/escalation_policies/{id}",
+        "operation_id": "getTeamEscalationPolicy",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/escalation_policies/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getteamoncallschedule-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
+        "operation_id": "getTeamOnCallSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getteamscheduleshift-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
+        "operation_id": "getTeamScheduleShift",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getteamsignalrule-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/signal_rules/{id}",
+        "operation_id": "getTeamSignalRule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/signal_rules/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticket-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/tickets/{ticket_id}",
+        "operation_id": "getTicket",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/tickets/{ticket_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketfunnelmetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/ticket_funnel",
+        "operation_id": "getTicketFunnelMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/ticket_funnel\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingpriority-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/priorities/{id}",
+        "operation_id": "getTicketingPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/priorities/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingproject-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}",
+        "operation_id": "getTicketingProject",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingprojectavailablefields-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/available_fields",
+        "operation_id": "getTicketingProjectAvailableFields",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/field_maps/available_fields\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingprojectconfig-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
+        "operation_id": "getTicketingProjectConfig",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingprojectconfigurationoptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/configuration_options",
+        "operation_id": "getTicketingProjectConfigurationOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/configuration_options\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingprojectfieldmap-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
+        "operation_id": "getTicketingProjectFieldMap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getticketingprojectfieldoptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/configuration_options/options_for/{field_id}",
+        "operation_id": "getTicketingProjectFieldOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/configuration_options/options_for/{field_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getuser-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/{id}",
+        "operation_id": "getUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getv1metricsmttx-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/mttx",
+        "operation_id": "getV1MetricsMttx",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/mttx\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.getwebhook-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/{webhook_id}",
+        "operation_id": "getWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks/{webhook_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.ingestcatalogdata-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/catalogs/{catalog_id}/ingest",
+        "operation_id": "ingestCatalogData",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/catalogs/{catalog_id}/ingest\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listalertprocessinglogs-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/processing_log_entries",
+        "operation_id": "listAlertProcessingLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/processing_log_entries\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listalerts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/alerts",
+        "operation_id": "listAlerts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/alerts\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listawscloudtrailbatches-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/aws/cloudtrail_batches",
+        "operation_id": "listAwsCloudtrailBatches",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/cloudtrail_batches\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listawsconnections-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/aws/connections",
+        "operation_id": "listAwsConnections",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/connections\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listchangeevents-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/changes/events",
+        "operation_id": "listChangeEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/events\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listchangeidentities-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/changes/{change_id}/identities",
+        "operation_id": "listChangeIdentities",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}/identities\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listchanges-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/changes",
+        "operation_id": "listChanges",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listchangetypes-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/change_types",
+        "operation_id": "listChangeTypes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/change_types\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listchecklisttemplates-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/checklist_templates",
+        "operation_id": "listChecklistTemplates",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/checklist_templates\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listconfluencespaces-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/confluence_cloud/connections/{id}/space/search",
+        "operation_id": "listConfluenceSpaces",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/confluence_cloud/connections/{id}/space/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listconversationcommentreactions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}/reactions",
+        "operation_id": "listConversationCommentReactions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}/reactions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listconversationcomments-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/conversations/{conversation_id}/comments",
+        "operation_id": "listConversationComments",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listcustomfielddefinitions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/custom_fields/definitions",
+        "operation_id": "listCustomFieldDefinitions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_fields/definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listentitlements-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/entitlements",
+        "operation_id": "listEntitlements",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/entitlements\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listenvironments-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/environments",
+        "operation_id": "listEnvironments",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/environments\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listfunctionalities-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/functionalities",
+        "operation_id": "listFunctionalities",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentalerts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/alerts",
+        "operation_id": "listIncidentAlerts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/alerts\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentattachments-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/attachments",
+        "operation_id": "listIncidentAttachments",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/attachments\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentevents-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/events",
+        "operation_id": "listIncidentEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentimpact-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/impact/{type}",
+        "operation_id": "listIncidentImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/impact/{type}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentlinks-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/links",
+        "operation_id": "listIncidentLinks",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/links\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentmetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/incidents",
+        "operation_id": "listIncidentMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/incidents\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentmilestones-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/milestones",
+        "operation_id": "listIncidentMilestones",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/milestones\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentrelatedchanges-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/related_change_events",
+        "operation_id": "listIncidentRelatedChanges",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/related_change_events\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentroleassignments-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/role_assignments",
+        "operation_id": "listIncidentRoleAssignments",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/role_assignments\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentroles-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incident_roles",
+        "operation_id": "listIncidentRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_roles\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidents-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents",
+        "operation_id": "listIncidents",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidentstatuspages-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/status_pages",
+        "operation_id": "listIncidentStatusPages",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/status_pages\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidenttags-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incident_tags",
+        "operation_id": "listIncidentTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_tags\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidenttasks-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incidents/{incident_id}/tasks",
+        "operation_id": "listIncidentTasks",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listincidenttypes-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/incident_types",
+        "operation_id": "listIncidentTypes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_types\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listinfrastructuremetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/{infra_type}",
+        "operation_id": "listInfrastructureMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/{infra_type}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listinfrastructures-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/infrastructures",
+        "operation_id": "listInfrastructures",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/infrastructures\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listintegrationconnections-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/connections",
+        "operation_id": "listIntegrationConnections",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/connections\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listintegrations-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations",
+        "operation_id": "listIntegrations",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listlifecyclephases-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/lifecycles/phases",
+        "operation_id": "listLifecyclePhases",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/phases\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listmeasurementdefinitions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/lifecycles/measurement_definitions",
+        "operation_id": "listMeasurementDefinitions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/measurement_definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listpriorities-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/priorities",
+        "operation_id": "listPriorities",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/priorities\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listretrospectivemetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/retrospectives",
+        "operation_id": "listRetrospectiveMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/retrospectives\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listretrospectivequestions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/post_mortems/questions",
+        "operation_id": "listRetrospectiveQuestions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/questions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listretrospectivereportreasons-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/post_mortems/reports/{report_id}/reasons",
+        "operation_id": "listRetrospectiveReportReasons",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/reasons\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listretrospectivereports-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/post_mortems/reports",
+        "operation_id": "listRetrospectiveReports",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listrunbookactions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/actions",
+        "operation_id": "listRunbookActions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/actions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listrunbookaudits-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbook_audits",
+        "operation_id": "listRunbookAudits",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbook_audits\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listrunbookexecutions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks/executions",
+        "operation_id": "listRunbookExecutions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listrunbooks-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/runbooks",
+        "operation_id": "listRunbooks",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsavedsearches-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/saved_searches/{resource_type}",
+        "operation_id": "listSavedSearches",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/saved_searches/{resource_type}\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listscheduledmaintenances-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/scheduled_maintenances",
+        "operation_id": "listScheduledMaintenances",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scheduled_maintenances\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listschedules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/schedules",
+        "operation_id": "listSchedules",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/schedules\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listserviceavailabledownstreamdependencies-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/services/{service_id}/available_downstream_dependencies",
+        "operation_id": "listServiceAvailableDownstreamDependencies",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}/available_downstream_dependencies\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listserviceavailableupstreamdependencies-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/services/{service_id}/available_upstream_dependencies",
+        "operation_id": "listServiceAvailableUpstreamDependencies",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}/available_upstream_dependencies\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listservices-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/services",
+        "operation_id": "listServices",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listseverities-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severities",
+        "operation_id": "listSeverities",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severities\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listseveritymatrixconditions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severity_matrix/conditions",
+        "operation_id": "listSeverityMatrixConditions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/conditions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listseveritymatriximpacts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/severity_matrix/impacts",
+        "operation_id": "listSeverityMatrixImpacts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/impacts\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsignalemailtargets-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/email_targets",
+        "operation_id": "listSignalEmailTargets",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/email_targets\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsignaleventsources-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/event_sources",
+        "operation_id": "listSignalEventSources",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/event_sources\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsignalsoncall-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals_on_call",
+        "operation_id": "listSignalsOnCall",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals_on_call\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsignaltransposers-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/transposers",
+        "operation_id": "listSignalTransposers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/transposers\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listsignalwebhooktargets-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/signals/webhook_targets",
+        "operation_id": "listSignalWebhookTargets",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/webhook_targets\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listslackemojiactions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions",
+        "operation_id": "listSlackEmojiActions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/emoji_actions\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listslackusergroups-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/slack/usergroups",
+        "operation_id": "listSlackUsergroups",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/usergroups\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.liststatuspageconnections-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/statuspage/connections",
+        "operation_id": "listStatuspageConnections",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuspage/connections\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.liststatuspagepages-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/statuspage/connections/{connection_id}/pages",
+        "operation_id": "listStatuspagePages",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuspage/connections/{connection_id}/pages\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.liststatuspages-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/nunc_connections",
+        "operation_id": "listStatusPages",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.liststatuspagesubscribers-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+        "operation_id": "listStatusPageSubscribers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/subscribers\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.liststatusupdatetemplates-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/status_update_templates",
+        "operation_id": "listStatusUpdateTemplates",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/status_update_templates\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listtasklists-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/task_lists",
+        "operation_id": "listTaskLists",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/task_lists\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listteamescalationpolicies-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/escalation_policies",
+        "operation_id": "listTeamEscalationPolicies",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/escalation_policies\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listteamoncallschedules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/on_call_schedules",
+        "operation_id": "listTeamOnCallSchedules",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listteams-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams",
+        "operation_id": "listTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listteamsignalrules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/{team_id}/signal_rules",
+        "operation_id": "listTeamSignalRules",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/signal_rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listticketingpriorities-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/priorities",
+        "operation_id": "listTicketingPriorities",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/priorities\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listticketingprojects-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/projects",
+        "operation_id": "listTicketingProjects",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listtickets-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/tickets",
+        "operation_id": "listTickets",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/tickets\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listtickettags-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/ticketing/ticket_tags",
+        "operation_id": "listTicketTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/ticket_tags\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listuserinvolvementmetrics-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/metrics/user_involvements",
+        "operation_id": "listUserInvolvementMetrics",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/metrics/user_involvements\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listusers-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users",
+        "operation_id": "listUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listuserservices-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/{id}/services",
+        "operation_id": "listUserServices",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users/{id}/services\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listwebhookdeliveries-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/{webhook_id}/deliveries",
+        "operation_id": "listWebhookDeliveries",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks/{webhook_id}/deliveries\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.listwebhooks-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks",
+        "operation_id": "listWebhooks",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.partialupdateincidentimpacts-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/impact",
+        "operation_id": "partialUpdateIncidentImpacts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/impact\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.publishretrospectivereport-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/post_mortems/reports/{report_id}/publish",
+        "operation_id": "publishRetrospectiveReport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/publish\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.refreshcatalog-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/catalogs/{catalog_id}/refresh",
+        "operation_id": "refreshCatalog",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/catalogs/{catalog_id}/refresh\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.refreshintegrationconnection-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/connections/{slug}/{connection_id}/refresh",
+        "operation_id": "refreshIntegrationConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/connections/{slug}/{connection_id}/refresh\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.replacescimuser-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/scim/v2/Users/{id}",
+        "operation_id": "replaceScimUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.resolveincident-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/incidents/{incident_id}/resolve",
+        "operation_id": "resolveIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/resolve\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.searchzendesktickets-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/zendesk/search",
+        "operation_id": "searchZendeskTickets",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/zendesk/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.setincidentalertasprimary-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/alerts/{incident_alert_id}/primary",
+        "operation_id": "setIncidentAlertAsPrimary",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/alerts/{incident_alert_id}/primary\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.unarchiveincident-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/unarchive",
+        "operation_id": "unarchiveIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/unarchive\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateaipreferences-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/ai/preferences",
+        "operation_id": "updateAiPreferences",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ai/preferences\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateawscloudtrailbatch-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/aws/cloudtrail_batches/{id}",
+        "operation_id": "updateAwsCloudTrailBatch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/cloudtrail_batches/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateawsconnection-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/aws/connections/{id}",
+        "operation_id": "updateAwsConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/aws/connections/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatechange-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/changes/{change_id}",
+        "operation_id": "updateChange",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatechangeevent-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/changes/events/{change_event_id}",
+        "operation_id": "updateChangeEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/events/{change_event_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatechangeidentity-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/changes/{change_id}/identities/{identity_id}",
+        "operation_id": "updateChangeIdentity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/changes/{change_id}/identities/{identity_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatechecklisttemplate-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/checklist_templates/{id}",
+        "operation_id": "updateChecklistTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/checklist_templates/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateconversationcomment-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/conversations/{conversation_id}/comments/{comment_id}",
+        "operation_id": "updateConversationComment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/conversations/{conversation_id}/comments/{comment_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatecustomfielddefinition-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/custom_fields/definitions/{field_id}",
+        "operation_id": "updateCustomFieldDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_fields/definitions/{field_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateenvironment-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/environments/{environment_id}",
+        "operation_id": "updateEnvironment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/environments/{environment_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatefunctionality-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/functionalities/{functionality_id}",
+        "operation_id": "updateFunctionality",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/functionalities/{functionality_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincident-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}",
+        "operation_id": "updateIncident",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentchatmessage-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/generic_chat_messages/{message_id}",
+        "operation_id": "updateIncidentChatMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/generic_chat_messages/{message_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentevent-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/events/{event_id}",
+        "operation_id": "updateIncidentEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events/{event_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidenteventvotes-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/events/{event_id}/votes",
+        "operation_id": "updateIncidentEventVotes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/events/{event_id}/votes\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentimpacts-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/incidents/{incident_id}/impact",
+        "operation_id": "updateIncidentImpacts",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/impact\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentlink-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/incidents/{incident_id}/links/{link_id}",
+        "operation_id": "updateIncidentLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/links/{link_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentmilestonesbulk-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/incidents/{incident_id}/milestones/bulk_update",
+        "operation_id": "updateIncidentMilestonesBulk",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/milestones/bulk_update\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentnote-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/notes/{note_id}",
+        "operation_id": "updateIncidentNote",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/notes/{note_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentrelatedchangeevent-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/related_change_events/{related_change_event_id}",
+        "operation_id": "updateIncidentRelatedChangeEvent",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/related_change_events/{related_change_event_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidentrole-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incident_roles/{incident_role_id}",
+        "operation_id": "updateIncidentRole",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_roles/{incident_role_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidenttask-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incidents/{incident_id}/tasks/{task_id}",
+        "operation_id": "updateIncidentTask",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incidents/{incident_id}/tasks/{task_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateincidenttype-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/incident_types/{id}",
+        "operation_id": "updateIncidentType",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_types/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateintegrationconnection-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/connections/{slug}/{connection_id}",
+        "operation_id": "updateIntegrationConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/connections/{slug}/{connection_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateintegrationfieldmap-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/field_maps/{field_map_id}",
+        "operation_id": "updateIntegrationFieldMap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/field_maps/{field_map_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatelifecyclemilestone-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/lifecycles/milestones/{milestone_id}",
+        "operation_id": "updateLifecycleMilestone",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/milestones/{milestone_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatemeasurementdefinition-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/lifecycles/measurement_definitions/{measurement_definition_id}",
+        "operation_id": "updateMeasurementDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/lifecycles/measurement_definitions/{measurement_definition_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatepostmortemreport-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/post_mortems/reports/{report_id}",
+        "operation_id": "updatePostMortemReport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatepriority-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/priorities/{priority_slug}",
+        "operation_id": "updatePriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/priorities/{priority_slug}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateretrospectivefield-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/post_mortems/reports/{report_id}/fields/{field_id}",
+        "operation_id": "updateRetrospectiveField",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/fields/{field_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateretrospectivequestions-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/post_mortems/questions",
+        "operation_id": "updateRetrospectiveQuestions",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/questions\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateretrospectivereason-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/post_mortems/reports/{report_id}/reasons/{reason_id}",
+        "operation_id": "updateRetrospectiveReason",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/reasons/{reason_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateretrospectivereportreasonorder-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/post_mortems/reports/{report_id}/reasons/order",
+        "operation_id": "updateRetrospectiveReportReasonOrder",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/post_mortems/reports/{report_id}/reasons/order\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updaterunbook-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/runbooks/{runbook_id}",
+        "operation_id": "updateRunbook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/{runbook_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updaterunbookexecutionstep-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}",
+        "operation_id": "updateRunbookExecutionStep",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/steps/{step_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updaterunbookexecutionstepscriptstate-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/script/{state}",
+        "operation_id": "updateRunbookExecutionStepScriptState",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/steps/{step_id}/script/{state}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updaterunbookexecutionstepvotes-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes",
+        "operation_id": "updateRunbookExecutionStepVotes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/steps/{step_id}/votes\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updaterunbookexecutionvotes-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/runbooks/executions/{execution_id}/votes",
+        "operation_id": "updateRunbookExecutionVotes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/runbooks/executions/{execution_id}/votes\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatesavedsearch-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/saved_searches/{resource_type}/{saved_search_id}",
+        "operation_id": "updateSavedSearch",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/saved_searches/{resource_type}/{saved_search_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatescheduledmaintenance-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/scheduled_maintenances/{scheduled_maintenance_id}",
+        "operation_id": "updateScheduledMaintenance",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scheduled_maintenances/{scheduled_maintenance_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatescimgroup-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "operation_id": "updateScimGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Groups/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatescimuser-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/scim/v2/Users/{id}",
+        "operation_id": "updateScimUser",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/scim/v2/Users/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateservice-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/services/{service_id}",
+        "operation_id": "updateService",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/services/{service_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateservicedependency-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/service_dependencies/{service_dependency_id}",
+        "operation_id": "updateServiceDependency",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/service_dependencies/{service_dependency_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateseverity-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/severities/{severity_slug}",
+        "operation_id": "updateSeverity",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severities/{severity_slug}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateseveritymatrix-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/severity_matrix",
+        "operation_id": "updateSeverityMatrix",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateseveritymatrixcondition-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/severity_matrix/conditions/{condition_id}",
+        "operation_id": "updateSeverityMatrixCondition",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/conditions/{condition_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateseveritymatriximpact-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/severity_matrix/impacts/{impact_id}",
+        "operation_id": "updateSeverityMatrixImpact",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/severity_matrix/impacts/{impact_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatesignalemailtarget-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/signals/email_targets/{id}",
+        "operation_id": "updateSignalEmailTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/email_targets/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatesignalswebhooktarget-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/signals/webhook_targets/{id}",
+        "operation_id": "updateSignalsWebhookTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/signals/webhook_targets/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateslackemojiaction-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}",
+        "operation_id": "updateSlackEmojiAction",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/slack/connections/{connection_id}/emoji_actions/{emoji_action_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatuspage-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/nunc_connections/{nunc_connection_id}",
+        "operation_id": "updateStatusPage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatuspagecomponentgroup-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}",
+        "operation_id": "updateStatusPageComponentGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/component_groups/{group_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatuspageconnection-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/integrations/statuspage/connections/{connection_id}",
+        "operation_id": "updateStatuspageConnection",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/integrations/statuspage/connections/{connection_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatuspageimage-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
+        "operation_id": "updateStatusPageImage",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/images/{type}\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatuspagelink-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/links/{link_id}",
+        "operation_id": "updateStatusPageLink",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/nunc_connections/{nunc_connection_id}/links/{link_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatestatusupdatetemplate-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/status_update_templates/{status_update_template_id}",
+        "operation_id": "updateStatusUpdateTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/status_update_templates/{status_update_template_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatetasklist-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/task_lists/{task_list_id}",
+        "operation_id": "updateTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/task_lists/{task_list_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateteam-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/teams/{team_id}",
+        "operation_id": "updateTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateteamescalationpolicy-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/teams/{team_id}/escalation_policies/{id}",
+        "operation_id": "updateTeamEscalationPolicy",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/escalation_policies/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateteamoncallschedule-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}",
+        "operation_id": "updateTeamOnCallSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateteamscheduleshift-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}",
+        "operation_id": "updateTeamScheduleShift",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/on_call_schedules/{schedule_id}/shifts/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateteamsignalrule-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/teams/{team_id}/signal_rules/{id}",
+        "operation_id": "updateTeamSignalRule",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/teams/{team_id}/signal_rules/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateticket-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/ticketing/tickets/{ticket_id}",
+        "operation_id": "updateTicket",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/tickets/{ticket_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateticketingpriority-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/ticketing/priorities/{id}",
+        "operation_id": "updateTicketingPriority",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/priorities/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateticketingprojectconfig-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}",
+        "operation_id": "updateTicketingProjectConfig",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/provider_project_configurations/{config_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updateticketingprojectfieldmap-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}",
+        "operation_id": "updateTicketingProjectFieldMap",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ticketing/projects/{ticketing_project_id}/field_maps/{map_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.updatewebhook-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/webhooks/{webhook_id}",
+        "operation_id": "updateWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/webhooks/{webhook_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.validateincidenttags-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incident_tags/validate",
+        "operation_id": "validateIncidentTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/incident_tags/validate\"].post",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      },
+      {
+        "id": "firehydrant.rest.voteonincidentsummary-source-1",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/vote",
+        "operation_id": "voteOnIncidentSummary",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/ai/summarize_incident/{incident_id}/{generated_summary_id}/vote\"].put",
+        "source_url": "https://raw.githubusercontent.com/firehydrant/firehydrant-go-sdk/main/openapi.yaml"
+      }
+    ]
+  }
+}

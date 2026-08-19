@@ -2,56 +2,45 @@
 
 ## Red
 
-- Batch 8: the pre-generation file-presence assertion failed for all thirty
-  required artifacts (three source artifacts for each of brex, zoho-books,
-  testrail, amplitude, posthog, metabase, dbt, looker, mode, and dremio).
-- Batch 8: the first integrity run failed on duplicated Zoho Books source-lock
-  operation IDs. The existing inventory has three repeated method/path pairs,
-  so a method/path-only synthetic identity would silently collapse documented
-  entries. The generator now makes the authoritative `api_surface.json`
-  endpoint index part of every source ID.
-- Remaining batches: the same assertion must fail if a source ID is omitted,
-  duplicated, placed in more than one primary class, if a typed write action is
-  classified as `reverse_etl`, or if a direct-write row omits the locked
-  `generic-typed-destination-executor` reverse-ETL eligibility gap.
+- The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:
+  maps used landing-page pins, omitted `counts.total`, bounded their result by
+  `api_surface.json`, and reported self-referential `declared_percent`.
+- The initial integrity assertion correctly rejected the old Batch 8 source
+  locks as incomplete source evidence. It also caught the pre-fix
+  per-method-count implementation error while the new source extractor and
+  cross-artifact verifier were being introduced.
+- A source map that put a typed write under `reverse_etl` is red: write
+  endpoints are `direct_write`; reverse-ETL is only the destination-executor
+  eligibility attribute.
 
 ## Green
 
-- Batch 8: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/generate-parity-maps.mjs 8`
-  generated all ten artifact triplets. TestRail is an allowed source skip:
-  Chrome reached the provider's Cloudflare verification page rather than the
-  published reference, so its lock records `no-public-api-description` and
-  `retrieval_method: browser`, with no invented pin or operation rows.
-- Batch 8: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/verify-parity-maps.mjs 8`
-  passed for all ten connectors after the source-identity correction.
-- Batch 8: all ten `connectorgen validate ... --json` commands passed with
-  zero findings/warnings; `surface-sync internal/connectors/defs --check`
-  passed with 552 scanned and zero corrections.
-- Batch 9: the pre-generation file-presence assertion failed for all thirty
-  required artifacts, then generation and
-  `verify-parity-maps.mjs 9` passed for all ten connectors.
-- Batch 9: all ten `connectorgen validate ... --json` commands passed with
-  zero findings/warnings; `surface-sync internal/connectors/defs --check`
-  again passed with 552 scanned and zero corrections.
-- Pending: repeat for batch 10.
+- Added `extract-source-operations.go`, which pins every provider document's
+  exact byte count and SHA-256, then extracts REST method/path operations from
+  complete OpenAPI/Swagger documents or complete official rendered references.
+- Regenerated all mapped `api_surface.json` files from that source inventory,
+  retaining old bindings only when they resolve to a pinned operation. The
+  generated report records prior and refreshed counts for every connector.
+- `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/verify-parity-maps.mjs 8`
+  passed for all Batch 8 connectors.
+- `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/verify-parity-maps.mjs 9`
+  passed for all Batch 9 connectors.
+- `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/verify-parity-maps.mjs 10`
+  passed for all Batch 10 connectors.
+- `go run ./cmd/connectorgen validate internal/connectors/defs` passed with
+  `552 connector(s) checked, 0 findings`.
+- `go run ./cmd/connectorgen surface-sync --check` passed with 552 scanned and
+  zero fields changed.
 
 ## Refactor / review
 
-- Batch 8: integrity assertions reviewed the source lock, crosswalk, and
-  ledger together; all direct writes retain only the reverse-ETL eligibility
-  foundation gap and no row is primarily classified `reverse_etl`.
-- Batch 9: the same assertions passed, including DELETE coverage and the
-  direct-write/reverse-ETL separation for all ten connector inventories.
-- Pending: inspect all final JSON ledgers for false engine-gap claims,
-  invented contracts, source location drift, delete coverage, and transport
-  correction compliance.
-
-## Fixed constraints
-
-- Reverse ETL is an eligibility attribute, not an endpoint parity class. It is
-  a foundation gap in this task, not declaration-pending. Evidence:
-  `internal/app/issue_label_warehouse_transport.go:85-95` at `acb85dc03`.
-  No `transport_binding` action may be created; existing typed write actions
-  remain enabled `direct_write` operations.
-- ETL is only declarable where the definition-owned source contract is actually
-  satisfied.
+- The source lock carries `counts.total`, per-method and per-kind counts,
+  source-document pins, and coverage basis. Dispositions use
+  `operations_found`; no generated summary has `declared_percent`.
+- TestRail, Eventbrite, and Greenhouse are explicitly skipped with browser
+  evidence and `counts.total: null`; Adobe Commerce is explicitly
+  `dynamic-instance-dependent` with a pinned official rendered reference and
+  no fabricated total.
+- Every `direct_write` has the locked
+  `generic-typed-destination-executor` reverse-ETL eligibility gap; no row is
+  primarily classed `reverse_etl` and no `transport_binding` action exists.

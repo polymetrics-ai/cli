@@ -1,9 +1,477 @@
 {
   "api": "Recharge API 2021-11 (https://api.rechargeapps.com)",
   "docs": "https://developer.rechargepayments.com/2021-11/",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration: the 3 legacy-parity read streams only (customers, subscriptions, orders); legacy itself ships no writes (capabilities.write is false) and no other Recharge resource is modeled.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Source-surface refresh 2026-08-19: 123 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.",
   "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/addresses/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bundle_selections/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}/collection_products-bulk",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customer_entitlements/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discounts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metafields/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/onetimes/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orders/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/payment_methods/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{external_product_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches/{batch_id}/tasks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundle_selections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundle_selections/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charges",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charges/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkout",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkouts/{token}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkouts/{token}/shipping_rates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collection_products",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_adjustments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_entitlements",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
     {
       "method": "GET",
       "path": "/customers",
@@ -13,9 +481,122 @@
     },
     {
       "method": "GET",
-      "path": "/subscriptions",
-      "covered_by": {
-        "stream": "subscriptions"
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/credit_summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/delivery_schedule",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discounts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metafields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metafields/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/onetimes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/onetimes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
@@ -27,51 +608,863 @@
     },
     {
       "method": "GET",
-      "path": "/charges",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "charges not modeled by legacy; not implemented in this bundle"
+      "path": "/orders/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
       "method": "GET",
-      "path": "/discounts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "discounts not modeled by legacy; not implemented in this bundle"
+      "path": "/payment_methods",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_methods/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
       "method": "GET",
       "path": "/products",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "products not modeled by legacy; not implemented in this bundle"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
       "method": "GET",
-      "path": "/addresses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "addresses not modeled by legacy; not implemented in this bundle"
+      "path": "/products/{external_product_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/token_information",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
       "method": "GET",
       "path": "/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhooks not modeled by legacy; not implemented in this bundle"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses/{id}/charges/skip",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses/merge",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/process",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/tasks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bundle_selections",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/add_free_gift",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/apply_discount",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/capture_payment",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/process",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/refund",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/remove_discount",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/remove_free_gift",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/skip",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/unskip",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkouts",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkouts/{token}/charge",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{id}/collection_products-bulk",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_accounts",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_entitlements",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     },
     {
       "method": "POST",
       "path": "/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy is read-only; write actions never implemented"
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/notifications",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/discounts",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metafields",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/onetimes",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/clone",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/delay",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payment_methods",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/activate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/cancel",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/change_address",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/set_next_charge_date",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/skip_gift",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{id}/test",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/addresses/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bundle_selections/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checkouts/{token}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collections/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/credit_accounts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_entitlements/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/discounts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metafields/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/onetimes/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orders/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payment_methods/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{external_product_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developer.getrecharge.com/2021-11"
       }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

@@ -1,14 +1,1904 @@
 {
   "api": "Factorial API v2 (https://api.factorialhr.com/api/v2/resources)",
   "docs": "https://apidoc.factorialhr.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams, full capability parity",
+  "reviewed_at": "2026-08-19",
+  "scope": "Source-surface refresh 2026-08-19: 155 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.  5 legacy runtime-binding row(s) are retained only to preserve current conformance and are excluded from the provider operation total.",
   "endpoints": [
-    { "method": "GET", "path": "/employees/employees", "covered_by": { "stream": "employees" } },
-    { "method": "GET", "path": "/teams/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/timeoff/leaves", "covered_by": { "stream": "leaves" } },
-    { "method": "GET", "path": "/timeoff/leave_types", "covered_by": { "stream": "leave_types" } },
-    { "method": "GET", "path": "/locations/locations", "covered_by": { "stream": "locations" } },
-    { "method": "GET", "path": "/api_public/credentials", "excluded": { "category": "non_data_endpoint", "reason": "used only as the check request; not a syncable object stream" } }
-  ]
+    {
+      "method": "DELETE",
+      "path": "/v1/ats/candidates/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-ats-candidates-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/ats/job_postings/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-ats-job-postings-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/documents/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-documents-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/keys/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-keys-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/posts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-posts-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/tasks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-tasks-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/teams/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-teams-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/teams/{id}/employees/{employee_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-teams-id-employees-employee-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/core/webhooks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-core-webhooks-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/payroll/compensations/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-payroll-compensations-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/payroll/contract_versions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-payroll-contract-versions-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/payroll/supplements/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-payroll-supplements-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/time/leaves/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-time-leaves-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/time/shifts_management/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-time-shifts-management-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/time/shifts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v1-time-shifts-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/core/webhooks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v2-core-webhooks-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/core/workplaces/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v2-core-workplaces-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/custom_fields/fields/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v2-custom-fields-fields-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/payroll_integrations/codes/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v2-payroll-integrations-codes-id?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/time/leaves/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/delete_v2-time-leaves-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/employees",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/locations",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/leave_types",
+      "covered_by": {
+        "stream": "leave_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/leaves",
+      "covered_by": {
+        "stream": "leaves"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ats/candidates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-ats-candidates?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ats/job_postings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-ats-job-postings?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ats/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-ats-messages?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company_holidays",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-company-holidays?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company_holidays/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-company-holidays-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/custom/tables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-custom-tables?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/custom/tables/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-custom-tables-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/custom/tables/{id}/fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-custom-tables-id-fields?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/custom/tables/{id}/values/{employee_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-custom-tables-id-values-employee-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/documents",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-documents?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/documents/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-documents-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-events?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-folders?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/folders/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-folders-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/keys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-keys?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/legal_entities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-legal-entities?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/legal_entities/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-legal-entities-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/posts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-posts?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/posts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-posts-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/tasks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-tasks?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/tasks/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-tasks-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/tasks/{id}/files",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-tasks-id-files?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/tasks/{task_id}/files/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-tasks-task-id-files-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/teams",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-teams?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/teams/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-teams-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/core/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-core-webhooks?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-custom-fields?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_fields/values",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-custom-fields-values?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/employees",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-employees?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/employees/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-employees-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/locations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-locations?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/locations/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-locations-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-me?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/compensations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-compensations?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/compensations/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-compensations-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/contract_versions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-contract-versions?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/family_situation",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-family-situation?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/reference_contracts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-reference-contracts?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/supplements",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-supplements?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/taxonomies",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-taxonomies?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payroll/taxonomies/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-payroll-taxonomies-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/break_configurations_for_dates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-break-configurations-for-dates?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/leave_types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-leave-types?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/leaves",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-leaves?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/leaves/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-leaves-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/policies",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-policies?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/policies/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-policies-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/shifts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-shifts?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/shifts_management",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-shifts-management?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/time/shifts_management/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v1-time-shifts-management-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/core/employees",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-core-employees?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/core/employees/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-core-employees-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/core/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-core-webhooks?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/core/workplaces",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-core-workplaces?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/core/workplaces/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-core-workplaces-id?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_fields/fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-custom-fields-fields?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_fields/values",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-custom-fields-values?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payroll_integrations/codes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-payroll-integrations-codes?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time/attendance",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-time-attendance?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time/leaves",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-time-leaves?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time/leaves/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/get_v2-time-leaves-id?reduce=false"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/payroll_integrations/codes/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/patch_v2-payroll-integrations-codes-id?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ats/applications",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-ats-applications?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ats/candidates",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-ats-candidates?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ats/job_postings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-ats-job-postings?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ats/job_postings/{id}/duplicate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-ats-job-postings-id-duplicate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ats/messages",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-ats-messages?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/custom/tables",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-custom-tables?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/custom/tables/{id}/fields",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-custom-tables-id-fields?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/custom/tables/{id}/values/{employee_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-custom-tables-id-values-employee-id?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/documents",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-documents?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/folders",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-folders?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/keys",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-keys?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/posts",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-posts?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/tasks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-tasks?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/tasks/{id}/copy",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-tasks-id-copy?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/tasks/{id}/files",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-tasks-id-files?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/tasks/{id}/resolve",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-tasks-id-resolve?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/tasks/{task_id}/files/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-tasks-task-id-files-id?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/teams",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-teams?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/teams/{id}/employees/{employee_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-teams-id-employees-employee-id?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/core/webhooks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-core-webhooks?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/custom_fields/values",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-custom-fields-values?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/employees",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-employees?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/employees/{id}/terminate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-employees-id-terminate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/employees/{id}/unterminate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-employees-id-unterminate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payroll/compensations",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-payroll-compensations?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payroll/contract_versions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-payroll-contract-versions?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payroll/family_situation",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-payroll-family-situation?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payroll/supplements",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-payroll-supplements?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/breaks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-breaks?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/breaks/end",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-breaks-end?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/breaks/start",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-breaks-start?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/leave_types",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-leave-types?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/leaves",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-leaves?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/shifts_management",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-shifts-management?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/shifts/clock_in",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-shifts-clock-in?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/shifts/clock_out",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-shifts-clock-out?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/time/shifts/toggle",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v1-time-shifts-toggle?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/bulk/attendance",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-bulk-attendance?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/bulk/contract_version",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-bulk-contract-version?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/bulk/employee",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-bulk-employee?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/employees",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-employees?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/employees/{id}/invite",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-employees-id-invite?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/employees/{id}/terminate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-employees-id-terminate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/employees/{id}/unterminate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-employees-id-unterminate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/webhooks",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-webhooks?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/core/workplaces",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-core-workplaces?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/custom_fields/fields",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-custom-fields-fields?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payroll_integrations/codes",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-payroll-integrations-codes?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time/attendance",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-time-attendance?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time/leaves",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/post_v2-time-leaves?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/ats/applications/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-ats-applications-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/ats/candidates/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-ats-candidates-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/ats/job_postings/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-ats-job-postings-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/documents/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-documents-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/folders/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-folders-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/posts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-posts-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/tasks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-tasks-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/teams/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-teams-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/core/teams/{id}/employees/{employee_id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-core-teams-id-employees-employee-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/employees/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-employees-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/payroll/compensations/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-payroll-compensations-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/payroll/contract_versions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-payroll-contract-versions-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/payroll/family_situation/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-payroll-family-situation-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/payroll/supplements/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-payroll-supplements-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/time/leave_types/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-time-leave-types-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/time/leaves/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-time-leaves-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/time/shifts/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v1-time-shifts-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/core/employees/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-core-employees-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/core/employees/{id}/email",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-core-employees-id-email?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/core/webhooks/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-core-webhooks-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/core/workplaces/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-core-workplaces-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/custom_fields/values/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-custom-fields-values-id?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/time/leaves/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0/reference/put_v2-time-leaves-id?reduce=false"
+      }
+    }
+  ],
+  "operation_ledger_version": 1
 }

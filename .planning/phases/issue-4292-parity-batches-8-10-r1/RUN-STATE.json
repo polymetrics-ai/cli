@@ -1,16 +1,18 @@
 {
   "schema_version": 1,
   "issue": 4292,
-  "state": "executing",
+  "state": "validation",
   "delivery": "direct-pr",
   "base_branch": "main",
   "working_branch": "fm/cli-map-batch8910-r1",
   "batches": {
-    "8": "committed and pushed",
-    "9": "validated; pending commit",
-    "10": "pending"
+    "8": "source-first map regenerated and integrity-verified",
+    "9": "source-first map regenerated and integrity-verified",
+    "10": "source-first map generated and integrity-verified"
   },
   "live_provider_calls": false,
   "credentials": false,
-  "reverse_etl_disposition": "foundation-gap:generic-typed-destination-executor"
+  "reverse_etl_disposition": "foundation-gap:generic-typed-destination-executor",
+  "source_surface_report": "SOURCE-SURFACE-REPORT.md",
+  "rebase_required_before_push": "main (PR #4297 capability update)"
 }

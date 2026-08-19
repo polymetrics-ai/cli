@@ -1,64 +1,981 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "mode",
-  "captured_at": "2026-08-19T15:28:37.221Z",
+  "captured_at": "2026-08-19T16:45:09.643Z",
   "rest": {
-    "source_url": "https://mode.com/developer/api-reference/introduction/",
-    "requested_url": "https://mode.com/developer/api-reference/",
-    "sha256": "e13ae9fce82d75c20d43a62d0b67e1d11a7f4f28022dedcd9e4e2c700bac82a1",
-    "bytes": 37901,
-    "content_type": "text/html; charset=utf-8",
-    "retrieval_method": "http",
-    "representation": "published-document",
-    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
-    "operation_counts": {
-      "HOOK": 5
+    "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+    "representation": "machine-readable-spec",
+    "documents": [
+      {
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+        "sha256": "4c694c3fdeb1460d8f9982f01c3932328d391a1f55e4489c86dc4a46528b7c56",
+        "bytes": 133871,
+        "content_type": "text/plain; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "machine-readable-spec"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "ba22ba675cb1224517a435c8414f61b0454ac98e2c62741a34c15f2ee7530348",
+      "bytes": 133871
+    },
+    "counts": {
+      "total": 94,
+      "by_method": {
+        "DELETE": 14,
+        "GET": 49,
+        "PATCH": 12,
+        "POST": 19
+      },
+      "by_kind": {
+        "rest": 94
+      }
+    },
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "Mode publishes its Swagger document in its official repository; every HTTP path item is extracted."
     },
     "operations": [
       {
-        "id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "id": "mode.rest.archivereport-source-1",
         "protocol": "rest",
-        "method": "HOOK",
-        "path": "internal/connectors/mode spaces read path",
-        "operation_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}/archive",
+        "operation_id": "archiveReport",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]"
+        "source_location": "paths[\"/{account}/reports/{report}/archive\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
       },
       {
-        "id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "id": "mode.rest.bulkdeletereportschedule-source-1",
         "protocol": "rest",
-        "method": "HOOK",
-        "path": "internal/connectors/mode reports read path",
-        "operation_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "method": "DELETE",
+        "path": "/{workspace}/reports/schedules/v1/bulk_delete",
+        "operation_id": "bulkDeleteReportSchedule",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]"
+        "source_location": "paths[\"/{workspace}/reports/schedules/v1/bulk_delete\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
       },
       {
-        "id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "id": "mode.rest.clonereportrun-source-1",
         "protocol": "rest",
-        "method": "HOOK",
-        "path": "internal/connectors/mode data_sources read path",
-        "operation_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/runs/{run}/clone",
+        "operation_id": "cloneReportRun",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]"
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/clone\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
       },
       {
-        "id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "id": "mode.rest.createcollection-source-1",
         "protocol": "rest",
-        "method": "HOOK",
-        "path": "internal/connectors/mode groups read path",
-        "operation_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "method": "POST",
+        "path": "/{workspace}/spaces",
+        "operation_id": "createCollection",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]"
+        "source_location": "paths[\"/{workspace}/spaces\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
       },
       {
-        "id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "id": "mode.rest.createdatasetfielddescriptions-source-1",
         "protocol": "rest",
-        "method": "HOOK",
-        "path": "internal/connectors/mode memberships read path",
-        "operation_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "method": "POST",
+        "path": "/{account}/datasets/{dataset}/field_descriptions",
+        "operation_id": "createDatasetFieldDescriptions",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]"
+        "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createdatasourceschemaupdate-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/data_sources/{data_source}/schema_updates",
+        "operation_id": "createDataSourceSchemaUpdate",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/data_sources/{data_source}/schema_updates\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createdefinition-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/definitions",
+        "operation_id": "createDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.creategroup-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/groups",
+        "operation_id": "createGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.creategroupmembership-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/groups/{group_token}/memberships",
+        "operation_id": "createGroupMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createorganizationinvite-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/invites",
+        "operation_id": "createOrganizationInvite",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/invites\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createqueryinreport-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/queries",
+        "operation_id": "createQueryInReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createreportfilter-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/filters",
+        "operation_id": "createReportFilter",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/filters\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createreportschedule-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/reports/{report}/schedules",
+        "operation_id": "createReportSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/reports/{report}/schedules\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createspacememberships-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/spaces/{space}/memberships",
+        "operation_id": "createSpaceMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/memberships\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.createsubscriptionforreport-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/subscriptions",
+        "operation_id": "createSubscriptionForReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/subscriptions\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletecollection-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/spaces/{space}",
+        "operation_id": "deleteCollection",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/spaces/{space}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletedataset-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/datasets/{dataset}",
+        "operation_id": "deleteDataset",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletedatasetfielddescription-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+        "operation_id": "deleteDatasetFieldDescription",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions/{field_description}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletedefinition-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/definitions/{definition}",
+        "operation_id": "deleteDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/definitions/{definition}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletegroup-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/groups/{group_token}",
+        "operation_id": "deleteGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletegroupmembership-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+        "operation_id": "deleteGroupMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships/{membership_token}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletemembership-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/memberships/{membership}",
+        "operation_id": "deleteMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/memberships/{membership}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletequeryinreport-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/reports/{report}/queries/{query}",
+        "operation_id": "deleteQueryInReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletereport-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/reports/{report}",
+        "operation_id": "deleteReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletereportfilter-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/reports/{report}/filters/{filter}",
+        "operation_id": "deleteReportFilter",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletereportschedule-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+        "operation_id": "deleteReportSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletespacemembership-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+        "operation_id": "deleteSpaceMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/memberships/{space_membership}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.deletesubscriptionforreport-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+        "operation_id": "deleteSubscriptionForReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.duplicatereportrun-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/runs/{run}/duplicates",
+        "operation_id": "duplicateReportRun",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/duplicates\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getauditlogs-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/audit_logs",
+        "operation_id": "getAuditLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/audit_logs\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getchart-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/queries/{query}/charts/{chart}",
+        "operation_id": "getChart",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries/{query}/charts/{chart}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getcollection-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/spaces/{space}",
+        "operation_id": "getCollection",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/spaces/{space}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getcurrentuser-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/account",
+        "operation_id": "getCurrentUser",
+        "deprecated": false,
+        "source_location": "paths[\"/account\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdataset-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}",
+        "operation_id": "getDataset",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdatasetfielddescriptions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}/field_descriptions",
+        "operation_id": "getDatasetFieldDescriptions",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdatasetfields-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}/fields",
+        "operation_id": "getDatasetFields",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/fields\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdatasetreports-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}/reports",
+        "operation_id": "getDatasetReports",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdatasetrun-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}/runs/{run}",
+        "operation_id": "getDatasetRun",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/runs/{run}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdatasource-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/data_sources/{data_source}",
+        "operation_id": "getDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/data_sources/{data_source}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getdefinition-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/definitions/{definition}",
+        "operation_id": "getDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/definitions/{definition}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getgroup-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/groups/{group_token}",
+        "operation_id": "getGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getgroupmembership-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+        "operation_id": "getGroupMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships/{membership_token}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getmembership-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/memberships/{membership}",
+        "operation_id": "getMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/memberships/{membership}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getqueryinreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/queries/{query}",
+        "operation_id": "getQueryInReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getqueryruncontent-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}/results/content(.csv, .json)",
+        "operation_id": "getQueryRunContent",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs/{query_run}/results/content(.csv, .json)\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getqueryrunforreportrun-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}",
+        "operation_id": "getQueryRunForReportRun",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs/{query_run}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}",
+        "operation_id": "getReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportfilter-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/filters/{filter}",
+        "operation_id": "getReportFilter",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportrun-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}",
+        "operation_id": "getReportRun",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportruncontent-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/results/content(.csv, .json)",
+        "operation_id": "getReportRunContent",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/results/content(.csv, .json)\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportrunduplicate-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/duplicates/{duplicate}",
+        "operation_id": "getReportRunDuplicate",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/duplicates/{duplicate}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportrunexport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/exports/runs/{run}/pdf/download",
+        "operation_id": "getReportRunExport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/exports/runs/{run}/pdf/download\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getreportschedule-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+        "operation_id": "getReportSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getspacemembership-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+        "operation_id": "getSpaceMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/memberships/{space_membership}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.getsubscriptionforreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+        "operation_id": "getSubscriptionForReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listchartsinquery-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/queries/{query}/charts",
+        "operation_id": "listChartsInQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries/{query}/charts\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listcollections-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/spaces",
+        "operation_id": "listCollections",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/spaces\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdatasetruns-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/datasets/{dataset}/runs",
+        "operation_id": "listDatasetRuns",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/runs\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdatasetschedules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/datasets/{dataset}/schedules",
+        "operation_id": "listDatasetSchedules",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/datasets/{dataset}/schedules\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdatasetsinspace-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/spaces/{space}/datasets",
+        "operation_id": "listDatasetsInSpace",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/datasets\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdatasetsusingdatasource-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/data_sources/{data_source}/datasets",
+        "operation_id": "listDatasetsUsingDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/data_sources/{data_source}/datasets\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdatasources-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/data_sources",
+        "operation_id": "listDataSources",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/data_sources\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listdefinitions-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/definitions",
+        "operation_id": "listDefinitions",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listformfields-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/options",
+        "operation_id": "listFormFields",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/options\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listgroupmemberships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/groups/{group_token}/memberships",
+        "operation_id": "listGroupMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listgroups-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/groups",
+        "operation_id": "listGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listmemberships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/memberships",
+        "operation_id": "listMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/memberships\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listqueriesinreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/queries",
+        "operation_id": "listQueriesInReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listqueryrunsforreportrun-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs/{run}/query_runs",
+        "operation_id": "listQueryRunsForReportRun",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listreportfilters-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/filters",
+        "operation_id": "listReportFilters",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/filters\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listreportruns-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/runs",
+        "operation_id": "listReportRuns",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listreportschedules-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{workspace}/reports/{report}/schedules",
+        "operation_id": "listReportSchedules",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/reports/{report}/schedules\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listreportsinspace-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/spaces/{space}/reports",
+        "operation_id": "listReportsInSpace",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listreportsusingdatasource-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/data_sources/{data_source}/reports",
+        "operation_id": "listReportsUsingDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/data_sources/{data_source}/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listspacememberships-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/spaces/{space}/memberships",
+        "operation_id": "listSpaceMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/spaces/{space}/memberships\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listsubscriptionsforreport-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/subscriptions",
+        "operation_id": "listSubscriptionsForReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/subscriptions\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.listsubscriptionsforreportschedule-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{account}/reports/{report}/schedules/{schedule}/subscriptions",
+        "operation_id": "listSubscriptionsForReportSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/schedules/{schedule}/subscriptions\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.purgeallreports-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/purge",
+        "operation_id": "purgeAllReports",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/purge\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.purgefordatasource-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/data_sources/{data_source}/purge",
+        "operation_id": "purgeForDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/data_sources/{data_source}/purge\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.refreshdataset-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/reports/{report}/runs",
+        "operation_id": "refreshDataset",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/runs\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.rundataset-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{account}/datasets/{dataset}/runs",
+        "operation_id": "runDataset",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/runs\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.unarchivereport-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}/unarchive",
+        "operation_id": "unarchiveReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/unarchive\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatecollection-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{workspace}/spaces/{space}",
+        "operation_id": "updateCollection",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/spaces/{space}\"].post",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatedataset-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/datasets/{dataset}",
+        "operation_id": "updateDataset",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatedatasetfielddescription-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+        "operation_id": "updateDatasetFieldDescription",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions/{field_description}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatedatasource-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{workspace}/data_sources/{data_source}",
+        "operation_id": "updateDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/data_sources/{data_source}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatedefinition-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{workspace}/definitions/{definition}",
+        "operation_id": "updateDefinition",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/definitions/{definition}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updategroup-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{workspace}/groups/{group_token}",
+        "operation_id": "updateGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/groups/{group_token}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatequeryinreport-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}/queries/{query}",
+        "operation_id": "updateQueryInReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatereport-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}",
+        "operation_id": "updateReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatereportfilter-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}/filters/{filter}",
+        "operation_id": "updateReportFilter",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatereportschedule-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+        "operation_id": "updateReportSchedule",
+        "deprecated": false,
+        "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.updatesubscriptionforreport-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+        "operation_id": "updateSubscriptionForReport",
+        "deprecated": false,
+        "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+      },
+      {
+        "id": "mode.rest.verifycurrentuser-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/verify",
+        "operation_id": "verifyCurrentUser",
+        "deprecated": false,
+        "source_location": "paths[\"/api/verify\"].get",
+        "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
       }
     ]
   }

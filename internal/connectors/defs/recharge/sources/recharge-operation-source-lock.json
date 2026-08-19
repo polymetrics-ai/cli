@@ -1,0 +1,1272 @@
+{
+  "schema_version": 3,
+  "connector": "recharge",
+  "captured_at": "2026-08-19T16:46:23.237Z",
+  "rest": {
+    "source_url": "https://developer.getrecharge.com/2021-11",
+    "representation": "complete-rendered-reference",
+    "documents": [
+      {
+        "source_url": "https://developer.getrecharge.com/2021-11",
+        "sha256": "260a361c67ebb47aed44ee7aae486d76aa4b3aa4e8993c5fdb02544b93698e8d",
+        "bytes": 5311263,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "96c3fc1a39e341c09b1cbfbf0b90feb0a99df03334b5d4f04927f2e971021dbd",
+      "bytes": 5311263
+    },
+    "counts": {
+      "total": 123,
+      "by_method": {
+        "DELETE": 16,
+        "GET": 47,
+        "POST": 43,
+        "PUT": 17
+      },
+      "by_kind": {
+        "rest": 123
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Recharge publishes the complete 2021-11 API reference as one public rendered document; every formal METHOD /path declaration is extracted after stripping presentation markup."
+    },
+    "operations": [
+      {
+        "id": "recharge.rendered.delete-addresses-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/addresses/{id}",
+        "operation_id": "delete-addresses-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-66517",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-bundle-selections-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/bundle_selections/{id}",
+        "operation_id": "delete-bundle-selections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-102505",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-collections-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/collections/{id}",
+        "operation_id": "delete-collections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272509",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-collections-id-collection-products-bulk",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/collections/{id}/collection_products-bulk",
+        "operation_id": "delete-collections-id-collection-products-bulk",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272796",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-customer-entitlements-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/customer_entitlements/{id}",
+        "operation_id": "delete-customer-entitlements-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-357240",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-customers-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/customers/{id}",
+        "operation_id": "delete-customers-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-308757",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-discounts-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/discounts/{id}",
+        "operation_id": "delete-discounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-333770",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-metafields-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/metafields/{id}",
+        "operation_id": "delete-metafields-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-366502",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-onetimes-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/onetimes/{id}",
+        "operation_id": "delete-onetimes-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-384518",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-orders-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/orders/{id}",
+        "operation_id": "delete-orders-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-402892",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-payment-methods-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/payment_methods/{id}",
+        "operation_id": "delete-payment-methods-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-453911",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-plans-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/plans/{id}",
+        "operation_id": "delete-plans-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471284",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-products-external-product-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/products/{external_product_id}",
+        "operation_id": "delete-products-external-product-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-499677",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-products-external-product-id-plans-bulk",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "operation_id": "delete-products-external-product-id-plans-bulk",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471581",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-subscriptions-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/subscriptions/{id}",
+        "operation_id": "delete-subscriptions-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532064",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.delete-webhooks-id",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "operation_id": "delete-webhooks-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583372",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-accounts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/accounts",
+        "operation_id": "get-accounts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-639335",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-accounts-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/accounts/{id}",
+        "operation_id": "get-accounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-639273",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-addresses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/addresses",
+        "operation_id": "get-addresses",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60438",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-addresses-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/addresses/{id}",
+        "operation_id": "get-addresses-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60455",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-api-orders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orders",
+        "operation_id": "get-api-orders",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-445745",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-async-batches",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/async_batches",
+        "operation_id": "get-async-batches",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-609199",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-async-batches-batch-id-tasks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/async_batches/{batch_id}/tasks",
+        "operation_id": "get-async-batches-batch-id-tasks",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-621291",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-async-batches-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/async_batches/{id}",
+        "operation_id": "get-async-batches-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-609132",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-bundle-selections",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bundle_selections",
+        "operation_id": "get-bundle-selections",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-102230",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-bundle-selections-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bundle_selections/{id}",
+        "operation_id": "get-bundle-selections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-102296",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-charges",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/charges",
+        "operation_id": "get-charges",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60642",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-charges-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/charges/{id}",
+        "operation_id": "get-charges-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60657",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-checkout",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/checkout",
+        "operation_id": "get-checkout",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-260064",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-checkouts-token",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/checkouts/{token}",
+        "operation_id": "get-checkouts-token",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-223277",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-checkouts-token-shipping-rates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/checkouts/{token}/shipping_rates",
+        "operation_id": "get-checkouts-token-shipping-rates",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-223468",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-collection-products",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collection_products",
+        "operation_id": "get-collection-products",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272637",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-collections",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collections",
+        "operation_id": "get-collections",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272577",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-collections-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collections/{id}",
+        "operation_id": "get-collections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272379",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-credit-accounts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/credit_accounts",
+        "operation_id": "get-credit-accounts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290252",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-credit-accounts-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/credit_accounts/{id}",
+        "operation_id": "get-credit-accounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290114",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-credit-accounts-id-credit-adjustments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/credit_accounts/{id}/credit_adjustments",
+        "operation_id": "get-credit-accounts-id-credit-adjustments",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290405",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-credit-adjustments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/credit_adjustments",
+        "operation_id": "get-credit-adjustments",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290493",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-customer-entitlements",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer_entitlements",
+        "operation_id": "get-customer-entitlements",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-357024",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-customers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers",
+        "operation_id": "get-customers",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60981",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-customers-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers/{id}",
+        "operation_id": "get-customers-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60998",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-customers-id-credit-summary",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers/{id}/credit_summary",
+        "operation_id": "get-customers-id-credit-summary",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-308962",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-customers-id-delivery-schedule",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers/{id}/delivery_schedule",
+        "operation_id": "get-customers-id-delivery-schedule",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-308881",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-discounts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/discounts",
+        "operation_id": "get-discounts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-333836",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-discounts-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/discounts/{id}",
+        "operation_id": "get-discounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-333644",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-events",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events",
+        "operation_id": "get-events",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-643320",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-metafields",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/metafields",
+        "operation_id": "get-metafields",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-366569",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-metafields-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/metafields/{id}",
+        "operation_id": "get-metafields-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-366374",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-onetimes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/onetimes",
+        "operation_id": "get-onetimes",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-384583",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-onetimes-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/onetimes/{id}",
+        "operation_id": "get-onetimes-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-384394",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-orders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders",
+        "operation_id": "get-orders",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61297",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-orders-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/{id}",
+        "operation_id": "get-orders-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61311",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-payment-methods",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_methods",
+        "operation_id": "get-payment-methods",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61568",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-payment-methods-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_methods/{id}",
+        "operation_id": "get-payment-methods-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61591",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-plans",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/plans",
+        "operation_id": "get-plans",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471346",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-products",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products",
+        "operation_id": "get-products",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-499759",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-products-external-product-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/{external_product_id}",
+        "operation_id": "get-products-external-product-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-499519",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-store",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/store",
+        "operation_id": "get-store",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-525125",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-subscriptions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscriptions",
+        "operation_id": "get-subscriptions",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61674",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-subscriptions-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscriptions/{id}",
+        "operation_id": "get-subscriptions-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61695",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-token-information",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/token_information",
+        "operation_id": "get-token-information",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-636431",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-webhooks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks",
+        "operation_id": "get-webhooks",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583437",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.get-webhooks-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "operation_id": "get-webhooks-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583248",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-addresses",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/addresses",
+        "operation_id": "post-addresses",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-66332",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-addresses-id-charges-skip",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/addresses/{id}/charges/skip",
+        "operation_id": "post-addresses-id-charges-skip",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-66706",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-addresses-merge",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/addresses/merge",
+        "operation_id": "post-addresses-merge",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-66641",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-async-batches",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/async_batches",
+        "operation_id": "post-async-batches",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-609069",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-async-batches-batch-id-process",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/async_batches/{batch_id}/process",
+        "operation_id": "post-async-batches-batch-id-process",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-609261",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-async-batches-batch-id-tasks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/async_batches/{batch_id}/tasks",
+        "operation_id": "post-async-batches-batch-id-tasks",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-621211",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-bundle-selections",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bundle_selections",
+        "operation_id": "post-bundle-selections",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-102367",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges",
+        "operation_id": "post-charges",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-162969",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-add-free-gift",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/add_free_gift",
+        "operation_id": "post-charges-id-add-free-gift",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-121205",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-apply-discount",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/apply_discount",
+        "operation_id": "post-charges-id-apply-discount",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-120697",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-capture-payment",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/capture_payment",
+        "operation_id": "post-charges-id-capture-payment",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-121127",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-process",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/process",
+        "operation_id": "post-charges-id-process",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-121057",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-refund",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/refund",
+        "operation_id": "post-charges-id-refund",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-120988",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-remove-discount",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/remove_discount",
+        "operation_id": "post-charges-id-remove-discount",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-120774",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-remove-free-gift",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/remove_free_gift",
+        "operation_id": "post-charges-id-remove-free-gift",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-121281",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-skip",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/skip",
+        "operation_id": "post-charges-id-skip",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-120852",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-charges-id-unskip",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/charges/{id}/unskip",
+        "operation_id": "post-charges-id-unskip",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-120919",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-checkouts",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/checkouts",
+        "operation_id": "post-checkouts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-223218",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-checkouts-token-charge",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/checkouts/{token}/charge",
+        "operation_id": "post-checkouts-token-charge",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-223549",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-collections",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/collections",
+        "operation_id": "post-collections",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272318",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-collections-id-collection-products-bulk",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/collections/{id}/collection_products-bulk",
+        "operation_id": "post-collections-id-collection-products-bulk",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272705",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-credit-accounts",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/credit_accounts",
+        "operation_id": "post-credit-accounts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290049",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-credit-accounts-id-credit-adjustments",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/credit_accounts/{id}/credit_adjustments",
+        "operation_id": "post-credit-accounts-id-credit-adjustments",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290316",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-customer-entitlements",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer_entitlements",
+        "operation_id": "post-customer-entitlements",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-357094",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-customers",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customers",
+        "operation_id": "post-customers",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-308572",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-customers-id-notifications",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customers/{id}/notifications",
+        "operation_id": "post-customers-id-notifications",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-382138",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-discounts",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/discounts",
+        "operation_id": "post-discounts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-333585",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-metafields",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/metafields",
+        "operation_id": "post-metafields",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-366314",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-onetimes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/onetimes",
+        "operation_id": "post-onetimes",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-384336",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-orders-id-clone",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/orders/{id}/clone",
+        "operation_id": "post-orders-id-clone",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-402698",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-orders-id-delay",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/orders/{id}/delay",
+        "operation_id": "post-orders-id-delay",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-402765",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-payment-methods",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payment_methods",
+        "operation_id": "post-payment-methods",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-453708",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-plans",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/plans",
+        "operation_id": "post-plans",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471170",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-products",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/products",
+        "operation_id": "post-products",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-499461",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-products-external-product-id-plans-bulk",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "operation_id": "post-products-external-product-id-plans-bulk",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471400",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions",
+        "operation_id": "post-subscriptions",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-531867",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions-id-activate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{id}/activate",
+        "operation_id": "post-subscriptions-id-activate",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532443",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions-id-cancel",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{id}/cancel",
+        "operation_id": "post-subscriptions-id-cancel",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532368",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions-id-change-address",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{id}/change_address",
+        "operation_id": "post-subscriptions-id-change-address",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532285",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions-id-set-next-charge-date",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{id}/set_next_charge_date",
+        "operation_id": "post-subscriptions-id-set-next-charge-date",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532196",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-subscriptions-skip-gift",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/skip_gift",
+        "operation_id": "post-subscriptions-skip-gift",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-532520",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-webhooks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhooks",
+        "operation_id": "post-webhooks",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583190",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.post-webhooks-id-test",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhooks/{id}/test",
+        "operation_id": "post-webhooks-id-test",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583494",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-addresses-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/addresses/{id}",
+        "operation_id": "put-addresses-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-66454",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-bundle-selections-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/bundle_selections/{id}",
+        "operation_id": "put-bundle-selections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-102434",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-checkouts-token",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/checkouts/{token}",
+        "operation_id": "put-checkouts-token",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-223402",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-collections-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/collections/{id}",
+        "operation_id": "put-collections-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-272444",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-credit-accounts-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/credit_accounts/{id}",
+        "operation_id": "put-credit-accounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-290183",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-customer-entitlements-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/customer_entitlements/{id}",
+        "operation_id": "put-customer-entitlements-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-357165",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-customers-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/customers/{id}",
+        "operation_id": "put-customers-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-308694",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-discounts-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/discounts/{id}",
+        "operation_id": "put-discounts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-333707",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-metafields-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/metafields/{id}",
+        "operation_id": "put-metafields-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-366438",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-onetimes-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/onetimes/{id}",
+        "operation_id": "put-onetimes-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-384456",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-orders-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/orders/{id}",
+        "operation_id": "put-orders-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-402832",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-payment-methods-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/payment_methods/{id}",
+        "operation_id": "put-payment-methods-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-453842",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-plans-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/plans/{id}",
+        "operation_id": "put-plans-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471225",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-products-external-product-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/products/{external_product_id}",
+        "operation_id": "put-products-external-product-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-499598",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-products-external-product-id-plans-bulk",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "operation_id": "put-products-external-product-id-plans-bulk",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-471491",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-subscriptions-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/subscriptions/{id}",
+        "operation_id": "put-subscriptions-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-531997",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      },
+      {
+        "id": "recharge.rendered.put-webhooks-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/webhooks/{id}",
+        "operation_id": "put-webhooks-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-583310",
+        "source_url": "https://developer.getrecharge.com/2021-11"
+      }
+    ]
+  }
+}

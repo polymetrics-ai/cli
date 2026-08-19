@@ -1,490 +1,561 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "dbt",
-  "captured_at": "2026-08-19T15:28:37.221Z",
+  "captured_at": "2026-08-19T16:45:02.799Z",
   "rest": {
     "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
-    "requested_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
-    "sha256": "733481d6d3a894c6c7b0fe828db2d2d4d80090769f458f1a56e9681b6c9045b8",
-    "bytes": 167519,
-    "content_type": "text/plain; charset=utf-8",
-    "retrieval_method": "http",
-    "representation": "published-document",
-    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
-    "operation_counts": {
-      "DELETE": 6,
-      "GET": 26,
-      "PATCH": 1,
-      "POST": 19
+    "representation": "machine-readable-spec",
+    "documents": [
+      {
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "sha256": "733481d6d3a894c6c7b0fe828db2d2d4d80090769f458f1a56e9681b6c9045b8",
+        "bytes": 167519,
+        "content_type": "text/plain; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "machine-readable-spec"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "73b2b946693913ab1ce5127838847598484cc87dac0d2c96c6f24b645d5709a5",
+      "bytes": 167519
+    },
+    "counts": {
+      "total": 52,
+      "by_method": {
+        "DELETE": 6,
+        "GET": 26,
+        "PATCH": 1,
+        "POST": 19
+      },
+      "by_kind": {
+        "rest": 52
+      }
+    },
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "dbt Labs publishes the dbt Cloud v2 OpenAPI document in its official repository; every HTTP path item is extracted."
     },
     "operations": [
       {
-        "id": "dbt.rest.get-api-v2-accounts-api-surface-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-api-surface-1",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[0]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]"
-      },
-      {
-        "id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v2/accounts/{account_id}/",
-        "operation_id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/encryptions/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/encryptions/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/environments/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/environments/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[10]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[12]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[13]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/invites/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/invites/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/jobs/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/jobs/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[22]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[23]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/licenses/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[24]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/notifications/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[25]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/notifications/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[26]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[27]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[28]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[29]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[30]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/projects/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[31]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/projects/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[32]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[33]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[34]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[35]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/repositories/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[36]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/repositories/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[37]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[38]"
-      },
-      {
-        "id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
-        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
-        "deprecated": true,
-        "source_location": "api_surface.json:endpoints[39]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/runs/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[40]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/runs/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[41]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[42]"
-      },
-      {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[43]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+        "id": "dbt.rest.cancel-run-source-1",
         "protocol": "rest",
         "method": "POST",
         "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+        "operation_id": "Cancel Run",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[44]"
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/cancel/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[45]"
-      },
-      {
-        "id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
+        "id": "dbt.rest.create-environment-source-1",
         "protocol": "rest",
         "method": "POST",
-        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
-        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[46]"
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "operation_id": "Create Environment",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+        "id": "dbt.rest.create-job-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "operation_id": "Create Job",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.create-notification-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "operation_id": "Create Notification",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.create-project-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "operation_id": "Create Project",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.create-repository-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "operation_id": "Create Repository",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.create-ssh-tunnel-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "operation_id": "Create SSH Tunnel",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-environment-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "Destroy Environment",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-job-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "Destroy Job",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-notification-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "Destroy Notification",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-project-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "Destroy Project",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-repository-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation_id": "Destroy Repository",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.destroy-ssh-tunnel-source-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "Destroy SSH Tunnel",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].delete",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-account-license-allocations-source-1",
         "protocol": "rest",
         "method": "GET",
-        "path": "/api/v2/accounts/{account_id}/steps/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+        "path": "/api/v2/accounts/{account_id}/licenses/",
+        "operation_id": "List Account License Allocations",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[47]"
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/licenses/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+        "id": "dbt.rest.list-accounts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/",
+        "operation_id": "List Accounts",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-environments-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "operation_id": "List Environments",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-invites-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/",
+        "operation_id": "List Invites",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-jobs-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "operation_id": "List Jobs",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-notifications-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "operation_id": "List Notifications",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-projects-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "operation_id": "List Projects",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-repositories-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "operation_id": "List Repositories",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-run-artifacts-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+        "operation_id": "List Run Artifacts",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-runs-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/",
+        "operation_id": "List Runs",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-ssh-tunnels-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "operation_id": "List SSH Tunnels",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.list-users-source-1",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/users/",
-        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+        "operation_id": "List Users",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[48]"
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/users/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+        "id": "dbt.rest.partial-update-account-source-1",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "Partial Update Account",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].patch",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-account-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "Retrieve Account",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-environment-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "Retrieve Environment",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-invite-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+        "operation_id": "Retrieve Invite",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-job-artifact-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+        "operation_id": "Retrieve Job Artifact",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-job-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "Retrieve Job",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-notification-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "Retrieve Notification",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-project-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "Retrieve Project",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-repository-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation_id": "Retrieve Repository",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-run-artifact-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+        "operation_id": "Retrieve Run Artifact",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-run-failure-details-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "operation_id": "Retrieve Run Failure Details",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-run-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+        "operation_id": "Retrieve Run",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-run-step-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+        "operation_id": "Retrieve Run Step",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-ssh-tunnel-source-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "Retrieve SSH Tunnel",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.retrieve-user-source-1",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/users/{id}/",
-        "operation_id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+        "operation_id": "Retrieve User",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[49]"
+        "source_location": "paths[\"/api/v2/users/{id}/\"].get",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+        "id": "dbt.rest.retry-failed-job-source-1",
         "protocol": "rest",
         "method": "POST",
-        "path": "/api/v2/users/{id}/",
-        "operation_id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+        "operation_id": "Retry Failed Job",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[50]"
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       },
       {
-        "id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+        "id": "dbt.rest.retry-run-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "operation_id": "Retry Run",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.trigger-job-run-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+        "operation_id": "Trigger Job Run",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/run/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.unsubscribe-from-notifications-source-1",
         "protocol": "rest",
         "method": "POST",
         "path": "/api/v2/notifications/unsubscribe/",
-        "operation_id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+        "operation_id": "Unsubscribe from Notifications",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[51]"
+        "source_location": "paths[\"/api/v2/notifications/unsubscribe/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-account-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "Update Account",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-environment-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "Update Environment",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-job-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "Update Job",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-license-permissions-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+        "operation_id": "Update License Permissions",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-notification-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "Update Notification",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-project-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "Update Project",
+        "deprecated": true,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-ssh-tunnel-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "Update SSH Tunnel",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+      },
+      {
+        "id": "dbt.rest.update-user-source-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/users/{id}/",
+        "operation_id": "Update User",
+        "deprecated": false,
+        "source_location": "paths[\"/api/v2/users/{id}/\"].post",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
       }
     ]
   }

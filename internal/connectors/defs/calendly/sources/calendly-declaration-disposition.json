@@ -1,32 +1,43 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "calendly",
-  "generated_at": "2026-08-19T15:30:48.422Z",
+  "generated_at": "2026-08-19T16:45:23.176Z",
   "source_basis": {
     "source_lock": "sources/calendly-operation-source-lock.json",
-    "source_url": "https://developer.calendly.com/api-docs",
-    "source_sha256": "fd940783940c2cae6e7fe9b7e6feb96cb465cdbcb9940b2b5977efa6e59bcf74",
-    "source_bytes": 298140,
-    "source_operation_count": 35
+    "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "b7a67e2a5c5e920bb346915710667cec4144e7c7ad0bac8f046397e86d922fe0",
+      "bytes": 493981
+    },
+    "source_operation_count": 61,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "Calendly's official developer site publishes this Scheduling API OpenAPI document through its Stoplight project; every HTTP path item is extracted."
+    }
   },
   "summary": {
-    "api_surface_rows": 35,
-    "exact_source_rows": 35,
-    "declared_operations": 35,
-    "declared_percent": 100,
+    "old_api_surface_count": 35,
+    "api_surface_rows": 61,
+    "legacy_runtime_binding_rows": 0,
+    "operations_found": 61,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "Calendly's official developer site publishes this Scheduling API OpenAPI document through its Stoplight project; every HTTP path item is extracted."
+    },
     "enabled_operations": 20,
-    "enabled_percent": 57.14,
-    "disabled_operations": 15,
-    "documented_deletes": 3,
+    "enabled_percent": 32.79,
+    "disabled_operations": 41,
+    "documented_deletes": 6,
     "enabled_deletes": 2,
     "parity_class_counts": [
       {
         "key": "direct_read",
-        "count": 13
+        "count": 27
       },
       {
         "key": "direct_write",
-        "count": 10
+        "count": 22
       },
       {
         "key": "etl",
@@ -46,7 +57,7 @@
       }
     ],
     "stream_bindings": 12,
-    "writes_actions": 8,
+    "write_actions": 8,
     "terminal_commands": 0,
     "live_certification": "pending",
     "gap_ids": [
@@ -57,14 +68,14 @@
         "id": "generic-typed-destination-executor",
         "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
         "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
-        "count": 10,
+        "count": 22,
         "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 15
+        "count": 41
       }
     ],
     "transport": {
@@ -93,70 +104,43 @@
     "declaration_pending": [
       {
         "id": "typed-operation-contract-calendly",
-        "count": 15
+        "count": 41
       }
     ]
   },
   "ledger_dispositions": [
     {
-      "method": "GET",
-      "path": "/scheduled_events",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/scheduled_events",
-        "operation": null,
-        "covered_by": {
-          "stream": "scheduled_events"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-scheduled-events-api-surface-1",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[0]",
-        "operation_id": "calendly.rest.get-scheduled-events-api-surface-1",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"scheduled_events\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"scheduled_events\" binds the pinned source contract",
-        "stream": "scheduled_events"
-      }
-    },
-    {
       "method": "POST",
-      "path": "/scheduled_events/{uuid}/cancellation",
+      "path": "/contacts",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/scheduled_events/{uuid}/cancellation",
-        "operation": null,
-        "covered_by": {
-          "write": "cancel_scheduled_event"
+        "path": "/contacts",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[1]",
-        "operation_id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
+        "source_id": "calendly.rest.create-contact-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/contacts\"].post",
+        "operation_id": "create-contact",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"cancel_scheduled_event\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "cancel_scheduled_event"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
         }
       },
       "reverse_etl_eligibility": {
@@ -167,103 +151,49 @@
           "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts\"].post."
+      },
       "declaration": {
-        "status": "enabled; typed direct_write action \"cancel_scheduled_event\" binds the pinned source contract",
-        "write": "cancel_scheduled_event"
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
       }
     },
     {
-      "method": "GET",
+      "method": "POST",
       "path": "/event_types",
-      "parity_class": "etl",
+      "parity_class": "direct_write",
       "api_surface": {
-        "method": "GET",
+        "method": "POST",
         "path": "/event_types",
-        "operation": null,
-        "covered_by": {
-          "stream": "event_types"
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-event-types-api-surface-3",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[2]",
-        "operation_id": "calendly.rest.get-event-types-api-surface-3",
+        "source_id": "calendly.rest.create-event-type-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_types\"].post",
+        "operation_id": "create-event-type",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"event_types\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"event_types\" binds the pinned source contract",
-        "stream": "event_types"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/organization_memberships",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/organization_memberships",
-        "operation": null,
-        "covered_by": {
-          "stream": "organization_memberships"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-organization-memberships-api-surface-4",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[3]",
-        "operation_id": "calendly.rest.get-organization-memberships-api-surface-4",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"organization_memberships\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"organization_memberships\" binds the pinned source contract",
-        "stream": "organization_memberships"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/organization_memberships/{uuid}",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "DELETE",
-        "path": "/organization_memberships/{uuid}",
-        "operation": null,
-        "covered_by": {
-          "write": "remove_organization_membership"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[4]",
-        "operation_id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"remove_organization_membership\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "remove_organization_membership"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
         }
       },
       "reverse_etl_eligibility": {
@@ -274,199 +204,49 @@
           "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types\"].post."
+      },
       "declaration": {
-        "status": "enabled; typed direct_write action \"remove_organization_membership\" binds the pinned source contract",
-        "write": "remove_organization_membership"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/groups",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/groups",
-        "operation": null,
-        "covered_by": {
-          "stream": "groups"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-groups-api-surface-6",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[5]",
-        "operation_id": "calendly.rest.get-groups-api-surface-6",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"groups\" binds this source endpoint.",
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
         "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"groups\" binds the pinned source contract",
-        "stream": "groups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/users/me",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/users/me",
-        "operation": null,
-        "covered_by": {
-          "stream": "users"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-users-me-api-surface-7",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[6]",
-        "operation_id": "calendly.rest.get-users-me-api-surface-7",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"users\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"users\" binds the pinned source contract",
-        "stream": "users"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/routing_forms",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/routing_forms",
-        "operation": null,
-        "covered_by": {
-          "stream": "routing_forms"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-routing-forms-api-surface-8",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[7]",
-        "operation_id": "calendly.rest.get-routing-forms-api-surface-8",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"routing_forms\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"routing_forms\" binds the pinned source contract",
-        "stream": "routing_forms"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/routing_form_submissions",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/routing_form_submissions",
-        "operation": null,
-        "covered_by": {
-          "stream": "routing_form_submissions"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-routing-form-submissions-api-surface-9",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[8]",
-        "operation_id": "calendly.rest.get-routing-form-submissions-api-surface-9",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"routing_form_submissions\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"routing_form_submissions\" binds the pinned source contract",
-        "stream": "routing_form_submissions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/webhook_subscriptions",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/webhook_subscriptions",
-        "operation": null,
-        "covered_by": {
-          "stream": "webhook_subscriptions"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[9]",
-        "operation_id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"webhook_subscriptions\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"webhook_subscriptions\" binds the pinned source contract",
-        "stream": "webhook_subscriptions"
       }
     },
     {
       "method": "POST",
-      "path": "/webhook_subscriptions",
+      "path": "/invitee_no_shows",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/webhook_subscriptions",
-        "operation": null,
-        "covered_by": {
-          "write": "create_webhook_subscription"
+        "path": "/invitee_no_shows",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[10]",
-        "operation_id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
+        "source_id": "calendly.rest.create-invitee-no-show-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/invitee_no_shows\"].post",
+        "operation_id": "create-invitee-no-show",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"create_webhook_subscription\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "create_webhook_subscription"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
         }
       },
       "reverse_etl_eligibility": {
@@ -477,267 +257,15 @@
           "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows\"].post."
+      },
       "declaration": {
-        "status": "enabled; typed direct_write action \"create_webhook_subscription\" binds the pinned source contract",
-        "write": "create_webhook_subscription"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/webhook_subscriptions/{uuid}",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "DELETE",
-        "path": "/webhook_subscriptions/{uuid}",
-        "operation": null,
-        "covered_by": {
-          "write": "delete_webhook_subscription"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[11]",
-        "operation_id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"delete_webhook_subscription\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "delete_webhook_subscription"
-        }
-      },
-      "reverse_etl_eligibility": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; typed direct_write action \"delete_webhook_subscription\" binds the pinned source contract",
-        "write": "delete_webhook_subscription"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/user_availability_schedules",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/user_availability_schedules",
-        "operation": null,
-        "covered_by": {
-          "stream": "user_availability_schedules"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-user-availability-schedules-api-surface-13",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[12]",
-        "operation_id": "calendly.rest.get-user-availability-schedules-api-surface-13",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"user_availability_schedules\" binds this source endpoint.",
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
         "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"user_availability_schedules\" binds the pinned source contract",
-        "stream": "user_availability_schedules"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/group_relationships",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/group_relationships",
-        "operation": null,
-        "covered_by": {
-          "stream": "group_relationships"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-group-relationships-api-surface-14",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[13]",
-        "operation_id": "calendly.rest.get-group-relationships-api-surface-14",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"group_relationships\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"group_relationships\" binds the pinned source contract",
-        "stream": "group_relationships"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/activity_log_entries",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/activity_log_entries",
-        "operation": null,
-        "covered_by": {
-          "stream": "activity_log_entries"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-activity-log-entries-api-surface-15",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[14]",
-        "operation_id": "calendly.rest.get-activity-log-entries-api-surface-15",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"activity_log_entries\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"activity_log_entries\" binds the pinned source contract",
-        "stream": "activity_log_entries"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/scheduled_events/{event_uuid}/invitees",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/scheduled_events/{event_uuid}/invitees",
-        "operation": null,
-        "covered_by": {
-          "stream": "invitees"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[15]",
-        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"invitees\" binds this source endpoint.",
-        "contract": null
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing etl stream \"invitees\" binds the pinned source contract",
-        "stream": "invitees"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invitees",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/invitees",
-        "operation": null,
-        "covered_by": {
-          "write": "create_invitee"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-invitees-api-surface-17",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[16]",
-        "operation_id": "calendly.rest.post-invitees-api-surface-17",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"create_invitee\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "create_invitee"
-        }
-      },
-      "reverse_etl_eligibility": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; typed direct_write action \"create_invitee\" binds the pinned source contract",
-        "write": "create_invitee"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/organizations/{uuid}/invitations",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/organizations/{uuid}/invitations",
-        "operation": null,
-        "covered_by": {
-          "write": "invite_user_to_organization"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[17]",
-        "operation_id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
-        "deprecated": false
-      },
-      "state": "enabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"invite_user_to_organization\" binds this source endpoint.",
-        "contract": {
-          "kind": "typed_write_action",
-          "id": "invite_user_to_organization"
-        }
-      },
-      "reverse_etl_eligibility": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; typed direct_write action \"invite_user_to_organization\" binds the pinned source contract",
-        "write": "invite_user_to_organization"
       }
     },
     {
@@ -747,26 +275,27 @@
       "api_surface": {
         "method": "POST",
         "path": "/one_off_event_types",
-        "operation": null,
         "covered_by": {
           "write": "create_one_off_event_type"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-one-off-event-types-api-surface-19",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[18]",
-        "operation_id": "calendly.rest.post-one-off-event-types-api-surface-19",
+        "source_id": "calendly.rest.create-one-off-event-type-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/one_off_event_types\"].post",
+        "operation_id": "create-one-off-event-type",
         "deprecated": false
       },
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"create_one_off_event_type\" binds this source endpoint.",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"create_one_off_event_type\"] bind this provider operation.",
         "contract": {
           "kind": "typed_write_action",
-          "id": "create_one_off_event_type"
+          "ids": [
+            "create_one_off_event_type"
+          ]
         }
       },
       "reverse_etl_eligibility": {
@@ -779,8 +308,155 @@
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed direct_write action \"create_one_off_event_type\" binds the pinned source contract",
-        "write": "create_one_off_event_type"
+        "status": "enabled; typed direct_write action(s) [\"create_one_off_event_type\"] bind the pinned provider operation",
+        "writes": [
+          "create_one_off_event_type"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{uuid}/invitations",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/organizations/{uuid}/invitations",
+        "covered_by": {
+          "write": "invite_user_to_organization"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.create-organization-invitation-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organizations/{uuid}/invitations\"].post",
+        "operation_id": "create-organization-invitation",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"invite_user_to_organization\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "invite_user_to_organization"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"invite_user_to_organization\"] bind the pinned provider operation",
+        "writes": [
+          "invite_user_to_organization"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheduled_events/{uuid}/cancellation",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/scheduled_events/{uuid}/cancellation",
+        "covered_by": {
+          "write": "cancel_scheduled_event"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.create-scheduled-event-cancellation-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduled_events/{uuid}/cancellation\"].post",
+        "operation_id": "create-scheduled-event-cancellation",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"cancel_scheduled_event\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "cancel_scheduled_event"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"cancel_scheduled_event\"] bind the pinned provider operation",
+        "writes": [
+          "cancel_scheduled_event"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheduling_links",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/scheduling_links",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.create-scheduling-link-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduling_links\"].post",
+        "operation_id": "create-scheduling-link",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduling_links\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduling_links\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
       }
     },
     {
@@ -790,26 +466,27 @@
       "api_surface": {
         "method": "POST",
         "path": "/shares",
-        "operation": null,
         "covered_by": {
           "write": "create_share"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-shares-api-surface-20",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[19]",
-        "operation_id": "calendly.rest.post-shares-api-surface-20",
+        "source_id": "calendly.rest.create-share-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/shares\"].post",
+        "operation_id": "create-share",
         "deprecated": false
       },
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action \"create_share\" binds this source endpoint.",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"create_share\"] bind this provider operation.",
         "contract": {
           "kind": "typed_write_action",
-          "id": "create_share"
+          "ids": [
+            "create_share"
+          ]
         }
       },
       "reverse_etl_eligibility": {
@@ -822,585 +499,90 @@
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed direct_write action \"create_share\" binds the pinned source contract",
-        "write": "create_share"
+        "status": "enabled; typed direct_write action(s) [\"create_share\"] bind the pinned provider operation",
+        "writes": [
+          "create_share"
+        ]
       }
     },
     {
-      "method": "GET",
-      "path": "/scheduled_events/{uuid}",
-      "parity_class": "direct_read",
+      "method": "POST",
+      "path": "/webhook_subscriptions",
+      "parity_class": "direct_write",
       "api_surface": {
-        "method": "GET",
-        "path": "/scheduled_events/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-scheduled-event detail fetch; every field it returns is already emitted by the scheduled_events list stream"
+        "method": "POST",
+        "path": "/webhook_subscriptions",
+        "covered_by": {
+          "write": "create_webhook_subscription"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[20]",
-        "operation_id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
+        "source_id": "calendly.rest.createwebhooks-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/webhook_subscriptions\"].post",
+        "operation_id": "createwebhooks",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[20]; api_surface.json:endpoints[20].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"create_webhook_subscription\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_webhook_subscription"
+          ]
         }
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[20]."
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
       },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/event_types/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/event_types/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-event-type detail fetch; every field it returns is already emitted by the event_types list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-event-types-uuid-api-surface-22",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[21]",
-        "operation_id": "calendly.rest.get-event-types-uuid-api-surface-22",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[21]; api_surface.json:endpoints[21].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[21]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/organization_memberships/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/organization_memberships/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-membership detail fetch; every field it returns is already emitted by the organization_memberships list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[22]",
-        "operation_id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[22]; api_surface.json:endpoints[22].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[22]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/webhook_subscriptions/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/webhook_subscriptions/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-webhook detail fetch; every field it returns is already emitted by the webhook_subscriptions list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[23]",
-        "operation_id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[23]; api_surface.json:endpoints[23].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[23]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/user_availability_schedules/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/user_availability_schedules/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-schedule detail fetch; every field it returns is already emitted by the user_availability_schedules list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[24]",
-        "operation_id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[24]; api_surface.json:endpoints[24].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[24]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/routing_forms/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/routing_forms/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-routing-form detail fetch; every field it returns is already emitted by the routing_forms list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[25]",
-        "operation_id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[25]; api_surface.json:endpoints[25].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[25]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/routing_form_submissions/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/routing_form_submissions/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-submission detail fetch; every field it returns is already emitted by the routing_form_submissions list stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[26]",
-        "operation_id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[26]; api_surface.json:endpoints[26].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[26]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-invitee detail fetch; every field it returns is already emitted by the invitees fan_out stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[27]",
-        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[27]; api_surface.json:endpoints[27].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[27]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/users/{uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/users/{uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-user detail fetch by arbitrary uuid; the users stream already covers the authenticated user (GET /users/me), the only user this bundle's api_key credential can name without a separate user-listing endpoint (Calendly publishes none)"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-users-uuid-api-surface-29",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[28]",
-        "operation_id": "calendly.rest.get-users-uuid-api-surface-29",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[28]; api_surface.json:endpoints[28].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[28]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/event_type_available_times",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/event_type_available_times",
-        "operation": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "computes available booking time slots for an event type over an arbitrary caller-supplied time window at query time; a derived availability calculation, not a persisted, syncable record set"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-event-type-available-times-api-surface-30",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[29]",
-        "operation_id": "calendly.rest.get-event-type-available-times-api-surface-30",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[29]; api_surface.json:endpoints[29].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[29]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/user_busy_times",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/user_busy_times",
-        "operation": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "requires an arbitrary caller-supplied start_time/end_time window per call (not a natural full/incremental list), on top of the same user-uri-required constraint as user_availability_schedules; a point-in-time availability check, not a syncable object stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-user-busy-times-api-surface-31",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[30]",
-        "operation_id": "calendly.rest.get-user-busy-times-api-surface-31",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[30]; api_surface.json:endpoints[30].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[30]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/organizations/{uuid}/invitations",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/organizations/{uuid}/invitations",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "lists an organization's pending invitations; a narrower, less useful view than organization_memberships (accepted members) for a sync-oriented connector, and not the resource the invite_user_to_organization write acts on reading back"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[31]",
-        "operation_id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[31]; api_surface.json:endpoints[31].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[31]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-invitation detail fetch; same reasoning as the list endpoint above"
-        }
-      },
-      "source": {
-        "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[32]",
-        "operation_id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[32]; api_surface.json:endpoints[32].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[32]."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-calendly",
-        "contract": null
+        "status": "enabled; typed direct_write action(s) [\"create_webhook_subscription\"] bind the pinned provider operation",
+        "writes": [
+          "create_webhook_subscription"
+        ]
       }
     },
     {
       "method": "DELETE",
-      "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
+      "path": "/contacts/{uuid}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
-        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
-        "operation": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "revokes a pending organization invitation; narrow lifecycle action on a resource this bundle does not stream, deferred to a later wave"
+        "path": "/contacts/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[33]",
-        "operation_id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
+        "source_id": "calendly.rest.delete-contacts-uuid-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/contacts/{uuid}\"].delete",
+        "operation_id": "delete-contacts-uuid",
         "deprecated": false
       },
       "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[33]; api_surface.json:endpoints[33].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
         }
       },
       "reverse_etl_eligibility": {
@@ -1414,8 +596,8 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[33]."
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].delete."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-calendly",
@@ -1429,28 +611,31 @@
       "api_surface": {
         "method": "POST",
         "path": "/data_compliance/deletion/invitees",
-        "operation": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "GDPR-style bulk deletion of invitee personal data across the account by email address; irreversible compliance action, never a safe automated write"
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
         }
       },
       "source": {
         "source_lock": "sources/calendly-operation-source-lock.json",
-        "source_id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
-        "source_url": "https://developer.calendly.com/api-docs",
-        "source_location": "api_surface.json:endpoints[34]",
-        "operation_id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
+        "source_id": "calendly.rest.delete-invitee-data-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/data_compliance/deletion/invitees\"].post",
+        "operation_id": "delete-invitee-data",
         "deprecated": false
       },
       "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-calendly",
-          "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[34]; api_surface.json:endpoints[34].",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/data_compliance/deletion/invitees\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
         }
       },
       "reverse_etl_eligibility": {
@@ -1464,8 +649,2145 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/calendly/api_surface.json:endpoints[34]."
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/data_compliance/deletion/invitees\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invitee_no_shows/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/invitee_no_shows/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.delete-invitee-no-show-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/invitee_no_shows/{uuid}\"].delete",
+        "operation_id": "delete-invitee-no-show",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows/{uuid}\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows/{uuid}\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/meeting_recaps/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/meeting_recaps/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.delete-meeting-recaps-uuid-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].delete",
+        "operation_id": "delete-meeting-recaps-uuid",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organization_memberships/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/organization_memberships/{uuid}",
+        "covered_by": {
+          "write": "remove_organization_membership"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.delete-organization-membership-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organization_memberships/{uuid}\"].delete",
+        "operation_id": "delete-organization-membership",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"remove_organization_membership\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "remove_organization_membership"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"remove_organization_membership\"] bind the pinned provider operation",
+        "writes": [
+          "remove_organization_membership"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_compliance/deletion/events",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/data_compliance/deletion/events",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.delete-scheduled-event-data-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/data_compliance/deletion/events\"].post",
+        "operation_id": "delete-scheduled-event-data",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/data_compliance/deletion/events\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/data_compliance/deletion/events\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhook_subscriptions/{webhook_uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/webhook_subscriptions/{webhook_uuid}",
+        "covered_by": {
+          "write": "delete_webhook_subscription"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.delete-webhook-subscription-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].delete",
+        "operation_id": "delete-webhook-subscription",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"delete_webhook_subscription\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_webhook_subscription"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_webhook_subscription\"] bind the pinned provider operation",
+        "writes": [
+          "delete_webhook_subscription"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/contacts/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-contact-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/contacts/{uuid}\"].get",
+        "operation_id": "get-contact",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/me",
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-current-user-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/users/me\"].get",
+        "operation_id": "get-current-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"users\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"users\" binds the pinned provider operation",
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_type_availability_schedules",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/event_type_availability_schedules",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-event-type-availability-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_type_availability_schedules\"].get",
+        "operation_id": "get-event-type-availability",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_availability_schedules\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_availability_schedules\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_types/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/event_types/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-event-type-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_types/{uuid}\"].get",
+        "operation_id": "get-event-type",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/group_relationships/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/group_relationships/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-group-relationship-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/group_relationships/{uuid}\"].get",
+        "operation_id": "get-group-relationship",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/group_relationships/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/group_relationships/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/groups/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-group-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/groups/{uuid}\"].get",
+        "operation_id": "get-group",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/groups/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/groups/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/groups",
+        "covered_by": {
+          "stream": "groups"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-groups-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/groups\"].get",
+        "operation_id": "get-groups",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"groups\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"groups\" binds the pinned provider operation",
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invitee_no_shows/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/invitee_no_shows/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-invitee-no-show-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/invitee_no_shows/{uuid}\"].get",
+        "operation_id": "get-invitee-no-show",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/invitee_no_shows/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/meeting_recaps/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/meeting_recaps/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-meeting-recaps-uuid-recap-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].get",
+        "operation_id": "get-meeting-recaps-uuid-recap",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_uuid}/invitations/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/organizations/{org_uuid}/invitations/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-organization-invitation-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].get",
+        "operation_id": "get-organization-invitation",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organization_memberships/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/organization_memberships/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-organization-membership-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organization_memberships/{uuid}\"].get",
+        "operation_id": "get-organization-membership",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organization_memberships/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organization_memberships/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/organizations/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-organization-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organizations/{uuid}\"].get",
+        "operation_id": "get-organization",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outgoing_communications",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/outgoing_communications",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-outgoing-communications-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/outgoing_communications\"].get",
+        "operation_id": "get-outgoing-communications",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/outgoing_communications\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/outgoing_communications\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routing_forms/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/routing_forms/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-routing-form-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/routing_forms/{uuid}\"].get",
+        "operation_id": "get-routing-form",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/routing_forms/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/routing_forms/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routing_form_submissions/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/routing_form_submissions/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-routing-form-submission-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/routing_form_submissions/{uuid}\"].get",
+        "operation_id": "get-routing-form-submission",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/routing_form_submissions/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/routing_form_submissions/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sample_webhook_data",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sample_webhook_data",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-sample-webhook-data-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/sample_webhook_data\"].get",
+        "operation_id": "get-sample-webhook-data",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/sample_webhook_data\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/sample_webhook_data\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-scheduled-event-invitees-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduled_events/{event_uuid}/invitees/{invitee_uuid}\"].get",
+        "operation_id": "get-scheduled-event-invitees",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduled_events/{event_uuid}/invitees/{invitee_uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduled_events/{event_uuid}/invitees/{invitee_uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_events/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scheduled_events/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-scheduled-event-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduled_events/{uuid}\"].get",
+        "operation_id": "get-scheduled-event",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduled_events/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/scheduled_events/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/meeting_recaps/{uuid}/transcript",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/meeting_recaps/{uuid}/transcript",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-transcript-meeting-recaps-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/meeting_recaps/{uuid}/transcript\"].get",
+        "operation_id": "get-transcript-meeting-recaps",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}/transcript\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}/transcript\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_availability_schedules/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/user_availability_schedules/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-user-availability-schedule-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/user_availability_schedules/{uuid}\"].get",
+        "operation_id": "get-user-availability-schedule",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/user_availability_schedules/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/user_availability_schedules/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-user-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/users/{uuid}\"].get",
+        "operation_id": "get-user",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/users/{uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/users/{uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhook_subscriptions/{webhook_uuid}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/webhook_subscriptions/{webhook_uuid}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.get-webhook-subscription-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].get",
+        "operation_id": "get-webhook-subscription",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/webhook_subscriptions/{webhook_uuid}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/webhook_subscriptions/{webhook_uuid}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity_log_entries",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/activity_log_entries",
+        "covered_by": {
+          "stream": "activity_log_entries"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-activity-log-entries-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/activity_log_entries\"].get",
+        "operation_id": "list-activity-log-entries",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"activity_log_entries\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"activity_log_entries\" binds the pinned provider operation",
+        "stream": "activity_log_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/contacts",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-contacts-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/contacts\"].get",
+        "operation_id": "list-contacts",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_events/{uuid}/invitees",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scheduled_events/{uuid}/invitees",
+        "covered_by": {
+          "stream": "invitees"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-event-invitees-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduled_events/{uuid}/invitees\"].get",
+        "operation_id": "list-event-invitees",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"invitees\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"invitees\" binds the pinned provider operation",
+        "stream": "invitees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_type_available_times",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/event_type_available_times",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-event-type-available-times-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_type_available_times\"].get",
+        "operation_id": "list-event-type-available-times",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_available_times\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_available_times\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_type_memberships",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/event_type_memberships",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-event-type-memberships-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_type_memberships\"].get",
+        "operation_id": "list-event-type-memberships",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_memberships\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_memberships\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_types",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/event_types",
+        "covered_by": {
+          "stream": "event_types"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-event-types-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_types\"].get",
+        "operation_id": "list-event-types",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"event_types\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"event_types\" binds the pinned provider operation",
+        "stream": "event_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/group_relationships",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/group_relationships",
+        "covered_by": {
+          "stream": "group_relationships"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-group-relationships-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/group_relationships\"].get",
+        "operation_id": "list-group-relationships",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"group_relationships\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"group_relationships\" binds the pinned provider operation",
+        "stream": "group_relationships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/meeting_recaps",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/meeting_recaps",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-meeting-recaps-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/meeting_recaps\"].get",
+        "operation_id": "list-meeting-recaps",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{uuid}/invitations",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/organizations/{uuid}/invitations",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-organization-invitations-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organizations/{uuid}/invitations\"].get",
+        "operation_id": "list-organization-invitations",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{uuid}/invitations\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{uuid}/invitations\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organization_memberships",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/organization_memberships",
+        "covered_by": {
+          "stream": "organization_memberships"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-organization-memberships-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organization_memberships\"].get",
+        "operation_id": "list-organization-memberships",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"organization_memberships\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"organization_memberships\" binds the pinned provider operation",
+        "stream": "organization_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routing_form_submissions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/routing_form_submissions",
+        "covered_by": {
+          "stream": "routing_form_submissions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-routing-form-submissions-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/routing_form_submissions\"].get",
+        "operation_id": "list-routing-form-submissions",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"routing_form_submissions\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"routing_form_submissions\" binds the pinned provider operation",
+        "stream": "routing_form_submissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routing_forms",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/routing_forms",
+        "covered_by": {
+          "stream": "routing_forms"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-routing-forms-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/routing_forms\"].get",
+        "operation_id": "list-routing-forms",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"routing_forms\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"routing_forms\" binds the pinned provider operation",
+        "stream": "routing_forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_events",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scheduled_events",
+        "covered_by": {
+          "stream": "scheduled_events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-scheduled-events-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/scheduled_events\"].get",
+        "operation_id": "list-scheduled-events",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"scheduled_events\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"scheduled_events\" binds the pinned provider operation",
+        "stream": "scheduled_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_availability_schedules",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/user_availability_schedules",
+        "covered_by": {
+          "stream": "user_availability_schedules"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-user-availability-schedules-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/user_availability_schedules\"].get",
+        "operation_id": "list-user-availability-schedules",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"user_availability_schedules\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"user_availability_schedules\" binds the pinned provider operation",
+        "stream": "user_availability_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_busy_times",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/user_busy_times",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-user-busy-times-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/user_busy_times\"].get",
+        "operation_id": "list-user-busy-times",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/user_busy_times\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/user_busy_times\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/locations",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-user-locations-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/locations\"].get",
+        "operation_id": "list-user-locations",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/locations\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/locations\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhook_subscriptions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/webhook_subscriptions",
+        "covered_by": {
+          "stream": "webhook_subscriptions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.list-webhook-subscriptions-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/webhook_subscriptions\"].get",
+        "operation_id": "list-webhook-subscriptions",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/streams.json: existing stream \"webhook_subscriptions\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"webhook_subscriptions\" binds the pinned provider operation",
+        "stream": "webhook_subscriptions"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/contacts/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.patch-contacts-uuid-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/contacts/{uuid}\"].patch",
+        "operation_id": "patch-contacts-uuid",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].patch.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/contacts/{uuid}\"].patch."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invitees",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/invitees",
+        "covered_by": {
+          "write": "create_invitee"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.post-invitee-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/invitees\"].post",
+        "operation_id": "post-invitee",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/calendly/writes.json: typed write action(s) [\"create_invitee\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_invitee"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_invitee\"] bind the pinned provider operation",
+        "writes": [
+          "create_invitee"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{org_uuid}/invitations/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/organizations/{org_uuid}/invitations/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.revoke-organization-invitation-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].delete",
+        "operation_id": "revoke-organization-invitation",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/event_type_availability_schedules",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/event_type_availability_schedules",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.update-event-type-availability-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_type_availability_schedules\"].patch",
+        "operation_id": "update-event-type-availability",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_availability_schedules\"].patch.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_type_availability_schedules\"].patch."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/event_types/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/event_types/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.update-event-type-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/event_types/{uuid}\"].patch",
+        "operation_id": "update-event-type",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types/{uuid}\"].patch.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/event_types/{uuid}\"].patch."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-calendly",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/meeting_recaps/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/meeting_recaps/{uuid}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/calendly-operation-source-lock.json",
+        "source_id": "calendly.rest.update-meeting-recaps-uuid-source-1",
+        "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+        "source_location": "paths[\"/meeting_recaps/{uuid}\"].patch",
+        "operation_id": "update-meeting-recaps-uuid",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-calendly",
+          "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].patch.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/calendly-operation-source-lock.json:paths[\"/meeting_recaps/{uuid}\"].patch."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-calendly",

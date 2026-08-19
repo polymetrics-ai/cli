@@ -7,7 +7,8 @@
 - Merges into: main
 - Delivery: A direct PR against `main`, containing three committed,
   source-locked ten-connector declaration-map increments, with local
-  validation green and no credentialed provider access.
+  validation green and no credentialed provider access. Publication is held
+  until the source-lock completeness correction below is green.
 - Working branch: fm/cli-map-batch8910-r1
 - Task: Add a public-source lock, source/API-surface crosswalk, complete
   six-class disposition ledger, and per-connector summary for brex, zoho-books,
@@ -32,15 +33,17 @@
 | Every documented operation has one map row and parity class | live | A JSON assertion compares unique source IDs from each lock, crosswalk, and ledger; all counts and six-class totals agree exactly. |
 | Missing declaration work is not misreported as an engine gap | live | Each disabled row names `declaration-pending` unless it carries concrete engine file/line evidence; direct-write rows carry the locked generic-destination gap only in their reverse-ETL eligibility attribute. |
 | Generated bundle metadata remains valid and synchronized | live | `connectorgen validate` accepts each changed bundle and `surface-sync --check` reports no drift. |
+| The provider surface is complete enough to make a map claim | live | Every source lock has `counts.total` and per-kind counts from a complete provider OpenAPI/Swagger/Discovery document or complete rendered reference; every ledger reports `operations_found` plus `coverage_confidence` and its basis, never a self-referential percentage. |
 
 ## Scope guard
 
 This is the multi-connector declaration-map outcome explicitly assigned by
-#4292, following the batch-one declaration-map precedent. It changes only the
-listed `internal/connectors/defs/<connector>/sources/` directories plus this
-phase evidence. It does not implement a connector, alter shared runtime/tooling,
-or make a certification claim. No source document, operation field, CLI command,
-or transport binding is guessed or synthesized.
+#4292, following the batch-one declaration-map precedent. It changes the listed
+`internal/connectors/defs/<connector>/sources/` directories and regenerates
+their `api_surface.json` inventories from the pinned provider operations, plus
+this phase evidence. It does not implement a connector, alter shared
+runtime/tooling, or make a certification claim. No source document, operation
+field, CLI command, or transport binding is guessed or synthesized.
 
 ## Foundation classification
 
@@ -85,6 +88,34 @@ or transport binding is guessed or synthesized.
 2. Keep only source artifacts and phase evidence in the diff. Commit after
    batches 8, 9, and 10; rebase onto current `main` immediately before each
    push, never force-push.
+
+## Source-lock completeness correction — 2026-08-19
+
+The captain's `SOURCE-LOCK-DEFECT.md` invalidated the initial maps' input
+model: a documentation landing page and a count derived from
+`api_surface.json` cannot prove a provider's documented operation surface.
+The initial Batch 8 and 9 commits remain on the branch for auditability but
+their generated source maps are not eligible for a PR until replaced.
+
+1. Retrieve each connector's complete provider-published OpenAPI, Swagger,
+   Discovery/service-model document. Where none exists, retrieve the complete
+   official rendered reference, explicitly record that representation, and
+   retain the exact source-document or source-bundle bytes/hashes. A landing
+   page or index alone is rejected.
+2. Extract the operation inventory from that document, including its source
+   location, then map every extracted operation. Existing `api_surface.json`
+   bindings may enable a row only when they exactly match a pinned source
+   operation; they are never the source inventory.
+3. Require `rest.counts.total`, per-method counts, `operations_found`, and a
+   `coverage_confidence` of `machine-readable` or
+   `complete-rendered-reference`, with its concrete evidence. A genuinely
+   unavailable public reference or instance-dependent surface records an
+   explicit `null` total and reason instead of fabricating a count. Delete
+   `declared_percent`.
+4. Reject a source whose count is implausibly small for its documented API
+   unless the lock records an explicit provider-scope explanation and a
+   non-`machine-readable` confidence. TestRail and Eventbrite retain a source
+   skip only when no official public reference can actually be retrieved.
 
 ## Batch checkpoints
 

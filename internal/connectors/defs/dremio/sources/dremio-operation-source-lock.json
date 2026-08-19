@@ -1,590 +1,676 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "dremio",
-  "captured_at": "2026-08-19T15:28:37.221Z",
+  "captured_at": "2026-08-19T16:45:09.939Z",
   "rest": {
     "source_url": "https://docs.dremio.com/25.x/reference/api/",
-    "requested_url": "https://docs.dremio.com/25.x/reference/api/",
-    "sha256": "fe2e585c8158a7ffbc60cf977ccb83b1fef6d746b92894a8f517b5542ff12c9c",
-    "bytes": 102674,
-    "content_type": "text/html; charset=utf-8",
-    "retrieval_method": "http",
-    "representation": "published-document",
-    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
-    "operation_counts": {
-      "DELETE": 10,
-      "GET": 29,
-      "PATCH": 2,
-      "POST": 15,
-      "PUT": 7
+    "representation": "complete-rendered-reference",
+    "documents": [
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/",
+        "sha256": "44e860f19fb2c943a36bf2350f3b0fb8cdabbab70611ff076609370d6da7e487",
+        "bytes": 102674,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+        "sha256": "09eb625f4393e7bec16015abb775ac7cc3d6ad88db84a2272d7e8e52b4d29d85",
+        "bytes": 85837,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "sha256": "ad2dabb792ce9cdfda8f54acfb307a691736754685e377d2987785d045a03b37",
+        "bytes": 199090,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-space/",
+        "sha256": "a3be1d93ac4c9ce82f20d1a0281a716db121d29177a802b96792659dd31b4b71",
+        "bytes": 200908,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/source/",
+        "sha256": "65f94054458f44e408cb39c84e76c70baf8063282f400528bdd4b52867d1b309",
+        "bytes": 369337,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+        "sha256": "6b119b548436a80bca2c76427759091cf0f5d25fda1ed55408ede09968fe9066",
+        "bytes": 123314,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "sha256": "adf478a9d71f436a285fda1a07ac363856fe0186e75c09f5f61fa143306ae934",
+        "bytes": 102447,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/job/",
+        "sha256": "b91b9abf1a8bf29d6f8778709bc085bedbbf195a72a1562ed8346c1b67486a9a",
+        "bytes": 87543,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+        "sha256": "4ba47b3436a4422f8447a93bb6fb14300d6d784d118fea552f464161f6c0b284",
+        "bytes": 47571,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+        "sha256": "6ea28f1ac067d434dd554e56dd806ba302f27043c427a6e5b9cfaffdd03249d9",
+        "bytes": 44529,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "sha256": "61c4215d2ab2b7452aed851d6280f08fb66f464bc5fa84be1034222e2f41aa8e",
+        "bytes": 512490,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+        "sha256": "41b8309834476e910862ad672de23af1a1bb80c812ea7f8b6e9fd17d5a09876a",
+        "bytes": 191734,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "sha256": "96c42df6444df6aa6ce9f9f4ba3a58bbd776d8f0256691a06d3e7ce00f47d72b",
+        "bytes": 115855,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "sha256": "a80a1ff24843852ea58309501a674820ff87e98a0c6494318b02800feb76f3b5",
+        "bytes": 165380,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/source/",
+        "sha256": "644feeb8db47ec44de13c7e9ff2597f7afca55f4a0430fa7b859c8721a713f92",
+        "bytes": 34164,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+        "sha256": "d5598d8f0b62ed8cc27b17bae5ba3b639c76f9276a4faeb167c595fabdfa2496",
+        "bytes": 44013,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+        "sha256": "17e077eeda43edfc2cdeb89d9458467da15856e70e1c1a32a622b64de8efd663",
+        "bytes": 38108,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "sha256": "94b16f62c2b9168bc398783eaa7d9ed482d92037ea786c819375ed6fe0114a24",
+        "bytes": 121059,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      },
+      {
+        "source_url": "https://docs.dremio.com/25.x/reference/api/wlm/",
+        "sha256": "152afe9ca56083262f613495eb354094370120c7d2bbe65f10829d74ea4e435b",
+        "bytes": 27517,
+        "content_type": "text/html; charset=utf-8",
+        "retrieval_method": "http",
+        "representation": "complete-rendered-reference"
+      }
+    ],
+    "source_bundle": {
+      "document_count": 19,
+      "sha256": "e76f0037f9bef3c79cfc071cebe010375532c4c53b0cf8177785bfd550e4e494",
+      "bytes": 2613570
+    },
+    "counts": {
+      "total": 49,
+      "by_method": {
+        "DELETE": 11,
+        "GET": 18,
+        "PATCH": 3,
+        "POST": 11,
+        "PUT": 6
+      },
+      "by_kind": {
+        "rest": 49
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Dremio's official API Reference index and every linked Reference API category page are retrieved. Their formal /api/v3 method/path declarations are extracted; the version prefix is removed only because this connector's declared base URL owns it."
     },
     "operations": [
       {
-        "id": "dremio.rest.get-catalog-api-surface-1",
+        "id": "dremio.rendered.delete-cache-authorization",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog",
-        "operation_id": "dremio.rest.get-catalog-api-surface-1",
+        "method": "DELETE",
+        "path": "/cache/authorization",
+        "operation_id": "delete-cache-authorization",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]"
+        "source_location": "rendered-document-byte-2172",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
       },
       {
-        "id": "dremio.rest.get-catalog-id-api-surface-2",
+        "id": "dremio.rendered.delete-cache-authorization-id",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog/{id}",
-        "operation_id": "dremio.rest.get-catalog-id-api-surface-2",
+        "method": "DELETE",
+        "path": "/cache/authorization/{id}",
+        "operation_id": "delete-cache-authorization-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]"
+        "source_location": "rendered-document-byte-2959",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
       },
       {
-        "id": "dremio.rest.get-catalog-by-path-path-api-surface-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog/by-path/{path}",
-        "operation_id": "dremio.rest.get-catalog-by-path-path-api-surface-3",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]"
-      },
-      {
-        "id": "dremio.rest.post-catalog-api-surface-4",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/catalog",
-        "operation_id": "dremio.rest.post-catalog-api-surface-4",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]"
-      },
-      {
-        "id": "dremio.rest.put-catalog-id-api-surface-5",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/catalog/{id}",
-        "operation_id": "dremio.rest.put-catalog-id-api-surface-5",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]"
-      },
-      {
-        "id": "dremio.rest.delete-catalog-id-api-surface-6",
+        "id": "dremio.rendered.delete-catalog-id",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/catalog/{id}",
-        "operation_id": "dremio.rest.delete-catalog-id-api-surface-6",
+        "operation_id": "delete-catalog-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]"
+        "source_location": "rendered-document-byte-30986",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
       },
       {
-        "id": "dremio.rest.post-catalog-id-refresh-api-surface-7",
+        "id": "dremio.rendered.delete-external-token-providers-id",
         "protocol": "rest",
-        "method": "POST",
-        "path": "/catalog/{id}/refresh",
-        "operation_id": "dremio.rest.post-catalog-id-refresh-api-surface-7",
+        "method": "DELETE",
+        "path": "/external-token-providers/{id}",
+        "operation_id": "delete-external-token-providers-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]"
+        "source_location": "rendered-document-byte-13714",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
       },
       {
-        "id": "dremio.rest.get-catalog-id-graph-api-surface-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog/{id}/graph",
-        "operation_id": "dremio.rest.get-catalog-id-graph-api-surface-8",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]"
-      },
-      {
-        "id": "dremio.rest.get-catalog-id-collaboration-tag-api-surface-9",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog/{id}/collaboration/tag",
-        "operation_id": "dremio.rest.get-catalog-id-collaboration-tag-api-surface-9",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]"
-      },
-      {
-        "id": "dremio.rest.post-catalog-id-collaboration-tag-api-surface-10",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/catalog/{id}/collaboration/tag",
-        "operation_id": "dremio.rest.post-catalog-id-collaboration-tag-api-surface-10",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]"
-      },
-      {
-        "id": "dremio.rest.get-catalog-id-collaboration-wiki-api-surface-11",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalog/{id}/collaboration/wiki",
-        "operation_id": "dremio.rest.get-catalog-id-collaboration-wiki-api-surface-11",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]"
-      },
-      {
-        "id": "dremio.rest.post-catalog-id-collaboration-wiki-api-surface-12",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/catalog/{id}/collaboration/wiki",
-        "operation_id": "dremio.rest.post-catalog-id-collaboration-wiki-api-surface-12",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]"
-      },
-      {
-        "id": "dremio.rest.get-reflections-api-surface-13",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/reflections",
-        "operation_id": "dremio.rest.get-reflections-api-surface-13",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[12]"
-      },
-      {
-        "id": "dremio.rest.get-reflection-id-api-surface-14",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/reflection/{id}",
-        "operation_id": "dremio.rest.get-reflection-id-api-surface-14",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[13]"
-      },
-      {
-        "id": "dremio.rest.get-dataset-datasetid-reflection-api-surface-15",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/dataset/{datasetId}/reflection",
-        "operation_id": "dremio.rest.get-dataset-datasetid-reflection-api-surface-15",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]"
-      },
-      {
-        "id": "dremio.rest.post-reflection-api-surface-16",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/reflection",
-        "operation_id": "dremio.rest.post-reflection-api-surface-16",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]"
-      },
-      {
-        "id": "dremio.rest.put-reflection-id-api-surface-17",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/reflection/{id}",
-        "operation_id": "dremio.rest.put-reflection-id-api-surface-17",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]"
-      },
-      {
-        "id": "dremio.rest.post-reflection-id-refresh-api-surface-18",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/reflection/{id}/refresh",
-        "operation_id": "dremio.rest.post-reflection-id-refresh-api-surface-18",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]"
-      },
-      {
-        "id": "dremio.rest.delete-reflection-id-api-surface-19",
+        "id": "dremio.rendered.delete-reflection-id",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/reflection/{id}",
-        "operation_id": "dremio.rest.delete-reflection-id-api-surface-19",
+        "operation_id": "delete-reflection-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]"
+        "source_location": "rendered-document-byte-78990",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
       },
       {
-        "id": "dremio.rest.get-source-api-surface-20",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/source",
-        "operation_id": "dremio.rest.get-source-api-surface-20",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]"
-      },
-      {
-        "id": "dremio.rest.get-source-id-api-surface-21",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/source/{id}",
-        "operation_id": "dremio.rest.get-source-id-api-surface-21",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]"
-      },
-      {
-        "id": "dremio.rest.delete-source-name-permission-cache-api-surface-22",
+        "id": "dremio.rendered.delete-role-id",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/source/{name}/permission-cache",
-        "operation_id": "dremio.rest.delete-source-name-permission-cache-api-surface-22",
+        "path": "/role/{id}",
+        "operation_id": "delete-role-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]"
+        "source_location": "rendered-document-byte-14094",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
       },
       {
-        "id": "dremio.rest.get-user-api-surface-23",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user",
-        "operation_id": "dremio.rest.get-user-api-surface-23",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[22]"
-      },
-      {
-        "id": "dremio.rest.get-user-id-api-surface-24",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user/{id}",
-        "operation_id": "dremio.rest.get-user-id-api-surface-24",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[23]"
-      },
-      {
-        "id": "dremio.rest.get-user-by-name-name-api-surface-25",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user/by-name/{name}",
-        "operation_id": "dremio.rest.get-user-by-name-name-api-surface-25",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[24]"
-      },
-      {
-        "id": "dremio.rest.post-user-api-surface-26",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/user",
-        "operation_id": "dremio.rest.post-user-api-surface-26",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[25]"
-      },
-      {
-        "id": "dremio.rest.put-user-id-api-surface-27",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/user/{id}",
-        "operation_id": "dremio.rest.put-user-id-api-surface-27",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[26]"
-      },
-      {
-        "id": "dremio.rest.delete-user-id-api-surface-28",
+        "id": "dremio.rendered.delete-scripts-id",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/user/{id}",
-        "operation_id": "dremio.rest.delete-user-id-api-surface-28",
+        "path": "/scripts/{id}",
+        "operation_id": "delete-scripts-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[27]"
+        "source_location": "rendered-document-byte-16147",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
       },
       {
-        "id": "dremio.rest.get-user-user-id-token-api-surface-29",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/user/{user-id}/token",
-        "operation_id": "dremio.rest.get-user-user-id-token-api-surface-29",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[28]"
-      },
-      {
-        "id": "dremio.rest.post-user-user-id-token-api-surface-30",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/user/{user-id}/token",
-        "operation_id": "dremio.rest.post-user-user-id-token-api-surface-30",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[29]"
-      },
-      {
-        "id": "dremio.rest.delete-user-user-id-token-token-id-api-surface-31",
+        "id": "dremio.rendered.delete-source-source-name-permission-cache",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/user/{user-id}/token/{token-id}",
-        "operation_id": "dremio.rest.delete-user-user-id-token-token-id-api-surface-31",
+        "path": "/source/{source-name}/permission-cache",
+        "operation_id": "delete-source-source-name-permission-cache",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[30]"
+        "source_location": "rendered-document-byte-2450",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/source/"
       },
       {
-        "id": "dremio.rest.delete-user-user-id-token-api-surface-32",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/user/{user-id}/token",
-        "operation_id": "dremio.rest.delete-user-user-id-token-api-surface-32",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[31]"
-      },
-      {
-        "id": "dremio.rest.delete-token-api-surface-33",
+        "id": "dremio.rendered.delete-token",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/token",
-        "operation_id": "dremio.rest.delete-token-api-surface-33",
+        "operation_id": "delete-token",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[32]"
+        "source_location": "rendered-document-byte-1972",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/token/"
       },
       {
-        "id": "dremio.rest.get-role-api-surface-34",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/role",
-        "operation_id": "dremio.rest.get-role-api-surface-34",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[33]"
-      },
-      {
-        "id": "dremio.rest.get-role-id-api-surface-35",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/role/{id}",
-        "operation_id": "dremio.rest.get-role-id-api-surface-35",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[34]"
-      },
-      {
-        "id": "dremio.rest.get-role-by-name-name-api-surface-36",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/role/by-name/{name}",
-        "operation_id": "dremio.rest.get-role-by-name-name-api-surface-36",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[35]"
-      },
-      {
-        "id": "dremio.rest.post-role-api-surface-37",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/role",
-        "operation_id": "dremio.rest.post-role-api-surface-37",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[36]"
-      },
-      {
-        "id": "dremio.rest.put-role-id-api-surface-38",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/role/{id}",
-        "operation_id": "dremio.rest.put-role-id-api-surface-38",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[37]"
-      },
-      {
-        "id": "dremio.rest.patch-role-id-member-api-surface-39",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/role/{id}/member",
-        "operation_id": "dremio.rest.patch-role-id-member-api-surface-39",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[38]"
-      },
-      {
-        "id": "dremio.rest.delete-role-id-api-surface-40",
+        "id": "dremio.rendered.delete-user-id",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/role/{id}",
-        "operation_id": "dremio.rest.delete-role-id-api-surface-40",
+        "path": "/user/{id}",
+        "operation_id": "delete-user-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[39]"
+        "source_location": "rendered-document-byte-15260",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
       },
       {
-        "id": "dremio.rest.post-sql-api-surface-41",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/sql",
-        "operation_id": "dremio.rest.post-sql-api-surface-41",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[40]"
-      },
-      {
-        "id": "dremio.rest.get-job-id-api-surface-42",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/job/{id}",
-        "operation_id": "dremio.rest.get-job-id-api-surface-42",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[41]"
-      },
-      {
-        "id": "dremio.rest.get-job-id-results-api-surface-43",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/job/{id}/results",
-        "operation_id": "dremio.rest.get-job-id-results-api-surface-43",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[42]"
-      },
-      {
-        "id": "dremio.rest.post-job-id-cancel-api-surface-44",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/job/{id}/cancel",
-        "operation_id": "dremio.rest.post-job-id-cancel-api-surface-44",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[43]"
-      },
-      {
-        "id": "dremio.rest.get-scripts-api-surface-45",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/scripts",
-        "operation_id": "dremio.rest.get-scripts-api-surface-45",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[44]"
-      },
-      {
-        "id": "dremio.rest.post-scripts-api-surface-46",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/scripts",
-        "operation_id": "dremio.rest.post-scripts-api-surface-46",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[45]"
-      },
-      {
-        "id": "dremio.rest.get-scripts-id-api-surface-47",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/scripts/{id}",
-        "operation_id": "dremio.rest.get-scripts-id-api-surface-47",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[46]"
-      },
-      {
-        "id": "dremio.rest.patch-scripts-id-api-surface-48",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/scripts/{id}",
-        "operation_id": "dremio.rest.patch-scripts-id-api-surface-48",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[47]"
-      },
-      {
-        "id": "dremio.rest.delete-scripts-id-api-surface-49",
+        "id": "dremio.rendered.delete-user-username-token-id",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/scripts/{id}",
-        "operation_id": "dremio.rest.delete-scripts-id-api-surface-49",
+        "path": "/user/{userName}/token/{id}",
+        "operation_id": "delete-user-username-token-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[48]"
+        "source_location": "rendered-document-byte-2490",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/token/"
       },
       {
-        "id": "dremio.rest.get-scripts-id-grants-api-surface-50",
+        "id": "dremio.rendered.get-catalog",
         "protocol": "rest",
         "method": "GET",
-        "path": "/scripts/{id}/grants",
-        "operation_id": "dremio.rest.get-scripts-id-grants-api-surface-50",
+        "path": "/catalog",
+        "operation_id": "get-catalog",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[49]"
+        "source_location": "rendered-document-byte-8099",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/"
       },
       {
-        "id": "dremio.rest.put-scripts-id-grants-api-surface-51",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/scripts/{id}/grants",
-        "operation_id": "dremio.rest.put-scripts-id-grants-api-surface-51",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[50]"
-      },
-      {
-        "id": "dremio.rest.post-search-api-surface-52",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/search",
-        "operation_id": "dremio.rest.post-search-api-surface-52",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[51]"
-      },
-      {
-        "id": "dremio.rest.get-search-status-api-surface-53",
+        "id": "dremio.rendered.get-catalog-by-path-path",
         "protocol": "rest",
         "method": "GET",
-        "path": "/search/status",
-        "operation_id": "dremio.rest.get-search-status-api-surface-53",
+        "path": "/catalog/by-path/{path}",
+        "operation_id": "get-catalog-by-path-path",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[52]"
+        "source_location": "rendered-document-byte-19415",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
       },
       {
-        "id": "dremio.rest.post-search-recovery-removedocuments-api-surface-54",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/search/recovery/removeDocuments",
-        "operation_id": "dremio.rest.post-search-recovery-removedocuments-api-surface-54",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[53]"
-      },
-      {
-        "id": "dremio.rest.get-engines-api-surface-55",
+        "id": "dremio.rendered.get-catalog-id",
         "protocol": "rest",
         "method": "GET",
-        "path": "/engines",
-        "operation_id": "dremio.rest.get-engines-api-surface-55",
+        "path": "/catalog/{id}",
+        "operation_id": "get-catalog-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[54]"
+        "source_location": "rendered-document-byte-14433",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
       },
       {
-        "id": "dremio.rest.post-engines-api-surface-56",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/engines",
-        "operation_id": "dremio.rest.post-engines-api-surface-56",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[55]"
-      },
-      {
-        "id": "dremio.rest.put-engines-id-start-api-surface-57",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/engines/{id}/start",
-        "operation_id": "dremio.rest.put-engines-id-start-api-surface-57",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[56]"
-      },
-      {
-        "id": "dremio.rest.put-engines-id-stop-api-surface-58",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/engines/{id}/stop",
-        "operation_id": "dremio.rest.put-engines-id-stop-api-surface-58",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[57]"
-      },
-      {
-        "id": "dremio.rest.delete-engines-id-api-surface-59",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/engines/{id}",
-        "operation_id": "dremio.rest.delete-engines-id-api-surface-59",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[58]"
-      },
-      {
-        "id": "dremio.rest.get-wlm-queue-api-surface-60",
+        "id": "dremio.rendered.get-dataset-datasetid-reflection",
         "protocol": "rest",
         "method": "GET",
-        "path": "/wlm/queue",
-        "operation_id": "dremio.rest.get-wlm-queue-api-surface-60",
+        "path": "/dataset/{datasetId}/reflection",
+        "operation_id": "get-dataset-datasetid-reflection",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[59]"
+        "source_location": "rendered-document-byte-55071",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
       },
       {
-        "id": "dremio.rest.get-wlm-rule-api-surface-61",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/wlm/rule",
-        "operation_id": "dremio.rest.get-wlm-rule-api-surface-61",
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[60]"
-      },
-      {
-        "id": "dremio.rest.get-external-token-providers-api-surface-62",
+        "id": "dremio.rendered.get-external-token-providers",
         "protocol": "rest",
         "method": "GET",
         "path": "/external-token-providers",
-        "operation_id": "dremio.rest.get-external-token-providers-api-surface-62",
+        "operation_id": "get-external-token-providers",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[61]"
+        "source_location": "rendered-document-byte-4157",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
       },
       {
-        "id": "dremio.rest.get-ldap-refreshusercache-api-surface-63",
+        "id": "dremio.rendered.get-external-token-providers-id",
         "protocol": "rest",
         "method": "GET",
-        "path": "/ldap/refreshUserCache",
-        "operation_id": "dremio.rest.get-ldap-refreshusercache-api-surface-63",
+        "path": "/external-token-providers/{id}",
+        "operation_id": "get-external-token-providers-id",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[62]"
+        "source_location": "rendered-document-byte-8292",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+      },
+      {
+        "id": "dremio.rendered.get-job-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job/{id}",
+        "operation_id": "get-job-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-6169",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/job/"
+      },
+      {
+        "id": "dremio.rendered.get-nodecollections-blacklist",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/nodeCollections/blacklist",
+        "operation_id": "get-nodecollections-blacklist",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-3401",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+      },
+      {
+        "id": "dremio.rendered.get-reflection",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reflection",
+        "operation_id": "get-reflection",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-40058",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+      },
+      {
+        "id": "dremio.rendered.get-reflection-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reflection/{id}",
+        "operation_id": "get-reflection-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-50838",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+      },
+      {
+        "id": "dremio.rendered.get-reflection-summary",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reflection-summary",
+        "operation_id": "get-reflection-summary",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-20084",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/"
+      },
+      {
+        "id": "dremio.rendered.get-role-by-name-name",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/role/by-name/{name}",
+        "operation_id": "get-role-by-name-name",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-8018",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+      },
+      {
+        "id": "dremio.rendered.get-role-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/role/{id}",
+        "operation_id": "get-role-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-6650",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+      },
+      {
+        "id": "dremio.rendered.get-scripts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scripts",
+        "operation_id": "get-scripts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-8167",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.get-scripts-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scripts/{id}",
+        "operation_id": "get-scripts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-12758",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.get-scripts-id-grants",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scripts/{id}/grants",
+        "operation_id": "get-scripts-id-grants",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-17971",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.get-user-by-name-name",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/by-name/{name}",
+        "operation_id": "get-user-by-name-name",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-10274",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+      },
+      {
+        "id": "dremio.rendered.get-user-id",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/{id}",
+        "operation_id": "get-user-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-8797",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+      },
+      {
+        "id": "dremio.rendered.patch-external-token-providers-id-state",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/external-token-providers/{id}/state",
+        "operation_id": "patch-external-token-providers-id-state",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-12670",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+      },
+      {
+        "id": "dremio.rendered.patch-role-id-member",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/role/{id}/member",
+        "operation_id": "patch-role-id-member",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-12355",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+      },
+      {
+        "id": "dremio.rendered.patch-scripts-id",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/scripts/{id}",
+        "operation_id": "patch-scripts-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-13989",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.post-catalog",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/catalog",
+        "operation_id": "post-catalog",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-10004",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+      },
+      {
+        "id": "dremio.rendered.post-dataset-id-reflection-recommendation-type",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dataset/{id}/reflection/recommendation/{type}",
+        "operation_id": "post-dataset-id-reflection-recommendation-type",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-7650",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/"
+      },
+      {
+        "id": "dremio.rendered.post-external-token-providers",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/external-token-providers",
+        "operation_id": "post-external-token-providers",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-5817",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+      },
+      {
+        "id": "dremio.rendered.post-nodecollections-blacklist",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/nodeCollections/blacklist",
+        "operation_id": "post-nodecollections-blacklist",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-2283",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+      },
+      {
+        "id": "dremio.rendered.post-reflection",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reflection",
+        "operation_id": "post-reflection",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-23136",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+      },
+      {
+        "id": "dremio.rendered.post-reflection-id-refresh",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reflection/{id}/refresh",
+        "operation_id": "post-reflection-id-refresh",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-60466",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+      },
+      {
+        "id": "dremio.rendered.post-role",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/role",
+        "operation_id": "post-role",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-4281",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+      },
+      {
+        "id": "dremio.rendered.post-scripts",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scripts",
+        "operation_id": "post-scripts",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-6298",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.post-scripts-batchdelete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scripts{batchDelete}",
+        "operation_id": "post-scripts-batchdelete",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-16841",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.post-sql",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sql",
+        "operation_id": "post-sql",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-2096",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/sql/"
+      },
+      {
+        "id": "dremio.rendered.post-user",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user",
+        "operation_id": "post-user",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-5482",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+      },
+      {
+        "id": "dremio.rendered.put-catalog-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/catalog/{id}",
+        "operation_id": "put-catalog-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-24260",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+      },
+      {
+        "id": "dremio.rendered.put-external-token-providers-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/external-token-providers/{id}",
+        "operation_id": "put-external-token-providers-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-9554",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+      },
+      {
+        "id": "dremio.rendered.put-reflection-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/reflection/{id}",
+        "operation_id": "put-reflection-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-61001",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+      },
+      {
+        "id": "dremio.rendered.put-role-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/role/{id}",
+        "operation_id": "put-role-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-9604",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+      },
+      {
+        "id": "dremio.rendered.put-scripts-id-grants",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/scripts/{id}/grants",
+        "operation_id": "put-scripts-id-grants",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-19343",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+      },
+      {
+        "id": "dremio.rendered.put-user-id",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/user/{id}",
+        "operation_id": "put-user-id",
+        "deprecated": false,
+        "source_location": "rendered-document-byte-11652",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
       }
     ]
   }
