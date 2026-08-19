@@ -172,6 +172,18 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	for _, action := range writes.Actions {
 		writesByName[action.Name] = struct{ kind, method, path, risk, confirm string }{action.Kind, action.Method, action.Path, action.Risk, action.Confirm}
 	}
+	for name, wantPath := range map[string]string{
+		"update_meeting":            "/meetings/{{ record.meetingId }}",
+		"delete_meeting":            "/meetings/{{ record.meetingId }}",
+		"upload_call_media":         "/calls/{{ record.id }}/media",
+		"upload_crm_entities":       "/crm/entities",
+		"upload_crm_entity_schema":  "/crm/entity-schema",
+		"upload_target_assignments": "/targets/{{ record.targetId }}/assignments",
+	} {
+		if got := writesByName[name].path; got != wantPath {
+			t.Fatalf("write action %q path = %q, want connector-relative %q", name, got, wantPath)
+		}
+	}
 	if got := flagsByPath["calls transcript"]["call-id"]; got != "body.filter.callIds" {
 		t.Fatalf("calls transcript --call-id maps_to = %q, want body.filter.callIds", got)
 	}

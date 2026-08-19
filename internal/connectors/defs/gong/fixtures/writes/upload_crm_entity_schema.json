@@ -1,7 +1,5 @@
 {
   "record": {
-    "integrationId": "12345678901234567890",
-    "objectType": "ACCOUNT",
     "selected_fields": [
       {
         "name": "fixture_field",

@@ -7,11 +7,11 @@
 - [x] `scripts/gsd doctor` passed and command sources were resolved.
 - [x] Current official OpenAPI refetch returned 69 operations with the current GET/POST/PUT/PATCH/DELETE distribution.
 - [x] Exact method/path/operation-ID/deprecation comparison against Batch 2/3 Gong source lock passed.
-- [ ] Current-main, typed-destination, and Batch 2/3 foundation reconciliation completed.
-- [ ] `go run ./cmd/connectorgen validate --json` passes after reconciliation.
-- [ ] `go run ./cmd/connectorgen surface-sync --check` passes after reconciliation.
-- [ ] `go run ./cmd/connectorgen surface-reconcile --check --json` reports no Gong runtime-surface drift.
-- [ ] Focused Gong `connectorgen`, engine, commandrunner, conformance, application, and CLI tests pass with `-timeout 20m`.
+- [x] Current-main, typed-destination, and Batch 2/3 foundation reconciliation completed.
+- [x] `go run ./cmd/connectorgen validate --json` passes after reconciliation.
+- [x] `go run ./cmd/connectorgen surface-sync --check` passes after reconciliation.
+- [ ] Full direct-read reconciliation remains pending. The bundle-directory `surface-reconcile` invocation is not a valid scoped proof, so its zero-scan result is not claimed as evidence.
+- [x] Focused Gong `connectorgen`, commandrunner, and conformance tests pass with `-timeout 20m`; multipart replay is explicitly excluded pending the shared F2/F4 foundation.
 - [ ] Built `pm` credential-free direct-read sweep records every result classification and proves no `unknown command` or exact-endpoint preflight block.
 - [ ] `pm help gong`, `pm gong`, and affected command help/docs/website generated-artifact checks pass.
 - [ ] `go vet ./...`, `go build ./cmd/pm`, individual `make verify` static gates, and detached `make connector-boundary` pass.
@@ -26,3 +26,10 @@ use; reads, writes, application commands, pagination, required-input behavior, E
 plan/preview/approval/apply/readback reverse ETL, binary routes if declared, representative CRUD
 with cleanup, and bounded non-secret request/result fingerprints. No browser session may replace
 connector authentication.
+
+## Accepted shared dependency
+
+`cli-closed-operation-runtime-r1` owns the provider-neutral F2/F4 requirement to bind synthetic
+fixture multipart payloads to the approval digests that runtime requires before dispatch. Gong
+does not ship a bypass and does not claim multipart conformance until that published generic head
+is integrated. The connector-local path and schema corrections are independently covered.

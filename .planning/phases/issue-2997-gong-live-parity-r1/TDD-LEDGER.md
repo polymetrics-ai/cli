@@ -18,6 +18,11 @@
   confirming that historical completion evidence is insufficient for this release certification.
 - Direct-read runtime coverage must be re-proven after reconciliation because prior audits found
   declaration rows that validated structurally but lacked exact executable `api_surface` bindings.
+- Gong conformance reproduced unresolved meeting placeholders and a fixture schema violation;
+  declaration-relative meeting and multipart paths plus the schema fixture were corrected and
+  locked by the focused Gong definition test. Multipart fixture replay remains outside this slice:
+  the generic fixture approval helper cannot bind the payload digests required before a multipart
+  request. Firstmate accepted that as `cli-closed-operation-runtime-r1` F2/F4 work.
 
 ## Green evidence to record during execution
 

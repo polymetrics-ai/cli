@@ -73,9 +73,10 @@ credential reference for live certification. It is not safe to invent or request
    API-surface bindings—then make the connector definitions pass the real runtime preflight and
    prove credential-free built-binary routing.
 4. Add Gong-owned source/destination transport and certification declarations where the merged
-   foundations admit them. Run plan/preview/approval/execute only through credential-free refusal
-   paths until a disposable credential reference is supplied; do not add provider-specific shared
-   code as a substitute.
+   foundations admit them. Multipart fixture replay is paused on the accepted provider-neutral
+   `cli-closed-operation-runtime-r1` F2/F4 approval-digest requirement; do not add a
+   provider-specific shared-code or fixture bypass. Run plan/preview/approval/execute only through
+   credential-free refusal paths until a disposable credential reference is supplied.
 5. Run focused gates, repository static gates, generated artifacts, connector boundary, full
    verification where the command timeout permits, a source/diff review, and the no-mistakes
    pipeline when firstmate authorizes its final gate.

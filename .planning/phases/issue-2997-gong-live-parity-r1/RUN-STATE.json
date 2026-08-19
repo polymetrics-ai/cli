@@ -3,7 +3,7 @@
   "branch": "fm/cli-gong-parity-wave01-r1",
   "pull_request": 3552,
   "base_branch": "main",
-  "status": "planned",
+  "status": "paused_waiting_shared_multipart_digest_foundation",
   "lifecycle": {
     "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
     "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
