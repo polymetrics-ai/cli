@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-19T00:00:00Z",
+  "updated_at": "2026-08-19T16:51:16.950Z",
   "crawls": {
     "salesloft": {
       "state": "complete",
@@ -12,13 +12,13 @@
       "coverage_confidence": "complete_rendered_reference"
     },
     "square": {
-      "state": "partial_incomplete_extraction",
+      "state": "superseded_by_machine_spec",
       "reference_root": "https://developer.squareup.com/reference/square",
       "groups_total": 40,
       "groups_retrieved": 40,
       "operations_found": null,
       "coverage_confidence": "partial",
-      "resume_strategy": "Resume at the listed zero-operation group pages using a rendered-browser extraction path. All groups must yield their operation cards before de-duplication; do not promote the partial operation list into a source lock.",
+      "resume_strategy": null,
       "group_pages": {
         "https://developer.squareup.com/reference/square/apple-pay-api": {
           "sha256": "eedba74f7517134b00604ad2d7f1ceb2c97aed9ff7b6e5bd92c688e837b6faca",
@@ -341,7 +341,54 @@
         "https://developer.squareup.com/reference/square/checkout-api": {
           "sha256": "e8cad0b6a3f30efbd942ce687906ecf15a309e6ab728716d6db2db4c9e4f5a9d",
           "bytes": 38471,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/location-settings/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-location-settings"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/location-settings/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-location-settings"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/merchant-settings",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-merchant-settings"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/merchant-settings",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-merchant-settings"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/payment-links",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/list-payment-links"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/online-checkout/payment-links",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/create-payment-link"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/delete-payment-link"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-payment-link"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-payment-link"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/customer-custom-attributes-api": {
           "sha256": "3f43e4e91784d52f8a576447155760b349bfa916a409f6935463898309e0b5ce",
@@ -639,12 +686,116 @@
         "https://developer.squareup.com/reference/square/gift-cards-api": {
           "sha256": "56e70c33d1b8e44140198ecc1694f8e0549456e05022a0ac2c2dc73b1960600a",
           "bytes": 38475,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/gift-cards",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/list-gift-cards"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/create-gift-card"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/from-gan",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card-from-gan"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/from-nonce",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card-from-nonce"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/{gift_card_id}/link-customer",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/link-customer-to-gift-card"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/{gift_card_id}/unlink-customer",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/unlink-customer-from-gift-card"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/gift-cards/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/inventory-api": {
           "sha256": "af02dfe255a76073124afa435c8fb4c380b1aa31fd3f3c0b5e0990d6b3f13daf",
           "bytes": 38473,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/inventory/adjustment-reasons",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/list-inventory-adjustment-reasons"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/create",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/create-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/delete",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/delete-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/restore",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/restore-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-adjustment-reason"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/inventory/adjustment-reasons/update",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/update-inventory-adjustment-reason"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/inventory/adjustments/update",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/update-inventory-adjustment"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/adjustments/{adjustment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-adjustment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/changes/batch-create",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-change-inventory"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/changes/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-retrieve-inventory-changes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/counts/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-retrieve-inventory-counts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/physical-counts/{physical_count_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-physical-count"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/{catalog_object_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-count"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/invoices-api": {
           "sha256": "78a538e5dfba370665988254c6ba90f5f4e90f4365321aa3d36d0aca3e185888",
@@ -872,7 +1023,29 @@
         "https://developer.squareup.com/reference/square/locations-api": {
           "sha256": "5507bc37fbf3657e3718502f7a14f547d331ad1baaa26cc9aba36ddb53607d1c",
           "bytes": 38474,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/locations",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/list-locations"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/create-location"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/locations/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/retrieve-location"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/locations/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/update-location"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/loyalty-api": {
           "sha256": "03e43afc939064708856b081864d3a317f27b877f22bd57549121c16d5a42554",
@@ -968,7 +1141,64 @@
         "https://developer.squareup.com/reference/square/merchant-custom-attributes-api": {
           "sha256": "7e21a087ac7d8f4cc275c416c3bcb660c6ca2ed1e66671dfd724361c628e4a9f",
           "bytes": 38491,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/merchants/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/list-merchant-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/create-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/delete-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/retrieve-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/update-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attributes/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/bulk-delete-merchant-custom-attributes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/bulk-upsert-merchant-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/list-merchant-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/delete-merchant-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/retrieve-merchant-custom-attribute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/upsert-merchant-custom-attribute"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/merchants-api": {
           "sha256": "4ae22944e2565482fcda5492e6555c2b935c3578494faa9b6829da40478ff10a",
@@ -1163,7 +1393,24 @@
         "https://developer.squareup.com/reference/square/payouts-api": {
           "sha256": "9c676484b938065b2bf284b4120cda7d1b3f9abdac2427db3fef01019ebf1299",
           "bytes": 38471,
-          "operations": []
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/payouts",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/list-payouts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/payouts/{payout_id}",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/get-payout"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/payouts/{payout_id}/payout-entries",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/list-payout-entries"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/refunds-api": {
           "sha256": "53e069a61715cabfd07598e27b11b52116b3b05e4fb1ad7067a883a66ce8a503",
@@ -1480,7 +1727,44 @@
         "https://developer.squareup.com/reference/square/vendors-api": {
           "sha256": "4e297c23f6ca2d9db51f3ee621732b45a9a3850088754ec8d113068e319d9fe1",
           "bytes": 38472,
-          "operations": []
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/vendors/bulk-create",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-create-vendors"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-retrieve-vendors"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/vendors/bulk-update",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-update-vendors"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/create",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/create-vendor"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/search",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/search-vendors"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/vendors/{vendor_id}",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/retrieve-vendor"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/vendors/{vendor_id}",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/update-vendor"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
         },
         "https://developer.squareup.com/reference/square/webhook-subscriptions-api": {
           "sha256": "aa85477d26f0df429277937f9c1507029af3e1a2e2ef0686e8f771253ba26ac1",
@@ -1547,8 +1831,17 @@
         "/reference/square/gift-card-activities-api",
         "/reference/square/gift-cards-api"
       ],
-      "last_error": "Rendered-reference parser found zero operations in 7 fetched group page(s): https://developer.squareup.com/reference/square/checkout-api, https://developer.squareup.com/reference/square/gift-cards-api, https://developer.squareup.com/reference/square/inventory-api, https://developer.squareup.com/reference/square/locations-api, https://developer.squareup.com/reference/square/merchant-custom-attributes-api, https://developer.squareup.com/reference/square/payouts-api, https://developer.squareup.com/reference/square/vendors-api",
-      "groups_extracted": 33
+      "last_error": null,
+      "groups_extracted": 40,
+      "static_extraction_defect": "Seven fetched group pages supplied no static operation cards; their browser-rendered DOM cards were checkpointed, but the rendered crawler is not used as the settled source denominator.",
+      "authoritative_source": {
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+        "sha256": "a0d0db22c202f68282fd359772461697b3f635df03d3b19b11bb60add7f8ff7c",
+        "bytes": 3279392,
+        "openapi": "3.0.0",
+        "operations_found": 334,
+        "coverage_confidence": "complete_machine_readable_specification"
+      }
     },
     "copper": {
       "state": "complete",

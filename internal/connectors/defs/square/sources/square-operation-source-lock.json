@@ -3,132 +3,3375 @@
   "connector": "square",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://developer.squareup.com/reference/square",
-    "sha256": "c26241012f6e52630b305ff3373d7238ade4fcc3513ef333d66401d22b9d1ad2",
-    "bytes": 99891,
-    "openapi": "public-provider-description",
-    "info_version": "Square Connect v2 API (https://connect.squareup.com/v2)",
+    "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+    "source_kind": "complete_machine_readable_specification",
+    "sha256": "a0d0db22c202f68282fd359772461697b3f635df03d3b19b11bb60add7f8ff7c",
+    "bytes": 3279392,
+    "openapi": "3.0.0",
+    "info_version": "Square API v2 public OpenAPI specification",
     "operation_counts": {
-      "GET": 9,
-      "POST": 2
+      "DELETE": 27,
+      "GET": 121,
+      "POST": 150,
+      "PUT": 36
     },
     "operations": [
       {
-        "id": "square.rest.get.V2Payments0",
+        "id": "square.rest.delete.DeleteBookingCustomAttribute0",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/payments",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+        "operation_id": "DeleteBookingCustomAttribute",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/bookings/{booking_id}/custom-attributes/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Refunds1",
+        "id": "square.rest.delete.DeleteBookingCustomAttributeDefinition1",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/refunds",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/v2/bookings/custom-attribute-definitions/{key}",
+        "operation_id": "DeleteBookingCustomAttributeDefinition",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/bookings/custom-attribute-definitions/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Customers2",
+        "id": "square.rest.delete.DeleteCatalogObject2",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/customers",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/v2/catalog/object/{object_id}",
+        "operation_id": "DeleteCatalogObject",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/catalog/object/{object_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Locations3",
+        "id": "square.rest.delete.DeleteCustomer3",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/locations",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}",
+        "operation_id": "DeleteCustomer",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/customers/{customer_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Orders4",
+        "id": "square.rest.delete.DeleteCustomerCard4",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/orders",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/cards/{card_id}",
+        "operation_id": "DeleteCustomerCard",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/cards/{card_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2CatalogList5",
+        "id": "square.rest.delete.DeleteCustomerCustomAttribute5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+        "operation_id": "DeleteCustomerCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/custom-attributes/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.RemoveGroupFromCustomer6",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/groups/{group_id}",
+        "operation_id": "RemoveGroupFromCustomer",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/groups/{group_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteCustomerCustomAttributeDefinition7",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/customers/custom-attribute-definitions/{key}",
+        "operation_id": "DeleteCustomerCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attribute-definitions/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteCustomerGroup8",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/customers/groups/{group_id}",
+        "operation_id": "DeleteCustomerGroup",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/groups/{group_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteDisputeEvidence9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+        "operation_id": "DeleteDisputeEvidence",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/evidence/{evidence_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteInvoice10",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/invoices/{invoice_id}",
+        "operation_id": "DeleteInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteInvoiceAttachment11",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/invoices/{invoice_id}/attachments/{attachment_id}",
+        "operation_id": "DeleteInvoiceAttachment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}/attachments/{attachment_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteBreakType12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/labor/break-types/{id}",
+        "operation_id": "DeleteBreakType",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/break-types/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteShift13",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/labor/shifts/{id}",
+        "operation_id": "DeleteShift",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/shifts/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteTimecard14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/labor/timecards/{id}",
+        "operation_id": "DeleteTimecard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/timecards/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteLocationCustomAttribute15",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+        "operation_id": "DeleteLocationCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}/custom-attributes/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteLocationCustomAttributeDefinition16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/locations/custom-attribute-definitions/{key}",
+        "operation_id": "DeleteLocationCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attribute-definitions/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteLoyaltyReward17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/loyalty/rewards/{reward_id}",
+        "operation_id": "DeleteLoyaltyReward",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/rewards/{reward_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteMerchantCustomAttribute18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+        "operation_id": "DeleteMerchantCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/{merchant_id}/custom-attributes/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteMerchantCustomAttributeDefinition19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/merchants/custom-attribute-definitions/{key}",
+        "operation_id": "DeleteMerchantCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attribute-definitions/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeletePaymentLink20",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/online-checkout/payment-links/{id}",
+        "operation_id": "DeletePaymentLink",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/payment-links/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteOrderCustomAttribute21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+        "operation_id": "DeleteOrderCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteOrderCustomAttributeDefinition22",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orders/custom-attribute-definitions/{key}",
+        "operation_id": "DeleteOrderCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attribute-definitions/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteSnippet23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/sites/{site_id}/snippet",
+        "operation_id": "DeleteSnippet",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/sites/{site_id}/snippet\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteSubscriptionAction24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/subscriptions/{subscription_id}/actions/{action_id}",
+        "operation_id": "DeleteSubscriptionAction",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/actions/{action_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteTransferOrder25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/transfer-orders/{transfer_order_id}",
+        "operation_id": "DeleteTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.delete.DeleteWebhookSubscription26",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/webhooks/subscriptions/{subscription_id}",
+        "operation_id": "DeleteWebhookSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions/{subscription_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.V1ListOrders27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/{location_id}/orders",
+        "operation_id": "V1ListOrders",
+        "deprecated": true,
+        "source_location": ".paths[\"/v1/{location_id}/orders\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.V1RetrieveOrder28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/{location_id}/orders/{order_id}",
+        "operation_id": "V1RetrieveOrder",
+        "deprecated": true,
+        "source_location": ".paths[\"/v1/{location_id}/orders/{order_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListBankAccounts29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bank-accounts",
+        "operation_id": "ListBankAccounts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bank-accounts\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetBankAccount30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bank-accounts/{bank_account_id}",
+        "operation_id": "GetBankAccount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bank-accounts/{bank_account_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetBankAccountByV1Id31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bank-accounts/by-v1-id/{v1_bank_account_id}",
+        "operation_id": "GetBankAccountByV1Id",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bank-accounts/by-v1-id/{v1_bank_account_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListBookings32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings",
+        "operation_id": "ListBookings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveBooking33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/{booking_id}",
+        "operation_id": "RetrieveBooking",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListBookingCustomAttributes34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/{booking_id}/custom-attributes",
+        "operation_id": "ListBookingCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}/custom-attributes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveBookingCustomAttribute35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+        "operation_id": "RetrieveBookingCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}/custom-attributes/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveBusinessBookingProfile36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/business-booking-profile",
+        "operation_id": "RetrieveBusinessBookingProfile",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/business-booking-profile\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListBookingCustomAttributeDefinitions37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/custom-attribute-definitions",
+        "operation_id": "ListBookingCustomAttributeDefinitions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attribute-definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveBookingCustomAttributeDefinition38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/custom-attribute-definitions/{key}",
+        "operation_id": "RetrieveBookingCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attribute-definitions/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLocationBookingProfiles39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/location-booking-profiles",
+        "operation_id": "ListLocationBookingProfiles",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/location-booking-profiles\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLocationBookingProfile40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/location-booking-profiles/{location_id}",
+        "operation_id": "RetrieveLocationBookingProfile",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/location-booking-profiles/{location_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListTeamMemberBookingProfiles41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/team-member-booking-profiles",
+        "operation_id": "ListTeamMemberBookingProfiles",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/team-member-booking-profiles\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveTeamMemberBookingProfile42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/bookings/team-member-booking-profiles/{team_member_id}",
+        "operation_id": "RetrieveTeamMemberBookingProfile",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/team-member-booking-profiles/{team_member_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCards43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards",
+        "operation_id": "ListCards",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cards\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCard44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards/{card_id}",
+        "operation_id": "RetrieveCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cards/{card_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCashDrawerShifts45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cash-drawers/shifts",
+        "operation_id": "ListCashDrawerShifts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cash-drawers/shifts\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCashDrawerShift46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cash-drawers/shifts/{shift_id}",
+        "operation_id": "RetrieveCashDrawerShift",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cash-drawers/shifts/{shift_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCashDrawerShiftEvents47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cash-drawers/shifts/{shift_id}/events",
+        "operation_id": "ListCashDrawerShiftEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cash-drawers/shifts/{shift_id}/events\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.CatalogInfo48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/catalog/info",
+        "operation_id": "CatalogInfo",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/info\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCatalog49",
         "protocol": "rest",
         "method": "GET",
         "path": "/v2/catalog/list",
-        "operation_id": null,
+        "operation_id": "ListCatalog",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/catalog/list\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Invoices6",
+        "id": "square.rest.get.RetrieveCatalogObject50",
         "protocol": "rest",
         "method": "GET",
-        "path": "/v2/invoices",
-        "operation_id": null,
+        "path": "/v2/catalog/object/{object_id}",
+        "operation_id": "RetrieveCatalogObject",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/catalog/object/{object_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2TeamMembers7",
+        "id": "square.rest.get.ListChannels51",
         "protocol": "rest",
         "method": "GET",
-        "path": "/v2/team-members",
-        "operation_id": null,
+        "path": "/v2/channels",
+        "operation_id": "ListChannels",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/channels\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.get.V2Disputes8",
+        "id": "square.rest.get.RetrieveChannel52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/channels/{channel_id}",
+        "operation_id": "RetrieveChannel",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/channels/{channel_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCustomers53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers",
+        "operation_id": "ListCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCustomer54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}",
+        "operation_id": "RetrieveCustomer",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCustomerCustomAttributes55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/custom-attributes",
+        "operation_id": "ListCustomerCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/custom-attributes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCustomerCustomAttribute56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+        "operation_id": "RetrieveCustomerCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/custom-attributes/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCustomerCustomAttributeDefinitions57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/custom-attribute-definitions",
+        "operation_id": "ListCustomerCustomAttributeDefinitions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attribute-definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCustomerCustomAttributeDefinition58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/custom-attribute-definitions/{key}",
+        "operation_id": "RetrieveCustomerCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attribute-definitions/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCustomerGroups59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/groups",
+        "operation_id": "ListCustomerGroups",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/groups\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCustomerGroup60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/groups/{group_id}",
+        "operation_id": "RetrieveCustomerGroup",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/groups/{group_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListCustomerSegments61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/segments",
+        "operation_id": "ListCustomerSegments",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/segments\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveCustomerSegment62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/segments/{segment_id}",
+        "operation_id": "RetrieveCustomerSegment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/segments/{segment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListDevices63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/devices",
+        "operation_id": "ListDevices",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/devices\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetDevice64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/devices/{device_id}",
+        "operation_id": "GetDevice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/devices/{device_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListDeviceCodes65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/devices/codes",
+        "operation_id": "ListDeviceCodes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/devices/codes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetDeviceCode66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/devices/codes/{id}",
+        "operation_id": "GetDeviceCode",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/devices/codes/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListDisputes67",
         "protocol": "rest",
         "method": "GET",
         "path": "/v2/disputes",
-        "operation_id": null,
+        "operation_id": "ListDisputes",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/disputes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.post.V2Payments9",
+        "id": "square.rest.get.RetrieveDispute68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/disputes/{dispute_id}",
+        "operation_id": "RetrieveDispute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListDisputeEvidence69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/disputes/{dispute_id}/evidence",
+        "operation_id": "ListDisputeEvidence",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/evidence\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveDisputeEvidence70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+        "operation_id": "RetrieveDisputeEvidence",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/evidence/{evidence_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListEmployees71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/employees",
+        "operation_id": "ListEmployees",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/employees\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveEmployee72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/employees/{id}",
+        "operation_id": "RetrieveEmployee",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/employees/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListEventTypes73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/events/types",
+        "operation_id": "ListEventTypes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/events/types\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListGiftCards74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/gift-cards",
+        "operation_id": "ListGiftCards",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveGiftCard75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/gift-cards/{id}",
+        "operation_id": "RetrieveGiftCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListGiftCardActivities76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/gift-cards/activities",
+        "operation_id": "ListGiftCardActivities",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/activities\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveInventoryCount77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/{catalog_object_id}",
+        "operation_id": "RetrieveInventoryCount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/{catalog_object_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveInventoryChanges78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/{catalog_object_id}/changes",
+        "operation_id": "RetrieveInventoryChanges",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/{catalog_object_id}/changes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListInventoryAdjustmentReasons79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/adjustment-reasons",
+        "operation_id": "ListInventoryAdjustmentReasons",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.DeprecatedRetrieveInventoryAdjustment80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/adjustment/{adjustment_id}",
+        "operation_id": "DeprecatedRetrieveInventoryAdjustment",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/adjustment/{adjustment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveInventoryAdjustment81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/adjustments/{adjustment_id}",
+        "operation_id": "RetrieveInventoryAdjustment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustments/{adjustment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.DeprecatedRetrieveInventoryPhysicalCount82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/physical-count/{physical_count_id}",
+        "operation_id": "DeprecatedRetrieveInventoryPhysicalCount",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/physical-count/{physical_count_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveInventoryPhysicalCount83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/inventory/physical-counts/{physical_count_id}",
+        "operation_id": "RetrieveInventoryPhysicalCount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/physical-counts/{physical_count_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListInvoices84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices",
+        "operation_id": "ListInvoices",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetInvoice85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice_id}",
+        "operation_id": "GetInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListBreakTypes86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/break-types",
+        "operation_id": "ListBreakTypes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/break-types\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetBreakType87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/break-types/{id}",
+        "operation_id": "GetBreakType",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/break-types/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListEmployeeWages88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/employee-wages",
+        "operation_id": "ListEmployeeWages",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/employee-wages\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetEmployeeWage89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/employee-wages/{id}",
+        "operation_id": "GetEmployeeWage",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/employee-wages/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveScheduledShift90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/scheduled-shifts/{id}",
+        "operation_id": "RetrieveScheduledShift",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetShift91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/shifts/{id}",
+        "operation_id": "GetShift",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/shifts/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListTeamMemberWages92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/team-member-wages",
+        "operation_id": "ListTeamMemberWages",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/team-member-wages\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetTeamMemberWage93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/team-member-wages/{id}",
+        "operation_id": "GetTeamMemberWage",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/team-member-wages/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveTimecard94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/timecards/{id}",
+        "operation_id": "RetrieveTimecard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/timecards/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListWorkweekConfigs95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/labor/workweek-configs",
+        "operation_id": "ListWorkweekConfigs",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/workweek-configs\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLocations96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations",
+        "operation_id": "ListLocations",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLocation97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{location_id}",
+        "operation_id": "RetrieveLocation",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLocationCustomAttributes98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{location_id}/custom-attributes",
+        "operation_id": "ListLocationCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}/custom-attributes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLocationCustomAttribute99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+        "operation_id": "RetrieveLocationCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}/custom-attributes/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListTransactions100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{location_id}/transactions",
+        "operation_id": "ListTransactions",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/locations/{location_id}/transactions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveTransaction101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{location_id}/transactions/{transaction_id}",
+        "operation_id": "RetrieveTransaction",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/locations/{location_id}/transactions/{transaction_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLocationCustomAttributeDefinitions102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/custom-attribute-definitions",
+        "operation_id": "ListLocationCustomAttributeDefinitions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attribute-definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLocationCustomAttributeDefinition103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/custom-attribute-definitions/{key}",
+        "operation_id": "RetrieveLocationCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attribute-definitions/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLoyaltyAccount104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/accounts/{account_id}",
+        "operation_id": "RetrieveLoyaltyAccount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/accounts/{account_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLoyaltyPrograms105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/programs",
+        "operation_id": "ListLoyaltyPrograms",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/loyalty/programs\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLoyaltyProgram106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/programs/{program_id}",
+        "operation_id": "RetrieveLoyaltyProgram",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListLoyaltyPromotions107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/programs/{program_id}/promotions",
+        "operation_id": "ListLoyaltyPromotions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}/promotions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLoyaltyPromotion108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}",
+        "operation_id": "RetrieveLoyaltyPromotion",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}/promotions/{promotion_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLoyaltyReward109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/loyalty/rewards/{reward_id}",
+        "operation_id": "RetrieveLoyaltyReward",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/rewards/{reward_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListMerchants110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants",
+        "operation_id": "ListMerchants",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveMerchant111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants/{merchant_id}",
+        "operation_id": "RetrieveMerchant",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/{merchant_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListMerchantCustomAttributes112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants/{merchant_id}/custom-attributes",
+        "operation_id": "ListMerchantCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/{merchant_id}/custom-attributes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveMerchantCustomAttribute113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+        "operation_id": "RetrieveMerchantCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/{merchant_id}/custom-attributes/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListMerchantCustomAttributeDefinitions114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants/custom-attribute-definitions",
+        "operation_id": "ListMerchantCustomAttributeDefinitions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attribute-definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveMerchantCustomAttributeDefinition115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/merchants/custom-attribute-definitions/{key}",
+        "operation_id": "RetrieveMerchantCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attribute-definitions/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveLocationSettings116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/online-checkout/location-settings/{location_id}",
+        "operation_id": "RetrieveLocationSettings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/location-settings/{location_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveMerchantSettings117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/online-checkout/merchant-settings",
+        "operation_id": "RetrieveMerchantSettings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/merchant-settings\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListPaymentLinks118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/online-checkout/payment-links",
+        "operation_id": "ListPaymentLinks",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/payment-links\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrievePaymentLink119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/online-checkout/payment-links/{id}",
+        "operation_id": "RetrievePaymentLink",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/payment-links/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveOrder120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/{order_id}",
+        "operation_id": "RetrieveOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListOrderCustomAttributes121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/{order_id}/custom-attributes",
+        "operation_id": "ListOrderCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}/custom-attributes\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveOrderCustomAttribute122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+        "operation_id": "RetrieveOrderCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListOrderCustomAttributeDefinitions123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/custom-attribute-definitions",
+        "operation_id": "ListOrderCustomAttributeDefinitions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attribute-definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveOrderCustomAttributeDefinition124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/custom-attribute-definitions/{key}",
+        "operation_id": "RetrieveOrderCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attribute-definitions/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListPayments125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payments",
+        "operation_id": "ListPayments",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetPayment126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payments/{payment_id}",
+        "operation_id": "GetPayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments/{payment_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListPayouts127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payouts",
+        "operation_id": "ListPayouts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payouts\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetPayout128",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payouts/{payout_id}",
+        "operation_id": "GetPayout",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payouts/{payout_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListPayoutEntries129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payouts/{payout_id}/payout-entries",
+        "operation_id": "ListPayoutEntries",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payouts/{payout_id}/payout-entries\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListPaymentRefunds130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/refunds",
+        "operation_id": "ListPaymentRefunds",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/refunds\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetPaymentRefund131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/refunds/{refund_id}",
+        "operation_id": "GetPaymentRefund",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/refunds/{refund_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListSites132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/sites",
+        "operation_id": "ListSites",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/sites\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveSnippet133",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/sites/{site_id}/snippet",
+        "operation_id": "RetrieveSnippet",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/sites/{site_id}/snippet\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveSubscription134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription_id}",
+        "operation_id": "RetrieveSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListSubscriptionEvents135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription_id}/events",
+        "operation_id": "ListSubscriptionEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/events\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveTeamMember136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team-members/{team_member_id}",
+        "operation_id": "RetrieveTeamMember",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/{team_member_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveWageSetting137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team-members/{team_member_id}/wage-setting",
+        "operation_id": "RetrieveWageSetting",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/{team_member_id}/wage-setting\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListJobs138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team-members/jobs",
+        "operation_id": "ListJobs",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/jobs\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveJob139",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team-members/jobs/{job_id}",
+        "operation_id": "RetrieveJob",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/jobs/{job_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetTerminalAction140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/terminals/actions/{action_id}",
+        "operation_id": "GetTerminalAction",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/actions/{action_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetTerminalCheckout141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/terminals/checkouts/{checkout_id}",
+        "operation_id": "GetTerminalCheckout",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/checkouts/{checkout_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.GetTerminalRefund142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/terminals/refunds/{terminal_refund_id}",
+        "operation_id": "GetTerminalRefund",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/refunds/{terminal_refund_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveTransferOrder143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/transfer-orders/{transfer_order_id}",
+        "operation_id": "RetrieveTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveVendor144",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/vendors/{vendor_id}",
+        "operation_id": "RetrieveVendor",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/{vendor_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListWebhookEventTypes145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/webhooks/event-types",
+        "operation_id": "ListWebhookEventTypes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/event-types\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.ListWebhookSubscriptions146",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/webhooks/subscriptions",
+        "operation_id": "ListWebhookSubscriptions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.get.RetrieveWebhookSubscription147",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/webhooks/subscriptions/{subscription_id}",
+        "operation_id": "RetrieveWebhookSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions/{subscription_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RevokeToken148",
         "protocol": "rest",
         "method": "POST",
-        "path": "/v2/payments",
-        "operation_id": null,
+        "path": "/oauth2/revoke",
+        "operation_id": "RevokeToken",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/oauth2/revoke\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       },
       {
-        "id": "square.rest.post.V2Customers10",
+        "id": "square.rest.post.ObtainToken149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/oauth2/token",
+        "operation_id": "ObtainToken",
+        "deprecated": false,
+        "source_location": ".paths[\"/oauth2/token\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RetrieveTokenStatus150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/oauth2/token/status",
+        "operation_id": "RetrieveTokenStatus",
+        "deprecated": false,
+        "source_location": ".paths[\"/oauth2/token/status\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RegisterDomain151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/apple-pay/domains",
+        "operation_id": "RegisterDomain",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/apple-pay/domains\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateBankAccount152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bank-accounts",
+        "operation_id": "CreateBankAccount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bank-accounts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DisableBankAccount153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bank-accounts/{bank_account_id}/disable",
+        "operation_id": "DisableBankAccount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bank-accounts/{bank_account_id}/disable\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateBooking154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings",
+        "operation_id": "CreateBooking",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelBooking155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/{booking_id}/cancel",
+        "operation_id": "CancelBooking",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchAvailability156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/availability/search",
+        "operation_id": "SearchAvailability",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/availability/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkRetrieveBookings157",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/bulk-retrieve",
+        "operation_id": "BulkRetrieveBookings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/bulk-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateBookingCustomAttributeDefinition158",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/custom-attribute-definitions",
+        "operation_id": "CreateBookingCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attribute-definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkDeleteBookingCustomAttributes159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/custom-attributes/bulk-delete",
+        "operation_id": "BulkDeleteBookingCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attributes/bulk-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpsertBookingCustomAttributes160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/custom-attributes/bulk-upsert",
+        "operation_id": "BulkUpsertBookingCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attributes/bulk-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkRetrieveTeamMemberBookingProfiles161",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/bookings/team-member-booking-profiles/bulk-retrieve",
+        "operation_id": "BulkRetrieveTeamMemberBookingProfiles",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/team-member-booking-profiles/bulk-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCard162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards",
+        "operation_id": "CreateCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cards\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DisableCard163",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards/{card_id}/disable",
+        "operation_id": "DisableCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/cards/{card_id}/disable\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchDeleteCatalogObjects164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/batch-delete",
+        "operation_id": "BatchDeleteCatalogObjects",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/batch-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchRetrieveCatalogObjects165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/batch-retrieve",
+        "operation_id": "BatchRetrieveCatalogObjects",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/batch-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchUpsertCatalogObjects166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/batch-upsert",
+        "operation_id": "BatchUpsertCatalogObjects",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/batch-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCatalogImage167",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/images",
+        "operation_id": "CreateCatalogImage",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/images\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertCatalogObject168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/object",
+        "operation_id": "UpsertCatalogObject",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/object\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchCatalogObjects169",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/search",
+        "operation_id": "SearchCatalogObjects",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchCatalogItems170",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/search-catalog-items",
+        "operation_id": "SearchCatalogItems",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/search-catalog-items\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpdateItemModifierLists171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/update-item-modifier-lists",
+        "operation_id": "UpdateItemModifierLists",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/update-item-modifier-lists\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpdateItemTaxes172",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/catalog/update-item-taxes",
+        "operation_id": "UpdateItemTaxes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/update-item-taxes\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkRetrieveChannels173",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/channels/bulk-retrieve",
+        "operation_id": "BulkRetrieveChannels",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/channels/bulk-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCustomer174",
         "protocol": "rest",
         "method": "POST",
         "path": "/v2/customers",
-        "operation_id": null,
+        "operation_id": "CreateCustomer",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]",
-        "source_url": "https://developer.squareup.com/reference/square"
+        "source_location": ".paths[\"/v2/customers\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCustomerCard175",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/cards",
+        "operation_id": "CreateCustomerCard",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/cards\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertCustomerCustomAttribute176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+        "operation_id": "UpsertCustomerCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/custom-attributes/{key}\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkCreateCustomers177",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/bulk-create",
+        "operation_id": "BulkCreateCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/bulk-create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkDeleteCustomers178",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/bulk-delete",
+        "operation_id": "BulkDeleteCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/bulk-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkRetrieveCustomers179",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/bulk-retrieve",
+        "operation_id": "BulkRetrieveCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/bulk-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpdateCustomers180",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/bulk-update",
+        "operation_id": "BulkUpdateCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/bulk-update\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCustomerCustomAttributeDefinition181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/custom-attribute-definitions",
+        "operation_id": "CreateCustomerCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attribute-definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpsertCustomerCustomAttributes182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/custom-attributes/bulk-upsert",
+        "operation_id": "BulkUpsertCustomerCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attributes/bulk-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCustomerGroup183",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/groups",
+        "operation_id": "CreateCustomerGroup",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/groups\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchCustomers184",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/search",
+        "operation_id": "SearchCustomers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateDeviceCode185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/devices/codes",
+        "operation_id": "CreateDeviceCode",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/devices/codes\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.AcceptDispute186",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/disputes/{dispute_id}/accept",
+        "operation_id": "AcceptDispute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/accept\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateDisputeEvidenceFile187",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/disputes/{dispute_id}/evidence-files",
+        "operation_id": "CreateDisputeEvidenceFile",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/evidence-files\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateDisputeEvidenceText188",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/disputes/{dispute_id}/evidence-text",
+        "operation_id": "CreateDisputeEvidenceText",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/evidence-text\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SubmitEvidence189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/disputes/{dispute_id}/submit-evidence",
+        "operation_id": "SubmitEvidence",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/disputes/{dispute_id}/submit-evidence\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchEvents190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/events",
+        "operation_id": "SearchEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/events\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateGiftCard191",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards",
+        "operation_id": "CreateGiftCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.LinkCustomerToGiftCard192",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards/{gift_card_id}/link-customer",
+        "operation_id": "LinkCustomerToGiftCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/{gift_card_id}/link-customer\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UnlinkCustomerFromGiftCard193",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards/{gift_card_id}/unlink-customer",
+        "operation_id": "UnlinkCustomerFromGiftCard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/{gift_card_id}/unlink-customer\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateGiftCardActivity194",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards/activities",
+        "operation_id": "CreateGiftCardActivity",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/activities\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RetrieveGiftCardFromGAN195",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards/from-gan",
+        "operation_id": "RetrieveGiftCardFromGAN",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/from-gan\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RetrieveGiftCardFromNonce196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gift-cards/from-nonce",
+        "operation_id": "RetrieveGiftCardFromNonce",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/gift-cards/from-nonce\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateInventoryAdjustmentReason197",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/adjustment-reasons/create",
+        "operation_id": "CreateInventoryAdjustmentReason",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons/create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DeleteInventoryAdjustmentReason198",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/adjustment-reasons/delete",
+        "operation_id": "DeleteInventoryAdjustmentReason",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons/delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RestoreInventoryAdjustmentReason199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/adjustment-reasons/restore",
+        "operation_id": "RestoreInventoryAdjustmentReason",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons/restore\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RetrieveInventoryAdjustmentReason200",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/adjustment-reasons/retrieve",
+        "operation_id": "RetrieveInventoryAdjustmentReason",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons/retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DeprecatedBatchChangeInventory201",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/batch-change",
+        "operation_id": "DeprecatedBatchChangeInventory",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/batch-change\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DeprecatedBatchRetrieveInventoryChanges202",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/batch-retrieve-changes",
+        "operation_id": "DeprecatedBatchRetrieveInventoryChanges",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/batch-retrieve-changes\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DeprecatedBatchRetrieveInventoryCounts203",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/batch-retrieve-counts",
+        "operation_id": "DeprecatedBatchRetrieveInventoryCounts",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/inventory/batch-retrieve-counts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchChangeInventory204",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/changes/batch-create",
+        "operation_id": "BatchChangeInventory",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/changes/batch-create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchRetrieveInventoryChanges205",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/changes/batch-retrieve",
+        "operation_id": "BatchRetrieveInventoryChanges",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/changes/batch-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchRetrieveInventoryCounts206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/inventory/counts/batch-retrieve",
+        "operation_id": "BatchRetrieveInventoryCounts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/counts/batch-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateInvoice207",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices",
+        "operation_id": "CreateInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateInvoiceAttachment208",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice_id}/attachments",
+        "operation_id": "CreateInvoiceAttachment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}/attachments\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelInvoice209",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice_id}/cancel",
+        "operation_id": "CancelInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.PublishInvoice210",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice_id}/publish",
+        "operation_id": "PublishInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}/publish\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchInvoices211",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/search",
+        "operation_id": "SearchInvoices",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateBreakType212",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/break-types",
+        "operation_id": "CreateBreakType",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/break-types\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateScheduledShift213",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/scheduled-shifts",
+        "operation_id": "CreateScheduledShift",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.PublishScheduledShift214",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/scheduled-shifts/{id}/publish",
+        "operation_id": "PublishScheduledShift",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts/{id}/publish\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkPublishScheduledShifts215",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/scheduled-shifts/bulk-publish",
+        "operation_id": "BulkPublishScheduledShifts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts/bulk-publish\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchScheduledShifts216",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/scheduled-shifts/search",
+        "operation_id": "SearchScheduledShifts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateShift217",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/shifts",
+        "operation_id": "CreateShift",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/shifts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchShifts218",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/shifts/search",
+        "operation_id": "SearchShifts",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/shifts/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTimecard219",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/timecards",
+        "operation_id": "CreateTimecard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/timecards\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTimecards220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/labor/timecards/search",
+        "operation_id": "SearchTimecards",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/timecards/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateLocation221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations",
+        "operation_id": "CreateLocation",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateCheckout222",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/{location_id}/checkouts",
+        "operation_id": "CreateCheckout",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/locations/{location_id}/checkouts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertLocationCustomAttribute223",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+        "operation_id": "UpsertLocationCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}/custom-attributes/{key}\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CaptureTransaction224",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/{location_id}/transactions/{transaction_id}/capture",
+        "operation_id": "CaptureTransaction",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/locations/{location_id}/transactions/{transaction_id}/capture\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.VoidTransaction225",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/{location_id}/transactions/{transaction_id}/void",
+        "operation_id": "VoidTransaction",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/locations/{location_id}/transactions/{transaction_id}/void\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateLocationCustomAttributeDefinition226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/custom-attribute-definitions",
+        "operation_id": "CreateLocationCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attribute-definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkDeleteLocationCustomAttributes227",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/custom-attributes/bulk-delete",
+        "operation_id": "BulkDeleteLocationCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attributes/bulk-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpsertLocationCustomAttributes228",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations/custom-attributes/bulk-upsert",
+        "operation_id": "BulkUpsertLocationCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attributes/bulk-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateLoyaltyAccount229",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/accounts",
+        "operation_id": "CreateLoyaltyAccount",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/accounts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.AccumulateLoyaltyPoints230",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/accounts/{account_id}/accumulate",
+        "operation_id": "AccumulateLoyaltyPoints",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/accounts/{account_id}/accumulate\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.AdjustLoyaltyPoints231",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/accounts/{account_id}/adjust",
+        "operation_id": "AdjustLoyaltyPoints",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/accounts/{account_id}/adjust\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchLoyaltyAccounts232",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/accounts/search",
+        "operation_id": "SearchLoyaltyAccounts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/accounts/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchLoyaltyEvents233",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/events/search",
+        "operation_id": "SearchLoyaltyEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/events/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CalculateLoyaltyPoints234",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/programs/{program_id}/calculate",
+        "operation_id": "CalculateLoyaltyPoints",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}/calculate\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateLoyaltyPromotion235",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/programs/{program_id}/promotions",
+        "operation_id": "CreateLoyaltyPromotion",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}/promotions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelLoyaltyPromotion236",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}/cancel",
+        "operation_id": "CancelLoyaltyPromotion",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/programs/{program_id}/promotions/{promotion_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateLoyaltyReward237",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/rewards",
+        "operation_id": "CreateLoyaltyReward",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/rewards\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RedeemLoyaltyReward238",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/rewards/{reward_id}/redeem",
+        "operation_id": "RedeemLoyaltyReward",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/rewards/{reward_id}/redeem\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchLoyaltyRewards239",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/loyalty/rewards/search",
+        "operation_id": "SearchLoyaltyRewards",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/loyalty/rewards/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertMerchantCustomAttribute240",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+        "operation_id": "UpsertMerchantCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/{merchant_id}/custom-attributes/{key}\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateMerchantCustomAttributeDefinition241",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/merchants/custom-attribute-definitions",
+        "operation_id": "CreateMerchantCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attribute-definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkDeleteMerchantCustomAttributes242",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/merchants/custom-attributes/bulk-delete",
+        "operation_id": "BulkDeleteMerchantCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attributes/bulk-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpsertMerchantCustomAttributes243",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/merchants/custom-attributes/bulk-upsert",
+        "operation_id": "BulkUpsertMerchantCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attributes/bulk-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreatePaymentLink244",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/online-checkout/payment-links",
+        "operation_id": "CreatePaymentLink",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/payment-links\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateOrder245",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders",
+        "operation_id": "CreateOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertOrderCustomAttribute246",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+        "operation_id": "UpsertOrderCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.PayOrder247",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order_id}/pay",
+        "operation_id": "PayOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}/pay\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BatchRetrieveOrders248",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/batch-retrieve",
+        "operation_id": "BatchRetrieveOrders",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/batch-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CalculateOrder249",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/calculate",
+        "operation_id": "CalculateOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/calculate\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CloneOrder250",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/clone",
+        "operation_id": "CloneOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/clone\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateOrderCustomAttributeDefinition251",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/custom-attribute-definitions",
+        "operation_id": "CreateOrderCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attribute-definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkDeleteOrderCustomAttributes252",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/custom-attributes/bulk-delete",
+        "operation_id": "BulkDeleteOrderCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attributes/bulk-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpsertOrderCustomAttributes253",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/custom-attributes/bulk-upsert",
+        "operation_id": "BulkUpsertOrderCustomAttributes",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attributes/bulk-upsert\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchOrders254",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/search",
+        "operation_id": "SearchOrders",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreatePayment255",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payments",
+        "operation_id": "CreatePayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelPayment256",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payments/{payment_id}/cancel",
+        "operation_id": "CancelPayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments/{payment_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CompletePayment257",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payments/{payment_id}/complete",
+        "operation_id": "CompletePayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments/{payment_id}/complete\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelPaymentByIdempotencyKey258",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payments/cancel",
+        "operation_id": "CancelPaymentByIdempotencyKey",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.RefundPayment259",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/refunds",
+        "operation_id": "RefundPayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/refunds\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpsertSnippet260",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/sites/{site_id}/snippet",
+        "operation_id": "UpsertSnippet",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/sites/{site_id}/snippet\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateSubscription261",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions",
+        "operation_id": "CreateSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.ChangeBillingAnchorDate262",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription_id}/billing-anchor",
+        "operation_id": "ChangeBillingAnchorDate",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/billing-anchor\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelSubscription263",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription_id}/cancel",
+        "operation_id": "CancelSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.PauseSubscription264",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription_id}/pause",
+        "operation_id": "PauseSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/pause\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.ResumeSubscription265",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription_id}/resume",
+        "operation_id": "ResumeSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/resume\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SwapPlan266",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription_id}/swap-plan",
+        "operation_id": "SwapPlan",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}/swap-plan\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkSwapPlan267",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/bulk-swap-plan",
+        "operation_id": "BulkSwapPlan",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/bulk-swap-plan\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchSubscriptions268",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/search",
+        "operation_id": "SearchSubscriptions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTeamMember269",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team-members",
+        "operation_id": "CreateTeamMember",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkCreateTeamMembers270",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team-members/bulk-create",
+        "operation_id": "BulkCreateTeamMembers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/bulk-create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkUpdateTeamMembers271",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team-members/bulk-update",
+        "operation_id": "BulkUpdateTeamMembers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/bulk-update\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateJob272",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team-members/jobs",
+        "operation_id": "CreateJob",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/jobs\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTeamMembers273",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team-members/search",
+        "operation_id": "SearchTeamMembers",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTerminalAction274",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/actions",
+        "operation_id": "CreateTerminalAction",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/actions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelTerminalAction275",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/actions/{action_id}/cancel",
+        "operation_id": "CancelTerminalAction",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/actions/{action_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DismissTerminalAction276",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/actions/{action_id}/dismiss",
+        "operation_id": "DismissTerminalAction",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/actions/{action_id}/dismiss\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTerminalActions277",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/actions/search",
+        "operation_id": "SearchTerminalActions",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/actions/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTerminalCheckout278",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/checkouts",
+        "operation_id": "CreateTerminalCheckout",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/checkouts\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelTerminalCheckout279",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/checkouts/{checkout_id}/cancel",
+        "operation_id": "CancelTerminalCheckout",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/checkouts/{checkout_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DismissTerminalCheckout280",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/checkouts/{checkout_id}/dismiss",
+        "operation_id": "DismissTerminalCheckout",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/checkouts/{checkout_id}/dismiss\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTerminalCheckouts281",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/checkouts/search",
+        "operation_id": "SearchTerminalCheckouts",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/checkouts/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTerminalRefund282",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/refunds",
+        "operation_id": "CreateTerminalRefund",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/refunds\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelTerminalRefund283",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/refunds/{terminal_refund_id}/cancel",
+        "operation_id": "CancelTerminalRefund",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/refunds/{terminal_refund_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.DismissTerminalRefund284",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/refunds/{terminal_refund_id}/dismiss",
+        "operation_id": "DismissTerminalRefund",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/refunds/{terminal_refund_id}/dismiss\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTerminalRefunds285",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/terminals/refunds/search",
+        "operation_id": "SearchTerminalRefunds",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/terminals/refunds/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateTransferOrder286",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transfer-orders",
+        "operation_id": "CreateTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CancelTransferOrder287",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transfer-orders/{transfer_order_id}/cancel",
+        "operation_id": "CancelTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.ReceiveTransferOrder288",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transfer-orders/{transfer_order_id}/receive",
+        "operation_id": "ReceiveTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}/receive\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.StartTransferOrder289",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transfer-orders/{transfer_order_id}/start",
+        "operation_id": "StartTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}/start\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchTransferOrders290",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transfer-orders/search",
+        "operation_id": "SearchTransferOrders",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkCreateVendors291",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/vendors/bulk-create",
+        "operation_id": "BulkCreateVendors",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/bulk-create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.BulkRetrieveVendors292",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/vendors/bulk-retrieve",
+        "operation_id": "BulkRetrieveVendors",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/bulk-retrieve\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateVendor293",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/vendors/create",
+        "operation_id": "CreateVendor",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/create\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.SearchVendors294",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/vendors/search",
+        "operation_id": "SearchVendors",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.CreateWebhookSubscription295",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhooks/subscriptions",
+        "operation_id": "CreateWebhookSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.UpdateWebhookSubscriptionSignatureKey296",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhooks/subscriptions/{subscription_id}/signature-key",
+        "operation_id": "UpdateWebhookSubscriptionSignatureKey",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions/{subscription_id}/signature-key\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.post.TestWebhookSubscription297",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhooks/subscriptions/{subscription_id}/test",
+        "operation_id": "TestWebhookSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions/{subscription_id}/test\"].post",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.V1UpdateOrder298",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/{location_id}/orders/{order_id}",
+        "operation_id": "V1UpdateOrder",
+        "deprecated": true,
+        "source_location": ".paths[\"/v1/{location_id}/orders/{order_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateBooking299",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/bookings/{booking_id}",
+        "operation_id": "UpdateBooking",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpsertBookingCustomAttribute300",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+        "operation_id": "UpsertBookingCustomAttribute",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/{booking_id}/custom-attributes/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateBookingCustomAttributeDefinition301",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/bookings/custom-attribute-definitions/{key}",
+        "operation_id": "UpdateBookingCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/bookings/custom-attribute-definitions/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateCatalogImage302",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/catalog/images/{image_id}",
+        "operation_id": "UpdateCatalogImage",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/catalog/images/{image_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateCustomer303",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}",
+        "operation_id": "UpdateCustomer",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.AddGroupToCustomer304",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/groups/{group_id}",
+        "operation_id": "AddGroupToCustomer",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/{customer_id}/groups/{group_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateCustomerCustomAttributeDefinition305",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customers/custom-attribute-definitions/{key}",
+        "operation_id": "UpdateCustomerCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/custom-attribute-definitions/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateCustomerGroup306",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customers/groups/{group_id}",
+        "operation_id": "UpdateCustomerGroup",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/customers/groups/{group_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.DisableEvents307",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/events/disable",
+        "operation_id": "DisableEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/events/disable\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.EnableEvents308",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/events/enable",
+        "operation_id": "EnableEvents",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/events/enable\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateInventoryAdjustmentReason309",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/inventory/adjustment-reasons/update",
+        "operation_id": "UpdateInventoryAdjustmentReason",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustment-reasons/update\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateInventoryAdjustment310",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/inventory/adjustments/update",
+        "operation_id": "UpdateInventoryAdjustment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/inventory/adjustments/update\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateInvoice311",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/invoices/{invoice_id}",
+        "operation_id": "UpdateInvoice",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/invoices/{invoice_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateBreakType312",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/labor/break-types/{id}",
+        "operation_id": "UpdateBreakType",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/break-types/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateScheduledShift313",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/labor/scheduled-shifts/{id}",
+        "operation_id": "UpdateScheduledShift",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/scheduled-shifts/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateShift314",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/labor/shifts/{id}",
+        "operation_id": "UpdateShift",
+        "deprecated": true,
+        "source_location": ".paths[\"/v2/labor/shifts/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateTimecard315",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/labor/timecards/{id}",
+        "operation_id": "UpdateTimecard",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/timecards/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateWorkweekConfig316",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/labor/workweek-configs/{id}",
+        "operation_id": "UpdateWorkweekConfig",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/labor/workweek-configs/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateLocation317",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/locations/{location_id}",
+        "operation_id": "UpdateLocation",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/{location_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateLocationCustomAttributeDefinition318",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/locations/custom-attribute-definitions/{key}",
+        "operation_id": "UpdateLocationCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/locations/custom-attribute-definitions/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateMerchantCustomAttributeDefinition319",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/merchants/custom-attribute-definitions/{key}",
+        "operation_id": "UpdateMerchantCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/merchants/custom-attribute-definitions/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateLocationSettings320",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/online-checkout/location-settings/{location_id}",
+        "operation_id": "UpdateLocationSettings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/location-settings/{location_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateMerchantSettings321",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/online-checkout/merchant-settings",
+        "operation_id": "UpdateMerchantSettings",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/merchant-settings\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdatePaymentLink322",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/online-checkout/payment-links/{id}",
+        "operation_id": "UpdatePaymentLink",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/online-checkout/payment-links/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateOrder323",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orders/{order_id}",
+        "operation_id": "UpdateOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/{order_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateOrderCustomAttributeDefinition324",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orders/custom-attribute-definitions/{key}",
+        "operation_id": "UpdateOrderCustomAttributeDefinition",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/orders/custom-attribute-definitions/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdatePayment325",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/payments/{payment_id}",
+        "operation_id": "UpdatePayment",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/payments/{payment_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateSubscription326",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/subscriptions/{subscription_id}",
+        "operation_id": "UpdateSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/subscriptions/{subscription_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateTeamMember327",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team-members/{team_member_id}",
+        "operation_id": "UpdateTeamMember",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/{team_member_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateWageSetting328",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team-members/{team_member_id}/wage-setting",
+        "operation_id": "UpdateWageSetting",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/{team_member_id}/wage-setting\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateJob329",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team-members/jobs/{job_id}",
+        "operation_id": "UpdateJob",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/team-members/jobs/{job_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateTransferOrder330",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/transfer-orders/{transfer_order_id}",
+        "operation_id": "UpdateTransferOrder",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/transfer-orders/{transfer_order_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateVendor331",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/vendors/{vendor_id}",
+        "operation_id": "UpdateVendor",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/{vendor_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.BulkUpdateVendors332",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/vendors/bulk-update",
+        "operation_id": "BulkUpdateVendors",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/vendors/bulk-update\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      {
+        "id": "square.rest.put.UpdateWebhookSubscription333",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/webhooks/subscriptions/{subscription_id}",
+        "operation_id": "UpdateWebhookSubscription",
+        "deprecated": false,
+        "source_location": ".paths[\"/v2/webhooks/subscriptions/{subscription_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
       }
     ]
   },
   "counts": {
-    "rest": 11,
+    "rest": 334,
     "graphql_query": 0,
     "graphql_mutation": 0,
-    "total": 11
+    "total": 334
+  },
+  "operations_found": {
+    "rest": 334,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 334
+  },
+  "coverage_confidence": {
+    "level": "complete_machine_readable_specification",
+    "basis": "Parsed every operation in the provider-published OpenAPI 3.0.0 document at https://raw.githubusercontent.com/square/connect-api-specification/master/api.json."
   }
 }

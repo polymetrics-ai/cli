@@ -35,9 +35,11 @@ For each slice, the source-lock count, API-surface rows, and disposition rows re
 
 Outreach is an explicit count-unchanged audit result, not an unverified carry-forward: the current public OpenAPI has 253 static operations, and the provider documents six fixed generic custom-object routes separately because the per-account object schemas are dynamic. The combined complete fixed surface is therefore 259. All 163 enabled rows have an exact typed write-action binding; the 96 stream-only rows remain ETL and declaration-pending. Customer.io increases from 159 to 166 source operations; its 10 enabled rows each retain an exact typed write-action binding.
 
-## Square — incomplete extraction is not a source lock
+## Square — partial crawl superseded by complete machine spec
 
-The Square crawl has fetched all 40 root-discovered group pages, but only 33 currently yield static operation cards. Browser-rendered Locations proves the other seven are not empty, so the crawler records `partial_incomplete_extraction`, `groups_retrieved: 40`, `groups_extracted: 33`, `operations_found: null`, and the exact seven-page resume list. The preliminary 255-operation de-duplication was discarded; no Square source lock, API surface, or disposition row may be promoted until rendered-browser extraction covers all 40 groups.
+The rendered crawl records its static-card extraction defect separately: all 40 persisted group pages were fetched, seven initially yielded no static cards, and their browser-rendered cards were checkpointed. It remains `coverage_confidence: partial` with `operations_found: null`; its preliminary 255-operation de-duplication was discarded and never became a source lock.
+
+Square publishes an authoritative OpenAPI 3.0.0 document at `https://raw.githubusercontent.com/square/connect-api-specification/master/api.json`. That 3,279,392-byte source pins **334** REST operations (121 GET, 150 POST, 36 PUT, 27 DELETE), so the complete source lock, API surface, and disposition ledger are regenerated **334/334/334** from the machine-readable source. The four existing ETL stream bindings remain declaration-pending; no Square operation is enabled without a runnable command or typed write action.
 
 Freshdesk’s complete rendered-reference pass is also green: all 171 endpoint sections in the provider’s single 3.2MB reference normalize to **170** unique HTTP method/path operations (78 GET, 39 POST, 30 PUT, 22 DELETE, 1 PATCH), replacing the legacy 10-row boundary. Its full source lock, API surface, and disposition ledger reconcile at 170 rows.
 

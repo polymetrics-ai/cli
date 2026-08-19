@@ -43,6 +43,13 @@ const configs = {
     info: 'Customer.io App API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)',
     docs: 'https://docs.customer.io/files/journeys-app.json',
   },
+  square: {
+    sourceURL: 'https://raw.githubusercontent.com/square/connect-api-specification/master/api.json',
+    artifact: 'square-openapi-3.0.0-2026-08-19',
+    api: 'Square API OpenAPI 3.0.0',
+    info: 'Square API v2 public OpenAPI specification',
+    docs: 'https://github.com/square/connect-api-specification/blob/master/api.json',
+  },
 };
 const config = configs[connector];
 if (!config) throw new Error(`unsupported connector ${connector}; add an authoritative-source config`);
