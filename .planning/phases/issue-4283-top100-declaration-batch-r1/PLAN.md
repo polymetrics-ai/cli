@@ -185,9 +185,9 @@ denominators, command-derived enabled percentages, deletes and gap IDs.
 
 ETL and reverse ETL are assessed only using the definition-owned transport
 contract in `docs/sync-transport-definition.md` (PR #4286). Every connector is
-an explicit two-direction transport gap until it provides its own exact
-executor, delivery facts, typed action strategy/acknowledgement, and
-conformance evidence. No `sync_transport.json` is copied or invented.
+an explicit two-direction transport declaration-pending record until it provides
+its own exact executor, delivery facts, typed action strategy/acknowledgement,
+and conformance evidence. No `sync_transport.json` is copied or invented.
 
 ### Refactor
 

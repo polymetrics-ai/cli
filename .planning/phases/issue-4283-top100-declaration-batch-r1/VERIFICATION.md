@@ -50,7 +50,7 @@
 - [x] Local map-integrity assertion: each crosswalk and disposition has exactly
   its pinned source count, every operation has one primary class and a
   foundation record, class counts sum to the source count, and both
-  definition-owned transport gaps are present.
+  definition-owned transport declaration-pending records are present.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/notion --json`
   — 0 findings.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
@@ -76,3 +76,15 @@
   again vanished before it wrote `result.txt`, stdout or stderr, so no exit
   status exists to claim. This is the third observed worker-containment
   failure; CI remains the required gate and no check was weakened.
+
+## Vocabulary correction
+
+- [x] Map-integrity assertion confirms every row in all ten maps carries
+  `method`, `path`, `parity_class`, `api_surface`, `source`, `state`,
+  `foundation`, and `rejection`; class totals equal each pinned denominator and
+  all six classes are present across the cohort.
+- [x] The assertion finds exactly five `foundation-gap` rows: three Docker Hub
+  HEAD rows and two Docker Hub operation-scoped pagination rows, each with its
+  engine refusal file/line. The 3,889 disabled rows in the nine newly mapped
+  connectors use `declaration-pending`, not `foundation-gap`; Docker Hub is
+  normalized to the same six-class row shape.

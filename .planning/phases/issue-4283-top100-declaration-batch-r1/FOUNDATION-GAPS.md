@@ -3,10 +3,11 @@
 ## Complete six-class map (captain order 2026-08-19)
 
 `COMPLETE-PARITY-MAP.md` and the connector-local source disposition files are
-now the operation-level gap log. They distinguish the missing command surface,
-typed operation contract, partial command contract, binary route, and the two
-definition-owned sync directions. The structured `FOUNDATION-GAP-REASONS.json`
-records the batched IDs, evidence and smallest recovery for each class.
+now the operation-level disposition log. Missing command surface, typed
+operation contract, partial command contract, binary route, and the two
+definition-owned sync directions are `declaration-pending`; they must not be
+sent to the foundation lane. The structured `FOUNDATION-GAP-REASONS.json`
+contains only the five engine-refused Docker Hub operations.
 
 Transport is no longer judged against the old GitHub-specific shape. The
 authoritative criteria are `docs/sync-transport-definition.md:15-75` from
@@ -14,7 +15,7 @@ PR #4286: source requires its exact executor, stream allowlist, delivery and
 conformance; destination additionally requires typed action bindings, durable
 acknowledgement and per-mode strategies. All ten connectors presently lack
 their own descriptor and evidence, therefore both directions remain named,
-recoverable `foundation-gap` records.
+recoverable `declaration-pending` records.
 
 This declaration-only increment does not claim a generic API sync transport. The complete, operation-level foundation reasons are machine-readable in `FOUNDATION-GAP-REASONS.json`; the entries retain their exact source operation and recovery condition. `TRANSPORT-GAP.md` records the explicit, recoverable transport decision for all ten connectors.
 

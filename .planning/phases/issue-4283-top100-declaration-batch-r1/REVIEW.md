@@ -78,7 +78,7 @@ Hub reference summary against the captain's map contract.
 - `ENABLED%` counts only operations with an implemented CLI binding. It does
   not promote an operation inventory, elevated scope, stream, write action or
   source URL into a runnable command.
-- Source and destination transport gaps are distinct. Both cite the
+- Source and destination transport declaration-pending records are distinct. Both cite the
   definition-owned #4286 contract and retain the minimum recovery; no
   `sync_transport.json`, GitHub evidence constant or generic write transport
   was invented.
@@ -89,3 +89,13 @@ Hub reference summary against the captain's map contract.
 No Critical, Warning, or Info finding was identified in the complete-map
 artifact. Connector-boundary remains pending CI because detached worker capture
 still has no observable exit record.
+
+## Vocabulary correction review
+
+The complete-map dispositions were re-reviewed to keep the foundation lane
+honest. All 3,889 non-enabled rows from the nine new maps are
+`declaration-pending`; their retained minimal change is connector declaration,
+not engine work. Docker Hub has been normalized to the same primary-class row
+shape. Exactly five rows remain `foundation-gap`, with the two distinct engine
+refusal sites cited in `FOUNDATION-GAP-REASONS.json`. All six primary classes
+are represented across the ten maps.

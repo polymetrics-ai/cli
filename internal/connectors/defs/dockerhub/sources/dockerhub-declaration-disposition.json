@@ -37,7 +37,11 @@
     "rejected_by_reason": [
       {
         "key": "foundation-gap",
-        "count": 10
+        "count": 5
+      },
+      {
+        "key": "declaration-pending",
+        "count": 5
       },
       {
         "key": "schema-incompatible",
@@ -45,16 +49,76 @@
       }
     ],
     "direct_read_commands": 17,
-    "reverse_etl_commands": 20
+    "reverse_etl_commands": 20,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 23
+      },
+      {
+        "key": "direct_write",
+        "count": 7
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 20
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "gap_ids": [
+      "head-response-less-operation-executor",
+      "operation-scoped-rest-pagination"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "head-response-less-operation-executor",
+        "count": 3
+      },
+      {
+        "id": "operation-scoped-rest-pagination",
+        "count": 2
+      }
+    ],
+    "declaration_pending_ids": [
+      "declaration-pending-dockerhub",
+      "sync-transport-source-definition-dockerhub",
+      "sync-transport-destination-definition-dockerhub"
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-dockerhub",
+          "evidence": "docs/sync-transport-definition.md:15-38; dockerhub sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source declaration and evidence; no engine change is requested."
+        }
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-destination-definition-dockerhub",
+          "evidence": "docs/sync-transport-definition.md:39-75; dockerhub sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned destination declaration and evidence; no engine change is requested."
+        }
+      }
+    }
   },
   "notes": [
-    "Every one of the 54 pinned source operations is declared by an exact source-to-api-surface crosswalk and a source disposition.",
-    "Thirty-three operations are runnable: four existing ETL commands, 13 direct_read commands, and 16 typed reverse-ETL write actions (including four deletes).",
-    "Pinned administrator, organization, SCIM, and bearer security requirements are runtime authorization metadata, not a disabled declaration; a token lacking provider scope receives the provider response at runtime.",
-    "The 13 credential/session minting or credential-management routes remain unsafe-to-exercise; five routes need an unavailable executor capability; three source response/content contracts are schema-incompatible.",
-    "Direct-read operation parameters include source path-item inheritance from the pinned document. The current params-import command does not merge path-item parameters; this bundle retains the exact source-derived set and the generator limitation is recorded in the foundation-gap log.",
-    "All runnable write actions retain the shared reverse-ETL plan, preview, approval, and execute lifecycle. Live credentialed certification remains pending.",
-    "sync_transport.json remains absent under recoverable foundation gap #4093."
+    "Complete six-class source-locked map. Each row has exactly one primary parity class.",
+    "Only five Docker Hub rows request shared foundation work: three response-less HEAD operations and two operation-scoped pagination operations.",
+    "All other non-enabled rows are declaration-pending or source-schema dispositions, not foundation requests."
   ],
   "ledger_dispositions": [
     {
@@ -103,42 +167,10 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The pinned UsersLoginRequest requires password and the success response returns token; the 401 continuation can return login_2fa_token. The matching x-secret spec fields and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.PostUsersLogin",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/users/login\"].post",
-          "security_requirements": [],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/json"
-            ],
-            "body_schema_references": [
-              "#/components/schemas/UsersLoginRequest"
-            ]
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/PostUsersLoginErrorResponse",
-              "#/components/schemas/PostUsersLoginSuccessResponse"
-            ],
-            "secret_fields": [
-              "password",
-              "token",
-              "login_2fa_token"
-            ]
-          },
-          "engine_gap": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
       },
       "declaration": {
         "kind": "rest_write",
@@ -149,6 +181,16 @@
         "authorization": {
           "required_security_schemes": [],
           "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
       }
     },
@@ -198,42 +240,10 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The pinned Users2FALoginRequest requires login_2fa_token and code, and the success response returns token. The matching x-secret spec fields and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.PostUsers2FALogin",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/users/2fa-login\"].post",
-          "security_requirements": [],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/json"
-            ],
-            "body_schema_references": [
-              "#/components/schemas/Users2FALoginRequest"
-            ]
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/PostUsers2FALoginErrorResponse",
-              "#/components/schemas/PostUsersLoginSuccessResponse"
-            ],
-            "secret_fields": [
-              "login_2fa_token",
-              "code",
-              "token"
-            ]
-          },
-          "engine_gap": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
       },
       "declaration": {
         "kind": "rest_write",
@@ -244,6 +254,16 @@
         "authorization": {
           "required_security_schemes": [],
           "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
       }
     },
@@ -290,39 +310,10 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The pinned request requires secret and AuthCreateTokenResponse returns access_token. The matching x-secret spec field and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.AuthCreateAccessToken",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/auth/token\"].post",
-          "security_requirements": [],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/json"
-            ],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/AuthCreateTokenResponse",
-              "#/components/schemas/error"
-            ],
-            "secret_fields": [
-              "secret",
-              "access_token"
-            ]
-          },
-          "engine_gap": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
       },
       "declaration": {
         "kind": "rest_write",
@@ -333,6 +324,16 @@
         "authorization": {
           "required_security_schemes": [],
           "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
       }
     },
@@ -385,45 +386,10 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The pinned 201 response is createAccessTokensResponse -> accessToken.token, the actual personal token value. It is marked secret_sensitive with sensitive_policy redaction, but a secret-response contract that redacts stdout/logs/warehouse and routes the value to secure storage is not implemented.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.post_/v2/access-tokens",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/access-tokens\"].post",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/json"
-            ],
-            "body_schema_references": [
-              "#/components/schemas/createAccessTokenRequest"
-            ]
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/Error",
-              "#/components/schemas/ValueError",
-              "#/components/schemas/createAccessTokensResponse"
-            ],
-            "secret_fields": [
-              "token"
-            ]
-          },
-          "engine_gap": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
       },
       "declaration": {
         "kind": "rest_write",
@@ -436,6 +402,16 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
       }
     },
@@ -499,7 +475,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "PATCH",
@@ -561,7 +544,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "GET",
@@ -617,7 +607,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "DELETE",
@@ -673,7 +670,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "GET",
@@ -727,6 +731,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -828,80 +838,7 @@
           ],
           "minimal_change": "Add a source-derived per-rest-operation PaginationSpec that direct reads use instead of the bundle-global base pagination, then materialize the documented page/page_size or startIndex/count strategy."
         },
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.AuditLogs_ListAuditLogs",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "account",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [
-              {
-                "name": "action",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "actor",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "from",
-                "in": "query",
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "name": "name",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "page",
-                "in": "query",
-                "type": "integer",
-                "format": "int32"
-              },
-              {
-                "name": "page_size",
-                "in": "query",
-                "type": "integer",
-                "format": "int32"
-              },
-              {
-                "name": "to",
-                "in": "query",
-                "type": "string",
-                "format": "date-time"
-              }
-            ],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/GetAuditLogsResponse",
-              "#/components/schemas/rpcStatus"
-            ]
-          }
-        }
+        "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared."
       },
       "declaration": {
         "kind": "rest_read",
@@ -913,6 +850,15 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-scoped-rest-pagination",
+          "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared.",
+          "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator."
         }
       }
     },
@@ -968,6 +914,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1024,6 +976,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1075,45 +1033,10 @@
       },
       "state": "disabled",
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The pinned 201 createOrgAccessTokenResponse exposes token, the actual organization access-token value. It is marked secret_sensitive with sensitive_policy redaction, but a secret-response contract that redacts stdout/logs/warehouse and routes the value to secure storage is not implemented.",
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [],
-            "body_content_types": [
-              "application/json"
-            ],
-            "body_schema_references": [
-              "#/components/schemas/createOrgAccessTokenRequest"
-            ]
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/Error",
-              "#/components/schemas/ValueError",
-              "#/components/schemas/createOrgAccessTokenResponse"
-            ],
-            "secret_fields": [
-              "token"
-            ]
-          },
-          "engine_gap": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
       },
       "declaration": {
         "kind": "rest_write",
@@ -1126,6 +1049,16 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
       }
     },
@@ -1201,7 +1134,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "GET",
@@ -1264,7 +1204,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "PATCH",
@@ -1331,7 +1278,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "DELETE",
@@ -1393,7 +1347,14 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
-      }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
     },
     {
       "method": "GET",
@@ -1464,6 +1425,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1529,45 +1496,7 @@
           ],
           "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
         },
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "namespace",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "repository",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/Error"
-            ]
-          }
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
       },
       "declaration": {
         "status": "disabled; no typed operation inventory emitted",
@@ -1576,6 +1505,15 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
+          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
         }
       }
     },
@@ -1643,6 +1581,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1714,51 +1658,7 @@
           ],
           "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
         },
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "namespace",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "repository",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "tag",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/Error"
-            ]
-          }
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
       },
       "declaration": {
         "status": "disabled; no typed operation inventory emitted",
@@ -1767,6 +1667,15 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
+          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
         }
       }
     },
@@ -1832,6 +1741,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1896,6 +1811,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -1961,6 +1882,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2045,6 +1972,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2103,6 +2036,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2164,6 +2103,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2231,47 +2176,7 @@
           ],
           "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
         },
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.CheckRepository",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
-          "security_requirements": [
-            {
-              "bearerAuth": []
-            },
-            {}
-          ],
-          "request": {
-            "path_parameters": [
-              {
-                "name": "namespace",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "repository",
-                "in": "path",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "query_parameters": [],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/json"
-            ],
-            "schema_references": [
-              "#/components/schemas/error",
-              "#/components/schemas/repository_info"
-            ]
-          }
-        }
+        "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O."
       },
       "declaration": {
         "status": "disabled; no typed operation inventory emitted",
@@ -2280,6 +2185,15 @@
             "bearerAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read, refusing this response-less HEAD operation before I/O.",
+          "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract."
         }
       }
     },
@@ -2375,6 +2289,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2472,6 +2392,11 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
       }
     },
     {
@@ -2534,6 +2459,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2593,6 +2524,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2646,6 +2583,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2720,6 +2663,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2776,6 +2725,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2836,6 +2791,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2898,6 +2859,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -2960,6 +2927,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3019,6 +2992,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3094,6 +3073,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3155,6 +3140,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3220,6 +3211,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3273,6 +3270,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3326,6 +3329,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3374,6 +3383,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "reverse_etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3420,6 +3435,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3464,6 +3485,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3517,6 +3544,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3561,6 +3594,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3614,6 +3653,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -3700,65 +3745,7 @@
           ],
           "minimal_change": "Add a source-derived per-rest-operation PaginationSpec that direct reads use instead of the bundle-global base pagination, then materialize the documented page/page_size or startIndex/count strategy."
         },
-        "evidence": {
-          "source_lock": "sources/dockerhub-operation-source-lock.json",
-          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
-          "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users",
-          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
-          "security_requirements": [
-            {
-              "bearerSCIMAuth": []
-            }
-          ],
-          "request": {
-            "path_parameters": [],
-            "query_parameters": [
-              {
-                "name": "attributes",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "count",
-                "in": "query",
-                "type": "integer"
-              },
-              {
-                "name": "filter",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "sortBy",
-                "in": "query",
-                "type": "string"
-              },
-              {
-                "name": "sortOrder",
-                "in": "query",
-                "type": "string",
-                "values": [
-                  "ascending",
-                  "descending"
-                ]
-              },
-              {
-                "name": "startIndex",
-                "in": "query",
-                "type": "integer"
-              }
-            ],
-            "body_content_types": [],
-            "body_schema_references": []
-          },
-          "response": {
-            "content_types": [
-              "application/scim+json"
-            ],
-            "schema_references": []
-          }
-        }
+        "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared."
       },
       "declaration": {
         "kind": "rest_read",
@@ -3770,6 +3757,15 @@
             "bearerSCIMAuth"
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-scoped-rest-pagination",
+          "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 reads only streams.json base pagination; this operation-specific documented paging shape cannot be declared.",
+          "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator."
         }
       }
     },
@@ -3859,6 +3855,11 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
       }
     },
     {
@@ -3912,6 +3913,12 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
       }
     },
     {
@@ -4014,6 +4021,11 @@
           ],
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
       }
     }
   ],

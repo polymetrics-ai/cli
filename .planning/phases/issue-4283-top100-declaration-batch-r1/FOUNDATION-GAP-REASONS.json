@@ -11837,308 +11837,72 @@
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }
       ]
-    },
+    }
+  ],
+  "complete_map_foundation_gaps": [
     {
-      "id": "sync-transport-source-definition",
-      "reason": "Every batch-1 connector lacks a definition-owned source transport declaration and connector-specific conformance evidence.",
-      "evidence": "docs/sync-transport-definition.md:15-38; each connector-local sync_transport.json is absent.",
-      "minimal_change": "Provide an exact source executor, concrete stream allowlist, delivery facts, modes and connector-owned conformance run before declaring source_transport.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
+      "id": "head-response-less-operation-executor",
+      "reason": "The engine refuses response-less HEAD operations as rest_read.",
+      "evidence": "internal/connectors/engine/bundle.go:2676-2681 admits only GET and POST for rest_read.",
+      "minimal_change": "Add a typed bounded HEAD/status executor and a distinct terminal command contract.",
       "operations": [
         {
           "connector": "dockerhub",
           "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         },
         {
-          "connector": "notion",
+          "connector": "dockerhub",
           "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
           },
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         },
         {
-          "connector": "stripe",
+          "connector": "dockerhub",
           "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
           },
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
-        },
-        {
-          "connector": "circleci",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
-        },
-        {
-          "connector": "sentry",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
-        },
-        {
-          "connector": "vercel",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
-        },
-        {
-          "connector": "asana",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
-        },
-        {
-          "connector": "jira",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "source_transport"
-          },
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }
       ]
     },
     {
-      "id": "sync-transport-destination-definition",
-      "reason": "Every batch-1 connector lacks a definition-owned destination transport declaration with typed action bindings and durable acknowledgement.",
-      "evidence": "docs/sync-transport-definition.md:39-75; each connector-local sync_transport.json is absent.",
-      "minimal_change": "Provide exact destination executor, typed eligible actions, acknowledgement, one closed strategy per mode, bindings and connector-owned conformance run before declaring destination_transport.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
+      "id": "operation-scoped-rest-pagination",
+      "reason": "The direct-read paginator cannot express operation-specific pagination.",
+      "evidence": "internal/connectors/engine/direct_read_paginate.go:126-130 consumes only streams.json base pagination.",
+      "minimal_change": "Add source-derived per-operation PaginationSpec support to the direct-read paginator.",
       "operations": [
         {
           "connector": "dockerhub",
           "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
+            "method": "GET",
+            "path": "/v2/auditlogs/{account}"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         },
         {
-          "connector": "notion",
+          "connector": "dockerhub",
           "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
+            "method": "GET",
+            "path": "/v2/scim/2.0/Users"
           },
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
-        },
-        {
-          "connector": "stripe",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
-        },
-        {
-          "connector": "circleci",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
-        },
-        {
-          "connector": "sentry",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
-        },
-        {
-          "connector": "vercel",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
-        },
-        {
-          "connector": "asana",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
-        },
-        {
-          "connector": "jira",
-          "operation": {
-            "method": "SYNC_TRANSPORT",
-            "path": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "cli-surface-missing-batch1",
-      "reason": "CircleCI, Sentry and Vercel have no cli_surface.json, so no declared operation can be user-reachable.",
-      "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; connector cli_surface.json files are absent.",
-      "minimal_change": "Create connector-owned source-backed CLI commands for the existing typed contracts, then surface-sync.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
-      "operations": [
-        {
-          "connector": "circleci",
-          "operation": {
-            "method": "MAP",
-            "path": "cli_surface"
-          },
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
-        },
-        {
-          "connector": "sentry",
-          "operation": {
-            "method": "MAP",
-            "path": "cli_surface"
-          },
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
-        },
-        {
-          "connector": "vercel",
-          "operation": {
-            "method": "MAP",
-            "path": "cli_surface"
-          },
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "typed-operation-contract-batch1",
-      "reason": "Some source-locked operations lack a materialized typed operation contract, so a command cannot be safely generated or enabled.",
-      "evidence": "Connector-local declaration-disposition rows cite the exact api_surface.json line and pinned source location.",
-      "minimal_change": "Derive only bounded typed contracts from the pinned document, or retain a disabled disposition when the documented shape is incompatible.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
-      "operations": [
-        {
-          "connector": "stripe",
-          "operation": {
-            "method": "MAP",
-            "path": "typed_operation_contract"
-          },
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "method": "MAP",
-            "path": "typed_operation_contract"
-          },
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {
-            "method": "MAP",
-            "path": "typed_operation_contract"
-          },
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
-        },
-        {
-          "connector": "jira",
-          "operation": {
-            "method": "MAP",
-            "path": "typed_operation_contract"
-          },
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "cli-command-contract-batch1",
-      "reason": "Some typed operation contracts are not bound by an implemented CLI command.",
-      "evidence": "cmd/connectorgen/surfacesync.go:63-64; connector-local map rows cite each operations.json and cli_surface.json line.",
-      "minimal_change": "Add a connector-owned command using the existing typed contract; surface-sync must derive, not invent, metadata.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
-      "operations": [
-        {
-          "connector": "notion",
-          "operation": {
-            "method": "MAP",
-            "path": "cli_command_contract"
-          },
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "method": "MAP",
-            "path": "cli_command_contract"
-          },
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "command-availability-batch1",
-      "reason": "Some declared CLI commands are partial or planned and therefore are not enabled user capability.",
-      "evidence": "Connector-local declaration-disposition rows cite exact cli_surface.json availability records.",
-      "minimal_change": "Finish the pinned-schema command contract and satisfy runtime preflight before changing availability to implemented.",
-      "recoverability": "Recoverable: source-locked declarations remain in place; add the exact missing contract/evidence and rerun the map and certification.",
-      "operations": [
-        {
-          "connector": "notion",
-          "operation": {
-            "method": "MAP",
-            "path": "command_availability"
-          },
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
-        },
-        {
-          "connector": "asana",
-          "operation": {
-            "method": "MAP",
-            "path": "command_availability"
-          },
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }
       ]
     }
+  ],
+  "complete_map_declaration_pending": [
+    "typed-operation-contract",
+    "cli-surface-missing",
+    "cli-command-contract",
+    "command-availability",
+    "sync-transport-source-definition",
+    "sync-transport-destination-definition"
   ]
 }

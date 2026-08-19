@@ -34,7 +34,7 @@
       },
       {
         "key": "reverse_etl",
-        "count": 23
+        "count": 22
       },
       {
         "key": "binary_read",
@@ -42,20 +42,47 @@
       },
       {
         "key": "binary_write",
-        "count": 0
+        "count": 1
       }
     ],
     "stream_bindings": 6,
     "writes_actions": 24,
     "terminal_commands": 45,
     "live_certification": "pending",
-    "gap_ids": [
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 6
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-notion",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/notion/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-destination-definition-notion",
+          "evidence": "docs/sync-transport-definition.md:39-75 lists the declaration fields; internal/connectors/defs/notion/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned destination transport declaration, typed binding, acknowledgement, apply strategies and conformance evidence; no engine change is required."
+        }
+      }
+    },
+    "declaration_pending_ids": [
       "command-availability-notion",
       "cli-command-contract-notion",
       "sync-transport-source-definition-notion",
       "sync-transport-destination-definition-notion"
     ],
-    "foundation_gaps": [
+    "declaration_pending": [
       {
         "id": "command-availability-notion",
         "count": 3
@@ -63,43 +90,8 @@
       {
         "id": "cli-command-contract-notion",
         "count": 3
-      },
-      {
-        "id": "sync-transport-source-definition-notion",
-        "count": 1,
-        "scope": "connector_transport"
-      },
-      {
-        "id": "sync-transport-destination-definition-notion",
-        "count": 1,
-        "scope": "connector_transport"
       }
-    ],
-    "rejected_by_reason": [
-      {
-        "key": "foundation-gap",
-        "count": 6
-      }
-    ],
-    "transport": {
-      "contract": "docs/sync-transport-definition.md (PR #4286)",
-      "source_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "sync-transport-source-definition-notion",
-          "evidence": "docs/sync-transport-definition.md:15-38 requires an exact executor, eligible streams, delivery and definition-owned conformance; internal/connectors/defs/notion/sync_transport.json is absent.",
-          "minimal_change": "Declare only a connector-owned source_transport after its exact executor, eligible stream allowlist, delivery facts, and connector-specific conformance run exist."
-        }
-      },
-      "destination_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "sync-transport-destination-definition-notion",
-          "evidence": "docs/sync-transport-definition.md:39-75 requires eligible typed actions, durable acknowledgement, apply strategies and definition-owned conformance; internal/connectors/defs/notion/sync_transport.json is absent.",
-          "minimal_change": "Declare only a connector-owned destination_transport after typed action bindings, durable acknowledgement, per-mode strategies, and connector-specific conformance evidence exist."
-        }
-      }
-    }
+    ]
   },
   "ledger_dispositions": [
     {
@@ -727,21 +719,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "command-availability-notion",
           "evidence": "internal/connectors/defs/notion/cli_surface.json:926: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/blocks/{block_id}/children\"].patch.",
           "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/cli_surface.json:926: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/blocks/{block_id}/children\"].patch."
       },
       "declaration": {
-        "status": "disabled; source-backed reverse_etl contract awaits command-availability-notion",
+        "status": "disabled; declaration-pending command-availability-notion",
         "contract": null
       }
     },
@@ -890,21 +883,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "command-availability-notion",
           "evidence": "internal/connectors/defs/notion/cli_surface.json:1067: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/data_sources\"].post.",
           "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/cli_surface.json:1067: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/data_sources\"].post."
       },
       "declaration": {
-        "status": "disabled; source-backed reverse_etl contract awaits command-availability-notion",
+        "status": "disabled; declaration-pending command-availability-notion",
         "contract": null
       }
     },
@@ -1379,7 +1373,7 @@
     {
       "method": "POST",
       "path": "/v1/file_uploads/{file_upload_id}/send",
-      "parity_class": "reverse_etl",
+      "parity_class": "binary_write",
       "api_surface": {
         "method": "POST",
         "path": "/v1/file_uploads/{file_upload_id}/send",
@@ -1404,21 +1398,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "command-availability-notion",
           "evidence": "internal/connectors/defs/notion/cli_surface.json:1669: command availability is planned; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/file_uploads/{file_upload_id}/send\"].post.",
           "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/cli_surface.json:1669: command availability is planned; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/file_uploads/{file_upload_id}/send\"].post."
       },
       "declaration": {
-        "status": "disabled; source-backed reverse_etl contract awaits command-availability-notion",
+        "status": "disabled; declaration-pending command-availability-notion",
         "contract": null
       }
     },
@@ -1955,21 +1950,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "cli-command-contract-notion",
           "evidence": "internal/connectors/defs/notion/operations.json:340 has rest_write contract notion.create_a_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/token; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
           "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/operations.json:340 has rest_write contract notion.create_a_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/token; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
       },
       "declaration": {
-        "status": "disabled; source-backed direct_write contract awaits cli-command-contract-notion",
+        "status": "disabled; declaration-pending cli-command-contract-notion",
         "contract": {
           "kind": "rest_write",
           "id": "notion.create_a_token"
@@ -2004,21 +2000,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "cli-command-contract-notion",
           "evidence": "internal/connectors/defs/notion/operations.json:422 has rest_write contract notion.revoke_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/revoke; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
           "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/operations.json:422 has rest_write contract notion.revoke_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/revoke; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
       },
       "declaration": {
-        "status": "disabled; source-backed direct_write contract awaits cli-command-contract-notion",
+        "status": "disabled; declaration-pending cli-command-contract-notion",
         "contract": {
           "kind": "rest_write",
           "id": "notion.revoke_token"
@@ -2053,21 +2050,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "absent",
-        "foundation_gap": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
           "id": "cli-command-contract-notion",
           "evidence": "internal/connectors/defs/notion/operations.json:459 has rest_write contract notion.introspect_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/introspect; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
           "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
         }
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The pinned operation is declared in the complete map but has no runnable command contract.",
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/notion/operations.json:459 has rest_write contract notion.introspect_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/introspect; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
       },
       "declaration": {
-        "status": "disabled; source-backed direct_write contract awaits cli-command-contract-notion",
+        "status": "disabled; declaration-pending cli-command-contract-notion",
         "contract": {
           "kind": "rest_write",
           "id": "notion.introspect_token"
@@ -2079,6 +2077,6 @@
   "notes": [
     "Complete six-class source-locked map required before certification. Each row has exactly one primary parity class.",
     "ENABLED% is implemented CLI commands bound to source operations, never inventory count or declared coverage.",
-    "ETL and reverse-ETL transport are mapped against the definition-owned #4286 contract; neither connector declares sync_transport.json or its conformance evidence yet."
+    "Missing typed contracts, commands and sync-transport definitions are declaration-pending, not foundation gaps."
   ]
 }

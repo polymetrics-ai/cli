@@ -5,7 +5,7 @@
 The batch is now mapped before certification. See
 `COMPLETE-PARITY-MAP.md` for the required per-connector source operation
 classes, command-derived `ENABLED%`, delete coverage, and #4286
-definition-owned transport gaps. Certification remains deliberately deferred.
+definition-owned transport declaration-pending records. Certification remains deliberately deferred.
 
 This checkpoint pins public API descriptions and records declaration parity
 only. It performs no live credentialed certification; every connector retains

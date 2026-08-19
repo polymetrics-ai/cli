@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
-  "scope": "public-source declarations plus complete six-class mapping; non-live certification deferred until map stabilization",
+  "scope": "public-source declarations plus complete six-class mapping; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
   "generated_at": "2026-08-19T00:00:00Z",
   "connectors": [
     {
@@ -43,21 +43,21 @@
         "enabled_percent": 32.93,
         "enabled_deletes": 4,
         "documented_deletes": 23,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-asana",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-asana",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-asana",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-asana",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -103,7 +103,7 @@
           },
           {
             "key": "direct_write",
-            "count": 1
+            "count": 0
           },
           {
             "key": "etl",
@@ -119,15 +119,16 @@
           },
           {
             "key": "binary_write",
-            "count": 0
+            "count": 1
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "command-availability-asana",
           "sync-transport-source-definition-asana",
           "sync-transport-destination-definition-asana"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -168,21 +169,21 @@
         "enabled_percent": 0.91,
         "enabled_deletes": 1,
         "documented_deletes": 54,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-bitbucket",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-bitbucket",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-bitbucket",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-bitbucket",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -227,7 +228,7 @@
           },
           {
             "key": "direct_write",
-            "count": 98
+            "count": 94
           },
           {
             "key": "etl",
@@ -243,16 +244,17 @@
           },
           {
             "key": "binary_write",
-            "count": 0
+            "count": 4
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "cli-command-contract-bitbucket",
           "typed-operation-contract-bitbucket",
           "sync-transport-source-definition-bitbucket",
           "sync-transport-destination-definition-bitbucket"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -294,21 +296,21 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 16,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-circleci",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-circleci",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-circleci",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-circleci",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -371,12 +373,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "cli-surface-missing-circleci",
           "sync-transport-source-definition-circleci",
           "sync-transport-destination-definition-circleci"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -429,22 +432,22 @@
         "enabled_deletes": 6,
         "documented_deletes": 6,
         "terminal_commands": 41,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding.",
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request.",
         "coverage_percent": 100
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-dockerhub",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-dockerhub",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-dockerhub",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-dockerhub",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -491,22 +494,39 @@
         "primary_classes": [
           {
             "key": "direct_read",
-            "count": 17
+            "count": 23
           },
           {
             "key": "direct_write",
-            "count": 20
+            "count": 7
           },
           {
             "key": "etl",
             "count": 4
+          },
+          {
+            "key": "reverse_etl",
+            "count": 20
+          },
+          {
+            "key": "binary_read",
+            "count": 0
+          },
+          {
+            "key": "binary_write",
+            "count": 0
           }
         ],
         "gap_ids": [
+          "head-response-less-operation-executor",
+          "operation-scoped-rest-pagination"
+        ],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
+          "declaration-pending-dockerhub",
           "sync-transport-source-definition-dockerhub",
           "sync-transport-destination-definition-dockerhub"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -549,21 +569,21 @@
         "enabled_percent": 0.23,
         "enabled_deletes": 0,
         "documented_deletes": 212,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-gitlab",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-gitlab",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-gitlab",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-gitlab",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -622,12 +642,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "typed-operation-contract-gitlab",
           "sync-transport-source-definition-gitlab",
           "sync-transport-destination-definition-gitlab"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -668,21 +689,21 @@
         "enabled_percent": 47.81,
         "enabled_deletes": 0,
         "documented_deletes": 89,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-jira",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-jira",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-jira",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-jira",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -746,12 +767,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "typed-operation-contract-jira",
           "sync-transport-source-definition-jira",
           "sync-transport-destination-definition-jira"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -792,21 +814,21 @@
         "enabled_percent": 87.76,
         "enabled_deletes": 4,
         "documented_deletes": 4,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-notion",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-notion",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-notion",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-notion",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -860,7 +882,7 @@
           },
           {
             "key": "reverse_etl",
-            "count": 23
+            "count": 22
           },
           {
             "key": "binary_read",
@@ -868,16 +890,17 @@
           },
           {
             "key": "binary_write",
-            "count": 0
+            "count": 1
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "command-availability-notion",
           "cli-command-contract-notion",
           "sync-transport-source-definition-notion",
           "sync-transport-destination-definition-notion"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -919,21 +942,21 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 35,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-sentry",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-sentry",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-sentry",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-sentry",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -992,12 +1015,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "cli-surface-missing-sentry",
           "sync-transport-source-definition-sentry",
           "sync-transport-destination-definition-sentry"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -1037,21 +1061,21 @@
         "enabled_percent": 1.36,
         "enabled_deletes": 1,
         "documented_deletes": 32,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-stripe",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-stripe",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-stripe",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-stripe",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -1114,12 +1138,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "typed-operation-contract-stripe",
           "sync-transport-source-definition-stripe",
           "sync-transport-destination-definition-stripe"
-        ],
-        "live_certification": "pending"
+        ]
       }
     },
     {
@@ -1162,21 +1187,21 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 56,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding."
+        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "mapped-gap",
+        "state": "declaration-pending",
         "contract": "docs/sync-transport-definition.md (PR #4286)",
         "source_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-source-definition-vercel",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-source-definition-vercel",
           "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
         },
         "destination_transport": {
-          "state": "gap",
-          "reason": "foundation-gap",
-          "gap_id": "sync-transport-destination-definition-vercel",
+          "state": "declaration-pending",
+          "reason": "declaration-pending",
+          "declaration_id": "sync-transport-destination-definition-vercel",
           "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
         },
         "recoverable": true
@@ -1239,12 +1264,13 @@
             "count": 0
           }
         ],
-        "gap_ids": [
+        "gap_ids": [],
+        "live_certification": "pending",
+        "declaration_pending_ids": [
           "cli-surface-missing-vercel",
           "sync-transport-source-definition-vercel",
           "sync-transport-destination-definition-vercel"
-        ],
-        "live_certification": "pending"
+        ]
       }
     }
   ]

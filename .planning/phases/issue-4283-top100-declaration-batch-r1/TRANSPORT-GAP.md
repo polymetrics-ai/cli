@@ -5,7 +5,8 @@
 The earlier runtime evidence remains historical context, but the complete map
 is now assessed against the definition-owned contract published by PR #4286 in
 `docs/sync-transport-definition.md`, not the former GitHub-shaped descriptor.
-For each selected connector, the map carries two distinct recoverable gaps:
+For each selected connector, the map carries two distinct recoverable
+declaration-pending records:
 `sync-transport-source-definition-<connector>` and
 `sync-transport-destination-definition-<connector>`.
 
@@ -26,9 +27,9 @@ The exact source-operation dispositions and the full six-class summary are
 recorded in `COMPLETE-PARITY-MAP.md` and in each connector's
 `sources/<connector>-declaration-disposition.json`.
 
-## Verdict: path (b), foundation gap
+## Historical verdict: path (b), superseded by declaration-pending
 
-No selected connector receives `sync_transport.json` in this increment. That omission is an explicit, recoverable declaration rather than a missing record: each of Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana has a `sync_transport` rejection with `reason: foundation-gap` and `recoverable: true` in `REJECTION-LIST.json`.
+No selected connector receives `sync_transport.json` in this increment. That omission is an explicit, recoverable declaration rather than a missing record: each of Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana now has a `sync_transport` disposition with `reason: declaration-pending` and `recoverable: true` in `REJECTION-LIST.json`. The preceding foundation-gap label is historical and is not a foundation-lane request.
 
 The pinned provider descriptions define HTTP resources, not a safe warehouse transport contract. They do not establish a source delivery guarantee, source-to-destination field mapping, destination acknowledgement, or the typed apply action for every sync mode. Those facts must not be inferred.
 

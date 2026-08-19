@@ -187,7 +187,8 @@ The map integrity assertion requires, for each of Notion, Stripe, Bitbucket,
 GitLab, CircleCI, Sentry, Vercel, Asana, and Jira: source disposition rows and
 crosswalk rows equal the pinned source denominator; primary class counts sum to
 that same denominator; each row has an enabled/disabled state plus foundation
-record; and both #4286 source and destination transport gaps are present.
+record; and both #4286 source and destination declaration-pending records are
+present.
 The assertion reports 49, 589, 331, 1,755, 111, 223, 400, 249, and 617 rows,
 respectively, with no missing class or transport record.
 
@@ -197,3 +198,27 @@ Keep the map connector-local and data-only. The absence of a command,
 transport, executor, acknowledgement, or conformance run is a named,
 recoverable gap; it is never filled from an unrelated connector or from an
 unstated provider behavior.
+
+## Vocabulary correction — declaration pending is not a foundation request
+
+### Red
+
+All 3,889 non-enabled rows in the nine new maps were labelled
+`foundation-gap`, although their stated minimal change was only to derive a
+connector-local operation contract, command or transport declaration. That
+would incorrectly send declaration work to the foundation lane.
+
+### Green
+
+Those 3,889 rows now use `declaration-pending` with `foundation.state:
+present`; their map evidence and minimal declaration change are retained. Docker
+Hub now has the same six-class row fields. Exactly five rows across the ten
+maps remain `foundation-gap`: three response-less HEAD operations refused by
+`bundle.go:2676-2681` and two operation-scoped pagination operations not
+expressible by `direct_read_paginate.go:126-130`.
+
+### Refactor
+
+Foundation dashboards consume only `foundation_gap` records and `gap_ids`.
+`declaration_pending_ids` is an explicit separate backlog and cannot be used to
+request shared engine work.
