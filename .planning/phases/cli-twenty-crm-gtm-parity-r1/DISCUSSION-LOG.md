@@ -12,3 +12,7 @@
   contract requires it; it is not duplicated as an invented raw command surface.
 - Decision: do not claim certification merely because a matrix or fixture exists.
   The current allowlist is a separate foundation boundary.
+- Firstmate, not the captain, directed the switch from UI setup to a headless
+  API/seed route. The captain's standing requirement remains a real-instance,
+  real-data proof before merge. This distinction must be retained in the PR
+  body and all delivery evidence.

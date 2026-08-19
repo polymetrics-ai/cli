@@ -20,7 +20,7 @@
 | Stream and direct-read runtime dispatch | `commandrunner.Preflight`, targeted command tests, and built CLI reach the Twenty request contract | Any required executor is missing: record `needs-decision` and do not alter foundation code. |
 | Typed reverse ETL and delete safety | Generator/conformance tests plus live plan-preview-approval-execute proof | Any bypass of the typed lifecycle: stop. |
 | Certification artifacts | `certification-sweep --check` passes for current allowed scope; assess whether Twenty is allowlisted | Adding Twenty to the allowlist would require a foundation decision. |
-| Live provider | Published Docker Compose starts a disposable local Twenty; key stays only in Keychain and stdin | After a genuine start attempt, document exact blocker and remain uncertified. |
+| Live provider | Published Docker Compose starts a disposable local Twenty; the image's seeded API-key emitter is piped directly into `pm credentials add --value-stdin`, then the built CLI proves read/page/write/read-back/delete | After a genuine start attempt, document exact blocker and remain uncertified. Keychain is intentionally out of scope because it truncates this image's long JWT-style key. |
 
 ## TDD slices
 
@@ -32,9 +32,10 @@
    write validation, typed deletes, invalid inputs, and edge pagination/output
    cases. Make each red result durable in `TDD-LEDGER.md` before its green fix.
 4. Regenerate only connector-owned derived files and run targeted gates.
-5. Build `pm`; establish a disposable self-hosted Twenty, add no source-visible
-   secrets, and use stdin at point of use for bounded live read/write/delete and
-   round-trip evidence.
+5. Build `pm`; establish a disposable self-hosted Twenty, stream the image's
+   seeded API key directly into the CLI encrypted credential store with
+   `--value-stdin`, and use it for bounded live read/write/delete and round-trip
+   evidence. Never route the key through Keychain, argv, a file, or a prompt.
 6. Run the required verification and review workflow, rebase on current `main`,
    push the branch, open a conventional-commit PR with `Refs #277`, then read
    its base back through the GitHub API.
