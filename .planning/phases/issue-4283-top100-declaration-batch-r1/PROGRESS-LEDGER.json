@@ -1718,7 +1718,7 @@
       "vercel": "projects -> update_project"
     },
     "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
-    "resume_pointer": "Paused by captain hard pre-merge gate. Do not resume connector implementation until F0, F2/F4, #4305, and final #4304 heads publish; then complete the per-operation six-surface, runtime, generated-CLI, website, and drift evidence before any merge-ready assertion.",
+    "resume_pointer": "Paused by captain hard pre-merge gate. The planning ledger is necessary but insufficient: after F0, F2/F4, #4305, and final #4304 publish, implement the executable CI validator on the integration branch for the fixed 100; it must emit schema-backed per-connector and aggregate verdicts and pass its negative tests before any merge-ready assertion.",
     "pre_merge_gate": {
       "state": "blocked-unpublished-foundations",
       "merge_ready": false,
@@ -1741,7 +1741,23 @@
         "F4",
         "#4305",
         "final #4304 dispatch"
-      ]
+      ],
+      "planning_gate_is_not_sufficient": true,
+      "executable_validator": {
+        "state": "not-implemented-deferred-until-foundations-publish",
+        "scope": "fixed 100 connector cohort",
+        "contract": "CI-suitable executable repository validator with schema-backed per-connector and aggregate pass/fail output, required negative tests, and a zero-failure merge verdict.",
+        "negative_tests": [
+          "missing source hash",
+          "missing or unreachable command",
+          "CLI/website drift",
+          "absent runtime fixture/conformance",
+          "surface misclassification",
+          "binary direction collapse",
+          "disabled callable operation",
+          "non-secret output omission"
+        ]
+      }
     }
   }
 }

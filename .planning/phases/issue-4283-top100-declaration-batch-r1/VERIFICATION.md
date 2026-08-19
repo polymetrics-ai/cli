@@ -275,3 +275,9 @@
 - [ ] Zoom, Twenty, and Gong have their separately authorized provider-live
   certification evidence. No other connector is claimed provider-live
   certified without credentials and accepted evidence.
+- [ ] The integration branch has an executable CI validator for the fixed 100
+  that emits schema-backed per-connector and aggregate verdicts. Its negative
+  suite rejects the required source-hash, command-reachability, CLI/website
+  drift, runtime-evidence, surface, binary-direction, disabled-operation, and
+  non-secret-output failures. Planning JSON is not evidence that this check
+  exists or passes.

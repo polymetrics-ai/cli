@@ -83,3 +83,16 @@ certification in their own lanes. This PR does not include those connectors and
 does not authorize credentials; all other connectors remain live-certification
 `pending` unless accepted credentialed evidence exists. The current PR remains
 paused on F0, F2/F4, #4305, and the final #4304 dispatch heads.
+
+### Enforcement is deferred, not complete
+
+This planning gate is necessary but cannot certify a merge. After the named
+foundations publish, the integration branch must add an executable,
+CI-suitable repository validator for the fixed 100. Its schema-backed machine
+output must include per-connector and aggregate pass/fail verdicts, operation
+counts, surface verdicts, CLI/website/runtime-evidence verdicts, and structured
+failures. The validator must have negative tests for a missing source hash,
+missing or unreachable command, CLI/website drift, absent fixture/conformance
+evidence, surface misclassification, binary-direction collapse, a disabled
+callable operation, and omission of non-secret output. No planning JSON can be
+used as a substitute for that executable validator or its passing CI result.

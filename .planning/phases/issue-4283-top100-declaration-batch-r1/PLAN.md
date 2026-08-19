@@ -428,3 +428,11 @@ Twenty, and Gong require authorized provider-live certification in their own
 lanes. This PR remains non-live and must not claim any provider-live result
 without credentials and accepted evidence. Implementation remains paused until
 F0, F2/F4, #4305, and the final #4304 heads publish.
+
+The planning record is necessary but insufficient. The integration branch must
+then implement a CI-suitable executable repository validator for the fixed 100
+with schema-backed per-connector and aggregate verdicts. Its negative suite
+must fail for a missing source hash; missing or unreachable command; CLI/website
+drift; missing runtime fixture/conformance evidence; surface misclassification;
+binary download/upload collapse; a disabled callable operation; and omission of
+non-secret output. Only a passing validator result may satisfy this final gate.

@@ -3683,8 +3683,60 @@
       "F4 bounded binary, multipart, status, and text operation runtime",
       "GitHub issue #4305 declaration-bound structured bodies",
       "final PR #4304 persisted App/CLI dispatch and action-scoped source binding",
-      "per-operation fixture/conformance, generated CLI/website projection, and exact drift proof after the foundations publish"
+      "per-operation fixture/conformance, generated CLI/website projection, and exact drift proof after the foundations publish",
+      "executable CI validator with schema-backed output and negative tests across the fixed 100"
     ],
-    "unblock_condition": "Remain paused until the named foundations publish. Then update every affected operation and surface with the required proof before any merge-ready assertion."
+    "unblock_condition": "Remain paused until the named foundations publish. Implement and pass the executable CI validator across the fixed 100, including all required negative tests, before any merge-ready assertion.",
+    "planning_gate_is_not_sufficient": true,
+    "enforcement": {
+      "state": "not-implemented-deferred-until-foundations-publish",
+      "implementation_branch": "integration branch after F0, F2/F4, #4305, and final #4304 publish",
+      "scope": "fixed 100 connector cohort",
+      "requirement": "The final pre-merge gate is an executable repository validator suitable for CI. Planning JSON describes the contract but cannot produce a merge verdict.",
+      "machine_output_schema": {
+        "required": [
+          "schema_version",
+          "validator",
+          "verdict",
+          "connectors",
+          "aggregate",
+          "failures"
+        ],
+        "per_connector": [
+          "connector",
+          "verdict",
+          "source_operation_total",
+          "operations_checked",
+          "surface_verdicts",
+          "cli_verdict",
+          "website_verdict",
+          "runtime_evidence_verdict",
+          "failures"
+        ],
+        "aggregate": [
+          "connector_total",
+          "connectors_passed",
+          "connectors_failed",
+          "source_operations_checked",
+          "failures_by_rule"
+        ],
+        "verdicts": [
+          "pass",
+          "fail"
+        ]
+      },
+      "required_negative_tests": [
+        "missing source hash",
+        "missing generated command",
+        "unreachable generated command",
+        "CLI and website projection drift",
+        "absent runtime fixture or conformance evidence",
+        "surface misclassification",
+        "binary download/upload direction collapse",
+        "disabled callable provider operation",
+        "non-secret provider output omission"
+      ],
+      "success_condition": "CI runs the validator over all fixed-100 connectors and accepts merge readiness only when every connector and the aggregate verdict pass."
+    }
   }
 }

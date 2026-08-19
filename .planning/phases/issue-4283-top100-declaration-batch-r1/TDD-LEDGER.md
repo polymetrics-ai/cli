@@ -511,3 +511,14 @@ credentialed accepted evidence.
 
 No connector implementation or provider I/O is introduced. The branch stays
 paused until F0, F2/F4, #4305, and final #4304 dispatch heads publish.
+
+### Deferred executable enforcement
+
+The JSON gate is not a test. After those foundations publish, implement the
+fixed-100 CI validator on the integration branch with schema-backed per-
+connector and aggregate verdicts. Its red suite must deliberately fail for a
+missing source hash, missing or unreachable command, CLI/website drift, absent
+fixture/conformance evidence, incorrect semantic surface, collapsed binary
+direction, a disabled callable operation, and a dropped non-secret output. Its
+green result is a passing repository command; the planning ledger alone is
+never green enforcement.

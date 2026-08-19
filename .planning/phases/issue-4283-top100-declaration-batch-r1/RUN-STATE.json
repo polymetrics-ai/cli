@@ -17,11 +17,12 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Remain paused. Do not call PR #4294 or any connector/batch merge-ready until every provider operation is source-locked and two-way traced, mapped to semantically applicable ETL/reverse-ETL/direct-read/direct-write/binary-download/binary-upload surfaces, runtime-enabled, generated-CLI reachable, and generated-website represented with per-operation fixture/conformance, output-preservation, and exact drift proof. Provider-only N/A requires provider evidence. Wait for F0, F2/F4, #4305, and final #4304. Zoom, Twenty, and Gong require authorized live certification in their own lanes; no other provider is live-certified without credentials and accepted evidence.",
+  "next": "Remain paused. The planning hard gate is necessary but not sufficient. After F0, F2/F4, #4305, and final #4304 publish, implement an executable CI repository validator on the integration branch across the fixed 100. It must emit schema-backed per-connector and aggregate verdicts and negative-test failures for missing source hash, missing or unreachable command, CLI/website drift, absent runtime fixture/conformance evidence, surface misclassification, binary direction collapse, disabled callable operations, and non-secret output omission. Do not make merge-ready claims until it passes.",
   "updated_at": "2026-08-20T00:00:00Z",
   "pre_merge_gate": {
     "state": "blocked-unpublished-foundations",
     "ledger": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate",
-    "merge_ready": false
+    "merge_ready": false,
+    "enforcement": "not-implemented-deferred-until-foundations-publish"
   }
 }
