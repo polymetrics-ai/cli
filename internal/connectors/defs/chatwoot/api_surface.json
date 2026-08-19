@@ -760,7 +760,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "The caller's own agent profile is addressed at /api/v1/profile, a sibling of /api/v1/accounts rather than nested under it, so it falls outside this bundle's single account-scoped base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v1/profile.",
         "source_url": "https://developers.chatwoot.com/api-reference/profile-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -786,7 +786,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Account-level report summary listing lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -799,7 +799,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Account conversation metrics report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/conversations.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -812,7 +812,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Agent conversation metrics report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/conversations/.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -825,7 +825,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "First response time distribution report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/first_response_time_distribution.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -838,7 +838,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Inbox/label matrix report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/inbox_label_matrix.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -851,7 +851,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Outgoing message count report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/outgoing_messages_count.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -864,7 +864,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Account report summary lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/reports/summary.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -877,7 +877,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Per-agent summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/summary_reports/agent.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -890,7 +890,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Per-channel summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/summary_reports/channel.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -903,7 +903,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Per-inbox summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/summary_reports/inbox.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -916,7 +916,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Per-team summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /api/v2/accounts/{account_id}/summary_reports/team.",
         "source_url": "https://developers.chatwoot.com/api-reference/reports-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       }
@@ -942,7 +942,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /platform/api/v1/accounts/{account_id}.",
         "source_url": "https://developers.chatwoot.com/api-reference/accounts-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); platformAppApiKey credential field, not present in spec.json"
       }
@@ -981,7 +981,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /platform/api/v1/accounts/{account_id}/account_users.",
         "source_url": "https://developers.chatwoot.com/api-reference/accounts-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); platformAppApiKey credential field, not present in spec.json"
       }
@@ -1020,7 +1020,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /platform/api/v1/agent_bots.",
         "source_url": "https://developers.chatwoot.com/api-reference/accounts-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); platformAppApiKey credential field, not present in spec.json"
       }
@@ -1046,7 +1046,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /platform/api/v1/agent_bots/{id}.",
         "source_url": "https://developers.chatwoot.com/api-reference/accounts-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); platformAppApiKey credential field, not present in spec.json"
       }
@@ -1098,7 +1098,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /platform/api/v1/users/{id}.",
         "source_url": "https://developers.chatwoot.com/api-reference/accounts-api",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); platformAppApiKey credential field, not present in spec.json"
       }
@@ -1150,7 +1150,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /public/api/v1/inboxes/{inbox_identifier}.",
         "source_url": "https://developers.chatwoot.com/api-reference/client-apis",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); inbox_identifier/contact_identifier widget-actor identity, not modeled by this connector's account-scoped credential"
       }
@@ -1176,7 +1176,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}.",
         "source_url": "https://developers.chatwoot.com/api-reference/client-apis",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); inbox_identifier/contact_identifier widget-actor identity, not modeled by this connector's account-scoped credential"
       }
@@ -1202,7 +1202,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations.",
         "source_url": "https://developers.chatwoot.com/api-reference/client-apis",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); inbox_identifier/contact_identifier widget-actor identity, not modeled by this connector's account-scoped credential"
       }
@@ -1228,7 +1228,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}.",
         "source_url": "https://developers.chatwoot.com/api-reference/client-apis",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); inbox_identifier/contact_identifier widget-actor identity, not modeled by this connector's account-scoped credential"
       }
@@ -1241,7 +1241,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages.",
         "source_url": "https://developers.chatwoot.com/api-reference/client-apis",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); inbox_identifier/contact_identifier widget-actor identity, not modeled by this connector's account-scoped credential"
       }
@@ -1319,7 +1319,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Public unauthenticated CSAT survey response page, addressed under /survey (a different path prefix than this bundle's account-scoped /api/v1 base) and keyed by a conversation UUID this connector's conversation records do not expose. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)",
+        "reason": "No reachable direct-read command declares GET /survey/responses/{conversation_uuid}.",
         "source_url": "https://developers.chatwoot.com/api-reference/csat-survey-page",
         "notes": "named_dependency=per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep); conversation UUID identifier, not exposed by the conversations stream/schema"
       }

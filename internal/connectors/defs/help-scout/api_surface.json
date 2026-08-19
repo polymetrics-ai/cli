@@ -986,7 +986,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "reason": "No reachable direct-read command declares GET /v3/conversations/{conversationId}.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
         "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }
@@ -999,7 +999,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "reason": "No reachable direct-read command declares GET /v3/conversations/{conversationId}/threads.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
         "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }
@@ -1012,7 +1012,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "reason": "No reachable direct-read command declares GET /v3/customers.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
         "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }
@@ -1025,7 +1025,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "reason": "No reachable direct-read command declares GET /v3/system-users.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
         "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }
@@ -1038,7 +1038,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "reason": "No reachable direct-read command declares GET /v3/system-users/{systemUserId}.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
         "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }

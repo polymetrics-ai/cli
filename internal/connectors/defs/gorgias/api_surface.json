@@ -376,7 +376,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic",
+        "reason": "No reachable direct-read command declares POST /api/reporting/stats.",
         "source_url": "https://developers.gorgias.com/reference/get-statistic",
         "notes": "named_dependency=a structured filter-expression command input (a DSL flag/builder) for the Statistics query grammar; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
@@ -792,7 +792,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "'Search for view's items' takes its filter/order criteria in a request body but the provider requires PUT, not GET or POST. This repository's operation direct-read executor (commandrunner.validateOperationDirectReadCommand) accepts only GET or POST endpoints, so a PUT-bodied read cannot be wired through it. The common case (an unfiltered, cursor-paginated listing of a view's items) is already served by the GET sibling, implemented here as the 'views items list' direct read. Source: https://developers.gorgias.com/reference/update-view-items",
+        "reason": "No reachable direct-read command declares PUT /api/views/{view_id}/items.",
         "source_url": "https://developers.gorgias.com/reference/update-view-items",
         "notes": "named_dependency=a PUT-capable operation direct-read executor (the runtime accepts only GET or POST today); artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
