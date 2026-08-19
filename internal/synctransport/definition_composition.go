@@ -11,11 +11,18 @@ import (
 // evidence. It deliberately names no connector: one explicit factory can be
 // reused by a second connector that declares the same closed role.
 type DefinitionFactory struct {
-	Reference           connectors.TransportExecutorReference
-	SourceEvidence      connectors.ConformanceEvidenceReference
-	DestinationEvidence connectors.ConformanceEvidenceReference
-	BuildSource         func(connectors.Connector) (SourceExecutor, error)
-	BuildDestination    func(connectors.Connector) (DestinationExecutor, error)
+	Reference      connectors.TransportExecutorReference
+	SourceEvidence connectors.ConformanceEvidenceReference
+	// AcceptedSourceEvidences are additional exact evidence references selected
+	// by declarations using this reusable source; production composition must
+	// collect them from those declarations, never from connector names.
+	AcceptedSourceEvidences []connectors.ConformanceEvidenceReference
+	DestinationEvidence     connectors.ConformanceEvidenceReference
+	// AcceptedDestinationEvidences is the destination-role equivalent of
+	// AcceptedSourceEvidences.
+	AcceptedDestinationEvidences []connectors.ConformanceEvidenceReference
+	BuildSource                  func(connectors.Connector) (SourceExecutor, error)
+	BuildDestination             func(connectors.Connector) (DestinationExecutor, error)
 }
 
 // DefinitionFactoryProvider lets a connector-local package expose adapters for
@@ -46,30 +53,60 @@ func NewDefinitionConformanceVerifier(factories []DefinitionFactory) (Conformanc
 			return nil, fmt.Errorf("definition transport factory reference: %w", err)
 		}
 		if factory.BuildSource != nil {
-			if err := factory.SourceEvidence.Validate(); err != nil {
-				return nil, fmt.Errorf("definition transport source evidence for %q: %w", factory.Reference.ID, err)
+			for _, evidence := range factory.sourceEvidences() {
+				if err := evidence.Validate(); err != nil {
+					return nil, fmt.Errorf("definition transport source evidence for %q: %w", factory.Reference.ID, err)
+				}
+				key := definitionConformanceKey{role: connectors.TransportRoleSource, reference: factory.Reference, evidence: evidence}
+				if _, exists := accepted[key]; exists {
+					return nil, fmt.Errorf("duplicate definition transport source evidence for executor %q", factory.Reference.ID)
+				}
+				accepted[key] = struct{}{}
 			}
-			key := definitionConformanceKey{role: connectors.TransportRoleSource, reference: factory.Reference, evidence: factory.SourceEvidence}
-			if _, exists := accepted[key]; exists {
-				return nil, fmt.Errorf("duplicate definition transport source evidence for executor %q", factory.Reference.ID)
-			}
-			accepted[key] = struct{}{}
 		}
 		if factory.BuildDestination != nil {
-			if err := factory.DestinationEvidence.Validate(); err != nil {
-				return nil, fmt.Errorf("definition transport destination evidence for %q: %w", factory.Reference.ID, err)
+			for _, evidence := range factory.destinationEvidences() {
+				if err := evidence.Validate(); err != nil {
+					return nil, fmt.Errorf("definition transport destination evidence for %q: %w", factory.Reference.ID, err)
+				}
+				key := definitionConformanceKey{role: connectors.TransportRoleDestination, reference: factory.Reference, evidence: evidence}
+				if _, exists := accepted[key]; exists {
+					return nil, fmt.Errorf("duplicate definition transport destination evidence for executor %q", factory.Reference.ID)
+				}
+				accepted[key] = struct{}{}
 			}
-			key := definitionConformanceKey{role: connectors.TransportRoleDestination, reference: factory.Reference, evidence: factory.DestinationEvidence}
-			if _, exists := accepted[key]; exists {
-				return nil, fmt.Errorf("duplicate definition transport destination evidence for executor %q", factory.Reference.ID)
-			}
-			accepted[key] = struct{}{}
 		}
 		if factory.BuildSource == nil && factory.BuildDestination == nil {
 			return nil, fmt.Errorf("definition transport factory %q has no role builder", factory.Reference.ID)
 		}
 	}
 	return definitionConformanceVerifier{accepted: accepted}, nil
+}
+
+func (f DefinitionFactory) sourceEvidences() []connectors.ConformanceEvidenceReference {
+	return append([]connectors.ConformanceEvidenceReference{f.SourceEvidence}, f.AcceptedSourceEvidences...)
+}
+
+func (f DefinitionFactory) destinationEvidences() []connectors.ConformanceEvidenceReference {
+	return append([]connectors.ConformanceEvidenceReference{f.DestinationEvidence}, f.AcceptedDestinationEvidences...)
+}
+
+func (f DefinitionFactory) acceptsSourceEvidence(evidence connectors.ConformanceEvidenceReference) bool {
+	for _, accepted := range f.sourceEvidences() {
+		if accepted == evidence {
+			return true
+		}
+	}
+	return false
+}
+
+func (f DefinitionFactory) acceptsDestinationEvidence(evidence connectors.ConformanceEvidenceReference) bool {
+	for _, accepted := range f.destinationEvidences() {
+		if accepted == evidence {
+			return true
+		}
+	}
+	return false
 }
 
 func (v definitionConformanceVerifier) VerifyTransportConformance(request ConformanceVerification) error {
@@ -130,6 +167,8 @@ func RegisterDeclaredTransports(connectorRegistry *connectors.Registry, transpor
 
 	sources := make([]declaredSource, 0)
 	destinations := make([]declaredDestination, 0)
+	seenSourceReferences := make(map[connectors.TransportExecutorReference]struct{})
+	seenDestinationReferences := make(map[connectors.TransportExecutorReference]struct{})
 	for _, metadata := range connectorRegistry.List() {
 		connector, ok := connectorRegistry.Get(metadata.Name)
 		if !ok {
@@ -150,10 +189,13 @@ func RegisterDeclaredTransports(connectorRegistry *connectors.Registry, transpor
 			if err := connectors.ValidateTransportExecutorFamily(connector.Metadata().IntegrationType, descriptor.Source.Executor); err != nil {
 				return fmt.Errorf("declared source transport for connector %q: %w", connector.Name(), err)
 			}
-			if factory.SourceEvidence != descriptor.Source.Conformance {
+			if !factory.acceptsSourceEvidence(descriptor.Source.Conformance) {
 				return fmt.Errorf("declared source transport evidence is not accepted for executor %q", descriptor.Source.Executor.ID)
 			}
-			sources = append(sources, declaredSource{connector: connector, factory: factory})
+			if _, seen := seenSourceReferences[descriptor.Source.Executor]; !seen {
+				sources = append(sources, declaredSource{connector: connector, factory: factory})
+				seenSourceReferences[descriptor.Source.Executor] = struct{}{}
+			}
 		}
 		if descriptor.Destination != nil {
 			factory, exists := factoryByReference[descriptor.Destination.Executor]
@@ -163,10 +205,13 @@ func RegisterDeclaredTransports(connectorRegistry *connectors.Registry, transpor
 			if err := connectors.ValidateTransportExecutorFamily(connector.Metadata().IntegrationType, descriptor.Destination.Executor); err != nil {
 				return fmt.Errorf("declared destination transport for connector %q: %w", connector.Name(), err)
 			}
-			if factory.DestinationEvidence != descriptor.Destination.Conformance {
+			if !factory.acceptsDestinationEvidence(descriptor.Destination.Conformance) {
 				return fmt.Errorf("declared destination transport evidence is not accepted for executor %q", descriptor.Destination.Executor.ID)
 			}
-			destinations = append(destinations, declaredDestination{connector: connector, factory: factory})
+			if _, seen := seenDestinationReferences[descriptor.Destination.Executor]; !seen {
+				destinations = append(destinations, declaredDestination{connector: connector, factory: factory})
+				seenDestinationReferences[descriptor.Destination.Executor] = struct{}{}
+			}
 		}
 	}
 

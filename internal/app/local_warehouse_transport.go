@@ -226,7 +226,7 @@ func localWarehouseApplyStrategy(mode synccontract.Mode) (connectors.Destination
 
 func localWarehouseDedupes(strategy connectors.ApplyStrategy) bool {
 	switch strategy {
-	case connectors.ApplyStrategyMerge, connectors.ApplyStrategyDedupe, connectors.ApplyStrategyDedupeHistory, connectors.ApplyStrategyChangeApply:
+	case connectors.ApplyStrategyMerge, connectors.ApplyStrategyDedupe, connectors.ApplyStrategyDedupeHistory:
 		return true
 	default:
 		return false

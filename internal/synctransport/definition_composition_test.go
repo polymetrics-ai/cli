@@ -65,7 +65,7 @@ func TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration(t *testing.T) {
 			},
 		},
 		{
-			name: "destination change capture missing closed apply strategy",
+			name: "destination change capture role",
 			mutate: func(pair *testTransportPair) {
 				pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeChangeCapture}
 				pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
@@ -133,6 +133,37 @@ func TestDefinitionConformanceVerifierRefusesAlteredEvidenceBeforeSourceIO(t *te
 	}
 	if pair.sourceExecutor.readCalls != 0 {
 		t.Fatalf("source reads = %d, want zero before altered evidence refusal", pair.sourceExecutor.readCalls)
+	}
+}
+
+// TestDefinitionConformanceVerifierAcceptsEvidenceSelectedByEachDefinition
+// protects the reusable adapter case: two declarations may select distinct
+// externally accepted evidence for one exact executor without turning either
+// evidence reference into a connector-name switch.
+func TestDefinitionConformanceVerifierAcceptsEvidenceSelectedByEachDefinition(t *testing.T) {
+	reference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "shared_definition_source"}
+	first := connectors.ConformanceEvidenceReference{Suite: "first_definition", RunID: "source_v1"}
+	second := connectors.ConformanceEvidenceReference{Suite: "second_definition", RunID: "source_v1"}
+	factory := DefinitionFactory{
+		Reference:               reference,
+		SourceEvidence:          first,
+		AcceptedSourceEvidences: []connectors.ConformanceEvidenceReference{second},
+		BuildSource: func(connectors.Connector) (SourceExecutor, error) {
+			return &testSourceExecutor{reference: reference}, nil
+		},
+	}
+	verifier, err := NewDefinitionConformanceVerifier([]DefinitionFactory{factory})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, evidence := range []connectors.ConformanceEvidenceReference{first, second} {
+		if err := verifier.VerifyTransportConformance(ConformanceVerification{Role: connectors.TransportRoleSource, Executor: reference, Evidence: evidence}); err != nil {
+			t.Fatalf("VerifyTransportConformance(%+v) = %v, want definition-selected evidence accepted", evidence, err)
+		}
+	}
+	foreign := connectors.ConformanceEvidenceReference{Suite: "foreign_definition", RunID: "source_v1"}
+	if err := verifier.VerifyTransportConformance(ConformanceVerification{Role: connectors.TransportRoleSource, Executor: reference, Evidence: foreign}); err == nil {
+		t.Fatal("VerifyTransportConformance() accepted evidence that no definition selected")
 	}
 }
 

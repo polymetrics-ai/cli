@@ -1708,7 +1708,6 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 			synccontract.ModeIncrementalUpsert,
 			synccontract.ModeIncrementalDedupe,
 			synccontract.ModeIncrementalDedupeHistory,
-			synccontract.ModeChangeCapture,
 		},
 		Delivery: DeliveryGuarantees{
 			Idempotency: DeliveryIdempotencyKeyed,
@@ -1723,7 +1722,6 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: ApplyStrategyDedupeHistory, Action: localWarehouseDestinationTransportAction},
-			{Mode: synccontract.ModeChangeCapture, Strategy: ApplyStrategyChangeApply, Action: localWarehouseDestinationTransportAction},
 		},
 	}}
 }

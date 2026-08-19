@@ -335,6 +335,7 @@ type DestinationApplyRequest struct {
 	Runtime       connectors.RuntimeConfig
 	Source        connectors.Connector
 	SourceRuntime connectors.RuntimeConfig
+	Destination   connectors.Connector
 	Binding       DestinationBinding
 	Stream        string
 	Mode          synccontract.Mode
@@ -356,6 +357,7 @@ type DestinationReadBackRequest struct {
 	Runtime       connectors.RuntimeConfig
 	Source        connectors.Connector
 	SourceRuntime connectors.RuntimeConfig
+	Destination   connectors.Connector
 	Binding       DestinationBinding
 	Stream        string
 	Mode          synccontract.Mode

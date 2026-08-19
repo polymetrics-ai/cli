@@ -252,6 +252,110 @@ func TestAppCompositionRoutesLoadedSyntheticDefinitionConnector(t *testing.T) {
 	}
 }
 
+// TestDefinitionTransportFactoriesSelectDeclaredEvidence proves production
+// composition takes reusable adapter evidence from the owning bundle rather
+// than reusing the historical GitHub constant.
+func TestDefinitionTransportFactoriesSelectDeclaredEvidence(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	factories, err := definitionTransportDefinitionFactories(a, a.registry)
+	if err != nil {
+		t.Fatal(err)
+	}
+	github, ok := a.registry.Get("github")
+	if !ok {
+		t.Fatal("GitHub connector was not registered")
+	}
+	source, ok := connectors.SourceTransportDescriptorOf(github)
+	if !ok {
+		t.Fatal("GitHub source transport declaration is unavailable")
+	}
+	destination, ok := connectors.DestinationTransportDescriptorOf(github)
+	if !ok {
+		t.Fatal("GitHub destination transport declaration is unavailable")
+	}
+	var sourceFactory, destinationFactory *synctransport.DefinitionFactory
+	for index := range factories {
+		factory := &factories[index]
+		if factory.Reference == source.Executor && factory.BuildSource != nil {
+			sourceFactory = factory
+		}
+		if factory.Reference == destination.Executor && factory.BuildDestination != nil {
+			destinationFactory = factory
+		}
+	}
+	if sourceFactory == nil || sourceFactory.SourceEvidence != source.Conformance {
+		t.Fatalf("source factory evidence = %#v, want declaration %#v", sourceFactory, source.Conformance)
+	}
+	if destinationFactory == nil || destinationFactory.DestinationEvidence != destination.Conformance {
+		t.Fatalf("destination factory evidence = %#v, want declaration %#v", destinationFactory, destination.Conformance)
+	}
+}
+
+// TestDefinitionTransportFactoriesRegisterSharedSourceOnce proves a second
+// bundle can select the reusable declarative source with its own evidence. A
+// single executor reference is registered once; it dispatches by the request's
+// declared connector rather than binding the first bundle the registry sees.
+func TestDefinitionTransportFactoriesRegisterSharedSourceOnce(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundleFS := syntheticTransportBundleFS()
+	bundleFS["synthetic/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+    "eligible_streams": ["widgets"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "synthetic_declarative_source", "run_id": "source_v1"}
+  }
+}`)}
+	bundle, err := engine.Load(bundleFS, "synthetic")
+	if err != nil {
+		t.Fatal(err)
+	}
+	a.registry.Register(engine.New(bundle, nil))
+	factories, err := definitionTransportDefinitionFactories(a, a.registry)
+	if err != nil {
+		t.Fatal(err)
+	}
+	factories = append(factories, localWarehouseTransportDefinitionFactories(a)...)
+	connectorFactories, err := synctransport.DefinitionFactoriesFromRegistry(a.registry)
+	if err != nil {
+		t.Fatal(err)
+	}
+	factories = append(factories, connectorFactories...)
+	verifier, err := synctransport.NewDefinitionConformanceVerifier(factories)
+	if err != nil {
+		t.Fatal(err)
+	}
+	transports := synctransport.NewRegistry(verifier)
+	if err := synctransport.RegisterDeclaredTransports(a.registry, transports, factories); err != nil {
+		t.Fatalf("register shared declarative source: %v", err)
+	}
+	postgres, ok := a.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector was not registered")
+	}
+	if _, err := transports.Preflight(synctransport.PreflightRequest{
+		Source: engine.New(bundle, nil), Destination: postgres, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+	}); err != nil {
+		t.Fatalf("synthetic definition preflight through one shared source registration: %v", err)
+	}
+}
+
 type syntheticDefinitionConnector struct {
 	*engine.Connector
 	factories []synctransport.DefinitionFactory
@@ -983,7 +1087,7 @@ func TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParqu
 	}
 }
 
-func TestLocalWarehouseDestinationExecutorAppliesChangeCaptureTombstones(t *testing.T) {
+func TestLocalWarehouseDestinationExecutorRefusesChangeCapture(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -996,98 +1100,14 @@ func TestLocalWarehouseDestinationExecutorAppliesChangeCaptureTombstones(t *test
 	if !ok {
 		t.Fatal("local warehouse connector is not registered")
 	}
-	conn := Connection{
-		ID:          "connection_transport_change_capture",
-		Name:        "transport-change-capture",
-		Source:      EndpointConfig{Connector: "postgres"},
-		Destination: EndpointConfig{Connector: "warehouse"},
-		Streams: map[string]StreamConfig{
-			"changes": {DestinationTable: "change_rows", PrimaryKey: []string{"id"}},
-		},
+	descriptor, ok := connectors.DestinationTransportDescriptorOf(warehouseConnector)
+	if !ok {
+		t.Fatal("local warehouse transport declaration is absent")
 	}
-	a.state.Connections = append(a.state.Connections, conn)
-	executor, err := newLocalWarehouseDestinationExecutor(a, warehouseConnector)
-	if err != nil {
-		t.Fatal(err)
+	if _, err := descriptor.ApplyStrategyFor(synccontract.ModeChangeCapture); err == nil {
+		t.Fatal("local warehouse transport declared change_capture as a destination mode")
 	}
-	runtime := connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{"path": t.TempDir()}}
-	strategy, err := localWarehouseApplyStrategy(synccontract.ModeChangeCapture)
-	if err != nil {
-		t.Fatal(err)
-	}
-	plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
-		Connector:     warehouseConnector,
-		Runtime:       runtime,
-		Stream:        "changes",
-		Mode:          synccontract.ModeChangeCapture,
-		ApplyStrategy: strategy,
-	})
-	if err != nil {
-		t.Fatalf("PlanDestination() error = %v", err)
-	}
-	receipt := synctransport.WarehouseReceipt{
-		ID:               "stage_transport_change_capture",
-		Owner:            conn.ID,
-		Generation:       1,
-		Stream:           "changes",
-		Mode:             synccontract.ModeChangeCapture,
-		CheckpointSHA256: "checkpoint",
-		TombstonesSHA256: "tombstones",
-		ManifestSHA256:   "manifest",
-		ContentSHA256:    "content",
-		ParquetSHA256:    "parquet",
-		Records:          2,
-		Tombstones:       1,
-	}
-	workset := synctransport.WarehouseWorkset{
-		ID:      receipt.ID,
-		Records: []connectors.Record{{"id": "kept", "name": "Ada"}, {"id": "removed", "name": "Alan"}},
-		Tombstones: []synccontract.Tombstone{{
-			Operation:   synccontract.OperationDelete,
-			EventID:     synccontract.OpaqueToken("event-1"),
-			Key:         json.RawMessage(`{"id":"removed"}`),
-			DeleteImage: synccontract.DeleteImageKeyOnly,
-			Position: synccontract.CheckpointPosition{
-				Primary:    synccontract.OpaqueToken("2"),
-				TieBreaker: synccontract.OpaqueToken("2"),
-			},
-		}},
-	}
-	ack, err := executor.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
-		ConnectionID: conn.ID,
-		Plan:         plan,
-		Receipt:      receipt,
-		Workset:      workset,
-		Runtime:      runtime,
-	})
-	if err != nil {
-		t.Fatalf("ApplyDestination() error = %v", err)
-	}
-	location, err := a.warehouseLocation(runtime.Config["path"], conn)
-	if err != nil {
-		t.Fatal(err)
-	}
-	tablePath, err := location.TablePath("change_rows")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var ids []string
-	if err := warehouse.ReadTable(context.Background(), tablePath, func(row warehouse.Row) error {
-		id, _ := row["id"].(string)
-		ids = append(ids, id)
-		return nil
-	}); err != nil {
-		t.Fatalf("read change-capture table: %v", err)
-	}
-	if len(ids) != 1 || ids[0] != "kept" {
-		t.Fatalf("change-capture table ids = %#v, want only the non-tombstoned record", ids)
-	}
-	if err := executor.ReadBackDestination(context.Background(), synctransport.DestinationReadBackRequest{
-		Plan:            plan,
-		Workset:         workset,
-		Acknowledgement: ack,
-		Runtime:         runtime,
-	}); err != nil {
-		t.Fatalf("ReadBackDestination() error = %v", err)
+	if _, err := localWarehouseApplyStrategy(synccontract.ModeChangeCapture); err == nil {
+		t.Fatal("local warehouse destination executor exposed a change_capture strategy")
 	}
 }

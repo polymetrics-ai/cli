@@ -209,32 +209,26 @@ func TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO(t *testing.T) {
 	})
 }
 
-func TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination(t *testing.T) {
+func TestRunETLTransportRefusesDeclaredChangeCaptureDestinationBeforeIO(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeChangeCapture)
 
-	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+	_, err := fixture.app.RunETL(context.Background(), RunETLRequest{
 		Connection: fixture.connection,
 		Stream:     "records",
 		BatchSize:  1,
 	})
-	if err != nil {
-		t.Fatalf("RunETL() = %v, want declared change_capture transport dispatch", err)
+	if err == nil || !strings.Contains(err.Error(), "does not support sync mode \"change_capture\"") {
+		t.Fatalf("RunETL() error = %v, want destination change_capture refusal", err)
 	}
 	stage, ok := fixture.app.transportStage.(*appTransportStage)
 	if !ok {
 		t.Fatalf("transport stage = %T, want app transport stage", fixture.app.transportStage)
 	}
-	if fixture.sourceExecutor.readCalls != 1 || stage.calls != 1 || fixture.destinationExecutor.planCalls != 1 || fixture.destinationExecutor.applyCalls != 1 {
-		t.Fatalf("change_capture calls source=%d stage=%d plan=%d apply=%d, want one closed transport pass", fixture.sourceExecutor.readCalls, stage.calls, fixture.destinationExecutor.planCalls, fixture.destinationExecutor.applyCalls)
-	}
-	if fixture.destinationExecutor.plan.ApplyStrategy.Mode != synccontract.ModeChangeCapture || fixture.destinationExecutor.plan.ApplyStrategy.Strategy != connectors.ApplyStrategyChangeApply || fixture.destinationExecutor.plan.ApplyStrategy.Action != "stage_change_capture" {
-		t.Fatalf("change_capture destination plan = %+v, want descriptor-declared change_apply/stage_change_capture", fixture.destinationExecutor.plan.ApplyStrategy)
+	if fixture.sourceExecutor.readCalls != 0 || stage.calls != 0 || fixture.destinationExecutor.planCalls != 0 || fixture.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("change_capture refusal source/stage/plan/apply = %d/%d/%d/%d, want zero before I/O", fixture.sourceExecutor.readCalls, stage.calls, fixture.destinationExecutor.planCalls, fixture.destinationExecutor.applyCalls)
 	}
 	if fixture.source.legacyReadCalls != 0 || fixture.destination.legacyWriteCalls != 0 {
-		t.Fatalf("change_capture legacy calls read=%d write=%d, want closed transport dispatch only", fixture.source.legacyReadCalls, fixture.destination.legacyWriteCalls)
-	}
-	if run.RecordsRead != 1 || run.RecordsLoaded != 1 || run.BatchCount != 1 {
-		t.Fatalf("change_capture run counts = %+v, want one staged/applied page", run)
+		t.Fatalf("change_capture legacy calls read=%d write=%d, want zero before refusal", fixture.source.legacyReadCalls, fixture.destination.legacyWriteCalls)
 	}
 }
 
@@ -2953,7 +2947,7 @@ func setupAppTransportFixture(t *testing.T, mode synccontract.Mode) appTransport
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "fixture_database_destination", DisplayName: "Fixture Database Destination", IntegrationType: "database", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
-			Executor: destinationRef, EligibleActions: actions, Modes: synccontract.AllModes(),
+			Executor: destinationRef, EligibleActions: actions, Modes: appTransportDestinationModes(),
 			Delivery: appTransportDelivery(), Conformance: destinationEvidence,
 			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: strategies,
@@ -3027,7 +3021,7 @@ func (f appTransportFixture) configureRuntime(t *testing.T, a *App, sourceExecut
 }
 
 func appTransportStrategies() ([]string, []connectors.DestinationApplyStrategy) {
-	modes := synccontract.AllModes()
+	modes := appTransportDestinationModes()
 	actions := make([]string, 0, len(modes))
 	strategies := make([]connectors.DestinationApplyStrategy, 0, len(modes))
 	for _, mode := range modes {
@@ -3043,8 +3037,6 @@ func appTransportStrategies() ([]string, []connectors.DestinationApplyStrategy) 
 			strategy = connectors.ApplyStrategyDedupe
 		case synccontract.ModeIncrementalDedupeHistory:
 			strategy = connectors.ApplyStrategyDedupeHistory
-		case synccontract.ModeChangeCapture:
-			strategy = connectors.ApplyStrategyChangeApply
 		}
 		strategies = append(strategies, connectors.DestinationApplyStrategy{Mode: mode, Strategy: strategy, Action: action})
 	}
@@ -3055,9 +3047,19 @@ func appTransportStrategies() ([]string, []connectors.DestinationApplyStrategy) 
 // full_overwrite: those modes mint one acknowledgement per bounded page,
 // whereas full_overwrite mints exactly one receipt for its whole run.
 func appTransportPerPageAcknowledgementModes() []synccontract.Mode {
+	modes := make([]synccontract.Mode, 0, len(appTransportDestinationModes())-1)
+	for _, mode := range appTransportDestinationModes() {
+		if mode != synccontract.ModeFullOverwrite {
+			modes = append(modes, mode)
+		}
+	}
+	return modes
+}
+
+func appTransportDestinationModes() []synccontract.Mode {
 	modes := make([]synccontract.Mode, 0, len(synccontract.AllModes())-1)
 	for _, mode := range synccontract.AllModes() {
-		if mode != synccontract.ModeFullOverwrite {
+		if mode != synccontract.ModeChangeCapture {
 			modes = append(modes, mode)
 		}
 	}
